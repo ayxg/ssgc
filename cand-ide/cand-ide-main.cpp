@@ -898,7 +898,7 @@ int main() {
       static bool draw_subcontex_switch =
           false;  // Note this switch has to be static to
                   // persist throught the frames.
-      if (my_button.is_pressed) {
+      if (my_button.IsOpen()) {
         draw_subcontex_switch = not draw_subcontex_switch;
       }
 
@@ -948,8 +948,10 @@ int main() {
         // Draw input text.
         static char mlbuf[1024];
         static const auto nlines = 50;
-        ImGui::InputTextMultiline("Code", &gEditorStringBuffer,
-                                  kExpandWidgetToRemainingSpaceXY);
+        auto file_text_box = cgui::MultiLineTextInput(
+            "Code2", &gEditorStringBuffer, cgui::kExpandWidgetToRemainingSpaceXY);
+        //ImGui::InputTextMultiline("Code", &gEditorStringBuffer,
+        //                          kExpandWidgetToRemainingSpaceXY);
 
         ImGui::EndTabItem();
       }

@@ -4,6 +4,7 @@
 #include <type_traits>
 #include <variant>
 
+#include "require.h"
 //======================================================================================//
 // Meta Methods:
 // These structs typedefs and methods are to be treated as meta functions.

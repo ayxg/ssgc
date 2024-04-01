@@ -9,5 +9,8 @@
     <ClInclude Include="mta.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="require.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

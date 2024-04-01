@@ -1,11 +1,28 @@
 #pragma once
 #include <atomic>
+#include <concepts>
+#include <type_traits>
 #include <unordered_set>
 
 #include "../submodules/extended-cpp-standard/cppsextended.h"
 #include "imgui-SFML.h"
 #include "imgui.h"
 #include "imgui_stdlib.h"
+
+// TODO: move this to cppextended, pretty useful.
+template <cxx::req::Enumeration EnumT, cxx::req::Integral_ UnderlyingT>
+class EnumeratedFlags {
+ public:
+  UnderlyingT flags_{0};
+  EnumeratedFlags() = default;
+  EnumeratedFlags(EnumT flags) : flags_(flags) {}
+  EnumeratedFlags(EnumT flags, std::same_as<EnumT> auto... other_flags)
+      : flags_(flags) {
+    (..., (flags_ |= other_flags));
+  }
+  UnderlyingT Get() const { return flags_; }
+  constexpr operator EnumT() const { return static_cast<EnumT>(flags_); }
+};
 
 /////////////////////////////////////////////////////////////////////////////////
 namespace cgui {
@@ -26,21 +43,29 @@ namespace cgui {
 using std::size_t;
 using std::string;
 
+using CguiVec2 = std::pair<float, float>;
+
 using ImGuiFlags = int;
 using eWindowFlags = ImGuiWindowFlags_;
 using eSubcontextFlags = ImGuiChildFlags_;
 using eTabBarFlags = ImGuiTabBarFlags_;
 using eTabItemFlags = ImGuiTabItemFlags_;
+using eInputTextFlags = ImGuiInputTextFlags_;
 
 class UIDGen;         // Generates unique widget identifiers.
 class UniqueNameMap;  // Maintains unique names across widgets.
 
 // Flag Structs: Represent ImGui Flags.
-class WindowFlags;
-class SubcontextFlags;
-class TabBarFlags;
-class TabItemFlags;
+//class WindowFlags;
+//class SubcontextFlags;
+//class TabBarFlags;
+//class TabItemFlags;
 
+using WindowFlags = EnumeratedFlags<eWindowFlags, ImGuiFlags>;
+using SubcontextFlags = EnumeratedFlags<eSubcontextFlags, ImGuiFlags>;
+using TabBarFlags = EnumeratedFlags<eTabBarFlags, ImGuiFlags>;
+using TabItemFlags = EnumeratedFlags<eTabItemFlags, ImGuiFlags>;
+using InputTextFlags = EnumeratedFlags<eInputTextFlags, ImGuiFlags>;
 // Represents open/closed/visible/pressed/hovered state
 // depending on the ImGui widget type.
 enum class eWidgetState {
@@ -68,6 +93,17 @@ class WidgetMaker;
 
 /////////////////////////////////////////////////////////////////////////////////
 // <enddecls>
+/////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////
+// <constants>
+/////////////////////////////////////////////////////////////////////////////////
+
+constexpr float kExpandWidgetToRemainingSpace() { return -FLT_MIN; }
+const CguiVec2 kExpandWidgetToRemainingSpaceXY = {
+    kExpandWidgetToRemainingSpace(), kExpandWidgetToRemainingSpace()};
+/////////////////////////////////////////////////////////////////////////////////
+// <endconstants>
 /////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -100,70 +136,84 @@ class UniqueNameMap {
   std::unordered_set<string> names_;
 };
 
-class WindowFlags {
- public:
-  ImGuiFlags flags_{0};
-  WindowFlags() = default;
-  WindowFlags(eWindowFlags flags) : flags_(flags) {}
-  WindowFlags(eWindowFlags flags,
-              std::same_as<eWindowFlags> auto... other_flags)
-      : flags_(flags) {
-    (..., (flags_ |= other_flags));
-  }
-  ImGuiFlags Get() const { return flags_; }
-  constexpr operator eWindowFlags() const {
-    return static_cast<eWindowFlags>(flags_);
-  }
-};
+//class WindowFlags {
+// public:
+//  ImGuiFlags flags_{0};
+//  WindowFlags() = default;
+//  WindowFlags(eWindowFlags flags) : flags_(flags) {}
+//  WindowFlags(eWindowFlags flags,
+//              std::same_as<eWindowFlags> auto... other_flags)
+//      : flags_(flags) {
+//    (..., (flags_ |= other_flags));
+//  }
+//  ImGuiFlags Get() const { return flags_; }
+//  constexpr operator eWindowFlags() const {
+//    return static_cast<eWindowFlags>(flags_);
+//  }
+//};
 
-class SubcontextFlags {
- public:
-  ImGuiFlags flags_{0};
-  SubcontextFlags() = default;
-  SubcontextFlags(eSubcontextFlags flags) : flags_(flags) {}
-  SubcontextFlags(eSubcontextFlags flags,
-                  std::same_as<eSubcontextFlags> auto... other_flags)
-      : flags_(flags) {
-    (..., (flags_ |= other_flags));
-  }
-  int Get() const { return flags_; }
-  constexpr operator eSubcontextFlags() const {
-    return static_cast<eSubcontextFlags>(flags_);
-  }
-};
-
-class TabBarFlags {
- public:
-  ImGuiFlags flags_{0};
-  TabBarFlags() = default;
-  TabBarFlags(eTabBarFlags flags) : flags_(flags) {}
-  TabBarFlags(eTabBarFlags flags,
-              std::same_as<eTabBarFlags> auto... other_flags)
-      : flags_(flags) {
-    (..., (flags_ |= other_flags));
-  }
-  int Get() const { return flags_; }
-  constexpr operator eTabBarFlags() const {
-    return static_cast<eTabBarFlags>(flags_);
-  }
-};
-
-class TabItemFlags {
- public:
-  ImGuiFlags flags_{0};
-  TabItemFlags() = default;
-  TabItemFlags(eTabItemFlags flags) : flags_(flags) {}
-  TabItemFlags(eTabItemFlags flags,
-               std::same_as<eTabItemFlags> auto... other_flags)
-      : flags_(flags) {
-    (..., (flags_ |= other_flags));
-  }
-  int Get() const { return flags_; }
-  constexpr operator eTabItemFlags() const {
-    return static_cast<eTabItemFlags>(flags_);
-  }
-};
-
+//class SubcontextFlags {
+// public:
+//  ImGuiFlags flags_{0};
+//  SubcontextFlags() = default;
+//  SubcontextFlags(eSubcontextFlags flags) : flags_(flags) {}
+//  SubcontextFlags(eSubcontextFlags flags,
+//                  std::same_as<eSubcontextFlags> auto... other_flags)
+//      : flags_(flags) {
+//    (..., (flags_ |= other_flags));
+//  }
+//  int Get() const { return flags_; }
+//  constexpr operator eSubcontextFlags() const {
+//    return static_cast<eSubcontextFlags>(flags_);
+//  }
+//};
+//
+//class TabBarFlags {
+// public:
+//  ImGuiFlags flags_{0};
+//  TabBarFlags() = default;
+//  TabBarFlags(eTabBarFlags flags) : flags_(flags) {}
+//  TabBarFlags(eTabBarFlags flags,
+//              std::same_as<eTabBarFlags> auto... other_flags)
+//      : flags_(flags) {
+//    (..., (flags_ |= other_flags));
+//  }
+//  int Get() const { return flags_; }
+//  constexpr operator eTabBarFlags() const {
+//    return static_cast<eTabBarFlags>(flags_);
+//  }
+//};
+//
+//class TabItemFlags {
+// public:
+//  ImGuiFlags flags_{0};
+//  TabItemFlags() = default;
+//  TabItemFlags(eTabItemFlags flags) : flags_(flags) {}
+//  TabItemFlags(eTabItemFlags flags,
+//               std::same_as<eTabItemFlags> auto... other_flags)
+//      : flags_(flags) {
+//    (..., (flags_ |= other_flags));
+//  }
+//  int Get() const { return flags_; }
+//  constexpr operator eTabItemFlags() const {
+//    return static_cast<eTabItemFlags>(flags_);
+//  }
+//};
+//class InputTextFlags {
+// public:
+//  ImGuiFlags flags_{0};
+//  InputTextFlags() = default;
+//  InputTextFlags(eInputTextFlags flags) : flags_(flags) {}
+//  InputTextFlags(eInputTextFlags flags,
+//                 std::same_as<eInputTextFlags> auto... other_flags)
+//      : flags_(flags) {
+//    (..., (flags_ |= other_flags));
+//  }
+//  int Get() const { return flags_; }
+//  constexpr operator eInputTextFlags() const {
+//    return static_cast<eInputTextFlags>(flags_);
+//  }
+//};
 struct WidgetBase {
   UniqueNameMap& name_map_;
   UIDGen& id_gen_;
@@ -293,22 +343,97 @@ class TabItem : public WidgetBase {
   void EndEarly() override;
 };
 
-struct Button {
-  const std::string& text;
-  const bool is_pressed;
-  Button(const std::string& text, std::pair<float, float> size = {})
-      : text(text),
-        is_pressed(ImGui::Button(text.c_str(), {size.first, size.second})) {}
+struct SingularWidgetBase {
+  bool is_scope_active_{false};
+  bool is_open_{false};
+  virtual bool BeginLate() = 0;
+  virtual ~SingularWidgetBase() = default;
+
+  bool IsOpen() const { return is_open_; }
+  bool IsScopeActive() const { return is_scope_active_; }
 };
 
-struct MenuItem {
+struct Button : public SingularWidgetBase {
   const std::string& text;
-  const bool is_selected;
+  const std::pair<float, float> size{};
+  Button(const std::string& text, std::pair<float, float> size = {},
+         bool delayed_begin = false)
+      : SingularWidgetBase(), text(text), size(size) {
+    if (delayed_begin) {
+      is_scope_active_ = false;
+      is_open_ = false;
+    } else {
+      is_open_ = (ImGui::Button(text.c_str(), {size.first, size.second}));
+      is_scope_active_ = true;
+    }
+  }
+
+  bool BeginLate() {
+    if (not is_scope_active_)
+      is_open_ = (ImGui::Button(text.c_str(), {size.first, size.second}));
+    // Do nothing if scope is already active. Same as IsOpen().
+    return is_open_;
+  }
+};
+
+struct MenuItem : public SingularWidgetBase {
+  const std::string& text;
+  const std::string& shortcut_hint;
+  const bool is_enabled;
   MenuItem(const std::string& text, const std::string& shortcut_hint = "",
-           bool is_enabled = true)
-      : text(text),
-        is_selected(ImGui::MenuItem(text.c_str(), shortcut_hint.c_str(), false,
-                                    is_enabled)) {}
+           bool is_enabled = true, bool delayed_begin = false)
+      : SingularWidgetBase(),
+        text(text),
+        shortcut_hint(shortcut_hint),
+        is_enabled(is_enabled) {
+    if (delayed_begin) {
+      is_scope_active_ = false;
+      is_open_ = false;
+    } else {
+      is_open_ = (ImGui::MenuItem(text.c_str(), shortcut_hint.c_str(), false,
+                                  is_enabled));
+      is_scope_active_ = true;
+    }
+  }
+  bool BeginLate() {
+    if (not is_scope_active_)
+      is_open_ = (ImGui::MenuItem(text.c_str(), shortcut_hint.c_str(), false,
+                                  is_enabled));
+    // Do nothing if scope is already active. Same as IsOpen().
+    return is_open_;
+  }
+};
+
+struct MultiLineTextInput : public SingularWidgetBase {
+  const std::string& label;
+  const CguiVec2& size;
+  std::string* buffer;
+  InputTextFlags flags;
+  MultiLineTextInput(const std::string& label, std::string* buffer,
+                     const CguiVec2& size = {},
+                     InputTextFlags flags = InputTextFlags(),
+                     bool delayed_begin = false)
+      : SingularWidgetBase(),
+        label(label),
+        size(size),
+        buffer(buffer),
+        flags(flags) {
+    if (delayed_begin) {
+      is_scope_active_ = false;
+      is_open_ = false;
+    } else {
+      is_open_ = ImGui::InputTextMultiline(label.c_str(), buffer,
+                                            {size.first, size.second});
+      is_scope_active_ = true;
+    }
+  }
+  bool BeginLate() {
+    if (not is_scope_active_)
+      is_open_ = ImGui::InputTextMultiline(label.c_str(), buffer,
+                                            {size.first, size.second});
+    // Do nothing if scope is already active. Same as IsOpen().
+    return is_open_;
+  }
 };
 
 class WidgetMaker {
