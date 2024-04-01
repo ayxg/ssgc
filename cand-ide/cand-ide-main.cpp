@@ -18,8 +18,9 @@
 #include "../submodules/extended-cpp-standard/cppsextended.h"
 #include "imgui-SFML.h"
 #include "imgui.h"
-#include "ext_gfx_lib/imgui_stdlib.h"
 #include "imgui_interface.h"
+#include "imgui_stdlib.h"
+
 namespace gui = ImGui;
 namespace cide {
 namespace stdfs = std::filesystem;
@@ -884,18 +885,20 @@ int main() {
     // Main window, same size a sfml window, pos at 0,0.
     gui::SetNextWindowSize(window.getSize());
     gui::SetNextWindowPos({0, 0});
-    if (true) { // This is to demonstrate windows that go out of scope automatically.
+    if (true) {  // This is to demonstrate windows that go out of scope
+                 // automatically.
       auto new_window = make_cgui.MakeWindow("CoolWindow!");
       auto new_named_subcontext = make_cgui.MakeSubcontext("HelloContext");
-      auto my_button = cgui::Button(new_named_subcontext.Name() + "'s Button inside" +
-                   new_window.Name());
+      auto my_button = cgui::Button(new_named_subcontext.Name() +
+                                    "'s Button inside" + new_window.Name());
       // End subcontext early to begin new one within the same window/context.
       new_named_subcontext.EndEarly();
 
       // Can query button properties. It hasnt gone out of scope yet!
-      static bool draw_subcontex_switch = false; // Note this switch has to be static to
-                                                 // persist throught the frames.
-      if (my_button.is_pressed) {       
+      static bool draw_subcontex_switch =
+          false;  // Note this switch has to be static to
+                  // persist throught the frames.
+      if (my_button.is_pressed) {
         draw_subcontex_switch = not draw_subcontex_switch;
       }
 
@@ -907,13 +910,29 @@ int main() {
       // automatically go out of scope.
     }
     ImGui::Begin("C&-IDE", &main_window, xMakeWindowFlags());
-    if (ImGui::BeginMenuBar()) {
-      GuiDrawMenuFile();
-      GuiDrawMenuEdit();
-      GuiDrawMenuProject();
-      ImGui::EndMenuBar();
-    }
+    {
+      auto main_menu_bar = make_cgui.MakeMenuBar();
+      // if (ImGui::BeginMenuBar()) {
+      if (main_menu_bar.IsOpen()) {
+        auto file_menu = make_cgui.MakeMenu("File");
+        if (file_menu.IsOpen()) {
+          auto new_submenu = make_cgui.MakeMenu("New");
+          if (new_submenu.IsOpen()) {
+            auto solution = cgui::MenuItem("Solution");
+          }
+        }
+        // Note that here we are in the coontext of the file menu.
+        // new_submenu is out of scope but file menu is not.
+        // Use end early here or braces above to escape the scope.
+        // If we did not pop, the following items would add to
+        // the file menu.
+        file_menu.EndEarly();
 
+        // Add more. Using direct imgui calls mixed in.
+        GuiDrawMenuEdit();
+        GuiDrawMenuProject();
+      }
+    }
     // Editor
     ImGui::BeginChild("Editor",
                       {static_cast<float>(window.getSize().x * 0.75f),
@@ -929,7 +948,8 @@ int main() {
         // Draw input text.
         static char mlbuf[1024];
         static const auto nlines = 50;
-        ImGui::InputTextMultiline("Code", &gEditorStringBuffer,kExpandWidgetToRemainingSpaceXY);
+        ImGui::InputTextMultiline("Code", &gEditorStringBuffer,
+                                  kExpandWidgetToRemainingSpaceXY);
 
         ImGui::EndTabItem();
       }
@@ -974,7 +994,8 @@ int main() {
         // Draw input text.
         static char mlbuf2[1024];
         static const auto nlines2 = 32;
-        ImGui::InputTextMultiline("Code", mlbuf2, sizeof(mlbuf2),kExpandWidgetToRemainingSpaceXY);
+        ImGui::InputTextMultiline("Code", mlbuf2, sizeof(mlbuf2),
+                                  kExpandWidgetToRemainingSpaceXY);
 
         ImGui::EndTabItem();
       }

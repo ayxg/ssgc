@@ -20,7 +20,7 @@
     <ClCompile Include="ext_gfx_lib\imgui-SFML.cpp">
       <Filter>ext_gfx_lib</Filter>
     </ClCompile>
-    <ClCompile Include="ext_gfx_lib\imgui_stdlib.cpp">
+    <ClCompile Include="imgui_stdlib.cpp">
       <Filter>ext_gfx_lib</Filter>
     </ClCompile>
   </ItemGroup>
@@ -31,7 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui_interface.h" />
-    <ClInclude Include="ext_gfx_lib\imgui_stdlib.h">
+    <ClInclude Include="imgui_stdlib.h">
       <Filter>ext_gfx_lib</Filter>
     </ClInclude>
   </ItemGroup>

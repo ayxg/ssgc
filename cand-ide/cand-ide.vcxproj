@@ -140,13 +140,13 @@
     <ClCompile Include="ext_gfx_lib\imgui.cpp" />
     <ClCompile Include="ext_gfx_lib\imgui_demo.cpp" />
     <ClCompile Include="ext_gfx_lib\imgui_draw.cpp" />
-    <ClCompile Include="ext_gfx_lib\imgui_stdlib.cpp" />
     <ClCompile Include="ext_gfx_lib\imgui_tables.cpp" />
     <ClCompile Include="ext_gfx_lib\imgui_widgets.cpp" />
+    <ClCompile Include="imgui_stdlib.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ext_gfx_lib\imgui_stdlib.h" />
     <ClInclude Include="imgui_interface.h" />
+    <ClInclude Include="imgui_stdlib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,9 +1,11 @@
 #pragma once
+#include <atomic>
+#include <unordered_set>
+
 #include "../submodules/extended-cpp-standard/cppsextended.h"
 #include "imgui-SFML.h"
 #include "imgui.h"
-#include <atomic>
-#include <unordered_set>
+#include "imgui_stdlib.h"
 
 /////////////////////////////////////////////////////////////////////////////////
 namespace cgui {
@@ -14,7 +16,7 @@ namespace cgui {
 // 3. Unified use of std::string.
 // 4. Names of windows must be unique. Handle possible errors from occurence.
 // 5. Widget IDs must be unique, are automatically generated.
-// 
+//
 /////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -27,6 +29,8 @@ using std::string;
 using ImGuiFlags = int;
 using eWindowFlags = ImGuiWindowFlags_;
 using eSubcontextFlags = ImGuiChildFlags_;
+using eTabBarFlags = ImGuiTabBarFlags_;
+using eTabItemFlags = ImGuiTabItemFlags_;
 
 class UIDGen;         // Generates unique widget identifiers.
 class UniqueNameMap;  // Maintains unique names across widgets.
@@ -34,6 +38,8 @@ class UniqueNameMap;  // Maintains unique names across widgets.
 // Flag Structs: Represent ImGui Flags.
 class WindowFlags;
 class SubcontextFlags;
+class TabBarFlags;
+class TabItemFlags;
 
 // Represents open/closed/visible/pressed/hovered state
 // depending on the ImGui widget type.
@@ -48,6 +54,10 @@ struct WidgetBase;  // Widget base class
 class Window;
 class UnnamedSubcontext;
 class Subcontext;
+
+class MenuBar;   // main menu bar belonging to a context
+class Menu;      // drop down menu, can have submenus
+class MenuItem;  // An entry in the menu.
 
 // Single Instance Widgets : which dont require and unique id or name.
 // These do not use the WidgetMaker class to construct.
@@ -119,6 +129,38 @@ class SubcontextFlags {
   int Get() const { return flags_; }
   constexpr operator eSubcontextFlags() const {
     return static_cast<eSubcontextFlags>(flags_);
+  }
+};
+
+class TabBarFlags {
+ public:
+  ImGuiFlags flags_{0};
+  TabBarFlags() = default;
+  TabBarFlags(eTabBarFlags flags) : flags_(flags) {}
+  TabBarFlags(eTabBarFlags flags,
+              std::same_as<eTabBarFlags> auto... other_flags)
+      : flags_(flags) {
+    (..., (flags_ |= other_flags));
+  }
+  int Get() const { return flags_; }
+  constexpr operator eTabBarFlags() const {
+    return static_cast<eTabBarFlags>(flags_);
+  }
+};
+
+class TabItemFlags {
+ public:
+  ImGuiFlags flags_{0};
+  TabItemFlags() = default;
+  TabItemFlags(eTabItemFlags flags) : flags_(flags) {}
+  TabItemFlags(eTabItemFlags flags,
+               std::same_as<eTabItemFlags> auto... other_flags)
+      : flags_(flags) {
+    (..., (flags_ |= other_flags));
+  }
+  int Get() const { return flags_; }
+  constexpr operator eTabItemFlags() const {
+    return static_cast<eTabItemFlags>(flags_);
   }
 };
 
@@ -206,6 +248,51 @@ class Subcontext : public WidgetBase {
   ~Subcontext();
 };
 
+class MenuBar : public WidgetBase {
+ public:
+  MenuBar(UniqueNameMap& name_map, UIDGen& id_gen, bool delay_begin = false);
+  ~MenuBar();
+  bool BeginLate() override;
+  void EndEarly() override;
+};
+
+class Menu : public WidgetBase {
+  std::string title_{""};
+  bool is_enabled_ = true;  // enable/disable this menu from showing up
+ public:
+  Menu(UniqueNameMap& name_map, UIDGen& id_gen, const std::string& title,
+       bool is_enabled = true, bool delay_begin = false);
+  ~Menu();
+  bool BeginLate() override;
+  void EndEarly() override;
+  const std::string& Name() { return title_; }
+};
+
+class TabBar : public WidgetBase {
+  std::string name_;
+  TabBarFlags flags_;
+
+ public:
+  TabBar(UniqueNameMap& name_map, UIDGen& id_gen,
+         TabBarFlags flags = TabBarFlags(), bool delay_begin = false);
+  ~TabBar();
+  bool BeginLate() override;
+  void EndEarly() override;
+};
+
+class TabItem : public WidgetBase {
+  std::string name_;
+  TabItemFlags flags_;
+
+ public:
+  TabItem(UniqueNameMap& name_map, UIDGen& id_gen,
+          eWidgetState state = eWidgetState::kFree,
+          TabItemFlags flags = TabItemFlags(), bool delay_begin = false);
+  ~TabItem();
+  bool BeginLate() override;
+  void EndEarly() override;
+};
+
 struct Button {
   const std::string& text;
   const bool is_pressed;
@@ -214,100 +301,63 @@ struct Button {
         is_pressed(ImGui::Button(text.c_str(), {size.first, size.second})) {}
 };
 
+struct MenuItem {
+  const std::string& text;
+  const bool is_selected;
+  MenuItem(const std::string& text, const std::string& shortcut_hint = "",
+           bool is_enabled = true)
+      : text(text),
+        is_selected(ImGui::MenuItem(text.c_str(), shortcut_hint.c_str(), false,
+                                    is_enabled)) {}
+};
+
 class WidgetMaker {
   UniqueNameMap name_map_;
   UIDGen id_gen_;
 
  public:
   // Window widget.
-  Window MakeWindow(const std::string& title) {
-    return Window(name_map_, id_gen_, title);
-  }
-
-  Window MakeWindow(const std::string& title, eWidgetState state) {
-    return Window(name_map_, id_gen_, title, state);
-  }
-
-  Window MakeWindow(const std::string& title, eWidgetState state,
-                    WindowFlags flags) {
-    return Window(name_map_, id_gen_, title, state, flags);
-  }
-
-  Window MakeWindow(const std::string& title, eWidgetState state,
-                    WindowFlags flags, bool delay_begin) {
+  Window MakeWindow(const std::string& title,
+                    eWidgetState state = eWidgetState::kFree,
+                    WindowFlags flags = WindowFlags(),
+                    bool delay_begin = false) {
     return Window(name_map_, id_gen_, title, state, flags, delay_begin);
   }
 
   // Subcontext Widget
-
-  Subcontext MakeSubcontext(const std::string& title) {
-    return Subcontext(name_map_, id_gen_, title);
-  }
-
-  Subcontext MakeSubcontext(const std::string& title,
-                            std::pair<float, float> size) {
-    return Subcontext(name_map_, id_gen_, title, size);
-  }
-
-  Subcontext MakeSubcontext(const std::string& title,
-                            std::pair<float, float> size, eWidgetState state) {
-    return Subcontext(name_map_, id_gen_, title, size, state);
-  }
-
-  Subcontext MakeSubcontext(const std::string& title,
-                            std::pair<float, float> size, eWidgetState state,
-                            WindowFlags flags) {
-    return Subcontext(name_map_, id_gen_, title, size, state, flags);
-  }
-
-  Subcontext MakeSubcontext(const std::string& title,
-                            std::pair<float, float> size, eWidgetState state,
-                            WindowFlags flags, SubcontextFlags ctx_flags) {
-    return Subcontext(name_map_, id_gen_, title, size, state, flags, ctx_flags);
-  }
-
-  Subcontext MakeSubcontext(const std::string& title,
-                            std::pair<float, float> size, eWidgetState state,
-                            WindowFlags flags, SubcontextFlags ctx_flags,
-                            bool delay_begin) {
-    return Subcontext(name_map_, id_gen_, title, size, state, flags, ctx_flags,
-                      delay_begin);
+  Subcontext MakeSubcontext(
+      const std::string& name, std::pair<float, float> size = {0.f, 0.f},
+      eWidgetState state = eWidgetState::kFree,
+      WindowFlags win_flags = WindowFlags(),
+      SubcontextFlags subcontext_flags = SubcontextFlags(),
+      bool delay_begin = false) {
+    return Subcontext(name_map_, id_gen_, name, size, state, win_flags,
+                      subcontext_flags, delay_begin);
   }
 
   // UnnamedSubcontext
-
-  UnnamedSubcontext MakeUnnamedSubcontext() {
-    return UnnamedSubcontext(name_map_, id_gen_);
+  UnnamedSubcontext MakeUnnamedSubcontext(
+      std::pair<float, float> size = {0.f, 0.f},
+      eWidgetState state = eWidgetState::kFree,
+      WindowFlags win_flags = WindowFlags(),
+      SubcontextFlags subcontext_flags = SubcontextFlags(),
+      bool delay_begin = false) {
+    return UnnamedSubcontext(name_map_, id_gen_, size, state, win_flags,
+                             subcontext_flags, delay_begin);
   }
 
-  UnnamedSubcontext MakeUnnamedSubcontext(std::pair<float, float> size) {
-    return UnnamedSubcontext(name_map_, id_gen_, size);
+  // MainMenuBar
+  MenuBar MakeMenuBar(bool delay_begin = false) {
+    return MenuBar(name_map_, id_gen_, delay_begin);
   }
 
-  UnnamedSubcontext MakeUnnamedSubcontext(std::pair<float, float> size,
-                                          eWidgetState state) {
-    return UnnamedSubcontext(name_map_, id_gen_, size, state);
+  // Menu
+  Menu MakeMenu(const std::string& title, bool is_enabled = true,
+                bool delay_begin = false) {
+    return Menu(name_map_, id_gen_, title, is_enabled, delay_begin);
   }
 
-  UnnamedSubcontext MakeUnnamedSubcontext(std::pair<float, float> size,
-                                          eWidgetState state,
-                                          WindowFlags flags) {
-    return UnnamedSubcontext(name_map_, id_gen_, size, state, flags);
-  }
-
-  UnnamedSubcontext MakeUnnamedSubcontext(std::pair<float, float> size,
-                                          eWidgetState state, WindowFlags flags,
-                                          SubcontextFlags ctx_flags) {
-    return UnnamedSubcontext(name_map_, id_gen_, size, state, flags, ctx_flags);
-  }
-
-  UnnamedSubcontext MakeUnnamedSubcontext(std::pair<float, float> size,
-                                          eWidgetState state, WindowFlags flags,
-                                          SubcontextFlags ctx_flags,
-                                          bool delay_begin) {
-    return UnnamedSubcontext(name_map_, id_gen_, size, state, flags, ctx_flags,
-                             delay_begin);
-  }
+  // Tree
 };
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -462,13 +512,11 @@ Window::~Window() {
 // <impl:UnnamedSubcontext>
 /////////////////////////////////////////////////////////////////////////////////
 
-UnnamedSubcontext::UnnamedSubcontext(
-    UniqueNameMap& name_map, UIDGen& id_gen,
-    std::pair<float, float> size,
-    eWidgetState state,
-    WindowFlags win_flags,
-    SubcontextFlags subcontext_flags,
-    bool delay_begin)
+UnnamedSubcontext::UnnamedSubcontext(UniqueNameMap& name_map, UIDGen& id_gen,
+                                     std::pair<float, float> size,
+                                     eWidgetState state, WindowFlags win_flags,
+                                     SubcontextFlags subcontext_flags,
+                                     bool delay_begin)
     : WidgetBase(name_map, id_gen) {
   HandleWidgetState(state);
   uid_ = NewId();
@@ -567,6 +615,86 @@ Subcontext::~Subcontext() {
 /////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////
+// <impl:MenuBar>
+/////////////////////////////////////////////////////////////////////////////////
+MenuBar::MenuBar(UniqueNameMap& name_map, UIDGen& id_gen, bool delay_begin)
+    : WidgetBase(name_map, id_gen) {
+  if (not delay_begin) {
+    is_scope_active_ = true;
+    is_open_ = std::make_unique<bool>(ImGui::BeginMenuBar());
+  }
+};
+MenuBar::~MenuBar() {
+  if (is_scope_active_ && IsOpen()) ImGui::EndMenuBar();
+};
+bool MenuBar::BeginLate() {
+  if (not is_scope_active_) {
+    is_scope_active_ = true;
+    is_open_ = std::make_unique<bool>(ImGui::BeginMenuBar());
+  }
+  return IsOpen();
+};
+void MenuBar::EndEarly() {
+  if (not is_scope_active_) throw "[Subcontext:End:end called before begin.]";
+  is_scope_active_ = false;
+  if (IsOpen()) ImGui::EndMenuBar();
+};
+/////////////////////////////////////////////////////////////////////////////////
+// <endimpl:MenuBar>
+/////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////
+// <impl:Menu>
+/////////////////////////////////////////////////////////////////////////////////
+
+Menu::Menu(UniqueNameMap& name_map, UIDGen& id_gen, const std::string& title,
+           bool is_enabled, bool delay_begin)
+    : WidgetBase(name_map, id_gen) {
+  cxx::BoolError valid_name = NewName(title);
+  if (valid_name) {
+    title_ = title;
+  } else
+    throw valid_name.Exception();
+
+  if (not delay_begin) {
+    is_scope_active_ = true;
+    is_open_ =
+        std::make_unique<bool>(ImGui::BeginMenu(title_.c_str(), is_enabled_));
+  }
+};
+Menu::~Menu() {
+  // End the gui object.
+  if (is_scope_active_ && *is_open_) ImGui::EndMenu();
+
+  // Remove the name from name map.
+  name_map_.RemoveName(title_);
+};
+bool Menu::BeginLate() {
+  if (not is_scope_active_) {
+    is_scope_active_ = true;
+    is_open_ =
+        std::make_unique<bool>(ImGui::BeginMenu(title_.c_str(), is_enabled_));
+  }
+  return IsOpen();
+};
+void Menu::EndEarly() {
+  if (not is_scope_active_) throw "[WindowWidget:End:end called before begin.]";
+  is_scope_active_ = false;
+  if (*is_open_) ImGui::EndMenu();
+};
+/////////////////////////////////////////////////////////////////////////////////
+// <endimpl:Menu>
+/////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////
+// <impl:MenuBar>
+/////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////
+// <endimpl:MenuBar>
+/////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////
 }  // end namespace cgui
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -600,4 +728,18 @@ void WIDGET_BASE_USE_EXAMPLE() {
   // Using the widget maker is easier!
   cgui::WidgetMaker make_gui;
   auto a_window = make_gui.MakeWindow("Coooool!");
+}
+static void cGuiDrawMenuFile() {
+  cgui::WidgetMaker make_gui;
+
+  // creating a menu bar
+  {
+    auto file_menu = make_gui.MakeMenu("File");
+    if (file_menu.IsOpen()) {
+      auto new_submenu = make_gui.MakeMenu("New");
+      if (new_submenu.IsOpen()) {
+        auto solution = cgui::MenuItem("Solution");
+      }
+    }
+  }
 }
