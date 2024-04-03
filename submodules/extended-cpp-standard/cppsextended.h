@@ -9,3 +9,4 @@
 #include "sysio.h"
 #include "unique_void_ptr.h"
 #include "hetero_method_map.h"
+#include "enumerated_flags.h"

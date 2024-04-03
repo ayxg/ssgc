@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="cppsextended.h" />
+    <ClInclude Include="enumerated_flags.h" />
     <ClInclude Include="expected.h" />
     <ClInclude Include="hetero_method_map.h" />
     <ClInclude Include="macrodef.h" />

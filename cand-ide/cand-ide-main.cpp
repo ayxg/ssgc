@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <set>
+
 #include "../submodules/extended-cpp-standard/cppsextended.h"
 #include "imgui-SFML.h"
 #include "imgui.h"
@@ -149,11 +151,7 @@ struct ExampleAppConsole {
       ImGui::EndPopup();
     }
 
-    ImGui::TextWrapped(
-        "This example implements a console with basic coloring, completion "
-        "(TAB key) and history (Up/Down keys). A more elaborate "
-        "implementation may want to store entries along with extra data such "
-        "as timestamp, emitter, etc.");
+    ImGui::TextWrapped("");
     ImGui::TextWrapped("Enter 'HELP' for help.");
 
     // TODO: display items starting from the bottom
@@ -452,9 +450,13 @@ void DisplayDirectory(const stdfs::path& path, int depth = 0) {
       gui::TreePop();
     }
   } else if (stdfs::is_regular_file(path)) {
-    if (gui::Selectable(path.filename().string().c_str())) {
+    // auto file_selectable = cgui::Selectable(path.filename().string());
+    if (cgui::Selectable(path.filename().string())) {
       gDisplayDirectorySelectFileCallback(path);
-    };
+    }
+    // if (gui::Selectable(path.filename().string().c_str())) {
+    //   gDisplayDirectorySelectFileCallback(path);
+    // };
   }
 }
 
@@ -783,6 +785,7 @@ static void GuiDrawMenuFile() {
     gui::EndMenu();
   }
 }
+
 static void GuiDrawMenuProject() {
   if (gui::BeginMenu("Project")) {
     if (gui::MenuItem("Add File")) {
@@ -848,14 +851,197 @@ auto xMakeWindowFlags = []() constexpr -> ImGuiWindowFlags {
   // if (no_close) p_open = NULL;  // Don't pass our bool* to Begin
 };
 constexpr float kExpandWidgetToRemainingSpace() { return -FLT_MIN; }
+
+/////////////////////////////////////////////////////////////////////////////////
+// <cidewidgets>
+/////////////////////////////////////////////////////////////////////////////////
+
+struct CideTopMenuBarInterface {
+  static constexpr LAMBDA xNullCallback = []() {};
+  using CallbackT = std::function<void(void)>;
+  cgui::WidgetMaker& make_cgui;
+  // File Menu
+  CallbackT callback_file_new_solution{xNullCallback};
+
+  // Edit menu
+  CallbackT callback_edit_undo{xNullCallback};
+  CallbackT callback_edit_redo{xNullCallback};
+  CallbackT callback_edit_cut{xNullCallback};
+  CallbackT callback_edit_copy{xNullCallback};
+  CallbackT callback_edit_paste{xNullCallback};
+
+  // Project Menu
+  CallbackT callback_project_addfile{xNullCallback};
+  CallbackT callback_project_addactivefile{xNullCallback};
+  CallbackT callback_project_addexistingfile{xNullCallback};
+  CallbackT callback_project_solutionproperties{xNullCallback};
+  CallbackT callback_project_clonesolution{xNullCallback};
+
+  // Widgets
+  cgui::MenuBar main_menu_bar{make_cgui.MakeDelayedMenuBar()};
+  cgui::Menu file_menu{make_cgui.MakeDelayedMenu("File")};
+  cgui::Menu edit_menu{make_cgui.MakeDelayedMenu("Edit")};
+  cgui::Menu project_menu{make_cgui.MakeDelayedMenu("Project")};
+  cgui::Menu file_new_submenu{make_cgui.MakeDelayedMenu("New")};
+
+  cgui::MenuItem file_new_solution_item{"Solution", "", true, true};
+
+  cgui::MenuItem edit_undo_item{"Undo", "CTRL+Z", true, true};
+  cgui::MenuItem edit_redo_item{"Redo", "CTRL+Y", true, true};
+  cgui::MenuItem edit_cut_item{"Cut", "CTRL+X", true, true};
+  cgui::MenuItem edit_copy_item{"Copy", "CTRL+C", true, true};
+  cgui::MenuItem edit_paste_item{"Paste", "CTRL+V", true, true};
+
+  cgui::MenuItem project_addfile_item{"Add File", "", true, true};
+  cgui::MenuItem project_addactivefile_item{"Add Active File", "", true, true};
+  cgui::MenuItem project_addexistingfile_item{"Add Existing File", "", true,
+                                              true};
+  cgui::MenuItem project_solutionproperties_item{"Solution Properties", "",
+                                                 true, true};
+  cgui::MenuItem project_clonesolution_item{"Clone Solution", "", true, true};
+
+  void Display(cgui::WidgetMaker& make_cgui) {
+    if (main_menu_bar.BeginLate()) {
+      if (file_menu.BeginLate()) {
+        if (file_new_submenu.BeginLate()) {
+          if (file_new_solution_item.BeginLate()) {
+            callback_file_new_solution();
+          }
+        }
+        file_new_submenu.EndEarly();
+      }
+      file_menu.EndEarly();
+
+      if (edit_menu.BeginLate()) {
+        if (edit_undo_item.BeginLate()) {
+          callback_edit_undo();
+        }
+        if (edit_redo_item.BeginLate()) {
+          callback_edit_redo();
+        }
+        if (edit_cut_item.BeginLate()) {
+          callback_edit_cut();
+        }
+        if (edit_copy_item.BeginLate()) {
+          callback_edit_copy();
+        }
+        if (edit_paste_item.BeginLate()) {
+          callback_edit_paste();
+        }
+      }
+      edit_menu.EndEarly();
+
+      if (project_menu.BeginLate()) {
+        if (project_addfile_item.BeginLate()) {
+          callback_project_addfile();
+        }
+        if (project_addactivefile_item.BeginLate()) {
+          callback_project_addactivefile();
+        }
+        if (project_addexistingfile_item.BeginLate()) {
+          callback_project_addexistingfile();
+        }
+        cgui::Separator();
+        if (project_solutionproperties_item.BeginLate()) {
+          callback_project_solutionproperties();
+        };
+        cgui::Separator();
+        if (project_clonesolution_item.BeginLate()) {
+          callback_project_clonesolution();
+        };
+      }
+      project_menu.EndEarly();
+    }
+    main_menu_bar.EndEarly();
+  }
+};
+
+struct CideFileEditorInterface {
+  struct FileTab {
+    cgui::TabItem tab_item;
+    cgui::MultiLineTextInput text_box;
+    bool marked_for_destruction;
+    FileTab(cgui::TabItem&& tab_item, cgui::MultiLineTextInput text_box,
+            bool marked_for_destruction)
+        : tab_item(std::move(tab_item)),
+          text_box(text_box),
+          marked_for_destruction(marked_for_destruction) {}
+  };
+  // Properties
+  cgui::CguiVec2 context_size;
+
+  // Widgets
+  cgui::WidgetMaker& make_cgui;
+  cgui::Subcontext editor_context;
+  cgui::TabBar editor_tab_bar;
+  std::vector<FileTab> open_file_tabs;
+
+  CideFileEditorInterface(cgui::WidgetMaker& make_cgui, const std::string& name,
+                          cgui::CguiVec2 context_size)
+      : make_cgui(make_cgui),
+        context_size(context_size),
+        editor_context(make_cgui.MakeDelayedSubcontext(name, context_size)),
+        editor_tab_bar(make_cgui.MakeDelayedTabBar(
+            "##file-tabs",
+            {cgui::eTabBarFlags::ImGuiTabBarFlags_Reorderable})) {}
+
+  void Display() {  // Editor Subcontext
+    if (editor_context.BeginLate()) {
+      if (editor_tab_bar.BeginLate()) {
+        for (auto& file_tab : open_file_tabs) {
+          if (file_tab.tab_item.BeginLate()) {
+            file_tab.text_box.BeginLate();
+          }
+          file_tab.tab_item.EndEarly();
+        }
+      }
+      editor_tab_bar.EndEarly();
+    }
+    editor_context.EndEarly();
+  }
+
+  void AddTab(const std::string& tab_name, std::string& text_buffer) {
+    open_file_tabs.push_back(FileTab{
+        make_cgui.MakeTabItem(tab_name, cgui::TabItemFlags(),
+                              cgui::kDelayWidget),
+        cgui::MultiLineTextInput(tab_name + "###textbox", &text_buffer,
+                                 cgui::kExpandWidgetToRemainingSpaceXY,
+                                 cgui::InputTextFlags(), cgui::kDelayWidget),
+        false});
+  }
+
+  void PopTab() { open_file_tabs.pop_back(); }
+};
+
+struct CideSolutionExplorerInterface {
+  stdfs::path root_dir;
+  std::string temp_file_buffer;
+
+  // Widgets
+  cgui::DirectoryView dir_tree_view;
+};
+
+/////////////////////////////////////////////////////////////////////////////////
+// <end_cidewidgets>
+/////////////////////////////////////////////////////////////////////////////////
+
 int main() {
   cgui::WidgetMaker make_cgui;
   const ImVec2 kExpandWidgetToRemainingSpaceXY = {
       kExpandWidgetToRemainingSpace(), kExpandWidgetToRemainingSpace()};
   std::string gEditorStringBuffer{""};
-  sf::RenderWindow window(sf::VideoMode(640, 480), "ImGui + SFML = <3");
+  sf::RenderWindow window(sf::VideoMode(800, 800), "ImGui + SFML = <3");
   window.setFramerateLimit(60);
   ImGui::SFML::Init(window);
+
+  // cgui
+  CideFileEditorInterface file_editor_interface{
+      make_cgui,
+      "Editor",
+      {static_cast<float>(window.getSize().x * 0.75f),
+       static_cast<float>(window.getSize().y * 0.75f)}};
+  CideTopMenuBarInterface topbarmenu_interface{make_cgui};
+  file_editor_interface.AddTab("TestingTab", gEditorStringBuffer);
 
   sf::CircleShape shape(100.f);
   shape.setFillColor(sf::Color::Green);
@@ -880,137 +1066,66 @@ int main() {
     }
 
     ImGui::SFML::Update(window, deltaClock.restart());
-    // ImGui::ShowDemoWindow();
-    bool main_window = true;
+    ImGui::ShowDemoWindow();
+
     // Main window, same size a sfml window, pos at 0,0.
     gui::SetNextWindowSize(window.getSize());
     gui::SetNextWindowPos({0, 0});
-    if (true) {  // This is to demonstrate windows that go out of scope
-                 // automatically.
-      auto new_window = make_cgui.MakeWindow("CoolWindow!");
-      auto new_named_subcontext = make_cgui.MakeSubcontext("HelloContext");
-      auto my_button = cgui::Button(new_named_subcontext.Name() +
-                                    "'s Button inside" + new_window.Name());
-      // End subcontext early to begin new one within the same window/context.
-      new_named_subcontext.EndEarly();
+    {  // Main Ide Window Context
+      auto main_ide_context = make_cgui.MakeWindow(
+          "C&-IDE", cgui::eWidgetState::kForceOn, {ImGuiWindowFlags_MenuBar});
+      topbarmenu_interface.Display(make_cgui);
+      file_editor_interface.Display();
 
-      // Can query button properties. It hasnt gone out of scope yet!
-      static bool draw_subcontex_switch =
-          false;  // Note this switch has to be static to
-                  // persist throught the frames.
-      if (my_button.IsOpen()) {
-        draw_subcontex_switch = not draw_subcontex_switch;
-      }
 
-      if (draw_subcontex_switch) {
-        auto next_unnamed_subcontext = make_cgui.MakeUnnamedSubcontext();
-        auto abtn = cgui::Button(std::to_string(next_unnamed_subcontext.Id()) +
-                                 "# Unnamed Subcontext's Btn ");
-      }
-      // automatically go out of scope.
-    }
-    ImGui::Begin("C&-IDE", &main_window, xMakeWindowFlags());
-    {
-      auto main_menu_bar = make_cgui.MakeMenuBar();
-      // if (ImGui::BeginMenuBar()) {
-      if (main_menu_bar.IsOpen()) {
-        auto file_menu = make_cgui.MakeMenu("File");
-        if (file_menu.IsOpen()) {
-          auto new_submenu = make_cgui.MakeMenu("New");
-          if (new_submenu.IsOpen()) {
-            auto solution = cgui::MenuItem("Solution");
-          }
+      // File Explorer
+      cgui::SameLine();
+      ImGui::BeginChild("File Explorer",
+                        {0, static_cast<float>(window.getSize().y * 0.75f)}, 1);
+
+      ImGuiTabBarFlags tab_bar_flags2 =
+          (true ? ImGuiTabBarFlags_Reorderable : 0);
+      if (ImGui::BeginTabBar("##file-tabs", tab_bar_flags2)) {
+        static bool opn2 = true;
+        ImGuiTabItemFlags tab_flags2 =
+            (true ? ImGuiTabItemFlags_UnsavedDocument : 0);
+        if (ImGui::BeginTabItem("Solution", &opn2, tab_flags2)) {
+          auto dir_view = cgui::DirectoryView(
+              cide::stdfs::current_path(),
+              // callback for selectting an item
+              [&gEditorStringBuffer](const auto& p) {
+                // Load file into the string buffer;
+                gEditorStringBuffer = cide::loadFileToStr(p.string());
+              },
+              // callback for right clicking an item
+              [](const auto& p) {
+                // New Menu:
+                if (cgui::MenuItem("Open")) {
+                };
+                if (cgui::MenuItem("Copy")) {
+                };
+                if (cgui::MenuItem("Paste")) {
+                };
+                if (cgui::MenuItem("Cut")) {
+                };
+                if (cgui::MenuItem("Delete")) {
+                };
+              });
+          ImGui::EndTabItem();
         }
-        // Note that here we are in the coontext of the file menu.
-        // new_submenu is out of scope but file menu is not.
-        // Use end early here or braces above to escape the scope.
-        // If we did not pop, the following items would add to
-        // the file menu.
-        file_menu.EndEarly();
-
-        // Add more. Using direct imgui calls mixed in.
-        GuiDrawMenuEdit();
-        GuiDrawMenuProject();
+        ImGui::EndTabBar();
       }
-    }
-    // Editor
-    ImGui::BeginChild("Editor",
-                      {static_cast<float>(window.getSize().x * 0.75f),
-                       static_cast<float>(window.getSize().y * 0.75f)},
-                      1);
-    gui::Button("Editor");
-    ImGuiTabBarFlags tab_bar_flags = (true ? ImGuiTabBarFlags_Reorderable : 0);
-    if (ImGui::BeginTabBar("##file-tabs", tab_bar_flags)) {
-      static bool opn = true;
-      ImGuiTabItemFlags tab_flags =
-          (true ? ImGuiTabItemFlags_UnsavedDocument : 0);
-      if (ImGui::BeginTabItem("[Selected]", &opn, tab_flags)) {
-        // Draw input text.
-        static char mlbuf[1024];
-        static const auto nlines = 50;
-        auto file_text_box = cgui::MultiLineTextInput(
-            "Code2", &gEditorStringBuffer, cgui::kExpandWidgetToRemainingSpaceXY);
-        //ImGui::InputTextMultiline("Code", &gEditorStringBuffer,
-        //                          kExpandWidgetToRemainingSpaceXY);
+      // End of File explorer
+      ImGui::EndChild();
 
-        ImGui::EndTabItem();
-      }
+      //  // Console
+      cide::ShowAppConsole();
+    }  // End Main Ide Window Context
 
-      if (ImGui::BeginTabItem("other", &opn, tab_flags)) {
-        // Draw input text.
-        static char mlbuf[1024];
-        static const auto nlines = 32;
-        ImGui::InputTextMultiline(
-            "Code", mlbuf, sizeof(mlbuf),
-            ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * nlines));
-
-        ImGui::EndTabItem();
-      }
-      gui::EndTabBar();
-    }
-    // End of Editor.
-    ImGui::EndChild();
-
-    // File Explorer
-    gui::SameLine();
-    ImGui::BeginChild("File Explorer",
-                      {0, static_cast<float>(window.getSize().y * 0.75f)}, 1);
-
-    ImGuiTabBarFlags tab_bar_flags2 = (true ? ImGuiTabBarFlags_Reorderable : 0);
-    if (ImGui::BeginTabBar("##file-tabs", tab_bar_flags2)) {
-      static bool opn2 = true;
-      ImGuiTabItemFlags tab_flags2 =
-          (true ? ImGuiTabItemFlags_UnsavedDocument : 0);
-      if (ImGui::BeginTabItem("Solution", &opn2, tab_flags2)) {
-        // Draw input text.
-        bool node_open = ImGui::TreeNode("Solution Folder");
-        if (node_open) {
-          // Draw the folder structure:
-          cide::DisplayDirectory(cide::stdfs::current_path());
-          ImGui::TreePop();
-        }
-        ImGui::EndTabItem();
-      }
-
-      if (ImGui::BeginTabItem("other", &opn2, tab_flags2)) {
-        // Draw input text.
-        static char mlbuf2[1024];
-        static const auto nlines2 = 32;
-        ImGui::InputTextMultiline("Code", mlbuf2, sizeof(mlbuf2),
-                                  kExpandWidgetToRemainingSpaceXY);
-
-        ImGui::EndTabItem();
-      }
-      gui::EndTabBar();
-    }
-    // End of File explorer
-    ImGui::EndChild();
-
-    // Console
-    cide::ShowAppConsole();
-
+    cgui::WindowWidget a{"wowowoow"};
+    a.EndEarly();
     // End of App.
-    ImGui::End();
+    // ImGui::End();
 
     window.clear();
     window.draw(shape);

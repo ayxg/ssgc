@@ -24,5 +24,8 @@
     <ClInclude Include="hetero_method_map.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="enumerated_flags.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

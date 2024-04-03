@@ -3,12 +3,117 @@
 #include <tuple>
 #include <type_traits>
 #include <variant>
-
+#include <functional>
 #include "require.h"
 //======================================================================================//
 // Meta Methods:
 // These structs typedefs and methods are to be treated as meta functions.
 //======================================================================================//
+
+template <typename T>
+struct function_traits;
+
+template <typename R, typename... Args>
+struct function_traits<std::function<R(Args...)>> {
+  static constexpr inline size_t nargs = sizeof...(Args);
+  using result_type = R;
+  using args_tuple_type = std::tuple<Args...>;
+  template<std::size_t N>
+  using arg_type = typename std::tuple_element<N, args_tuple_type>::type;
+};
+
+template <typename T, typename U = void>
+struct is_callable {
+  static bool const constexpr value =
+      std::conditional_t<std::is_class<std::remove_reference_t<T>>::value,
+                         is_callable<std::remove_reference_t<T>, int>,
+                         std::false_type>::value;
+};
+
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args...), U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T (*)(Args...), U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T (&)(Args...), U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args......), U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T (*)(Args......), U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T (&)(Args......), U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args...) const, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args...) volatile, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args...) const volatile, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args......) const, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args......) volatile, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args......) const volatile, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args...)&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args...) const&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args...) volatile&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args...) const volatile&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args......)&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args......) const&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args......) volatile&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args......) const volatile&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args...)&&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args...) const&&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args...) volatile&&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args...) const volatile&&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args......)&&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args......) const&&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args......) volatile&&, U> : std::true_type {};
+template <typename T, typename U, typename... Args>
+struct is_callable<T(Args......) const volatile&&, U> : std::true_type {};
+
+template <typename T>
+struct is_callable<T, int> {
+ private:
+  using YesType = char (&)[1];
+  using NoType = char (&)[2];
+
+  struct Fallback {
+    void operator()();
+  };
+
+  struct Derived : T, Fallback {};
+
+  template <typename U, U>
+  struct Check;
+
+  template <typename>
+  static YesType Test(...);
+
+  template <typename C>
+  static NoType Test(Check<void (Fallback::*)(), &C::operator()>*);
+
+ public:
+  static bool const constexpr value =
+      sizeof(Test<Derived>(0)) == sizeof(YesType);
+};
+template<typename T>
+concept iCallable = is_callable<T>::value;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // is_template_for

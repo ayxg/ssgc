@@ -4,6 +4,8 @@
 #include <optional>
 #include <string>
 #include <type_traits>
+#include <exception>
+#include <stdexcept>
 
 #include "macrodef.h"
 namespace cxx {

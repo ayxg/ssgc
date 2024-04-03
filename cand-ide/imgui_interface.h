@@ -1,6 +1,10 @@
 #pragma once
 #include <atomic>
 #include <concepts>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <tuple>
 #include <type_traits>
 #include <unordered_set>
 
@@ -9,106 +13,101 @@
 #include "imgui.h"
 #include "imgui_stdlib.h"
 
-// TODO: move this to cppextended, pretty useful.
-template <cxx::req::Enumeration EnumT, cxx::req::Integral_ UnderlyingT>
-class EnumeratedFlags {
- public:
-  UnderlyingT flags_{0};
-  EnumeratedFlags() = default;
-  EnumeratedFlags(EnumT flags) : flags_(flags) {}
-  EnumeratedFlags(EnumT flags, std::same_as<EnumT> auto... other_flags)
-      : flags_(flags) {
-    (..., (flags_ |= other_flags));
-  }
-  UnderlyingT Get() const { return flags_; }
-  constexpr operator EnumT() const { return static_cast<EnumT>(flags_); }
-};
+//===========================================================================//
+namespace cgui { /* cgui namespace */
+//===========================================================================//
+/* C++ 20 Interface to the ImGui library
+ * 1. No need to call ImGui::Begin and ImGui::End for each window/widget.
+ * 2. No raw pointers.
+ * 3. Unified use of std::string.
+ * 4. Names of windows must be unique. Handle possible errors from occurence.
+ * 5. Widget IDs must be unique, are automatically generated.
+ */
+//===========================================================================//
 
-/////////////////////////////////////////////////////////////////////////////////
-namespace cgui {
-/////////////////////////////////////////////////////////////////////////////////
-// C++ 20 Interface to the ImGui library
-// 1. No need to call ImGui::Begin and ImGui::End for each window/widget.
-// 2. No raw pointers.
-// 3. Unified use of std::string.
-// 4. Names of windows must be unique. Handle possible errors from occurence.
-// 5. Widget IDs must be unique, are automatically generated.
-//
-/////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////
-// <decls>
-/////////////////////////////////////////////////////////////////////////////////
+//===========================================================================//
+/*<decls>*/
+//===========================================================================//
 
 using std::size_t;
 using std::string;
 
+// Internal vec2 representation, for now its a pair to keep it simple.
 using CguiVec2 = std::pair<float, float>;
 
-using ImGuiFlags = int;
+using GuiFlags = int;
 using eWindowFlags = ImGuiWindowFlags_;
 using eSubcontextFlags = ImGuiChildFlags_;
 using eTabBarFlags = ImGuiTabBarFlags_;
 using eTabItemFlags = ImGuiTabItemFlags_;
 using eInputTextFlags = ImGuiInputTextFlags_;
 
-class UIDGen;         // Generates unique widget identifiers.
-class UniqueNameMap;  // Maintains unique names across widgets.
-
 // Flag Structs: Represent ImGui Flags.
-//class WindowFlags;
-//class SubcontextFlags;
-//class TabBarFlags;
-//class TabItemFlags;
+using WindowFlags = cxx::EnumeratedFlags<eWindowFlags, GuiFlags>;
+using SubcontextFlags = cxx::EnumeratedFlags<eSubcontextFlags, GuiFlags>;
+using TabBarFlags = cxx::EnumeratedFlags<eTabBarFlags, GuiFlags>;
+using TabItemFlags = cxx::EnumeratedFlags<eTabItemFlags, GuiFlags>;
+using InputTextFlags = cxx::EnumeratedFlags<eInputTextFlags, GuiFlags>;
 
-using WindowFlags = EnumeratedFlags<eWindowFlags, ImGuiFlags>;
-using SubcontextFlags = EnumeratedFlags<eSubcontextFlags, ImGuiFlags>;
-using TabBarFlags = EnumeratedFlags<eTabBarFlags, ImGuiFlags>;
-using TabItemFlags = EnumeratedFlags<eTabItemFlags, ImGuiFlags>;
-using InputTextFlags = EnumeratedFlags<eInputTextFlags, ImGuiFlags>;
-// Represents open/closed/visible/pressed/hovered state
-// depending on the ImGui widget type.
-enum class eWidgetState {
-  kFree,      // state will be inferred.
-  kForceOff,  // force false state (if possible)
-  kForceOn,   // force true state(if possible)
-};
-struct WidgetBase;  // Widget base class
+class UIDGen;              // Generates unique widget identifiers.
+class UniqueNameMap;       // Maintains unique names across widgets.
+class ScopedWidgetBase;    // Base class for all scoped widgets.
+class SingularWidgetBase;  // Base class for all singular widgets.
 
-// Widgets
+namespace scoped_widget {
 class Window;
-class UnnamedSubcontext;
-class Subcontext;
+class Subcontext;       // Autogenerates unique id.
+class NamedSubcontext;  // Name must be unique or throws.
+class MenuBar;
+class Menu;
+class TabBar;
+class TabItem;
+class TreeNode;
+}  // namespace scoped_widget
 
-class MenuBar;   // main menu bar belonging to a context
-class Menu;      // drop down menu, can have submenus
-class MenuItem;  // An entry in the menu.
-
-// Single Instance Widgets : which dont require and unique id or name.
-// These do not use the WidgetMaker class to construct.
+namespace single_widget {
 class Button;
+class MenuItem;
+class Selectable;
+class MultilineTextInput;
+}  // namespace single_widget
 
-// Widget Factory Class: links a UIDGen and UniqueNameMap to a group of widgets.
-class WidgetMaker;
+namespace combo_widget {
+class DirectoryView;  // TreeNode view of a file path,single widget base.
+}  // namespace combo_widget
 
-/////////////////////////////////////////////////////////////////////////////////
-// <enddecls>
-/////////////////////////////////////////////////////////////////////////////////
+//===========================================================================//
+/*<enddecls>*/
+//===========================================================================//
 
-/////////////////////////////////////////////////////////////////////////////////
-// <constants>
-/////////////////////////////////////////////////////////////////////////////////
+// Implicit global unique id generator for cgui widget classes.
+// !! Do not use/access directly, called by ScopedWidgetBase on default
+// construction.
+static UIDGen gCguiDefaultUIDGenerator{};
+// Implicit global unique name map for cgui widget classes.
+// !! Do not use/access directly, called by ScopedWidgetBase on default
+// construction.
+static UniqueNameMap gCguiDefaultUniqueNameMap{};
+
+//===========================================================================//
+/*<constants>*/
+//===========================================================================//
 
 constexpr float kExpandWidgetToRemainingSpace() { return -FLT_MIN; }
 const CguiVec2 kExpandWidgetToRemainingSpaceXY = {
     kExpandWidgetToRemainingSpace(), kExpandWidgetToRemainingSpace()};
-/////////////////////////////////////////////////////////////////////////////////
-// <endconstants>
-/////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////
-// <defs>
-/////////////////////////////////////////////////////////////////////////////////
+//===========================================================================//
+/*<endconstants>*/
+//===========================================================================//
+
+//===========================================================================//
+/* <defs> */
+//===========================================================================//
+
+//-------------------------------------------------------------------------//
+/* <class:UIDGen> */
+//-------------------------------------------------------------------------//
 class UIDGen {
  public:
   using Iter = std::unordered_set<size_t>::iterator;
@@ -126,373 +125,9 @@ class UIDGen {
   std::unordered_set<size_t> generated_ids_;
 };
 
-class UniqueNameMap {
- public:
-  cxx::BoolError AddName(const std::string& str);
-  cxx::BoolError RemoveName(const std::string& str);
-  bool Contains(const std::string& str) { return names_.contains(str); }
-
- private:
-  std::unordered_set<string> names_;
-};
-
-//class WindowFlags {
-// public:
-//  ImGuiFlags flags_{0};
-//  WindowFlags() = default;
-//  WindowFlags(eWindowFlags flags) : flags_(flags) {}
-//  WindowFlags(eWindowFlags flags,
-//              std::same_as<eWindowFlags> auto... other_flags)
-//      : flags_(flags) {
-//    (..., (flags_ |= other_flags));
-//  }
-//  ImGuiFlags Get() const { return flags_; }
-//  constexpr operator eWindowFlags() const {
-//    return static_cast<eWindowFlags>(flags_);
-//  }
-//};
-
-//class SubcontextFlags {
-// public:
-//  ImGuiFlags flags_{0};
-//  SubcontextFlags() = default;
-//  SubcontextFlags(eSubcontextFlags flags) : flags_(flags) {}
-//  SubcontextFlags(eSubcontextFlags flags,
-//                  std::same_as<eSubcontextFlags> auto... other_flags)
-//      : flags_(flags) {
-//    (..., (flags_ |= other_flags));
-//  }
-//  int Get() const { return flags_; }
-//  constexpr operator eSubcontextFlags() const {
-//    return static_cast<eSubcontextFlags>(flags_);
-//  }
-//};
-//
-//class TabBarFlags {
-// public:
-//  ImGuiFlags flags_{0};
-//  TabBarFlags() = default;
-//  TabBarFlags(eTabBarFlags flags) : flags_(flags) {}
-//  TabBarFlags(eTabBarFlags flags,
-//              std::same_as<eTabBarFlags> auto... other_flags)
-//      : flags_(flags) {
-//    (..., (flags_ |= other_flags));
-//  }
-//  int Get() const { return flags_; }
-//  constexpr operator eTabBarFlags() const {
-//    return static_cast<eTabBarFlags>(flags_);
-//  }
-//};
-//
-//class TabItemFlags {
-// public:
-//  ImGuiFlags flags_{0};
-//  TabItemFlags() = default;
-//  TabItemFlags(eTabItemFlags flags) : flags_(flags) {}
-//  TabItemFlags(eTabItemFlags flags,
-//               std::same_as<eTabItemFlags> auto... other_flags)
-//      : flags_(flags) {
-//    (..., (flags_ |= other_flags));
-//  }
-//  int Get() const { return flags_; }
-//  constexpr operator eTabItemFlags() const {
-//    return static_cast<eTabItemFlags>(flags_);
-//  }
-//};
-//class InputTextFlags {
-// public:
-//  ImGuiFlags flags_{0};
-//  InputTextFlags() = default;
-//  InputTextFlags(eInputTextFlags flags) : flags_(flags) {}
-//  InputTextFlags(eInputTextFlags flags,
-//                 std::same_as<eInputTextFlags> auto... other_flags)
-//      : flags_(flags) {
-//    (..., (flags_ |= other_flags));
-//  }
-//  int Get() const { return flags_; }
-//  constexpr operator eInputTextFlags() const {
-//    return static_cast<eInputTextFlags>(flags_);
-//  }
-//};
-struct WidgetBase {
-  UniqueNameMap& name_map_;
-  UIDGen& id_gen_;
-  std::unique_ptr<bool> is_open_{nullptr};
-  bool is_scope_active_ = false;
-  WidgetBase(UniqueNameMap& name_map, UIDGen& id_gen)
-      : name_map_(name_map), id_gen_(id_gen) {}
-  virtual bool BeginLate() = 0;
-  virtual void EndEarly() = 0;
-  virtual ~WidgetBase() = default;
-
- protected:
-  // Name must not exist.
-  cxx::BoolError NewName(const std::string& str);
-  // Generate a new uuid
-  UIDGen::Iter NewId() { return id_gen_.GetId(); }
-  // Name must exist. For adding to widgets 'later'.
-  cxx::BoolError SetName(const std::string& str);
-  inline void HandleWidgetState(eWidgetState state);
-
- public:
-  // Returns true if the widget is active. This may be an open window, or a
-  // pressed button.
-  bool IsOpen() const { return *is_open_; }
-  // Returns true is the Begin() function has been called, further gui commands
-  // will add to this scope.
-  bool IsScopeActive() const { return is_scope_active_; }
-  operator bool() {
-    return IsOpen();
-  }  // Convertible to bool. Value of is_open.
-};
-
-class Window : public WidgetBase {
-  std::string title_{""};
-  WindowFlags flags_;
-
- public:
-  Window(UniqueNameMap& name_map, UIDGen& id_gen, const std::string& title,
-         eWidgetState state = eWidgetState::kFree,
-         WindowFlags flags = WindowFlags(), bool delay_begin = false);
-  ~Window();
-  bool BeginLate() override;
-  void EndEarly() override;
-  const std::string& Name() { return title_; }
-};
-
-class UnnamedSubcontext : public WidgetBase {
-  UIDGen::Iter uid_;
-  WindowFlags win_flags_;
-  SubcontextFlags subcontext_flags_;
-  std::pair<float, float> requested_size_;
-
- public:
-  auto Id() const { return *uid_; }
-  UnnamedSubcontext(UniqueNameMap& name_map, UIDGen& id_gen,
-                    std::pair<float, float> size = {0.f, 0.f},
-                    eWidgetState state = eWidgetState::kFree,
-                    WindowFlags win_flags = WindowFlags(),
-                    SubcontextFlags subcontext_flags = SubcontextFlags(),
-                    bool delay_begin = false);
-  bool BeginLate() override;
-  void EndEarly() override;
-  ~UnnamedSubcontext();
-};
-
-class Subcontext : public WidgetBase {
-  std::string name_;
-  WindowFlags win_flags_;
-  SubcontextFlags subcontext_flags_;
-  std::pair<float, float> requested_size_;
-
- public:
-  const std::string& Name() { return name_; }
-  Subcontext(UniqueNameMap& name_map, UIDGen& id_gen, const std::string& name,
-             std::pair<float, float> size = {0.f, 0.f},
-             eWidgetState state = eWidgetState::kFree,
-             WindowFlags win_flags = WindowFlags(),
-             SubcontextFlags subcontext_flags = SubcontextFlags(),
-             bool delay_begin = false);
-  bool BeginLate() override;
-  void EndEarly() override;
-  ~Subcontext();
-};
-
-class MenuBar : public WidgetBase {
- public:
-  MenuBar(UniqueNameMap& name_map, UIDGen& id_gen, bool delay_begin = false);
-  ~MenuBar();
-  bool BeginLate() override;
-  void EndEarly() override;
-};
-
-class Menu : public WidgetBase {
-  std::string title_{""};
-  bool is_enabled_ = true;  // enable/disable this menu from showing up
- public:
-  Menu(UniqueNameMap& name_map, UIDGen& id_gen, const std::string& title,
-       bool is_enabled = true, bool delay_begin = false);
-  ~Menu();
-  bool BeginLate() override;
-  void EndEarly() override;
-  const std::string& Name() { return title_; }
-};
-
-class TabBar : public WidgetBase {
-  std::string name_;
-  TabBarFlags flags_;
-
- public:
-  TabBar(UniqueNameMap& name_map, UIDGen& id_gen,
-         TabBarFlags flags = TabBarFlags(), bool delay_begin = false);
-  ~TabBar();
-  bool BeginLate() override;
-  void EndEarly() override;
-};
-
-class TabItem : public WidgetBase {
-  std::string name_;
-  TabItemFlags flags_;
-
- public:
-  TabItem(UniqueNameMap& name_map, UIDGen& id_gen,
-          eWidgetState state = eWidgetState::kFree,
-          TabItemFlags flags = TabItemFlags(), bool delay_begin = false);
-  ~TabItem();
-  bool BeginLate() override;
-  void EndEarly() override;
-};
-
-struct SingularWidgetBase {
-  bool is_scope_active_{false};
-  bool is_open_{false};
-  virtual bool BeginLate() = 0;
-  virtual ~SingularWidgetBase() = default;
-
-  bool IsOpen() const { return is_open_; }
-  bool IsScopeActive() const { return is_scope_active_; }
-};
-
-struct Button : public SingularWidgetBase {
-  const std::string& text;
-  const std::pair<float, float> size{};
-  Button(const std::string& text, std::pair<float, float> size = {},
-         bool delayed_begin = false)
-      : SingularWidgetBase(), text(text), size(size) {
-    if (delayed_begin) {
-      is_scope_active_ = false;
-      is_open_ = false;
-    } else {
-      is_open_ = (ImGui::Button(text.c_str(), {size.first, size.second}));
-      is_scope_active_ = true;
-    }
-  }
-
-  bool BeginLate() {
-    if (not is_scope_active_)
-      is_open_ = (ImGui::Button(text.c_str(), {size.first, size.second}));
-    // Do nothing if scope is already active. Same as IsOpen().
-    return is_open_;
-  }
-};
-
-struct MenuItem : public SingularWidgetBase {
-  const std::string& text;
-  const std::string& shortcut_hint;
-  const bool is_enabled;
-  MenuItem(const std::string& text, const std::string& shortcut_hint = "",
-           bool is_enabled = true, bool delayed_begin = false)
-      : SingularWidgetBase(),
-        text(text),
-        shortcut_hint(shortcut_hint),
-        is_enabled(is_enabled) {
-    if (delayed_begin) {
-      is_scope_active_ = false;
-      is_open_ = false;
-    } else {
-      is_open_ = (ImGui::MenuItem(text.c_str(), shortcut_hint.c_str(), false,
-                                  is_enabled));
-      is_scope_active_ = true;
-    }
-  }
-  bool BeginLate() {
-    if (not is_scope_active_)
-      is_open_ = (ImGui::MenuItem(text.c_str(), shortcut_hint.c_str(), false,
-                                  is_enabled));
-    // Do nothing if scope is already active. Same as IsOpen().
-    return is_open_;
-  }
-};
-
-struct MultiLineTextInput : public SingularWidgetBase {
-  const std::string& label;
-  const CguiVec2& size;
-  std::string* buffer;
-  InputTextFlags flags;
-  MultiLineTextInput(const std::string& label, std::string* buffer,
-                     const CguiVec2& size = {},
-                     InputTextFlags flags = InputTextFlags(),
-                     bool delayed_begin = false)
-      : SingularWidgetBase(),
-        label(label),
-        size(size),
-        buffer(buffer),
-        flags(flags) {
-    if (delayed_begin) {
-      is_scope_active_ = false;
-      is_open_ = false;
-    } else {
-      is_open_ = ImGui::InputTextMultiline(label.c_str(), buffer,
-                                            {size.first, size.second});
-      is_scope_active_ = true;
-    }
-  }
-  bool BeginLate() {
-    if (not is_scope_active_)
-      is_open_ = ImGui::InputTextMultiline(label.c_str(), buffer,
-                                            {size.first, size.second});
-    // Do nothing if scope is already active. Same as IsOpen().
-    return is_open_;
-  }
-};
-
-class WidgetMaker {
-  UniqueNameMap name_map_;
-  UIDGen id_gen_;
-
- public:
-  // Window widget.
-  Window MakeWindow(const std::string& title,
-                    eWidgetState state = eWidgetState::kFree,
-                    WindowFlags flags = WindowFlags(),
-                    bool delay_begin = false) {
-    return Window(name_map_, id_gen_, title, state, flags, delay_begin);
-  }
-
-  // Subcontext Widget
-  Subcontext MakeSubcontext(
-      const std::string& name, std::pair<float, float> size = {0.f, 0.f},
-      eWidgetState state = eWidgetState::kFree,
-      WindowFlags win_flags = WindowFlags(),
-      SubcontextFlags subcontext_flags = SubcontextFlags(),
-      bool delay_begin = false) {
-    return Subcontext(name_map_, id_gen_, name, size, state, win_flags,
-                      subcontext_flags, delay_begin);
-  }
-
-  // UnnamedSubcontext
-  UnnamedSubcontext MakeUnnamedSubcontext(
-      std::pair<float, float> size = {0.f, 0.f},
-      eWidgetState state = eWidgetState::kFree,
-      WindowFlags win_flags = WindowFlags(),
-      SubcontextFlags subcontext_flags = SubcontextFlags(),
-      bool delay_begin = false) {
-    return UnnamedSubcontext(name_map_, id_gen_, size, state, win_flags,
-                             subcontext_flags, delay_begin);
-  }
-
-  // MainMenuBar
-  MenuBar MakeMenuBar(bool delay_begin = false) {
-    return MenuBar(name_map_, id_gen_, delay_begin);
-  }
-
-  // Menu
-  Menu MakeMenu(const std::string& title, bool is_enabled = true,
-                bool delay_begin = false) {
-    return Menu(name_map_, id_gen_, title, is_enabled, delay_begin);
-  }
-
-  // Tree
-};
-
-/////////////////////////////////////////////////////////////////////////////////
-// <enddefs>
-/////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////
-// <impl:UIDGen>
-/////////////////////////////////////////////////////////////////////////////////
-
+//-------------------------------------------------------------------------//
+/* <impl:UIDGen> */
+//-------------------------------------------------------------------------//
 // Do a try catch block around this method if you wish to refresh on overflow.
 UIDGen::Iter UIDGen::GetId() {
   if (next_id_ == SIZE_MAX) throw std::overflow_error("UIDGen: ID overflow");
@@ -525,13 +160,34 @@ void UIDGen::Refresh() {
   generated_ids_.clear();
   next_id_.store(1);
 }
-/////////////////////////////////////////////////////////////////////////////////
-// <endimpl:UIDGen>
-/////////////////////////////////////////////////////////////////////////////////
+//-------------------------------------------------------------------------//
+/* <endimpl:UIDGen> */
+//-------------------------------------------------------------------------//
 
-/////////////////////////////////////////////////////////////////////////////////
-// <impl:UniqueNameMap>
-/////////////////////////////////////////////////////////////////////////////////
+//-------------------------------------------------------------------------//
+/* <class:UniqueNameMap> */
+//-------------------------------------------------------------------------//
+// Simple map which maintains unique names.
+// TODO: improve using appended unique ids,
+// in ImGui you can add "id" + "###tag" at the end
+// to seperate objects with the same name.
+// ## seems to also do something...search imgui src
+//   You can use the "##" or "###" markers to use the same label with different
+//   id, or same id with different label. See documentation at the top of this
+//   file.
+class UniqueNameMap {
+ public:
+  cxx::BoolError AddName(const std::string& str);
+  cxx::BoolError RemoveName(const std::string& str);
+  bool Contains(const std::string& str) { return names_.contains(str); }
+
+ private:
+  std::unordered_set<string> names_;
+};
+
+//-------------------------------------------------------------------------//
+/* <impl:UniqueNameMap> */
+//-------------------------------------------------------------------------//
 cxx::BoolError UniqueNameMap::AddName(const std::string& str) {
   if (names_.contains(str))
     return "[UniqueNameMap:AddName:This widget name is already in use.]";
@@ -545,294 +201,870 @@ cxx::BoolError UniqueNameMap::RemoveName(const std::string& str) {
   names_.erase(str);
   return true;
 }
+//-------------------------------------------------------------------------//
+/* <endimpl:UniqueNameMap> */
+//-------------------------------------------------------------------------//
 
-/////////////////////////////////////////////////////////////////////////////////
-// <endimpl:UniqueNameMap>
-/////////////////////////////////////////////////////////////////////////////////
+//-------------------------------------------------------------------------//
+/* <class:ScopedWidgetBase> */
+//-------------------------------------------------------------------------//
+class ScopedWidgetBase {
+ public:
+  using BoundScopeBeginFuncT = std::function<bool()>;
+  using BoundScopeEndFuncT = std::function<void()>;
 
-/////////////////////////////////////////////////////////////////////////////////
-// <impl:WidgetBase>
-/////////////////////////////////////////////////////////////////////////////////
+  // Returns true is the Begin() function has been called
+  // further gui commands will add to this scope.
+  constexpr inline bool IsScopeActive() const { return is_scope_active_; }
 
-// Name must not exist.
-cxx::BoolError WidgetBase::NewName(const std::string& str) {
-  if (name_map_.Contains(str))
-    return "[WidgetBase:NewName:This widget name is already in use.]";
-  name_map_.AddName(str);
-  return true;
+  // The meaning of is_on_ may vary based on the ImGui widget call.
+  // Usually indicates if this object was rendered by ImGui.
+  // Some Object will always render, while the result represents a state.
+  // These objects must be ended with ForceEndImpl().
+  // Ex. Windows will return false for this parameter if they are minimized,
+  // but the top bar will still be rendered. So the window is NOT displayed
+  // but it IS rendered.
+  constexpr inline bool IsOn() const { return is_on_; }
+
+  // Implementations of the BeginLate and EndEarly methods.
+  // Begin and End implementations are ment for the constructor
+  //  and destructor respectivley.
+  // ForceEnd is for widgets which must call End()
+  //  even if Begin() returns false.
+ protected:
+  void BindBegin(const BoundScopeBeginFuncT& bound_begin) {
+    begin_func = bound_begin;
+  }
+  void BindEnd(const BoundScopeEndFuncT& bound_end) { end_func = bound_end; }
+  bool BeginImpl() {
+    if (is_delayed_ == true) {
+      is_scope_active_ = true;
+      is_on_ = begin_func();
+    } else {
+      is_scope_active_ = false;
+      is_on_ = false;
+    }
+    return is_on_;
+  }
+  bool BeginLateImpl() {
+    if (not is_scope_active_) {
+      is_scope_active_ = true;
+      is_on_ = begin_func();
+    }
+    return is_on_;
+  }
+  void EndImpl() {
+    if (is_scope_active_ && is_on_) end_func();
+  }
+  void EndEarlyImpl() {
+    if (not is_scope_active_) throw "[ EndEarly() called before begin. ]";
+    is_scope_active_ = false;
+    if (is_on_) end_func();
+  };
+  void ForceEndImpl() {
+    if (is_scope_active_) end_func();
+  }
+  void ForceEndEarlyImpl() {
+    if (not is_scope_active_) throw "[ EndEarly() called before begin. ]";
+    is_scope_active_ = false;
+    end_func();
+  };
+
+  // Public interface to be implemented by the child class.
+ public:
+  virtual bool BeginLate() = 0;
+  virtual void EndEarly() = 0;
+  virtual ~ScopedWidgetBase() = default;
+
+ public:
+  // Default object is a null widget,Begin() will always return false.
+  ScopedWidgetBase(bool is_delayed)
+      : name_map_(gCguiDefaultUniqueNameMap),
+        id_gen_(gCguiDefaultUIDGenerator),
+        is_delayed_(is_delayed) {
+    is_on_ = false;
+    is_scope_active_ = false;
+    begin_func = []() { return false; };
+    end_func = []() {};
+  };
+
+  // For simple widget which can be bound without other internal dependencies.
+  // BeginImpl() must still be called by the child class.
+  ScopedWidgetBase(bool is_delayed, const BoundScopeBeginFuncT& bound_begin,
+                   const BoundScopeEndFuncT& bound_end)
+      : name_map_(gCguiDefaultUniqueNameMap),
+        id_gen_(gCguiDefaultUIDGenerator),
+        is_delayed_(is_delayed) {
+    is_on_ = false;
+    is_scope_active_ = false;
+    begin_func = bound_begin;
+    end_func = bound_end;
+  };
+
+  // Move is allowed
+  ScopedWidgetBase(ScopedWidgetBase&& other) noexcept
+      : name_map_(other.name_map_), id_gen_(other.id_gen_) {
+    is_on_ = other.is_on_;
+    is_scope_active_ = other.is_scope_active_;
+    is_delayed_ = other.is_delayed_;
+    begin_func = other.begin_func;
+    end_func = other.end_func;
+  }
+
+  // Copy is implicitly forbidden.
+  ScopedWidgetBase(const ScopedWidgetBase& other) = delete;
+
+  // Boolean conversion, returns IsOn()
+  operator bool() { return is_on_; }
+
+ private:
+  UniqueNameMap& name_map_;
+  UIDGen& id_gen_;
+  bool is_scope_active_;
+  bool is_on_;
+  bool is_delayed_;
+  BoundScopeBeginFuncT begin_func;
+  BoundScopeEndFuncT end_func;
+
+  // Helper methods to keep the above members private,
+  // They are to be used by the child class implementation.
+ protected:
+  // Name must not exist.
+  cxx::BoolError RequestNewName(const std::string& str) {
+    if (name_map_.Contains(str))
+      return "[WidgetBase:NewName:This widget name is already in use.]";
+    name_map_.AddName(str);
+    return true;
+  };
+  void ReleaseName(const std::string& str) {
+    // Remove the name from name map.
+    name_map_.RemoveName(str);
+  }
+  // Generate a new uuid
+  UIDGen::Iter RequestId() { return id_gen_.GetId(); }
+  void ReleaseId(UIDGen::Iter id_iter) {
+    // Remove the id
+    id_gen_.EraseId(id_iter);
+  }
 };
 
-// Name must exist. For adding to widgets 'later'.
-cxx::BoolError WidgetBase::SetName(const std::string& str) {
-  if (!name_map_.Contains(str))
-    return "[WidgetBase:SetName:No widget with such name exists.]";
-  return true;
-}
+//-------------------------------------------------------------------------//
+/* <class:SingularWidgetBase> */
+//-------------------------------------------------------------------------//
+class SingularWidgetBase {
+ public:
+  using BoundBeginFuncT = std::function<bool()>;
 
-inline void WidgetBase::HandleWidgetState(eWidgetState state) {
-  // handle is_open based on widget state
-  if (state == eWidgetState::kForceOff) {
-    is_open_ = std::make_unique<bool>(false);
-  } else if (state == eWidgetState::kForceOn) {
-    is_open_ = std::make_unique<bool>(true);
+ protected:
+  void BindBegin(const BoundBeginFuncT& bound_begin) {
+    begin_func = bound_begin;
   }
-}
-/////////////////////////////////////////////////////////////////////////////////
-// <endimpl:WidgetBase>
-/////////////////////////////////////////////////////////////////////////////////
+  bool BeginImpl() {
+    if (is_delayed_ == true) {
+      is_scope_active_ = true;
+      is_on_ = begin_func();
+    } else {
+      is_scope_active_ = false;
+      is_on_ = false;
+    }
+    return is_on_;
+  }
+  bool BeginLateImpl() {
+    if (not is_scope_active_) {
+      is_scope_active_ = true;
+      is_on_ = begin_func();
+    }
+    return is_on_;
+  }
 
-/////////////////////////////////////////////////////////////////////////////////
-// <impl:Window>
-/////////////////////////////////////////////////////////////////////////////////
-Window::Window(UniqueNameMap& name_map, UIDGen& id_gen,
-               const std::string& title, eWidgetState state, WindowFlags flags,
-               bool delay_begin)
-    : WidgetBase(name_map, id_gen) {
-  cxx::BoolError valid_name = NewName(title);
-  if (valid_name) {
+ public:
+  SingularWidgetBase(bool is_delayed)
+      : is_delayed_(is_delayed), is_scope_active_(false), is_on_(false) {}
+  virtual bool BeginLate() = 0;
+  virtual ~SingularWidgetBase() = default;
+
+  // Result of requesting to render this widget.
+  // Meaning varies from widget to widget.
+  // Indicated a pressed/released/displayed state.
+  bool IsOn() const { return is_on_; }
+
+  // Has this widget's scope been initiated?
+  // If true -> not necessarily rendered, but a request to render has
+  // been sent.
+  bool IsScopeActive() const { return is_scope_active_; }
+
+  // Boolean conversion, returns IsOn()
+  operator bool() { return is_on_; }
+
+ private:
+  bool is_scope_active_;  // Has this widget's scope been initiated?
+  bool is_on_;            // Result of requesting to render this widget.
+  bool is_delayed_;
+  BoundBeginFuncT begin_func;
+};
+
+//===========================================================================//
+namespace scoped_widget { /* cgui scoped_widget */
+//===========================================================================//
+
+//-------------------------------------------------------------------------//
+/* <class:Window> */
+//-------------------------------------------------------------------------//
+class Window : public ScopedWidgetBase {
+ public:
+  Window(const std::string& title, bool has_close_button = false,
+         WindowFlags flags = WindowFlags(), bool delay_begin = true)
+      : ScopedWidgetBase(delay_begin) {
+    flags_ = flags;
+    has_close_button_ = has_close_button;
+
+    // Make sure the name is unique. Add it to the name map.
+    cxx::BoolError valid_name = RequestNewName(title);
+    if (valid_name) {
+      title_ = title;
+    } else
+      throw valid_name.Exception();
+
+    // Bind the begin method.
+    BindBegin([this]() -> bool {
+      if (has_close_button_) {
+        close_button_state_ = std::make_unique<bool>(true);
+      }
+      return ImGui::Begin(title_.c_str(), close_button_state_.get(),
+                          flags_.Get());
+    });
+
+    // Bind the end method
+    BindEnd(ImGui::End);
+
+    // Begin Scope if not delayed.
+    BeginImpl();
+  }
+
+  bool BeginLate() override { return BeginLateImpl(); }
+
+  void EndEarly() override { ForceEndEarlyImpl(); }
+
+  ~Window() {
+    ForceEndImpl();
+    // Remove the name from name map.
+    ReleaseName(title_);
+  }
+
+  // Properties
+ public:
+  const std::string& Title() const { return title_; }
+
+  // !! Warning: Returns a mutable reference.
+  WindowFlags& Flags() { return flags_; }
+
+  // Returns TRUE if the close button of the window was triggered this frame.
+  // From ImGui documentation as to why the implementation is inversed...:
+  // Passing 'bool* p_open' displays a Close button on the upper-right corner
+  // of the window, the pointed value will be set to false when the button is
+  // pressed.
+  bool IsCloseButtonTriggered() const { return not *close_button_state_; }
+
+ private:
+  std::string title_{""};
+  WindowFlags flags_{WindowFlags()};
+  bool has_close_button_;
+  std::unique_ptr<bool> close_button_state_{nullptr};
+};
+
+//-------------------------------------------------------------------------//
+/* <class:Subcontext> */
+//-------------------------------------------------------------------------//
+class Subcontext : public ScopedWidgetBase {
+  UIDGen::Iter uid_;
+  WindowFlags win_flags_;
+  SubcontextFlags subcontext_flags_;
+  CguiVec2 requested_size_;
+
+ public:
+  std::size_t Id() const { return *uid_; }
+  // !! Warning: mutable reference
+  WindowFlags GetWindowFlags() const { return win_flags_; }
+  // !! Warning: mutable reference
+  SubcontextFlags GetSubcontextFlags() const { return subcontext_flags_; }
+  const CguiVec2& RequestedSize() { return requested_size_; }
+
+  Subcontext(CguiVec2 size = {0.f, 0.f}, WindowFlags win_flags = WindowFlags(),
+             SubcontextFlags subcontext_flags = SubcontextFlags(),
+             bool delay_begin = false)
+      : ScopedWidgetBase(delay_begin) {
+    uid_ = RequestId();
+    win_flags_ = win_flags;
+    subcontext_flags_ = subcontext_flags;
+    requested_size_ = size;
+
+    // Bind the begin method.
+    BindBegin([this]() -> bool {
+      return ImGui::BeginChild(*uid_,
+                               {requested_size_.first, requested_size_.second},
+                               subcontext_flags_, win_flags_);
+    });
+
+    // Bind the end method
+    BindEnd(ImGui::EndChild);
+
+    // Begin Scope if not delayed.
+    BeginImpl();
+  }
+  bool BeginLate() override { return BeginLateImpl(); }
+
+  void EndEarly() override { EndEarlyImpl(); }
+
+  ~Subcontext() {
+    EndImpl();
+    // Remove the name from name map.
+    ReleaseId(uid_);
+  }
+};
+
+//-------------------------------------------------------------------------//
+/* <class:NamedSubcontext> */
+//-------------------------------------------------------------------------//
+class NamedSubcontext : public ScopedWidgetBase {
+  std::string name_;
+  WindowFlags win_flags_;
+  SubcontextFlags subcontext_flags_;
+  CguiVec2 requested_size_;
+
+ public:
+  const std::string& Name() const { return name_; }
+  // !! Warning: mutable reference
+  WindowFlags GetWindowFlags() const { return win_flags_; }
+  // !! Warning: mutable reference
+  SubcontextFlags GetSubcontextFlags() const { return subcontext_flags_; }
+  const CguiVec2& RequestedSize() { return requested_size_; }
+
+  NamedSubcontext(const std::string& name, CguiVec2 size = {0.f, 0.f},
+                  WindowFlags win_flags = WindowFlags(),
+                  SubcontextFlags subcontext_flags = SubcontextFlags(),
+                  bool delay_begin = false)
+      : ScopedWidgetBase(delay_begin) {
+    win_flags_ = win_flags;
+    subcontext_flags_ = subcontext_flags;
+    requested_size_ = size;
+
+    // Make sure the name is unique. Add it to the name map.
+    cxx::BoolError valid_name = RequestNewName(name);
+    if (valid_name) {
+      name_ = name;
+    } else
+      throw valid_name.Exception();
+
+    // Bind the begin method.
+    BindBegin([this]() -> bool {
+      return ImGui::BeginChild(name_.c_str(),
+                               {requested_size_.first, requested_size_.second},
+                               subcontext_flags_, win_flags_);
+    });
+
+    // Bind the end method
+    BindEnd(ImGui::EndChild);
+
+    // Begin Scope if not delayed.
+    BeginImpl();
+  }
+
+  bool BeginLate() override { return BeginLateImpl(); }
+
+  void EndEarly() override { EndEarlyImpl(); }
+
+  ~NamedSubcontext() {
+    EndImpl();
+    // Remove the name from name map.
+    ReleaseName(name_);
+  }
+};
+
+//-------------------------------------------------------------------------//
+/* <class:MenuBar> */
+//-------------------------------------------------------------------------//
+class MenuBar : public ScopedWidgetBase {
+ public:
+  MenuBar(bool delay_begin = false) : ScopedWidgetBase(delay_begin) {
+    // Bind the begin method.
+    BindBegin(ImGui::BeginMainMenuBar);
+
+    // Bind the end method
+    BindEnd(ImGui::EndMainMenuBar);
+
+    // Begin Scope if not delayed.
+    BeginImpl();
+  }
+
+  bool BeginLate() override { return BeginLateImpl(); }
+
+  void EndEarly() override { EndEarlyImpl(); }
+
+  ~MenuBar() { EndImpl(); }
+};
+
+//-------------------------------------------------------------------------//
+/* <class:Menu> */
+//-------------------------------------------------------------------------//
+class Menu : public ScopedWidgetBase {
+  std::string title_;
+  bool is_enabled_;
+
+ public:
+  const std::string& Title() const { return title_; }
+  bool IsEnabled() const { return is_enabled_; }
+
+  Menu(const std::string& title, bool is_enabled = true,
+       bool delay_begin = false)
+      : ScopedWidgetBase(delay_begin) {
     title_ = title;
-  } else
-    throw valid_name.Exception();
+    is_enabled_ = is_enabled;
 
-  // handle is_open based on widget state
-  if (state == eWidgetState::kForceOff) {
-    is_open_ = std::make_unique<bool>(false);
-  } else if (state == eWidgetState::kForceOn) {
-    is_open_ = std::make_unique<bool>(true);
+    // Make sure the name is unique. Add it to the name map.
+    cxx::BoolError valid_name = RequestNewName(title);
+    if (valid_name) {
+      title_ = title;
+    } else
+      throw valid_name.Exception();
+
+    // Bind the begin method.
+    BindBegin([this]() -> bool {
+      return ImGui::BeginMenu(title_.c_str(), is_enabled_);
+    });
+
+    // Bind the end method
+    BindEnd(ImGui::EndMenu);
+
+    // Begin Scope if not delayed.
+    BeginImpl();
   }
-  flags_ = flags;
 
-  if (not delay_begin) {
-    is_scope_active_ = true;
-    ImGui::Begin(title_.c_str(), is_open_.get(), flags_);
+  bool BeginLate() override { return BeginLateImpl(); }
+
+  void EndEarly() override { EndEarlyImpl(); }
+
+  ~Menu() {
+    EndImpl();
+    // Remove the name from name map.
+    ReleaseName(title_);
   }
-}
+};
 
-bool Window::BeginLate() {
-  if (not is_scope_active_) {
-    is_scope_active_ = true;
-    ImGui::Begin(title_.c_str(), is_open_.get(), flags_);
-  }
-  return IsOpen();
-}
+//-------------------------------------------------------------------------//
+/* <class:TabBar> */
+//-------------------------------------------------------------------------//
+class TabBar : public ScopedWidgetBase {
+  std::string name_;
+  TabBarFlags flags_;
 
-void Window::EndEarly() {
-  if (not is_scope_active_) throw "[WindowWidget:End:end called before begin.]";
-  is_scope_active_ = false;
-  ImGui::End();
-}
+ public:
+  const std::string& Name() const { return name_; }
+  TabBarFlags GetFlags() const { return flags_; }
 
-Window::~Window() {
-  // End the gui object.
-  if (is_scope_active_) ImGui::End();
-
-  // Remove the name from name map.
-  name_map_.RemoveName(title_);
-}
-/////////////////////////////////////////////////////////////////////////////////
-// <endimpl:Window>
-/////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////
-// <impl:UnnamedSubcontext>
-/////////////////////////////////////////////////////////////////////////////////
-
-UnnamedSubcontext::UnnamedSubcontext(UniqueNameMap& name_map, UIDGen& id_gen,
-                                     std::pair<float, float> size,
-                                     eWidgetState state, WindowFlags win_flags,
-                                     SubcontextFlags subcontext_flags,
-                                     bool delay_begin)
-    : WidgetBase(name_map, id_gen) {
-  HandleWidgetState(state);
-  uid_ = NewId();
-  win_flags_ = win_flags;
-  subcontext_flags_ = subcontext_flags;
-  requested_size_ = size;
-  if (not delay_begin) {
-    is_scope_active_ = true;
-    is_open_ = std::make_unique<bool>(ImGui::BeginChild(
-        *uid_, {requested_size_.first, requested_size_.second},
-        subcontext_flags_, win_flags_));
-  }
-}
-
-bool UnnamedSubcontext::BeginLate() {
-  if (not is_scope_active_) {
-    is_scope_active_ = true;
-    is_open_ = std::make_unique<bool>(ImGui::BeginChild(
-        *uid_, {requested_size_.first, requested_size_.second},
-        subcontext_flags_, win_flags_));
-    return IsOpen();
-  }
-  throw "[UnnamedSubcontext:BeginLate:begin called twice, set delay_begin true on construct.]";
-}
-
-void UnnamedSubcontext::EndEarly() {
-  if (not is_scope_active_)
-    throw "[UnnamedSubcontext:End:end called before begin.]";
-  is_scope_active_ = false;
-  if (*is_open_) ImGui::EndChild();
-}
-
-UnnamedSubcontext::~UnnamedSubcontext() {
-  // End the gui object.
-  if (is_scope_active_ && *is_open_) ImGui::EndChild();
-
-  // Remove the id
-  id_gen_.EraseId(uid_);
-}
-
-/////////////////////////////////////////////////////////////////////////////////
-// <endimpl:UnnamedSubcontext>
-/////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////
-// <impl:Subcontext>
-/////////////////////////////////////////////////////////////////////////////////
-Subcontext::Subcontext(UniqueNameMap& name_map, UIDGen& id_gen,
-                       const std::string& name, std::pair<float, float> size,
-                       eWidgetState state, WindowFlags win_flags,
-                       SubcontextFlags subcontext_flags, bool delay_begin)
-    : WidgetBase(name_map, id_gen) {
-  HandleWidgetState(state);
-  cxx::BoolError valid_name = NewName(name);
-  if (valid_name) {
+  TabBar(const std::string& name, TabBarFlags flags = TabBarFlags(),
+         bool delay_begin = false)
+      : ScopedWidgetBase(delay_begin) {
     name_ = name;
-  } else
-    throw valid_name.Exception();
-  win_flags_ = win_flags;
-  subcontext_flags_ = subcontext_flags;
-  requested_size_ = size;
-  if (not delay_begin) {
-    is_scope_active_ = true;
-    is_open_ = std::make_unique<bool>(ImGui::BeginChild(
-        name_.c_str(), {requested_size_.first, requested_size_.second},
-        subcontext_flags_, win_flags_));
+    flags_ = flags;
+
+    // Make sure the name is unique. Add it to the name map.
+    cxx::BoolError valid_name = RequestNewName(name);
+    if (valid_name) {
+      name_ = name;
+    } else
+      throw valid_name.Exception();
+
+    // Bind the begin method.
+    BindBegin([this]() -> bool {
+      return ImGui::BeginTabBar(name_.c_str(), flags_.Get());
+    });
+
+    // Bind the end method
+    BindEnd(ImGui::EndTabBar);
+
+    // Begin Scope if not delayed.
+    BeginImpl();
   }
-}
 
-bool Subcontext::BeginLate() {
-  if (not is_scope_active_) {
-    is_scope_active_ = true;
-    is_open_ = std::make_unique<bool>(ImGui::BeginChild(
-        name_.c_str(), {requested_size_.first, requested_size_.second},
-        subcontext_flags_, win_flags_));
-    return IsOpen();
-  }
-  throw "[Subcontext:BeginLate:begin called twice, set delay_begin true on construct.]";
-}
+  bool BeginLate() override { return BeginLateImpl(); }
 
-void Subcontext::EndEarly() {
-  if (not is_scope_active_) throw "[Subcontext:End:end called before begin.]";
-  is_scope_active_ = false;
-  if (*is_open_) ImGui::EndChild();
-}
+  void EndEarly() override { EndEarlyImpl(); }
 
-Subcontext::~Subcontext() {
-  // End the gui object.
-  if (is_scope_active_ && *is_open_) ImGui::EndChild();
-
-  // Remove the name from name map.
-  name_map_.RemoveName(name_);
-}
-/////////////////////////////////////////////////////////////////////////////////
-// <endimpl:Subcontext>
-/////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////
-// <impl:MenuBar>
-/////////////////////////////////////////////////////////////////////////////////
-MenuBar::MenuBar(UniqueNameMap& name_map, UIDGen& id_gen, bool delay_begin)
-    : WidgetBase(name_map, id_gen) {
-  if (not delay_begin) {
-    is_scope_active_ = true;
-    is_open_ = std::make_unique<bool>(ImGui::BeginMenuBar());
+  ~TabBar() {
+    EndImpl();
+    // Remove the name from name map.
+    ReleaseName(name_);
   }
 };
-MenuBar::~MenuBar() {
-  if (is_scope_active_ && IsOpen()) ImGui::EndMenuBar();
-};
-bool MenuBar::BeginLate() {
-  if (not is_scope_active_) {
-    is_scope_active_ = true;
-    is_open_ = std::make_unique<bool>(ImGui::BeginMenuBar());
+
+//-------------------------------------------------------------------------//
+/* <class:TabItem> */
+//-------------------------------------------------------------------------//
+class TabItem : public ScopedWidgetBase {
+  std::string name_;
+  TabItemFlags flags_;
+  std::unique_ptr<bool> is_selected_;
+
+ public:
+  const std::string& Name() const { return name_; }
+  TabItemFlags GetFlags() const { return flags_; }
+  bool IsSelected() const { return *is_selected_; }
+
+  TabItem(const std::string& title, TabItemFlags flags = TabItemFlags(),
+          bool delay_begin = false)
+      : ScopedWidgetBase(delay_begin) {
+    name_ = title;
+    flags_ = flags;
+    is_selected_ = std::make_unique<bool>(false);
+
+    // Make sure the name is unique. Add it to the name map.
+    cxx::BoolError valid_name = RequestNewName(title);
+    if (valid_name) {
+      name_ = title;
+    } else
+      throw valid_name.Exception();
+
+    // Bind the begin method.
+    BindBegin([this]() -> bool {
+      return ImGui::BeginTabItem(name_.c_str(), is_selected_.get(),
+                                 flags_.Get());
+    });
+
+    // Bind the end method
+    BindEnd(ImGui::EndTabItem);
+
+    // Begin Scope if not delayed.
+    BeginImpl();
   }
-  return IsOpen();
-};
-void MenuBar::EndEarly() {
-  if (not is_scope_active_) throw "[Subcontext:End:end called before begin.]";
-  is_scope_active_ = false;
-  if (IsOpen()) ImGui::EndMenuBar();
-};
-/////////////////////////////////////////////////////////////////////////////////
-// <endimpl:MenuBar>
-/////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////
-// <impl:Menu>
-/////////////////////////////////////////////////////////////////////////////////
+  bool BeginLate() override { return BeginLateImpl(); }
 
-Menu::Menu(UniqueNameMap& name_map, UIDGen& id_gen, const std::string& title,
-           bool is_enabled, bool delay_begin)
-    : WidgetBase(name_map, id_gen) {
-  cxx::BoolError valid_name = NewName(title);
-  if (valid_name) {
-    title_ = title;
-  } else
-    throw valid_name.Exception();
+  void EndEarly() override { EndEarlyImpl(); }
 
-  if (not delay_begin) {
-    is_scope_active_ = true;
-    is_open_ =
-        std::make_unique<bool>(ImGui::BeginMenu(title_.c_str(), is_enabled_));
+  ~TabItem() {
+    EndImpl();
+    // Remove the name from name map.
+    ReleaseName(name_);
   }
 };
-Menu::~Menu() {
-  // End the gui object.
-  if (is_scope_active_ && *is_open_) ImGui::EndMenu();
 
-  // Remove the name from name map.
-  name_map_.RemoveName(title_);
-};
-bool Menu::BeginLate() {
-  if (not is_scope_active_) {
-    is_scope_active_ = true;
-    is_open_ =
-        std::make_unique<bool>(ImGui::BeginMenu(title_.c_str(), is_enabled_));
+//-------------------------------------------------------------------------//
+/* <class:TreeNode> */
+//-------------------------------------------------------------------------//
+class TreeNode : public ScopedWidgetBase {
+  std::string name_;
+
+ public:
+  const std::string& Name() const { return name_; }
+  TreeNode(const std::string& name, bool delay_begin = false)
+      : ScopedWidgetBase(delay_begin) {
+    name_ = name;
+
+    // Make sure the name is unique. Add it to the name map.
+    cxx::BoolError valid_name = RequestNewName(name);
+    if (valid_name) {
+      name_ = name;
+    } else
+      throw valid_name.Exception();
+
+    // Bind the begin method.
+    BindBegin([this]() -> bool { return ImGui::TreeNode(name_.c_str()); });
+
+    // Bind the end method
+    BindEnd(ImGui::TreePop);
+
+    // Begin Scope if not delayed.
+    BeginImpl();
   }
-  return IsOpen();
+
+  bool BeginLate() override { return BeginLateImpl(); }
+
+  void EndEarly() override { EndEarlyImpl(); }
+
+  ~TreeNode() {
+    EndImpl();
+    // Remove the name from name map.
+    ReleaseName(name_);
+  }
 };
-void Menu::EndEarly() {
-  if (not is_scope_active_) throw "[WindowWidget:End:end called before begin.]";
-  is_scope_active_ = false;
-  if (*is_open_) ImGui::EndMenu();
+
+//===========================================================================//
+};  // end namespace scoped_widget
+//===========================================================================//
+
+//===========================================================================//
+namespace single_widget { /* cgui single_widget */
+//===========================================================================//
+
+//-------------------------------------------------------------------------//
+/* <class:Button> */
+//-------------------------------------------------------------------------//
+class Button : public SingularWidgetBase {
+  std::string text_;
+  CguiVec2 size_;
+
+ public:
+  Button(const std::string& text, CguiVec2 size = {},
+         bool delayed_begin = false)
+      : SingularWidgetBase(delayed_begin) {
+    text_ = text;
+    size_ = size;
+
+    // Bind the begin method.
+    BindBegin([this]() -> bool {
+      return ImGui::Button(text_.c_str(), {size_.first, size_.second});
+    });
+
+    // Begin Scope if not delayed.
+    BeginImpl();
+  }
+
+  bool BeginLate() override { return BeginLateImpl(); }
+
+  ~Button() = default;
 };
-/////////////////////////////////////////////////////////////////////////////////
-// <endimpl:Menu>
-/////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////
-// <impl:MenuBar>
-/////////////////////////////////////////////////////////////////////////////////
+//-------------------------------------------------------------------------//
+/* <class:MenuItem> */
+//-------------------------------------------------------------------------//
+class MenuItem : public SingularWidgetBase {
+  std::string text_;
+  std::string shortcut_hint_;
+  bool is_enabled_;
 
-/////////////////////////////////////////////////////////////////////////////////
-// <endimpl:MenuBar>
-/////////////////////////////////////////////////////////////////////////////////
+ public:
+  MenuItem(const std::string& text, const std::string& shortcut_hint = "",
+           bool is_enabled = true, bool delayed_begin = false)
+      : SingularWidgetBase(delayed_begin) {
+    text_ = text;
+    shortcut_hint_ = shortcut_hint;
+    is_enabled_ = is_enabled;
 
-/////////////////////////////////////////////////////////////////////////////////
-}  // end namespace cgui
-/////////////////////////////////////////////////////////////////////////////////
+    // Bind the begin method.
+    BindBegin([this]() -> bool {
+      return ImGui::MenuItem(text_.c_str(), shortcut_hint_.c_str(), false,
+                             is_enabled_);
+    });
 
-void WIDGET_BASE_USE_EXAMPLE() {
-  // "global" id generators.
-  cgui::UIDGen idgen;
-  cgui::UniqueNameMap nmap;
-  cgui::Window my_window{nmap, idgen, "Cool0!"};
+    // Begin Scope if not delayed.
+    BeginImpl();
+  }
+
+  bool BeginLate() override { return BeginLateImpl(); }
+
+  ~MenuItem() = default;
+};
+
+//-------------------------------------------------------------------------//
+/* <class:Selectable> */
+//-------------------------------------------------------------------------//
+class Selectable : public SingularWidgetBase {
+  std::string text_;
+
+ public:
+  Selectable(const std::string& text, bool delayed_begin = false)
+      : SingularWidgetBase(delayed_begin) {
+    text_ = text;
+
+    // Bind the begin method.
+    BindBegin([this]() -> bool { return ImGui::Selectable(text_.c_str()); });
+
+    // Begin Scope if not delayed.
+    BeginImpl();
+  }
+
+  bool BeginLate() override { return BeginLateImpl(); }
+
+  ~Selectable() = default;
+};
+
+//-------------------------------------------------------------------------//
+/* <class:MultilineTextInput> */
+//-------------------------------------------------------------------------//
+class MultilineTextInput : public SingularWidgetBase {
+  std::string label_;
+  const CguiVec2& size_;
+  std::string* buffer_;
+  InputTextFlags flags_;
+
+ public:
+  MultilineTextInput(const std::string& label, std::string* buffer,
+                     const CguiVec2& size = {},
+                     InputTextFlags flags = InputTextFlags(),
+                     bool delayed_begin = false)
+      : SingularWidgetBase(delayed_begin),
+        label_(label),
+        size_(size),
+        buffer_(buffer),
+        flags_(flags) {
+    // Bind the begin method.
+    BindBegin([this]() -> bool {
+      return ImGui::InputTextMultiline(
+          label_.c_str(), buffer_, {size_.first, size_.second}, flags_.Get());
+    });
+
+    // Begin Scope if not delayed.
+    BeginImpl();
+  }
+
+  bool BeginLate() override { return BeginLateImpl(); }
+
+  ~MultilineTextInput() = default;
+};
+
+//===========================================================================//
+};  // namespace single_widget
+//===========================================================================//
+
+//===========================================================================//
+namespace combo_widget {
+//===========================================================================//
+
+//-----------------------------------------------------------------------//
+/*<class:DirectoryView>*/
+//-----------------------------------------------------------------------//
+class DirectoryView : public SingularWidgetBase {
+ public:
+  using PathT = typename std::filesystem::path;
+  using SelectedCallbackT = std::function<void(const PathT&)>;
+ public:
+  DirectoryView(
+      const PathT& path,
+      SelectedCallbackT selected_callback = [](auto&& a) {},
+      bool is_delayed = false)
+      : SingularWidgetBase(is_delayed),
+        select_file_callback(selected_callback),
+        root(path) {
+    // Bind the begin method.
+    BindBegin([this]() -> bool {
+      RecursiveDisplayDirectory(root);
+      return true;
+    });
+
+    // Begin Scope if not delayed.
+    BeginImpl();
+  }
+  DirectoryView(
+      const PathT& path,
+      SelectedCallbackT selected_callback = [](auto&& a) {},
+      SelectedCallbackT right_click_callback = [](auto&& a) {},
+      bool is_delayed = false)
+      : SingularWidgetBase(is_delayed),
+        select_file_callback(selected_callback),
+        right_click_file_callback(right_click_callback),
+        root(path) {
+    // Bind the begin method.
+    BindBegin([this]() -> bool {
+      RecursiveDisplayDirectory(root);
+      return true;
+    });
+
+    // Begin Scope if not delayed.
+    BeginImpl();
+  }
+  bool BeginLate() { return BeginLateImpl(); }
+ private:
+  SelectedCallbackT select_file_callback;
+  SelectedCallbackT right_click_file_callback;
+  const PathT& root;
+
+  void RecursiveDisplayDirectory(const PathT& path, int depth = 0) {
+    if (std::filesystem::is_directory(path)) {
+      bool node_open = ImGui::TreeNode(path.filename().string().c_str());
+      if (node_open) {
+        for (const auto& entry : std::filesystem::directory_iterator(path)) {
+          RecursiveDisplayDirectory(entry.path(), depth + 1);
+        }
+        ImGui::TreePop();
+      }
+    } else if (std::filesystem::is_regular_file(path)) {
+      // Select (left click) on a leaf callback.
+      if (single_widget::Selectable(path.filename().string())) {
+        select_file_callback(path);
+      }
+      // Right click on a leaf callback.
+      if (ImGui::BeginPopupContextItem(
+              (std::string("dir-file-right-click-context###") + path.string())
+                  .c_str())) {
+        right_click_file_callback(path);
+        ImGui::EndPopup();
+      }
+    }
+  }
+};
+
+//===========================================================================//
+}; /* end namespace combo_widget */
+//===========================================================================//
+
+//===========================================================================//
+}; /* end namespace cgui */
+//===========================================================================//
+
+//===========================================================================//
+/*<library interface>*/
+//===========================================================================//
+
+// Forwarded methods from ImGui namespace.
+namespace cgui {
+using ImGui::SameLine;
+using ImGui::Separator;
+}  // namespace cgui
+
+// Common objects.
+using CguiVec2 = cgui::CguiVec2;
+using CguiUIDGen = cgui::UIDGen;
+using CguiUIDIter = cgui::UIDGen::Iter;
+using CguiUniqueNameMap = cgui::UniqueNameMap;
+
+// Flag structures.
+using CguiFlags = cgui::GuiFlags;
+using CguiWindowFlags = cgui::WindowFlags;
+using CguiSubcontextFlags = cgui::SubcontextFlags;
+using CguiTabBarFlags = cgui::TabBarFlags;
+using CguiTabItemFlags = cgui::TabItemFlags;
+using CguiInputTextFlags = cgui::InputTextFlags;
+
+// Flag enums.
+using CguiWindowFlagEnum = cgui::eWindowFlags;
+using CguiSubcontextFlagEnum = cgui::eSubcontextFlags;
+using CguiTabBarFlagEnum = cgui::eTabBarFlags;
+using CguiTabItemFlagEnum = cgui::eTabItemFlags;
+using CguiInputTextFlagEnum = cgui::eInputTextFlags;
+
+// Scoped widgets.
+using CguiWindow = cgui::scoped_widget::Window;
+using CguiSubcontext = cgui::scoped_widget::Subcontext;
+using CguiNamedSubcontext = cgui::scoped_widget::NamedSubcontext;
+using CguiMenuBar = cgui::scoped_widget::MenuBar;
+using CguiMenu = cgui::scoped_widget::Menu;
+using CguiTabBar = cgui::scoped_widget::TabBar;
+using CguiTabItem = cgui::scoped_widget::TabItem;
+using CguiTreeNode = cgui::scoped_widget::TreeNode;
+
+// Single widgets
+using CguiButton = cgui::single_widget::Button;
+using CguiMenuItem = cgui::single_widget::MenuItem;
+using CguiSelectable = cgui::single_widget::Selectable;
+using CguiMultilineTextInput = cgui::single_widget::MultilineTextInput;
+
+// Combo widgets
+using CguiDirectoryView = cgui::combo_widget::DirectoryView;
+
+//===========================================================================//
+/*<end library interface>*/
+//===========================================================================//
+
+// Some examples of how to use the library.
+namespace cgui::example {
+void ExampleHelloWindow() {
+  CguiWindow my_window{"My Window"};
 
   // Do things based on if the window is open or not.
-  // Use my_window.IsOpen() to be explicit.
-  if (my_window)            // use implict bool conversion.
-    std::cout << "Cool1!";  // Draw other elements inside window etc.
+  // Use my_window.IsOn() to be explicit.
+  if (my_window)                                 // Use implict bool conversion.
+    std::cout << "Hello World from my window!";  // Draw other elements inside
+                                                 // window etc.
 
   // Widget will automaticall call end when going out of scope.
   // or we can call end early.
@@ -843,28 +1075,97 @@ void WIDGET_BASE_USE_EXAMPLE() {
 
   // restart the same window's scope if it still in the overall C++ scope.
   if (my_window.BeginLate()) {
-    // ImGui standard syntax for Begin/End. But calling End is not necessary.
-    std::cout << "Cool2!";
+    // ImGui standard syntax for BeginLate/EndEarly.
+    // But calling End is not necessary if obj will go out of scope.
+    std::cout << "Hello again from my window!";
   };
-  // add more stuff.
+  // add more stuff.....
 
   // window will end itself here.
-
-  // Using the widget maker is easier!
-  cgui::WidgetMaker make_gui;
-  auto a_window = make_gui.MakeWindow("Coooool!");
 }
-static void cGuiDrawMenuFile() {
-  cgui::WidgetMaker make_gui;
-
-  // creating a menu bar
+void ExampleMenuBar() {  // creating a menu bar
   {
-    auto file_menu = make_gui.MakeMenu("File");
-    if (file_menu.IsOpen()) {
-      auto new_submenu = make_gui.MakeMenu("New");
-      if (new_submenu.IsOpen()) {
-        auto solution = cgui::MenuItem("Solution");
+    auto file_menu = CguiMenu("File");
+    if (file_menu) {
+      auto new_submenu = CguiMenu("New");
+      if (new_submenu) {
+        auto solution = CguiMenuItem("Solution");
       }
     }
   }
 }
+void ExampleWindowWithSubcontext() {
+  // A window with two subcontexts.
+  if (true) {
+    // This is to demonstrate windows that go out of scope
+    // automatically.
+    auto new_window = CguiWindow("CoolWindow!");
+    auto new_named_subcontext = CguiNamedSubcontext("HelloContext");
+    auto my_button = CguiButton(new_named_subcontext.Name() +
+                                "'s Button inside" + new_window.Title());
+
+    // End subcontext early to begin new one within the same window context.
+    new_named_subcontext.EndEarly();
+
+    // Can query button properties.It hasnt gone out of scope yet!
+    static bool draw_subcontext_switch =
+        false;  // Note this switch has to be static to
+                // persist throught the frames.
+    if (my_button) {
+      draw_subcontext_switch = not draw_subcontext_switch;
+    }
+
+    if (draw_subcontext_switch) {
+      auto next_unnamed_subcontext = CguiSubcontext();
+      auto abtn = CguiButton(std::to_string(next_unnamed_subcontext.Id()) +
+                             "# Unnamed Subcontext's Btn ");
+    }
+    // automatically goes out of scope.
+  }
+}
+void ExampleTabBar() {
+  // A window with a tab bar.
+  if (true) {
+    auto new_window = CguiWindow("TabBarWindow");
+    auto new_tab_bar = CguiTabBar("TabBar");
+    if (new_tab_bar) {
+      auto tab1 = CguiTabItem("Tab1");
+      if (tab1) {
+        auto btn1 = CguiButton("Button1");
+      }
+      auto tab2 = CguiTabItem("Tab2");
+      if (tab2) {
+        auto btn2 = CguiButton("Button2");
+      }
+    }
+  }
+}
+void ExampleEditorTabs(sf::Window& window) {
+  // A file editor with tabs
+  // Demonstrates use of cgui::kExpandWidgetToRemainingSpaceXY to stretch
+  // widgets. Function is in the context of immediate mode eg. called once per
+  // render frame.
+  std::string gEditorStringBuffer{""};
+  auto editor_context = CguiNamedSubcontext(
+      "Editor", {static_cast<float>(window.getSize().x * 0.75f),
+                 static_cast<float>(window.getSize().y * 0.75f)});
+  if (editor_context) {
+    auto editor_btn = CguiButton("Editor");
+    auto editor_tab_bar = CguiTabBar(
+        "##file-tabs", {CguiTabBarFlagEnum::ImGuiTabBarFlags_Reorderable});
+    if (editor_tab_bar) {
+      auto selected_tab = CguiTabItem("[Selected]");
+      if (selected_tab)
+        auto file_text_box =
+            CguiMultilineTextInput("Selected_Code", &gEditorStringBuffer,
+                                   cgui::kExpandWidgetToRemainingSpaceXY);
+      selected_tab.EndEarly();
+      auto other_tab = CguiTabItem("[Other]");
+      if (other_tab)
+        auto file_text_box =
+            CguiMultilineTextInput("Other_Code", &gEditorStringBuffer,
+                                   cgui::kExpandWidgetToRemainingSpaceXY);
+    }
+  }
+}
+};  // namespace cgui::example
