@@ -145,6 +145,9 @@
     <ClCompile Include="imgui_stdlib.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cide_backend.h" />
+    <ClInclude Include="cide_file_extensions.h" />
+    <ClInclude Include="cide_ui.h" />
     <ClInclude Include="imgui_interface.h" />
     <ClInclude Include="imgui_stdlib.h" />
   </ItemGroup>

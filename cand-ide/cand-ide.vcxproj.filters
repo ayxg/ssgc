@@ -34,5 +34,8 @@
     <ClInclude Include="imgui_stdlib.h">
       <Filter>ext_gfx_lib</Filter>
     </ClInclude>
+    <ClInclude Include="cide_ui.h" />
+    <ClInclude Include="cide_backend.h" />
+    <ClInclude Include="cide_file_extensions.h" />
   </ItemGroup>
 </Project>
