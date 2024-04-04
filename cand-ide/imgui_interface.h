@@ -49,6 +49,11 @@ using TabBarFlags = cxx::EnumeratedFlags<eTabBarFlags, GuiFlags>;
 using TabItemFlags = cxx::EnumeratedFlags<eTabItemFlags, GuiFlags>;
 using InputTextFlags = cxx::EnumeratedFlags<eInputTextFlags, GuiFlags>;
 
+enum eWidgetInit {
+  kWidgetInitDelayed = true,
+  kWidgetInitImmediate = false,
+};
+
 class UIDGen;              // Generates unique widget identifiers.
 class UniqueNameMap;       // Maintains unique names across widgets.
 class ScopedWidgetBase;    // Base class for all scoped widgets.
@@ -79,15 +84,6 @@ class DirectoryView;  // TreeNode view of a file path,single widget base.
 //===========================================================================//
 /*<enddecls>*/
 //===========================================================================//
-
-// Implicit global unique id generator for cgui widget classes.
-// !! Do not use/access directly, called by ScopedWidgetBase on default
-// construction.
-static UIDGen gCguiDefaultUIDGenerator{};
-// Implicit global unique name map for cgui widget classes.
-// !! Do not use/access directly, called by ScopedWidgetBase on default
-// construction.
-static UniqueNameMap gCguiDefaultUniqueNameMap{};
 
 //===========================================================================//
 /*<constants>*/
@@ -121,7 +117,7 @@ class UIDGen {
   bool Empty() { return generated_ids_.empty(); }
 
  private:
-  std::atomic<size_t> next_id_;
+  size_t next_id_;
   std::unordered_set<size_t> generated_ids_;
 };
 
@@ -131,7 +127,8 @@ class UIDGen {
 // Do a try catch block around this method if you wish to refresh on overflow.
 UIDGen::Iter UIDGen::GetId() {
   if (next_id_ == SIZE_MAX) throw std::overflow_error("UIDGen: ID overflow");
-  size_t id = next_id_.fetch_add(1);
+  size_t id = next_id_;
+  next_id_++;
   generated_ids_.insert(id);
   return generated_ids_.find(id);
 }
@@ -139,7 +136,7 @@ UIDGen::Iter UIDGen::GetId() {
 void UIDGen::PopId() {
   if (generated_ids_.empty()) throw std::runtime_error("UIDGen: No IDs to pop");
   generated_ids_.erase(next_id_);
-  next_id_.fetch_sub(1);
+  next_id_--;
 }
 
 // Erases an id but does not reset counter. If generating many id and deleting
@@ -149,8 +146,9 @@ void UIDGen::EraseId(Iter it) {
     // If the id we are erasing is the last id, we can also pop to save make
     // more uids
     PopId();
+  } else {
+    if (generated_ids_.contains(*it)) generated_ids_.erase(it);
   }
-  generated_ids_.erase(it);
 }
 
 const std::unordered_set<size_t>& UIDGen::Generated() { return generated_ids_; }
@@ -158,7 +156,7 @@ const std::unordered_set<size_t>& UIDGen::Generated() { return generated_ids_; }
 // Pops all ids and sets next_id_ = 0;
 void UIDGen::Refresh() {
   generated_ids_.clear();
-  next_id_.store(1);
+  next_id_ = 1;
 }
 //-------------------------------------------------------------------------//
 /* <endimpl:UIDGen> */
@@ -178,7 +176,7 @@ void UIDGen::Refresh() {
 class UniqueNameMap {
  public:
   cxx::BoolError AddName(const std::string& str);
-  cxx::BoolError RemoveName(const std::string& str);
+  void RemoveName(const std::string& str);
   bool Contains(const std::string& str) { return names_.contains(str); }
 
  private:
@@ -195,24 +193,28 @@ cxx::BoolError UniqueNameMap::AddName(const std::string& str) {
   return true;
 }
 
-cxx::BoolError UniqueNameMap::RemoveName(const std::string& str) {
-  if (!names_.contains(str))
-    return "[UniqueNameMap:RemoveName:This widget name does not exist.]";
+void UniqueNameMap::RemoveName(const std::string& str) {
+  if (!names_.contains(str)) return;  // Do nothing if the name is not found.
   names_.erase(str);
-  return true;
 }
 //-------------------------------------------------------------------------//
 /* <endimpl:UniqueNameMap> */
 //-------------------------------------------------------------------------//
+
+// Implicit global unique id generator for cgui widget classes.
+// !! Do not use/access directly, called by ScopedWidgetBase on default
+// construction.
+static UIDGen gCguiDefaultUIDGenerator{};
+// Implicit global unique name map for cgui widget classes.
+// !! Do not use/access directly, called by ScopedWidgetBase on default
+// construction.
+static UniqueNameMap gCguiDefaultUniqueNameMap{};
 
 //-------------------------------------------------------------------------//
 /* <class:ScopedWidgetBase> */
 //-------------------------------------------------------------------------//
 class ScopedWidgetBase {
  public:
-  using BoundScopeBeginFuncT = std::function<bool()>;
-  using BoundScopeEndFuncT = std::function<void()>;
-
   // Returns true is the Begin() function has been called
   // further gui commands will add to this scope.
   constexpr inline bool IsScopeActive() const { return is_scope_active_; }
@@ -232,14 +234,14 @@ class ScopedWidgetBase {
   // ForceEnd is for widgets which must call End()
   //  even if Begin() returns false.
  protected:
-  void BindBegin(const BoundScopeBeginFuncT& bound_begin) {
-    begin_func = bound_begin;
-  }
-  void BindEnd(const BoundScopeEndFuncT& bound_end) { end_func = bound_end; }
+  // void BindBegin(const BoundScopeBeginFuncT& bound_begin) {
+  //   begin_func = bound_begin;
+  // }
+  // void BindEnd(const BoundScopeEndFuncT& bound_end) { end_func = bound_end; }
   bool BeginImpl() {
-    if (is_delayed_ == true) {
+    if (is_delayed_ == kWidgetInitImmediate) {
       is_scope_active_ = true;
-      is_on_ = begin_func();
+      is_on_ = BoundBegin();
     } else {
       is_scope_active_ = false;
       is_on_ = false;
@@ -249,29 +251,32 @@ class ScopedWidgetBase {
   bool BeginLateImpl() {
     if (not is_scope_active_) {
       is_scope_active_ = true;
-      is_on_ = begin_func();
+      is_on_ = BoundBegin();
     }
     return is_on_;
   }
+
   void EndImpl() {
-    if (is_scope_active_ && is_on_) end_func();
+    if (is_scope_active_ && is_on_) BoundEnd();
   }
   void EndEarlyImpl() {
     if (not is_scope_active_) throw "[ EndEarly() called before begin. ]";
     is_scope_active_ = false;
-    if (is_on_) end_func();
+    if (is_on_) BoundEnd();
   };
   void ForceEndImpl() {
-    if (is_scope_active_) end_func();
+    if (is_scope_active_) BoundEnd();
   }
   void ForceEndEarlyImpl() {
     if (not is_scope_active_) throw "[ EndEarly() called before begin. ]";
     is_scope_active_ = false;
-    end_func();
+    BoundEnd();
   };
 
   // Public interface to be implemented by the child class.
  public:
+  virtual bool BoundBegin() = 0;
+  virtual void BoundEnd() = 0;
   virtual bool BeginLate() = 0;
   virtual void EndEarly() = 0;
   virtual ~ScopedWidgetBase() = default;
@@ -284,50 +289,25 @@ class ScopedWidgetBase {
         is_delayed_(is_delayed) {
     is_on_ = false;
     is_scope_active_ = false;
-    begin_func = []() { return false; };
-    end_func = []() {};
   };
 
-  // For simple widget which can be bound without other internal dependencies.
-  // BeginImpl() must still be called by the child class.
-  ScopedWidgetBase(bool is_delayed, const BoundScopeBeginFuncT& bound_begin,
-                   const BoundScopeEndFuncT& bound_end)
-      : name_map_(gCguiDefaultUniqueNameMap),
-        id_gen_(gCguiDefaultUIDGenerator),
-        is_delayed_(is_delayed) {
-    is_on_ = false;
-    is_scope_active_ = false;
-    begin_func = bound_begin;
-    end_func = bound_end;
-  };
+  // Copy is allowed, but the name_map and id_gen are shared.
+  // The uniqueness of the name or id is only checked on construction.
+  ScopedWidgetBase(const ScopedWidgetBase& other) = default;
 
-  // Move is allowed
-  ScopedWidgetBase(ScopedWidgetBase&& other) noexcept
-      : name_map_(other.name_map_), id_gen_(other.id_gen_) {
-    is_on_ = other.is_on_;
-    is_scope_active_ = other.is_scope_active_;
-    is_delayed_ = other.is_delayed_;
-    begin_func = other.begin_func;
-    end_func = other.end_func;
-  }
-
-  // Copy is implicitly forbidden.
-  ScopedWidgetBase(const ScopedWidgetBase& other) = delete;
+  // Move is allowed.
+  ScopedWidgetBase(ScopedWidgetBase&& other) noexcept = default;
 
   // Boolean conversion, returns IsOn()
   operator bool() { return is_on_; }
 
- private:
+ protected:
   UniqueNameMap& name_map_;
   UIDGen& id_gen_;
   bool is_scope_active_;
   bool is_on_;
   bool is_delayed_;
-  BoundScopeBeginFuncT begin_func;
-  BoundScopeEndFuncT end_func;
 
-  // Helper methods to keep the above members private,
-  // They are to be used by the child class implementation.
  protected:
   // Name must not exist.
   cxx::BoolError RequestNewName(const std::string& str) {
@@ -336,12 +316,15 @@ class ScopedWidgetBase {
     name_map_.AddName(str);
     return true;
   };
+
   void ReleaseName(const std::string& str) {
     // Remove the name from name map.
     name_map_.RemoveName(str);
   }
+
   // Generate a new uuid
   UIDGen::Iter RequestId() { return id_gen_.GetId(); }
+
   void ReleaseId(UIDGen::Iter id_iter) {
     // Remove the id
     id_gen_.EraseId(id_iter);
@@ -353,54 +336,42 @@ class ScopedWidgetBase {
 //-------------------------------------------------------------------------//
 class SingularWidgetBase {
  public:
-  using BoundBeginFuncT = std::function<bool()>;
-
- protected:
-  void BindBegin(const BoundBeginFuncT& bound_begin) {
-    begin_func = bound_begin;
-  }
-  bool BeginImpl() {
-    if (is_delayed_ == true) {
-      is_scope_active_ = true;
-      is_on_ = begin_func();
-    } else {
-      is_scope_active_ = false;
-      is_on_ = false;
-    }
-    return is_on_;
-  }
-  bool BeginLateImpl() {
-    if (not is_scope_active_) {
-      is_scope_active_ = true;
-      is_on_ = begin_func();
-    }
-    return is_on_;
-  }
-
- public:
-  SingularWidgetBase(bool is_delayed)
-      : is_delayed_(is_delayed), is_scope_active_(false), is_on_(false) {}
-  virtual bool BeginLate() = 0;
-  virtual ~SingularWidgetBase() = default;
-
   // Result of requesting to render this widget.
   // Meaning varies from widget to widget.
   // Indicated a pressed/released/displayed state.
   bool IsOn() const { return is_on_; }
 
-  // Has this widget's scope been initiated?
-  // If true -> not necessarily rendered, but a request to render has
-  // been sent.
-  bool IsScopeActive() const { return is_scope_active_; }
+  // True if the widget is currently delayed
+  // eg. the widget has not been rendered yet.
+  bool IsDelayed() const { return is_delayed_; }
 
   // Boolean conversion, returns IsOn()
   operator bool() { return is_on_; }
 
- private:
-  bool is_scope_active_;  // Has this widget's scope been initiated?
-  bool is_on_;            // Result of requesting to render this widget.
+ protected:
+  bool BeginImpl() {
+    if (is_delayed_ == kWidgetInitImmediate) {
+      is_on_ = BoundBegin();
+    } else {
+      is_on_ = false;
+    }
+    return is_on_;
+  }
+  bool BeginLateImpl() {
+    is_on_ = BoundBegin();
+    return is_on_;
+  }
+
+ public:
+  SingularWidgetBase(bool is_delayed)
+      : is_delayed_(is_delayed), is_on_(false) {}
+  virtual bool BeginLate() = 0;
+  virtual ~SingularWidgetBase() = default;
+  virtual bool BoundBegin() = 0;
+
+ protected:
+  bool is_on_;  // Result of requesting to render this widget.
   bool is_delayed_;
-  BoundBeginFuncT begin_func;
 };
 
 //===========================================================================//
@@ -411,47 +382,6 @@ namespace scoped_widget { /* cgui scoped_widget */
 /* <class:Window> */
 //-------------------------------------------------------------------------//
 class Window : public ScopedWidgetBase {
- public:
-  Window(const std::string& title, bool has_close_button = false,
-         WindowFlags flags = WindowFlags(), bool delay_begin = true)
-      : ScopedWidgetBase(delay_begin) {
-    flags_ = flags;
-    has_close_button_ = has_close_button;
-
-    // Make sure the name is unique. Add it to the name map.
-    cxx::BoolError valid_name = RequestNewName(title);
-    if (valid_name) {
-      title_ = title;
-    } else
-      throw valid_name.Exception();
-
-    // Bind the begin method.
-    BindBegin([this]() -> bool {
-      if (has_close_button_) {
-        close_button_state_ = std::make_unique<bool>(true);
-      }
-      return ImGui::Begin(title_.c_str(), close_button_state_.get(),
-                          flags_.Get());
-    });
-
-    // Bind the end method
-    BindEnd(ImGui::End);
-
-    // Begin Scope if not delayed.
-    BeginImpl();
-  }
-
-  bool BeginLate() override { return BeginLateImpl(); }
-
-  void EndEarly() override { ForceEndEarlyImpl(); }
-
-  ~Window() {
-    ForceEndImpl();
-    // Remove the name from name map.
-    ReleaseName(title_);
-  }
-
-  // Properties
  public:
   const std::string& Title() const { return title_; }
 
@@ -465,6 +395,71 @@ class Window : public ScopedWidgetBase {
   // pressed.
   bool IsCloseButtonTriggered() const { return not *close_button_state_; }
 
+ public:
+  static inline Window Delayed(const std::string& title,
+                               bool has_close_button = false,
+                               WindowFlags flags = WindowFlags()) {
+    return Window(title, has_close_button, flags, kWidgetInitDelayed);
+  }
+
+  Window(const std::string& title, bool has_close_button = false,
+         WindowFlags flags = WindowFlags(),
+         bool delay_begin = kWidgetInitImmediate)
+      : ScopedWidgetBase(delay_begin) {
+    flags_ = flags;
+    has_close_button_ = has_close_button;
+
+    // Make sure the name is unique. Add it to the name map.
+    cxx::BoolError valid_name = RequestNewName(title);
+    if (valid_name) {
+      title_ = title;
+    } else
+      throw valid_name.Exception();
+
+    BeginImpl();
+  }
+
+  bool BeginLate() override { return BeginLateImpl(); }
+
+  void EndEarly() override { ForceEndEarlyImpl(); }
+
+  ~Window() {
+    ForceEndImpl();
+    // Remove the name from name map.
+    ReleaseName(title_);
+  }
+
+  Window(const Window& other) : ScopedWidgetBase(other.is_delayed_) {
+    this->is_scope_active_ = other.is_scope_active_;
+    this->is_on_ = other.is_on_;
+    this->title_ = other.title_;
+    this->flags_ = other.flags_;
+    this->has_close_button_ = other.has_close_button_;
+    this->close_button_state_ =
+        std::make_unique<bool>(*other.close_button_state_);
+  }
+
+  Window(Window&& other) noexcept
+      : ScopedWidgetBase(std::move(other.is_delayed_)) {
+    this->is_scope_active_ = std::move(other.is_scope_active_);
+    this->is_on_ = std::move(other.is_on_);
+    this->title_ = std::move(other.title_);
+    this->flags_ = std::move(other.flags_);
+    this->has_close_button_ = std::move(other.has_close_button_);
+    this->close_button_state_ = std::move(other.close_button_state_);
+  }
+
+ protected:
+  bool BoundBegin() override {
+    if (has_close_button_) {
+      close_button_state_ = std::make_unique<bool>(true);
+    }
+    return ImGui::Begin(title_.c_str(), close_button_state_.get(),
+                        flags_.Get());
+  }
+
+  void BoundEnd() override { ImGui::End(); }
+
  private:
   std::string title_{""};
   WindowFlags flags_{WindowFlags()};
@@ -476,37 +471,32 @@ class Window : public ScopedWidgetBase {
 /* <class:Subcontext> */
 //-------------------------------------------------------------------------//
 class Subcontext : public ScopedWidgetBase {
-  UIDGen::Iter uid_;
-  WindowFlags win_flags_;
-  SubcontextFlags subcontext_flags_;
-  CguiVec2 requested_size_;
-
  public:
   std::size_t Id() const { return *uid_; }
+
   // !! Warning: mutable reference
   WindowFlags GetWindowFlags() const { return win_flags_; }
+
   // !! Warning: mutable reference
   SubcontextFlags GetSubcontextFlags() const { return subcontext_flags_; }
+
   const CguiVec2& RequestedSize() { return requested_size_; }
+
+ public:
+  static inline Subcontext Delayed(
+      CguiVec2 size = {0.f, 0.f}, WindowFlags win_flags = WindowFlags(),
+      SubcontextFlags subcontext_flags = SubcontextFlags()) {
+    return Subcontext(size, win_flags, subcontext_flags, kWidgetInitDelayed);
+  }
 
   Subcontext(CguiVec2 size = {0.f, 0.f}, WindowFlags win_flags = WindowFlags(),
              SubcontextFlags subcontext_flags = SubcontextFlags(),
-             bool delay_begin = false)
+             bool delay_begin = kWidgetInitImmediate)
       : ScopedWidgetBase(delay_begin) {
     uid_ = RequestId();
     win_flags_ = win_flags;
     subcontext_flags_ = subcontext_flags;
     requested_size_ = size;
-
-    // Bind the begin method.
-    BindBegin([this]() -> bool {
-      return ImGui::BeginChild(*uid_,
-                               {requested_size_.first, requested_size_.second},
-                               subcontext_flags_, win_flags_);
-    });
-
-    // Bind the end method
-    BindEnd(ImGui::EndChild);
 
     // Begin Scope if not delayed.
     BeginImpl();
@@ -520,29 +510,51 @@ class Subcontext : public ScopedWidgetBase {
     // Remove the name from name map.
     ReleaseId(uid_);
   }
+
+ protected:
+  bool BoundBegin() override {
+    return ImGui::BeginChild(*uid_,
+                             {requested_size_.first, requested_size_.second},
+                             subcontext_flags_, win_flags_);
+  }
+
+  void BoundEnd() override { ImGui::EndChild(); }
+
+ private:
+  UIDGen::Iter uid_;
+  WindowFlags win_flags_;
+  SubcontextFlags subcontext_flags_;
+  CguiVec2 requested_size_;
 };
 
 //-------------------------------------------------------------------------//
 /* <class:NamedSubcontext> */
 //-------------------------------------------------------------------------//
 class NamedSubcontext : public ScopedWidgetBase {
-  std::string name_;
-  WindowFlags win_flags_;
-  SubcontextFlags subcontext_flags_;
-  CguiVec2 requested_size_;
-
  public:
   const std::string& Name() const { return name_; }
+
   // !! Warning: mutable reference
   WindowFlags GetWindowFlags() const { return win_flags_; }
+
   // !! Warning: mutable reference
   SubcontextFlags GetSubcontextFlags() const { return subcontext_flags_; }
+
   const CguiVec2& RequestedSize() { return requested_size_; }
+
+ public:
+  static inline NamedSubcontext Delayed(
+      const std::string& name, CguiVec2 size = {0.f, 0.f},
+      WindowFlags win_flags = WindowFlags(),
+      SubcontextFlags subcontext_flags = SubcontextFlags()) {
+    return NamedSubcontext(name, size, win_flags, subcontext_flags,
+                           kWidgetInitDelayed);
+  }
 
   NamedSubcontext(const std::string& name, CguiVec2 size = {0.f, 0.f},
                   WindowFlags win_flags = WindowFlags(),
                   SubcontextFlags subcontext_flags = SubcontextFlags(),
-                  bool delay_begin = false)
+                  bool delay_begin = kWidgetInitImmediate)
       : ScopedWidgetBase(delay_begin) {
     win_flags_ = win_flags;
     subcontext_flags_ = subcontext_flags;
@@ -554,16 +566,6 @@ class NamedSubcontext : public ScopedWidgetBase {
       name_ = name;
     } else
       throw valid_name.Exception();
-
-    // Bind the begin method.
-    BindBegin([this]() -> bool {
-      return ImGui::BeginChild(name_.c_str(),
-                               {requested_size_.first, requested_size_.second},
-                               subcontext_flags_, win_flags_);
-    });
-
-    // Bind the end method
-    BindEnd(ImGui::EndChild);
 
     // Begin Scope if not delayed.
     BeginImpl();
@@ -578,6 +580,21 @@ class NamedSubcontext : public ScopedWidgetBase {
     // Remove the name from name map.
     ReleaseName(name_);
   }
+
+ protected:
+  bool BoundBegin() override {
+    return ImGui::BeginChild(name_.c_str(),
+                             {requested_size_.first, requested_size_.second},
+                             subcontext_flags_, win_flags_);
+  }
+
+  void BoundEnd() override { ImGui::EndChild(); }
+
+ private:
+  std::string name_;
+  WindowFlags win_flags_;
+  SubcontextFlags subcontext_flags_;
+  CguiVec2 requested_size_;
 };
 
 //-------------------------------------------------------------------------//
@@ -585,13 +602,10 @@ class NamedSubcontext : public ScopedWidgetBase {
 //-------------------------------------------------------------------------//
 class MenuBar : public ScopedWidgetBase {
  public:
-  MenuBar(bool delay_begin = false) : ScopedWidgetBase(delay_begin) {
-    // Bind the begin method.
-    BindBegin(ImGui::BeginMainMenuBar);
+  static inline MenuBar Delayed() { return MenuBar(kWidgetInitDelayed); }
 
-    // Bind the end method
-    BindEnd(ImGui::EndMainMenuBar);
-
+  MenuBar(bool delay_begin = kWidgetInitImmediate)
+      : ScopedWidgetBase(delay_begin) {
     // Begin Scope if not delayed.
     BeginImpl();
   }
@@ -601,21 +615,28 @@ class MenuBar : public ScopedWidgetBase {
   void EndEarly() override { EndEarlyImpl(); }
 
   ~MenuBar() { EndImpl(); }
+
+ protected:
+  bool BoundBegin() override { return ImGui::BeginMenuBar(); }
+
+  void BoundEnd() override { ImGui::EndMenuBar(); }
 };
 
 //-------------------------------------------------------------------------//
 /* <class:Menu> */
 //-------------------------------------------------------------------------//
 class Menu : public ScopedWidgetBase {
-  std::string title_;
-  bool is_enabled_;
-
  public:
   const std::string& Title() const { return title_; }
   bool IsEnabled() const { return is_enabled_; }
 
+ public:
+  static inline Menu Delayed(const std::string& title, bool is_enabled = true) {
+    return Menu(title, is_enabled, kWidgetInitDelayed);
+  }
+
   Menu(const std::string& title, bool is_enabled = true,
-       bool delay_begin = false)
+       bool delay_begin = kWidgetInitImmediate)
       : ScopedWidgetBase(delay_begin) {
     title_ = title;
     is_enabled_ = is_enabled;
@@ -626,14 +647,6 @@ class Menu : public ScopedWidgetBase {
       title_ = title;
     } else
       throw valid_name.Exception();
-
-    // Bind the begin method.
-    BindBegin([this]() -> bool {
-      return ImGui::BeginMenu(title_.c_str(), is_enabled_);
-    });
-
-    // Bind the end method
-    BindEnd(ImGui::EndMenu);
 
     // Begin Scope if not delayed.
     BeginImpl();
@@ -648,21 +661,35 @@ class Menu : public ScopedWidgetBase {
     // Remove the name from name map.
     ReleaseName(title_);
   }
+
+ protected:
+  bool BoundBegin() override {
+    return ImGui::BeginMenu(title_.c_str(), is_enabled_);
+  }
+
+  void BoundEnd() override { ImGui::EndMenu(); }
+
+ private:
+  std::string title_;
+  bool is_enabled_;
 };
 
 //-------------------------------------------------------------------------//
 /* <class:TabBar> */
 //-------------------------------------------------------------------------//
 class TabBar : public ScopedWidgetBase {
-  std::string name_;
-  TabBarFlags flags_;
-
  public:
   const std::string& Name() const { return name_; }
   TabBarFlags GetFlags() const { return flags_; }
 
+ public:
+  static inline TabBar Delayed(const std::string& name,
+                               TabBarFlags flags = TabBarFlags()) {
+    return TabBar(name, flags, kWidgetInitDelayed);
+  }
+
   TabBar(const std::string& name, TabBarFlags flags = TabBarFlags(),
-         bool delay_begin = false)
+         bool delay_begin = kWidgetInitImmediate)
       : ScopedWidgetBase(delay_begin) {
     name_ = name;
     flags_ = flags;
@@ -673,14 +700,6 @@ class TabBar : public ScopedWidgetBase {
       name_ = name;
     } else
       throw valid_name.Exception();
-
-    // Bind the begin method.
-    BindBegin([this]() -> bool {
-      return ImGui::BeginTabBar(name_.c_str(), flags_.Get());
-    });
-
-    // Bind the end method
-    BindEnd(ImGui::EndTabBar);
 
     // Begin Scope if not delayed.
     BeginImpl();
@@ -695,27 +714,45 @@ class TabBar : public ScopedWidgetBase {
     // Remove the name from name map.
     ReleaseName(name_);
   }
+
+ protected:
+  bool BoundBegin() override {
+    return ImGui::BeginTabBar(name_.c_str(), flags_.Get());
+  }
+
+  void BoundEnd() override { ImGui::EndTabBar(); }
+
+ private:
+  std::string name_;
+  TabBarFlags flags_;
 };
 
 //-------------------------------------------------------------------------//
 /* <class:TabItem> */
 //-------------------------------------------------------------------------//
 class TabItem : public ScopedWidgetBase {
-  std::string name_;
-  TabItemFlags flags_;
-  std::unique_ptr<bool> is_selected_;
-
  public:
   const std::string& Name() const { return name_; }
-  TabItemFlags GetFlags() const { return flags_; }
+
+  //!! Warning: mutable reference
+  TabItemFlags& GetFlags() { return flags_; }
+
+  const TabItemFlags& GetFlags() const { return flags_; }
+
   bool IsSelected() const { return *is_selected_; }
 
+ public:
+  static inline TabItem Delayed(const std::string& title,
+                                TabItemFlags flags = TabItemFlags()) {
+    return TabItem(title, flags, kWidgetInitDelayed);
+  }
+
   TabItem(const std::string& title, TabItemFlags flags = TabItemFlags(),
-          bool delay_begin = false)
+          bool delay_begin = kWidgetInitImmediate)
       : ScopedWidgetBase(delay_begin) {
     name_ = title;
     flags_ = flags;
-    is_selected_ = std::make_unique<bool>(false);
+    is_selected_ = (bool*)(nullptr);
 
     // Make sure the name is unique. Add it to the name map.
     cxx::BoolError valid_name = RequestNewName(title);
@@ -723,15 +760,6 @@ class TabItem : public ScopedWidgetBase {
       name_ = title;
     } else
       throw valid_name.Exception();
-
-    // Bind the begin method.
-    BindBegin([this]() -> bool {
-      return ImGui::BeginTabItem(name_.c_str(), is_selected_.get(),
-                                 flags_.Get());
-    });
-
-    // Bind the end method
-    BindEnd(ImGui::EndTabItem);
 
     // Begin Scope if not delayed.
     BeginImpl();
@@ -746,6 +774,35 @@ class TabItem : public ScopedWidgetBase {
     // Remove the name from name map.
     ReleaseName(name_);
   }
+
+  //TabItem(const TabItem& other) : ScopedWidgetBase(other.is_delayed_) {
+  //  this->is_scope_active_ = other.is_scope_active_;
+  //  this->is_on_ = other.is_on_;
+  //  this->name_ = other.name_;
+  //  this->flags_ = other.flags_;
+  //  this->is_selected_ = std::make_unique<bool>(*other.is_selected_);
+  //}
+
+  //TabItem(TabItem&& other) noexcept
+  //    : ScopedWidgetBase(std::move(other.is_delayed_)) {
+  //  this->is_scope_active_ = std::move(other.is_scope_active_);
+  //  this->is_on_ = std::move(other.is_on_);
+  //  this->name_ = std::move(other.name_);
+  //  this->flags_ = std::move(other.flags_);
+  //  this->is_selected_ = std::move(other.is_selected_);
+  //}
+
+ protected:
+  bool BoundBegin() override {
+    return ImGui::BeginTabItem(name_.c_str(), is_selected_, flags_.Get());
+  }
+
+  void BoundEnd() override { ImGui::EndTabItem(); }
+
+ private:
+  std::string name_;
+  TabItemFlags flags_;
+  bool* is_selected_;
 };
 
 //-------------------------------------------------------------------------//
@@ -756,7 +813,13 @@ class TreeNode : public ScopedWidgetBase {
 
  public:
   const std::string& Name() const { return name_; }
-  TreeNode(const std::string& name, bool delay_begin = false)
+
+ public:
+  static inline TreeNode Delayed(const std::string& name) {
+    return TreeNode(name, kWidgetInitDelayed);
+  }
+
+  TreeNode(const std::string& name, bool delay_begin = kWidgetInitImmediate)
       : ScopedWidgetBase(delay_begin) {
     name_ = name;
 
@@ -766,12 +829,6 @@ class TreeNode : public ScopedWidgetBase {
       name_ = name;
     } else
       throw valid_name.Exception();
-
-    // Bind the begin method.
-    BindBegin([this]() -> bool { return ImGui::TreeNode(name_.c_str()); });
-
-    // Bind the end method
-    BindEnd(ImGui::TreePop);
 
     // Begin Scope if not delayed.
     BeginImpl();
@@ -786,6 +843,11 @@ class TreeNode : public ScopedWidgetBase {
     // Remove the name from name map.
     ReleaseName(name_);
   }
+
+ protected:
+  bool BoundBegin() override { return ImGui::TreeNode(name_.c_str()); }
+
+  void BoundEnd() override { ImGui::TreePop(); }
 };
 
 //===========================================================================//
@@ -800,20 +862,19 @@ namespace single_widget { /* cgui single_widget */
 /* <class:Button> */
 //-------------------------------------------------------------------------//
 class Button : public SingularWidgetBase {
-  std::string text_;
-  CguiVec2 size_;
+ public:
+  const std::string& Text() const { return text_; }
+  const CguiVec2& Size() const { return size_; }
 
  public:
+  static inline Button Delayed(const std::string& text, CguiVec2 size = {}) {
+    return Button(text, size, kWidgetInitDelayed);
+  }
   Button(const std::string& text, CguiVec2 size = {},
-         bool delayed_begin = false)
+         bool delayed_begin = kWidgetInitImmediate)
       : SingularWidgetBase(delayed_begin) {
     text_ = text;
     size_ = size;
-
-    // Bind the begin method.
-    BindBegin([this]() -> bool {
-      return ImGui::Button(text_.c_str(), {size_.first, size_.second});
-    });
 
     // Begin Scope if not delayed.
     BeginImpl();
@@ -822,29 +883,38 @@ class Button : public SingularWidgetBase {
   bool BeginLate() override { return BeginLateImpl(); }
 
   ~Button() = default;
+
+ protected:
+  bool BoundBegin() override {
+    return ImGui::Button(text_.c_str(), {size_.first, size_.second});
+  }
+
+ private:
+  std::string text_;
+  CguiVec2 size_;
 };
 
 //-------------------------------------------------------------------------//
 /* <class:MenuItem> */
 //-------------------------------------------------------------------------//
 class MenuItem : public SingularWidgetBase {
-  std::string text_;
-  std::string shortcut_hint_;
-  bool is_enabled_;
+ public:
+  const std::string& Text() const { return text_; }
+  const std::string& ShortcutHint() const { return shortcut_hint_; }
+  bool IsEnabled() const { return is_enabled_; }
 
  public:
+  static inline MenuItem Delayed(const std::string& text,
+                                 const std::string& shortcut_hint = "",
+                                 bool is_enabled = true) {
+    return MenuItem(text, shortcut_hint, is_enabled, kWidgetInitDelayed);
+  }
   MenuItem(const std::string& text, const std::string& shortcut_hint = "",
-           bool is_enabled = true, bool delayed_begin = false)
+           bool is_enabled = true, bool delayed_begin = kWidgetInitImmediate)
       : SingularWidgetBase(delayed_begin) {
     text_ = text;
     shortcut_hint_ = shortcut_hint;
     is_enabled_ = is_enabled;
-
-    // Bind the begin method.
-    BindBegin([this]() -> bool {
-      return ImGui::MenuItem(text_.c_str(), shortcut_hint_.c_str(), false,
-                             is_enabled_);
-    });
 
     // Begin Scope if not delayed.
     BeginImpl();
@@ -853,21 +923,33 @@ class MenuItem : public SingularWidgetBase {
   bool BeginLate() override { return BeginLateImpl(); }
 
   ~MenuItem() = default;
+
+ protected:
+  bool BoundBegin() override {
+    return ImGui::MenuItem(text_.c_str(), shortcut_hint_.c_str(), false,
+                           is_enabled_);
+  }
+
+ private:
+  std::string text_;
+  std::string shortcut_hint_;
+  bool is_enabled_;
 };
 
 //-------------------------------------------------------------------------//
 /* <class:Selectable> */
 //-------------------------------------------------------------------------//
 class Selectable : public SingularWidgetBase {
-  std::string text_;
+ public:
+  const std::string& Text() const { return text_; }
 
  public:
-  Selectable(const std::string& text, bool delayed_begin = false)
+  static inline Selectable Delayed(const std::string& text) {
+    return Selectable(text, kWidgetInitDelayed);
+  }
+  Selectable(const std::string& text, bool delayed_begin = kWidgetInitImmediate)
       : SingularWidgetBase(delayed_begin) {
     text_ = text;
-
-    // Bind the begin method.
-    BindBegin([this]() -> bool { return ImGui::Selectable(text_.c_str()); });
 
     // Begin Scope if not delayed.
     BeginImpl();
@@ -876,6 +958,12 @@ class Selectable : public SingularWidgetBase {
   bool BeginLate() override { return BeginLateImpl(); }
 
   ~Selectable() = default;
+
+ protected:
+  bool BoundBegin() override { return ImGui::Selectable(text_.c_str()); }
+
+ private:
+  std::string text_;
 };
 
 //-------------------------------------------------------------------------//
@@ -884,25 +972,34 @@ class Selectable : public SingularWidgetBase {
 class MultilineTextInput : public SingularWidgetBase {
   std::string label_;
   const CguiVec2& size_;
-  std::string* buffer_;
+  std::string& buffer_;
   InputTextFlags flags_;
 
  public:
-  MultilineTextInput(const std::string& label, std::string* buffer,
+  const std::string& Label() const { return label_; }
+  const CguiVec2& Size() const { return size_; }
+  std::string& Buffer() { return buffer_; }
+  InputTextFlags& InputFlags() { return flags_; }
+
+  const std::string& Buffer() const { return buffer_; }
+  const InputTextFlags& InputFlags() const { return flags_; }
+
+ public:
+  static inline MultilineTextInput Delayed(
+      const std::string& label, std::string& buffer,
+      const CguiVec2& size = {0.f, 0.f},
+      InputTextFlags flags = InputTextFlags()) {
+    return MultilineTextInput(label, buffer, size, flags, kWidgetInitDelayed);
+  }
+  MultilineTextInput(const std::string& label, std::string& buffer,
                      const CguiVec2& size = {},
                      InputTextFlags flags = InputTextFlags(),
-                     bool delayed_begin = false)
+                     bool delayed_begin = kWidgetInitImmediate)
       : SingularWidgetBase(delayed_begin),
         label_(label),
         size_(size),
         buffer_(buffer),
         flags_(flags) {
-    // Bind the begin method.
-    BindBegin([this]() -> bool {
-      return ImGui::InputTextMultiline(
-          label_.c_str(), buffer_, {size_.first, size_.second}, flags_.Get());
-    });
-
     // Begin Scope if not delayed.
     BeginImpl();
   }
@@ -910,6 +1007,12 @@ class MultilineTextInput : public SingularWidgetBase {
   bool BeginLate() override { return BeginLateImpl(); }
 
   ~MultilineTextInput() = default;
+
+ protected:
+  bool BoundBegin() override {
+    return ImGui::InputTextMultiline(label_.c_str(), &buffer_,
+                                     {size_.first, size_.second}, flags_.Get());
+  }
 };
 
 //===========================================================================//
@@ -927,46 +1030,40 @@ class DirectoryView : public SingularWidgetBase {
  public:
   using PathT = typename std::filesystem::path;
   using SelectedCallbackT = std::function<void(const PathT&)>;
+
  public:
   DirectoryView(
-      const PathT& path,
-      SelectedCallbackT selected_callback = [](auto&& a) {},
+      const PathT& path, SelectedCallbackT selected_callback = [](auto&& a) {},
       bool is_delayed = false)
       : SingularWidgetBase(is_delayed),
         select_file_callback(selected_callback),
         root(path) {
-    // Bind the begin method.
-    BindBegin([this]() -> bool {
-      RecursiveDisplayDirectory(root);
-      return true;
-    });
-
     // Begin Scope if not delayed.
     BeginImpl();
   }
   DirectoryView(
-      const PathT& path,
-      SelectedCallbackT selected_callback = [](auto&& a) {},
+      const PathT& path, SelectedCallbackT selected_callback = [](auto&& a) {},
       SelectedCallbackT right_click_callback = [](auto&& a) {},
       bool is_delayed = false)
       : SingularWidgetBase(is_delayed),
         select_file_callback(selected_callback),
         right_click_file_callback(right_click_callback),
         root(path) {
-    // Bind the begin method.
-    BindBegin([this]() -> bool {
-      RecursiveDisplayDirectory(root);
-      return true;
-    });
 
     // Begin Scope if not delayed.
     BeginImpl();
   }
   bool BeginLate() { return BeginLateImpl(); }
+
  private:
   SelectedCallbackT select_file_callback;
   SelectedCallbackT right_click_file_callback;
   const PathT& root;
+
+  bool BoundBegin() override {
+    RecursiveDisplayDirectory(root);
+    return true;
+  }
 
   void RecursiveDisplayDirectory(const PathT& path, int depth = 0) {
     if (std::filesystem::is_directory(path)) {
@@ -1157,15 +1254,387 @@ void ExampleEditorTabs(sf::Window& window) {
       auto selected_tab = CguiTabItem("[Selected]");
       if (selected_tab)
         auto file_text_box =
-            CguiMultilineTextInput("Selected_Code", &gEditorStringBuffer,
+            CguiMultilineTextInput("Selected_Code", gEditorStringBuffer,
                                    cgui::kExpandWidgetToRemainingSpaceXY);
       selected_tab.EndEarly();
       auto other_tab = CguiTabItem("[Other]");
       if (other_tab)
         auto file_text_box =
-            CguiMultilineTextInput("Other_Code", &gEditorStringBuffer,
+            CguiMultilineTextInput("Other_Code", gEditorStringBuffer,
                                    cgui::kExpandWidgetToRemainingSpaceXY);
     }
   }
 }
 };  // namespace cgui::example
+
+
+
+struct ExampleAppConsole {
+  char InputBuf[256];
+  ImVector<char*> Items;
+  ImVector<const char*> Commands;
+  ImVector<char*> History;
+  int HistoryPos;  // -1: new line, 0..History.Size-1 browsing history.
+  ImGuiTextFilter Filter;
+  bool AutoScroll;
+  bool ScrollToBottom;
+
+  ExampleAppConsole() {
+    ClearLog();
+    memset(InputBuf, 0, sizeof(InputBuf));
+    HistoryPos = -1;
+
+    // "CLASSIFY" is here to provide the test case where "C"+[tab] completes to
+    // "CL" and display multiple matches.
+    Commands.push_back("HELP");
+    Commands.push_back("HISTORY");
+    Commands.push_back("CLEAR");
+    Commands.push_back("CLASSIFY");
+    AutoScroll = true;
+    ScrollToBottom = false;
+    AddLog("Welcome to Dear ImGui!");
+  }
+  ~ExampleAppConsole() {
+    ClearLog();
+    for (int i = 0; i < History.Size; i++) free(History[i]);
+  }
+
+  // Portable helpers
+  static int Stricmp(const char* s1, const char* s2) {
+    int d;
+    while ((d = toupper(*s2) - toupper(*s1)) == 0 && *s1) {
+      s1++;
+      s2++;
+    }
+    return d;
+  }
+  static int Strnicmp(const char* s1, const char* s2, int n) {
+    int d = 0;
+    while (n > 0 && (d = toupper(*s2) - toupper(*s1)) == 0 && *s1) {
+      s1++;
+      s2++;
+      n--;
+    }
+    return d;
+  }
+  static char* Strdup(const char* s) {
+    IM_ASSERT(s);
+    size_t len = strlen(s) + 1;
+    void* buf = malloc(len);
+    IM_ASSERT(buf);
+    return (char*)memcpy(buf, (const void*)s, len);
+  }
+  static void Strtrim(char* s) {
+    char* str_end = s + strlen(s);
+    while (str_end > s && str_end[-1] == ' ') str_end--;
+    *str_end = 0;
+  }
+
+  void ClearLog() {
+    for (int i = 0; i < Items.Size; i++) free(Items[i]);
+    Items.clear();
+  }
+
+  void AddLog(const char* fmt, ...) IM_FMTARGS(2) {
+    // FIXME-OPT
+    char buf[1024];
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
+    buf[IM_ARRAYSIZE(buf) - 1] = 0;
+    va_end(args);
+    Items.push_back(Strdup(buf));
+  }
+
+  void Draw(const char* title, bool* p_open) {
+    ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
+    if (!ImGui::BeginChild(title)) {
+      ImGui::EndChild();
+      return;
+    }
+
+    // As a specific feature guaranteed by the library, after calling Begin()
+    // the last Item represent the title bar. So e.g. IsItemHovered() will
+    // return true when hovering the title bar. Here we create a context menu
+    // only available from the title bar.
+    if (ImGui::BeginPopupContextItem()) {
+      if (ImGui::MenuItem("Close Console")) *p_open = false;
+      ImGui::EndPopup();
+    }
+
+    ImGui::TextWrapped("");
+    ImGui::TextWrapped("Enter 'HELP' for help.");
+
+    // TODO: display items starting from the bottom
+
+    if (ImGui::SmallButton("Add Debug Text")) {
+      AddLog("%d some text", Items.Size);
+      AddLog("some more text");
+      AddLog("display very important message here!");
+    }
+    ImGui::SameLine();
+    if (ImGui::SmallButton("Add Debug Error")) {
+      AddLog("[error] something went wrong");
+    }
+    ImGui::SameLine();
+    if (ImGui::SmallButton("Clear")) {
+      ClearLog();
+    }
+    ImGui::SameLine();
+    bool copy_to_clipboard = ImGui::SmallButton("Copy");
+    // static float t = 0.0f; if (ImGui::GetTime() - t > 0.02f) { t =
+    // ImGui::GetTime(); AddLog("Spam %f", t); }
+
+    ImGui::Separator();
+
+    // Options menu
+    if (ImGui::BeginPopup("Options")) {
+      ImGui::Checkbox("Auto-scroll", &AutoScroll);
+      ImGui::EndPopup();
+    }
+
+    // Options, Filter
+    if (ImGui::Button("Options")) ImGui::OpenPopup("Options");
+    ImGui::SameLine();
+    Filter.Draw("Filter (\"incl,-excl\") (\"error\")", 180);
+    ImGui::Separator();
+
+    // Reserve enough left-over height for 1 separator + 1 input text
+    const float footer_height_to_reserve =
+        ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+    if (ImGui::BeginChild(
+            "ScrollingRegion", ImVec2(0, -footer_height_to_reserve),
+            ImGuiChildFlags_None, ImGuiWindowFlags_HorizontalScrollbar)) {
+      if (ImGui::BeginPopupContextWindow()) {
+        if (ImGui::Selectable("Clear")) ClearLog();
+        ImGui::EndPopup();
+      }
+
+      // Display every line as a separate entry so we can change their color or
+      // add custom widgets. If you only want raw text you can use
+      // ImGui::TextUnformatted(log.begin(), log.end()); NB- if you have
+      // thousands of entries this approach may be too inefficient and may
+      // require user-side clipping to only process visible items. The clipper
+      // will automatically measure the height of your first item and then
+      // "seek" to display only items in the visible area.
+      // To use the clipper we can replace your standard loop:
+      //      for (int i = 0; i < Items.Size; i++)
+      //   With:
+      //      ImGuiListClipper clipper;
+      //      clipper.Begin(Items.Size);
+      //      while (clipper.Step())
+      //         for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
+      // - That your items are evenly spaced (same height)
+      // - That you have cheap random access to your elements (you can access
+      // them given their index,
+      //   without processing all the ones before)
+      // You cannot this code as-is if a filter is active because it breaks the
+      // 'cheap random-access' property. We would need random-access on the
+      // post-filtered list. A typical application wanting coarse clipping and
+      // filtering may want to pre-compute an array of indices or offsets of
+      // items that passed the filtering test, recomputing this array when user
+      // changes the filter, and appending newly elements as they are inserted.
+      // This is left as a task to the user until we can manage to improve this
+      // example code! If your items are of variable height:
+      // - Split them into same height items would be simpler and facilitate
+      // random-seeking into your list.
+      // - Consider using manual call to IsRectVisible() and skipping extraneous
+      // decoration from your items.
+      ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing,
+                          ImVec2(4, 1));  // Tighten spacing
+      if (copy_to_clipboard) ImGui::LogToClipboard();
+      for (const char* item : Items) {
+        if (!Filter.PassFilter(item)) continue;
+
+        // Normally you would store more information in your item than just a
+        // string. (e.g. make Items[] an array of structure, store color/type
+        // etc.)
+        ImVec4 color;
+        bool has_color = false;
+        if (strstr(item, "[error]")) {
+          color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f);
+          has_color = true;
+        } else if (strncmp(item, "# ", 2) == 0) {
+          color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f);
+          has_color = true;
+        }
+        if (has_color) ImGui::PushStyleColor(ImGuiCol_Text, color);
+        ImGui::TextUnformatted(item);
+        if (has_color) ImGui::PopStyleColor();
+      }
+      if (copy_to_clipboard) ImGui::LogFinish();
+
+      // Keep up at the bottom of the scroll region if we were already at the
+      // bottom at the beginning of the frame. Using a scrollbar or mouse-wheel
+      // will take away from the bottom edge.
+      if (ScrollToBottom ||
+          (AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()))
+        ImGui::SetScrollHereY(1.0f);
+      ScrollToBottom = false;
+
+      ImGui::PopStyleVar();
+    }
+    ImGui::EndChild();
+    ImGui::Separator();
+
+    // Command-line
+    bool reclaim_focus = false;
+    ImGuiInputTextFlags input_text_flags =
+        ImGuiInputTextFlags_EnterReturnsTrue |
+        ImGuiInputTextFlags_EscapeClearsAll |
+        ImGuiInputTextFlags_CallbackCompletion |
+        ImGuiInputTextFlags_CallbackHistory;
+    if (ImGui::InputText("Input", InputBuf, IM_ARRAYSIZE(InputBuf),
+                         input_text_flags, &TextEditCallbackStub,
+                         (void*)this)) {
+      char* s = InputBuf;
+      Strtrim(s);
+      if (s[0]) ExecCommand(s);
+      strcpy_s(s, sizeof s, "");
+      reclaim_focus = true;
+    }
+
+    // Auto-focus on window apparition
+    ImGui::SetItemDefaultFocus();
+    if (reclaim_focus)
+      ImGui::SetKeyboardFocusHere(-1);  // Auto focus previous widget
+
+    ImGui::EndChild();
+  }
+
+  void ExecCommand(const char* command_line) {
+    AddLog("# %s\n", command_line);
+
+    // Insert into history. First find match and delete it so it can be pushed
+    // to the back. This isn't trying to be smart or optimal.
+    HistoryPos = -1;
+    for (int i = History.Size - 1; i >= 0; i--)
+      if (Stricmp(History[i], command_line) == 0) {
+        free(History[i]);
+        History.erase(History.begin() + i);
+        break;
+      }
+    History.push_back(Strdup(command_line));
+
+    // Process command
+    if (Stricmp(command_line, "CLEAR") == 0) {
+      ClearLog();
+    } else if (Stricmp(command_line, "HELP") == 0) {
+      AddLog("Commands:");
+      for (int i = 0; i < Commands.Size; i++) AddLog("- %s", Commands[i]);
+    } else if (Stricmp(command_line, "HISTORY") == 0) {
+      int first = History.Size - 10;
+      for (int i = first > 0 ? first : 0; i < History.Size; i++)
+        AddLog("%3d: %s\n", i, History[i]);
+    } else {
+      AddLog("Unknown command: '%s'\n", command_line);
+    }
+
+    // On command input, we scroll to bottom even if AutoScroll==false
+    ScrollToBottom = true;
+  }
+
+  // In C++11 you'd be better off using lambdas for this sort of forwarding
+  // callbacks
+  static int TextEditCallbackStub(ImGuiInputTextCallbackData* data) {
+    ExampleAppConsole* console = (ExampleAppConsole*)data->UserData;
+    return console->TextEditCallback(data);
+  }
+
+  int TextEditCallback(ImGuiInputTextCallbackData* data) {
+    // AddLog("cursor: %d, selection: %d-%d", data->CursorPos,
+    // data->SelectionStart, data->SelectionEnd);
+    switch (data->EventFlag) {
+      case ImGuiInputTextFlags_CallbackCompletion: {
+        // Example of TEXT COMPLETION
+
+        // Locate beginning of current word
+        const char* word_end = data->Buf + data->CursorPos;
+        const char* word_start = word_end;
+        while (word_start > data->Buf) {
+          const char c = word_start[-1];
+          if (c == ' ' || c == '\t' || c == ',' || c == ';') break;
+          word_start--;
+        }
+
+        // Build a list of candidates
+        ImVector<const char*> candidates;
+        for (int i = 0; i < Commands.Size; i++)
+          if (Strnicmp(Commands[i], word_start, (int)(word_end - word_start)) ==
+              0)
+            candidates.push_back(Commands[i]);
+
+        if (candidates.Size == 0) {
+          // No match
+          AddLog("No match for \"%.*s\"!\n", (int)(word_end - word_start),
+                 word_start);
+        } else if (candidates.Size == 1) {
+          // Single match. Delete the beginning of the word and replace it
+          // entirely so we've got nice casing.
+          data->DeleteChars((int)(word_start - data->Buf),
+                            (int)(word_end - word_start));
+          data->InsertChars(data->CursorPos, candidates[0]);
+          data->InsertChars(data->CursorPos, " ");
+        } else {
+          // Multiple matches. Complete as much as we can..
+          // So inputing "C"+Tab will complete to "CL" then display "CLEAR" and
+          // "CLASSIFY" as matches.
+          int match_len = (int)(word_end - word_start);
+          for (;;) {
+            int c = 0;
+            bool all_candidates_matches = true;
+            for (int i = 0; i < candidates.Size && all_candidates_matches; i++)
+              if (i == 0)
+                c = toupper(candidates[i][match_len]);
+              else if (c == 0 || c != toupper(candidates[i][match_len]))
+                all_candidates_matches = false;
+            if (!all_candidates_matches) break;
+            match_len++;
+          }
+
+          if (match_len > 0) {
+            data->DeleteChars((int)(word_start - data->Buf),
+                              (int)(word_end - word_start));
+            data->InsertChars(data->CursorPos, candidates[0],
+                              candidates[0] + match_len);
+          }
+
+          // List matches
+          AddLog("Possible matches:\n");
+          for (int i = 0; i < candidates.Size; i++)
+            AddLog("- %s\n", candidates[i]);
+        }
+
+        break;
+      }
+      case ImGuiInputTextFlags_CallbackHistory: {
+        // Example of HISTORY
+        const int prev_history_pos = HistoryPos;
+        if (data->EventKey == ImGuiKey_UpArrow) {
+          if (HistoryPos == -1)
+            HistoryPos = History.Size - 1;
+          else if (HistoryPos > 0)
+            HistoryPos--;
+        } else if (data->EventKey == ImGuiKey_DownArrow) {
+          if (HistoryPos != -1)
+            if (++HistoryPos >= History.Size) HistoryPos = -1;
+        }
+
+        // A better implementation would preserve the data on the current input
+        // line along with cursor position.
+        if (prev_history_pos != HistoryPos) {
+          const char* history_str =
+              (HistoryPos >= 0) ? History[HistoryPos] : "";
+          data->DeleteChars(0, data->BufTextLen);
+          data->InsertChars(0, history_str);
+        }
+      }
+    }
+    return 0;
+  }
+};
+static void ShowAppConsole() {
+  static ExampleAppConsole console;
+  static bool po{true};
+  console.Draw("Example: Console", &po);
+}
