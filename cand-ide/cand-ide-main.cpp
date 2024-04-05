@@ -4,6 +4,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include "../submodules/extended-cpp-standard/cppsextended.h"
+#include "import_unit_tests.h"
 
 #include "imgui-SFML.h"
 #include "imgui.h"
