@@ -43,6 +43,7 @@
 //  and inline tests which can be run at a later time and defined inside
 //  methods.
 //
+// (More examples available at bottom of this file...)
 // Sample Use:
 //       auto my_method() { return true; }
 //       MINITEST(MyTest,MyTestCase){
@@ -526,13 +527,13 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
   } else {                                                             \
     minitest::RecordTestLog(true, msg, minitest::gLastFailedTestName,  \
                             minitest::gLastFailedTestCaseName);        \
-  };
+  }
 #else
 #define MINITEST_INTERNAL_CHECK_METHOD(method, msg, ...)           \
   if (!minitest::method(__VA_ARGS__)) {                            \
     minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName, \
                                minitest::gLastFailedTestCaseName); \
-  };
+  }
 #endif
 //-----------------------------------//
 //=---------------------------------=//
@@ -554,14 +555,14 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
   } else {                                                             \
     minitest::RecordTestLog(true, msg, minitest::gLastFailedTestName,  \
                             minitest::gLastFailedTestCaseName);        \
-  };
+  }
 #else
 #define MINITEST_INTERNAL_ASSERT_METHOD(method, msg, ...)          \
   if (!minitest::method(__VA_ARGS__)) {                            \
     minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName, \
                                minitest::gLastFailedTestCaseName); \
     return;                                                        \
-  };
+  }
 #endif
 
 //-----------------------------------//
@@ -665,3 +666,31 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 #endif HEADER_GUARD_MINITEST_H
 //---------------------------------------------------------------------------//
 //=-------------------------------------------------------------------------=//
+
+//---------------------------------------------------------------------------//
+// More examples...
+//---------------------------------------------------------------------------//
+
+//-----------------------------------//
+// ex1. Using inline test cases.
+//-----------------------------------//
+/*
+INLINE_MINITEST(A, B) {
+  // Test code here.
+  int i;
+}
+INLINE_END_MINITEST;
+
+void ut_expected() {
+  INLINE_MINITEST(A, C) {
+    // Test code here.
+    int i;
+  }
+  INLINE_END_MINITEST;
+
+  RUN_INLINE_MINITEST(A, B)
+
+  RUN_INLINE_MINITEST(A, C)
+}
+*/
+//-----------------------------------//

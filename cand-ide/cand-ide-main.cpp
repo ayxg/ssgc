@@ -4,6 +4,11 @@
 #include <SFML/Window/Event.hpp>
 
 #include "../submodules/extended-cpp-standard/cppsextended.h"
+
+// Unit Testing
+#include "../submodules/mini-test/minitest.h"
+#include "../unit-tests/ut-extended-cpp-standard/ut_expected.h"
+
 #include "import_unit_tests.h"
 
 #include "imgui-SFML.h"
@@ -21,13 +26,17 @@ int main() {
 
   cide::ui::CideUserInterface cide_ui;
   // cide::IdeInterface idei;
-
   sf::Clock deltaClock;
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
       ImGui::SFML::ProcessEvent(window, event);
 
+      if (event.type == sf::Event::KeyReleased) {
+        if (event.key.code == sf::Keyboard::T) {
+          RUN_INLINE_MINITEST(Test_CxxExpected, TestCase_CxxExpected);
+        }
+      }
       if (event.type == sf::Event::Closed) {
         window.close();
       }
