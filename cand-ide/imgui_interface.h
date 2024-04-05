@@ -1106,6 +1106,8 @@ class DirectoryView : public SingularWidgetBase {
 namespace cgui {
 using ImGui::SameLine;
 using ImGui::Separator;
+using ImGui::SetNextWindowSize;
+using ImGui::SetNextWindowPos;
 }  // namespace cgui
 
 // Common objects.

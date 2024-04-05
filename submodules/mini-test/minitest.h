@@ -39,7 +39,9 @@
 //  This is a single header file unit testing framework. Tests are defined as
 //  lambdas in a template parameter, which is executed upon initialization of
 //  static variables. As a result the order of tests is not guaranteed but the
-//  usual order of static initialization is followed.
+//  usual order of static initialization is followed. New: now supports fixtures
+//  and inline tests which can be run at a later time and defined inside
+//  methods.
 //
 // Sample Use:
 //       auto my_method() { return true; }
@@ -64,12 +66,26 @@
 //       int main() {
 //         return MINITESTS_RESULT ? 0 : 1;
 //       }
+//
+// Configuration Macros:
+//   - MINITEST_CONFIG_RECORD_ALL: If true, all test results are recorded and
+//                              can be viewed using MINITESTS_RECORDED macro.
+//
+//   - MINITEST_CONFIG_NO_CONSOLE_PRINT: If true, no output is printed to the
+//                                       console during the test run.
+//
+//   - MINITEST_CONFIG_CUSTOM_SEPARATOR: If defined, a custom separator is used
+//   between test sections which should be the macro def. Default is a dashed
+//   line. Definition must be a string literal with a newline.
 //---------------------------------------------------------------------------//
+
 #ifndef HEADER_GUARD_MINITEST_H
 #define HEADER_GUARD_MINITEST_H
 // Includes:
 #include <concepts>
 #include <iostream>
+#include <source_location>
+#include <sstream>
 #include <string>
 #include <type_traits>
 #include <vector>
@@ -80,15 +96,20 @@
 // namespace minitest
 //---------------------------------------------------------------------------//
 namespace minitest {
+
+#ifndef MINITEST_CONFIG_CUSTOM_SEPARATOR
+#define MINITEST_CONFIG_CUSTOM_SEPARATOR                         \
+  "------------------------------------------------------------" \
+  "---------------------------------------------------------\n"
+#endif  // !MINITEST_CONFIG_CUSTOM_SEPARATOR
+
 // Used as a seperator between sections in the output.
-static constexpr auto kDashedLine =
-    "------------------------------------------------------------"
-    "---------------------------------------------------------\n";
+static constexpr auto kSeparator = MINITEST_CONFIG_CUSTOM_SEPARATOR;
 
 // Concept to check if a type is streamable.
 // Non-streamable objects are output as their pointer address.
 template <typename T>
-concept Streamable = requires(std::ostream os, std::decay_t<T> value) {
+concept iStreamable = requires(std::ostream os, std::decay_t<T> value) {
   { os << value } -> std::same_as<std::ostream&>;
 };
 
@@ -102,13 +123,17 @@ struct Test {
   static inline const TestImpl test_impl{};
   bool is_test_passed = true;
   static inline bool Run() {
-    std::cout << kDashedLine << "[Begin Mini Test] " << test_name << " [Case]"
+#ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
+    std::cout << kSeparator << "[Begin Mini Test] " << test_name << " [Case]"
               << test_case_name << "\n"
-              << kDashedLine;
+              << kSeparator;
+#endif  // !MINITEST_CONFIG_NO_CONSOLE_PRINT
     test_impl();
-    std::cout << kDashedLine << "[End Mini Test] " << test_name << " [Case]"
+#ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
+    std::cout << kSeparator << "[End Mini Test] " << test_name << " [Case]"
               << test_case_name << "\n"
-              << kDashedLine;
+              << kSeparator;
+#endif  // !MINITEST_CONFIG_NO_CONSOLE_PRINT
     return true;
   }
 };
@@ -128,7 +153,9 @@ struct Fixture {
 // !! DO NOT USE
 static inline bool ExpectTrue(bool b) {
   if (!b) {
+#ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
     std::cout << "[FAIL] Expected TRUE." << std::endl;
+#endif  // !MINITEST_CONFIG_NO_CONSOLE_PRINT
     return false;
   }
   return true;
@@ -137,7 +164,9 @@ static inline bool ExpectTrue(bool b) {
 // !! DO NOT USE
 static inline bool ExpectFalse(bool b) {
   if (b) {
+#ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
     std::cout << "[FAIL] Expected FALSE." << std::endl;
+#endif  // !MINITEST_CONFIG_NO_CONSOLE_PRINT
     return false;
   }
   return true;
@@ -150,11 +179,13 @@ static inline bool ExpectEq(LT lhs, RT rhs) {
   if (lhs == rhs) {
     return true;
   } else {
+#ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
     std::cout << "[FAIL] Expected Equality with: ";
-    if constexpr (Streamable<LT> && Streamable<RT>)
+    if constexpr (iStreamable<LT> && iStreamable<RT>)
       std::cout << ">|" << lhs << " Got: " << rhs << std::endl;
     else
       std::cout << ">|" << &lhs << " Got: " << &rhs << std::endl;
+#endif  // !MINITEST_CONFIG_NO_CONSOLE_PRINT
     return false;
   }
 }
@@ -166,11 +197,13 @@ static inline bool ExpectNe(LT lhs, RT rhs) {
   if (lhs != rhs) {
     return true;
   } else {
+#ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
     std::cout << "[FAIL] Expected Inequality with";
-    if constexpr (Streamable<LT> && Streamable<RT>)
+    if constexpr (iStreamable<LT> && iStreamable<RT>)
       std::cout << ">|" << lhs << std::endl;
     else
       std::cout << ">|" << &lhs << std::endl;
+#endif  // !MINITEST_CONFIG_NO_CONSOLE_PRINT
     return false;
   }
 }
@@ -182,7 +215,9 @@ static inline bool ExpectAnyThrow(auto&& f) {
   } catch (...) {
     return true;
   }
+#ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
   std::cout << "[FAIL] Expected exception but got none." << std::endl;
+#endif  // !MINITEST_CONFIG_NO_CONSOLE_PRINT
   return false;
 }
 
@@ -191,38 +226,94 @@ static inline bool ExpectNoThrow(auto&& f) {
   try {
     f();
   } catch (...) {
+#ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
     std::cout << "[FAIL] Expected no exception but one was raised."
               << std::endl;
+#endif  // !MINITEST_CONFIG_NO_CONSOLE_PRINT
     return false;
   }
   return true;
 }
 
-static std::vector<std::string> failed_test_logs;
-static const char* last_failed_test_name = "";
-static const char* last_failed_test_case_name = "";
+struct TestResult {
+  bool is_test_passed;
+  std::string test_name;
+  std::string test_case_name;
+  std::source_location location;
+};
 
-static inline void AddFailedTestLog(const std::string& log, const char* test,
-                                    const char* tcase) {
-  std::string ss = "[FAILURE DETECTED] Test: " + std::string(test) +
-                   " Case: " + std::string(tcase) + " On Check:" + log;
-  failed_test_logs.push_back(ss);
+std::ostream& operator<<(std::ostream& ss, const TestResult& t) {
+  if (t.is_test_passed) {
+    ss << "[PASSED] Test: " << t.test_name << "\n Case: " << t.test_case_name
+       << '\n';
+  } else {
+    ss << "[FAILED] Test: " << t.test_name << "\n Case: " << t.test_case_name
+       << t.location.file_name() << '(' << t.location.line() << ':'
+       << t.location.column() << ") `" << t.location.function_name() << "`: \n";
+  };
+  return ss;
+}
+
+static std::vector<std::string> gFailedTestLogs;
+static std::vector<TestResult> gRecordedTestLogs;
+static const char* gLastFailedTestName = "";
+static const char* gLastFailedTestCaseName = "";
+
+static inline void AddFailedTestLog(
+    const std::string& log, const char* test, const char* tcase,
+    const std::source_location location = std::source_location::current()) {
+  std::stringstream ss;
+  ss << "[FAILURE DETECTED] Test: " << std::string(test)
+     << " Case: " << std::string(tcase) << " On Check:" << log
+     << "\nfile: " << location.file_name() << '(' << location.line() << ':'
+     << location.column() << ") `" << location.function_name() << "`: " << '\n';
+  gFailedTestLogs.push_back(ss.str());
 }
 
 static inline bool PrintFailedTestLogs() {
-  if (failed_test_logs.empty()) {
-    std::cout << kDashedLine << "All tests passed.\n" << kDashedLine;
+  if (gFailedTestLogs.empty()) {
+    std::cout << kSeparator << "All tests passed.\n" << kSeparator;
     return true;
   } else {
-    std::cout << kDashedLine << "Failed Tests:\n" << kDashedLine;
-    for (const auto& log : failed_test_logs) {
+    std::cout << kSeparator << "Failed Tests:\n" << kSeparator;
+    for (const auto& log : gFailedTestLogs) {
       std::cout << log << std::endl;
     }
-    std::cout << kDashedLine << "End of Failed Tests:\n" << kDashedLine;
+    std::cout << kSeparator << "End of Failed Tests:\n" << kSeparator;
     return false;
   }
 }
 
+static inline void RecordTestLog(
+    bool passed, const std::string& log, const char* test, const char* tcase,
+    const std::source_location location = std::source_location::current()) {
+  gRecordedTestLogs.push_back(TestResult{.is_test_passed = passed,
+                                         .test_name = std::string(test),
+                                         .test_case_name = std::string(tcase),
+                                         .location = location});
+}
+
+static inline bool PrintRecordedTestLogs() {
+  if (gRecordedTestLogs.empty()) {
+    std::cout << kSeparator << "No test were run.\n" << kSeparator;
+    return true;
+  } else {
+    std::cout << kSeparator << "Tests:\n" << kSeparator;
+    for (const auto& log : gRecordedTestLogs) {
+      std::cout << log << std::endl;
+    }
+    std::cout << kSeparator << "End of Tests:\n" << kSeparator;
+    return false;
+  }
+}
+
+static inline const std::vector<TestResult>& ViewTestResults() {
+  return gRecordedTestLogs;
+}
+
+static inline const std::vector<std::string>& ViewFailedTestResults() {
+  return gFailedTestLogs;
+}
 }  // namespace minitest
 //---------------------------------------------------------------------------//
 //=-------------------------------------------------------------------------=//
@@ -246,8 +337,8 @@ static inline bool PrintFailedTestLogs() {
   return minitest::Test < []() consteval -> const char* { return #TestName; },\
        []() consteval -> const char* { return #TestCaseName; },\
        decltype([]() -> void {\
-         minitest::last_failed_test_name = #TestName;\
-         minitest::last_failed_test_case_name = #TestCaseName;
+         minitest::gLastFailedTestName = #TestName;\
+         minitest::gLastFailedTestCaseName = #TestCaseName;
 //-----------------------------------//
 //=---------------------------------=//
 
@@ -296,8 +387,8 @@ static inline bool PrintFailedTestLogs() {
        decltype([]() -> void {\
   const static struct MINITEST_FIXTURE_##TestCaseName : TestFixtureClass {\
   void RunFixture() {\
-  minitest::last_failed_test_case_name = #TestName;\
-  minitest::last_failed_test_name = #TestCaseName;\
+  minitest::gLastFailedTestCaseName = #TestName;\
+  minitest::gLastFailedTestName = #TestCaseName;\
   (*this).SetUp();
 //-----------------------------------//
 //=---------------------------------=//
@@ -335,7 +426,45 @@ static inline bool PrintFailedTestLogs() {
 //=---------------------------------=//
 
 //=---------------------------------=//
-// Macro:{FINISH_MINITESTS}
+// Macro:{MINITEST}
+// Brief:{Defines an inline test case to be executed at a later time.
+// Always close with 'INLINE_END_MINITEST;'.}
+//-----------------------------------//
+#define INLINE_MINITEST(TestName, TestCaseName) \
+  auto INLINE_MINITEST_##TestName##TestCaseName = []() -> bool {\
+  return minitest::Test < []() consteval -> const char* { return #TestName; },\
+       []() consteval -> const char* { return #TestCaseName; },\
+       decltype([]() -> void {\
+         minitest::gLastFailedTestName = #TestName;\
+         minitest::gLastFailedTestCaseName = #TestCaseName;
+//-----------------------------------//
+//=---------------------------------=//
+
+//=---------------------------------=//
+// Macro:{INLINE_END_MINITEST}
+// Brief:{}
+//-----------------------------------//
+#define INLINE_END_MINITEST \
+  }                         \
+  )\
+  >\
+  ::Run();                  \
+  }                         \
+  ;
+//-----------------------------------//
+//=---------------------------------=//
+
+//=---------------------------------=//
+// Macro:{INLINE_END_MINITEST}
+// Brief:{}
+//-----------------------------------//
+#define RUN_INLINE_MINITEST(TestName, TestCaseName) \
+  INLINE_MINITEST_##TestName##TestCaseName();       \
+//-----------------------------------//
+//=---------------------------------=//
+
+//=---------------------------------=//
+// Macro:{PRINT_MINITESTS}
 // Brief:{ Completes the test suite and prints the result.
 //        Must be called right before your main function.
 //        This store a boolean true result in MINITESTS_RESULT
@@ -345,7 +474,7 @@ static inline bool PrintFailedTestLogs() {
 //        This must be called LAST, after all tests are defined.
 // }
 //-----------------------------------//
-#define FINISH_MINITESTS                     \
+#define PRINT_MINITESTS                      \
   namespace minitest {                       \
   static const bool minitest_result = []() { \
     return minitest::PrintFailedTestLogs();  \
@@ -365,6 +494,18 @@ static inline bool PrintFailedTestLogs() {
 //-----------------------------------//
 //=---------------------------------=//
 
+//=---------------------------------=//
+// Macro:{MINITESTS_RECORDED}
+#define MINITESTS_RECORDED minitest::ViewTestResults()
+//-----------------------------------//
+//=---------------------------------=//
+
+//=---------------------------------=//
+// Macro:{MINITESTS_FAILED}
+#define MINITESTS_FAILED minitest::ViewFailedTestResults()
+//-----------------------------------//
+//=---------------------------------=//
+
 //---------------------------------------------------------------------------//
 // Check Macros
 //---------------------------------------------------------------------------//
@@ -375,10 +516,24 @@ static inline bool PrintFailedTestLogs() {
 //        DO NOT USE DIRECTLY.
 //        This is used internally by the EXPECT_ macros.
 // }
-#define MINITEST_INTERNAL_CHECK_METHOD(method, msg, ...)             \
-  if (!minitest::method(__VA_ARGS__))                                \
-    minitest::AddFailedTestLog(msg, minitest::last_failed_test_name, \
-                               minitest::last_failed_test_case_name);
+#ifdef MINITEST_CONFIG_RECORD_ALL
+#define MINITEST_INTERNAL_CHECK_METHOD(method, msg, ...)               \
+  if (!minitest::method(__VA_ARGS__)) {                                \
+    minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName,     \
+                               minitest::gLastFailedTestCaseName);     \
+    minitest::RecordTestLog(false, msg, minitest::gLastFailedTestName, \
+                            minitest::gLastFailedTestCaseName);        \
+  } else {                                                             \
+    minitest::RecordTestLog(true, msg, minitest::gLastFailedTestName,  \
+                            minitest::gLastFailedTestCaseName);        \
+  };
+#else
+#define MINITEST_INTERNAL_CHECK_METHOD(method, msg, ...)           \
+  if (!minitest::method(__VA_ARGS__)) {                            \
+    minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName, \
+                               minitest::gLastFailedTestCaseName); \
+  };
+#endif
 //-----------------------------------//
 //=---------------------------------=//
 
@@ -388,12 +543,27 @@ static inline bool PrintFailedTestLogs() {
 //        DO NOT USE DIRECTLY.
 //        This is used internally by the ASSERT_ macros.
 // }
-#define MINITEST_INTERNAL_ASSERT_METHOD(method, msg, ...)             \
-  if (!minitest::method(__VA_ARGS__)) {                               \
-    minitest::AddFailedTestLog(msg, minitest::last_failed_test_name,  \
-                               minitest::last_failed_test_case_name); \
-    return;                                                           \
-  }
+#ifdef MINITEST_CONFIG_RECORD_ALL
+#define MINITEST_INTERNAL_ASSERT_METHOD(method, msg, ...)              \
+  if (!minitest::method(__VA_ARGS__)) {                                \
+    minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName,     \
+                               minitest::gLastFailedTestCaseName);     \
+    minitest::RecordTestLog(false, msg, minitest::gLastFailedTestName, \
+                            minitest::gLastFailedTestCaseName);        \
+    return;                                                            \
+  } else {                                                             \
+    minitest::RecordTestLog(true, msg, minitest::gLastFailedTestName,  \
+                            minitest::gLastFailedTestCaseName);        \
+  };
+#else
+#define MINITEST_INTERNAL_ASSERT_METHOD(method, msg, ...)          \
+  if (!minitest::method(__VA_ARGS__)) {                            \
+    minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName, \
+                               minitest::gLastFailedTestCaseName); \
+    return;                                                        \
+  };
+#endif
+
 //-----------------------------------//
 //=---------------------------------=//
 
