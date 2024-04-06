@@ -241,6 +241,7 @@ struct TestResult {
   std::string test_name;
   std::string test_case_name;
   std::source_location location;
+  std::string log;
 };
 
 std::ostream& operator<<(std::ostream& ss, const TestResult& t) {
@@ -291,7 +292,8 @@ static inline void RecordTestLog(
   gRecordedTestLogs.push_back(TestResult{.is_test_passed = passed,
                                          .test_name = std::string(test),
                                          .test_case_name = std::string(tcase),
-                                         .location = location});
+                                         .location = location,
+                                         .log = log});
 }
 
 static inline bool PrintRecordedTestLogs() {
@@ -315,6 +317,15 @@ static inline const std::vector<TestResult>& ViewTestResults() {
 static inline const std::vector<std::string>& ViewFailedTestResults() {
   return gFailedTestLogs;
 }
+
+static inline void FlushTestResults() {
+  gRecordedTestLogs.clear();
+}
+
+static inline void FlushFailedTestResults() {
+  gFailedTestLogs.clear();
+}
+
 }  // namespace minitest
 //---------------------------------------------------------------------------//
 //=-------------------------------------------------------------------------=//
@@ -518,18 +529,18 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 //        This is used internally by the EXPECT_ macros.
 // }
 #ifdef MINITEST_CONFIG_RECORD_ALL
-#define MINITEST_INTERNAL_CHECK_METHOD(method, msg, ...)               \
+#define MINITEST_INTERNAL_CHECK_METHOD(method, pmsg, msg, ...)         \
   if (!minitest::method(__VA_ARGS__)) {                                \
     minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName,     \
                                minitest::gLastFailedTestCaseName);     \
     minitest::RecordTestLog(false, msg, minitest::gLastFailedTestName, \
                             minitest::gLastFailedTestCaseName);        \
   } else {                                                             \
-    minitest::RecordTestLog(true, msg, minitest::gLastFailedTestName,  \
+    minitest::RecordTestLog(true, pmsg, minitest::gLastFailedTestName, \
                             minitest::gLastFailedTestCaseName);        \
   }
 #else
-#define MINITEST_INTERNAL_CHECK_METHOD(method, msg, ...)           \
+#define MINITEST_INTERNAL_CHECK_METHOD(method, pmsg, msg, ...)     \
   if (!minitest::method(__VA_ARGS__)) {                            \
     minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName, \
                                minitest::gLastFailedTestCaseName); \
@@ -545,7 +556,7 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 //        This is used internally by the ASSERT_ macros.
 // }
 #ifdef MINITEST_CONFIG_RECORD_ALL
-#define MINITEST_INTERNAL_ASSERT_METHOD(method, msg, ...)              \
+#define MINITEST_INTERNAL_ASSERT_METHOD(method, pmsg, msg, ...)        \
   if (!minitest::method(__VA_ARGS__)) {                                \
     minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName,     \
                                minitest::gLastFailedTestCaseName);     \
@@ -553,11 +564,11 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
                             minitest::gLastFailedTestCaseName);        \
     return;                                                            \
   } else {                                                             \
-    minitest::RecordTestLog(true, msg, minitest::gLastFailedTestName,  \
+    minitest::RecordTestLog(true, pmsg, minitest::gLastFailedTestName, \
                             minitest::gLastFailedTestCaseName);        \
   }
 #else
-#define MINITEST_INTERNAL_ASSERT_METHOD(method, msg, ...)          \
+#define MINITEST_INTERNAL_ASSERT_METHOD(method, pmsg, msg, ...)    \
   if (!minitest::method(__VA_ARGS__)) {                            \
     minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName, \
                                minitest::gLastFailedTestCaseName); \
@@ -576,46 +587,46 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 // Checks
 //=---------------------------------=//
 
-#define EXPECT_TRUE(b)                       \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectTrue, \
+#define EXPECT_TRUE(b)                                               \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectTrue, "[PASSED] EXPECT_TRUE", \
                                  "[EXPECTATION FAILED]: EXPECT_TRUE", b)
-#define EXPECT_FALSE(b)                       \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectFalse, \
+#define EXPECT_FALSE(b)                                                \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectFalse, "[PASSED] EXPECT_FALSE", \
                                  "[EXPECTATION FAILED]: EXPECT_FALSE", b)
-#define EXPECT_EQ(a, b)                                                       \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectEq, "[EXPECTATION FAILED]: EXPECT_EQ", \
-                                 a, b)
-#define EXPECT_NE(a, b)                                                       \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectNe, "[EXPECTATION FAILED]: EXPECT_NE", \
-                                 a, b)
-#define EXPECT_ANY_THROW(f)                      \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectAnyThrow, \
+#define EXPECT_EQ(a, b)                                          \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectEq, "[PASSED] EXPECT_EQ", \
+                                 "[EXPECTATION FAILED]: EXPECT_EQ", a, b)
+#define EXPECT_NE(a, b)                                          \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectNe, "[PASSED] EXPECT_NE", \
+                                 "[EXPECTATION FAILED]: EXPECT_NE", a, b)
+#define EXPECT_ANY_THROW(f)                                                   \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectAnyThrow, "[PASSED] EXPECT_ANY_THROW", \
                                  "[EXPECTATION FAILED]: EXPECT_ANY_THROW", f)
-#define EXPECT_NO_THROW(f)                      \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectNoThrow, \
+#define EXPECT_NO_THROW(f)                                                  \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectNoThrow, "[PASSED] EXPECT_NO_THROW", \
                                  "[EXPECTATION FAILED]: EXPECT_NO_THROW", f)
 
 //=---------------------------------=//
 // Assertions
 //=---------------------------------=//
 
-#define ASSERT_TRUE(b)                        \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectTrue, \
+#define ASSERT_TRUE(b)                                                \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectTrue, "[PASSED] ASSERT_TRUE", \
                                   "[ASSERTION FAILED]: ASSERT_TRUE", b)
-#define ASSERT_FALSE(b)                        \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectFalse, \
+#define ASSERT_FALSE(b)                                                 \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectFalse, "[PASSED] ASSERT_FALSE", \
                                   "[ASSERTION FAILED]: ASSERT_FALSE", b)
-#define ASSERT_EQ(a, b)                                                      \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectEq, "[ASSERTION FAILED]: ASSERT_EQ", \
-                                  a, b)
-#define ASSERT_NE(a, b)                                                      \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNe, "[ASSERTION FAILED]: ASSERT_NE", \
-                                  a, b)
-#define ASSERT_ANY_THROW(f)                       \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectAnyThrow, \
+#define ASSERT_EQ(a, b)                                           \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectEq, "[PASSED] ASSERT_EQ", \
+                                  "[ASSERTION FAILED]: ASSERT_EQ", a, b)
+#define ASSERT_NE(a, b)                                           \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNe, "[PASSED] ASSERT_NE", \
+                                  "[ASSERTION FAILED]: ASSERT_NE", a, b)
+#define ASSERT_ANY_THROW(f)                                                    \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectAnyThrow, "[PASSED] ASSERT_ANY_THROW", \
                                   "[ASSERTION FAILED]: ASSERT_ANY_THROW", f)
-#define ASSERT_NO_THROW(f)                       \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNoThrow, \
+#define ASSERT_NO_THROW(f)                                                   \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNoThrow, "[PASSED] ASSERT_NO_THROW", \
                                   "[ASSERTION FAILED]: ASSERT_NO_THROW", f)
 
 //---------------------------------------------------------------------------//
@@ -626,34 +637,35 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 // Logging checks
 //=---------------------------------=//
 
-#define EXPECT_TRUE_LOG(b, lg) MINITEST_INTERNAL_CHECK_METHOD(ExpectTrue, lg, b)
-#define EXPECT_FALSE_LOG(b, lg) \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectFalse, lg, b)
-#define EXPECT_EQ_LOG(a, b, lg) \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectEq, lg, a, b)
-#define EXPECT_NE_LOG(a, b, lg) \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectNe, lg, a, b)
-#define EXPECT_ANY_THROW_LOG(f, lg) \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectAnyThrow, lg, f)
-#define EXPECT_NO_THROW_LOG(f, lg) \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectNoThrow, lg, f)
+#define EXPECT_TRUE_LOG(b, plg, lg) \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectTrue, plg, lg, b)
+#define EXPECT_FALSE_LOG(b, plg, lg) \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectFalse, plg, lg, b)
+#define EXPECT_EQ_LOG(a, b, plg, lg) \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectEq, lg, plg, a, b)
+#define EXPECT_NE_LOG(a, b, plg, lg) \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectNe, lg, plg, a, b)
+#define EXPECT_ANY_THROW_LOG(f, plg, lg) \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectAnyThrow, plg, lg, f)
+#define EXPECT_NO_THROW_LOG(f, plg, lg) \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectNoThrow, plg, lg, f)
 
 //=---------------------------------=//
 // Logging assertions
 //=---------------------------------=//
 
-#define ASSERT_TRUE_LOG(b, lg) \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectTrue, lg, b)
-#define ASSERT_FALSE_LOG(b, lg) \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectFalse, lg, b)
-#define ASSERT_EQ_LOG(a, b, lg) \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectEq, lg, a, b)
-#define ASSERT_NE_LOG(a, b, lg) \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNe, lg, a, b)
-#define ASSERT_ANY_THROW_LOG(f, lg) \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectAnyThrow, lg, f)
-#define ASSERT_NO_THROW_LOG(f, lg) \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNoThrow, lg, f)
+#define ASSERT_TRUE_LOG(b, plg, lg) \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectTrue, plg, lg, b)
+#define ASSERT_FALSE_LOG(b, plg, lg) \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectFalse, plg, lg, b)
+#define ASSERT_EQ_LOG(a, b, plg, lg) \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectEq, lg, plg, a, b)
+#define ASSERT_NE_LOG(a, b, plg, lg) \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNe, lg, plg, a, b)
+#define ASSERT_ANY_THROW_LOG(f, plg, lg) \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectAnyThrow, plg, lg, f)
+#define ASSERT_NO_THROW_LOG(f, plg, lg) \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNoThrow, plg, lg, f)
 
 //=-------------------------------------------------------------------------=//
 //---------------------------------------------------------------------------//

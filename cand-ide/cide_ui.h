@@ -14,6 +14,226 @@ using std::function;
 using std::string;
 using std::vector;
 
+static constexpr LAMBDA xNullVoidCallback = []() {};
+using VoidCallbackT = function<void(void)>;
+
+static constexpr LAMBDA xNullBoolCallback = []() { return false; };
+using BoolCallbackT = function<bool(void)>;
+
+struct TestModuleResult {
+  string test_module_name;
+  bool is_test_passed;
+  BoolCallbackT test_case;
+  bool* run_this_test = new (bool)(false);
+  void Run() { is_test_passed = test_case(); }
+  bool IsEnabled() const { return *run_this_test; }
+};
+
+// Popup Windows
+class CideTestExplorerInterface {
+  using TestResultT = minitest::TestResult;
+  using TestCallbackT = function<bool(void)>;
+
+  float width;
+  float height;
+
+  vector<TestModuleResult> registered_test_cases{};
+  CguiWindow test_explorer_window = CguiWindow::Delayed("Test Explorer");
+  CguiButton run_all_tests_button{
+      "Run All Tests", {}, cgui::kWidgetInitDelayed};
+  CguiButton flush_results_button{
+      "Flush Results", {}, cgui::kWidgetInitDelayed};
+
+
+
+  CguiNamedSubcontext toolbar_context =
+      CguiNamedSubcontext::Delayed("testtoolbar");
+
+  CguiNamedSubcontext modules_context =
+      CguiNamedSubcontext::Delayed("testmodules");
+  CguiNamedSubcontext test_results_context =
+      CguiNamedSubcontext::Delayed("testchecks");
+
+ public:
+  inline void RunEnabledModuleTests() {
+    for (auto& test_case : registered_test_cases) {
+      if (test_case.IsEnabled()) test_case.Run();
+    }
+  }
+  inline void FillModulesTableFailRowData(size_t& style_id,
+                                          const TestModuleResult& t_module) {
+    ImGui::TableNextRow();
+    ImGui::TableNextColumn();
+    ImGui::Checkbox("", t_module.run_this_test);
+    ImGui::SameLine();
+    ImGui::PushID(style_id);
+    style_id++;
+    ImGui::PushStyleColor(ImGuiCol_Button,
+                          (ImVec4)ImColor::HSV(1.0f, .75f, .75f));
+    ImGui::Button("Fail");
+    ImGui::PopStyleColor(1);
+    ImGui::PopID();
+    ImGui::TableNextColumn();
+    ImGui::Text(t_module.test_module_name.c_str());
+  }
+
+  inline void FillModulesTablePassRowData(size_t& style_id,
+                                          const TestModuleResult& t_module) {
+    ImGui::TableNextRow();
+    ImGui::TableNextColumn();
+    ImGui::Checkbox("", t_module.run_this_test);
+    ImGui::SameLine();
+    ImGui::PushID(style_id);
+    style_id++;
+    ImGui::PushStyleColor(ImGuiCol_Button,
+                          (ImVec4)ImColor::HSV(0.4f, .75f, .75f));
+    ImGui::Button("Pass");
+    ImGui::PopStyleColor(1);
+    ImGui::PopID();
+    ImGui::TableNextColumn();
+    ImGui::Text(t_module.test_module_name.c_str());
+  }
+
+  inline void FillChecksTableFailRowData(size_t& style_id,
+                                         const minitest::TestResult& t_case) {
+    ImGui::TableNextRow();
+    ImGui::TableNextColumn();
+    ImGui::PushID(style_id);
+    style_id++;
+    ImGui::PushStyleColor(ImGuiCol_Button,
+                          (ImVec4)ImColor::HSV(1.0f, .75f, .75f));
+    ImGui::Button("Fail");
+    ImGui::PopStyleColor(1);
+    ImGui::PopID();
+    ImGui::TableNextColumn();
+    ImGui::Text(t_case.test_name.c_str());
+
+    ImGui::TableNextColumn();
+    ImGui::Text(t_case.test_case_name.c_str());
+
+    ImGui::TableNextColumn();
+    ImGui::Text(t_case.log.c_str());
+
+    ImGui::TableNextColumn();
+    std::string temp_s;
+    temp_s +=
+        std::filesystem::path(t_case.location.file_name()).filename().string();
+    temp_s += " [Line:" + std::to_string(t_case.location.line()) +
+              "] [Col:" + std::to_string(t_case.location.column()) + "]";
+    ImGui::TextWrapped(temp_s.c_str());
+  }
+
+  inline void FillChecksTablePassRowData(size_t& style_id,
+                                         const minitest::TestResult& t_case) {
+    ImGui::TableNextRow();
+    ImGui::TableNextColumn();
+    ImGui::PushID(style_id);
+    style_id++;
+    ImGui::PushStyleColor(ImGuiCol_Button,
+                          (ImVec4)ImColor::HSV(0.4f, .75f, .75f));
+    ImGui::Button("Pass");
+    ImGui::PopStyleColor(1);
+    ImGui::PopID();
+    ImGui::TableNextColumn();
+    ImGui::Text(t_case.test_name.c_str());
+
+    ImGui::TableNextColumn();
+    ImGui::Text(t_case.test_case_name.c_str());
+
+    ImGui::TableNextColumn();
+    ImGui::Text(t_case.log.c_str());
+
+    ImGui::TableNextColumn();
+    std::string temp_s;
+    temp_s +=
+        std::filesystem::path(t_case.location.file_name()).filename().string();
+    temp_s += " [Line:" + std::to_string(t_case.location.line()) +
+              "] [Col:" + std::to_string(t_case.location.column()) + "]";
+    ImGui::TextWrapped(temp_s.c_str());
+  }
+
+  void DisplayToolbar() {
+    toolbar_context.RequestSize({width, height * 0.1f});
+    if (toolbar_context.BeginLate()) {
+      if (run_all_tests_button.BeginLate()) {
+        RunEnabledModuleTests();
+      }
+      cgui::SameLine();
+      if (flush_results_button.BeginLate()) {
+        minitest::FlushTestResults();
+      }
+    }
+    toolbar_context.EndEarly();
+  }
+
+  void DisplayModulesTable() {
+    modules_context.RequestSize({width * 0.30f, height});
+    if (modules_context.BeginLate()) {
+      if (ImGui::BeginTable("test-explorer-modules-table", 2, 1)) {
+        int flags = 0;
+        flags |= ImGuiTableFlags_SizingFixedFit;
+        ImGui::TableSetupColumn("Status", flags);
+        ImGui::TableSetupColumn("Module", flags);
+        ImGui::TableHeadersRow();
+        for (size_t style_id = 0;
+             const auto& test_case : registered_test_cases) {
+          if (test_case.is_test_passed) {
+            FillModulesTablePassRowData(style_id, test_case);
+          } else {
+            FillModulesTableFailRowData(style_id, test_case);
+          }
+        }
+        ImGui::EndTable();
+      }
+    }
+    modules_context.EndEarly();
+  }
+
+  void DisplayChecksTable() {
+    test_results_context.RequestSize({width * 0.70f, height});
+    if (test_results_context.BeginLate()) {
+      if (ImGui::BeginTable("test-explorer-checks-table", 5, 1)) {
+        int flags = 0;
+        flags |= ImGuiTableFlags_SizingFixedFit;
+        ImGui::TableSetupColumn("Status", flags);
+        ImGui::TableSetupColumn("Test", flags);
+        ImGui::TableSetupColumn("Test Case", flags);
+        ImGui::TableSetupColumn("Message", flags);
+        ImGui::TableSetupColumn("Location");
+        ImGui::TableHeadersRow();
+
+        for (size_t style_id = 0; const auto& test_case : MINITESTS_RECORDED) {
+          if (test_case.is_test_passed) {
+            FillChecksTablePassRowData(style_id, test_case);
+          } else {
+            FillChecksTableFailRowData(style_id, test_case);
+          }
+        }
+        ImGui::EndTable();
+      }
+    }
+    test_results_context.EndEarly();
+  }
+
+  void Display() {
+    test_explorer_window.BeginLate();
+    width = test_explorer_window.QueryWidth();
+    height = test_explorer_window.QueryHeight();
+    DisplayToolbar();
+    cgui::Separator();
+    DisplayModulesTable();
+    cgui::SameLine();
+    DisplayChecksTable();
+    test_explorer_window.EndEarly();
+  }
+
+  void RegisterTestCase(TestCallbackT test_case,
+                        const std::string& test_module_name) {
+    registered_test_cases.push_back(
+        TestModuleResult{test_module_name, false, test_case});
+  }
+};
+// Main CIDE Interface
 class CideTopMenuBarInterface;
 class CideFileEditorInterface;
 class CideSolutionToolbarInterface;
