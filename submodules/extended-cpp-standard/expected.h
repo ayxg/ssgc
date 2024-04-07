@@ -1,15 +1,34 @@
-#pragma once
+//---------------------------------------------------------------------------//
+//---------------------------------------------------------------------------//
+// Copyright 2024 Anton Yashchenko
+// Licensed under the GNU Affero General Public License, Version 3.
+//---------------------------------------------------------------------------//
+// Author(s): Anton Yashchenko
+// Email: ntondev@gmail.com
+// Website: https://www.acpp.dev
+//---------------------------------------------------------------------------//
+// Project: C& Programming Language Environment
+// Directory: extended-cpp-standard
+// File: expected.h
+//---------------------------------------------------------------------------//
+#ifndef HEADER_GUARD_EXTENDED_CPP_STANDARD_EXPECTED_H
+#define HEADER_GUARD_EXTENDED_CPP_STANDARD_EXPECTED_H
+//---------------------------------------------------------------------------//
 // Brief: Structures for handling expected values and errors.
-#include <functional>
-#include <optional>
-#include <string>
-#include <type_traits>
-#include <exception>
-#include <stdexcept>
-
+//---------------------------------------------------------------------------//
+// Includes:
 #include "macrodef.h"
+#include "import_std.h"
+//---------------------------------------------------------------------------//
+
 namespace cxx {
+
+//---------------------------------------------------------//
+// Class:{BoolError}
+// Brief:{
 // BoolError returns a boolean true value or an error message.
+// }
+//---------------------------------------------------------//
 class BoolError {
   bool valid_;
   std::string error_;
@@ -32,8 +51,17 @@ class BoolError {
   }
   constexpr operator bool() const { return valid_; }
 };
+//---------------------------------------------------------//
+// EndClass:{BoolError}
+//---------------------------------------------------------//
 
+
+//---------------------------------------------------------//
+// Template:{Expected}
+// Brief:{
 // Expected returns a value or an error message.
+// }
+//---------------------------------------------------------//
 template <typename T>
 class Expected {
   std::optional<T> expected_{std::nullopt};
@@ -85,9 +113,18 @@ class Expected {
     return ret;
   }
 };
+//---------------------------------------------------------//
+// EndTemplate:{Expected}
+//---------------------------------------------------------//
 
+
+//---------------------------------------------------------//
+// Template:{PartialExpected}
+// Brief:{
 // PartialExpected returns a value or an error message, but also allows for
 // an additional value which will always be passed along with the expected.
+// }
+//---------------------------------------------------------//
 template <typename T, typename AlwaysT>
 class PartialExpected {
   AlwaysT always_;
@@ -149,4 +186,35 @@ class PartialExpected {
     return ret;
   }
 };
+//---------------------------------------------------------//
+// EndTemplate:{PartialExpected}
+//---------------------------------------------------------//
+
 };  // namespace cxx
+
+//---------------------------------------------------------------------------//
+// Copyright 2024 Anton Yashchenko
+//
+// Licensed under the GNU Affero General Public License, Version 3.
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//---------------------------------------------------------------------------//
+// Author(s): Anton Yashchenko
+// Email: ntondev@gmail.com
+// Website: https://www.acpp.dev
+//---------------------------------------------------------------------------//
+// Project: C& Programming Language Environment
+// Directory: extended-cpp-standard
+// File: expected.h
+//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_EXTENDED_CPP_STANDARD_EXPECTED_H
+//---------------------------------------------------------------------------//
+//---------------------------------------------------------------------------//
