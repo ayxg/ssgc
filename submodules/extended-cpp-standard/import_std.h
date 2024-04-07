@@ -9,25 +9,57 @@
 //---------------------------------------------------------------------------//
 // Project: C& Programming Language Environment
 // Directory: extended-cpp-standard
-// File: cppsextended.h
+// File: import_std.h
 //---------------------------------------------------------------------------//
-#ifndef HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_CPPSEXTENDED_H
-#define HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_CPPSEXTENDED_H
+#ifndef HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_IMPORT_STD_H
+#define HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_IMPORT_STD_H
 //---------------------------------------------------------------------------//
-// Brief: C++ Extended Standard Library Includes
+// Brief: Project-Wide C++ Standard Library Includes
 //---------------------------------------------------------------------------//
-// External Includes:
-#include "mta.h"
+// Includes:
+// Basic Types
+#include <cstddef>  // std::size_t
+#include <string>   // std::string
 
-// Local includes.
-#include "macrodef.h"
-#include "import_std.h"
-#include "expected.h"
-#include "enumerated_flags.h"
-//#include "sysio.h"
-//#include "unique_void_ptr.h"
-//#include "hetero_method_map.h"
+// Containers
+#include <array>  // std::array
+#include <deque>
+#include <initializer_list>  // std::initializer_list
+#include <list>              // std::list
+#include <map>               // std::map
+#include <span>              // std::span
+#include <stack>
+#include <tuple>
+#include <unordered_map>  // std::unordered_map
+#include <vector>         // std::vector
+#include <set>
 
+// Utils
+#include <cstdlib>     // numeric string conversions
+#include <functional>  // std::reference_wrapper
+#include <iterator>    // reverse_iterator
+#include <limits>      // std::numeric_limits
+#include <memory>      // std::unique_ptr , std::shared_ptr
+#include <optional>
+#include <variant>
+// Algorithms
+#include <algorithm>  // std::move, std::forward, std::get, std::ref, std::cref, std::any_of
+
+// Type
+#include <concepts>
+#include <type_traits>
+#include <typeindex>
+#include <typeinfo>
+
+// Error handling
+#include <cassert>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <exception>
+#include <stdexcept>
+
+#include <source_location>
 
 //---------------------------------------------------------------------------//
 // Copyright 2024 Anton Yashchenko
@@ -50,8 +82,8 @@
 //---------------------------------------------------------------------------//
 // Project: C& Programming Language Environment
 // Directory: extended-cpp-standard
-// File: cppsextended.h
+// File: import_std.h
 //---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_CPPSEXTENDED_H
+#endif HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_IMPORT_STD_H
 //---------------------------------------------------------------------------//
 //---------------------------------------------------------------------------//

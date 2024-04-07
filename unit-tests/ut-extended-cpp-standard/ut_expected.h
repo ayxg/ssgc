@@ -12,8 +12,8 @@
 #ifndef HEADER_GUARD_CAOCO_UNIT_TESTS_UT0_EXPECTED_H
 #define HEADER_GUARD_CAOCO_UNIT_TESTS_UT0_EXPECTED_H
 // Includes:
-#include "../../submodules/extended-cpp-standard/cppsextended.h"
-#include "../../submodules/mini-test/minitest.h"
+#include "cppsextended.h"
+#include "minitest.h"
 
 //---------------------------------------------------------------------------//
 //=-------------------------------------------------------------------------=//

@@ -1,50 +1,35 @@
-//=-------------------------------------------------------------------------=//
 //---------------------------------------------------------------------------//
-// Author: Anton Yashchenko
-// Email: acppdev@gmail.com
+//---------------------------------------------------------------------------//
+// Copyright 2024 Anton Yashchenko
+// Licensed under the Apache License, Version 2.0(the "License");
+//---------------------------------------------------------------------------//
+// Author(s): Anton Yashchenko
+// Email: ntondev@gmail.com
 // Website: https://www.acpp.dev
 //---------------------------------------------------------------------------//
+// Project: C& Programming Language Environment
+// Directory: mini-test
 // File: minitest.h
 //---------------------------------------------------------------------------//
-// MIT License
-//
-// Copyright(c)[2024][Anton Yashchenko]
-//
-// Permission is hereby granted,free of charge,to any person obtaining a copy of
-// this software and associated documentation files(the "Software"),to deal in
-// the Software without restriction, including without limitation the rights to
-// use, copy, modify, merge, publish, distribute, sublicense, and / or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so,subject to the following conditions :
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT,TORT OR OTHERWISE, ARISING
-// FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-// IN THE SOFTWARE.
+#ifndef HEADER_GUARD_CALE_MINITEST_MINITEST_H
+#define HEADER_GUARD_CALE_MINITEST_MINITEST_H
 //---------------------------------------------------------------------------//
-//=-------------------------------------------------------------------------=//
-//
 // Mini-Test: A Minimal Unit Testing Framework for C++20
-// Requires:
+// Requires:{
 //   - Compiler flag minimum /std:c++20
 //   - P0315R4 : Lambdas in unevaluated contexts
 //     https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0315r4.pdf
-// Brief:
+// }
+// Brief: {
 //  This is a single header file unit testing framework. Tests are defined as
 //  lambdas in a template parameter, which is executed upon initialization of
 //  static variables. As a result the order of tests is not guaranteed but the
 //  usual order of static initialization is followed. New: now supports fixtures
 //  and inline tests which can be run at a later time and defined inside
 //  methods.
-//
+// 
 // (More examples available at bottom of this file...)
-// Sample Use:
+// Sample Use: 
 //       auto my_method() { return true; }
 //       MINITEST(MyTest,MyTestCase){
 //         EXPECT_TRUE(my_method());
@@ -78,10 +63,8 @@
 //   - MINITEST_CONFIG_CUSTOM_SEPARATOR: If defined, a custom separator is used
 //   between test sections which should be the macro def. Default is a dashed
 //   line. Definition must be a string literal with a newline.
+// }
 //---------------------------------------------------------------------------//
-
-#ifndef HEADER_GUARD_MINITEST_H
-#define HEADER_GUARD_MINITEST_H
 // Includes:
 #include <concepts>
 #include <iostream>
@@ -381,13 +364,9 @@ static inline void FlushFailedTestResults() {
 // Parameters:{
 //		1.TestName : Name of the test.
 //		2.TestCaseName : Name of the test case,must be unique per test.
-// 	  3.TestFixtureClass : Name of the fixture class.
+// 	    3.TestFixtureClass : Name of the fixture class.
 //                         Must inherit from minitest::Fixture.
 //                         See minitest::Fixture for more details.
-// }
-// Detail:{
-// - { } before and after the test case definition is optional
-//   but recommended for visibility.
 // }
 //-----------------------------------//
 #define MINITEST_F(TestName, TestCaseName, TestFixtureClass) \
@@ -411,12 +390,12 @@ static inline void FlushFailedTestResults() {
 // TestCaseName.
 // }
 // Parameters:{
-//		1.TestCaseName : Name of the last-called test case which created
-//    was created with MINITEST_F. MUST be the same as the last-called test
-//    case. Or else it will not compile.
+//	    1.TestCaseName : Name of the last-called test case which created
+//      was created with MINITEST_F. MUST be the same as the last-called test
+//      case. Or else it will not compile.
 //
-//    eg. If you called MINITEST_F(MyTest,MyTestCase,MyFixture)
-//     then you must call END_MINITEST_F(MyTestCase);
+//      eg. If you called MINITEST_F(MyTest,MyTestCase,MyFixture)
+//      then you must call END_MINITEST_F(MyTestCase);
 // }
 //-----------------------------------//
 #define END_MINITEST_F(TestCaseName)                                        \
@@ -438,7 +417,7 @@ static inline void FlushFailedTestResults() {
 //=---------------------------------=//
 
 //=---------------------------------=//
-// Macro:{MINITEST}
+// Macro:{INLINE_MINITEST}
 // Brief:{Defines an inline test case to be executed at a later time.
 // Always close with 'INLINE_END_MINITEST;'.}
 //-----------------------------------//
@@ -467,8 +446,8 @@ static inline void FlushFailedTestResults() {
 //=---------------------------------=//
 
 //=---------------------------------=//
-// Macro:{INLINE_END_MINITEST}
-// Brief:{}
+// Macro:{RUN_INLINE_MINITEST}
+// Brief:{Runs an inline minitest.}
 //-----------------------------------//
 #define RUN_INLINE_MINITEST(TestName, TestCaseName) \
   INLINE_MINITEST_##TestName##TestCaseName();       \
@@ -476,7 +455,7 @@ static inline void FlushFailedTestResults() {
 //=---------------------------------=//
 
 //=---------------------------------=//
-// Macro:{PRINT_MINITESTS}
+// Macro:{FINISH_MINITESTS}
 // Brief:{ Completes the test suite and prints the result.
 //        Must be called right before your main function.
 //        This store a boolean true result in MINITESTS_RESULT
@@ -486,7 +465,7 @@ static inline void FlushFailedTestResults() {
 //        This must be called LAST, after all tests are defined.
 // }
 //-----------------------------------//
-#define PRINT_MINITESTS                      \
+#define FINISH_MINITESTS                      \
   namespace minitest {                       \
   static const bool minitest_result = []() { \
     return minitest::PrintFailedTestLogs();  \
@@ -667,17 +646,33 @@ static inline void FlushFailedTestResults() {
 #define ASSERT_NO_THROW_LOG(f, plg, lg) \
   MINITEST_INTERNAL_ASSERT_METHOD(ExpectNoThrow, plg, lg, f)
 
-//=-------------------------------------------------------------------------=//
+
 //---------------------------------------------------------------------------//
-// Author: Anton Yashchenko
-// Email: acppdev@gmail.com
+// Copyright 2024 Anton Yashchenko
+//
+// Licensed under the Apache License, Version 2.0(the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//---------------------------------------------------------------------------//
+// Author(s): Anton Yashchenko
+// Email: ntondev@gmail.com
 // Website: https://www.acpp.dev
 //---------------------------------------------------------------------------//
+// Project: C& Programming Language Environment
+// Directory: mini-test
 // File: minitest.h
 //---------------------------------------------------------------------------//
-#endif HEADER_GUARD_MINITEST_H
+#endif HEADER_GUARD_CALE_MINITEST_MINITEST_H
 //---------------------------------------------------------------------------//
-//=-------------------------------------------------------------------------=//
+//---------------------------------------------------------------------------//
 
 //---------------------------------------------------------------------------//
 // More examples...
