@@ -35,53 +35,55 @@ namespace cxx {
 //  !!TODO: add example here.
 // }
 //---------------------------------------------------------//
-template <mta::req::iEnumeration EnumT, mta::req::iIntegral UnderlyingT = std::underlying_type_t<EnumT>>
+template <mta::req::iEnumeration EnumT,
+          mta::req::iIntegral UnderlyingT = std::underlying_type_t<EnumT>>
 class EnumeratedFlags {
-public:
-    // Retrieve the flags by value.
-    UnderlyingT Get() const { return flags_; }
+ public:
+  // Retrieve the flags by value.
+  UnderlyingT Get() const { return flags_; }
 
-    // Append a single flag.
-    constexpr void Append(EnumT flags) { flags_ |= flags; }
+  // Append a single flag.
+  constexpr void Append(EnumT flags) { flags_ |= flags; }
 
-    // Append a list of flags, applied using bitwise OR.
-    constexpr void Append(EnumT flags, std::same_as<EnumT> auto... other_flags) {
-        (..., (flags_ |= other_flags));
-    }
+  // Append a list of flags, applied using bitwise OR.
+  constexpr void Append(EnumT flags, std::same_as<EnumT> auto... other_flags) {
+    (..., (flags_ |= other_flags));
+  }
 
-    // Remove a single flag.
-    constexpr void Remove(EnumT flags) { flags_ &= ~(flags); }
+  // Remove a single flag.
+  constexpr void Remove(EnumT flags) { flags_ &= ~(flags); }
 
-    // Remove a list of flags, applied using bitwise AND with bitwise NOT.
-    constexpr void Remove(EnumT flags, std::same_as<EnumT> auto... other_flags) {
-        (..., (flags_ &= ~(flags)));
-    }
+  // Remove a list of flags, applied using bitwise AND with bitwise NOT.
+  constexpr void Remove(EnumT flags, std::same_as<EnumT> auto... other_flags) {
+    (..., (flags_ &= ~(flags)));
+  }
 
-    // Bitwise OR assignment operator.
-    constexpr EnumeratedFlags& operator|=(EnumT flag) {
-        flags_ |= flag;
-        return *this;
-    }
+  // Bitwise OR assignment operator.
+  constexpr EnumeratedFlags& operator|=(EnumT flag) {
+    flags_ |= flag;
+    return *this;
+  }
 
-    // Default value is 0.
-    EnumeratedFlags() = default;
+  // Default value is 0.
+  EnumeratedFlags() = default;
 
-    // Construct from a single flag.
-    EnumeratedFlags(EnumT flags) : flags_(0) { flags_ |= flags; }
+  // Construct from a single flag.
+  EnumeratedFlags(EnumT flags) : flags_(0) { flags_ |= flags; }
 
-    // Construct from a list of flags which will be combined using bitwise OR.
-    EnumeratedFlags(EnumT flags, std::same_as<EnumT> auto... other_flags)
-        : flags_(flags) {
-        (..., (flags_ |= other_flags));
-    }
+  // Construct from a list of flags which will be combined using bitwise OR.
+  EnumeratedFlags(EnumT flags, std::same_as<EnumT> auto... other_flags)
+      : flags_(flags) {
+    (..., (flags_ |= other_flags));
+  }
 
-    // Implicit conversion to the enumeration type.
-    constexpr operator EnumT() const { return static_cast<EnumT>(flags_); }
-    
-    // Implicit conversion to the underlying type.
-    constexpr operator UnderlyingT() const { return flags_; }
-private:
-    UnderlyingT flags_{ 0 };
+  // Implicit conversion to the enumeration type.
+  constexpr operator EnumT() const { return static_cast<EnumT>(flags_); }
+
+  // Implicit conversion to the underlying type.
+  constexpr operator UnderlyingT() const { return flags_; }
+
+ private:
+  UnderlyingT flags_{0};
 };
 //---------------------------------------------------------//
 // EndTemplate:{EnumeratedFlags}

@@ -27,12 +27,12 @@
 #include <initializer_list>  // std::initializer_list
 #include <list>              // std::list
 #include <map>               // std::map
-#include <span>              // std::span
+#include <set>
+#include <span>  // std::span
 #include <stack>
 #include <tuple>
 #include <unordered_map>  // std::unordered_map
 #include <vector>         // std::vector
-#include <set>
 
 // Utils
 #include <cstdlib>     // numeric string conversions
@@ -53,13 +53,12 @@
 
 // Error handling
 #include <cassert>
+#include <exception>
 #include <fstream>
 #include <iostream>
-#include <sstream>
-#include <exception>
-#include <stdexcept>
-
 #include <source_location>
+#include <sstream>
+#include <stdexcept>
 
 //---------------------------------------------------------------------------//
 // Copyright 2024 Anton Yashchenko

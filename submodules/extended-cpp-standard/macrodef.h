@@ -14,7 +14,7 @@
 #ifndef HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_MACRODEF_H
 #define HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_MACRODEF_H
 //---------------------------------------------------------------------------//
-// Brief: 
+// Brief:
 //	Project Wide Macro Definitions
 //	This file contains all the macro definitions for cxx
 //	All other cxx headers should include this file.
@@ -34,7 +34,6 @@
 //-----------------------------------//
 // EndMacro:{LAMBDA}
 //-----------------------------------//
-
 
 //-----------------------------------//
 // Macro:{LAMBDA_STRING}

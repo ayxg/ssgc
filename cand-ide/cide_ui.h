@@ -44,8 +44,6 @@ class CideTestExplorerInterface {
   CguiButton flush_results_button{
       "Flush Results", {}, cgui::kWidgetInitDelayed};
 
-
-
   CguiNamedSubcontext toolbar_context =
       CguiNamedSubcontext::Delayed("testtoolbar");
 

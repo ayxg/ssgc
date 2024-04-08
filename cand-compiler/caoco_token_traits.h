@@ -9,10 +9,10 @@
 //---------------------------------------------------------------------------//
 // Project: C& Programming Language Environment
 // Directory: cand-official-compiler
-// File: token_traits.h
+// File: caoco_token_traits.h
 //---------------------------------------------------------------------------//
-#ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_TOKEN_TRAITS_H
-#define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_TOKEN_TRAITS_H
+#ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_TRAITS_H
+#define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_TRAITS_H
 //---------------------------------------------------------------------------//
 // Brief: brief
 //---------------------------------------------------------------------------//
@@ -962,8 +962,8 @@ constexpr AllDirectivesTupleT kAllDirectivesTuple = AllDirectivesTupleT{};
 //---------------------------------------------------------------------------//
 // Project: C& Programming Language Environment
 // Directory: cand-official-compiler
-// File: token_traits.h
+// File: caoco_token_traits.h
 //---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_TOKEN_TRAITS_H
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_TRAITS_H
 //---------------------------------------------------------------------------//
 //---------------------------------------------------------------------------//
