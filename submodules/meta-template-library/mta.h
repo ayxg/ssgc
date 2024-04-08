@@ -18,10 +18,11 @@
 //---------------------------------------------------------------------------//
 // Includes:
 #include <concepts>
+#include <functional>
 #include <tuple>
 #include <type_traits>
 #include <variant>
-#include <functional>
+
 #include "require.h"
 //---------------------------------------------------------------------------//
 
@@ -41,12 +42,12 @@ namespace mta {
 // Template:{function_traits}
 // Brief:{
 //  Provides information about a function type.
-//  eg.     
+//  eg.
 //          using fnT = function_traits<function<int(float, double)>>;
 //          fnT::nargs == 2
 //          fnT::result_type == int
 //          fnT::arg_type<0> == float
-//          fnT::arg_type<1> == double     
+//          fnT::arg_type<1> == double
 // }
 //---------------------------------------------------------//
 template <typename T>
@@ -54,11 +55,11 @@ struct function_traits;
 
 template <typename R, typename... Args>
 struct function_traits<std::function<R(Args...)>> {
-    static constexpr inline size_t nargs = sizeof...(Args);
-    using result_type = R;
-    using args_tuple_type = std::tuple<Args...>;
-    template<std::size_t N>
-    using arg_type = typename std::tuple_element<N, args_tuple_type>::type;
+  static constexpr inline size_t nargs = sizeof...(Args);
+  using result_type = R;
+  using args_tuple_type = std::tuple<Args...>;
+  template <std::size_t N>
+  using arg_type = typename std::tuple_element<N, args_tuple_type>::type;
 };
 //---------------------------------------------------------//
 // EndTemplate:{function_traits}
@@ -73,24 +74,24 @@ struct function_traits<std::function<R(Args...)>> {
 //---------------------------------------------------------//
 template <typename T, typename U = void>
 struct is_callable {
-    static bool const constexpr value =
-        std::conditional_t<std::is_class<std::remove_reference_t<T>>::value,
-        is_callable<std::remove_reference_t<T>, int>,
-        std::false_type>::value;
+  static bool const constexpr value =
+      std::conditional_t<std::is_class<std::remove_reference_t<T>>::value,
+                         is_callable<std::remove_reference_t<T>, int>,
+                         std::false_type>::value;
 };
 
 template <typename T, typename U, typename... Args>
 struct is_callable<T(Args...), U> : std::true_type {};
 template <typename T, typename U, typename... Args>
-struct is_callable<T(*)(Args...), U> : std::true_type {};
+struct is_callable<T (*)(Args...), U> : std::true_type {};
 template <typename T, typename U, typename... Args>
-struct is_callable<T(&)(Args...), U> : std::true_type {};
+struct is_callable<T (&)(Args...), U> : std::true_type {};
 template <typename T, typename U, typename... Args>
 struct is_callable<T(Args......), U> : std::true_type {};
 template <typename T, typename U, typename... Args>
-struct is_callable<T(*)(Args......), U> : std::true_type {};
+struct is_callable<T (*)(Args......), U> : std::true_type {};
 template <typename T, typename U, typename... Args>
-struct is_callable<T(&)(Args......), U> : std::true_type {};
+struct is_callable<T (&)(Args......), U> : std::true_type {};
 template <typename T, typename U, typename... Args>
 struct is_callable<T(Args...) const, U> : std::true_type {};
 template <typename T, typename U, typename... Args>
@@ -138,30 +139,30 @@ struct is_callable<T(Args......) const volatile&&, U> : std::true_type {};
 
 template <typename T>
 struct is_callable<T, int> {
-private:
-    using YesType = char(&)[1];
-    using NoType = char(&)[2];
+ private:
+  using YesType = char (&)[1];
+  using NoType = char (&)[2];
 
-    struct Fallback {
-        void operator()();
-    };
+  struct Fallback {
+    void operator()();
+  };
 
-    struct Derived : T, Fallback {};
+  struct Derived : T, Fallback {};
 
-    template <typename U, U>
-    struct Check;
+  template <typename U, U>
+  struct Check;
 
-    template <typename>
-    static YesType Test(...);
+  template <typename>
+  static YesType Test(...);
 
-    template <typename C>
-    static NoType Test(Check<void (Fallback::*)(), &C::operator()>*);
+  template <typename C>
+  static NoType Test(Check<void (Fallback::*)(), &C::operator()>*);
 
-public:
-    static bool const constexpr value =
-        sizeof(Test<Derived>(0)) == sizeof(YesType);
+ public:
+  static bool const constexpr value =
+      sizeof(Test<Derived>(0)) == sizeof(YesType);
 };
-template<typename T>
+template <typename T>
 concept iCallable = is_callable<T>::value;
 
 //---------------------------------------------------------//
@@ -176,8 +177,8 @@ concept iCallable = is_callable<T>::value;
 //      is_template_for_v<std::vector, std::vector<int>> == true
 // }
 // Template Parameters:{
-//		1. : 
-//		2. : 
+//		1. :
+//		2. :
 // }
 //---------------------------------------------------------//
 template <template <typename...> typename tmpl, typename T>
@@ -194,7 +195,7 @@ template <template <typename...> typename tmpl, typename... Ts>
 constexpr bool is_template_for_v = is_template_for<tmpl, Ts...>::value;
 
 static_assert(is_template_for_v<std::tuple, std::tuple<int, double>>,
-    "[is_template_for] Implementation Failure.");
+              "[is_template_for] Implementation Failure.");
 //---------------------------------------------------------//
 // EndTemplate:{is_template_for}
 //---------------------------------------------------------//
@@ -212,14 +213,13 @@ inline constexpr auto is_unique_pack = std::true_type{};
 template <typename T, typename... Rest>
 inline constexpr auto is_unique_pack<T, Rest...> =
     std::bool_constant<(!std::is_same_v<T, Rest> && ...) &&
-    is_unique_pack<Rest...>>{};
+                       is_unique_pack<Rest...>>{};
 
 static_assert(is_unique_pack<double, int, char>,
-    "[is_unique_pack] Implementation Failure.");
+              "[is_unique_pack] Implementation Failure.");
 //---------------------------------------------------------//
 // EndTemplate:{is_unique_type_in_pack}
 //---------------------------------------------------------//
-
 
 //-----------------------------------//
 // Method:{index_of_type_in_tuple}
@@ -229,33 +229,30 @@ static_assert(is_unique_pack<double, int, char>,
 //-----------------------------------//
 template <typename T, typename U, typename... Us>
 constexpr auto index_of_type_in_tuple_impl() {
-    if constexpr (std::is_same<T, U>::value) {
-        return 0;
-    }
-    else {
-        static_assert(
-            sizeof...(Us) > 0,
-            "index_of_type_in_tuple: This tuple does not contain requested type");
-        return 1 + index_of_type_in_tuple_impl<T, Us...>();
-    }
+  if constexpr (std::is_same<T, U>::value) {
+    return 0;
+  } else {
+    static_assert(
+        sizeof...(Us) > 0,
+        "index_of_type_in_tuple: This tuple does not contain requested type");
+    return 1 + index_of_type_in_tuple_impl<T, Us...>();
+  }
 }
 
 template <typename T, typename U, typename... Us>
 constexpr auto index_of_type_in_tuple(const std::tuple<U, Us...>&) {
-    static_assert(is_unique_pack<U, Us...>,
-        "[index_of_type_in_tuple] Should only be called on tuples with "
-        "unique types.");
-    return index_of_type_in_tuple_impl<T, U, Us...>();
+  static_assert(is_unique_pack<U, Us...>,
+                "[index_of_type_in_tuple] Should only be called on tuples with "
+                "unique types.");
+  return index_of_type_in_tuple_impl<T, U, Us...>();
 }
 
 static_assert(index_of_type_in_tuple<float>(std::tuple<int, float, double>()) ==
-    1,
-    "[index_of_type_in_tuple] Implementation Failure.");
+                  1,
+              "[index_of_type_in_tuple] Implementation Failure.");
 //-----------------------------------//
 // EndMethod:{index_of_type_in_tuple}
 //-----------------------------------//
-
-
 
 //---------------------------------------------------------//
 // Template:{tuple_to_variant}
@@ -266,19 +263,19 @@ static_assert(index_of_type_in_tuple<float>(std::tuple<int, float, double>()) ==
 // Base case
 template <typename... Ts>
 constexpr std::variant<Ts...> tuple_to_variant(const std::tuple<Ts...>& tuple) {
-    return std::get<0>(tuple);  // Return the first element of the tuple
+  return std::get<0>(tuple);  // Return the first element of the tuple
 }
 // Recursive case
 template <typename T, typename... Ts>
 constexpr std::variant<T, Ts...> tuple_to_variant(
     const std::tuple<T, Ts...>& tuple) {
-    return std::variant<T, Ts...>(std::get<0>(tuple));
+  return std::variant<T, Ts...>(std::get<0>(tuple));
 }
 
 static_assert(std::is_same_v<
-    std::variant<int, float, double>,
-    decltype(tuple_to_variant(std::tuple<int, float, double>()))>,
-    "[tuple_to_variant] Implementation Failure.");
+                  std::variant<int, float, double>,
+                  decltype(tuple_to_variant(std::tuple<int, float, double>()))>,
+              "[tuple_to_variant] Implementation Failure.");
 //---------------------------------------------------------//
 // EndTemplate:{tuple_to_variant}
 //---------------------------------------------------------//
@@ -292,7 +289,6 @@ static_assert(std::is_same_v<
 // These structs typedefs and methods are to be treated as meta structures.
 //======================================================================================//
 
-
 //---------------------------------------------------------//
 // Template:{compile_time_type_index_list}
 // Brief:{
@@ -301,45 +297,44 @@ static_assert(std::is_same_v<
 //---------------------------------------------------------//
 template <class... TypeTs>
 struct compile_time_type_index_list {
-    static constexpr inline size_t kNumTypes = sizeof...(TypeTs);
-    using types_tuple = std::tuple<TypeTs...>;
-    using types_variant = decltype(tuple_to_variant(types_tuple{}));
+  static constexpr inline size_t kNumTypes = sizeof...(TypeTs);
+  using types_tuple = std::tuple<TypeTs...>;
+  using types_variant = decltype(tuple_to_variant(types_tuple{}));
 
-    // Type of element at index.
-    template <std::size_t index>
-    using type_of = typename std::tuple_element_t<index, types_tuple>;
+  // Type of element at index.
+  template <std::size_t index>
+  using type_of = typename std::tuple_element_t<index, types_tuple>;
 
-    // Helps when needing to pass a type as a template parameter.
-    template <class T>
-    struct IndexOf {
-        using type = T;
-        static constexpr std::size_t idx = index_of_type_in_tuple<T>(types_tuple{});
-    };
+  // Helps when needing to pass a type as a template parameter.
+  template <class T>
+  struct IndexOf {
+    using type = T;
+    static constexpr std::size_t idx = index_of_type_in_tuple<T>(types_tuple{});
+  };
 
-    // Index of a type in the list.
-    template <class T>
-    constexpr static std::size_t index_of() {
-        return IndexOf<T>::idx;
-    }
+  // Index of a type in the list.
+  template <class T>
+  constexpr static std::size_t index_of() {
+    return IndexOf<T>::idx;
+  }
 };
 
 static_assert(compile_time_type_index_list<int, float, double>::kNumTypes == 3,
-    "[compile_time_type_list] Implementation Failure.");
+              "[compile_time_type_list] Implementation Failure.");
 static_assert(
     compile_time_type_index_list<int, float, double>::index_of<float>() == 1,
     "[compile_time_type_list] Implementation Failure.");
 static_assert(
     std::is_same_v<compile_time_type_index_list<int, float, double>::type_of<2>,
-    double>,
+                   double>,
     "[compile_time_type_list] Implementation Failure.");
 //---------------------------------------------------------//
 // EndTemplate:{compile_time_type_index_list}
 //---------------------------------------------------------//
 
-
 //---------------------------------------------------------//
 // Template:{string_constant , character_constant , null_string_constant}
-// Brief:{ 
+// Brief:{
 //  Constant evaluated string constants. Passable as template parameters.
 //  Utilizes new C++20 lambda features to allow passing a string as a
 //  template parameter to the string_constant struct. constexpr const char
@@ -364,7 +359,8 @@ static_assert(
 //      #undef STRING_CONSTANT
 // }
 //-----------------------------------//
-#define STRING_CONSTANT(STR) mta::string_constant<[]() consteval { return STR; }>
+#define STRING_CONSTANT(STR) mta::string_constant<[]() consteval { return STR;
+}>
 //-----------------------------------//
 // EndMacro:{STRING_CONSTANT}
 //-----------------------------------//
@@ -381,19 +377,19 @@ using character_constant = std::integral_constant<char, CHAR>;
 
 template <auto STR>
 struct string_constant {
-    static constexpr const char* value = STR();
-    constexpr bool operator==(const string_constant& other) const {
-        return value == other.value;
-    }
+  static constexpr const char* value = STR();
+  constexpr bool operator==(const string_constant& other) const {
+    return value == other.value;
+  }
 };
 
-using null_string_constant = string_constant < []() consteval { return ""; } > ;
+using null_string_constant = string_constant<[]() consteval { return ""; }>;
 //---------------------------------------------------------//
 // EndTemplate:{string_constant , character_constant , null_string_constant}
 //---------------------------------------------------------//
 
 //---------------------------------------------------------------------------//
-};// EndNamespace:{mta}
+};  // namespace mta
 //---------------------------------------------------------------------------//
 
 //---------------------------------------------------------------------------//
@@ -422,4 +418,3 @@ using null_string_constant = string_constant < []() consteval { return ""; } > ;
 #endif HEADER_GUARD_CALE_META_TEMPLATE_ARCHIVE_MTA_H
 //---------------------------------------------------------------------------//
 //---------------------------------------------------------------------------//
-

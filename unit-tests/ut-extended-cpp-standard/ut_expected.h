@@ -123,8 +123,8 @@ namespace ut::modules {
 static bool RUN_INLINE_MINITESTS_UT_EXPECTED_H() {
   bool is_passed = true;
   is_passed = RUN_INLINE_MINITEST(Test_CxxExpected, TestCase_CxxExpected);
-  is_passed = RUN_INLINE_MINITEST(Test_CxxExpected,
-                               TestCase_PartialExpectedConstrtuct);
+  is_passed =
+      RUN_INLINE_MINITEST(Test_CxxExpected, TestCase_PartialExpectedConstrtuct);
   is_passed = RUN_INLINE_MINITEST(Test_CxxExpected, TestCase_BoolError);
   return is_passed;
 }

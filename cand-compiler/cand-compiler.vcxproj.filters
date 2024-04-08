@@ -3,9 +3,17 @@
   <ItemGroup>
     <ClInclude Include="caoco_enum.h" />
     <ClInclude Include="scrapbook.h" />
-    <ClInclude Include="cand_grammar.h" />
-    <ClInclude Include="token_traits.h" />
-    <ClInclude Include="cand_token.h" />
+    <ClInclude Include="caoco_grammar.h" />
+    <ClInclude Include="caoco_token_traits.h" />
+    <ClInclude Include="caoco_token.h" />
+    <ClInclude Include="caoco_ast.h" />
+    <ClInclude Include="caoco_char_traits.h" />
+    <ClInclude Include="caoco_lexer.h" />
+    <ClInclude Include="caoco_compiler_error.h" />
+    <ClInclude Include="caoco_token_closure.h" />
+    <ClInclude Include="caoco_token_cursor.h" />
+    <ClInclude Include="caoco_token_scope.h" />
+    <ClInclude Include="caoco_parser.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="compiler_main.cpp" />

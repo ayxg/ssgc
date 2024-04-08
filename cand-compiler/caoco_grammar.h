@@ -9,10 +9,10 @@
 //---------------------------------------------------------------------------//
 // Project: C& Programming Language Environment
 // Directory: cand-official-compiler
-// File: cand_grammar.h
+// File: caoco_grammar.h
 //---------------------------------------------------------------------------//
-#ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAND_GRAMMAR_H
-#define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAND_GRAMMAR_H
+#ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_GRAMMAR_H
+#define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_GRAMMAR_H
 //---------------------------------------------------------------------------//
 // Brief: brief
 //---------------------------------------------------------------------------//
@@ -29,7 +29,8 @@
 //      #undef STRING_CONSTANT
 // }
 //-----------------------------------//
-#define STRING_CONSTANT(STR) mta::string_constant<[]() consteval { return STR; }>
+#define STRING_CONSTANT(STR) \
+  mta::string_constant<[]() consteval { return STR; }>
 //-----------------------------------//
 // EndMacro:{STRING_CONSTANT}
 //-----------------------------------//
@@ -137,9 +138,9 @@ using kAllKeywords = std::tuple<
 static auto constinit kAllKeywordsArray =
     []<typename... Keywords>(std::tuple<Keywords...> const& t) consteval
     -> auto {
-    auto ret = std::array<std::string_view, sizeof...(Keywords)>{
-        std::get<Keywords>(t).value...};
-    return ret;
+  auto ret = std::array<std::string_view, sizeof...(Keywords)>{
+      std::get<Keywords>(t).value...};
+  return ret;
 }(kAllKeywords{});
 
 namespace directives {
@@ -213,9 +214,8 @@ using kBlockComment = STRING_CONSTANT("///");
 using kLineComment = STRING_CONSTANT("//");
 
 }  // namespace grammar
-} // namespace caoco
+}  // namespace caoco
 #undef STRING_CONSTANT
-
 
 //---------------------------------------------------------------------------//
 // Copyright 2024 Anton Yashchenko
@@ -238,8 +238,8 @@ using kLineComment = STRING_CONSTANT("//");
 //---------------------------------------------------------------------------//
 // Project: C& Programming Language Environment
 // Directory: cand-official-compiler
-// File: cand_grammar.h
+// File: caoco_grammar.h
 //---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAND_GRAMMAR_H
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_GRAMMAR_H
 //---------------------------------------------------------------------------//
 //---------------------------------------------------------------------------//

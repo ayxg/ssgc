@@ -22,229 +22,180 @@
 #include <utility>
 //---------------------------------------------------------------------------//
 
-namespace mta{
+namespace mta {
 namespace req {
 
 /* Core Language Concepts */
 template <typename T, typename U>
-concept iSameAs =
-    std::same_as<T, U>;  
+concept iSameAs = std::same_as<T, U>;
 
 template <typename T, typename U>
-concept iDerivedFrom = std::derived_from<T, U>;  
+concept iDerivedFrom = std::derived_from<T, U>;
 
 template <typename T, typename U>
-concept iConvertibleTo =
-    std::convertible_to<T, U>;  
-                                
+concept iConvertibleTo = std::convertible_to<T, U>;
 
 template <typename T, typename U>
-concept iCommonRefWith =
-    std::common_reference_with<T, U>;  
+concept iCommonRefWith = std::common_reference_with<T, U>;
 
 template <typename T, typename U>
-concept iCommonWith =
-    std::common_with<T,
-                     U>;  
+concept iCommonWith = std::common_with<T, U>;
 
 template <typename T>
-concept iIntegral =
-    std::integral<T>;  
+concept iIntegral = std::integral<T>;
 
 template <typename T>
-concept iSignedIntegral =
-    std::signed_integral<T>;  
-                              
+concept iSignedIntegral = std::signed_integral<T>;
 
 template <typename T>
-concept iUnsignedIntegral =
-    std::unsigned_integral<T>;  
-                                
+concept iUnsignedIntegral = std::unsigned_integral<T>;
 
 template <typename T>
-concept iFloatingPoint = std::floating_point<T>;  
+concept iFloatingPoint = std::floating_point<T>;
 
 template <typename LhsT, typename RhsT>
-concept iAssignableFrom =
-    std::assignable_from<LhsT, RhsT>;  
+concept iAssignableFrom = std::assignable_from<LhsT, RhsT>;
 
 template <typename T>
-concept iSwappable =
-    std::swappable<T>;  
+concept iSwappable = std::swappable<T>;
 
 template <typename T, typename U>
-concept iSwappableWith =
-    std::swappable_with<T, U>;  
-                                
+concept iSwappableWith = std::swappable_with<T, U>;
 
 template <typename T>
-concept iDestructible = std::destructible<T>;  
+concept iDestructible = std::destructible<T>;
 
 template <typename T, typename U>
-concept iConstructibleFrom =
-    std::constructible_from<T, U>;  
+concept iConstructibleFrom = std::constructible_from<T, U>;
 
 template <typename T>
-concept iDefaultInitializable =
-    std::default_initializable<T>;  
+concept iDefaultInitializable = std::default_initializable<T>;
 
 template <typename T>
-concept iMoveConstructible =
-    std::move_constructible<T>;  
+concept iMoveConstructible = std::move_constructible<T>;
 
 // note: Types without a move constructor, but with a copy constructor that
 // accepts const T& arguments,
 //       satisfy std::is_move_constructible.
 template <typename T>
-concept iCopyAndMoveConstructible =
-    std::move_constructible<T>;  
+concept iCopyAndMoveConstructible = std::move_constructible<T>;
 
 /* Comparison concepts */
 template <typename T>
-concept iEqualityComparable =
-    std::equality_comparable<T>;  
+concept iEqualityComparable = std::equality_comparable<T>;
 
 template <typename T, typename U>
-concept iEqualityComparableWith =
-    std::equality_comparable_with<T, U>; 
+concept iEqualityComparableWith = std::equality_comparable_with<T, U>;
 template <typename T>
-concept iTotallyOrdered =
-    std::totally_ordered<T>;  
-                            
+concept iTotallyOrdered = std::totally_ordered<T>;
+
 template <typename T, typename U>
-concept iTotallyOrderedWith =
-    std::totally_ordered_with<T, U>;  
+concept iTotallyOrderedWith = std::totally_ordered_with<T, U>;
 
 template <typename T>
-concept iMoveAndSwappable = std::movable<T>; 
+concept iMoveAndSwappable = std::movable<T>;
 
 template <typename T>
-concept iCopyMoveAndSwappable =
-    std::copyable<T>; 
+concept iCopyMoveAndSwappable = std::copyable<T>;
 
 template <typename T>
-concept iSemiregular = std::semiregular<T>;  
+concept iSemiregular = std::semiregular<T>;
 
 template <typename T>
-concept iRegular = std::regular<T>; 
+concept iRegular = std::regular<T>;
 
 template <typename T>
-concept iInvocable = std::invocable<T>; 
+concept iInvocable = std::invocable<T>;
 
 template <typename T>
-concept iRegularInvocable =
-    std::regular_invocable<T>;  
+concept iRegularInvocable = std::regular_invocable<T>;
 
 template <typename T>
-concept iPredicate = std::predicate<T>; 
+concept iPredicate = std::predicate<T>;
 
 template <typename R, typename T, typename U>
-concept iEquivalenceRelation =
-    std::equivalence_relation<R, T, U>;  
+concept iEquivalenceRelation = std::equivalence_relation<R, T, U>;
 
 template <typename R, typename T, typename U>
-concept iStrictWeakOrder =
-    std::strict_weak_order<R, T, U>;  
+concept iStrictWeakOrder = std::strict_weak_order<R, T, U>;
 
 /// Range concepts
 
 template <typename T>
-concept iRange = std::ranges::range<T>; 
+concept iRange = std::ranges::range<T>;
 
 template <typename T>
-concept iBorrowedRange =
-    std::ranges::borrowed_range<T>;  
+concept iBorrowedRange = std::ranges::borrowed_range<T>;
 
 template <typename T>
-concept iSizedRange =
-    std::ranges::sized_range<T>; 
+concept iSizedRange = std::ranges::sized_range<T>;
 
 template <typename T>
-concept iRangeView = std::ranges::view<T>; 
+concept iRangeView = std::ranges::view<T>;
 
 template <typename T>
-concept iInputRange =
-    std::ranges::input_range<T>;  
+concept iInputRange = std::ranges::input_range<T>;
 
 template <typename T, typename U>
-concept iOutputRange =
-    std::ranges::output_range<T, U>;  
+concept iOutputRange = std::ranges::output_range<T, U>;
 
 template <typename T>
-concept iForwardRange =
-    std::ranges::forward_range<T>;  
+concept iForwardRange = std::ranges::forward_range<T>;
 
 template <typename T>
-concept iBidirectionalRange =
-    std::ranges::bidirectional_range<T>;  
+concept iBidirectionalRange = std::ranges::bidirectional_range<T>;
 
 template <typename T>
-concept iRandomAccessRange =
-    std::ranges::random_access_range<T>;  
+concept iRandomAccessRange = std::ranges::random_access_range<T>;
 
 template <typename T>
-concept iContiguousRange =
-    std::ranges::contiguous_range<T>;  
+concept iContiguousRange = std::ranges::contiguous_range<T>;
 
 template <typename T>
-concept iCommonRange =
-    std::ranges::common_range<T>;  
+concept iCommonRange = std::ranges::common_range<T>;
 
 template <typename T>
-concept iViewableRange =
-    std::ranges::viewable_range<T>;  
+concept iViewableRange = std::ranges::viewable_range<T>;
 
 /* Iterator concepts */
 
 template <typename T>
-concept iIndirectlyReadable =
-    std::indirectly_readable<T>;  
+concept iIndirectlyReadable = std::indirectly_readable<T>;
 
 template <typename T, typename U>
-concept iIndirectlyWritable =
-    std::indirectly_writable<T, U>;  
+concept iIndirectlyWritable = std::indirectly_writable<T, U>;
 
 template <typename T>
-concept iWeaklyIncrementableIter =
-    std::weakly_incrementable<T>;  
+concept iWeaklyIncrementableIter = std::weakly_incrementable<T>;
 
 template <typename T>
-concept iIncrementableIter =
-    std::incrementable<T>;  
+concept iIncrementableIter = std::incrementable<T>;
 
 template <typename T>
-concept iInputOrOutputIter =
-    std::input_or_output_iterator<T>;  
+concept iInputOrOutputIter = std::input_or_output_iterator<T>;
 
 template <typename SentinelT, typename IterT>
-concept iSentinelForIter =
-    std::sentinel_for<SentinelT, IterT>;  
+concept iSentinelForIter = std::sentinel_for<SentinelT, IterT>;
 
 template <typename SentinelT, typename IterT>
-concept iSizedSentinelForIter =
-    std::sized_sentinel_for<SentinelT,
-                            IterT>;  
+concept iSizedSentinelForIter = std::sized_sentinel_for<SentinelT, IterT>;
 template <typename T>
-concept iInputIter = std::input_iterator<T>;  
+concept iInputIter = std::input_iterator<T>;
 
 template <typename T>
-concept iOutputIter = std::input_iterator<T>;  
+concept iOutputIter = std::input_iterator<T>;
 
 template <typename T>
-concept iForwardIter =
-    std::forward_iterator<T>;  
+concept iForwardIter = std::forward_iterator<T>;
 
 template <typename T>
-concept iBidirectionalIter =
-    std::bidirectional_iterator<T>;  
+concept iBidirectionalIter = std::bidirectional_iterator<T>;
 
 template <typename T>
-concept iRandomAccessIter =
-    std::random_access_iterator<T>;  
+concept iRandomAccessIter = std::random_access_iterator<T>;
 
 template <typename T>
-concept iContiguousIter =
-    std::contiguous_iterator<T>;  
+concept iContiguousIter = std::contiguous_iterator<T>;
 
 /* Indirect callable concepts */
 
@@ -503,7 +454,7 @@ template <class T>
 concept iEnumeration = requires() { std::is_enum_v<T>; };
 
 }  // namespace req
-}
+}  // namespace mta
 
 //---------------------------------------------------------------------------//
 // Copyright 2024 Anton Yashchenko

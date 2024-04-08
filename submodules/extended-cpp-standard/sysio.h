@@ -1,9 +1,9 @@
 #pragma once
 // Brief: Filesystem I/O utilities.
-#include <vector>
-#include <string>
 #include <fstream>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 #include "macrodef.h"
 namespace cxx {

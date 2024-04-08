@@ -17,8 +17,8 @@
 // Brief: Structures for handling expected values and errors.
 //---------------------------------------------------------------------------//
 // Includes:
-#include "macrodef.h"
 #include "import_std.h"
+#include "macrodef.h"
 //---------------------------------------------------------------------------//
 
 namespace cxx {
@@ -55,7 +55,6 @@ class BoolError {
 // EndClass:{BoolError}
 //---------------------------------------------------------//
 
-
 //---------------------------------------------------------//
 // Template:{Expected}
 // Brief:{
@@ -74,8 +73,8 @@ class Expected {
   constexpr Expected(const T& expected) : expected_(expected) {}
 
 #pragma warning( \
-        disable : 4100)  // Disable unused parameter warning for std::nullopt_t
-                         // Cannot be instantiated directly from type.
+    disable : 4100)  // Disable unused parameter warning for std::nullopt_t
+                     // Cannot be instantiated directly from type.
   constexpr Expected(const std::nullopt_t& none, std::string error_message)
       : expected_(std::nullopt), error_(error_message) {}
 #pragma warning(default : 4100)
@@ -116,7 +115,6 @@ class Expected {
 //---------------------------------------------------------//
 // EndTemplate:{Expected}
 //---------------------------------------------------------//
-
 
 //---------------------------------------------------------//
 // Template:{PartialExpected}
