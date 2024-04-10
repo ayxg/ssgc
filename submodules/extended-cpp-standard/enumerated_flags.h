@@ -55,7 +55,8 @@ class EnumeratedFlags {
 
   // Remove a list of flags, applied using bitwise AND with bitwise NOT.
   constexpr void Remove(EnumT flags, std::same_as<EnumT> auto... other_flags) {
-    (..., (flags_ &= ~(flags)));
+    flags_ &= ~(flags);
+    (..., (flags_ &= ~(other_flags)));
   }
 
   // Bitwise OR assignment operator.

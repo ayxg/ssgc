@@ -15,7 +15,4 @@
     <ClInclude Include="caoco_token_scope.h" />
     <ClInclude Include="caoco_parser.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="compiler_main.cpp" />
-  </ItemGroup>
 </Project>

@@ -241,8 +241,20 @@ std::ostream& operator<<(std::ostream& ss, const TestResult& t) {
 
 static std::vector<std::string> gFailedTestLogs;
 static std::vector<TestResult> gRecordedTestLogs;
+static std::map<std::string_view, std::vector<std::function<bool()>>> gRegisteredTests;
 static const char* gLastFailedTestName = "";
 static const char* gLastFailedTestCaseName = "";
+
+static inline void RegisterTest(const std::string_view & test_name,
+                                std::function<bool()> test) {
+  gRegisteredTests[test_name].push_back(test);
+}
+
+static inline void RunRegisteredTestModule(const std::string_view & test_name) {
+  for (const auto& test : gRegisteredTests[test_name]) {
+    test();
+  }
+};
 
 static inline void AddFailedTestLog(
     const std::string& log, const char* test, const char* tcase,
@@ -444,6 +456,28 @@ static inline void FlushFailedTestResults() {
   ;
 //-----------------------------------//
 //=---------------------------------=//
+
+//=---------------------------------=//
+// Macro:{REGISTER_INLINE_TEST_CASE}
+// Brief:{}
+//-----------------------------------//
+#define REGISTER_INLINE_TEST_CASE(TestName, TestCaseName) \
+  const bool REGISTER_INLINE_MINITEST_##TestName##TestCaseName \
+  = []{minitest::RegisterTest(#TestName, INLINE_MINITEST_##TestName##TestCaseName);return true;}()
+//-----------------------------------//
+
+//=---------------------------------=//
+// Macro:{RUN_REGISTERED_TEST_MODULE}
+// Brief:{}
+//-----------------------------------//
+#define RUN_REGISTERED_TEST_MODULE(TestName) \
+  minitest::RunRegisteredTestModule(#TestName)
+
+//=---------------------------------=//
+// Macro:{REGISTERED_TEST_MODULE_METHOD}
+//-----------------------------------//
+#define REGISTERED_TEST_MODULE_METHOD(TestName) \
+  []->void{minitest::RunRegisteredTestModule(#TestName);}
 
 //=---------------------------------=//
 // Macro:{RUN_INLINE_MINITEST}
