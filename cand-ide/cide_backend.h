@@ -1,10 +1,9 @@
 #pragma once
-#include <filesystem>
-#include <string>
-#include <vector>
-
-#include "cide_file_extensions.h"
+// Standard
 #include "cppsextended.h"
+
+// CIDE Common Defs
+#include "cide_common.h"
 
 constexpr auto AdvanceIt(auto&& iter, size_t i) {
   std::advance(iter, i);
@@ -12,9 +11,7 @@ constexpr auto AdvanceIt(auto&& iter, size_t i) {
 }
 
 namespace cide::backend {
-namespace stdfs = std::filesystem;
-using std::string;
-using std::vector;
+
 // Utils
 static string LoadFileToStr(stdfs::path file_path) {
   std::filesystem::path filepath(

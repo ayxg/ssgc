@@ -76,6 +76,8 @@ int main() {
   cide_test_explorer.RegisterTestCase(
       MINITEST_FUNCTOR_RUN_INLINE(Test_ParserBasics), "UT_PARSER_H");
 
+  cide::ui::AstExplorerInterface ast_explorer;
+
   //// cide::IdeInterface idei;
   sf::Clock deltaClock;
   while (window.isOpen()) {
@@ -85,8 +87,7 @@ int main() {
 
       if (event.type == sf::Event::KeyReleased) {
         if (event.key.code == sf::Keyboard::T) {
-          using namespace ut;  // All unit tests are in the ut namespace.
-          MINITEST_RUN_INLINE(Test_CxxExpected, TestCase_CxxExpected);
+
         }
       }
       if (event.type == sf::Event::Closed) {
@@ -96,7 +97,8 @@ int main() {
 
     ImGui::SFML::Update(window, deltaClock.restart());
     // ImGui::ShowDemoWindow();
-    // cide_ui.Display();
+    //cide_ui.Display();
+    ast_explorer.Display();
     cide_test_explorer.Display();
     window.clear();
     ImGui::SFML::Render(window);

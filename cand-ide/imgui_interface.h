@@ -129,6 +129,8 @@ UIDGen::Iter UIDGen::GetId() {
   if (next_id_ == SIZE_MAX) throw std::overflow_error("UIDGen: ID overflow");
   size_t id = next_id_;
   next_id_++;
+  if (generated_ids_.contains(id))
+    throw std::runtime_error("UIDGen: ID exists");
   generated_ids_.insert(id);
   return generated_ids_.find(id);
 }
@@ -519,10 +521,10 @@ class Subcontext : public ScopedWidgetBase {
   }
   bool BeginLate() override { return BeginLateImpl(); }
 
-  void EndEarly() override { EndEarlyImpl(); }
+  void EndEarly() override { ForceEndEarlyImpl(); }
 
   ~Subcontext() {
-    EndImpl();
+    ForceEndImpl();
     // Remove the name from name map.
     ReleaseId(uid_);
   }
