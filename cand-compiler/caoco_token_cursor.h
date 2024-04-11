@@ -36,29 +36,29 @@ class TkCursor {
   constexpr const Tk& operator->() const { return Get(); }
 
   // Token Properties
-  constexpr inline auto Type() const noexcept { return Get().Type(); }
-  constexpr inline auto Size() const { return Get().Size(); }
-  constexpr inline auto Line() const noexcept { return Get().Line(); }
-  constexpr inline auto Col() const noexcept { return Get().Col(); }
+  constexpr inline eTk Type() const noexcept { return Get().Type(); }
+  constexpr inline size_t Size() const { return Get().Size(); }
+  constexpr inline size_t Line() const noexcept { return Get().Line(); }
+  constexpr inline size_t Col() const noexcept { return Get().Col(); }
   constexpr inline const std::string& Literal() const;
-  constexpr inline auto Priority() const { return Get().Priority(); }
-  constexpr inline auto Assoc() const { return Get().Assoc(); }
-  constexpr inline auto Operation() const { return Get().Operation(); }
-  constexpr inline auto TypeIs(eTk type) const;
-  constexpr inline auto TypeIsnt(eTk type) const;
-  constexpr inline auto TypeAndLitIs(eTk kind,
-                                     const std::string& literal) const;
-  constexpr inline auto IsKeyword() const noexcept { return Get().IsKeyword(); }
-  constexpr inline auto IsModifierKeyword() const;
-  constexpr inline auto IsDeclarativeKeyword() const;
-  constexpr inline auto IsSingularOperand() const;
-  constexpr bool IsSingularPrefixOperator() const;
-  constexpr inline auto IsOpeningScope() const;
-  constexpr inline auto IsClosingScope() const;
-  constexpr inline auto IsClosingScopeOf(eTk open) const;
-  constexpr inline auto NodeType() const noexcept { return Get().NodeType(); }
+  constexpr inline ePriority Priority() const { return Get().Priority(); }
+  constexpr inline eAssoc Assoc() const { return Get().Assoc(); }
+  constexpr inline eOperation Operation() const { return Get().Operation(); }
+  constexpr inline bool TypeIs(eTk type) const noexcept;
+  constexpr inline bool TypeIsnt(eTk type) const noexcept;
+  constexpr inline bool TypeAndLitIs(eTk kind,
+                                     const std::string& literal) const noexcept;
+  constexpr inline bool IsKeyword() const noexcept { return Get().IsKeyword(); }
+  constexpr inline bool IsModifierKeyword() const noexcept;
+  constexpr inline bool IsDeclarativeKeyword() const noexcept;
+  constexpr inline bool IsSingularOperand() const noexcept;
+  constexpr bool IsSingularPrefixOperator() const noexcept;
+  constexpr inline bool IsOpeningScope() const noexcept;
+  constexpr inline bool IsClosingScope() const noexcept;
+  constexpr inline bool IsClosingScopeOf(eTk open) const noexcept;
+  constexpr inline bool IsPrimaryExpressionOpening() const noexcept;
 
-  constexpr inline auto IsPrimaryExpressionOpening() const noexcept;
+    constexpr inline eAst NodeType() const noexcept { return Get().NodeType(); }
 
   // Iteration
   // advances the cursor by n.
@@ -83,7 +83,7 @@ class TkCursor {
 
   // True there is a match in the iterator's range.
   // Starting from and including the current token.
-  constexpr auto FindForward(TkVector match);
+  constexpr bool FindForward(TkVector match);
 
   // Returns true if the next n tokens match the
   // match vector. Starting from and including the current token.
@@ -125,7 +125,7 @@ constexpr bool TkCursor::AtEnd() const {
 
 // Iteration
 // advances the cursor by n.
-constexpr TkCursor& TkCursor::Advance(int n = 1) {
+constexpr TkCursor& TkCursor::Advance(int n) {
   if (n != 0) {
     if (it_ + n >= end_) {
       it_ = end_;
@@ -160,7 +160,7 @@ constexpr TkCursor& TkCursor::Advance(
 }
 
 // returns cursor advanced by N. N may be negative.
-TkCursor TkCursor::Next(int n = 1) const {
+TkCursor TkCursor::Next(int n) const {
   TkCursor next_cursor = *this;
   next_cursor.Advance(n);
   return next_cursor;
@@ -180,7 +180,7 @@ TkCursor TkCursor::Next(TkVectorConstIter new_it) const {
 
 // True there is a match in the iterator's range.
 // Starting from and including the current token.
-constexpr auto TkCursor::FindForward(TkVector match) {
+constexpr bool TkCursor::FindForward(TkVector match) {
   auto end = std::next(it_, match.size());
   auto found = std::search(
       it_, end, match.begin(), match.end(),
@@ -207,45 +207,39 @@ constexpr bool TkCursor::FindForwardExact(TkVectorConstIter cursor,
 constexpr inline const std::string& TkCursor::Literal() const {
   return Get().Literal();
 }
-constexpr inline auto TkCursor::TypeIs(eTk type) const noexcept {
+constexpr inline bool TkCursor::TypeIs(eTk type) const noexcept {
   return Get().TypeIs(type);
 }
-constexpr inline auto TkCursor::TypeIsnt(eTk type) const noexcept {
+constexpr inline bool TkCursor::TypeIsnt(eTk type) const noexcept {
   return not(Get().TypeIs(type));
 }
-constexpr inline auto TkCursor::TypeAndLitIs(eTk kind,
-                                             const std::string& literal) const {
+constexpr inline bool TkCursor::TypeAndLitIs(eTk kind, const std::string& literal) const noexcept {
   return Get().TypeAndLitIs(kind, literal);
 }
-constexpr inline auto TkCursor::IsKeyword() const noexcept {
-  return Get().IsKeyword();
-}
-constexpr inline auto TkCursor::IsModifierKeyword() const noexcept {
+
+constexpr inline bool TkCursor::IsModifierKeyword() const noexcept {
   return Get().IsModifierKeyword();
 }
-constexpr inline auto TkCursor::IsDeclarativeKeyword() const noexcept {
+constexpr inline bool TkCursor::IsDeclarativeKeyword() const noexcept {
   return Get().IsDeclarativeKeyword();
 }
-constexpr inline auto TkCursor::IsSingularOperand() const noexcept {
+constexpr inline bool TkCursor::IsSingularOperand() const noexcept {
   return Get().IsSingularOperand();
 }
 constexpr bool TkCursor::IsSingularPrefixOperator() const noexcept {
   return Get().IsSingularPrefixOperator();
 }
-constexpr inline auto TkCursor::IsOpeningScope() const noexcept {
+constexpr inline bool TkCursor::IsOpeningScope() const noexcept {
   return Get().IsOpeningScope();
 }
-constexpr inline auto TkCursor::IsClosingScope() const noexcept {
+constexpr inline bool TkCursor::IsClosingScope() const noexcept {
   return Get().IsClosingScope();
 }
-constexpr inline auto TkCursor::IsClosingScopeOf(eTk open) const {
+constexpr inline bool TkCursor::IsClosingScopeOf(eTk open) const noexcept {
   return Get().IsClosingScopeOf(open);
 }
-constexpr inline auto TkCursor::NodeType() const noexcept {
-  return Get().NodeType();
-}
 
-constexpr inline auto TkCursor::IsPrimaryExpressionOpening() const noexcept {
+constexpr inline bool TkCursor::IsPrimaryExpressionOpening() const noexcept {
   const Tk& c = Get();
   return c.IsSingularOperand() || c.IsSingularPrefixOperator() ||
          c.TypeIs(eTk::kOpenParen);

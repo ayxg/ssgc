@@ -1985,6 +1985,12 @@ ParseResultWithOffset parser::ParseMethodDecl(TkCursor c) {
       }
       signature_node = signature_result.Extract();
       c.Advance(signature_result.Always().Iter());
+      if(c.Peek(-1).TypeIs(eTk::kColon)) c.Advance(-1);  // !!SPECIAL CASE: 
+      // Signature will consume and advance past the colon or semicolon. 
+      // This is to allow checking if the signature is a decl or
+      // definition within the signature parsing method. 
+      // So after getting signature, advance backwards 1 token
+      // but only if that token is a colon!!
     } else {
       signature_node = Ast(eAst::kMethodSignature);
     }

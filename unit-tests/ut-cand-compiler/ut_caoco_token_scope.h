@@ -74,6 +74,7 @@ INLINE_MINITEST(Test_TkScope, TestCase_ParenScopeFinder) {
                    "Testing invalid scope:", "Invalid scope was valid!");
 }
 INLINE_END_MINITEST;
+MINITEST_REGISTER_CASE(Test_TkScope, TestCase_ParenScopeFinder);
 
 INLINE_MINITEST(Test_TkScope, TestCase_ListScopeFinder) {
   using namespace caoco;
@@ -95,6 +96,7 @@ INLINE_MINITEST(Test_TkScope, TestCase_ListScopeFinder) {
   EXPECT_FALSE(invalid_list.Valid());
 }
 INLINE_END_MINITEST;
+MINITEST_REGISTER_CASE(Test_TkScope, TestCase_ListScopeFinder);
 
 INLINE_MINITEST(Test_TkScope, TestCase_FrameScopeFinder) {
   using namespace caoco;
@@ -117,6 +119,7 @@ INLINE_MINITEST(Test_TkScope, TestCase_FrameScopeFinder) {
   EXPECT_FALSE(invalid_frame.Valid());
 }
 INLINE_END_MINITEST;
+MINITEST_REGISTER_CASE(Test_TkScope, TestCase_FrameScopeFinder);
 
 INLINE_MINITEST(Test_TkScope, TestCase_StatementScopeFinder) {
   using namespace caoco;
@@ -150,12 +153,13 @@ INLINE_MINITEST(Test_TkScope, TestCase_StatementScopeFinder) {
   // Test finding an "open" statement which allows for repeated open tokens. ex
   // a = a + a + ([ a ;a + {a;a;a}]);
   TkScope open_statement =
-      TkScope::FindStatement(eTk::kIdentifier, eTk::kSemicolon,
+      TkScope::FindOpenStatement(eTk::kIdentifier, eTk::kSemicolon,
                              complex_statement.End(), result.cend());
   EXPECT_TRUE(open_statement.Valid());
   EXPECT_TRUE(open_statement.End() == result.cend());
 }
 INLINE_END_MINITEST;
+MINITEST_REGISTER_CASE(Test_TkScope, TestCase_StatementScopeFinder);
 //---------------------------------------------------------------------------//
 // Copyright 2024 Anton Yashchenko
 //

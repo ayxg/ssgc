@@ -26,10 +26,10 @@
 INLINE_MINITEST(Test_Lexer, TestCase_Keywords) {
   using namespace caoco;
   auto keywords = Lexer::Lex(
-      "enter start use class obj private "
+      "use class private "
       "public const static if else elif while for switch "
-      "break continue return print none int uint real "
-      "byte bit str type value identity array pointer memory function "
+      "break continue return none int uint real "
+      "byte bit str array"
       "def auto fn default any case");
 
   TkVector expected_test_result = TkVector(
@@ -45,6 +45,7 @@ INLINE_MINITEST(Test_Lexer, TestCase_Keywords) {
   EXPECT_TRUE(keywords.Valid());
 
   if (keywords.Valid()) {
+    ASSERT_EQ(keywords.Value().size(), expected_test_result.size());
     TkVector result = keywords.Extract();
     for (size_t i = 0; i < result.size(); ++i) {
       EXPECT_EQ(result[i].Type(), expected_test_result[i].Type());
@@ -52,6 +53,7 @@ INLINE_MINITEST(Test_Lexer, TestCase_Keywords) {
   } 
 }
 INLINE_END_MINITEST;
+MINITEST_REGISTER_CASE(Test_Lexer, TestCase_Keywords);
 
 //---------------------------------------------------------------------------//
 // Copyright 2024 Anton Yashchenko

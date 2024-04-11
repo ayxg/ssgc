@@ -28,13 +28,11 @@ EXPECT_TRUE(e_good.Valid());
 EXPECT_FALSE(e_bad.Valid());
 EXPECT_EQ(e_good.Value(), compare);
 EXPECT_EQ(e_bad.Error(), compare);
-std::cout << e_bad.Error() << std::endl;
 
 // Good should be invalid after extraction of value.
 std::string value = e_good.Extract();
 EXPECT_FALSE(e_good.Valid());
 EXPECT_EQ(e_good.Error(), "Value has been moved out of the expected object.");
-std::cout << e_good.Error() << std::endl;
 
 // - Chaining Errors properly preserves order of errors.
 // - Chaining errors seperates error messages by a single newline character.
@@ -43,13 +41,13 @@ std::cout << e_good.Error() << std::endl;
 ExpectedString e_err = e_bad.ChainFailure("Error 2: 42 was caught!");
 EXPECT_FALSE(e_err.Valid());
 EXPECT_EQ(e_err.Error(), "42\nError 2: 42 was caught!");
-std::cout << e_err.Error() << std::endl;
 
 // Implicit conversion to boolean to conditional expressions.
 EXPECT_FALSE(e_err);
 EXPECT_FALSE(e_good);
 EXPECT_FALSE(e_bad);
-INLINE_END_MINITEST
+INLINE_END_MINITEST;
+MINITEST_REGISTER_CASE(Test_CxxExpected, TestCase_CxxExpected);
 
 INLINE_MINITEST(Test_CxxExpected, TestCase_PartialExpectedConstrtuct)
 using PartialExpectedString = cxx::PartialExpected<std::string, std::string>;
@@ -61,13 +59,11 @@ EXPECT_EQ(e_good.Always(), "Always");
 EXPECT_EQ(e_bad.Always(), "Always");
 EXPECT_EQ(e_good.Value(), "Good");
 EXPECT_EQ(e_bad.Error(), "Bad");
-std::cout << e_bad.Error() << std::endl;
 
 // Good should be invalid after extraction of value.
 std::string value = e_good.Extract();
 EXPECT_FALSE(e_good.Valid());
 EXPECT_EQ(e_good.Error(), "Value has been moved out of the expected object.");
-std::cout << e_good.Error() << std::endl;
 
 // - Chaining Errors properly preserves order of errors.
 // - Chaining errors seperates error messages by a single newline character.
@@ -79,7 +75,6 @@ PartialExpectedString e_err = e_bad.ChainFailure("Error 2: Bad was caught!");
 EXPECT_FALSE(e_err.Valid());
 EXPECT_EQ(e_err.Error(), "Bad\nError 2: Bad was caught!");
 EXPECT_EQ(e_err.Always(), e_bad.Always());
-std::cout << e_err.Error() << std::endl;
 
 // ChainFailure is NOT provided with a new always value.
 //      -> Old value is passed.
@@ -89,13 +84,12 @@ EXPECT_FALSE(e_err_new_always.Valid());
 EXPECT_EQ(e_err_new_always.Error(), "Bad\nError 2: Bad was caught!");
 EXPECT_NE(e_err_new_always.Always(), e_bad.Always());
 EXPECT_EQ(e_err_new_always.Always(), "VeryBad");
-std::cout << e_err_new_always.Always() << std::endl;
-
 // Implicit conversion to boolean to conditional expressions.
 EXPECT_FALSE(e_err);
 EXPECT_FALSE(e_good);
 EXPECT_FALSE(e_bad);
-INLINE_END_MINITEST
+INLINE_END_MINITEST;
+MINITEST_REGISTER_CASE(Test_CxxExpected, TestCase_PartialExpectedConstrtuct);
 
 INLINE_MINITEST(Test_CxxExpected, TestCase_BoolError)
 using BoolError = cxx::BoolError;
@@ -117,18 +111,19 @@ EXPECT_FALSE(bool_err);
 EXPECT_TRUE(bool_good);
 EXPECT_FALSE(bool_bad);
 INLINE_END_MINITEST
+MINITEST_REGISTER_CASE(Test_CxxExpected, TestCase_BoolError);
 }  // namespace ut
 
-namespace ut::modules {
-static bool RUN_INLINE_MINITESTS_UT_EXPECTED_H() {
-  bool is_passed = true;
-  is_passed = RUN_INLINE_MINITEST(Test_CxxExpected, TestCase_CxxExpected);
-  is_passed =
-      RUN_INLINE_MINITEST(Test_CxxExpected, TestCase_PartialExpectedConstrtuct);
-  is_passed = RUN_INLINE_MINITEST(Test_CxxExpected, TestCase_BoolError);
-  return is_passed;
-}
-}  // namespace ut::modules
+//namespace ut::modules {
+//static bool RUN_INLINE_MINITESTS_UT_EXPECTED_H() {
+//  bool is_passed = true;
+//  is_passed = MINITEST_RUN_INLINE(Test_CxxExpected, TestCase_CxxExpected);
+//  is_passed =
+//      MINITEST_RUN_INLINE(Test_CxxExpected, TestCase_PartialExpectedConstrtuct);
+//  is_passed = MINITEST_RUN_INLINE(Test_CxxExpected, TestCase_BoolError);
+//  return is_passed;
+//}
+//}  // namespace ut::modules
 
 //=-------------------------------------------------------------------------=//
 //---------------------------------------------------------------------------//

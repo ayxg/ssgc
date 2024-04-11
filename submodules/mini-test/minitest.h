@@ -250,10 +250,14 @@ static inline void RegisterTest(const std::string_view & test_name,
   gRegisteredTests[test_name].push_back(test);
 }
 
-static inline void RunRegisteredTestModule(const std::string_view & test_name) {
+static inline bool RunRegisteredTestModule(const std::string_view & test_name) {
+  bool passed = true;
   for (const auto& test : gRegisteredTests[test_name]) {
-    test();
+    if(not test()){
+      passed = false;    
+    }
   }
+  return passed;
 };
 
 static inline void AddFailedTestLog(
@@ -458,32 +462,32 @@ static inline void FlushFailedTestResults() {
 //=---------------------------------=//
 
 //=---------------------------------=//
-// Macro:{REGISTER_INLINE_TEST_CASE}
+// Macro:{MINITEST_REGISTER_CASE}
 // Brief:{}
 //-----------------------------------//
-#define REGISTER_INLINE_TEST_CASE(TestName, TestCaseName) \
+#define MINITEST_REGISTER_CASE(TestName, TestCaseName) \
   const bool REGISTER_INLINE_MINITEST_##TestName##TestCaseName \
   = []{minitest::RegisterTest(#TestName, INLINE_MINITEST_##TestName##TestCaseName);return true;}()
 //-----------------------------------//
 
 //=---------------------------------=//
-// Macro:{RUN_REGISTERED_TEST_MODULE}
+// Macro:{MINITEST_RUN_REGISTERED_MODULE}
 // Brief:{}
 //-----------------------------------//
-#define RUN_REGISTERED_TEST_MODULE(TestName) \
+#define MINITEST_RUN_REGISTERED_MODULE(TestName) \
   minitest::RunRegisteredTestModule(#TestName)
 
 //=---------------------------------=//
 // Macro:{REGISTERED_TEST_MODULE_METHOD}
 //-----------------------------------//
-#define REGISTERED_TEST_MODULE_METHOD(TestName) \
-  []->void{minitest::RunRegisteredTestModule(#TestName);}
+#define MINITEST_FUNCTOR_RUN_INLINE(TestName) \
+  []()->bool{return minitest::RunRegisteredTestModule(#TestName);}
 
 //=---------------------------------=//
-// Macro:{RUN_INLINE_MINITEST}
+// Macro:{MINITEST_RUN_INLINE}
 // Brief:{Runs an inline minitest.}
 //-----------------------------------//
-#define RUN_INLINE_MINITEST(TestName, TestCaseName) \
+#define MINITEST_RUN_INLINE(TestName, TestCaseName) \
   INLINE_MINITEST_##TestName##TestCaseName();       \
 //-----------------------------------//
 //=---------------------------------=//
@@ -729,9 +733,9 @@ void ut_expected() {
   }
   INLINE_END_MINITEST;
 
-  RUN_INLINE_MINITEST(A, B)
+  MINITEST_RUN_INLINE(A, B)
 
-  RUN_INLINE_MINITEST(A, C)
+  MINITEST_RUN_INLINE(A, C)
 }
 */
 //-----------------------------------//

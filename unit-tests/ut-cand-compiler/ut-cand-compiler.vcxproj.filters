@@ -4,6 +4,7 @@
     <ClInclude Include="ut_caoco_token_scope.h" />
     <ClInclude Include="ut_caoco_lexer.h" />
     <ClInclude Include="ut_caoco_parser_basic.h" />
+    <ClInclude Include="ut_cand_compiler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ignore_this.cpp" />

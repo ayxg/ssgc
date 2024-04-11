@@ -74,7 +74,7 @@ inline void TestInternalParserMethod(
   auto expected_source = Lexer::Lex(code);
   ASSERT_TRUE(expected_source.Valid());
   auto source = expected_source.Extract();
-  auto parse_result = ParseTokens({source.cbegin(), source.cend()});
+  auto parse_result = fn({source.cbegin(), source.cend()});
   ASSERT_TRUE(parse_result.Valid());
 }
 
@@ -146,7 +146,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_SingleOperand) {
   EXPECT_EQ(none_lit.Value().Literal(), expected_result[8].Literal());
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(Test_ParserBasics, TestCase_SingleOperand);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_SingleOperand);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_ValueExpr) {
   using namespace caoco;
@@ -409,7 +409,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ValueExpr) {
       "-1 - -1");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(Test_ParserBasics, TestCase_ValueExpr);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ValueExpr);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_PrimaryStatement) {
   using namespace caoco;
@@ -419,7 +419,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_PrimaryStatement) {
                            "Primary Statement");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(Test_ParserBasics, TestCase_PrimaryStatement);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_PrimaryStatement);
 // Declarations
 
 INLINE_MINITEST(Test_ParserBasics,
@@ -430,7 +430,7 @@ INLINE_MINITEST(Test_ParserBasics,
                            "VariableDeclarationNoTypeNoAssignNoMod");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(Test_ParserBasics,
+MINITEST_REGISTER_CASE(Test_ParserBasics,
                           TestCase_VariableDeclarationNoTypeNoAssignNoMod);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_VariableDeclarationNoTypeNoAssign) {
@@ -440,7 +440,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_VariableDeclarationNoTypeNoAssign) {
                            "VariableDeclarationNoTypeNoAssign");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(Test_ParserBasics,
+MINITEST_REGISTER_CASE(Test_ParserBasics,
                           TestCase_VariableDeclarationNoTypeNoAssign);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_VariableDeclarationNoAssign) {
@@ -450,7 +450,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_VariableDeclarationNoAssign) {
                            "VariableDeclarationNoAssign");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(Test_ParserBasics, TestCase_VariableDeclarationNoAssign);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_VariableDeclarationNoAssign);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_VariableDefinition) {
   using namespace caoco::parser;
@@ -459,7 +459,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_VariableDefinition) {
                            "VariableDefinition");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_VariableDefinition);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_TypeAlias) {
@@ -468,7 +468,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_TypeAlias) {
   TestInternalParserMethod("use @MyInteger: int;", ParseUsingDecl, "TypeAlias");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_TypeAlias);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_LibraryNamespaceInclusion) {
@@ -478,7 +478,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_LibraryNamespaceInclusion) {
                            "LibraryNamespaceInclusion");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_LibraryNamespaceInclusion);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_NamespaceInclusion) {
@@ -488,7 +488,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_NamespaceInclusion) {
                            "NamespaceInclusion");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_NamespaceInclusion);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_ObjectInclusion) {
@@ -498,7 +498,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ObjectInclusion) {
                            "ObjectInclusion");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_ObjectInclusion);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_TypeInclusion) {
@@ -508,7 +508,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_TypeInclusion) {
                            "TypeInclusion");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_TypeInclusion);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_ObjectInclusionFromLibrary) {
@@ -518,7 +518,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ObjectInclusionFromLibrary) {
                            "ObjectInclusionFromLibrary");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_ObjectInclusionFromLibrary);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_TypeInclusionFromLibrary) {
@@ -528,7 +528,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_TypeInclusionFromLibrary) {
                            ParseUsingDecl, "TypeInclusionFromLibrary");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_TypeInclusionFromLibrary);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_TypeImportDeclaration) {
@@ -537,7 +537,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_TypeImportDeclaration) {
   TestInternalParserMethod("import foo;", ParseImportDecl, "ImportDeclaration");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_TypeImportDeclaration);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet) {
@@ -547,7 +547,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet) {
                            "MethodDeclImplicitVoidArgNoRet");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet2) {
@@ -557,7 +557,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet2) {
                            "MethodDeclImplicitVoidArgNoRet");
 }
 INLINE_END_MINITEST;
-  REGISTER_INLINE_TEST_CASE(
+  MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet2);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet) {
@@ -567,7 +567,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet) {
                            "TestCaseMethodDeclImplicitVoidArgAnyRet");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet2) {
@@ -577,7 +577,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet2) {
                            "TestCaseMethodDeclImplicitVoidArgAnyRet2");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet2);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgNoRet) {
@@ -587,7 +587,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgNoRet) {
                            "TestCaseMethodDeclArgNoRet");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_MethodDeclArgNoRet);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgAnyRet) {
@@ -597,7 +597,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgAnyRet) {
                            "TestCaseMethodDeclArgAnyRet");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_MethodDeclArgAnyRet);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgIdentifiedAnyRet) {
@@ -607,7 +607,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgIdentifiedAnyRet) {
                            "TestCaseMethodDeclArgAnyRet");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_MethodDeclArgIdentifiedAnyRet);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgsTypedRet) {
@@ -617,7 +617,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgsTypedRet) {
                            "TestCaseMethodDeclArgsTypedRet");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_MethodDeclArgsTypedRet);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRet) {
@@ -627,7 +627,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRet) {
                            "TestCaseMethodDeclTypedArgsTypedRet");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRet);
 
 INLINE_MINITEST(Test_ParserBasics,
@@ -639,7 +639,7 @@ INLINE_MINITEST(Test_ParserBasics,
                            "TestCaseMethodDeclTypedArgsTypedRet");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRetWithModifiers);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_ClassDecl) {
@@ -649,7 +649,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ClassDecl) {
                            "TestCaseMethodDeclTypedArgsTypedRet");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_ClassDecl);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_ClassDeclWithMod) {
@@ -659,7 +659,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ClassDeclWithMod) {
                            "TestCaseClassDeclWithMod");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_ClassDeclWithMod);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_LibWithMod) {
@@ -669,7 +669,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_LibWithMod) {
                            "TestCaseCLibDeclWithMod");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_LibWithMod);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_LibWithModAndDefinition) {
@@ -680,7 +680,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_LibWithModAndDefinition) {
       ParseLibDecl, "TestCaseCLibDeclWithMod");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_LibWithModAndDefinition);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_ClassWithModAndDefinition) {
@@ -691,7 +691,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ClassWithModAndDefinition) {
       ParseClassDecl, "TestCaseClassDeclWithMod");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_ClassWithModAndDefinition);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDefinition) {
@@ -702,7 +702,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDefinition) {
       "TestCaseMethodDefinition");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_MethodDefinition);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MainDefinition) {
@@ -712,7 +712,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MainDefinition) {
                            "TestCaseMainDefinition");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_MainDefinition);
 
 // Pragmatic Statements: appears at top level, or in a library.
@@ -766,7 +766,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_PragmaticDeclarations) {
                            "TestCaseCLibDeclWithMod");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(Test_ParserBasics, TestCase_PragmaticDeclarations);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_PragmaticDeclarations);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_ParseProgramWithDeclrations) {
   using namespace caoco::parser;
@@ -781,7 +781,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ParseProgramWithDeclrations) {
       ParseProgram, "TestCaseParseProgramWithDeclrations");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(Test_ParserBasics,
+MINITEST_REGISTER_CASE(Test_ParserBasics,
                           TestCase_ParseProgramWithDeclrations);
 
 // Control Flow Statements
@@ -792,7 +792,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ReturnStatement) {
                            "TestCaseReturnStatement");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(Test_ParserBasics, TestCase_ReturnStatement);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ReturnStatement);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_IfStatement) {
   using namespace caoco::parser;
@@ -801,7 +801,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_IfStatement) {
                            "TestCaseIfStatement");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(Test_ParserBasics, TestCase_IfStatement);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_IfStatement);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_IfElseStatement) {
   using namespace caoco::parser;
@@ -810,7 +810,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_IfElseStatement) {
                            "TestCaseIfElseStatement");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_IfElseStatement);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_IfElifStatement) {
@@ -820,7 +820,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_IfElifStatement) {
                            "TestCaseIfElifStatement");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_IfElifStatement);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_IfElifElseStatement) {
@@ -830,7 +830,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_IfElifElseStatement) {
                            "TestCaseIfElifElseStatement");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(
+MINITEST_REGISTER_CASE(
   Test_ParserBasics, TestCase_IfElifElseStatement);
 
 // Loop Statements
@@ -841,7 +841,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_WhileStatement) {
                            "TestCaseWhileStatement");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(Test_ParserBasics, TestCase_WhileStatement);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_WhileStatement);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_ForStatement) {
   using namespace caoco::parser;
@@ -850,7 +850,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ForStatement) {
                            "TestCaseForStatement");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(Test_ParserBasics, TestCase_ForStatement);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ForStatement);
 
 // Animals Example Program.
 INLINE_MINITEST(Test_ParserBasics, TestCase_AnimalsExampleProgram) {
@@ -872,7 +872,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_AnimalsExampleProgram) {
       parser::ParseProgram, "TestCaseAnimalsExampleProgram");
 }
 INLINE_END_MINITEST;
-REGISTER_INLINE_TEST_CASE(Test_ParserBasics, TestCase_AnimalsExampleProgram);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_AnimalsExampleProgram);
 
 //---------------------------------------------------------------------------//
 // Copyright 2024 Anton Yashchenko
