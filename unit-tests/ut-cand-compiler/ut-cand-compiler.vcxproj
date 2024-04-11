@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ut_cand_compiler.h" />
     <ClInclude Include="ut_caoco_lexer.h" />
     <ClInclude Include="ut_caoco_token_scope.h" />
     <ClInclude Include="ut_caoco_parser_basic.h" />

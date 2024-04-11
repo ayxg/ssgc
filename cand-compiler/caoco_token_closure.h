@@ -121,10 +121,7 @@ class ClosureBuffer {
   TkListIter LastClosureBack() { return closures_.back().Back(); }
 
   // Search from the end of the closure list until first occurence.
-  ClosureListIter FindClosureReverse(
-      std::function<bool(Closure&)>&& condition) {
-    return std::find_if(closures_.rbegin(), closures_.rend(), condition).base();
-  }
+  ClosureListIter FindClosureReverse(std::function<bool(Closure&)>&& condition);
 
   // Search from the end of the closure list for repeated occurences.
   std::vector<ClosureListIter> FindClosureReverseConsecutive(

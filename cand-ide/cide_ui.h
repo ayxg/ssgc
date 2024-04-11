@@ -27,6 +27,7 @@ struct TestModuleResult {
   bool* run_this_test = new (bool)(false);
   void Run() { is_test_passed = test_case(); }
   bool IsEnabled() const { return *run_this_test; }
+  void SetEnabled(bool value = true) { *run_this_test = value; }
 };
 
 // Popup Windows
@@ -58,11 +59,13 @@ class CideTestExplorerInterface {
       if (test_case.IsEnabled()) test_case.Run();
     }
   }
+
   inline void FillModulesTableFailRowData(size_t& style_id,
-                                          const TestModuleResult& t_module) {
+                                          TestModuleResult& t_module) {
     ImGui::TableNextRow();
     ImGui::TableNextColumn();
-    ImGui::Checkbox("", t_module.run_this_test);
+    ImGui::Checkbox((std::string("Run##") + std::to_string(style_id)).c_str(),
+                    t_module.run_this_test);
     ImGui::SameLine();
     ImGui::PushID(style_id);
     style_id++;
@@ -76,10 +79,11 @@ class CideTestExplorerInterface {
   }
 
   inline void FillModulesTablePassRowData(size_t& style_id,
-                                          const TestModuleResult& t_module) {
+                                          TestModuleResult& t_module) {
     ImGui::TableNextRow();
     ImGui::TableNextColumn();
-    ImGui::Checkbox("", t_module.run_this_test);
+    ImGui::Checkbox((std::string("Run##") + std::to_string(style_id)).c_str(),
+                    t_module.run_this_test);
     ImGui::SameLine();
     ImGui::PushID(style_id);
     style_id++;
@@ -174,7 +178,7 @@ class CideTestExplorerInterface {
         ImGui::TableSetupColumn("Module", flags);
         ImGui::TableHeadersRow();
         for (size_t style_id = 0;
-             const auto& test_case : registered_test_cases) {
+             auto& test_case : registered_test_cases) {
           if (test_case.is_test_passed) {
             FillModulesTablePassRowData(style_id, test_case);
           } else {
