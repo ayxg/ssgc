@@ -300,7 +300,6 @@ struct compile_time_type_index_list {
   static constexpr inline size_t kNumTypes = sizeof...(TypeTs);
   using types_tuple = std::tuple<TypeTs...>;
   using types_variant = decltype(tuple_to_variant(types_tuple{}));
-
   // Type of element at index.
   template <std::size_t index>
   using type_of = typename std::tuple_element_t<index, types_tuple>;
@@ -387,6 +386,36 @@ using null_string_constant = string_constant<[]() consteval { return ""; }>;
 //---------------------------------------------------------//
 // EndTemplate:{string_constant , character_constant , null_string_constant}
 //---------------------------------------------------------//
+
+
+
+// helper constant for the visitor #3
+template <class>
+inline constexpr bool always_false_v = false;
+
+// helper type for the visitor #4
+template <class... Ts>
+struct overloaded : Ts... {
+  using Ts::operator()...;
+};
+
+template <class HostT, class... CallableTs>
+constexpr inline decltype(auto) visit_overloaded(HostT&& host,
+                                                 CallableTs&&... callables) {
+  return std::visit(overloaded{std::forward<CallableTs>(callables)...},
+                    std::forward<HostT>(host));
+}
+
+
+
+template <typename... Args>
+consteval bool are_unique(Args&&... args) {
+  std::array arr{std::forward<Args>(args)...};
+  std::sort(arr.begin(), arr.end());
+  return std::adjacent_find(arr.begin(), arr.end()) == arr.end();
+}
+
+
 
 //---------------------------------------------------------------------------//
 };  // namespace mta
