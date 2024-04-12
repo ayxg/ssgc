@@ -138,6 +138,7 @@
     <ClInclude Include="caoco_compiler_error.h" />
     <ClInclude Include="caoco_lexer.h" />
     <ClInclude Include="caoco_parser.h" />
+    <ClInclude Include="caoco_rtval.h" />
     <ClInclude Include="caoco_token.h" />
     <ClInclude Include="caoco_enum.h" />
     <ClInclude Include="caoco_grammar.h" />

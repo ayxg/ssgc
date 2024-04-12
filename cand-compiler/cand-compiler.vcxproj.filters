@@ -14,5 +14,6 @@
     <ClInclude Include="caoco_token_cursor.h" />
     <ClInclude Include="caoco_token_scope.h" />
     <ClInclude Include="caoco_parser.h" />
+    <ClInclude Include="caoco_rtval.h" />
   </ItemGroup>
 </Project>

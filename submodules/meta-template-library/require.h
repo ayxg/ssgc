@@ -453,6 +453,9 @@ concept iSingular = iNonCopyable<T> && iNonMovable<T> && (not iSwappable<T>);
 template <class T>
 concept iEnumeration = requires() { std::is_enum_v<T>; };
 
+template <class T, class ...Us>
+concept iOneOf = (std::same_as<T, Us> || ...);
+
 }  // namespace req
 }  // namespace mta
 
