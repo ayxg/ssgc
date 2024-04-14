@@ -136,9 +136,15 @@
     <ClInclude Include="caoco_ast.h" />
     <ClInclude Include="caoco_char_traits.h" />
     <ClInclude Include="caoco_compiler_error.h" />
+    <ClInclude Include="caoco_executor.h" />
+    <ClInclude Include="caoco_ir.h" />
+    <ClInclude Include="caoco_irgen.h" />
     <ClInclude Include="caoco_lexer.h" />
     <ClInclude Include="caoco_parser.h" />
+    <ClInclude Include="caoco_program.h" />
     <ClInclude Include="caoco_rtval.h" />
+    <ClInclude Include="caoco_rtalloc.h" />
+    <ClInclude Include="caoco_runtime.h" />
     <ClInclude Include="caoco_token.h" />
     <ClInclude Include="caoco_enum.h" />
     <ClInclude Include="caoco_grammar.h" />

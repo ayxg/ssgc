@@ -51,6 +51,7 @@ int main() {
 
   cide::ui::CideUserInterface cide_ui;
   cide::ui::CideTestExplorerInterface cide_test_explorer;
+  cide::ui::AstExplorerInterface ast_explorer;
   // cide_test_explorer.RegisterTestCase([]() {
   //   using namespace ut;
   //   MINITEST_RUN_INLINE(Test_CxxExpected, TestCase_CxxExpected);
@@ -76,7 +77,6 @@ int main() {
   cide_test_explorer.RegisterTestCase(
       MINITEST_FUNCTOR_RUN_INLINE(Test_ParserBasics), "UT_PARSER_H");
 
-  cide::ui::AstExplorerInterface ast_explorer;
 
   //// cide::IdeInterface idei;
   sf::Clock deltaClock;
@@ -97,7 +97,7 @@ int main() {
 
     ImGui::SFML::Update(window, deltaClock.restart());
     // ImGui::ShowDemoWindow();
-    //cide_ui.Display();
+    cide_ui.Display();
     ast_explorer.Display();
     cide_test_explorer.Display();
     window.clear();

@@ -502,8 +502,7 @@ class DynamicRuntimeObject : public DynamicRuntimeNamespace {
   DynamicRuntimeNamespace& static_object_namespace_{kNullNamespace};
 
  public:
-  DynamicRuntimeObject() : DynamicRuntimeNamespace() {
-  }
+  DynamicRuntimeObject() : DynamicRuntimeNamespace() {}
   DynamicRuntimeObject(const string_view& name)
       : DynamicRuntimeNamespace(name) {}
 
@@ -530,7 +529,6 @@ class DynamicRuntimeObject : public DynamicRuntimeNamespace {
   constexpr void AddInstanceMember(RuntimeValue val, const string_view& name) {
     static_object_namespace_.AddInstanceMember(std::move(val), name);
   }
-
 };
 class ProgramActionBlock;
 
@@ -589,7 +587,7 @@ struct ActionUnaryOp {
 struct ActionFuncCall {};  // Execute a method given a name with arguments.
 
 // Variant of all types of actions. An action is synonymous with an opcode or
-// intermediate representation line.
+// intermediate representation line. 
 using ProgramActionVariant =
     std::variant<ActionDebugPrint, ActionDeclareVariable, ActionAssignVariable>;
 
@@ -907,9 +905,10 @@ void test_runtime_value() {
       RuntimeValue::New(NativeDynamicObjectT().ctor());
 
   auto& ns = builtin_dynamic_namespace.GetRef<NativeDynamicNamespaceT>().get();
-  ns.DesignateAsType(); // Designate this namespace as a type definition.
-  ns.AddInstanceMember(builtin_string, "foo_str_member"); // add an instance member
-  ns.AddMember(builtin_cpp_method, "foo_str_member"); // add a static member
+  ns.DesignateAsType();  // Designate this namespace as a type definition.
+  ns.AddInstanceMember(builtin_string,
+                       "foo_str_member");              // add an instance member
+  ns.AddMember(builtin_cpp_method, "foo_str_member");  // add a static member
 
   // Retrieve the object !!note ref count is not increased here.
   // GetRef-> retrieves from RuntimeValue
@@ -917,10 +916,13 @@ void test_runtime_value() {
   auto& obj = builtin_dynamic_object.GetRef<NativeDynamicObjectT>().get();
   obj.SetStaticObjectNamespace(ns);
 
-  // These two methods will affect all instances of this object which have not be created yet.
-  // They operate on the internal reference to the set namespace.For ergonomic purposes.
-  obj.AddStaticMember(builtin_string, "foo_str2_static"); // add a static member from the obj
-  obj.AddInstanceMember(builtin_string, "foo_str_member"); // add an instance member from the obj
+  // These two methods will affect all instances of this object which have not
+  // be created yet. They operate on the internal reference to the set
+  // namespace.For ergonomic purposes.
+  obj.AddStaticMember(builtin_string,
+                      "foo_str2_static");  // add a static member from the obj
+  obj.AddInstanceMember(
+      builtin_string, "foo_str_member");  // add an instance member from the obj
 
   // Once the namespace is set up an object may be initialized as so:
   obj.InitFromNamespace();
