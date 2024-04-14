@@ -1,49 +1,35 @@
-//=-------------------------------------------------------------------------=//
 //---------------------------------------------------------------------------//
-// Author: Anton Yashchenko
-// Email: acppdev@gmail.com
+//---------------------------------------------------------------------------//
+// Copyright 2024 Anton Yashchenko
+// Licensed under the Apache License, Version 2.0(the "License");
+//---------------------------------------------------------------------------//
+// Author(s): Anton Yashchenko
+// Email: ntondev@gmail.com
 // Website: https://www.acpp.dev
 //---------------------------------------------------------------------------//
+// Project: C& Programming Language Environment
+// Directory: mini-test
 // File: minitest.h
 //---------------------------------------------------------------------------//
-// MIT License
-//
-// Copyright(c)[2024][Anton Yashchenko]
-//
-// Permission is hereby granted,free of charge,to any person obtaining a copy of
-// this software and associated documentation files(the "Software"),to deal in
-// the Software without restriction, including without limitation the rights to
-// use, copy, modify, merge, publish, distribute, sublicense, and / or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so,subject to the following conditions :
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT,TORT OR OTHERWISE, ARISING
-// FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-// IN THE SOFTWARE.
+#ifndef HEADER_GUARD_CALE_MINITEST_MINITEST_H
+#define HEADER_GUARD_CALE_MINITEST_MINITEST_H
 //---------------------------------------------------------------------------//
-//=-------------------------------------------------------------------------=//
-//
 // Mini-Test: A Minimal Unit Testing Framework for C++20
-// Requires:
+// Requires:{
 //   - Compiler flag minimum /std:c++20
 //   - P0315R4 : Lambdas in unevaluated contexts
 //     https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0315r4.pdf
-// Brief:
+// }
+// Brief: {
 //  This is a single header file unit testing framework. Tests are defined as
 //  lambdas in a template parameter, which is executed upon initialization of
 //  static variables. As a result the order of tests is not guaranteed but the
 //  usual order of static initialization is followed. New: now supports fixtures
 //  and inline tests which can be run at a later time and defined inside
 //  methods.
-//
-// Sample Use:
+// 
+// (More examples available at bottom of this file...)
+// Sample Use: 
 //       auto my_method() { return true; }
 //       MINITEST(MyTest,MyTestCase){
 //         EXPECT_TRUE(my_method());
@@ -77,10 +63,8 @@
 //   - MINITEST_CONFIG_CUSTOM_SEPARATOR: If defined, a custom separator is used
 //   between test sections which should be the macro def. Default is a dashed
 //   line. Definition must be a string literal with a newline.
+// }
 //---------------------------------------------------------------------------//
-
-#ifndef HEADER_GUARD_MINITEST_H
-#define HEADER_GUARD_MINITEST_H
 // Includes:
 #include <concepts>
 #include <iostream>
@@ -240,6 +224,7 @@ struct TestResult {
   std::string test_name;
   std::string test_case_name;
   std::source_location location;
+  std::string log;
 };
 
 std::ostream& operator<<(std::ostream& ss, const TestResult& t) {
@@ -256,8 +241,24 @@ std::ostream& operator<<(std::ostream& ss, const TestResult& t) {
 
 static std::vector<std::string> gFailedTestLogs;
 static std::vector<TestResult> gRecordedTestLogs;
+static std::map<std::string_view, std::vector<std::function<bool()>>> gRegisteredTests;
 static const char* gLastFailedTestName = "";
 static const char* gLastFailedTestCaseName = "";
+
+static inline void RegisterTest(const std::string_view & test_name,
+                                std::function<bool()> test) {
+  gRegisteredTests[test_name].push_back(test);
+}
+
+static inline bool RunRegisteredTestModule(const std::string_view & test_name) {
+  bool passed = true;
+  for (const auto& test : gRegisteredTests[test_name]) {
+    if(not test()){
+      passed = false;    
+    }
+  }
+  return passed;
+};
 
 static inline void AddFailedTestLog(
     const std::string& log, const char* test, const char* tcase,
@@ -290,7 +291,8 @@ static inline void RecordTestLog(
   gRecordedTestLogs.push_back(TestResult{.is_test_passed = passed,
                                          .test_name = std::string(test),
                                          .test_case_name = std::string(tcase),
-                                         .location = location});
+                                         .location = location,
+                                         .log = log});
 }
 
 static inline bool PrintRecordedTestLogs() {
@@ -314,6 +316,15 @@ static inline const std::vector<TestResult>& ViewTestResults() {
 static inline const std::vector<std::string>& ViewFailedTestResults() {
   return gFailedTestLogs;
 }
+
+static inline void FlushTestResults() {
+  gRecordedTestLogs.clear();
+}
+
+static inline void FlushFailedTestResults() {
+  gFailedTestLogs.clear();
+}
+
 }  // namespace minitest
 //---------------------------------------------------------------------------//
 //=-------------------------------------------------------------------------=//
@@ -369,13 +380,9 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 // Parameters:{
 //		1.TestName : Name of the test.
 //		2.TestCaseName : Name of the test case,must be unique per test.
-// 	  3.TestFixtureClass : Name of the fixture class.
+// 	    3.TestFixtureClass : Name of the fixture class.
 //                         Must inherit from minitest::Fixture.
 //                         See minitest::Fixture for more details.
-// }
-// Detail:{
-// - { } before and after the test case definition is optional
-//   but recommended for visibility.
 // }
 //-----------------------------------//
 #define MINITEST_F(TestName, TestCaseName, TestFixtureClass) \
@@ -399,12 +406,12 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 // TestCaseName.
 // }
 // Parameters:{
-//		1.TestCaseName : Name of the last-called test case which created
-//    was created with MINITEST_F. MUST be the same as the last-called test
-//    case. Or else it will not compile.
+//	    1.TestCaseName : Name of the last-called test case which created
+//      was created with MINITEST_F. MUST be the same as the last-called test
+//      case. Or else it will not compile.
 //
-//    eg. If you called MINITEST_F(MyTest,MyTestCase,MyFixture)
-//     then you must call END_MINITEST_F(MyTestCase);
+//      eg. If you called MINITEST_F(MyTest,MyTestCase,MyFixture)
+//      then you must call END_MINITEST_F(MyTestCase);
 // }
 //-----------------------------------//
 #define END_MINITEST_F(TestCaseName)                                        \
@@ -426,7 +433,7 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 //=---------------------------------=//
 
 //=---------------------------------=//
-// Macro:{MINITEST}
+// Macro:{INLINE_MINITEST}
 // Brief:{Defines an inline test case to be executed at a later time.
 // Always close with 'INLINE_END_MINITEST;'.}
 //-----------------------------------//
@@ -455,16 +462,38 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 //=---------------------------------=//
 
 //=---------------------------------=//
-// Macro:{INLINE_END_MINITEST}
+// Macro:{MINITEST_REGISTER_CASE}
 // Brief:{}
 //-----------------------------------//
-#define RUN_INLINE_MINITEST(TestName, TestCaseName) \
+#define MINITEST_REGISTER_CASE(TestName, TestCaseName) \
+  const bool REGISTER_INLINE_MINITEST_##TestName##TestCaseName \
+  = []{minitest::RegisterTest(#TestName, INLINE_MINITEST_##TestName##TestCaseName);return true;}()
+//-----------------------------------//
+
+//=---------------------------------=//
+// Macro:{MINITEST_RUN_REGISTERED_MODULE}
+// Brief:{}
+//-----------------------------------//
+#define MINITEST_RUN_REGISTERED_MODULE(TestName) \
+  minitest::RunRegisteredTestModule(#TestName)
+
+//=---------------------------------=//
+// Macro:{REGISTERED_TEST_MODULE_METHOD}
+//-----------------------------------//
+#define MINITEST_FUNCTOR_RUN_INLINE(TestName) \
+  []()->bool{return minitest::RunRegisteredTestModule(#TestName);}
+
+//=---------------------------------=//
+// Macro:{MINITEST_RUN_INLINE}
+// Brief:{Runs an inline minitest.}
+//-----------------------------------//
+#define MINITEST_RUN_INLINE(TestName, TestCaseName) \
   INLINE_MINITEST_##TestName##TestCaseName();       \
 //-----------------------------------//
 //=---------------------------------=//
 
 //=---------------------------------=//
-// Macro:{PRINT_MINITESTS}
+// Macro:{FINISH_MINITESTS}
 // Brief:{ Completes the test suite and prints the result.
 //        Must be called right before your main function.
 //        This store a boolean true result in MINITESTS_RESULT
@@ -474,7 +503,7 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 //        This must be called LAST, after all tests are defined.
 // }
 //-----------------------------------//
-#define PRINT_MINITESTS                      \
+#define FINISH_MINITESTS                      \
   namespace minitest {                       \
   static const bool minitest_result = []() { \
     return minitest::PrintFailedTestLogs();  \
@@ -517,22 +546,22 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 //        This is used internally by the EXPECT_ macros.
 // }
 #ifdef MINITEST_CONFIG_RECORD_ALL
-#define MINITEST_INTERNAL_CHECK_METHOD(method, msg, ...)               \
+#define MINITEST_INTERNAL_CHECK_METHOD(method, pmsg, msg, ...)         \
   if (!minitest::method(__VA_ARGS__)) {                                \
     minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName,     \
                                minitest::gLastFailedTestCaseName);     \
     minitest::RecordTestLog(false, msg, minitest::gLastFailedTestName, \
                             minitest::gLastFailedTestCaseName);        \
   } else {                                                             \
-    minitest::RecordTestLog(true, msg, minitest::gLastFailedTestName,  \
+    minitest::RecordTestLog(true, pmsg, minitest::gLastFailedTestName, \
                             minitest::gLastFailedTestCaseName);        \
-  };
+  }
 #else
-#define MINITEST_INTERNAL_CHECK_METHOD(method, msg, ...)           \
+#define MINITEST_INTERNAL_CHECK_METHOD(method, pmsg, msg, ...)     \
   if (!minitest::method(__VA_ARGS__)) {                            \
     minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName, \
                                minitest::gLastFailedTestCaseName); \
-  };
+  }
 #endif
 //-----------------------------------//
 //=---------------------------------=//
@@ -544,7 +573,7 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 //        This is used internally by the ASSERT_ macros.
 // }
 #ifdef MINITEST_CONFIG_RECORD_ALL
-#define MINITEST_INTERNAL_ASSERT_METHOD(method, msg, ...)              \
+#define MINITEST_INTERNAL_ASSERT_METHOD(method, pmsg, msg, ...)        \
   if (!minitest::method(__VA_ARGS__)) {                                \
     minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName,     \
                                minitest::gLastFailedTestCaseName);     \
@@ -552,16 +581,16 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
                             minitest::gLastFailedTestCaseName);        \
     return;                                                            \
   } else {                                                             \
-    minitest::RecordTestLog(true, msg, minitest::gLastFailedTestName,  \
+    minitest::RecordTestLog(true, pmsg, minitest::gLastFailedTestName, \
                             minitest::gLastFailedTestCaseName);        \
-  };
+  }
 #else
-#define MINITEST_INTERNAL_ASSERT_METHOD(method, msg, ...)          \
+#define MINITEST_INTERNAL_ASSERT_METHOD(method, pmsg, msg, ...)    \
   if (!minitest::method(__VA_ARGS__)) {                            \
     minitest::AddFailedTestLog(msg, minitest::gLastFailedTestName, \
                                minitest::gLastFailedTestCaseName); \
     return;                                                        \
-  };
+  }
 #endif
 
 //-----------------------------------//
@@ -575,46 +604,46 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 // Checks
 //=---------------------------------=//
 
-#define EXPECT_TRUE(b)                       \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectTrue, \
+#define EXPECT_TRUE(b)                                               \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectTrue, "[PASSED] EXPECT_TRUE", \
                                  "[EXPECTATION FAILED]: EXPECT_TRUE", b)
-#define EXPECT_FALSE(b)                       \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectFalse, \
+#define EXPECT_FALSE(b)                                                \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectFalse, "[PASSED] EXPECT_FALSE", \
                                  "[EXPECTATION FAILED]: EXPECT_FALSE", b)
-#define EXPECT_EQ(a, b)                                                       \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectEq, "[EXPECTATION FAILED]: EXPECT_EQ", \
-                                 a, b)
-#define EXPECT_NE(a, b)                                                       \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectNe, "[EXPECTATION FAILED]: EXPECT_NE", \
-                                 a, b)
-#define EXPECT_ANY_THROW(f)                      \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectAnyThrow, \
+#define EXPECT_EQ(a, b)                                          \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectEq, "[PASSED] EXPECT_EQ", \
+                                 "[EXPECTATION FAILED]: EXPECT_EQ", a, b)
+#define EXPECT_NE(a, b)                                          \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectNe, "[PASSED] EXPECT_NE", \
+                                 "[EXPECTATION FAILED]: EXPECT_NE", a, b)
+#define EXPECT_ANY_THROW(f)                                                   \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectAnyThrow, "[PASSED] EXPECT_ANY_THROW", \
                                  "[EXPECTATION FAILED]: EXPECT_ANY_THROW", f)
-#define EXPECT_NO_THROW(f)                      \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectNoThrow, \
+#define EXPECT_NO_THROW(f)                                                  \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectNoThrow, "[PASSED] EXPECT_NO_THROW", \
                                  "[EXPECTATION FAILED]: EXPECT_NO_THROW", f)
 
 //=---------------------------------=//
 // Assertions
 //=---------------------------------=//
 
-#define ASSERT_TRUE(b)                        \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectTrue, \
+#define ASSERT_TRUE(b)                                                \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectTrue, "[PASSED] ASSERT_TRUE", \
                                   "[ASSERTION FAILED]: ASSERT_TRUE", b)
-#define ASSERT_FALSE(b)                        \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectFalse, \
+#define ASSERT_FALSE(b)                                                 \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectFalse, "[PASSED] ASSERT_FALSE", \
                                   "[ASSERTION FAILED]: ASSERT_FALSE", b)
-#define ASSERT_EQ(a, b)                                                      \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectEq, "[ASSERTION FAILED]: ASSERT_EQ", \
-                                  a, b)
-#define ASSERT_NE(a, b)                                                      \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNe, "[ASSERTION FAILED]: ASSERT_NE", \
-                                  a, b)
-#define ASSERT_ANY_THROW(f)                       \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectAnyThrow, \
+#define ASSERT_EQ(a, b)                                           \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectEq, "[PASSED] ASSERT_EQ", \
+                                  "[ASSERTION FAILED]: ASSERT_EQ", a, b)
+#define ASSERT_NE(a, b)                                           \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNe, "[PASSED] ASSERT_NE", \
+                                  "[ASSERTION FAILED]: ASSERT_NE", a, b)
+#define ASSERT_ANY_THROW(f)                                                    \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectAnyThrow, "[PASSED] ASSERT_ANY_THROW", \
                                   "[ASSERTION FAILED]: ASSERT_ANY_THROW", f)
-#define ASSERT_NO_THROW(f)                       \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNoThrow, \
+#define ASSERT_NO_THROW(f)                                                   \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNoThrow, "[PASSED] ASSERT_NO_THROW", \
                                   "[ASSERTION FAILED]: ASSERT_NO_THROW", f)
 
 //---------------------------------------------------------------------------//
@@ -625,43 +654,88 @@ static inline const std::vector<std::string>& ViewFailedTestResults() {
 // Logging checks
 //=---------------------------------=//
 
-#define EXPECT_TRUE_LOG(b, lg) MINITEST_INTERNAL_CHECK_METHOD(ExpectTrue, lg, b)
-#define EXPECT_FALSE_LOG(b, lg) \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectFalse, lg, b)
-#define EXPECT_EQ_LOG(a, b, lg) \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectEq, lg, a, b)
-#define EXPECT_NE_LOG(a, b, lg) \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectNe, lg, a, b)
-#define EXPECT_ANY_THROW_LOG(f, lg) \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectAnyThrow, lg, f)
-#define EXPECT_NO_THROW_LOG(f, lg) \
-  MINITEST_INTERNAL_CHECK_METHOD(ExpectNoThrow, lg, f)
+#define EXPECT_TRUE_LOG(b, plg, lg) \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectTrue, plg, lg, b)
+#define EXPECT_FALSE_LOG(b, plg, lg) \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectFalse, plg, lg, b)
+#define EXPECT_EQ_LOG(a, b, plg, lg) \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectEq, lg, plg, a, b)
+#define EXPECT_NE_LOG(a, b, plg, lg) \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectNe, lg, plg, a, b)
+#define EXPECT_ANY_THROW_LOG(f, plg, lg) \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectAnyThrow, plg, lg, f)
+#define EXPECT_NO_THROW_LOG(f, plg, lg) \
+  MINITEST_INTERNAL_CHECK_METHOD(ExpectNoThrow, plg, lg, f)
 
 //=---------------------------------=//
 // Logging assertions
 //=---------------------------------=//
 
-#define ASSERT_TRUE_LOG(b, lg) \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectTrue, lg, b)
-#define ASSERT_FALSE_LOG(b, lg) \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectFalse, lg, b)
-#define ASSERT_EQ_LOG(a, b, lg) \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectEq, lg, a, b)
-#define ASSERT_NE_LOG(a, b, lg) \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNe, lg, a, b)
-#define ASSERT_ANY_THROW_LOG(f, lg) \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectAnyThrow, lg, f)
-#define ASSERT_NO_THROW_LOG(f, lg) \
-  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNoThrow, lg, f)
+#define ASSERT_TRUE_LOG(b, plg, lg) \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectTrue, plg, lg, b)
+#define ASSERT_FALSE_LOG(b, plg, lg) \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectFalse, plg, lg, b)
+#define ASSERT_EQ_LOG(a, b, plg, lg) \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectEq, lg, plg, a, b)
+#define ASSERT_NE_LOG(a, b, plg, lg) \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNe, lg, plg, a, b)
+#define ASSERT_ANY_THROW_LOG(f, plg, lg) \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectAnyThrow, plg, lg, f)
+#define ASSERT_NO_THROW_LOG(f, plg, lg) \
+  MINITEST_INTERNAL_ASSERT_METHOD(ExpectNoThrow, plg, lg, f)
 
-//=-------------------------------------------------------------------------=//
+
 //---------------------------------------------------------------------------//
-// Author: Anton Yashchenko
-// Email: acppdev@gmail.com
+// Copyright 2024 Anton Yashchenko
+//
+// Licensed under the Apache License, Version 2.0(the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//---------------------------------------------------------------------------//
+// Author(s): Anton Yashchenko
+// Email: ntondev@gmail.com
 // Website: https://www.acpp.dev
 //---------------------------------------------------------------------------//
+// Project: C& Programming Language Environment
+// Directory: mini-test
 // File: minitest.h
 //---------------------------------------------------------------------------//
-#endif HEADER_GUARD_MINITEST_H
+#endif HEADER_GUARD_CALE_MINITEST_MINITEST_H
 //---------------------------------------------------------------------------//
-//=-------------------------------------------------------------------------=//
+//---------------------------------------------------------------------------//
+
+//---------------------------------------------------------------------------//
+// More examples...
+//---------------------------------------------------------------------------//
+
+//-----------------------------------//
+// ex1. Using inline test cases.
+//-----------------------------------//
+/*
+INLINE_MINITEST(A, B) {
+  // Test code here.
+  int i;
+}
+INLINE_END_MINITEST;
+
+void ut_expected() {
+  INLINE_MINITEST(A, C) {
+    // Test code here.
+    int i;
+  }
+  INLINE_END_MINITEST;
+
+  MINITEST_RUN_INLINE(A, B)
+
+  MINITEST_RUN_INLINE(A, C)
+}
+*/
+//-----------------------------------//

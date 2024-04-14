@@ -129,6 +129,8 @@ UIDGen::Iter UIDGen::GetId() {
   if (next_id_ == SIZE_MAX) throw std::overflow_error("UIDGen: ID overflow");
   size_t id = next_id_;
   next_id_++;
+  if (generated_ids_.contains(id))
+    throw std::runtime_error("UIDGen: ID exists");
   generated_ids_.insert(id);
   return generated_ids_.find(id);
 }
@@ -395,6 +397,10 @@ class Window : public ScopedWidgetBase {
   // pressed.
   bool IsCloseButtonTriggered() const { return not *close_button_state_; }
 
+  const CguiVec2& QuerySize() const { return size_; }
+  inline float QueryWidth() const { return size_.first; }
+  inline float QueryHeight() const { return size_.second; }
+
  public:
   static inline Window Delayed(const std::string& title,
                                bool has_close_button = false,
@@ -417,9 +423,20 @@ class Window : public ScopedWidgetBase {
       throw valid_name.Exception();
 
     BeginImpl();
+    if (IsScopeActive()) {
+      size_.first = ImGui::GetWindowWidth();
+      size_.second = ImGui::GetWindowHeight();
+    }
   }
 
-  bool BeginLate() override { return BeginLateImpl(); }
+  bool BeginLate() override {
+    bool on = BeginLateImpl();
+    if (IsScopeActive()) {
+      size_.first = ImGui::GetWindowWidth();
+      size_.second = ImGui::GetWindowHeight();
+    }
+    return on;
+  }
 
   void EndEarly() override { ForceEndEarlyImpl(); }
 
@@ -465,6 +482,7 @@ class Window : public ScopedWidgetBase {
   WindowFlags flags_{WindowFlags()};
   bool has_close_button_;
   std::unique_ptr<bool> close_button_state_{nullptr};
+  CguiVec2 size_{0.f, 0.f};
 };
 
 //-------------------------------------------------------------------------//
@@ -503,10 +521,10 @@ class Subcontext : public ScopedWidgetBase {
   }
   bool BeginLate() override { return BeginLateImpl(); }
 
-  void EndEarly() override { EndEarlyImpl(); }
+  void EndEarly() override { ForceEndEarlyImpl(); }
 
   ~Subcontext() {
-    EndImpl();
+    ForceEndImpl();
     // Remove the name from name map.
     ReleaseId(uid_);
   }
@@ -541,6 +559,7 @@ class NamedSubcontext : public ScopedWidgetBase {
   SubcontextFlags GetSubcontextFlags() const { return subcontext_flags_; }
 
   const CguiVec2& RequestedSize() { return requested_size_; }
+  void RequestSize(const CguiVec2& size) { requested_size_ = size; }
 
  public:
   static inline NamedSubcontext Delayed(
@@ -573,10 +592,10 @@ class NamedSubcontext : public ScopedWidgetBase {
 
   bool BeginLate() override { return BeginLateImpl(); }
 
-  void EndEarly() override { EndEarlyImpl(); }
+  void EndEarly() override { ForceEndEarlyImpl(); }
 
   ~NamedSubcontext() {
-    EndImpl();
+    ForceEndImpl();
     // Remove the name from name map.
     ReleaseName(name_);
   }
@@ -775,22 +794,22 @@ class TabItem : public ScopedWidgetBase {
     ReleaseName(name_);
   }
 
-  //TabItem(const TabItem& other) : ScopedWidgetBase(other.is_delayed_) {
-  //  this->is_scope_active_ = other.is_scope_active_;
-  //  this->is_on_ = other.is_on_;
-  //  this->name_ = other.name_;
-  //  this->flags_ = other.flags_;
-  //  this->is_selected_ = std::make_unique<bool>(*other.is_selected_);
-  //}
+  // TabItem(const TabItem& other) : ScopedWidgetBase(other.is_delayed_) {
+  //   this->is_scope_active_ = other.is_scope_active_;
+  //   this->is_on_ = other.is_on_;
+  //   this->name_ = other.name_;
+  //   this->flags_ = other.flags_;
+  //   this->is_selected_ = std::make_unique<bool>(*other.is_selected_);
+  // }
 
-  //TabItem(TabItem&& other) noexcept
-  //    : ScopedWidgetBase(std::move(other.is_delayed_)) {
-  //  this->is_scope_active_ = std::move(other.is_scope_active_);
-  //  this->is_on_ = std::move(other.is_on_);
-  //  this->name_ = std::move(other.name_);
-  //  this->flags_ = std::move(other.flags_);
-  //  this->is_selected_ = std::move(other.is_selected_);
-  //}
+  // TabItem(TabItem&& other) noexcept
+  //     : ScopedWidgetBase(std::move(other.is_delayed_)) {
+  //   this->is_scope_active_ = std::move(other.is_scope_active_);
+  //   this->is_on_ = std::move(other.is_on_);
+  //   this->name_ = std::move(other.name_);
+  //   this->flags_ = std::move(other.flags_);
+  //   this->is_selected_ = std::move(other.is_selected_);
+  // }
 
  protected:
   bool BoundBegin() override {
@@ -1049,7 +1068,6 @@ class DirectoryView : public SingularWidgetBase {
         select_file_callback(selected_callback),
         right_click_file_callback(right_click_callback),
         root(path) {
-
     // Begin Scope if not delayed.
     BeginImpl();
   }
@@ -1106,8 +1124,8 @@ class DirectoryView : public SingularWidgetBase {
 namespace cgui {
 using ImGui::SameLine;
 using ImGui::Separator;
-using ImGui::SetNextWindowSize;
 using ImGui::SetNextWindowPos;
+using ImGui::SetNextWindowSize;
 }  // namespace cgui
 
 // Common objects.
@@ -1268,8 +1286,6 @@ void ExampleEditorTabs(sf::Window& window) {
   }
 }
 };  // namespace cgui::example
-
-
 
 struct ExampleAppConsole {
   char InputBuf[256];

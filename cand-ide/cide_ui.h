@@ -1,19 +1,17 @@
 #pragma once
-#include <filesystem>
-#include <functional>
-#include <string>
-#include <vector>
-
+// CIDE Common Defs
+#include "cide_common.h"
+// CIDE Backend
 #include "cide_backend.h"
+// ImGui
 #include "imgui_interface.h"
+
+#include "cide_ui_cpp_test_explorer.h"
+#include "cide_ui_ast_explorer.h"
 
 namespace cide::ui {
 
-namespace fs = std::filesystem;
-using std::function;
-using std::string;
-using std::vector;
-
+// Main CIDE Interface
 class CideTopMenuBarInterface;
 class CideFileEditorInterface;
 class CideSolutionToolbarInterface;
@@ -168,8 +166,8 @@ struct CideFileEditorInterface {
 };
 
 struct CideSolutionToolbarInterface {
-  static constexpr LAMBDA xNullCallback = [](const fs::path&) {};
-  using CallbackT = function<void(const fs::path&)>;
+  static constexpr LAMBDA xNullCallback = [](const stdfs::path&) {};
+  using CallbackT = function<void(const stdfs::path&)>;
 
   // By default select file callback will store the selected file in
   // the local temp_file_buffer.
@@ -184,7 +182,7 @@ struct CideSolutionToolbarInterface {
 
   CguiVec2 requested_size;
 
-  fs::path root_dir;
+  stdfs::path root_dir;
   std::string temp_file_buffer;
 
   // Widgets
@@ -194,7 +192,7 @@ struct CideSolutionToolbarInterface {
   CguiTabItem solution_explorer_tab_item{CguiTabItem::Delayed("Solution View")};
   CguiDirectoryView dir_tree_view;
 
-  inline void BeginRightClickContextMenu(const fs::path& p) const {
+  inline void BeginRightClickContextMenu(const stdfs::path& p) const {
     // New Menu:
     if (CguiMenuItem("Open")) {
       callback_edit_open(p);
@@ -222,12 +220,12 @@ struct CideSolutionToolbarInterface {
         dir_tree_view(
             root_dir,
             // callback for selectting an item
-            [this](const fs::path& p) {
+            [this](const stdfs::path& p) {
               temp_file_buffer = backend::LoadFileToStr(p.string());
               select_file_callback(p);
             },
             // callback for right clicking an item
-            [this](const fs::path& p) {
+            [this](const stdfs::path& p) {
               // New Menu:
               BeginRightClickContextMenu(p);
             },

@@ -27,5 +27,11 @@
     <ClInclude Include="enumerated_flags.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="import_std.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\cand-compiler\cxx_main.cpp" />
   </ItemGroup>
 </Project>
