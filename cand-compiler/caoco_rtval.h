@@ -39,8 +39,8 @@ class NamedRtVal;
 class NamedRtValSet;
 
 // All non-literal types are stored as unique pointers in the NativeVariant.
-// NOTE: RtNone and RtUndefined are trivially constructible and destructible.
-//       So they can be stored as values in the NativeVariant.
+// NOTE: RtNone,RtUndefined and RtDynPtr are trivially constructible and
+//       destructible.So they can be stored as values in the NativeVariant.
 template <class T>
 using Uptr = std::unique_ptr<T>;
 
@@ -55,6 +55,7 @@ using Uptr = std::unique_ptr<T>;
 //   - RtDynMethod: Runtime method.
 //   - RtCppMethod: C++ method pointer from C&.
 //   - RtDynList: Heterogenous list of objects.
+//   - RtDynPtr: Pointer to an RtVal object.
 //   - RtNone: Represents a null or nothing.
 //   - RtUndefined: Represents an uninitialized or destroyed value.
 //
@@ -67,6 +68,8 @@ class RtDynObject;
 class RtDynMethod;
 class RtCppMethod;
 class RtDynList;
+class RtDynPtr;
+
 struct RtNone;
 struct RtUndefined;
 //---------------------------------------------------------------------------//
@@ -91,6 +94,7 @@ using NativeCharT = char;
 using NativeByteT = unsigned char;
 using NativeNoneT = RtNone;
 using NativeUndefinedT = RtUndefined;
+using NativePtrT = RtDynPtr;
 using NativeStringT = Uptr<string>;
 using NativeNamespaceT = Uptr<RtDynNamespace>;
 using NativeObjectT = Uptr<RtDynObject>;
@@ -101,7 +105,7 @@ using NativeListT = Uptr<RtDynList>;
 using NativeTypeIndexList = mta::compile_time_type_index_list<
     NativeEmptyVariantT, NativeIntT, NativeUnsignedT, NativeDoubleT,
     NativeBoolT, NativeCharT, NativeByteT, NativeNoneT, NativeUndefinedT,
-    NativeStringT, NativeNamespaceT, NativeObjectT, NativeMethodT,
+    NativePtrT, NativeStringT, NativeNamespaceT, NativeObjectT, NativeMethodT,
     NativeCppMethodT, NativeListT>;
 
 // std::variant of all the types in the C& runtime, a member of RtVal.
@@ -109,6 +113,7 @@ using NativeVariant = NativeTypeIndexList::types_variant;
 
 // Enumeration of native variant types.
 namespace eNativeTypeIndex {
+using underlying_type = size_t;
 enum enum_type : size_t {
   kEmpty = NativeTypeIndexList::index_of<NativeEmptyVariantT>(),
   kInt = NativeTypeIndexList::index_of<NativeIntT>(),
@@ -119,6 +124,7 @@ enum enum_type : size_t {
   kByte = NativeTypeIndexList::index_of<NativeByteT>(),
   kNone = NativeTypeIndexList::index_of<NativeNoneT>(),
   kUndefined = NativeTypeIndexList::index_of<NativeUndefinedT>(),
+  kDynamicPtr = NativeTypeIndexList::index_of<NativePtrT>(),
   kString = NativeTypeIndexList::index_of<NativeStringT>(),
   kDynamicNamespace = NativeTypeIndexList::index_of<NativeNamespaceT>(),
   kDynamicObject = NativeTypeIndexList::index_of<NativeObjectT>(),
@@ -126,19 +132,43 @@ enum enum_type : size_t {
   kCppMethod = NativeTypeIndexList::index_of<NativeCppMethodT>(),
   kDynamicRuntimeArray = NativeTypeIndexList::index_of<NativeListT>(),
 };
-}
+}  // namespace eNativeTypeIndex
+//---------------------------------------------------------------------------//
+// EndSection:{Native Union Typedefs}
+//---------------------------------------------------------------------------//
 
+//---------------------------------------------------------------------------//
+// Section:{Native Type Concepts}
+// Brief:{
+//  These cconcepts categorize the native types in the C& runtime. For use in
+//  NativeVariant visitation and type checking.
+// }
+// Detail:{
+//  iOneOfNativeLiterals: Type is one of the literal types, stored
+//                        directly as a value in the NativeVariant.
+//  iOneOfNativeArithmetic: Type is one of the literal values which represents a
+//                       integral or real numeric value. This includes bool
+//                       and RtNone. Any operation appplied to none result in
+//                       none. Any operation applied with None results in the
+//                       input value.
+// }
+//---------------------------------------------------------------------------//
 template <class T>
 concept iOneOfNativeLiterals =
     mta::req::iOneOf<NativeIntT, NativeUnsignedT, NativeDoubleT, NativeBoolT,
-                     NativeCharT, NativeByteT, NativeNoneT, NativeUndefinedT>;
+                     NativeCharT, NativeByteT, NativeNoneT, NativeUndefinedT,
+                     NativePtrT>;
 
+template <class T>
+concept iOneOfNativeArithmetic =
+    mta::req::iOneOf<NativeIntT, NativeUnsignedT, NativeDoubleT, NativeBoolT,
+                     NativeCharT, NativeByteT, NativeNoneT>;
 template <class T>
 concept iOneOfNativeNonLiterals =
     mta::req::iOneOf<NativeStringT, NativeNamespaceT, NativeObjectT,
                      NativeMethodT, NativeCppMethodT, NativeListT>;
 //---------------------------------------------------------------------------//
-// EndSection:{Native Union Typedefs}
+// EndSection:{Native Type Concepts}
 //---------------------------------------------------------------------------//
 
 //---------------------------------------------------------//
@@ -146,9 +176,16 @@ concept iOneOfNativeNonLiterals =
 // Brief:{}
 //---------------------------------------------------------//
 class RtVal {
+ public:
   constexpr static inline RtVal NewNone() {
     RtVal new_val;
     new_val.data_ = NativeNoneT();
+    return new_val;
+  }
+
+  constexpr static inline RtVal NewUndefined() {
+    RtVal new_val;
+    new_val.data_ = NativeUndefinedT();
     return new_val;
   }
 
@@ -156,8 +193,10 @@ class RtVal {
   constexpr size_t Idx() const { return data_.index(); }
 
   constexpr eNativeTypeIndex::enum_type NativeIdx() const {
-    return data_.index();
+    return static_cast<eNativeTypeIndex::enum_type>(data_.index());
   }
+
+  constexpr NativeVariant& Variant() { return data_; }
 
   constexpr inline void Copy(const NativeVariant& other) {
     const auto xCopyRtVal = [this](const auto& other_val) constexpr {
@@ -498,6 +537,30 @@ class RtDynNamespace {
   constexpr bool IsClass() const { return category_ == eCategory::kClass; }
   constexpr bool IsGlobal() const { return category_ == eCategory::kGlobal; }
 
+  constexpr bool AddInstanceDecl(const NamedRtVal& named_val) {
+    return instance_decls_.Emplace(NamedRtVal(named_val));
+  }
+
+  constexpr bool AddInstanceDecl(NamedRtVal&& named_val) {
+    return instance_decls_.Emplace(forward<NamedRtVal>(named_val));
+  }
+
+  constexpr bool AddInstanceDecl(const string_view& name, RtVal& value) {
+    return instance_decls_.Emplace(NamedRtVal(name, value));
+  }
+
+  constexpr bool AddDecl(const NamedRtVal& named_val) {
+    return decls_.Emplace(NamedRtVal(named_val));
+  }
+
+  constexpr bool AddDecl(NamedRtVal&& named_val) {
+    return decls_.Emplace(forward<NamedRtVal>(named_val));
+  }
+
+  constexpr bool AddDecl(const string_view& name, RtVal& value) {
+    return decls_.Emplace(NamedRtVal(name, value));
+  }
+
  public:
   constexpr const NamedRtValSet& InstanceDecls() const {
     return instance_decls_;
@@ -546,6 +609,16 @@ class RtDynNamespace {
       return Parent().ResolveUnchecked(name);
     }
   }
+
+ public:
+  RtDynNamespace() = default;
+  RtDynNamespace(const RtDynNamespace&) = default;
+  RtDynNamespace(RtDynNamespace&&) = default;
+  RtDynNamespace& operator=(const RtDynNamespace&) = default;
+  RtDynNamespace& operator=(RtDynNamespace&&) = default;
+
+  RtDynNamespace(const string_view& name)
+      : category_(eCategory::kNamespace), name_(name) {}
 
  private:
   eCategory category_{eCategory::kUndefined};
@@ -623,7 +696,7 @@ class RtDynMethod {
   constexpr const RtDynNamespace& Context() const { return context_; }
   void Call() {
     for (auto& instruction : instructions_) {
-      instruction();
+      instruction(context_);
     }
   }
 
@@ -660,6 +733,26 @@ class RtCppMethod {
 //---------------------------------------------------------//
 // EndClass:{RtCppMethod}
 //---------------------------------------------------------//
+
+class RtDynPtr {
+ public:
+  constexpr inline eNativeTypeIndex::underlying_type TypeIndex() {
+    if (ptr_ == nullptr) return eNativeTypeIndex::kEmpty;
+    return ptr_->Idx();
+  };
+  RtVal& Get() { return *ptr_; }
+  bool IsNull() { return ptr_ == nullptr; }
+
+ public:
+  RtDynPtr() = default;
+  RtDynPtr(RtVal* ptr) : ptr_(ptr) {}
+  RtDynPtr(const RtDynPtr& other) : ptr_(other.ptr_) {}
+  RtDynPtr(RtDynPtr&& other) : ptr_(other.ptr_) {}
+  RtDynPtr(RtVal& val) : ptr_(&val) {}
+
+ private:
+  RtVal* ptr_{nullptr};
+};
 
 //---------------------------------------------------------//
 // Class:{RtDynList}

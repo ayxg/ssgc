@@ -247,6 +247,14 @@ constexpr auto index_of_type_in_tuple(const std::tuple<U, Us...>&) {
   return index_of_type_in_tuple_impl<T, U, Us...>();
 }
 
+template <typename T, typename U, typename... Us>
+constexpr auto index_of_type_in_tuple(std::tuple<U, Us...>&&) {
+  static_assert(is_unique_pack<U, Us...>,
+                "[index_of_type_in_tuple] Should only be called on tuples with "
+                "unique types.");
+  return index_of_type_in_tuple_impl<T, U, Us...>();
+}
+
 static_assert(index_of_type_in_tuple<float>(std::tuple<int, float, double>()) ==
                   1,
               "[index_of_type_in_tuple] Implementation Failure.");
@@ -299,7 +307,8 @@ template <class... TypeTs>
 struct compile_time_type_index_list {
   static constexpr inline size_t kNumTypes = sizeof...(TypeTs);
   using types_tuple = std::tuple<TypeTs...>;
-  using types_variant = decltype(tuple_to_variant(types_tuple{}));
+  using types_variant = std::variant<TypeTs...>;
+  //using types_variant = decltype(tuple_to_variant(types_tuple{}));
   // Type of element at index.
   template <std::size_t index>
   using type_of = typename std::tuple_element_t<index, types_tuple>;
