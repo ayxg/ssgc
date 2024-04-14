@@ -1,9 +1,6 @@
 // CandRuntime.cpp : This file contains the 'main' function. Program execution
 // begins and ends there.
 //
-#include "ext/meta_template_archive/mta.h"
-#include "ext/cpp_standard_extended/cppsextended.h"
-
 #include <cassert>
 #include <functional>
 #include <iostream>
@@ -15,6 +12,9 @@
 #include <variant>
 #include <vector>
 
+#include "ext/cpp_standard_extended/cppsextended.h"
+#include "ext/meta_template_archive/mta.h"
+
 using std::shared_ptr;
 using std::size_t;
 using std::string;
@@ -24,26 +24,26 @@ using std::vector;
 using std::weak_ptr;
 // Template Utilities.
 
-//template <template <class...> class tmpl, typename T>
-//struct is_template_for_impl : public std::false_type {};
+// template <template <class...> class tmpl, typename T>
+// struct is_template_for_impl : public std::false_type {};
 //
-//template <template <class...> class tmpl, class... Args>
-//struct is_template_for_impl<tmpl, tmpl<Args...>> : public std::true_type {};
+// template <template <class...> class tmpl, class... Args>
+// struct is_template_for_impl<tmpl, tmpl<Args...>> : public std::true_type {};
 //
-//template <template <class...> class tmpl, typename... Ts>
-//using is_template_for =
-//    std::conjunction<is_template_for_impl<tmpl, std::decay_t<Ts>>...>;
+// template <template <class...> class tmpl, typename... Ts>
+// using is_template_for =
+//     std::conjunction<is_template_for_impl<tmpl, std::decay_t<Ts>>...>;
 //
-//template <template <class...> class tmpl, typename... Ts>
-//constexpr bool is_template_for_v = is_template_for<tmpl, Ts...>::value;
+// template <template <class...> class tmpl, typename... Ts>
+// constexpr bool is_template_for_v = is_template_for<tmpl, Ts...>::value;
 //
-//template <typename...>
-//inline constexpr auto is_unique_type_in_tuple = std::true_type{};
+// template <typename...>
+// inline constexpr auto is_unique_type_in_tuple = std::true_type{};
 //
-//template <typename T, typename... Rest>
-//inline constexpr auto is_unique_type_in_tuple<T, Rest...> =
-//    std::bool_constant<(!std::is_same_v<T, Rest> && ...) &&
-//                       is_unique_type_in_tuple<Rest...>>{};
+// template <typename T, typename... Rest>
+// inline constexpr auto is_unique_type_in_tuple<T, Rest...> =
+//     std::bool_constant<(!std::is_same_v<T, Rest> && ...) &&
+//                        is_unique_type_in_tuple<Rest...>>{};
 
 template <typename T, typename U, typename... Us>
 constexpr auto getTupleIndexImpl() {
@@ -437,6 +437,9 @@ enum class eDynNamespaceCategory {
 };
 
 class DynamicRuntimeNamespace {
+  NamedRuntimeValueSet instance_members_{};
+
+ protected:
   eDynNamespaceCategory category_{eDynNamespaceCategory::kUndefined};
   string_view name_{"#"};  // # can never be a namespace name, here its used to
                            // signify the null namespace
@@ -475,6 +478,18 @@ class DynamicRuntimeNamespace {
           name_.data() + "'.");
     }
   }
+
+  constexpr const NamedRuntimeValueSet& InstanceMembers() const {
+    return instance_members_;
+  };
+
+  constexpr void AddInstanceMember(RuntimeValue val, string_view name) {
+    instance_members_.Push(NamedRuntimeValue(name, val));
+  }
+
+  constexpr void DesignateAsType() {
+    category_ = eDynNamespaceCategory::kClassDef;
+  }
 };
 // !!DO NOT MODIFY!! Static null namespace used by default constructor of
 // DynamicRuntimeObject.
@@ -495,6 +510,10 @@ class DynamicRuntimeObject : public DynamicRuntimeNamespace {
     static_object_namespace_ = dyn_ns;
   }
 
+  void InitFromNamespace() {
+    this->members_ = static_object_namespace_.InstanceMembers();
+  }
+
   constexpr bool ContainsStaticMember(const string_view& name) {
     return static_object_namespace_.ContainsMember(name);
   }
@@ -506,13 +525,17 @@ class DynamicRuntimeObject : public DynamicRuntimeNamespace {
   constexpr RuntimeValue& AccessStaticMember(const string_view& name) {
     return static_object_namespace_.AccessMember(name);
   }
+
+  constexpr void AddInstanceMember(RuntimeValue val, const string_view& name) {
+    static_object_namespace_.AddInstanceMember(std::move(val), name);
+  }
 };
 class ProgramActionBlock;
 
 class DynamicRuntimeMethod {
   string_view name_;
   NamedRuntimeValueSet arguments_;
-  ProgramActionBlock*
+  std::vector<std::function<void(void)>>
       instructions_;  // codes for executing the method at runtime.
 };
 
@@ -564,7 +587,7 @@ struct ActionUnaryOp {
 struct ActionFuncCall {};  // Execute a method given a name with arguments.
 
 // Variant of all types of actions. An action is synonymous with an opcode or
-// intermediate representation line.
+// intermediate representation line. 
 using ProgramActionVariant =
     std::variant<ActionDebugPrint, ActionDeclareVariable, ActionAssignVariable>;
 
@@ -662,9 +685,7 @@ class CompilerStackMemory {
   // Unary operations take the top of the stack, apply the operation, and push
   // the result back on the stack.
   // Implements STACK[-1] = <UNARY_OPERATOR>STACK[-1].
-  void UnaryOperation(std::function<void(RuntimeValue&)> op) {
-    op(Top());
-  }
+  void UnaryOperation(std::function<void(RuntimeValue&)> op) { op(Top()); }
 
   // Binary and in-place operations
   // Binary operations remove the top two items from the stack(STACK[-1] and
@@ -753,7 +774,6 @@ struct ActionDeclareVariable {
   ActionDeclareVariable(const string_view& name) : name(name) {}
 
   bool Perform(DynamicRuntimeNamespace& ns) const {
-    // Declare an empty(undefined) variable.
     if (ns.ContainsMember(name)) {
       return false;  // Variable is already declared.
     }
@@ -883,18 +903,40 @@ void test_runtime_value() {
 
   RuntimeValue builtin_dynamic_object =
       RuntimeValue::New(NativeDynamicObjectT().ctor());
+
+  auto& ns = builtin_dynamic_namespace.GetRef<NativeDynamicNamespaceT>().get();
+  ns.DesignateAsType();  // Designate this namespace as a type definition.
+  ns.AddInstanceMember(builtin_string,
+                       "foo_str_member");              // add an instance member
+  ns.AddMember(builtin_cpp_method, "foo_str_member");  // add a static member
+
   // Retrieve the object !!note ref count is not increased here.
   // GetRef-> retrieves from RuntimeValue
   // get()-> retrieves from RefCountedObj
   auto& obj = builtin_dynamic_object.GetRef<NativeDynamicObjectT>().get();
-  obj.SetStaticObjectNamespace(
-      builtin_dynamic_namespace.GetRef<NativeDynamicNamespaceT>().get());
-  obj.AddMember(builtin_string, "foo_str");
+  obj.SetStaticObjectNamespace(ns);
+
+  // These two methods will affect all instances of this object which have not
+  // be created yet. They operate on the internal reference to the set
+  // namespace.For ergonomic purposes.
+  obj.AddStaticMember(builtin_string,
+                      "foo_str2_static");  // add a static member from the obj
+  obj.AddInstanceMember(
+      builtin_string, "foo_str_member");  // add an instance member from the obj
+
+  // Once the namespace is set up an object may be initialized as so:
+  obj.InitFromNamespace();
+
+  // This method with modify the type, and should only be used in rare cases.
+  // Types should remain constant.
   obj.AddMember(builtin_cpp_method, "cpp_method");
 
+  // Print.
   std::cout << "\n Printing member foo_str from object FooClass:"
             << obj.AccessMember("foo_str").GetRef<NativeStringT>().getc()
             << "\n Calling Method cpp_method From Object FooClass:";
+
+  // Call a native C++ method.
   obj.AccessMember("cpp_method").GetRef<NativeCppMethodT>().get().Call();
   std::cout << "\n";
 }
@@ -912,15 +954,3 @@ int main() {
       ActionDebugPrint("myString"));
   program.Run(code);
 }
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started:
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add
-//   Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project
-//   and select the .sln file
