@@ -1,7 +1,12 @@
-# C& 
-# Compiled and Interpreted Practical Programming Language
+# C& Programming Language Full Environment Package
+| **Includes** | **Description** |
+|--|--|
+| **CIDE**: C-Ide | GUI and command line for writing and building C&, and C++ programs. Currently depends on Imgui-SFML (Temporary GUI Solution).|
+| **CAOCO**: C& Official Compiler | Official compiler and virtual machine implementation for the C& language runtime. Compiles and runs C& programs. |
+| **CXX** : C++ Extended Standard Library | Common patterns and utilities as an extension to the standard library. Depends on **MTA**.|
+| **MTA** : C++ Meta Template Archive | Variety of meta template methods and structures , for more ergonomic metaprogramming.|
+| **MINT** : Minimal C++ Testing Framework | Used to unit test other project submodules.|
 
-Pronunciation: “**candy**” or “**see-and**”
 
 # Goals 
 1. Quick and easy **deployment of a minimum viable product** with the **ability to scale and stay maintainable** by opting in to **type and logic safety** incrementally.
