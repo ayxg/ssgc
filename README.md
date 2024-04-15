@@ -1,7 +1,7 @@
 # C& Programming Language Full Environment Package
 A complete package with minimal external dependencies for creating and deploying C& programs and libraries.
 
-The C& complier may be used directly from the command line to build and execute files or as a library included in your C++ code. A rudimentary IDE with a user interface is provided to ease the learning curve and enourage use of the language. Currently the IDE uses ImGui-SFML to generate the user interface - the end goal is to embed the IDE into a browser to allow writing C& program from the browser.
+The C& complier may be used directly from the command line to build and execute files or as a library included in your C++ code. A rudimentary IDE with a user interface is provided to ease the learning curve and enourage use of the language. Currently the IDE uses ImGui-SFML to generate the user interface - the end goal is to only depend on VulkanAPI and embed the IDE into a browser to allow writing C& program from the browser.
 
 | **Includes** | **Description** |
 |--|--|
