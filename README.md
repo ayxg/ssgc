@@ -20,7 +20,7 @@ First of, I will let the code do the talking. Have a taste of C&:
  ![ex1](https://i.imgur.com/BJbjYaK.png)
  
 **Example#2: The Husky which makes diffrent sounds based on it's mood, displays use of template metaprogramming.**
- ![](https://i.imgur.com/N3yvqqq.png)
+ ![](https://i.imgur.com/xgGejGT.png)
 
 ### Goals 
 1. Quick and easy **deployment of a minimum viable product** with the **ability to scale and stay maintainable** by opting in to **type and logic safety** incrementally.
