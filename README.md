@@ -12,7 +12,8 @@ The C& complier may be used directly from the command line to build and execute 
 | **MINT** : Minimal C++ Testing Framework | Used to unit test other project submodules.|
 
 # The C& Programming Language
-Pronunciation: “**candy**” or “**see-and**”
+Pronunciation: “**candy**” or “**see-and**”.
+
 First of, I will let the code do the talking. Have a taste of C&:
 
 **Example#1: Unrelated animal types which all make sounds, displays use of dynamic types.**
