@@ -331,7 +331,7 @@ static inline void FlushFailedTestResults() {
 
 //=---------------------------------=//
 // Macro:{MINITEST}
-// Brief:{Defines a test case. Always close with 'END_MINITEST;'.}
+// Brief:{Defines a static test case. Always close with 'END_MINITEST;'.}
 // Parameters:{
 //		1.TestName : Name of the test.
 //		2.TestCaseName : Name of the test case,must be unique per test.
@@ -375,7 +375,7 @@ static inline void FlushFailedTestResults() {
 //=---------------------------------=//
 // Macro:{MINITEST_F}
 // Brief:{Defines a fixture test case.
-//        Always close with 'END_MINITEST_F(TestCaseName,NameOfFixture);'.
+//        Always close with 'END_MINITEST_F(NameOfFixture);'.
 // }
 // Parameters:{
 //		1.TestName : Name of the test.
