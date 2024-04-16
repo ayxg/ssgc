@@ -26,12 +26,52 @@
 //---------------------------------------------------------------------------//
 
 namespace caoco {
-enum class eCErr {
-  kNone,
-  kLexerInvalidChar,
+enum class eCaErr : std::size_t {
+  kNone = 0,
+  kLexerUnknownChar,
   kLexerSyntaxError,
 
 };
+
+namespace caerr {
+constexpr inline string GenErrorHeader(eCaErr error_code) {
+  return string("[C&][ERROR:") +
+         std::to_string(static_cast<size_t>(error_code)) + "]";
+}
+
+constexpr inline string GenErrorName(eCaErr error_code) {
+  switch (error_code) {
+    case eCaErr::kNone:
+      return GenErrorHeader(error_code) + "[No Error]: ";
+    case eCaErr::kLexerUnknownChar:
+      return GenErrorHeader(error_code) + "[Lexer][UnknownChar]: ";
+    case eCaErr::kLexerSyntaxError:
+      return GenErrorHeader(error_code) + "[Lexer][SyntaxError]: ";
+    default:
+      return GenErrorHeader(error_code) + "[Unknown Error]: ";
+  }
+}
+
+using UnknownCharacter =
+    decltype([](size_t line, size_t col, char c, string error = "") {
+      // Specific errors for specific characters.
+      // if c == \" then we can assume the user attempted to use " to
+      // denote a string literal. C& uses ' for string literals.
+      string special_case_error = "";
+
+      if (c == '\"') {
+        special_case_error =
+            "Did you mean to use ' for a string literal? \nC& uses single "
+            "apostrophes to enclose string literals. ex 'Hello World!'.\n";
+      }
+
+      return GenErrorName(eCaErr::kLexerUnknownChar) +
+             "\nUnknown character at line: " + std::to_string(line) +
+             " column: " + std::to_string(col) + +"\nOffending Char: '" +
+             string(1, c) + " \nError detail: " + special_case_error + error;
+    });
+}  // namespace caerr
+
 namespace compiler_error {
 
 namespace tokenizer {
