@@ -22,12 +22,10 @@
 #include "caoco_ast.h"
 //
 #include "caoco_rtval.h"
-//
-#include "caoco_ir.h"
 //---------------------------------------------------------------------------//
 
 namespace caoco {
-
+  using std::vector;
 // Error codes
 static constexpr std::string_view kIrErrorNoProgramDefinition =
     "[C&][ERROR][CRITICAL] No program definition found.";
@@ -82,28 +80,27 @@ enum class eIrOp {
   BINARY_MOD,
 };
 
-using IrInt = int;
-using IrSize = std::size_t;
-using IrBool = bool;
-using IrDouble = double;
-using IrString = std::string_view;
-using IrVariant = std::variant<int, double, std::string_view>;
-static const std::vector<IrVariant> kIrOpNullArguments = {};
+using IrInt = NativeIntT;
+using IrSize = NativeUnsignedT;
+using IrBool = NativeBoolT;
+using IrDouble = NativeDoubleT;
+using IrString = NativeCStringT;
+using IrArgVariant = std::variant<int, double, std::string_view>;
+static const vector<IrArgVariant> kIrOpNullArguments = {};
 
 struct IrLine {
-  std::size_t index;
-  eIrOp op;
-  std::vector<IrVariant> args;
+  const std::size_t code_line;
+  const eIrOp op;
+  const vector<IrArgVariant> args;
 };
 
 struct IrCode {
   std::list<IrLine> lines;
 
-  std::list<IrLine>::iterator getLine(int index) {
-    return std::next(lines.begin(), index);
-  }
-  IrLine& AddLine(std::size_t line_index, eIrOp op,
-                  std::vector<IrVariant> args) {
+  
+
+  std::list<IrLine>::iterator AddLine(std::size_t line_index, eIrOp op,
+                  std::vector<IrArgVariant> args) {
     lines.push_back(IrLine{line_index, op, args});
     return lines.back();
   }
@@ -116,7 +113,7 @@ struct IrCode {
       lines.push_back(line);
     }
   }
-  std::list<IrLine>& GetLines() { return lines; }
+  const std::list<IrLine>& GetLines() { return lines; }
 
   bool isAborted() {
     if (lines.back().op == eIrOp::ABORT_AND_ERROR) {

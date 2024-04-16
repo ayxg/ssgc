@@ -92,6 +92,7 @@ using NativeDoubleT = double;
 using NativeBoolT = bool;
 using NativeCharT = char;
 using NativeByteT = unsigned char;
+using NativeCStringT = string_view;
 using NativeNoneT = RtNone;
 using NativeUndefinedT = RtUndefined;
 using NativePtrT = RtDynPtr;
@@ -104,9 +105,9 @@ using NativeListT = Uptr<RtDynList>;
 
 using NativeTypeIndexList = mta::compile_time_type_index_list<
     NativeEmptyVariantT, NativeIntT, NativeUnsignedT, NativeDoubleT,
-    NativeBoolT, NativeCharT, NativeByteT, NativeNoneT, NativeUndefinedT,
-    NativePtrT, NativeStringT, NativeNamespaceT, NativeObjectT, NativeMethodT,
-    NativeCppMethodT, NativeListT>;
+    NativeBoolT, NativeCharT, NativeByteT, NativeCStringT, NativeNoneT,
+    NativeUndefinedT, NativePtrT, NativeStringT, NativeNamespaceT,
+    NativeObjectT, NativeMethodT, NativeCppMethodT, NativeListT>;
 
 // std::variant of all the types in the C& runtime, a member of RtVal.
 using NativeVariant = NativeTypeIndexList::types_variant;
@@ -122,6 +123,7 @@ enum enum_type : size_t {
   kBool = NativeTypeIndexList::index_of<NativeBoolT>(),
   kChar = NativeTypeIndexList::index_of<NativeCharT>(),
   kByte = NativeTypeIndexList::index_of<NativeByteT>(),
+  kCString = NativeTypeIndexList::index_of<NativeCStringT>(),
   kNone = NativeTypeIndexList::index_of<NativeNoneT>(),
   kUndefined = NativeTypeIndexList::index_of<NativeUndefinedT>(),
   kDynamicPtr = NativeTypeIndexList::index_of<NativePtrT>(),
@@ -156,8 +158,8 @@ enum enum_type : size_t {
 template <class T>
 concept iOneOfNativeLiterals =
     mta::req::iOneOf<NativeIntT, NativeUnsignedT, NativeDoubleT, NativeBoolT,
-                     NativeCharT, NativeByteT, NativeNoneT, NativeUndefinedT,
-                     NativePtrT>;
+                     NativeCharT, NativeByteT, NativeCStringT, NativeNoneT,
+                     NativeUndefinedT, NativePtrT>;
 
 template <class T>
 concept iOneOfNativeArithmetic =

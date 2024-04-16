@@ -70,9 +70,9 @@ class Lexer {
   constexpr inline LexMethodResult SuccessResult(eTk type,
                                                  CharVectorCIter beg_it,
                                                  CharVectorCIter end_it);
-  
+
   constexpr inline LexMethodResult NoneResult(CharVectorCIter beg_it);
-  
+
   constexpr inline LexMethodResult FailureResult(CharVectorCIter beg_it,
                                                  const std::string& error);
 
@@ -82,15 +82,18 @@ class Lexer {
 
   // Lexer's Utility functions
   constexpr bool NotAtEof(CharVectorCIter it) const { return it != end_; }
-  
+
   constexpr char Get(CharVectorCIter it) const;
-  
+
   constexpr char Peek(CharVectorCIter it, int n);
 
   constexpr bool FindForward(CharVectorCIter it,
                              std::string_view characters) const;
 
   constexpr CharVectorCIter& Advance(CharVectorCIter& it, int n = 1);
+
+  constexpr inline CharVectorCIter Begin() const { return beg_; }
+  constexpr inline CharVectorCIter End() const { return end_; }
 
   // Lexers
   constexpr LexMethodResult LexSolidus(CharVectorCIter it);
@@ -590,7 +593,7 @@ constexpr Lexer::LexMethodResult Lexer::LexPeriod(CharVectorCIter it) {
 
 // Main tokenizer method
 constexpr Lexer::LexerResult Lexer::Lex() {
-  CharVectorCIter it = beg_;
+  CharVectorCIter it = Begin();
   TkVector output_tokens;
   std::size_t current_line = 1;
   std::size_t current_col = 1;
@@ -623,8 +626,8 @@ constexpr Lexer::LexerResult Lexer::Lex() {
               .base();
       // If there is no newline before the current character, use the start of
       // the string
-      if (last_newline == end_) {
-        last_newline = beg_;
+      if (last_newline == End()) {
+        last_newline = Begin();
       }
 
       // Calculate the character index within the line
@@ -665,8 +668,27 @@ constexpr Lexer::LexerResult Lexer::Lex() {
         break;  // Exit for-loop
       }
     }
+    // None of the lexers matched, report an error
+    // Update position based on the number of characters consumed
+    if (!match) {
+      // Find the current line - count newlines from begin to iter.
+      current_line += std::count(Begin(), it, '\n');
 
-    if (!match) {  // None of the lexers matched, report an error
+      // Find the last newline before the iter.
+      CharVectorCIter last_newline =
+          std::find(std::reverse_iterator(it), std::reverse_iterator(Begin()),
+                    '\n')
+              .base();
+
+      // If there is no newline before the current iter, use the start of
+      // the source
+      if (last_newline == End()) {
+        last_newline = Begin();
+      }
+
+      // Calculate the character index within the line
+      current_col = static_cast<std::size_t>(std::distance(last_newline, it));
+
       return LexerResult::Failure(compiler_error::tokenizer::xInvalidChar(
           current_line, current_col, Get(it)));
     }
