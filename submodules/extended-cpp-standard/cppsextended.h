@@ -28,6 +28,14 @@
 //#include "unique_void_ptr.h"
 //#include "hetero_method_map.h"
 
+// Common typedefs from std to bring into global namespace.
+using std::size_t;
+using std::array;
+using std::string;
+using std::string_view;
+using std::vector;
+using std::tuple;
+
 
 //---------------------------------------------------------------------------//
 // Copyright 2024 Anton Yashchenko

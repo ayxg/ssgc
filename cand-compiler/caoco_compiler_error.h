@@ -26,28 +26,34 @@
 //---------------------------------------------------------------------------//
 
 namespace caoco {
+enum class eCErr {
+  kNone,
+  kLexerInvalidChar,
+  kLexerSyntaxError,
+
+};
 namespace compiler_error {
+
 namespace tokenizer {
 
-static constexpr LAMBDA xInvalidChar = [](std::size_t line, std::size_t col,
-                                          char c, std::string error = "") {
-  std::stringstream ss;
-  ss << "\n[User Syntax Error]: ";
-  ss << "\nInvalid character at line: " << line << " column: " << col
-     << " \nerror detail: " << error;
-  ss << "\n Offending character: " << static_cast<char>(c);
-  return ss.str();
+#define SXLAMBDA static constexpr LAMBDA
+
+SXLAMBDA xInvalidChar = [](size_t line, size_t col, char c, string error = "") {
+  return string("\n[User Syntax Error]: ") +
+         "\nInvalid character at line: " + std::to_string(line) +
+         " column: " + std::to_string(col) + " \nerror detail: " + error +
+         +"\n Offending character: '" + string(1, c);
 };
 
-static constexpr LAMBDA xLexerSyntaxError =
-    [](std::size_t line, std::size_t col, char8_t c, std::string error = "") {
-      std::stringstream ss;
-      ss << "\n[User Syntax Error]: ";
-      ss << "\nLexer syntax error at line: " << line << " column: " << col
-         << "\n Offending character: " << static_cast<char>(c)
-         << "\nerror detail: " << error;
-      return ss.str();
-    };
+SXLAMBDA xLexerSyntaxError = [](std::size_t line, std::size_t col, char8_t c,
+                                std::string error = "") {
+  std::stringstream ss;
+  ss << "\n[User Syntax Error]: ";
+  ss << "\nLexer syntax error at line: " << line << " column: " << col
+     << "\n Offending character: " << static_cast<char>(c)
+     << "\nerror detail: " << error;
+  return ss.str();
+};
 
 static constexpr LAMBDA xProgrammerLogicError =
     [](std::size_t line, std::size_t col, char8_t c, std::string error = "") {
