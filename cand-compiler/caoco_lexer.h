@@ -689,8 +689,10 @@ constexpr Lexer::LexerResult Lexer::Lex() {
       // Calculate the character index within the line
       current_col = static_cast<std::size_t>(std::distance(last_newline, it));
 
-      return LexerResult::Failure(compiler_error::tokenizer::xInvalidChar(
-          current_line, current_col, Get(it)));
+      // return LexerResult::Failure(compiler_error::tokenizer::xInvalidChar(
+      //     current_line, current_col, Get(it)));
+      return LexerResult::Failure(
+          caerr::UnknownCharacter()(current_line, current_col, Get(it)));
     }
   }  // end while
 
