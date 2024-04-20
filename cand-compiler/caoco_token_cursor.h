@@ -18,9 +18,9 @@
 //---------------------------------------------------------------------------//
 #include "cppsextended.h"
 // Includes:
-#include "caoco_ast.h"
-#include "caoco_enum.h"
+#include "caoco_grammar.h"
 #include "caoco_token.h"
+#include "caoco_ast.h"
 //---------------------------------------------------------------------------//
 
 namespace caoco {
@@ -51,13 +51,16 @@ class TkCursor {
   constexpr inline bool IsKeyword() const noexcept { return Get().IsKeyword(); }
   constexpr inline bool IsModifierKeyword() const noexcept;
   constexpr inline bool IsDeclarativeKeyword() const noexcept;
-  constexpr inline bool IsSingularOperand() const noexcept;
+  constexpr inline bool IsAnOperand() const noexcept;
   constexpr bool IsSingularPrefixOperator() const noexcept;
   constexpr inline bool IsOpeningScope() const noexcept;
   constexpr inline bool IsClosingScope() const noexcept;
   constexpr inline bool IsClosingScopeOf(eTk open) const noexcept;
-  constexpr inline bool IsPrimaryExpressionOpening() const noexcept;
-
+  constexpr inline bool IsPrimary() const noexcept;
+  constexpr inline bool IsPragmatic() const noexcept {
+    auto& c = Get();
+    return c.IsModifier() || c.IsDeclarative();
+  }
     constexpr inline eAst NodeType() const noexcept { return Get().NodeType(); }
 
   // Iteration
@@ -68,12 +71,14 @@ class TkCursor {
   // cursor is within beg and end.
   constexpr TkCursor& Advance(TkVectorConstIter new_it);
 
-  // Specialized Advance for use in the lark_parser.h.
+// Specialized Advance for use in the lark_parser.h.
   // Shortcut for accessing .Always().Iter() from an InternalParseResult.
   // before. c.Advance(result.Always().Iter());
   // use. c.Advance(result);
   constexpr TkCursor& Advance(
-      const cxx::PartialExpected<Ast, TkCursor>& result);
+      const cxx::PartialExpected<Ast, TkCursor>& result) {
+    return Advance(result.Always().Iter());
+  }
 
   // returns cursor advanced by N. N may be negative.
   TkCursor Next(int n = 1) const;
@@ -110,7 +115,7 @@ class TkCursor {
   TkVectorConstIter end_;
   TkVectorConstIter it_;
 };
-const Tk TkCursor::kSentinelEndToken = Tk(eTk::kEof);
+const Tk TkCursor::kSentinelEndToken = Tk(eTk::Eofile);
 
 constexpr const Tk& TkCursor::Get() const {
   if (it_ >= end_) {
@@ -120,7 +125,7 @@ constexpr const Tk& TkCursor::Get() const {
 }
 
 constexpr bool TkCursor::AtEnd() const {
-  return (it_ == end_) || (it_->TypeIs(eTk::kEof));
+  return (it_ == end_) || (it_->TypeIs(eTk::Eofile));
 }
 
 // Iteration
@@ -150,14 +155,7 @@ constexpr TkCursor& TkCursor::Advance(TkVectorConstIter new_it) {
   return *this;
 }
 
-// Specialized Advance for use in the lark_parser.h.
-// Shortcut for accessing .Always().Iter() from an InternalParseResult.
-// before. c.Advance(result.Always().Iter());
-// use. c.Advance(result);
-constexpr TkCursor& TkCursor::Advance(
-    const cxx::PartialExpected<Ast, TkCursor>& result) {
-  return Advance(result.Always().Iter());
-}
+
 
 // returns cursor advanced by N. N may be negative.
 TkCursor TkCursor::Next(int n) const {
@@ -218,32 +216,32 @@ constexpr inline bool TkCursor::TypeAndLitIs(eTk kind, const std::string& litera
 }
 
 constexpr inline bool TkCursor::IsModifierKeyword() const noexcept {
-  return Get().IsModifierKeyword();
+  return Get().IsModifier();
 }
 constexpr inline bool TkCursor::IsDeclarativeKeyword() const noexcept {
-  return Get().IsDeclarativeKeyword();
+  return Get().IsDeclarative();
 }
-constexpr inline bool TkCursor::IsSingularOperand() const noexcept {
-  return Get().IsSingularOperand();
+constexpr inline bool TkCursor::IsAnOperand() const noexcept {
+  return Get().IsAnOperand();
 }
 constexpr bool TkCursor::IsSingularPrefixOperator() const noexcept {
-  return Get().IsSingularPrefixOperator();
+  return Get().IsAPrefixOperator();
 }
 constexpr inline bool TkCursor::IsOpeningScope() const noexcept {
-  return Get().IsOpeningScope();
+  return Get().IsLScope();
 }
 constexpr inline bool TkCursor::IsClosingScope() const noexcept {
-  return Get().IsClosingScope();
+  return Get().IsRScope();
 }
 constexpr inline bool TkCursor::IsClosingScopeOf(eTk open) const noexcept {
-  return Get().IsClosingScopeOf(open);
+  return Get().IsRScopeOf(open);
 }
 
-constexpr inline bool TkCursor::IsPrimaryExpressionOpening() const noexcept {
-  const Tk& c = Get();
-  return c.IsSingularOperand() || c.IsSingularPrefixOperator() ||
-         c.TypeIs(eTk::kOpenParen);
+constexpr inline bool TkCursor::IsPrimary() const noexcept {
+  return Get().IsPrimary();
 }
+
+
 
 }  // namespace caoco
 

@@ -18,8 +18,7 @@
 //---------------------------------------------------------------------------//
 #include "cppsextended.h"
 // Includes:
-#include "caoco_enum.h"
-#include "caoco_token.h"
+#include "caoco_grammar.h"
 //---------------------------------------------------------------------------//
 
 namespace caoco {
@@ -48,9 +47,9 @@ class Closure {
   // Operation of the front token. ( [ { are postfix operators.
   eOperation Operation() const {
     // Special case for (, [, {, and postfix operators.
-    if (front_->TypeIs(eTk::kOpenParen) || front_->TypeIs(eTk::kOpenBrace) ||
-        front_->TypeIs(eTk::kOpenBracket)) {
-      return eOperation::kPostfix;
+    if (front_->TypeIs(eTk::LParen) || front_->TypeIs(eTk::LBrace) ||
+        front_->TypeIs(eTk::LBracket)) {
+      return eOperation::Postfix;
     } else {
       return front_->Operation();
     }
@@ -59,9 +58,9 @@ class Closure {
   // Priority of the front token. ( [ { are postfix priority.
   ePriority Priority() const {
     // Special case for (, [, {, are postfix priority.
-    if (front_->TypeIs(eTk::kOpenParen) || front_->TypeIs(eTk::kOpenBrace) ||
-        front_->TypeIs(eTk::kOpenBracket)) {
-      return ePriority::kPostfix;
+    if (front_->TypeIs(eTk::LParen) || front_->TypeIs(eTk::LBrace) ||
+        front_->TypeIs(eTk::LBracket)) {
+      return ePriority::Postfix;
     } else {
       return front_->Priority();
     }
@@ -168,7 +167,7 @@ class ClosureBuffer {
 // EndClass:{ClosureBuffer}
 //---------------------------------------------------------//
 
-const Tk ClosureBuffer::kSentinelBegin = {eTk::kNone,
+const Tk ClosureBuffer::kSentinelBegin = {eTk::NONE,
                                           "ClosureBuffer sentinel begin."};
 
 // Search from the end of the closure list until first occurence.

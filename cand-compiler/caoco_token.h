@@ -18,160 +18,183 @@
 //---------------------------------------------------------------------------//
 #include "cppsextended.h"
 // Includes:
-#include "caoco_enum.h"
-#include "caoco_token_traits.h"
+#include "caoco_grammar.h"
+//---------------------------------------------------------------------------//
+
+//---------------------------------------------------------------------------//
+// Namespace:{caoco}
 //---------------------------------------------------------------------------//
 namespace caoco {
-
+//---------------------------------------------------------------------------//
 class Tk;
 using TkVector = std::vector<Tk>;
 using TkVectorIter = TkVector::iterator;
 using TkVectorConstIter = TkVector::const_iterator;
+
+//---------------------------------------------------------//
+// Class:{Tk}
+// Brief:{
+//  C& Source Token.
+// }
+//---------------------------------------------------------//
 class Tk {
  public:
   // Modifiers
-  constexpr void SetLine(std::size_t line) { line_ = line; }
-
-  constexpr void SetCol(std::size_t col) { col_ = col; }
+  constexpr void SetLine(size_t line) { line_ = line; }
+  constexpr void SetCol(size_t col) { col_ = col; }
+  constexpr void SetSourceIndexBeg(size_t idx) { source_index_beg_ = idx; }
+  constexpr void SetSourceIndexEnd(size_t idx) { source_index_end_ = idx; }
   // Properties
   constexpr eTk Type() const noexcept { return type_; }
-
-  constexpr std::size_t Size() const noexcept { return literal_.size(); }
-
-  constexpr std::size_t Line() const noexcept { return line_; }
-
-  constexpr std::size_t Col() const noexcept { return col_; }
-
-  constexpr const std::string& Literal() const noexcept { return literal_; }
-
-  constexpr std::string& LiteralMutable() { return literal_; }
-
+  constexpr size_t Size() const noexcept { return literal_.size(); }
+  constexpr size_t Line() const noexcept { return line_; }
+  constexpr size_t Col() const noexcept { return col_; }
+  constexpr size_t SourceIndexBeg() const noexcept { return source_index_beg_; }
+  constexpr size_t SourceIndexEnd() const noexcept { return source_index_end_; }
+  constexpr const string& Literal() const noexcept { return literal_; }
+  constexpr string& LiteralMutable() { return literal_; }
   // Parsing Utilities
-  constexpr ePriority Priority() const noexcept {
-    return tk_traits::kTkTypePriority(type_);
-  };
-
-  constexpr eAssoc Assoc() const noexcept {
-    return tk_traits::kTkTypeAssoc(type_);
-  }
-
+  constexpr ePriority Priority() const noexcept { return eTkPriority(type_); };
+  constexpr eAssoc Assoc() const noexcept { return eTkAssoc(type_); }
   constexpr eOperation Operation() const noexcept {
-    return tk_traits::kTkTypeOperation(type_);
+    return eTkOperation(type_);
   }
   // Fast type queries.
+  constexpr string_view TypeStr() const noexcept { return eTkEnumStr(type_); }
   constexpr bool TypeIs(eTk type) const noexcept { return type_ == type; }
-
-  constexpr bool TypeAndLitIs(eTk kind,
-                              const std::string& literal) const noexcept {
+  constexpr bool TypeAndLitIs(eTk kind, const string& literal) const noexcept {
     return type_ == kind && literal_ == literal;
   }
-
-  constexpr bool IsKeyword() const noexcept {
-    return tk_traits::kTkTypeIsKeyword(type_);
-  }
-
-  inline constexpr bool IsModifierKeyword() const noexcept {
-    return tk_traits::kTkTypeIsModifierKeyword(type_);
-  }
-
-  constexpr bool IsDeclarativeKeyword() const noexcept {
-    return tk_traits::kTkTypeIsDeclarativeKeyword(type_);
+  constexpr bool IsKeyword() const noexcept { return eTkIsKeyword(type_); }
+  constexpr bool IsModifier() const noexcept { return eTkIsModifier(type_); }
+  constexpr bool IsDeclarative() const noexcept {
+    return eTkIsDeclarative(type_);
   };
-
-  constexpr bool IsSingularOperand() const noexcept {
-    return tk_traits::kTkTypeIsSingularOperand(type_);
+  constexpr bool IsAnOperand() const noexcept { return eTkIsAnOperand(type_); };
+  constexpr bool IsAPrefixOperator() const noexcept {
+    return eTkIsAPrefixOperator(type_);
   };
-
-  constexpr bool IsSingularPrefixOperator() const noexcept {
-    return tk_traits::kTkTypeIsSingularPrefixOperator(type_);
+  constexpr bool IsLScope() const noexcept { return eTkIsLScope(type_); };
+  constexpr bool IsRScope() const noexcept { return eTkIsRScope(type_); };
+  constexpr bool IsRScopeOf(eTk topen) const noexcept {
+    return eTkIsRScopeOf(topen, type_);
   };
-
-  constexpr bool IsOpeningScope() const noexcept {
-    return tk_traits::kTkTypeIsOpeningScope(type_);
-  };
-
-  constexpr bool IsClosingScope() const noexcept {
-    return tk_traits::kTkTypeIsClosingScope(type_);
-  };
-
-  constexpr bool IsClosingScopeOf(eTk topen) const noexcept {
-    return tk_traits::kTkTypeIsClosingScopeOf(topen, type_);
-  };
-
-  constexpr bool IsPrimaryExpressionOpening() const noexcept {
-    return tk_traits::kTkTypeIsPrimaryExpressionOpening(type_);
-  };
-
-  constexpr eAst NodeType() const noexcept {
-    return tk_traits::kTkTypeToAstNodeType(type_);
-  };
+  constexpr bool IsPrimary() const noexcept { return eTkIsPrimary(type_); };
+  constexpr eAst NodeType() const noexcept { return eTkToAstEnum(type_); };
 
  public:
-  constexpr Tk() noexcept : type_(eTk::kNone), line_(0), col_(0), literal_() {}
+  constexpr Tk() noexcept : type_(eTk::NONE), line_(0), col_(0), literal_() {}
 
-  constexpr Tk(eTk type) noexcept : type_(type), line_(0), col_(0) {}
-
-  constexpr Tk(eTk type, std::vector<char>::const_iterator beg,
-               std::vector<char>::const_iterator end) noexcept
-      : type_(type), line_(0), col_(0) {
-    literal_ = std::string(beg, end);
+  // Literal is implicitly set to the pre-defined literal if it exists.
+  constexpr Tk(eTk type) noexcept
+      : type_(type), line_(0), col_(0), literal_(eTkLiteral(type)) {
   }
+  constexpr Tk(eTk type, vector<char>::const_iterator beg,
+               vector<char>::const_iterator end) noexcept;
+  constexpr Tk(eTk type, vector<char>::const_iterator beg,
+               vector<char>::const_iterator end, tuple<size_t, size_t> src_idx);
+  constexpr Tk(eTk type, vector<char>::const_iterator beg,
+               vector<char>::const_iterator end, size_t line,
+               size_t col) noexcept;
+  constexpr Tk(eTk type, string literal);
+  constexpr Tk(eTk type, string literal, size_t line, size_t col);
+  constexpr Tk(eTk type, string literal, tuple<size_t, size_t> src_idx);
+  constexpr Tk(const Tk& other) noexcept;
+  constexpr Tk(Tk&& other) noexcept;
+  constexpr auto operator=(const Tk& other) noexcept;
 
-  constexpr Tk(eTk type, std::vector<char>::const_iterator beg,
-               std::vector<char>::const_iterator end, std::size_t line,
-               std::size_t col) noexcept
-      : type_(type), line_(line), col_(col) {
-    literal_ = std::string(beg, end);
-  }
-
-  constexpr Tk(eTk type, std::string literal)
-      : type_(type), line_(0), col_(0), literal_(literal) {}
-
-  constexpr Tk(eTk type, std::string literal, std::size_t line, std::size_t col)
-      : type_(type), line_(line), col_(col), literal_(literal) {}
-
-  constexpr Tk(const Tk& other) noexcept
-      : type_(other.type_),
-        line_(other.line_),
-        col_(other.col_),
-        literal_(other.literal_) {}
-
-  constexpr Tk(Tk&& other) noexcept
-      : type_(other.type_),
-        line_(other.line_),
-        col_(other.col_),
-        literal_(std::move(other.literal_)) {}
-
-  constexpr auto operator=(const Tk& other) noexcept {
-    type_ = other.type_;
-    line_ = other.line_;
-    col_ = other.col_;
-    literal_ = other.literal_;
-    return *this;
-  }
-
-  constexpr auto operator=(Tk&& other) noexcept {
-    type_ = other.type_;
-    line_ = other.line_;
-    col_ = other.col_;
-    literal_ = std::move(other.literal_);
-    return *this;
-  }
-
+  constexpr auto operator=(Tk&& other) noexcept;
   constexpr bool operator==(const Tk& rhs) const {
     return type_ == rhs.type_ && literal_ == rhs.literal_;
   };
-
   constexpr bool operator!=(const Tk& rhs) const { return !(*this == rhs); };
 
  private:
-  eTk type_{eTk::kInvalid};
-  std::string literal_{""};
-  std::size_t line_{0};
-  std::size_t col_{0};
+  eTk type_{eTk::NONE};
+  string literal_{""};
+  size_t line_{0};
+  size_t col_{0};
+  size_t source_index_beg_{0};  // Index of start char in the source code.
+  size_t source_index_end_{0};  // 1 past the end char in the source code.
 };
+//---------------------------------------------------------//
+// EndClass:{Tk}
+//---------------------------------------------------------//
 
+constexpr Tk::Tk(eTk type, vector<char>::const_iterator beg,
+                 vector<char>::const_iterator end) noexcept
+    : type_(type), line_(0), col_(0) {
+  literal_ = string(beg, end);
+}
+constexpr Tk::Tk(eTk type, vector<char>::const_iterator beg,
+                 vector<char>::const_iterator end,
+                 tuple<size_t, size_t> src_idx)
+    : type_(type),
+      line_(),
+      col_(),
+      source_index_beg_(get<0>(src_idx)),
+      source_index_end_(get<1>(src_idx)) {
+  literal_ = string(beg, end);
+}
+constexpr Tk::Tk(eTk type, vector<char>::const_iterator beg,
+                 vector<char>::const_iterator end, size_t line,
+                 size_t col) noexcept
+    : type_(type), line_(line), col_(col) {
+  literal_ = string(beg, end);
+}
+
+constexpr Tk::Tk(eTk type, string literal)
+    : type_(type), line_(0), col_(0), literal_(literal) {}
+
+constexpr Tk::Tk(eTk type, string literal, size_t line, size_t col)
+    : type_(type), line_(line), col_(col), literal_(literal) {}
+
+constexpr Tk::Tk(eTk type, string literal, tuple<size_t, size_t> src_idx)
+    : type_(type),
+      line_(),
+      col_(),
+      literal_(literal),
+      source_index_beg_(get<0>(src_idx)),
+      source_index_end_(get<1>(src_idx)) {}
+
+constexpr Tk::Tk(const Tk& other) noexcept
+    : type_(other.type_),
+      line_(other.line_),
+      col_(other.col_),
+      literal_(other.literal_),
+      source_index_beg_(other.source_index_beg_),
+      source_index_end_(other.source_index_end_) {}
+
+constexpr Tk::Tk(Tk&& other) noexcept
+    : type_(other.type_),
+      line_(other.line_),
+      col_(other.col_),
+      literal_(std::move(other.literal_)),
+      source_index_beg_(other.source_index_beg_),
+      source_index_end_(other.source_index_end_) {}
+
+constexpr auto Tk::operator=(const Tk& other) noexcept {
+  type_ = other.type_;
+  line_ = other.line_;
+  col_ = other.col_;
+  literal_ = other.literal_;
+  source_index_beg_ = other.source_index_beg_;
+  source_index_end_ = other.source_index_end_;
+  return *this;
+}
+
+constexpr auto Tk::operator=(Tk&& other) noexcept {
+  type_ = other.type_;
+  line_ = other.line_;
+  col_ = other.col_;
+  literal_ = std::move(other.literal_);
+  source_index_beg_ = other.source_index_beg_;
+  source_index_end_ = other.source_index_end_;
+  return *this;
+}
+//---------------------------------------------------------------------------//
 }  // namespace caoco
+//---------------------------------------------------------------------------//
 
 //---------------------------------------------------------------------------//
 // Copyright 2024 Anton Yashchenko

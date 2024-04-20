@@ -26,21 +26,22 @@
 INLINE_MINITEST(Test_Lexer, TestCase_Keywords) {
   using namespace caoco;
   auto keywords = Lexer::Lex(
-      "use class private "
-      "public const static if else elif while for switch "
-      "break continue return none int uint real "
-      "byte bit str array"
-      "def auto fn default any case");
-
+      "def class fn import main namespace using lib dll if elif else cxif "
+      "cxelif cxelse switch case default while for return break continue int "
+      "uint real bool char byte cstr str ptr list array true false none void "
+      "in as cin cout native const ref private public static any auto type "
+      "value template");
+  using enum caoco::eTk;
   TkVector expected_test_result = TkVector(
-      {{eTk::kUse},   {eTk::kClass},
-       {eTk::kPrivate}, {eTk::kPublic},      {eTk::kConst}, {eTk::kStatic},
-       {eTk::kIf},      {eTk::kElse},        {eTk::kElif},  {eTk::kWhile},
-       {eTk::kFor},     {eTk::kSwitch},      {eTk::kBreak}, {eTk::kContinue},
-       {eTk::kReturn},  {eTk::kNoneLiteral}, {eTk::kInt},   {eTk::kUint},
-       {eTk::kReal},    {eTk::kByte},        {eTk::kBit},   {eTk::kStr},
-       {eTk::kArray},   {eTk::kDef},         {eTk::kAuto},  {eTk::kFn},
-       {eTk::kDefault}, {eTk::kAny},         {eTk::kCase}});
+      {KwDef,    KwClass,  KwFn,     KwImport,  KwMain,     KwNamespace,
+       KwUse,    KwLib,    KwDll,    KwIf,      KwElif,     KwElse,
+       KwCxif,   KwCxelif, KwCxelse, KwSwitch,  KwCase,     KwDefault,
+       KwWhile,  KwFor,    KwReturn, KwBreak,   KwContinue, KwInt,
+       KwUint,   KwReal,   KwBool,   KwChar,    KwByte,     KwCstr,
+       KwStr,    KwPtr,    KwList,   KwArray,   KwTrue,     KwFalse,
+       KwNone,   KwVoid,   KwIn,     KwAs,      KwCin,      KwCout,
+       KwNative, KwConst,  KwRef,    KwPrivate, KwPublic,   KwStatic,
+       KwAny,    KwAuto,   KwType,   KwValue,   KwTemplate});
 
   EXPECT_TRUE(keywords.Valid());
 
@@ -48,9 +49,12 @@ INLINE_MINITEST(Test_Lexer, TestCase_Keywords) {
     ASSERT_EQ(keywords.Value().size(), expected_test_result.size());
     TkVector result = keywords.Extract();
     for (size_t i = 0; i < result.size(); ++i) {
+      if (result[i].Type() != expected_test_result[i].Type())
+        std::cout << "Expected: " << expected_test_result[i].TypeStr().data()
+                  << " Got: " << result[i].TypeStr().data() << std::endl;
       EXPECT_EQ(result[i].Type(), expected_test_result[i].Type());
     }
-  } 
+  }
 }
 INLINE_END_MINITEST;
 MINITEST_REGISTER_CASE(Test_Lexer, TestCase_Keywords);
