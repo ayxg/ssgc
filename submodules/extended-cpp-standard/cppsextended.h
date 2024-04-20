@@ -24,6 +24,8 @@
 #include "import_std.h"
 #include "expected.h"
 #include "enumerated_flags.h"
+#include "cx_ftos.h"
+#include "cx_itos.h"
 //#include "sysio.h"
 //#include "unique_void_ptr.h"
 //#include "hetero_method_map.h"
@@ -35,6 +37,21 @@ using std::string;
 using std::string_view;
 using std::vector;
 using std::tuple;
+
+using std::unique_ptr;
+using std::shared_ptr;
+
+// Using for common std functions.
+using std::make_unique;
+using std::make_shared;
+using std::make_tuple;
+using std::to_string;
+
+// Typedefs for some literal types/pointers.
+using cstring = const char*;
+using cwstring = const wchar_t*;
+using void_ptr = void*;
+using const_void_ptr = const void*;
 
 
 //---------------------------------------------------------------------------//

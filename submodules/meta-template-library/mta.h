@@ -308,8 +308,8 @@ struct compile_time_type_index_list {
   static constexpr inline size_t kNumTypes = sizeof...(TypeTs);
   using types_tuple = std::tuple<TypeTs...>;
   using types_variant = std::variant<TypeTs...>;
-  //using types_variant = decltype(tuple_to_variant(types_tuple{}));
-  // Type of element at index.
+  // using types_variant = decltype(tuple_to_variant(types_tuple{}));
+  //  Type of element at index.
   template <std::size_t index>
   using type_of = typename std::tuple_element_t<index, types_tuple>;
 
@@ -385,18 +385,22 @@ using character_constant = std::integral_constant<char, CHAR>;
 
 template <auto STR>
 struct string_constant {
-  static constexpr const char* value = STR();
-  constexpr bool operator==(const string_constant& other) const {
-    return value == other.value;
+  static constexpr const char* data = STR();
+  static constexpr inline size_t uid{0};
+
+  static inline size_t hash =
+      size_t{reinterpret_cast<std::uintptr_t>(std::addressof(uid))};
+
+  template <auto OTHER_STR>
+  constexpr bool operator==(const string_constant<OTHER_STR>& other) const {
+    return data == other.data;
   }
-};
+};  // namespace mta
 
 using null_string_constant = string_constant<[]() consteval { return ""; }>;
 //---------------------------------------------------------//
 // EndTemplate:{string_constant , character_constant , null_string_constant}
 //---------------------------------------------------------//
-
-
 
 // helper constant for the visitor #3
 template <class>
@@ -415,8 +419,6 @@ constexpr inline decltype(auto) visit_overloaded(HostT&& host,
                     std::forward<HostT>(host));
 }
 
-
-
 template <typename... Args>
 consteval bool are_unique(Args&&... args) {
   std::array arr{std::forward<Args>(args)...};
@@ -424,11 +426,86 @@ consteval bool are_unique(Args&&... args) {
   return std::adjacent_find(arr.begin(), arr.end()) == arr.end();
 }
 
+// Type trait to check if a type is a container.
+// A minimal container is a type with a cbegin and cend method.
+template <typename T>
+auto is_minimal_container(int)
+    -> decltype(cbegin(std::declval<T>()) == cend(std::declval<T>()),
+                std::true_type{});
 
+template <typename T>
+std::false_type is_minimal_container(...);
 
+template <typename T>
+constexpr bool is_minimal_container_v =
+    decltype(is_minimal_container<T>(0))::value;
+
+namespace any_of_element_detail {
+template <typename... Args>
+struct compile_time_any_of_impl {
+  std::tuple<Args...> values;
+
+  constexpr compile_time_any_of_impl(Args&&... values)
+      : values(std::forward<Args>(values)...) {}
+
+  template <typename T>
+  [[nodiscard]] friend constexpr bool operator==(
+      T lhs, compile_time_any_of_impl const& rhs) noexcept {
+    bool found = false;
+    return std::apply([&](auto&&... vals) { return ((lhs == vals) || ...); },
+                      rhs.values);
+  }
+};
+
+template <typename Container>
+struct runtime_any_of_impl {
+  Container const& values;
+
+  constexpr runtime_any_of_impl(Container const& values) : values(values) {}
+
+  template <typename T>
+  [[nodiscard]] friend constexpr bool operator==(
+      T&& lhs, runtime_any_of_impl&& rhs) noexcept {
+    return std::any_of(cbegin(rhs.values), cend(rhs.values),
+                       [&](auto val) { return lhs == val; });
+  }
+};
+}  // namespace any_of_element_detail
+
+// any_of_element : compile time meta method
+// which returns a result which is equal to all elements within a
+// container. A compile time any_of that works like so:
+//  any_of_element(container_or_element_pack) == the_value;
+// eg. any_of_element(1, 2, 3) == 2
+//     any_of_element(std::vector{1, 2, 3}) != 5
+template <typename... Args>
+[[nodiscard]] constexpr auto any_of_element(Args&&... values) {
+  using namespace any_of_element_detail;
+
+  if constexpr (sizeof...(Args) == 1 &&
+                is_minimal_container_v<
+                    std::tuple_element_t<0, std::tuple<Args...>>>)
+    return runtime_any_of_impl(std::forward<Args>(values)...);
+  else
+    return compile_time_any_of_impl(std::forward<Args>(values)...);
+}
 //---------------------------------------------------------------------------//
 };  // namespace mta
 //---------------------------------------------------------------------------//
+
+namespace mta {
+template <typename Type, std::size_t... sizes>
+static constexpr inline auto merge_arrays(
+    const std::array<Type, sizes>&... arrays) {
+  std::array<Type, (sizes + ...)> result;
+  std::size_t index{};
+
+  ((std::copy_n(arrays.begin(), sizes, result.begin() + index), index += sizes),
+   ...);
+
+  return result;
+}
+}  // namespace mta
 
 //---------------------------------------------------------------------------//
 // Copyright 2024 Anton Yashchenko

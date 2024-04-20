@@ -19,7 +19,7 @@
 #include "cppsextended.h"
 // Includes:
 #include "caoco_compiler_error.h"
-#include "caoco_enum.h"
+#include "caoco_grammar.h"
 #include "caoco_token.h"
 #include "caoco_token_closure.h"
 #include "caoco_token_cursor.h"
@@ -27,15 +27,33 @@
 //---------------------------------------------------------------------------//
 
 namespace caoco {
-using ParseResultWithOffset = cxx::PartialExpected<Ast, TkCursor>;
-using ParseResult = cxx::Expected<Ast>;
+using OffsetParseResult = cxx::PartialExpected<Ast, TkCursor>;
+using ExpectedAst = cxx::Expected<Ast>;
 
-static ParseResult ParseTokens(const TkVector& c);
+static ExpectedAst ParseTokens(const TkVector& c);
 
 namespace parser {
 
+static constexpr inline OffsetParseResult Success(const TkCursor& c,
+                                                  Ast&& ast) {
+  return OffsetParseResult::Success(c, std::forward<Ast>(ast));
+}
+
+static constexpr inline OffsetParseResult Fail(const TkCursor& c,
+                                               const std::string& error) {
+  return OffsetParseResult::Failure(c, error);
+}
+
+// static constexpr inline ExpectedAst RetSuccess(Ast&& ast) {
+//   return ExpectedAst::Success(std::forward<Ast>(ast));
+// }
+//
+// static constexpr inline ExpectedAst RetFailure(const std::string& error) {
+//   return ExpectedAst::Failure(error);
+// }
+
 // Shift reduce parser for primary expressions.
-class PrimaryExprClosureParser;
+class ExprParser;
 
 //---------------------------------------------------------------------------//
 // Section:{Internal parsing methods}
@@ -44,7 +62,7 @@ class PrimaryExprClosureParser;
 // the main method to call when parsing. The rest are for internal use.
 // Each method is responsible for parsing a specific type of statement or
 // declaration.
-// Each method returns an ParseResultWithOffset.
+// Each method returns an OffsetParseResult.
 // The result contains the parsed AST node, and the location of the last token
 // parsed. Begin parsing the next statement from this location.
 // The result also contains an error message if the parsing failed.
@@ -55,31 +73,40 @@ class PrimaryExprClosureParser;
 //------------------------------------/
 // - Singular operands only, not subexpressions.
 //------------------------------------//
-static ParseResultWithOffset ParseOperand(TkCursor current);
+static OffsetParseResult ParseOperand(TkCursor current);
 
 //------------------------------------//
-// Parse Arguments (<primary_expr?*>,)
-// - Arguments for method calls.
+// Parse Arguments
+// (<primary_expr?*>,)
+// - Arguments for method calls. Recieves a cursor to the beginning open paren
+// of the arguments.
 //------------------------------------//
-static ParseResultWithOffset ParseArguments(TkCursor current);
+static OffsetParseResult ParseArguments(TkCursor current);
 
 //------------------------------------//
-// Parse Indexing Arguments [<primary_expr?*>,]
+// Parse Indexing Arguments
+// [<primary_expr?*>,]
 // - Arguments for indexing operator.
 //------------------------------------//
-static ParseResultWithOffset ParseIndexingArguments(TkCursor current);
+static OffsetParseResult ParseIndexingArguments(TkCursor current);
 
 //------------------------------------//
-// Parse Listing Arguments {<primary_expr?*>,}
+// Parse Listing Arguments
+// {<primary_expr?*>,}
 // - Arguments for listing operator.
 //------------------------------------//
-static ParseResultWithOffset ParseListingArguments(TkCursor current);
+static OffsetParseResult ParseListingArguments(TkCursor current);
 
 //------------------------------------//
-// Parse Primary Statement <primary_expr>;
+// Parse Primary Statement
+// <primary_expr>;
 // - A single primary expression ending with a semicolon.
+// Primary statement will begin with:
+// - A singular token operand.
+// - A prefix operator.
+// - An open paren which is a subexpression.
 //------------------------------------//
-static ParseResultWithOffset ParsePrimaryStatement(TkCursor current);
+static OffsetParseResult ParsePrimaryStatement(TkCursor current);
 
 //------------------------------------//
 // ParseConditionalSubExpression (<primary_expr?*>,)
@@ -88,7 +115,7 @@ static ParseResultWithOffset ParsePrimaryStatement(TkCursor current);
 // - Format will account for a minimum of 1 argument.
 // - Format will account for (i in collection) syntax.
 //------------------------------------//
-static ParseResultWithOffset ParseConditionalSubExpression(TkCursor c);
+static OffsetParseResult ParseConditionalSubExpression(TkCursor c);
 
 //------------------------------------//
 // ParsePrimaryPreIdentifier <primary_expr>@
@@ -96,7 +123,7 @@ static ParseResultWithOffset ParseConditionalSubExpression(TkCursor c);
 // identifier.
 // - Used in declarations
 //------------------------------------//
-static ParseResultWithOffset ParsePrimaryPreIdentifier(TkCursor current);
+static OffsetParseResult ParsePrimaryPreIdentifier(TkCursor current);
 
 //------------------------------------//
 // ParsePrimaryPostIdentifier <primary_expr>: or <primary_expr>;
@@ -104,44 +131,44 @@ static ParseResultWithOffset ParsePrimaryPreIdentifier(TkCursor current);
 // semicolon.
 // - Used in declarations, method signatures.
 //------------------------------------//
-static ParseResultWithOffset ParsePrimaryPostIdentifier(TkCursor current);
+static OffsetParseResult ParsePrimaryPostIdentifier(TkCursor current);
 
 //------------------------------------//
 // Parse Modifiers <modifier?*>
 // - Parses a list of keyword modifiers.
 //------------------------------------//
-static ParseResultWithOffset ParseModifiers(TkCursor current);
+static OffsetParseResult ParseModifiers(TkCursor current);
 
-// !!TODO: document the rest of these methods.
-static ParseResultWithOffset ParseReturnStmt(TkCursor current);
-static ParseResultWithOffset ParseMethodParameters(TkCursor current);
-static ParseResultWithOffset ParseMethodReturnParameters(TkCursor current);
-static ParseResultWithOffset ParseMethodSignature(TkCursor current);
-static ParseResultWithOffset ParseMethodDef(TkCursor current);
-static ParseResultWithOffset ParseMainDef(TkCursor current);
-static ParseResultWithOffset ParseClassDef(TkCursor current);
-static ParseResultWithOffset ParseLibDef(TkCursor current);
-static ParseResultWithOffset ParsePragmaticStmt(TkCursor current);
-static ParseResultWithOffset ParseFunctionalStmt(TkCursor current);
-static ParseResultWithOffset ParseConditionalStmt(TkCursor c);
-static ParseResultWithOffset ParseIfDecl(TkCursor c);
-static ParseResultWithOffset ParseMainDecl(TkCursor current);
-static ParseResultWithOffset ParseLibDecl(TkCursor current);
-static ParseResultWithOffset ParseImportDecl(TkCursor current);
-static ParseResultWithOffset ParseWhileDecl(TkCursor c);
-static ParseResultWithOffset ParseForDecl(TkCursor c);
-static ParseResultWithOffset ParseUsingDecl(TkCursor current);
-static ParseResultWithOffset ParseVariableDecl(TkCursor current);
-static ParseResultWithOffset ParseMethodDecl(TkCursor current);
-static ParseResultWithOffset ParseClassDecl(TkCursor current);
-static ParseResultWithOffset ParseProgram(TkCursor current);
+// <KwReturn> <ValueExpr?> <Semicolon>
+static OffsetParseResult ParseReturnStmt(TkCursor current);
+static OffsetParseResult ParseMethodParameters(TkCursor current);
+static OffsetParseResult ParseMethodReturnParameters(TkCursor current);
+static OffsetParseResult ParseMethodSignature(TkCursor current);
+static OffsetParseResult ParseMethodDef(TkCursor current);
+static OffsetParseResult ParseMainDef(TkCursor current);
+static OffsetParseResult ParseClassDef(TkCursor current);
+static OffsetParseResult ParseLibDef(TkCursor current);
+static OffsetParseResult ParsePragmaticStmt(TkCursor current);
+static OffsetParseResult ParseFunctionalStmt(TkCursor current);
+static OffsetParseResult ParseConditionalStmt(TkCursor c);
+static OffsetParseResult ParseIfDecl(TkCursor c);
+static OffsetParseResult ParseMainDecl(TkCursor current);
+static OffsetParseResult ParseLibDecl(TkCursor current);
+static OffsetParseResult ParseImportDecl(TkCursor current);
+static OffsetParseResult ParseWhileDecl(TkCursor c);
+static OffsetParseResult ParseForDecl(TkCursor c);
+static OffsetParseResult ParseUsingDecl(TkCursor current);
+static OffsetParseResult ParseVariableDecl(TkCursor current);
+static OffsetParseResult ParseMethodDecl(TkCursor current);
+static OffsetParseResult ParseClassDecl(TkCursor current);
+static OffsetParseResult ParseProgram(TkCursor current);
 
 //---------------------------------------------------------------------------//
 // EndSection:{sectionspace}
 //---------------------------------------------------------------------------//
 
 //---------------------------------------------------------//
-// Class:{PrimaryExprClosureParser}
+// Class:{ExprParser}
 // Brief:{
 // Cursor begin and end must be the start and end of the expression.
 // Note this parser does not take the entire source as an argument.
@@ -150,13 +177,10 @@ static ParseResultWithOffset ParseProgram(TkCursor current);
 // This parser does not advance the cursor or return a new start point.
 // }
 //---------------------------------------------------------//
-class PrimaryExprClosureParser {
+class ExprParser {
  public:
-  static ParseResult Perform(TkCursor c) {
-    return PrimaryExprClosureParser().Parse(c);
-  }
-
-  ParseResult Parse(TkCursor c);
+  static ExpectedAst Perform(TkCursor c) { return ExprParser().Parse(c); }
+  ExpectedAst Parse(TkCursor c);
 
  private:
   // Set is_first_operator_ to false if currently true, else do nothing.
@@ -201,7 +225,7 @@ class PrimaryExprClosureParser {
 
   // After the closures are resolved, perform an LL recursive descent parse.
   // Expect the expression to be fully parenthesized.
-  ParseResult ParseImpl(TkCursor c);
+  ExpectedAst ParseImpl(TkCursor c);
 
  private:
   enum class eNextExpectedHeadToken { kOperative, kOperator, kNone };
@@ -214,49 +238,47 @@ class PrimaryExprClosureParser {
   bool is_first_operator_ = {true};
   bool is_resolved_ = {false};
 };
+
+static inline ExpectedAst ParseExpr(const TkCursor& c) {
+  return ExprParser::Perform(c);
+}
 //---------------------------------------------------------//
-// EndClass:{PrimaryExprClosureParser}
+// EndClass:{ExprParser}
 //---------------------------------------------------------//
 }  // namespace parser
 
 namespace parser {
-// Static const members of PrimaryExprClosureParser.
-const Tk parser::PrimaryExprClosureParser::kOpenParenTk =
-    Tk{eTk::kOpenParen, "("};
-const Tk PrimaryExprClosureParser::kCloseParenTk = Tk{eTk::kCloseParen, ")"};
+using std::move;
+// Static const members of ExprParser.
+const Tk parser::ExprParser::kOpenParenTk = Tk{eTk::LParen, "("};
+const Tk ExprParser::kCloseParenTk = Tk{eTk::RParen, ")"};
 
-ParseResult PrimaryExprClosureParser::Parse(TkCursor c) {
-  cxx::Expected<std::vector<Tk>> resolved_closures_result =
+ExpectedAst ExprParser::Parse(TkCursor c) {
+  cxx::Expected<vector<Tk>> resolved_closures_result =
       CreateAndResolveClosures(c);
-  if (!resolved_closures_result.Valid()) {
-    return ParseResult::Failure(
-        "PrimaryExprClosureParser::Parse: Error creating and resolving "
-        "closures.\n" +
-        resolved_closures_result.Error());
+  if (not resolved_closures_result) {
+    return ExpectedAst::Failure(resolved_closures_result.Error());
   }
 
-  const std::vector<Tk>& resolved_closures = resolved_closures_result.Value();
+  const vector<Tk>& resolved_closures = resolved_closures_result.Value();
 
   TkCursor intermediate_expr(resolved_closures.cbegin(),
                              resolved_closures.cend());
-  ParseResult expected_parse_result = ParseImpl(intermediate_expr);
+  ExpectedAst expected_parse_result = ParseImpl(intermediate_expr);
 
-  if (!expected_parse_result.Valid()) {
-    return ParseResult::Failure(
-        "PrimaryExprClosureParser::Parse: Error parsing resolved "
-        "closures.\n" +
-        expected_parse_result.Error());
+  if (not expected_parse_result) {
+    return expected_parse_result;
   }
-  return ParseResult::Success(expected_parse_result.Extract());
+  return ExpectedAst::Success(expected_parse_result.Extract());
 }
 
-void PrimaryExprClosureParser::FirstOperatorSwitch() {
+void ExprParser::FirstOperatorSwitch() {
   if (is_first_operator_) {
     is_first_operator_ = false;
   }
 }
 
-inline void PrimaryExprClosureParser::ResolvePrefix() {
+inline void ExprParser::ResolvePrefix() {
   // Find concecutive prefix closures.
   auto nclosures = closure_buffer_
                        .FindClosureReverseConsecutive(
@@ -278,7 +300,7 @@ inline void PrimaryExprClosureParser::ResolvePrefix() {
   }
 }
 
-inline void PrimaryExprClosureParser::ResolvePostfix() {
+inline void ExprParser::ResolvePostfix() {
   // Find concecutive postfix closures.
   auto nclosures = closure_buffer_
                        .FindClosureReverseConsecutive(
@@ -304,7 +326,7 @@ inline void PrimaryExprClosureParser::ResolvePostfix() {
   }
 };
 
-inline void PrimaryExprClosureParser::ResolveBinaryLeftAssoc() {
+inline void ExprParser::ResolveBinaryLeftAssoc() {
   std::vector<ClosureListIter> binary_closures =
       closure_buffer_.FindClosureReverseConsecutiveAndIgnore(
           [](ClosureListIter a, ClosureListIter b) -> bool {
@@ -313,31 +335,31 @@ inline void PrimaryExprClosureParser::ResolveBinaryLeftAssoc() {
                    (a->Assoc() == b->Assoc());
           },
           [](ClosureListIter a) -> bool {
-            return ((a->Priority() == ePriority::kPostfix) ||
-                    (a->Priority() == ePriority::kPrefix));
+            return ((a->Priority() == ePriority::Postfix) ||
+                    (a->Priority() == ePriority::Prefix));
           });
 
   // Resolve first closure.(last in the list)
   ClosureListIter open_paren_location = std::prev(binary_closures.back());
   // skip any postfix/prefix closures when looking for the open paren loc.
-  while (open_paren_location->Priority() == ePriority::kPostfix ||
-         open_paren_location->Priority() == ePriority::kPrefix) {
+  while (open_paren_location->Priority() == ePriority::Postfix ||
+         open_paren_location->Priority() == ePriority::Prefix) {
     open_paren_location = std::prev(open_paren_location);
   }
 
   closure_buffer_.StreamInsertAfterClosure(open_paren_location,
-                                           {eTk::kOpenParen, "("});
-  closure_buffer_.StreamPushBack({eTk::kCloseParen, ")"});
+                                           {eTk::LParen, "("});
+  closure_buffer_.StreamPushBack({eTk::RParen, ")"});
 
   // Resolve the rest,skip last in loop.
   std::vector<ClosureListIter>::iterator close_paren_location_iter =
       binary_closures.begin();
   while (close_paren_location_iter != std::prev(binary_closures.end())) {
     closure_buffer_.StreamInsertAfterClosure(open_paren_location,
-                                             {eTk::kOpenParen, "("});
+                                             {eTk::LParen, "("});
 
     closure_buffer_.StreamInsertBeforeClosure(*close_paren_location_iter,
-                                              {eTk::kCloseParen, ")"});
+                                              {eTk::RParen, ")"});
     close_paren_location_iter = std::next(close_paren_location_iter);
   }
 
@@ -347,7 +369,7 @@ inline void PrimaryExprClosureParser::ResolveBinaryLeftAssoc() {
   }
 };
 
-inline void PrimaryExprClosureParser::ResolveBinaryRightAssoc() {
+inline void ExprParser::ResolveBinaryRightAssoc() {
   std::vector<ClosureListIter> binary_closures =
       closure_buffer_.FindClosureReverseConsecutiveAndIgnore(
           [](ClosureListIter a, ClosureListIter b) -> bool {
@@ -356,21 +378,21 @@ inline void PrimaryExprClosureParser::ResolveBinaryRightAssoc() {
                    (a->Assoc() == b->Assoc());
           },
           [](ClosureListIter a) -> bool {
-            return ((a->Priority() == ePriority::kPostfix) ||
-                    (a->Priority() == ePriority::kPrefix));
+            return ((a->Priority() == ePriority::Postfix) ||
+                    (a->Priority() == ePriority::Prefix));
           });
 
   // Resolve first closure.(last in the list)
   closure_buffer_.StreamInsertAfterClosure(std::prev(binary_closures.back()),
-                                           {eTk::kOpenParen, "("});
-  closure_buffer_.StreamPushBack({eTk::kCloseParen, ")"});
+                                           {eTk::LParen, "("});
+  closure_buffer_.StreamPushBack({eTk::RParen, ")"});
   // Resolve the rest.
   std::vector<ClosureListIter>::iterator open_paren_location_iter =
       std::next(binary_closures.begin());
   while (open_paren_location_iter != binary_closures.end()) {
     closure_buffer_.StreamInsertAfterClosure(*open_paren_location_iter,
-                                             {eTk::kOpenParen, "("});
-    closure_buffer_.StreamPushBack({eTk::kCloseParen, ")"});
+                                             {eTk::LParen, "("});
+    closure_buffer_.StreamPushBack({eTk::RParen, ")"});
     open_paren_location_iter = std::next(open_paren_location_iter);
   }
   // Pop all collected closures.
@@ -379,14 +401,14 @@ inline void PrimaryExprClosureParser::ResolveBinaryRightAssoc() {
   }
 };
 
-inline void PrimaryExprClosureParser::ResolveBinary() {
+inline void ExprParser::ResolveBinary() {
   // Resolve associative binary if there are repeated equivalent priority
   // closures before the last.
   if (closure_buffer_.LastClosure()->Priority() ==
       std::prev(closure_buffer_.LastClosure())->Priority()) {
-    if (closure_buffer_.LastClosure()->Assoc() == eAssoc::kLeft) {
+    if (closure_buffer_.LastClosure()->Assoc() == eAssoc::Left) {
       ResolveBinaryLeftAssoc();
-    } else if (closure_buffer_.LastClosure()->Assoc() == eAssoc::kRight) {
+    } else if (closure_buffer_.LastClosure()->Assoc() == eAssoc::Right) {
       ResolveBinaryRightAssoc();
     } else {
       throw "ResolveBinary: Invalid binary token in closure, association "
@@ -401,17 +423,17 @@ inline void PrimaryExprClosureParser::ResolveBinary() {
         std::prev(closure_buffer_.LastClosure());
 
     // Lower:
-    if (closure_buffer_.LastClosure()->Priority() < ePriority::kPostfix) {
+    if (closure_buffer_.LastClosure()->Priority() < ePriority::Postfix) {
       // If there are postfix/prefix closures-> skip them when
       // looking for the open paren insertion location.
       ClosureListIter postfix_it = std::prev(closure_buffer_.LastClosure());
-      while (postfix_it->Priority() == ePriority::kPostfix) {
+      while (postfix_it->Priority() == ePriority::Postfix) {
         postfix_it = std::prev(postfix_it);
       }
 
       ClosureListIter prefix_it = postfix_it;
-      if (prefix_it->Priority() == ePriority::kPrefix) {
-        while (prefix_it->Priority() == ePriority::kPrefix) {
+      if (prefix_it->Priority() == ePriority::Prefix) {
+        while (prefix_it->Priority() == ePriority::Prefix) {
           prefix_it = std::prev(prefix_it);
         }
       }
@@ -423,7 +445,7 @@ inline void PrimaryExprClosureParser::ResolveBinary() {
       // If there are postfix/prefix closures-> skip them when
       // looking for the open paren insertion location.
       ClosureListIter postfix_it = std::prev(closure_buffer_.LastClosure());
-      while (postfix_it->Priority() == ePriority::kPostfix) {
+      while (postfix_it->Priority() == ePriority::Postfix) {
         postfix_it = std::prev(postfix_it);
       }
 
@@ -431,20 +453,19 @@ inline void PrimaryExprClosureParser::ResolveBinary() {
     }
 
     closure_buffer_.StreamInsertAfterClosure(open_paren_insertion_loc_iter,
-                                             {eTk::kOpenParen, "("});
-    closure_buffer_.StreamPushBack({eTk::kCloseParen, ")"});
+                                             {eTk::LParen, "("});
+    closure_buffer_.StreamPushBack({eTk::RParen, ")"});
     closure_buffer_.PopClosure();
   }
 };
 
-inline void PrimaryExprClosureParser::ResolveLast() {
-  if (closure_buffer_.LastClosure()->Operation() == eOperation::kPrefix) {
+inline void ExprParser::ResolveLast() {
+  if (closure_buffer_.LastClosure()->Operation() == eOperation::Prefix) {
     ResolvePrefix();
   } else if (closure_buffer_.LastClosure()->Operation() ==
-             eOperation::kPostfix) {
+             eOperation::Postfix) {
     ResolvePostfix();
-  } else if (closure_buffer_.LastClosure()->Operation() ==
-             eOperation::kBinary) {
+  } else if (closure_buffer_.LastClosure()->Operation() == eOperation::Binary) {
     ResolveBinary();
   } else {
     throw "ActionResolveLast: Invalid token type in closure.Must be an "
@@ -452,22 +473,22 @@ inline void PrimaryExprClosureParser::ResolveLast() {
   }
 }
 
-inline cxx::BoolError PrimaryExprClosureParser::ActionSkip(TkCursor& c) {
+inline cxx::BoolError ExprParser::ActionSkip(TkCursor& c) {
   // Check for an open paren-> Subexpression
   // Resolve the subexpr first.
   // Push resolved result to output.
-  if (c.TypeIs(eTk::kOpenParen)) {
+  if (c.TypeIs(eTk::LParen)) {
     TkScope scope = TkScope::FindParen(c);
-    if (!scope.Valid()) {
+    if (not scope) {
       return "Mismatched parentheses in operand.";
     } else {
       // Resolve but do not parse!the inside of the parentheses.
-      PrimaryExprClosureParser resolved_subexpr_parser;
+      ExprParser resolved_subexpr_parser;
       cxx::Expected<TkVector> resolved_subexpr_result =
-          PrimaryExprClosureParser().CreateAndResolveClosures(
+          ExprParser().CreateAndResolveClosures(
               {scope.ContainedBegin(), scope.ContainedEnd()});
-      if (!resolved_subexpr_result.Valid()) {
-        return "PrimaryExprClosureParser::ActionSkip: Could not resolve "
+      if (not resolved_subexpr_result) {
+        return "ExprParser::ActionSkip: Could not resolve "
                "subexpression.\n" +
                resolved_subexpr_result.Error();
       }
@@ -482,18 +503,18 @@ inline cxx::BoolError PrimaryExprClosureParser::ActionSkip(TkCursor& c) {
     }
   }
   // Check if this is a singular token OPERAND.
-  if (c.Operation() == eOperation::kNone || c.TypeIs(eTk::kSubtraction)) {
+  if (c.Operation() == eOperation::None || c.TypeIs(eTk::Sub)) {
     // If unary minus - Emplace unary minus into operand.
-    if (c.TypeIs(eTk::kSubtraction)) {
+    if (c.TypeIs(eTk::Sub)) {
       c.Advance();
-      if (c.TypeIs(eTk::kNumberLiteral) || c.TypeIs(eTk::kDoubleLiteral)) {
+      if (c.TypeIs(eTk::LitInt) || c.TypeIs(eTk::LitReal)) {
         Tk negative_number = c.Get();
         negative_number.LiteralMutable() = "-" + negative_number.Literal();
         closure_buffer_.StreamPushBack(negative_number);
         c.Advance();
         return true;
       } else {
-        return "PrimaryExprClosureParser::ActionSkip: Unary minus must be "
+        return "ExprParser::ActionSkip: Unary minus must be "
                "followed by a numeric literal.\n";
       }
     }
@@ -503,17 +524,17 @@ inline cxx::BoolError PrimaryExprClosureParser::ActionSkip(TkCursor& c) {
     return true;
   }
 
-  return "PrimaryExprClosureParser::ActionSkip: Could not read operand token, "
+  return "ExprParser::ActionSkip: Could not read operand token, "
          "invalid or unimplemented.";
 }
 
-inline cxx::BoolError PrimaryExprClosureParser::ActionStore(TkCursor& c) {
+inline cxx::BoolError ExprParser::ActionStore(TkCursor& c) {
   // Check for an open paren-> Function Call
   // Arguments are parsed and resolved in ParseImpl.
   // Push a closure for the function call.
-  if (c.TypeIs(eTk::kOpenParen)) {
+  if (c.TypeIs(eTk::LParen)) {
     TkScope scope = TkScope::FindParen(c);
-    if (!scope.Valid()) {
+    if (not scope) {
       return "Mismatched parentheses in function call.";
     } else {
       closure_buffer_.StreamPushBack(c.Get());
@@ -531,9 +552,9 @@ inline cxx::BoolError PrimaryExprClosureParser::ActionStore(TkCursor& c) {
     }
   }
   // Check for an open bracket-> Indexing Operator
-  if (c.TypeIs(eTk::kOpenBracket)) {
+  if (c.TypeIs(eTk::LBracket)) {
     TkScope scope = TkScope::FindBracket(c);
-    if (!scope.Valid()) {
+    if (not scope) {
       return "Mismatched bracket in indexing call.";
     } else {
       closure_buffer_.StreamPushBack(c.Get());
@@ -549,9 +570,9 @@ inline cxx::BoolError PrimaryExprClosureParser::ActionStore(TkCursor& c) {
     }
   }
   // Listing Operator
-  if (c.TypeIs(eTk::kOpenBrace)) {
+  if (c.TypeIs(eTk::LBrace)) {
     TkScope scope = TkScope::FindBrace(c);
-    if (!scope.Valid()) {
+    if (not scope) {
       return "Mismatched brace in listing call.";
     } else {
       closure_buffer_.StreamPushBack(c.Get());
@@ -567,21 +588,21 @@ inline cxx::BoolError PrimaryExprClosureParser::ActionStore(TkCursor& c) {
     }
   }
   // Single Token Operator.
-  if (c.Operation() == eOperation::kBinary ||
-      c.Operation() == eOperation::kPrefix ||
-      c.Operation() == eOperation::kPostfix) {
+  if (c.Operation() == eOperation::Binary ||
+      c.Operation() == eOperation::Prefix ||
+      c.Operation() == eOperation::Postfix) {
     closure_buffer_.StreamPushBack(c.Get());
     closure_buffer_.PushBackClosure(closure_buffer_.LastStreamed());
     c.Advance();
     return true;
   }
 
-  return "PrimaryExprClosureParser::ActionStore: Could not read operator "
+  return "ExprParser::ActionStore: Could not read operator "
          "token, "
          "invalid or unimplemented.";
 }
 
-inline cxx::BoolError PrimaryExprClosureParser::ActionCheck(TkCursor& c) {
+inline cxx::BoolError ExprParser::ActionCheck(TkCursor& c) {
   if (c.AtEnd()) {
     while (closure_buffer_.ClosureCount() > 0) {
       ResolveLast();
@@ -602,14 +623,14 @@ inline cxx::BoolError PrimaryExprClosureParser::ActionCheck(TkCursor& c) {
   }
 }
 
-inline cxx::BoolError PrimaryExprClosureParser::ChooseAction(TkCursor& c) {
+inline cxx::BoolError ExprParser::ChooseAction(TkCursor& c) {
   if (c.AtEnd()) {
     cxx::BoolError check_result = ActionCheck(c);
     if (check_result) {
       is_resolved_ = true;
       return true;
     } else {
-      return "PrimaryExprClosureParser::ChooseAction: Could not resolve "
+      return "ExprParser::ChooseAction: Could not resolve "
              "closures.\n" +
              check_result.Error();
     }
@@ -625,31 +646,31 @@ inline cxx::BoolError PrimaryExprClosureParser::ChooseAction(TkCursor& c) {
     //                           -> Skip Both.
     //                         // If the following is non number, error.
     if (next_expected_head_token_ == eNextExpectedHeadToken::kOperative) {
-      if (c.Operation() == eOperation::kNone || c.TypeIs(eTk::kOpenParen) ||
-          c.TypeIs(eTk::kSubtraction)) {
+      if (c.Operation() == eOperation::None || c.TypeIs(eTk::LParen) ||
+          c.TypeIs(eTk::Sub)) {
         cxx::BoolError skip_result = ActionSkip(c);
         if (skip_result) {
           next_expected_head_token_ = eNextExpectedHeadToken::kOperator;
           return true;
         } else {
-          return "PrimaryExprClosureParser::ChooseAction: Could not skip "
+          return "ExprParser::ChooseAction: Could not skip "
                  "operand.\n" +
                  skip_result.Error();
         }
       }
       // Prefix Operator -> Check Single Prefix Operator.
-      else if (c.Operation() == eOperation::kPrefix) {
+      else if (c.Operation() == eOperation::Prefix) {
         if (is_first_operator_) {
           cxx::BoolError store_result = ActionStore(c);
-          if (!store_result) {
-            return "PrimaryExprClosureParser::ChooseAction: Could not store "
+          if (not store_result) {
+            return "ExprParser::ChooseAction: Could not store "
                    "prefix operator.\n" +
                    store_result.Error();
           }
         } else {
           cxx::BoolError check_result = ActionCheck(c);
-          if (!check_result) {
-            return "PrimaryExprClosureParser::ChooseAction: Could not check "
+          if (not check_result) {
+            return "ExprParser::ChooseAction: Could not check "
                    "prefix operator.\n" +
                    check_result.Error();
           }
@@ -659,15 +680,15 @@ inline cxx::BoolError PrimaryExprClosureParser::ChooseAction(TkCursor& c) {
         return true;
       }
       // expected operand got operator -> user error
-      else if (c.Operation() == eOperation::kBinary ||
-               c.Operation() == eOperation::kPostfix) {
-        return "PrimaryExprClosureParser::ChooseAction: Invalid token type "
+      else if (c.Operation() == eOperation::Binary ||
+               c.Operation() == eOperation::Postfix) {
+        return "ExprParser::ChooseAction: Invalid token type "
                "encountered, operator following operator.\n";
       }
       // Else user error -> this token does not belong in a value
       // expression.
       else {
-        return "PrimaryExprClosureParser::ChooseAction: "
+        return "ExprParser::ChooseAction: "
                "Token type not valid for a primary expression.\n";
       }
     }
@@ -677,8 +698,8 @@ inline cxx::BoolError PrimaryExprClosureParser::ChooseAction(TkCursor& c) {
     else if (next_expected_head_token_ == eNextExpectedHeadToken::kOperator) {
       // Open Paren, Open Bracket, Postfix Operator
       //    -> Check, next is Operator.
-      if (c.TypeIs(eTk::kOpenParen) || c.TypeIs(eTk::kOpenBracket) ||
-          c.TypeIs(eTk::kOpenBrace) || c.Operation() == eOperation::kPostfix) {
+      if (c.TypeIs(eTk::LParen) || c.TypeIs(eTk::LBracket) ||
+          c.TypeIs(eTk::LBrace) || c.Operation() == eOperation::Postfix) {
         cxx::BoolError action_result;
         if (is_first_operator_) {
           action_result = ActionStore(c);
@@ -691,7 +712,7 @@ inline cxx::BoolError PrimaryExprClosureParser::ChooseAction(TkCursor& c) {
         }
       }
       // Binary Operator -> Check, next is Operative.
-      else if (c.Operation() == eOperation::kBinary) {
+      else if (c.Operation() == eOperation::Binary) {
         cxx::BoolError action_result;
         if (is_first_operator_) {
           action_result = ActionStore(c);
@@ -702,1014 +723,825 @@ inline cxx::BoolError PrimaryExprClosureParser::ChooseAction(TkCursor& c) {
         next_expected_head_token_ = eNextExpectedHeadToken::kOperative;
       }
       // Prefix -> user Error, prefix following operand.
-      else if (c.Operation() == eOperation::kPrefix) {
-        return "PrimaryExprClosureParser::ChooseAction: Invalid token type "
+      else if (c.Operation() == eOperation::Prefix) {
+        return "ExprParser::ChooseAction: Invalid token type "
                "encountered, prefix following operand.\n";
       }
       // Operand -> user Error, operand following operand.
-      else if (c.Operation() == eOperation::kNone) {
-        return "PrimaryExprClosureParser::ChooseAction: Invalid token type "
+      else if (c.Operation() == eOperation::None) {
+        return "ExprParser::ChooseAction: Invalid token type "
                "encountered, operand following operand.\n";
       }
       // Else user error -> this token does not belong in a value
       // expression.
       else {
-        return "PrimaryExprClosureParser::ChooseAction: "
+        return "ExprParser::ChooseAction: "
                "Token type not valid for a primary expression.\n";
       }
     }
     // This should never happen -> critical logic error.
     // eNextExpectedHeadToken enum set to invalid value.
     else {
-      throw "[CRITICAL LOGIC ERROR] PrimaryExprClosureParser::ChooseAction: "
+      throw "[CRITICAL LOGIC ERROR] ExprParser::ChooseAction: "
                 "Invalid next expected head token enumeration type.\n";
     }
   }
 }
 
-cxx::Expected<std::vector<Tk>>
-PrimaryExprClosureParser::CreateAndResolveClosures(TkCursor c) {
-  while (!is_resolved_) {
+cxx::Expected<std::vector<Tk>> ExprParser::CreateAndResolveClosures(
+    TkCursor c) {
+  while (not is_resolved_) {
     auto action_result = ChooseAction(c);
-    if (!action_result) {
-      return cxx::Expected<std::vector<Tk>>::Failure(
-          "PrimaryExprClosureParser::CreateAndResolveClosures: Error creating "
-          "and resolving closures.\n" +
-          action_result.Error());
+    if (not action_result) {
+      return cxx::Expected<std::vector<Tk>>::Failure(action_result.Error());
     }
   }
   return cxx::Expected<std::vector<Tk>>::Success(
       closure_buffer_.StreamToVector());
 }
 
-ParseResult PrimaryExprClosureParser::ParseImpl(TkCursor c) {
-  enum class eNextExpectedToken { kOperand, kOperator, kAny };
-  // eNextExpectedToken next_expected_token = eNextExpectedToken::kAny;
-  Ast final_result_node;
+ExpectedAst ExprParser::ParseImpl(TkCursor c) {
+  using enum eTk;
+  using namespace caerr;
 
-  // Expression will always start with one of:
-  // - Operand
-  // - Prefix Operator
-  // - Open Paren(subexpression)
-  if (c.TypeIs(eTk::kOpenParen)) {
+  Ast out_node;
+
+  if (c.TypeIs(LParen)) {
     auto scope = TkScope::FindParen(c);
-    if (!scope.Valid()) {
-      return ParseResult::Failure("Mismatched parentheses in operand.");
+    if (not scope) {
+      return ExpectedAst::Failure(MismatchedScope(c));
     } else {
-      // Check for redundant parentheses.
+      // 1. Check for redundant paren-> Parse the inside of the paren instead.
       if (scope.End() == c.End()) {
-        // Parse the inside of the parentheses instead.
         return ParseImpl({scope.ContainedBegin(), scope.ContainedEnd()});
       }
-      // Scope is an operand contained in a subexpression.
+      // 2. Else scope is an operand contained in a subexpression.
       else {
-        ParseResult subexpr_result =
+        ExpectedAst lhs_result =
             ParseImpl({scope.ContainedBegin(), scope.ContainedEnd()});
-        if (!subexpr_result.Valid()) {
-          return ParseResult::Failure(
-              "PrimaryExprClosureParser::ParseImpl: Error parsing "
-              "subexpression.\n" +
-              subexpr_result.Error());
-        }
-        auto lhs_operand_node = subexpr_result.Extract();
+        if (not lhs_result) {
+          return lhs_result;
+        };
         c.Advance(scope.End());
-        // Operand may be followed by a postfix, or a binary operator.
-        if (c.Operation() == eOperation::kPostfix) {
-          // Postfix () -> Function Call
-          if (c.TypeIs(eTk::kOpenParen)) {
+
+        // 2.1. Postfix
+        if (c.Operation() == eOperation::Postfix) {
+          // 2.1.1. Postfix () -> Function Call
+          if (c.TypeIs(LParen)) {
             auto scope = TkScope::FindParen(c);
-            if (!scope.Valid()) {
-              throw "Mismatched parentheses in function call.";
+            if (not scope) {
+              return ExpectedAst::Failure(MismatchedScope(c));
             }
             // Parse the arguments
             auto arguments_result = ParseArguments(c);
-            if (!arguments_result.Valid()) {
-              return ParseResult::Failure(
-                  "PrimaryExprClosureParser::ParseImpl: Error parsing "
-                  "arguments.\n" +
-                  arguments_result.Error());
+            if (not arguments_result) {
+              return ExpectedAst::Failure(arguments_result.Error());
             }
-            final_result_node = Ast(eAst::kFunctionCall, "", lhs_operand_node,
-                                    arguments_result.Extract());
+            out_node = Ast(eAst::FunctionCall, "", lhs_result.Extract(),
+                           arguments_result.Extract());
             c.Advance(scope.End());
           }
-          // Postfix [] -> Index Operator
-          else if (c.TypeIs(eTk::kOpenBracket)) {
+          // 2.1.2. Postfix [] -> Index Operator
+          else if (c.TypeIs(LBracket)) {
             auto scope = TkScope::FindBracket(c);
-            if (!scope.Valid()) {
-              throw "Mismatched brackets in indexing call.";
+            if (not scope) {
+              return ExpectedAst::Failure(MismatchedScope(c));
             }
             auto arguments_result = ParseIndexingArguments(c);
-            if (!arguments_result.Valid()) {
-              return ParseResult::Failure(
-                  "PrimaryExprClosureParser::ParseImpl: Error parsing "
-                  "indexing arguments.\n" +
-                  arguments_result.Error());
+            if (not arguments_result) {
+              return ExpectedAst::Failure(arguments_result.Error());
             }
-            final_result_node = Ast(eAst::kIndexOperator, "", lhs_operand_node,
-                                    arguments_result.Extract());
+            out_node = Ast(eAst::IndexOperator, "", lhs_result.Extract(),
+                           arguments_result.Extract());
             c.Advance(scope.End());
           }
-          // Postfix {} -> Listing Operator
-          else if (c.TypeIs(eTk::kOpenBrace)) {
+          // 2.1.3. Postfix {} -> Listing Operator
+          else if (c.TypeIs(LBrace)) {
             auto scope = TkScope::FindBrace(c);
-            if (!scope.Valid()) {
-              throw "Mismatched braces in listing call.";
+            if (not scope) {
+              return ExpectedAst::Failure(MismatchedScope(c));
             }
             auto arguments_result = ParseListingArguments(c);
-            if (!arguments_result.Valid()) {
-              return ParseResult::Failure(
-                  "PrimaryExprClosureParser::ParseImpl: Error parsing "
-                  "listing arguments.\n" +
-                  arguments_result.Error());
+            if (not arguments_result) {
+              return ExpectedAst::Failure(arguments_result.Error());
             }
-            final_result_node =
-                Ast(eAst::kListingOperator, "", lhs_operand_node,
-                    arguments_result.Extract());
+            out_node = Ast(eAst::ListingOperator, "", lhs_result.Extract(),
+                           arguments_result.Extract());
             c.Advance(scope.End());
           }
-          // Postfix Single Token Operator.
+          // 2.1.4. Postfix Single Token Operator.
           else {
-            final_result_node = Ast(c.Get());
-            final_result_node.PushBack(lhs_operand_node);
+            out_node = Ast(c.Get());
+            out_node.ExtractAndPush(lhs_result);
             c.Advance();
           }
-        } else if (c.Operation() == eOperation::kBinary) {
-          final_result_node = Ast(c.Get());
+        }
+        // 2.2. Binary Operator
+        else if (c.Operation() == eOperation::Binary) {
+          out_node = Ast(c.Get());
           c.Advance();
           // Expecting an operand after a binary operator.
-          // Open Paren -> Subexpr
-          if (c.TypeIs(eTk::kOpenParen)) {
+          // 2.2.1. Open Paren -> Subexpr
+          if (c.TypeIs(LParen)) {
             auto scope = TkScope::FindParen(c);
-            if (!scope.Valid()) {
-              return ParseResult::Failure("Mismatched parentheses in operand.");
+            if (not scope) {
+              return ExpectedAst::Failure(MismatchedScope(c));
             } else {
-              ParseResult subexpr_result =
+              ExpectedAst rhs_result =
                   ParseImpl({scope.ContainedBegin(), scope.ContainedEnd()});
-              if (!subexpr_result.Valid()) {
-                return ParseResult::Failure(
-                    "PrimaryExprClosureParser::ParseImpl: Error parsing "
-                    "subexpression.\n" +
-                    subexpr_result.Error());
+              if (not rhs_result) {
+                return rhs_result;
               }
-              auto rhs_operand_node = subexpr_result.Extract();
-              final_result_node.PushBack(lhs_operand_node);
-              final_result_node.PushBack(rhs_operand_node);
+              out_node.ExtractAndPush(lhs_result);
+              out_node.ExtractAndPush(rhs_result);
               c.Advance(scope.End());
             }
           }
-          // Else it has to be a singular token operand.
+          // 2.2.2. Else it has to be a singular token operand.
           else {
-            ParseResultWithOffset operand_result = ParseOperand(c);
-            if (!operand_result.Valid()) {
-              return ParseResult::Failure(
-                  "PrimaryExprClosureParser::ParseImpl: Error parsing "
-                  "operand.\n" +
-                  operand_result.Error());
+            OffsetParseResult rhs_result = ParseOperand(c);
+            if (not rhs_result) {
+              return ExpectedAst::Failure(rhs_result.Error());
             }
-            auto rhs_operand_node = operand_result.Extract();
-            final_result_node.PushBack(lhs_operand_node);
-            final_result_node.PushBack(rhs_operand_node);
-            c.Advance(operand_result.Always().Iter());
+            out_node.ExtractAndPush(lhs_result);
+            out_node.ExtractAndPush(rhs_result);
+            c.Advance(rhs_result);
           }
-        } else {
+        }
+        // 2.3 End of expr
+        else {
           if (c.AtEnd()) {
-            final_result_node = lhs_operand_node;
+            out_node = lhs_result.Extract();
           } else {
-            return ParseResult::Failure(
-                "PrimaryExprClosureParser::ParseImpl: Invalid token type "
-                "encountered following binary operator.\n");
+            return ExpectedAst::Failure(
+                "Invalid token type encountered following binary operator.\n");
           }
         }
       }
     }
   }
   // - Operand
-  else if (c.Operation() == eOperation::kNone) {
-    ParseResultWithOffset operand_result = ParseOperand(c);
-    if (!operand_result.Valid()) {
-      return ParseResult::Failure(
-          "PrimaryExprClosureParser::ParseImpl: Error parsing operand.\n" +
-          operand_result.Error());
+  else if (c.Operation() == eOperation::None) {
+    auto lhs_result = ParseOperand(c);
+    if (not lhs_result) {
+      return ExpectedAst::Failure(lhs_result.Error());
     }
-    auto lhs_operand_node = operand_result.Extract();
-    c.Advance(operand_result.Always().Iter());
-    // Operand may be followed by a postfix, or a binary operator.
-    if (c.Operation() == eOperation::kPostfix) {
-      // Postfix () -> Function Call
-      if (c.TypeIs(eTk::kOpenParen)) {
+    c.Advance(lhs_result);
+
+    // 1. Postfix
+    if (c.Operation() == eOperation::Postfix) {
+      // 1.1. Postfix () -> Function Call
+      if (c.TypeIs(LParen)) {
         auto scope = TkScope::FindParen(c);
-        if (!scope.Valid()) {
-          throw "Mismatched parentheses in function call.";
+        if (not scope) {
+          return ExpectedAst::Failure(MismatchedScope(c));
         }
         // Parse the arguments
         auto arguments_result = ParseArguments(c);
-        if (!arguments_result.Valid()) {
-          return ParseResult::Failure(
-              "PrimaryExprClosureParser::ParseImpl: Error parsing "
-              "arguments.\n" +
-              arguments_result.Error());
+        if (not arguments_result) {
+          return ExpectedAst::Failure(arguments_result.Error());
         }
-        final_result_node = Ast(eAst::kFunctionCall, "", lhs_operand_node,
-                                arguments_result.Extract());
+        out_node = Ast(eAst::FunctionCall, "", lhs_result.Extract(),
+                       arguments_result.Extract());
         c.Advance(scope.End());
       }
-      // Postfix [] -> Index Operator
-      else if (c.TypeIs(eTk::kOpenBracket)) {
+      // 1.2. Postfix [] -> Index Operator
+      else if (c.TypeIs(LBracket)) {
         auto scope = TkScope::FindBracket(c);
-        if (!scope.Valid()) {
-          throw "Mismatched brackets in indexing call.";
+        if (not scope) {
+          return ExpectedAst::Failure(MismatchedScope(c));
         }
         auto arguments_result = ParseIndexingArguments(c);
-        if (!arguments_result.Valid()) {
-          return ParseResult::Failure(
-              "PrimaryExprClosureParser::ParseImpl: Error parsing "
-              "indexing arguments.\n" +
-              arguments_result.Error());
+        if (not arguments_result) {
+          return ExpectedAst::Failure(arguments_result.Error());
         }
-        final_result_node =
-            Ast(eAst::kIndexOperator, "", lhs_operand_node,
-                arguments_result.Extract());  // TODO: Parse Index Arguments
+        out_node = Ast(eAst::IndexOperator, "", lhs_result.Extract(),
+                       arguments_result.Extract());
         c.Advance(scope.End());
       }
-      // Postfix {} -> Listing Operator
-      else if (c.TypeIs(eTk::kOpenBrace)) {
+      // 1.3. Postfix {} -> Listing Operator
+      else if (c.TypeIs(LBrace)) {
         auto scope = TkScope::FindBrace(c);
-        if (!scope.Valid()) {
-          throw "Mismatched braces in listing call.";
+        if (not scope) {
+          return ExpectedAst::Failure(MismatchedScope(c));
         }
         auto arguments_result = ParseListingArguments(c);
-        if (!arguments_result.Valid()) {
-          return ParseResult::Failure(
-              "PrimaryExprClosureParser::ParseImpl: Error parsing "
-              "listing arguments.\n" +
-              arguments_result.Error());
+        if (not arguments_result) {
+          return ExpectedAst::Failure(arguments_result.Error());
         }
-        final_result_node = Ast(eAst::kListingOperator, "", lhs_operand_node,
-                                arguments_result.Extract());
+        out_node = Ast(eAst::ListingOperator, "", lhs_result.Extract(),
+                       arguments_result.Extract());
         c.Advance(scope.End());
       }
-      // Postfix Single Token Operator.
+      // 1.3. Postfix Single Token Operator.
       else {
-        final_result_node = Ast(c.Get());
-        final_result_node.PushBack(lhs_operand_node);
+        out_node = Ast(c.Get());
+        out_node.ExtractAndPush(lhs_result);
         c.Advance();
       }
     }
-    // Binary Operator after operand.
-    else if (c.Operation() == eOperation::kBinary) {
-      final_result_node = Ast(c.Get());
+    // 2. Binary Operator after operand.
+    else if (c.Operation() == eOperation::Binary) {
+      out_node = Ast(c.Get());
       c.Advance();
       // Expecting an operand after a binary operator.
-      // Open Paren -> Subexpr
-      if (c.TypeIs(eTk::kOpenParen)) {
+      // 2.1. Open Paren -> Subexpr
+      if (c.TypeIs(LParen)) {
         auto scope = TkScope::FindParen(c);
-        if (!scope.Valid()) {
-          return ParseResult::Failure("Mismatched parentheses in operand.");
+        if (not scope) {
+          return ExpectedAst::Failure(MismatchedScope(c));
         } else {
-          ParseResult subexpr_result =
+          ExpectedAst rhs_result =
               ParseImpl({scope.ContainedBegin(), scope.ContainedEnd()});
-          if (!subexpr_result.Valid()) {
-            return ParseResult::Failure(
-                "PrimaryExprClosureParser::ParseImpl: Error parsing "
-                "subexpression.\n" +
-                subexpr_result.Error());
+          if (not rhs_result) {
+            return rhs_result;
           }
-          auto rhs_operand_node = subexpr_result.Extract();
-          final_result_node.PushBack(lhs_operand_node);
-          final_result_node.PushBack(rhs_operand_node);
+          out_node.ExtractAndPush(lhs_result);
+          out_node.ExtractAndPush(rhs_result);
           c.Advance(scope.End());
         }
       }
-      // Else it has to be a singular token operand.
+      // 2.2. Else it has to be a singular token operand.
       else {
-        ParseResultWithOffset operand_result = ParseOperand(c);
-        if (!operand_result.Valid()) {
-          return ParseResult::Failure(
-              "PrimaryExprClosureParser::ParseImpl: Error parsing operand.\n" +
-              operand_result.Error());
+        auto rhs_result = ParseOperand(c);
+        if (not rhs_result) {
+          return ExpectedAst::Failure(rhs_result.Error());
         }
-        auto rhs_operand_node = operand_result.Extract();
-        final_result_node.PushBack(lhs_operand_node);
-        final_result_node.PushBack(rhs_operand_node);
-        c.Advance(operand_result.Always().Iter());
+        out_node.ExtractAndPush(lhs_result);
+        out_node.ExtractAndPush(rhs_result);
+        c.Advance(rhs_result);
       }
-    } else {
-      // expecting to be at the end of the expression.
+    }
+    // 3. End of the expression.
+    else {
       if (c.AtEnd()) {
-        final_result_node = lhs_operand_node;
+        out_node = lhs_result.Extract();
       } else {
-        return ParseResult::Failure(
-            "PrimaryExprClosureParser::ParseImpl: Invalid token type "
-            "encountered following binary operator.\n");
+        return ExpectedAst::Failure(
+            "Invalid token type encountered following binary operator.\n");
       }
     }
   }
   // - Prefix
-  else if (c.Operation() == eOperation::kPrefix) {
+  else if (c.Operation() == eOperation::Prefix) {
     // Prefix Operator, must be followed by an operand.
-    final_result_node = Ast(c.Get());
+    out_node = Ast(c.Get());
     c.Advance();
 
     if (c.AtEnd()) {
-      return ParseResult::Failure(
-          "PrimaryExprClosureParser::ParseImpl: Prefix operator at end of "
-          "expression.\n");
+      return ExpectedAst::Failure(
+          UserSyntaxError(c, "Prefix operator at end of expression."));
     }
 
-    // Open Paren -> Subexpr
-    if (c.TypeIs(eTk::kOpenParen)) {
+    // 1. Open Paren -> Subexpr
+    if (c.TypeIs(LParen)) {
       auto scope = TkScope::FindParen(c);
-      if (!scope.Valid()) {
-        return ParseResult::Failure("Mismatched parentheses in operand.");
+      if (not scope) {
+        return ExpectedAst::Failure(MismatchedScope(c));
       } else {
-        ParseResult subexpr_result =
+        ExpectedAst lhs_result =
             ParseImpl({scope.ContainedBegin(), scope.ContainedEnd()});
-        if (!subexpr_result.Valid()) {
-          return ParseResult::Failure(
-              "PrimaryExprClosureParser::ParseImpl: Error parsing "
-              "subexpression.\n" +
-              subexpr_result.Error());
+        if (not lhs_result) {
+          return lhs_result;
         }
-        final_result_node.PushBack(subexpr_result.Extract());
+        out_node.ExtractAndPush(lhs_result);
         c.Advance(scope.End());
       }
     }
-    // Else it has to be a singular token operand.
-    else if (c.Operation() == eOperation::kNone) {
-      ParseResultWithOffset operand_result = ParseOperand(c);
-      if (!operand_result.Valid()) {
-        return ParseResult::Failure(
-            "PrimaryExprClosureParser::ParseImpl: Error parsing operand.\n" +
-            operand_result.Error());
+    // 2. Else it has to be a singular token operand.
+    else if (c.Operation() == eOperation::None) {
+      OffsetParseResult lhs_result = ParseOperand(c);
+      if (not lhs_result) {
+        return ExpectedAst::Failure(lhs_result.Error());
       }
-      final_result_node.PushBack(operand_result.Extract());
-      c.Advance(operand_result.Always().Iter());
-    } else {
-      return ParseResult::Failure(
-          "PrimaryExprClosureParser::ParseImpl: Invalid token type "
-          "encountered following prefix operator.\n");
+      out_node.ExtractAndPush(lhs_result);
+      c.Advance(lhs_result);
+    }
+    // 3. Error -> Invalid token type encountered following prefix operator.
+    else {
+      return ExpectedAst::Failure(
+          "Invalid token type encountered following prefix operator.\n");
     }
 
   }
   // Error -> Invalid token type at beginning of expression.
   else {
-    return ParseResult::Failure(
-        "PrimaryExprClosureParser::ParseImpl: Invalid token type at beginning "
-        "of expression.\n");
+    return ExpectedAst::Failure(
+        "Invalid token type at beginning of primary expression.\n");
   }
 
-  return ParseResult::Success(final_result_node);  // temp? unreachable
+  return ExpectedAst::Success(move(out_node));
 }
 
-ParseResultWithOffset parser::ParseOperand(TkCursor c) {
-  using namespace compiler_error::parser;
-  if (c.IsSingularOperand())
-    return ParseResultWithOffset::Success(c.Next(), c.Get());
+//---------------------------------------------------------------------------//
+// Section:{Internal parsing methods impl}
+//---------------------------------------------------------------------------//
+
+OffsetParseResult parser::ParseOperand(TkCursor c) {
+  using namespace caerr;
+  if (c.IsAnOperand())
+    return Success(c.Next(), c.Get());
   else
-    return ParseResultWithOffset::Failure(
-        c, xProgrammerLogicError(eAst::kValue, c.Iter(),
-                                 "Could not parse singular operand."));
+    return Fail(c, ImplParserExpectedToken(c));
 };
 
-ParseResultWithOffset parser::ParseArguments(TkCursor c) {
-  using namespace compiler_error::parser;
-  if (c.TypeIs(eTk::kOpenParen)) {
-    if (c.Next().TypeIs(eTk::kCloseParen)) {  // Empty Arg.
-      return ParseResultWithOffset::Success(c.Advance(2),
-                                            Ast(eAst::kArguments));
+OffsetParseResult parser::ParseArguments(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+  if (c.TypeIs(LParen)) {
+    if (c.Next().TypeIs(RParen)) {  // Empty Arg.
+      return Success(c.Advance(2), Ast(eAst::Arguments));
     }
 
-    std::vector<TkScope> arg_scopes =
-        TkScope::FindSeperatedParen(c, eTk::kComma);
+    TkScope::Vector arg_scopes = TkScope::FindSeperatedParen(c, Comma);
+
     if (not arg_scopes.front()) {
-      return ParseResultWithOffset::Failure(c,
-                                            xMismatchedParentheses(c.Iter()));
+      return Fail(c, MismatchedScope(c));
     } else {
-      Ast arguments_node = eAst::kArguments;
+      Ast arguments_node = eAst::Arguments;
       for (const TkScope& arg_scope : arg_scopes) {
-        ParseResult arg_result =
-            PrimaryExprClosureParser::Perform(arg_scope.Contained());
-        if (!arg_result) {
-          // TODO: Add error message type for this.
-          return ParseResultWithOffset::Failure(c, arg_result.Error());
+        ExpectedAst arg_result = ParseExpr(arg_scope.Contained());
+        if (not arg_result) {
+          return Fail(c, arg_result.Error());
         }
-        arguments_node.PushBack(arg_result.Extract());
+        arguments_node.ExtractAndPush(arg_result);
       }
-      return ParseResultWithOffset::Success(c.Advance(arg_scopes.back().End()),
-                                            arguments_node);
+      return Success(c.Advance(arg_scopes.back().End()), move(arguments_node));
     }
   } else {
-    return ParseResultWithOffset::Failure(
-        c, xProgrammerLogicError(eAst::kExpression, c.Iter()));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParseIndexingArguments(TkCursor c) {
-  if (c.TypeIs(eTk::kOpenBracket)) {
+OffsetParseResult parser::ParseIndexingArguments(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+  if (c.TypeIs(LBracket)) {
     // Check for empty arguments.
-    if (c.Next().TypeIs(eTk::kCloseBracket)) {
-      return ParseResultWithOffset::Success(c.Advance(2),
-                                            Ast(eAst::kArguments));
+    if (c.Next().TypeIs(RBracket)) {
+      return Success(c.Advance(2), eAst::Arguments);
     }
 
-    std::vector<TkScope> arg_scopes =
-        TkScope::FindSeperatedBracket(c, eTk::kComma);
-    if (!arg_scopes.front().Valid()) {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xMismatchedParentheses(
-                 c.Iter(),
-                 "[parser::ParseIndexingArguments] Mismatched "
-                 "brackets in indexing call."));
+    TkScope::Vector arg_scopes = TkScope::FindSeperatedBracket(c, Comma);
+    if (not arg_scopes.front()) {
+      return Fail(c, MismatchedScope(c));
     } else {
-      Ast arguments_node(eAst::kArguments);
+      Ast arguments_node(eAst::Arguments);
       for (const TkScope& arg_scope : arg_scopes) {
-        ParseResult arg_result = PrimaryExprClosureParser::Perform(
-            {arg_scope.ContainedBegin(), arg_scope.ContainedEnd()});
-        if (!arg_result.Valid()) {
-          return ParseResultWithOffset::Failure(
-              c,
-              std::string("[parser::ParseIndexingArguments] Error parsing ") +
-                  "argument in indexing call.\n" + arg_result.Error());
+        ExpectedAst arg_result =
+            ParseExpr({arg_scope.ContainedBegin(), arg_scope.ContainedEnd()});
+        if (not arg_result) {
+          return Fail(c, arg_result.Error());
         }
-        arguments_node.PushBack(arg_result.Extract());
+        arguments_node.ExtractAndPush(arg_result);
       }
-      return ParseResultWithOffset::Success(c.Advance(arg_scopes.back().End()),
-                                            arguments_node);
+      return Success(c.Advance(arg_scopes.back().End()), move(arguments_node));
     }
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(),
-               "[parser::ParseIndexingArguments] Token on begin "
-               "cursor does not evaluate to an indexing argument "
-               "node."));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParseListingArguments(TkCursor c) {
-  if (c.TypeIs(eTk::kOpenBrace)) {
+OffsetParseResult parser::ParseListingArguments(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+  if (c.TypeIs(LBrace)) {
     // Check for empty arguments.
-    if (c.Next().TypeIs(eTk::kCloseBrace)) {
-      return ParseResultWithOffset::Success(c.Advance(2),
-                                            Ast(eAst::kArguments));
+    if (c.Next().TypeIs(RBrace)) {
+      return Success(c.Advance(2), eAst::Arguments);
     }
 
-    std::vector<TkScope> arg_scopes =
-        TkScope::FindSeperatedBrace(c, eTk::kComma);
-    if (!arg_scopes.front().Valid()) {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xMismatchedParentheses(
-                 c.Iter(),
-                 "[parser::ParseListingArguments] Mismatched "
-                 "brackets in indexing call."));
+    TkScope::Vector arg_scopes = TkScope::FindSeperatedBrace(c, Comma);
+    if (not arg_scopes.front()) {
+      return Fail(c, MismatchedScope(c));
     } else {
-      Ast arguments_node(eAst::kArguments);
+      Ast arguments_node(eAst::Arguments);
       for (const TkScope& arg_scope : arg_scopes) {
-        ParseResult arg_result = PrimaryExprClosureParser::Perform(
-            {arg_scope.ContainedBegin(), arg_scope.ContainedEnd()});
-        if (!arg_result.Valid()) {
-          return ParseResultWithOffset::Failure(
-              c, std::string("[parser::ParseListingArguments] Error parsing ") +
-                     "argument in indexing call.\n" + arg_result.Error());
+        ExpectedAst arg_result =
+            ParseExpr({arg_scope.ContainedBegin(), arg_scope.ContainedEnd()});
+        if (not arg_result) {
+          return Fail(c, arg_result.Error());
         }
-        arguments_node.PushBack(arg_result.Extract());
+        arguments_node.ExtractAndPush(arg_result);
       }
-      return ParseResultWithOffset::Success(c.Advance(arg_scopes.back().End()),
-                                            arguments_node);
+      return Success(c.Advance(arg_scopes.back().End()), move(arguments_node));
     }
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(),
-               "[parser::ParseListingArguments] Token on begin "
-               "cursor does not evaluate to an indexing argument "
-               "node."));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParsePrimaryStatement(TkCursor c) {
-  // Primary statement will begin with:
-  // - A singular token operand.
-  // - A prefix operator.
-  // - An open paren which is a subexpression.
-  if (c.IsSingularOperand() || c.IsSingularPrefixOperator() ||
-      c.TypeIs(eTk::kOpenParen)) {
+OffsetParseResult parser::ParsePrimaryStatement(TkCursor c) {
+  using namespace caerr;
+  if (c.IsPrimary()) {
     TkScope statement_scope = TkScope::FindProgramStatement(c);
-    if (statement_scope.Valid()) {
-      ParseResult statement_result = PrimaryExprClosureParser::Perform(
-          {statement_scope.Begin(), statement_scope.ContainedEnd()});
-      if (!statement_result.Valid()) {
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xProgrammerLogicError(
-                   Ast(c.Get()).Type(), c.Iter(),
-                   "[parser::ParsePrimaryStatement] Error parsing "
-                   "primary statement.\n" +
-                       statement_result.Error()));
+    if (statement_scope) {
+      ExpectedAst statement_result =
+          ParseExpr({statement_scope.Begin(), statement_scope.ContainedEnd()});
+      if (not statement_result) {
+        return Fail(c, statement_result.Error());
       }
-      return ParseResultWithOffset::Success(c.Advance(statement_scope.End()),
-                                            statement_result.Extract());
+      return Success(c.Advance(statement_scope.End()),
+                     statement_result.Extract());
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xMismatchedParentheses(
-                 c.Iter(),
-                 "[parser::ParsePrimaryStatement] Mismatched "
-                 "parentheses in primary statement." +
-                     statement_scope.Error()));
+      return Fail(c, MismatchedScope(c));
     }
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(),
-               "[parser::ParsePrimaryStatement] Token on begin "
-               "cursor does not evaluate to a primary statement "
-               "node."));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParseConditionalSubExpression(TkCursor c) {
+OffsetParseResult parser::ParseConditionalSubExpression(TkCursor c) {
+  using namespace caerr;
   TkScope paren_scope = TkScope::FindParen(c);
-  if (paren_scope.Valid()) {
-    if (paren_scope.ContainedBegin()->IsPrimaryExpressionOpening()) {
-      ParseResult subexpr_result = PrimaryExprClosureParser::Perform(
-          {paren_scope.ContainedBegin(), paren_scope.ContainedEnd()});
-      if (!subexpr_result.Valid()) {
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xProgrammerLogicError(
-                   Ast(c.Get()).Type(), c.Iter(),
-                   "[ParseConditionalSubExpression] Error parsing "
-                   "conditional subexpression.\n" +
-                       subexpr_result.Error()));
+  if (paren_scope) {
+    if (paren_scope.ContainedBegin()->IsPrimary()) {
+      ExpectedAst subexpr_result =
+          ParseExpr({paren_scope.ContainedBegin(), paren_scope.ContainedEnd()});
+      if (not subexpr_result) {
+        return Fail(c, subexpr_result.Error());
       }
-      return ParseResultWithOffset::Success(c.Advance(paren_scope.End()),
-                                            subexpr_result.Extract());
+      return Success(c.Advance(paren_scope.End()), subexpr_result.Extract());
     } else {
-      return ParseResultWithOffset::Failure(
-          c,
-          compiler_error::parser::xUserSyntaxError(
-              c.Iter(), "Invalid begining of conditional primary expression."));
+      return Fail(c, UserSyntaxError(
+                         c, "Invalid start of conditional sub-expression."));
     }
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xMismatchedParentheses(
-               c.Iter(),
-               "[ParseConditionalSubExpression] Mismatched "
-               "parentheses in conditional subexpression."));
+    return Fail(c, MismatchedScope(c));
   }
 }
 
-ParseResultWithOffset parser::ParsePrimaryPreIdentifier(TkCursor c) {
-  if (c.IsSingularOperand() || c.IsSingularPrefixOperator() ||
-      c.TypeIs(eTk::kOpenParen)) {
+OffsetParseResult parser::ParsePrimaryPreIdentifier(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+  if (c.IsPrimary()) {
     TkScope statement_scope = TkScope::FindOpenStatement(
-        c.Get().Type(), {eTk::kCommercialAt}, c.Iter(), c.End());
-    if (statement_scope.Valid()) {
-      ParseResult statement_result = PrimaryExprClosureParser::Perform(
-          {statement_scope.Begin(), statement_scope.ContainedEnd()});
-      if (!statement_result.Valid()) {
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xProgrammerLogicError(
-                   Ast(c.Get()).Type(), c.Iter(),
-                   "[ParsePrimaryPreIdentifier] Error parsing "
-                   "primary PreIdentifier.\n" +
-                       statement_result.Error()));
+        c.Get().Type(), {eTk::CommercialAt}, c.Iter(), c.End());
+    if (statement_scope) {
+      ExpectedAst statement_result =
+          ParseExpr({statement_scope.Begin(), statement_scope.ContainedEnd()});
+      if (not statement_result) {
+        return Fail(c, statement_result.Error());
       }
-      return ParseResultWithOffset::Success(c.Advance(statement_scope.End()),
-                                            statement_result.Extract());
+      return Success(c.Advance(statement_scope.End()),
+                     statement_result.Extract());
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xMismatchedParentheses(
-                 c.Iter(),
-                 "[ParsePrimaryPreIdentifier] Mismatched "
-                 "parentheses in primary PreIdentifier." +
-                     statement_scope.Error()));
+      return Fail(c, MismatchedScope(c));
     }
   } else {
     // Else the type is implicitly an any type.
     // Expecting a @
-    if (c.TypeIs(eTk::kCommercialAt)) {
-      return ParseResultWithOffset::Success(c.Advance(), Ast(eAst::kAny));
+    if (c.TypeIs(eTk::CommercialAt)) {
+      return Success(c.Advance(), eAst::KwAny);
     }
 
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(), "[ParsePrimaryPreIdentifier]"));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParsePrimaryPostIdentifier(TkCursor c) {
-  if (c.IsSingularOperand() || c.IsSingularPrefixOperator() ||
-      c.TypeIs(eTk::kOpenParen)) {
+OffsetParseResult parser::ParsePrimaryPostIdentifier(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+  if (c.IsAnOperand() || c.IsSingularPrefixOperator() || c.TypeIs(LParen)) {
     TkScope statement_scope = TkScope::FindOpenStatement(
-        c.Get().Type(), {eTk::kColon, eTk::kSemicolon}, c.Iter(), c.End());
-    if (statement_scope.Valid()) {
-      ParseResult statement_result = PrimaryExprClosureParser::Perform(
+        c.Get().Type(), {Colon, Semicolon}, c.Iter(), c.End());
+    if (statement_scope) {
+      ExpectedAst statement_result = ExprParser::Perform(
           {statement_scope.Begin(), statement_scope.ContainedEnd()});
-      if (!statement_result.Valid()) {
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xProgrammerLogicError(
-                   Ast(c.Get()).Type(), c.Iter(),
-                   "[ParsePrimaryPostIdentifier] Error parsing "
-                   "primary PreIdentifier.\n" +
-                       statement_result.Error()));
+      if (not statement_result) {
+        return Fail(c, statement_result.Error());
       }
-      // Special case: if end of statement is a semicolon, go 1 back.
+      // !SPECIAL CASE: if end of statement is a semicolon, go 1 back.
       // This will allow the callee to determine if the statement is
       // terminated or not.
-      if (statement_scope.ContainedEnd()->TypeIs(eTk::kSemicolon)) {
-        return ParseResultWithOffset::Success(
-            c.Advance(statement_scope.ContainedEnd()),
-            statement_result.Extract());
+      if (statement_scope.ContainedEnd()->TypeIs(Semicolon)) {
+        return Success(c.Advance(statement_scope.ContainedEnd()),
+                       statement_result.Extract());
       }
 
-      return ParseResultWithOffset::Success(c.Advance(statement_scope.End()),
-                                            statement_result.Extract());
+      return Success(c.Advance(statement_scope.End()),
+                     statement_result.Extract());
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xMismatchedParentheses(
-                 c.Iter(),
-                 "[ParsePrimaryPostIdentifier] Mismatched "
-                 "parentheses in primary PreIdentifier." +
-                     statement_scope.Error()));
+      return Fail(c, MismatchedScope(c));
     }
   } else {
-    // fallback, should not be called. ParseMethodSignature should handle.
-    if (c.TypeIs(eTk::kColon)) {
-      return ParseResultWithOffset::Success(c.Advance(), Ast(eAst::kAny));
+    // Implicit any type.
+    if (c.TypeIs(Colon)) {
+      return Success(c.Advance(), eAst::KwAny);
     }
 
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(),
-               "[ParsePrimaryPostIdentifier]expected colon"));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParseModifiers(TkCursor c) {
+OffsetParseResult parser::ParseModifiers(TkCursor c) {
+  using namespace caerr;
   if (c.IsModifierKeyword()) {
-    Ast modifiers_node(eAst::kModifiers);
+    Ast mod_node(eAst::Modifiers);
     while (c.IsModifierKeyword()) {
-      modifiers_node.PushBack(Ast(c.Get()));
+      mod_node.PushBack(c.Get());
       c.Advance();
     }
-    return ParseResultWithOffset::Success(c, modifiers_node);
+    return Success(c, move(mod_node));
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(),
-               "[parser::ParseModifiers] Token on begin cursor "
-               "does not evaluate to a modifier node."));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParseReturnStmt(TkCursor c) {
-  // Expect a return keyword.
-  if (c.TypeIs(eTk::kReturn)) {
+OffsetParseResult parser::ParseReturnStmt(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+  if (c.TypeIs(KwReturn)) {
     c.Advance();
 
-    if (c.TypeIs(eTk::kSemicolon)) {
-      Ast return_statement_node(eAst::kReturn);
-      return ParseResultWithOffset::Success(c.Advance(), return_statement_node);
+    if (c.TypeIs(Semicolon)) {
+      Ast return_statement_node{eAst::KwReturn};
+      return Success(c.Advance(), move(return_statement_node));
     }
 
-    // Expecting a value expression.
-    ParseResultWithOffset value_expr_result = ParsePrimaryStatement(c);
-    if (!value_expr_result) {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xProgrammerLogicError(
-                 Ast(c.Get()).Type(), c.Iter(),
-                 "[parser::ParseReturnStmt] Error parsing "
-                 "value expression.\n" +
-                     value_expr_result.Error()));
+    auto value_expr_result = ParsePrimaryStatement(c);
+    if (not value_expr_result) {
+      return value_expr_result;
     }
-    Ast return_statement_node(eAst::kReturn);
-    return_statement_node.PushBack(value_expr_result.Extract());
-    return ParseResultWithOffset::Success(c, return_statement_node);
+    Ast return_statement_node(eAst::KwReturn);
+    return_statement_node.ExtractAndPush(value_expr_result);
+    return Success(c, move(return_statement_node));
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xExpectedToken(
-               ToCStr(eTk::kReturn), c.Literal(),
-               "[parser::ParseReturnStmt] Expected return "
-               "keyword."));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParsePragmaticStmt(TkCursor c) {
+OffsetParseResult parser::ParsePragmaticStmt(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+
   // Format: <modifiers?><decl keyword>
-  if (c.TypeIs(eTk::kSemicolon)) {
-    // Empty statement
-    std::cout << "Warning: Empty statement in code.";
-    return ParseResultWithOffset::Success(c.Advance(), Ast(eAst::kNone));
+  if (c.TypeIs(Semicolon)) {
+    std::cout << "[C&][Warning] Empty statement in code. Line: " << c.Line();
+    return Success(c.Advance(), eAst::NONE);
   }
-  // 0. Handle declarations which cannot have modifiers.
-  //    - use
-  //    - main  TODO: implement main.
-  //    - import TODO: implement import.
+
   if (c.IsDeclarativeKeyword()) {
     switch (c.Type()) {
-      case eTk::kUse:
+      case KwUse:
         return ParseUsingDecl(c);
-      case eTk::kMain:
+      case KwMain:
         return ParseMainDecl(c);
-      case eTk::kImport:
+      case KwImport:
         return ParseImportDecl(c);
       default:
         break;
     }
   }
 
-  // 1. Store begin and skip any number of modifiers when looking for decl type.
   TkCursor start_of_decl = c;
   while (c.IsModifierKeyword()) {
     c.Advance();
   }
 
-  // 2. Expecting a declarative keyword.
   if (c.IsDeclarativeKeyword()) {
-    // 3. Decide what kind of declaration it is based on keyword.
-    //    All declrations which could not have modifiers were handled above.
-    //    Return specific error when trying to modify unmodifiable declaration.
     switch (c.Type()) {
-      case eTk::kDef:
+      case KwDef:
         return ParseVariableDecl(c);
-      case eTk::kFn:
+      case KwFn:
         return ParseMethodDecl(c);
-      case eTk::kClass:
+      case KwClass:
         return ParseClassDecl(c);
-      case eTk::kLib:
+      case KwLib:
         return ParseLibDecl(c);
-      case eTk::kUse:
-      case eTk::kMain:
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xUserSyntaxError(
-                   c.Iter(),
-                   "[parser::ParseDeclaration] Declarative "
-                   "Keyword cannot be modified."));
+      case KwUse:
+      case KwMain:
+        return Fail(c, UserSyntaxError(
+                           c, c.Literal() +
+                                  " declaration keyword cannot be modified."));
       default:
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xProgrammerLogicError(
-                   Ast(c.Get()).Type(), c.Iter(),
-                   "[parser::ParseDeclaration] Declarative "
-                   "Keyword not implemented in ParseDeclaration"));
+        return Fail(c,
+                    UserSyntaxError(c, c.Literal() +
+                                           " declaration keyword not permitted "
+                                           "inside pragmatic code block."));
     }
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xExpectedToken(
-               ToCStr(eTk::kDef), c.Literal(),
-               "[parser::ParseDeclaration] Expected declarative token."));
+    return Fail(c, ExpectedPragmaticDeclaration(c));
   }
 }
 
-ParseResultWithOffset parser::ParseFunctionalStmt(TkCursor c) {
-  if (c.TypeIs(eTk::kSemicolon)) {
-    // Empty statement
-    std::cout << "Warning: Empty statement in code.";
-    return ParseResultWithOffset::Success(c.Advance(), Ast(eAst::kNone));
+OffsetParseResult parser::ParseFunctionalStmt(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+
+  if (c.TypeIs(Semicolon)) {
+    std::cout << "[C&][Warning] Empty statement in code. Line: " << c.Line();
+    return Success(c.Advance(), eAst::NONE);
   }
 
-  // 0. Handle declarations which cannot have modifiers.
-  //    - use
-  //    - main  TODO: implement main.
-  //    - import TODO: implement import.
   if (c.IsDeclarativeKeyword()) {
     switch (c.Type()) {
-      case eTk::kIf:
+      case KwIf:
         return ParseIfDecl(c);
-      case eTk::kWhile:
+      case KwWhile:
         return ParseWhileDecl(c);
-      case eTk::kFor:
+      case KwFor:
         return ParseForDecl(c);
-      case eTk::kReturn:
+      case KwReturn:
         return ParseReturnStmt(c);
-      case eTk::kUse:
+      case KwUse:
         return ParseUsingDecl(c);
-      case eTk::kImport:
+      case KwImport:
         return ParseImportDecl(c);
       default:
         break;
     }
   }
 
-  // 1. Store begin and skip any number of modifiers when looking for decl type.
   TkCursor start_of_decl = c;
   while (c.IsModifierKeyword()) {
     c.Advance();
   }
 
-  // 2. Expecting a declarative keyword.
   if (c.IsDeclarativeKeyword()) {
-    // 3. Decide what kind of declaration it is based on keyword.
-    //    All declrations which could not have modifiers were handled above.
-    //    Return specific error when trying to modify unmodifiable declaration.
     switch (c.Type()) {
-      case eTk::kDef:
+      case KwDef:
         return ParseVariableDecl(c);
-      case eTk::kFn:
+      case KwFn:
         return ParseMethodDecl(c);
-      case eTk::kClass:
+      case KwClass:
         return ParseClassDecl(c);
-      case eTk::kUse:
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xUserSyntaxError(
-                   c.Iter(),
-                   "[ParseFunctionalStmt] Declarative "
-                   "Keyword cannot be modified."));
+      case KwUse:
+        return Fail(c, UserSyntaxError(
+                           c, c.Literal() +
+                                  " declaration keyword cannot be modified."));
       default:
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xProgrammerLogicError(
-                   Ast(c.Get()).Type(), c.Iter(),
-                   "[ParseFunctionalStmt] Declarative "
-                   "Keyword type not allowed in functional block."));
+        return Fail(c,
+                    UserSyntaxError(c, c.Literal() +
+                                           " declaration keyword not permitted "
+                                           "inside functional code block."));
     }
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xExpectedToken(
-               ToCStr(eTk::kDef), c.Literal(),
-               "[ParseFunctionalStmt] Expected declarative token."));
+    return Fail(c, ExpectedPragmaticDeclaration(c));
   }
 }
 
-ParseResultWithOffset parser::ParseConditionalStmt(TkCursor c) {
-  // Handle declarations which cannot have modifiers.
+OffsetParseResult parser::ParseConditionalStmt(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+
   if (c.IsDeclarativeKeyword()) {
     switch (c.Type()) {
-      case eTk::kUse:
+      case KwUse:
         return ParseUsingDecl(c);
-      case eTk::kImport:
+      case KwImport:
         return ParseImportDecl(c);
       default:
         break;
     }
   }
-  // Store begin and skip any number of modifiers when looking for decl type.
+
   TkCursor start_of_decl = c;
   while (c.IsModifierKeyword()) {
     c.Advance();
   }
-  // Expecting a declarative keyword.
+
   if (c.IsDeclarativeKeyword()) {
-    // Decide what kind of declaration it is based on keyword.
-    // All declrations which could not have modifiers were handled above.
-    // Return specific error when trying to modify unmodifiable declaration.
     switch (c.Type()) {
-      case eTk::kDef:
+      case KwDef:
         return ParseVariableDecl(c);
-      case eTk::kFn:
+      case KwFn:
         return ParseMethodDecl(c);
-      case eTk::kClass:
+      case KwClass:
         return ParseClassDecl(c);
-      case eTk::kUse:
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xUserSyntaxError(
-                   c.Iter(),
-                   "[ParseConditionalStmt] Declarative "
-                   "Keyword cannot be modified."));
+      case KwUse:
+        return Fail(c, UserSyntaxError(
+                           c, c.Literal() +
+                                  " declaration keyword cannot be modified."));
       default:
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xProgrammerLogicError(
-                   Ast(c.Get()).Type(), c.Iter(),
-                   "[ParseConditionalStmt] Declarative "
-                   "Keyword type not allowed in functional block."));
+        return Fail(c,
+                    UserSyntaxError(c, c.Literal() +
+                                           " declaration keyword not permitted "
+                                           "inside conditional code block."));
     }
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xExpectedToken(
-               ToCStr(eTk::kDef), c.Literal(),
-               "[ParseConditionalStmt] Expected declarative token."));
+    return Fail(c, ExpectedPragmaticDeclaration(c));
   }
 }
 
-ParseResultWithOffset parser::ParseIfDecl(TkCursor c) {
-  using namespace compiler_error::parser;
-  LAMBDA xParseIfElifElse = [&c](eAst ast_type) {
-    if (c.TypeIs(eTk::kIf) or c.TypeIs(eTk::kElif)) {
+OffsetParseResult parser::ParseIfDecl(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+
+  static const LAMBDA xParseIfElifElse = [&c](eAst ast_type) {
+    if (c.TypeIs(KwIf) or c.TypeIs(KwElif)) {
       c.Advance();
       auto condition_result = ParseConditionalSubExpression(c);
       if (not condition_result) {
-        return ParseResultWithOffset::Failure(
-            c, xExpectedToken(ToCStr(eTk::kOpenParen), c.Literal()));
+        return Fail(c, ExpectedToken(LParen, c));
       }
       c.Advance(condition_result);
       // Parse the body.
       auto body_result = ParseMethodDef(c);
       if (not body_result) {
-        return ParseResultWithOffset::Failure(
-            c, xExpectedToken(ToCStr(eTk::kOpenBrace), c.Literal()));
+        return Fail(c, ExpectedToken(LBrace, c));
       }
       c.Advance(body_result);
-      return ParseResultWithOffset::Success(
-          c,
-          Ast(ast_type, "", condition_result.Extract(), body_result.Extract()));
-    } else if (c.TypeIs(eTk::kElse)) {
+      return Success(c, Ast(ast_type, "", condition_result.Extract(),
+                            body_result.Extract()));
+    } else if (c.TypeIs(KwElse)) {
       c.Advance();
       auto body_result = ParseMethodDef(c);
       if (not body_result) {
-        return ParseResultWithOffset::Failure(
-            c, xExpectedToken(ToCStr(eTk::kOpenBrace), c.Literal()));
+        return Fail(c, ExpectedToken(LBrace, c));
       }
       c.Advance(body_result);
-      return ParseResultWithOffset::Success(
-          c, Ast(ast_type, "", body_result.Extract()));
+      return Success(c, Ast(ast_type, "", body_result.Extract()));
     } else {
-      throw "Expected if or elif or else.";
+      return Fail(c,
+                  ImplParserExpectedToken(c, "Expected if or elif or else."));
     }
   };
 
-  if (c.TypeIsnt(eTk::kIf)) {
-    return ParseResultWithOffset::Failure(
-        c,
-        compiler_error::parser::xExpectedToken(ToCStr(eTk::kIf), c.Literal()));
+  if (c.TypeIsnt(KwIf)) {
+    return Fail(c, ImplParserExpectedToken(c));
   }
 
-  Ast ifelifelse_statement = eAst::kIfStatement;
-  auto if_statement = xParseIfElifElse(eAst::kIf);
+  Ast ifelifelse_statement = eAst::IfStatement;
+  auto if_statement = xParseIfElifElse(eAst::KwIf);
   if (not if_statement) {
     return if_statement;
   }
-  ifelifelse_statement.PushBack(if_statement.Extract());
+  ifelifelse_statement.ExtractAndPush(if_statement);
 
-  if (c.TypeIs(eTk::kSemicolon)) {
-    return ParseResultWithOffset::Success(c.Advance(), ifelifelse_statement);
+  if (c.TypeIs(Semicolon)) {
+    return Success(c.Advance(), move(ifelifelse_statement));
   }
 
-  while (c.TypeIs(eTk::kElif)) {
-    auto elif_statement = xParseIfElifElse(eAst::kElif);
+  while (c.TypeIs(KwElif)) {
+    auto elif_statement = xParseIfElifElse(eAst::KwElif);
     if (not elif_statement) {
       return elif_statement;
     }
-    ifelifelse_statement.PushBack(elif_statement.Extract());
+    ifelifelse_statement.ExtractAndPush(elif_statement);
   }
 
-  if (c.TypeIs(eTk::kElse)) {
-    auto else_statement = xParseIfElifElse(eAst::kElse);
+  if (c.TypeIs(KwElse)) {
+    auto else_statement = xParseIfElifElse(eAst::KwElse);
     if (not else_statement) {
       return else_statement;
     }
-    ifelifelse_statement.PushBack(else_statement.Extract());
+    ifelifelse_statement.ExtractAndPush(else_statement);
   }
 
-  return ParseResultWithOffset::Success(c, ifelifelse_statement);
+  return Success(c, move(ifelifelse_statement));
 }
 
-ParseResultWithOffset parser::ParseWhileDecl(TkCursor c) {
+OffsetParseResult parser::ParseWhileDecl(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
   // While Keyword, Conditional subexpression, Functional Block, Semicolon.
-
-  if (c.TypeIsnt(eTk::kWhile)) {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xExpectedToken(ToCStr(eTk::kWhile),
-                                                  c.Literal()));
+  if (c.TypeIsnt(KwWhile)) {
+    return Fail(c, ImplParserExpectedToken(c));
   }
-
   c.Advance();
 
   auto condition_result = ParseConditionalSubExpression(c);
   if (not condition_result) {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xExpectedToken(ToCStr(eTk::kOpenParen),
-                                                  c.Literal()));
+    return Fail(c, ExpectedToken(LParen, c));
   }
   c.Advance(condition_result);
 
   auto body_result = ParseMethodDef(c);
   if (not body_result) {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xExpectedToken(ToCStr(eTk::kOpenBrace),
-                                                  c.Literal()));
+    return Fail(c, ExpectedToken(LBrace, c));
   }
   c.Advance(body_result);
 
-  if (c.TypeIs(eTk::kSemicolon)) {
-    return ParseResultWithOffset::Success(
-        c.Advance(), Ast(eAst::kWhile, "", condition_result.Extract(),
-                         body_result.Extract()));
+  if (c.TypeIs(eTk::Semicolon)) {
+    return Success(c.Advance(),
+                   Ast(eAst::KwWhile, "", condition_result.Extract(),
+                       body_result.Extract()));
   }
 
-  return ParseResultWithOffset::Failure(
-      c, compiler_error::parser::xExpectedToken(ToCStr(eTk::kSemicolon),
-                                                c.Literal()));
+  return Fail(c, ExpectedToken(Semicolon, c));
 }
 
-ParseResultWithOffset parser::ParseForDecl(TkCursor c) {
-  using namespace compiler_error::parser;
-  if (c.TypeIsnt(eTk::kFor)) {
-    return ParseResultWithOffset::Failure(
-        c, xExpectedToken(ToCStr(eTk::kFor), c.Literal()));
+OffsetParseResult parser::ParseForDecl(TkCursor c) {
+  using namespace caerr;
+
+  if (c.TypeIsnt(eTk::KwFor)) {
+    return Fail(c, ImplParserExpectedToken(c));
   }
   c.Advance();
 
-  TkScope condition_scope = TkScope::FindParen(c);
-  if (not condition_scope.Valid()) {
-    return ParseResultWithOffset::Failure(c, xMismatchedParentheses(c.Iter()));
+  auto condition_scope = TkScope::FindParen(c);
+  if (not condition_scope) {
+    return Fail(c, MismatchedScope(c));
   }
 
-  std::vector<TkScope> condition_scopes =
-      TkScope::FindSeperatedParen(c, eTk::kSemicolon);
+  TkScope::Vector condition_scopes =
+      TkScope::FindSeperatedParen(c, eTk::Semicolon);
   if (condition_scopes.size() > 3) {
-    return ParseResultWithOffset::Failure(
-        c, xInvalidForLoopConditionSyntax(
-               c.Iter(),
-               "For condition may have a maximum of 3 statements.Detected:" +
-                   std::to_string(condition_scopes.size())));
+    return Fail(
+        c, InvalidForLoopSyntax(
+               c, "For condition may have a maximum of 3 statements.Detected:" +
+                      std::to_string(condition_scopes.size())));
   }
 
   auto init_var_result = ParseVariableDecl(
@@ -1724,10 +1556,10 @@ ParseResultWithOffset parser::ParseForDecl(TkCursor c) {
     return condition_result;
   }
 
-  auto increment_result = PrimaryExprClosureParser::Perform(
+  auto increment_result = ExprParser::Perform(
       {condition_scopes[2].ContainedBegin(), condition_scope.ContainedEnd()});
   if (not increment_result) {
-    return ParseResultWithOffset::Failure(c, increment_result.Error());
+    return Fail(c, increment_result.Error());
   }
   c.Advance(condition_scope.End());
 
@@ -1737,39 +1569,34 @@ ParseResultWithOffset parser::ParseForDecl(TkCursor c) {
   }
   c.Advance(body_result);
 
-  if (c.TypeIs(eTk::kSemicolon)) {
-    return ParseResultWithOffset::Success(
-        c.Advance(), Ast(eAst::kFor, "", init_var_result.Extract(),
-                         condition_result.Extract(), increment_result.Extract(),
-                         body_result.Extract()));
+  if (c.TypeIs(eTk::Semicolon)) {
+    return Success(c.Advance(),
+                   Ast(eAst::KwFor, "", init_var_result.Extract(),
+                       condition_result.Extract(), increment_result.Extract(),
+                       body_result.Extract()));
   }
 
-  return ParseResultWithOffset::Failure(
-      c, xExpectedToken(ToCStr(eTk::kSemicolon), c.Literal()));
+  return Fail(c, ExpectedToken(eTk::Semicolon, c));
 }
 
-ParseResultWithOffset parser::ParseUsingDecl(TkCursor c) {
-  if (c.TypeIs(eTk::kUse)) {
+OffsetParseResult parser::ParseUsingDecl(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+  if (c.TypeIs(KwUse)) {
     c.Advance();
     // Next may be:
     // - @ commercial at -> Type Alias
     // - @name: lib-> Library Type Alias.
-    if (c.TypeIs(eTk::kCommercialAt)) {
+    if (c.TypeIs(CommercialAt)) {
       c.Advance();
-      if (!c.TypeIs(eTk::kIdentifier)) {
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xExpectedToken(
-                   ToCStr(eTk::kIdentifier), c.Literal(),
-                   "[parser::ParseUsingDecl] Expected identifier."));
+      if (c.TypeIsnt(Ident)) {
+        return Fail(c, ExpectedToken(Ident, c));
       }
       Ast typedef_identifier = Ast(c.Get());
       c.Advance();
 
-      if (!c.TypeIs(eTk::kColon)) {
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xExpectedToken(
-                   ToCStr(eTk::kColon), c.Literal(),
-                   "[parser::ParseUsingDecl] Expected colon."));
+      if (c.TypeIsnt(Colon)) {
+        return Fail(c, ExpectedToken(Colon, c));
       }
       c.Advance();
 
@@ -1777,548 +1604,437 @@ ParseResultWithOffset parser::ParseUsingDecl(TkCursor c) {
       // Everything following lib must be a value expression closed by a
       // semicolon. Wether it is reduced to a type is determined at a later
       // stage. Builds a kLibraryTypeAlias else it is a type alias.
-      if (c.TypeIs(eTk::kLib)) {
+      if (c.TypeIs(KwLib)) {
         c.Advance();
-        ParseResultWithOffset value_expr_result = ParsePrimaryStatement(c);
-        if (!value_expr_result.Valid()) {
-          return ParseResultWithOffset::Failure(
-              c, "[parser::ParseUsingDecl] Error parsing value expression." +
-                     value_expr_result.Error());
+        auto value_expr_result = ParsePrimaryStatement(c);
+        if (not value_expr_result) {
+          return value_expr_result;
         }
-        c.Advance(value_expr_result.Always().Iter());
-        return ParseResultWithOffset::Success(
-            c, Ast(eAst::kLibraryTypeAlias, "", typedef_identifier,
-                   value_expr_result.Extract()));
+        c.Advance(value_expr_result);
+        return Success(c, Ast(eAst::LibraryTypeAlias, "", typedef_identifier,
+                              value_expr_result.Extract()));
 
       } else {
-        ParseResultWithOffset value_expr_result = ParsePrimaryStatement(c);
-        if (!value_expr_result.Valid()) {
-          return ParseResultWithOffset::Failure(
-              c, "[parser::ParseUsingDecl] Error parsing value expression." +
-                     value_expr_result.Error());
+        auto value_expr_result = ParsePrimaryStatement(c);
+        if (not value_expr_result) {
+          return value_expr_result;
         }
-        c.Advance(value_expr_result.Always().Iter());
-        return ParseResultWithOffset::Success(
-            c, Ast(eAst::kTypeAlias, "", typedef_identifier,
-                   value_expr_result.Extract()));
+        c.Advance(value_expr_result);
+        return Success(c, Ast(eAst::TypeAlias, "", typedef_identifier,
+                              value_expr_result.Extract()));
       }
     }
     // - lib-> Library Namespace Inclusion.
-    else if (c.TypeIs(eTk::kLib)) {
+    else if (c.TypeIs(KwLib)) {
       c.Advance();
-      ParseResultWithOffset value_expr_result = ParsePrimaryStatement(c);
-      if (!value_expr_result.Valid()) {
-        return ParseResultWithOffset::Failure(
-            c, "[parser::ParseUsingDecl] Error parsing value expression." +
-                   value_expr_result.Error());
+      auto value_expr_result = ParsePrimaryStatement(c);
+      if (not value_expr_result) {
+        return value_expr_result;
       }
       c.Advance(value_expr_result.Always().Iter());
-      return ParseResultWithOffset::Success(
-          c, Ast(eAst::kLibraryNamespaceInclusion, "",
-                 value_expr_result.Extract()));
+      return Success(c, Ast(eAst::LibraryNamespaceInclusion, "",
+                            value_expr_result.Extract()));
 
     }
     // - namespace-> Namespace Inclusion.
-    else if (c.TypeIs(eTk::kNamespace)) {
+    else if (c.TypeIs(KwNamespace)) {
       c.Advance();
-      ParseResultWithOffset value_expr_result = ParsePrimaryStatement(c);
-      if (!value_expr_result.Valid()) {
-        return ParseResultWithOffset::Failure(
-            c, "[parser::ParseUsingDecl] Error parsing value expression." +
-                   value_expr_result.Error());
+      auto value_expr_result = ParsePrimaryStatement(c);
+      if (not value_expr_result) {
+        return value_expr_result;
       }
-      c.Advance(value_expr_result.Always().Iter());
-      return ParseResultWithOffset::Success(
-          c, Ast(eAst::kNamespaceInclusion, "", value_expr_result.Extract()));
-    } else if (c.IsSingularOperand() || c.IsSingularPrefixOperator() ||
-               c.TypeIs(eTk::kOpenParen)) {
-      ParseResultWithOffset primary_result = ParsePrimaryStatement(c);
-      if (!primary_result) {
-        return primary_result.ChainFailure(
-            "[ParseUsingDecl: Failed to parse primary expression.]");
+      c.Advance(value_expr_result);
+
+      return Success(
+          c, Ast(eAst::NamespaceInclusion, "", value_expr_result.Extract()));
+    } else if (c.IsPrimary()) {
+      auto primary_result = ParsePrimaryStatement(c);
+      if (not primary_result) {
+        return primary_result;
       }
-      c.Advance(primary_result.Always().Iter());
-      return ParseResultWithOffset::Success(
-          c,
-          Ast(eAst::kNamespaceObjectInclusion, "", primary_result.Extract()));
+      c.Advance(primary_result);
+      return Success(
+          c, Ast(eAst::NamespaceObjectInclusion, "", primary_result.Extract()));
 
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 std::string(ToCStr(eTk::kCommercialAt)) + " or " +
-                     ToCStr(eTk::kLib),
-                 c.Literal(),
-                 "[parser::ParseUsingDecl] Expected commercial at or "
-                 "lib or namespace or type expression."));
+      return Fail(c, ExpectedToken(Colon, c,
+                                   "Expected commercial at or lib or namespace "
+                                   "or type expression."));
     }
 
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(),
-               "[parser::ParseUsingDecl] Token on begin cursor "
-               "does not evaluate to a use declaration node."));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 };
 
-ParseResultWithOffset parser::ParseVariableDecl(TkCursor c) {
+OffsetParseResult parser::ParseVariableDecl(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
   // Format:
   // <modifiers?><def><what*?><commercial_at?><name?><colon?><definition?>
   // <semicolon>
-  Ast modifiers_node;  // Check if there are any modifiers.
+  Ast mod_node;  // Check if there are any modifiers.
   if (c.IsModifierKeyword()) {
-    ParseResultWithOffset modifiers_result = ParseModifiers(c);
-    if (!modifiers_result.Valid()) {
-      return ParseResultWithOffset::Failure(c, modifiers_result.Error());
+    auto mod_result = ParseModifiers(c);
+    if (not mod_result) {
+      return mod_result;
     }
-    modifiers_node = modifiers_result.Extract();
-    c.Advance(modifiers_result.Always().Iter());
+    mod_node = mod_result.Extract();
+    c.Advance(mod_result);
   } else {
     // No modifiers found.
-    modifiers_node = Ast(eAst::kModifiers);
+    mod_node = Ast(eAst::Modifiers);
   }
 
   // Expect a def keyword
-  if (c.TypeIs(eTk::kDef)) {
+  if (c.TypeIs(KwDef)) {
     c.Advance();
     // 2. Expect a what token(s).
     // Everything following def until kCommericalAt is a type constraint
     // describing what is being created.
-    ParseResultWithOffset what_result = ParsePrimaryPreIdentifier(c);
-    if (!what_result.Valid()) {
-      return ParseResultWithOffset::Failure(c, what_result.Error());
+    auto what_result = ParsePrimaryPreIdentifier(c);
+    if (not what_result) {
+      return what_result;
     }
     Ast what_node = what_result.Extract();
-    c.Advance(what_result.Always().Iter());
+    c.Advance(what_result);
 
     // Expecting an identifier.
-    if (!c.TypeIs(eTk::kIdentifier)) {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 ToCStr(eTk::kIdentifier), c.Literal(),
-                 "[parser::ParseVariableDecl] Expected identifier."));
+    if (c.TypeIsnt(Ident)) {
+      return Fail(c, ExpectedToken(Ident, c));
     }
-    Ast identifier_node = Ast(c.Get());
+    Ast ident_node = Ast(c.Get());
     c.Advance();
 
     // If there is a colon, this is a Definition.
     // If there is a semicolon, this is a Declaration.
-    if (c.TypeIs(eTk::kColon)) {
+    if (c.TypeIs(Colon)) {
       c.Advance();
-      ParseResultWithOffset definition_result = ParsePrimaryStatement(c);
-      if (!definition_result.Valid()) {
-        return ParseResultWithOffset::Failure(c, definition_result.Error());
+      auto def_result = ParsePrimaryStatement(c);
+      if (not def_result) {
+        return def_result;
       }
-      Ast definition_node =
-          Ast(eAst::kVariableDefinition, "", definition_result.Extract());
-      c.Advance(definition_result.Always().Iter());
-      return ParseResultWithOffset::Success(
-          c, Ast(eAst::kVariableDeclaration, "", modifiers_node, what_node,
-                 identifier_node, definition_node));
-    } else if (c.TypeIs(eTk::kSemicolon)) {
+      Ast def_node = Ast(eAst::VariableDefinition, "", def_result.Extract());
+      c.Advance(def_result);
+      return Success(c, Ast(eAst::VariableDeclaration, "", mod_node, what_node,
+                            ident_node, def_node));
+    } else if (c.TypeIs(Semicolon)) {
       c.Advance();
-      return ParseResultWithOffset::Success(
-          c, Ast(eAst::kVariableDeclaration, "", modifiers_node, what_node,
-                 identifier_node));
+      return Success(c, Ast(eAst::VariableDeclaration, "", mod_node, what_node,
+                            ident_node));
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 std::string(ToCStr(eTk::kColon)) + " or " +
-                     ToCStr(eTk::kSemicolon),
-                 c.Literal(),
-                 "[parser::ParseVariableDecl] Expected colon or "
-                 "semicolon."));
+      return Fail(c, ExpectedToken(Colon, c, "Expected colon or semicolon."));
     }
 
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(),
-               "[parser::ParseVariableDecl] Token on begin cursor "
-               "does not evaluate to a variable declaration node."));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParseMethodDecl(TkCursor c) {
+OffsetParseResult parser::ParseMethodDecl(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
   // Format:
   // <modifiers?><fn><commercial_at?><name?><signature?><colon?>
   // <definition?> <semicolon>
-  Ast modifiers_node;  // Check if there are any modifiers.
+  Ast mod_node;  // Check if there are any modifiers.
   if (c.IsModifierKeyword()) {
-    ParseResultWithOffset modifiers_result = ParseModifiers(c);
-    if (!modifiers_result) {
-      return modifiers_result.ChainFailure("[ParseMethodDecl]");
+    auto mod_result = ParseModifiers(c);
+    if (not mod_result) {
+      return mod_result;
     }
-    modifiers_node = modifiers_result.Extract();
-    c.Advance(modifiers_result.Always().Iter());
+    mod_node = mod_result.Extract();
+    c.Advance(mod_result);
   } else {
     // No modifiers found.
-    modifiers_node = Ast(eAst::kModifiers);
+    mod_node = Ast(eAst::Modifiers);
   }
 
   // Expect a fn keyword
-  if (c.TypeIs(eTk::kFn)) {
+  if (c.TypeIs(KwFn)) {
     c.Advance();
     // Expecting a commercial @
-    if (c.TypeIsnt(eTk::kCommercialAt)) {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 ToCStr(eTk::kCommercialAt), c.Literal(), "[ParseMethodDecl]"));
+    if (c.TypeIsnt(CommercialAt)) {
+      return Fail(c, ExpectedToken(CommercialAt, c));
     }
     c.Advance();
 
     // Expecting an identifier.
-    if (c.TypeIsnt(eTk::kIdentifier)) {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 ToCStr(eTk::kIdentifier), c.Literal(), "[ParseMethodDecl]"));
+    if (c.TypeIsnt(Ident)) {
+      return Fail(c, ExpectedToken(Ident, c));
     }
-    Ast identifier_node = Ast(c.Get());
+    Ast ident_node = Ast(c.Get());
     c.Advance();
 
-    Ast signature_node;
+    Ast sig_node;
     // Expecting a signature or colon/semicolon.
-    if (c.TypeIsnt(eTk::kColon) && c.TypeIsnt(eTk::kSemicolon)) {
-      ParseResultWithOffset signature_result = ParseMethodSignature(c);
-      if (!signature_result.Valid()) {
-        return ParseResultWithOffset::Failure(c, signature_result.Error());
+    if (c.TypeIsnt(Colon) && c.TypeIsnt(Semicolon)) {
+      auto sig_result = ParseMethodSignature(c);
+      if (not sig_result) {
+        return sig_result;
       }
-      signature_node = signature_result.Extract();
-      c.Advance(signature_result.Always().Iter());
-      if(c.Peek(-1).TypeIs(eTk::kColon)) c.Advance(-1);  // !!SPECIAL CASE: 
-      // Signature will consume and advance past the colon or semicolon. 
+      sig_node = sig_result.Extract();
+      c.Advance(sig_result);
+      if (c.Peek(-1).TypeIs(Colon)) c.Advance(-1);  // !!SPECIAL CASE:
+      // Signature will consume and advance past the colon or semicolon.
       // This is to allow checking if the signature is a decl or
-      // definition within the signature parsing method. 
+      // definition within the signature parsing method.
       // So after getting signature, advance backwards 1 token
       // but only if that token is a colon!!
     } else {
-      signature_node = Ast(eAst::kMethodSignature);
+      sig_node = Ast(eAst::MethodSignature);
     }
 
     // If there is a colon, this is a Definition.
     // If there is a semicolon, this is a Declaration.
-    if (c.TypeIs(eTk::kColon)) {
+    if (c.TypeIs(Colon)) {
       c.Advance();
-      ParseResultWithOffset definition_result = ParseMethodDef(c);
-      if (!definition_result.Valid()) {
-        return ParseResultWithOffset::Failure(c, definition_result.Error());
+      auto def_result = ParseMethodDef(c);
+      if (not def_result) {
+        return def_result;
       }
-      Ast definition_node = definition_result.Extract();
-      c.Advance(definition_result.Always().Iter());
+      Ast def_node = def_result.Extract();
+      c.Advance(def_result);
       // Expect semicolon
-      if (c.TypeIsnt(eTk::kSemicolon)) {
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xExpectedToken(
-                   ToCStr(eTk::kSemicolon), c.Literal(),
-                   "[parser::ParseMethodDecl] Expected semicolon."));
+      if (c.TypeIsnt(Semicolon)) {
+        return Fail(c, ExpectedToken(Semicolon, c));
       }
       c.Advance();
-      return ParseResultWithOffset::Success(
-          c, Ast(eAst::kMethodDeclaration, "", modifiers_node, identifier_node,
-                 signature_node, definition_node));
+      return Success(c, Ast(eAst::MethodDeclaration, "", mod_node, ident_node,
+                            sig_node, def_node));
 
-    } else if (c.TypeIs(eTk::kSemicolon)) {
+    } else if (c.TypeIs(Semicolon)) {
       c.Advance();
-      return ParseResultWithOffset::Success(
-          c, Ast(eAst::kMethodDeclaration, "", modifiers_node, identifier_node,
-                 signature_node));
+      return Success(
+          c, Ast(eAst::MethodDeclaration, "", mod_node, ident_node, sig_node));
 
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 std::string(ToCStr(eTk::kColon)) + " or " +
-                     ToCStr(eTk::kSemicolon),
-                 c.Literal(),
-                 "[parser::ParseMethodDecl] Expected colon or semicolon."));
+      return Fail(c, ExpectedToken(Colon, c, "Expected colon or semicolon."));
     }
 
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(),
-               "[parser::ParseMethodDecl] Token on begin cursor "
-               "does not evaluate to a method declaration node."));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParseClassDecl(TkCursor c) {
+OffsetParseResult parser::ParseClassDecl(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
   // Format:
   // <modifiers?><class><commercial_at?><name?><colon?>
   // <class_definition?> <semicolon>
-  Ast modifiers_node;  // Check if there are any modifiers.
+  Ast mod_node;
   if (c.IsModifierKeyword()) {
-    ParseResultWithOffset modifiers_result = ParseModifiers(c);
-    if (!modifiers_result) {
-      return modifiers_result.ChainFailure("[ParseClassDecl]");
+    auto mod_result = ParseModifiers(c);
+    if (not mod_result) {
+      return mod_result;
     }
-    modifiers_node = modifiers_result.Extract();
-    c.Advance(modifiers_result.Always().Iter());
+    mod_node = mod_result.Extract();
+    c.Advance(mod_result);
   } else {
     // No modifiers found.
-    modifiers_node = Ast(eAst::kModifiers);
+    mod_node = Ast(eAst::Modifiers);
   }
 
-  // Expect a class keyword
-  if (c.TypeIs(eTk::kClass)) {
+  if (c.TypeIs(KwClass)) {
     c.Advance();
 
-    // Expecting a commercial @
-    if (c.TypeIsnt(eTk::kCommercialAt)) {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 ToCStr(eTk::kCommercialAt), c.Literal(), "[ParseClassDecl]"));
+    if (c.TypeIsnt(CommercialAt)) {
+      return Fail(c, ExpectedToken(CommercialAt, c));
     }
     c.Advance();
 
-    // Expecting an identifier.
-    if (!c.TypeIs(eTk::kIdentifier)) {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 ToCStr(eTk::kIdentifier), c.Literal(),
-                 "[ParseClassDecl] Expected identifier."));
+    if (c.TypeIsnt(Ident)) {
+      return Fail(c, ExpectedToken(Ident, c));
     }
-    Ast identifier_node = Ast(c.Get());
+    Ast ident_node = Ast(c.Get());
     c.Advance();
 
     // If there is a colon, this is a Definition.
     // If there is a semicolon, this is a Declaration.
-    if (c.TypeIs(eTk::kColon)) {
+    if (c.TypeIs(Colon)) {
       c.Advance();
-      ParseResultWithOffset definition_result = ParseClassDef(c);
-      if (!definition_result) {
-        return definition_result.ChainFailure("[ParseClassDecl]");
+      auto def_result = ParseClassDef(c);
+      if (not def_result) {
+        return def_result;
       }
-      Ast definition_node = definition_result.Extract();
-      c.Advance(definition_result.Always().Iter());
-      return ParseResultWithOffset::Success(
-          c, Ast(eAst::kClassDeclaration, "", modifiers_node, identifier_node,
-                 definition_node));
-    } else if (c.TypeIs(eTk::kSemicolon)) {
+      Ast def_node = def_result.Extract();
+      c.Advance(def_result);
+      return Success(
+          c, Ast(eAst::ClassDeclaration, "", mod_node, ident_node, def_node));
+    } else if (c.TypeIs(Semicolon)) {
       c.Advance();
-      return ParseResultWithOffset::Success(
-          c, Ast(eAst::kClassDeclaration, "", modifiers_node, identifier_node));
+      return Success(c, Ast(eAst::ClassDeclaration, "", mod_node, ident_node));
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 std::string(ToCStr(eTk::kColon)) + " or " +
-                     ToCStr(eTk::kSemicolon),
-                 c.Literal(), "[ParseClassDecl] Expected colon or semicolon."));
+      return Fail(c, ExpectedToken(Colon, c, "Expected colon or semicolon."));
     }
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(), "[ParseClassDecl]"));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParseImportDecl(TkCursor c) {
+OffsetParseResult parser::ParseImportDecl(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
   // Format: <import><name><semicolon>
-  if (c.TypeIs(eTk::kImport)) {
+  if (c.TypeIs(KwImport)) {
     c.Advance();
     // Expecting an identifier.
-    if (!c.TypeIs(eTk::kIdentifier)) {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 ToCStr(eTk::kIdentifier), c.Literal(),
-                 "[ParseImportDecl] Expected identifier."));
+    if (not c.TypeIs(Ident)) {
+      return Fail(c, ExpectedToken(Ident, c));
     }
-    Ast identifier_node = Ast(c.Get());
+    Ast ident_node = Ast(c.Get());
     c.Advance();
 
     // Expecting a semicolon.
-    if (c.TypeIs(eTk::kSemicolon)) {
+    if (c.TypeIs(Semicolon)) {
       c.Advance();
-      return ParseResultWithOffset::Success(
-          c, Ast(eAst::kImportDeclaration, "", identifier_node));
+      return Success(c, Ast(eAst::ImportDeclaration, "", ident_node));
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 ToCStr(eTk::kSemicolon), c.Literal(),
-                 "[ParseImportDecl] Expected semicolon."));
+      return Fail(c, ExpectedToken(Semicolon, c));
     }
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(), "[ParseImportDecl]"));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParseLibDecl(TkCursor c) {
+OffsetParseResult parser::ParseLibDecl(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
   // Format:
   // <modifiers?><lib><commercial_at?><name?><colon?>
   // <lib_definition?> <semicolon>
-  Ast modifiers_node;  // Check if there are any modifiers.
+  Ast mod_node;  // Check if there are any modifiers.
   if (c.IsModifierKeyword()) {
-    ParseResultWithOffset modifiers_result = ParseModifiers(c);
-    if (!modifiers_result) {
-      return modifiers_result.ChainFailure("[ParseLibDecl]");
+    auto mod_result = ParseModifiers(c);
+    if (not mod_result) {
+      return mod_result;
     }
-    modifiers_node = modifiers_result.Extract();
-    c.Advance(modifiers_result.Always().Iter());
+    mod_node = mod_result.Extract();
+    c.Advance(mod_result);
   } else {
     // No modifiers found.
-    modifiers_node = Ast(eAst::kModifiers);
+    mod_node = Ast(eAst::Modifiers);
   }
 
   // Expect a lib keyword
-  if (c.TypeIs(eTk::kLib)) {
+  if (c.TypeIs(KwLib)) {
     c.Advance();
     // If there is a colon, this is an unnamed library.
     // Expect a definition ending in a semicolon.
-    if (c.TypeIs(eTk::kColon)) {
+    if (c.TypeIs(Colon)) {
       c.Advance();
-      ParseResultWithOffset definition_result = ParseLibDef(c);
-      if (!definition_result) {
-        return definition_result.ChainFailure("[ParseLibDecl]");
+      auto def_result = ParseLibDef(c);
+      if (not def_result) {
+        return def_result;
       }
-      Ast definition_node = definition_result.Extract();
-      c.Advance(definition_result.Always().Iter());
-      return ParseResultWithOffset::Success(
-          c,
-          Ast(eAst::kLibraryDeclaration, "", modifiers_node, definition_node));
+      auto def_node = def_result.Extract();
+      c.Advance(def_result);
+      return Success(c, Ast(eAst::LibraryDeclaration, "", mod_node, def_node));
     }
 
     // If there is a @ following the lib keyword, this is a named library.
     // Expecting a commercial @ followed by an identifier.
-    if (!c.TypeIs(eTk::kCommercialAt)) {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 ToCStr(eTk::kCommercialAt), c.Literal(),
-                 "[ParseLibDecl] Expected commercial at."));
+    if (c.TypeIsnt(CommercialAt)) {
+      return Fail(c, ExpectedToken(CommercialAt, c));
     }
     c.Advance();
 
     // Expecting an identifier.
-    if (!c.TypeIs(eTk::kIdentifier)) {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 ToCStr(eTk::kIdentifier), c.Literal(),
-                 "[ParseLibDecl] Expected identifier."));
+    if (c.TypeIsnt(Ident)) {
+      return Fail(c, ExpectedToken(Ident, c));
     }
-    Ast identifier_node = Ast(c.Get());
+    Ast ident_node{c.Get()};
     c.Advance();
 
-    if (c.TypeIs(eTk::kSemicolon)) {
+    if (c.TypeIs(Semicolon)) {
       c.Advance();
-      return ParseResultWithOffset::Success(
-          c,
-          Ast(eAst::kLibraryDeclaration, "", modifiers_node, identifier_node));
+      return Success(c,
+                     Ast(eAst::LibraryDeclaration, "", mod_node, ident_node));
     }
 
     // Expecting a colon and a definition.
-    if (c.TypeIsnt(eTk::kColon)) {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 ToCStr(eTk::kColon), c.Literal(),
-                 "[ParseLibDecl] Expected colon."));
+    if (c.TypeIsnt(Colon)) {
+      return Fail(c, ExpectedToken(Colon, c));
     }
     c.Advance();
 
-    ParseResultWithOffset definition_result = ParseLibDef(c);
-    if (!definition_result) {
-      return definition_result.ChainFailure("[ParseLibDecl]");
+    auto def_result = ParseLibDef(c);
+    if (not def_result) {
+      return def_result;
     }
-    Ast definition_node = definition_result.Extract();
-    c.Advance(definition_result.Always().Iter());
-    return ParseResultWithOffset::Success(
-        c, Ast(eAst::kLibraryDeclaration, "", modifiers_node, identifier_node,
-               definition_node));
+    Ast def_node = def_result.Extract();
+    c.Advance(def_result);
+
+    return Success(
+        c, Ast(eAst::LibraryDeclaration, "", mod_node, ident_node, def_node));
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(), "[ParseLibDecl]"));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParseMainDecl(TkCursor c) {
+OffsetParseResult parser::ParseMainDecl(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
   // Format:
   // <main><commerical_at?><name?><function_signature><colon?><definition?>
   // <semicolon>
 
   // Expect a main keyword
-  if (c.TypeIs(eTk::kMain)) {
+  if (c.TypeIs(KwMain)) {
     c.Advance();
 
     // If there is a commercial at following the main keyword, this is a named
     // main. Expecting a commercial @ followed by an identifier.
-    if (c.TypeIs(eTk::kCommercialAt)) {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xUserSyntaxError(
-                 c.Iter(), "[ParseMainDecl] Named main not implemented."));
+    if (c.TypeIs(CommercialAt)) {
+      return Fail(c, NotImplemented(c, "Named main not implemented."));
     } else {
       // This is an unnamed main.
       // Expecting a function signature followed by a colon and a definition.
       // Expecting a colon.
-      Ast signature_node;
-      if (c.TypeIs(eTk::kColon)) {
-        signature_node = Ast(eAst::kMethodSignature);
+      Ast sig_node;
+      if (c.TypeIs(Colon)) {
+        sig_node = Ast(eAst::MethodSignature);
         c.Advance();
       } else {
-        ParseResultWithOffset signature_result = ParseMethodSignature(c);
-        if (!signature_result) {
-          return signature_result.ChainFailure("[ParseMainDecl]");
+        auto sig_result = ParseMethodSignature(c);
+        if (not sig_result) {
+          return sig_result;
         }
-        signature_node = signature_result.Extract();
-        c.Advance(signature_result.Always().Iter());
+        sig_node = sig_result.Extract();
+        c.Advance(sig_result);
       }
 
       // Expecting a definition.
-      ParseResultWithOffset definition_result = ParseMainDef(c);
-      if (!definition_result) {
-        return definition_result.ChainFailure("[ParseMainDecl]");
+      auto def_result = ParseMainDef(c);
+      if (not def_result) {
+        return def_result;
       }
+      Ast def_node = def_result.Extract();
+      c.Advance(def_result);
 
-      Ast definition_node = definition_result.Extract();
-      c.Advance(definition_result.Always().Iter());
       // Expect semicolon
-      if (c.TypeIsnt(eTk::kSemicolon)) {
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xExpectedToken(
-                   ToCStr(eTk::kSemicolon), c.Literal(),
-                   "[parser::ParseMainDecl] Expected semicolon."));
+      if (c.TypeIsnt(Semicolon)) {
+        return Fail(c, ExpectedToken(Semicolon, c));
       }
       c.Advance();
 
-      return ParseResultWithOffset::Success(
-          c, Ast(eAst::kMainDeclaration, "", signature_node, definition_node));
+      return Success(c, Ast(eAst::MainDeclaration, "", sig_node, def_node));
     }
 
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(), "[ParseMainDecl]"));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParseMethodParameters(TkCursor c) {
-  if (c.TypeIsnt(eTk::kOpenParen)) {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xExpectedToken(
-               ToCStr(eTk::kOpenParen), c.Literal(),
-               "[ParseMethodParameters] Expected open parenthesis."));
-  }
+OffsetParseResult parser::ParseMethodParameters(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
 
-  // Check for empty arguments.
-  if (c.Next().TypeIs(eTk::kCloseParen)) {
-    return ParseResultWithOffset::Success(
-        c.Advance(2),
-        Ast(eAst::kMethodParameterList, "",
-            Ast(eAst::kMethodParameter, "", Ast(eAst::kMethodVoid))));
-  }
-
-  std::vector<TkScope> arg_scopes = TkScope::FindSeperatedParen(c, eTk::kComma);
-  if (!arg_scopes.front().Valid()) {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xMismatchedParentheses(
-               c.Iter(),
-               "[ParseMethodParameters] Mismatched "
-               "parentheses in method parameters."));
-  }
-
-  LAMBDA xFindCommercialAt = [](TkVectorConstIter beg,
-                                TkVectorConstIter end) -> bool {
+  static constexpr LAMBDA xFindCommercialAt =
+      [](TkVectorConstIter beg, TkVectorConstIter end) -> bool {
     TkCursor c(beg, end);
-    while (c.TypeIsnt(eTk::kCommercialAt)) {
+    while (c.TypeIsnt(CommercialAt)) {
       if (not c.AtEnd())
         c.Advance();
       else
@@ -2327,405 +2043,375 @@ ParseResultWithOffset parser::ParseMethodParameters(TkCursor c) {
     return true;
   };
 
+  if (c.TypeIsnt(LParen)) {
+    return Fail(c, ExpectedToken(LParen, c));
+  }
+
+  // Check for empty arguments.
+  if (c.Next().TypeIs(RParen)) {
+    return Success(c.Advance(2),
+                   Ast(eAst::MethodParameterList, "",
+                       Ast(eAst::MethodParameter, "", Ast(eAst::MethodVoid))));
+  }
+
+  TkScope::Vector arg_scopes = TkScope::FindSeperatedParen(c, Comma);
+  if (not arg_scopes.front()) {
+    return Fail(c, MismatchedScope(c));
+  }
+
   // For each arg:
   // - If there is no @ then it is an identifier of type any -> Expecting an
   // identifier.
   // - If there is an @ then it is a typed argument -> Expect possible mods,
   // followed a primaryPreIdentifier.
-  Ast method_parameters_list_node(eAst::kMethodParameterList);
+  Ast method_parameters_list_node(eAst::MethodParameterList);
   for (const auto& scope : arg_scopes) {
-    Ast method_parameter_node(eAst::kMethodParameter);
+    Ast method_parameter_node(eAst::MethodParameter);
     c.Advance(scope.ContainedBegin());
     if (xFindCommercialAt(scope.ContainedBegin(), scope.ContainedEnd())) {
       // Modifiers
       if (c.IsModifierKeyword()) {
-        ParseResultWithOffset method_mods_result = ParseModifiers(c);
-        if (!method_mods_result) {
-          return method_mods_result.ChainFailure("[ParseMethodParameters]");
+        auto method_mods_result = ParseModifiers(c);
+        if (not method_mods_result) {
+          return method_mods_result;
         }
-        c.Advance(method_mods_result.Always().Iter());
-        method_parameter_node.PushBack(method_mods_result.Extract());
+        c.Advance(method_mods_result);
+        method_parameter_node.ExtractAndPush(method_mods_result);
       } else {
         method_parameter_node.PushBack(
-            Ast(eAst::kModifiers, "", Ast(eAst::kNone)));
+            Ast(eAst::Modifiers, "", Ast(eAst::KwNone)));
       }
+
       // Type
-      if (c.IsPrimaryExpressionOpening()) {
-        ParseResultWithOffset method_parameter_type_result =
-            ParsePrimaryPreIdentifier(c);
-        if (!method_parameter_type_result) {
+      if (c.IsPrimary()) {
+        auto method_parameter_type_result = ParsePrimaryPreIdentifier(c);
+        if (not method_parameter_type_result) {
           return method_parameter_type_result.ChainFailure(
-              "[ParseMethodParameters] Error parsing method parameter type.");
+              "Error parsing method parameter type.");
         }
         c.Advance(method_parameter_type_result.Always().Iter());
-        method_parameter_node.PushBack(method_parameter_type_result.Extract());
-      } else if (c.TypeIs(eTk::kCommercialAt)) {
+        method_parameter_node.ExtractAndPush(method_parameter_type_result);
+      } else if (c.TypeIs(CommercialAt)) {
         c.Advance();
         // Implied any type.
-        method_parameter_node.PushBack(Ast(eAst::kAny));
+        method_parameter_node.PushBack(eAst::KwAny);
       } else {
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xExpectedToken(
-                   "Primary Expression", c.Literal(),
-                   "[ParseMethodParameters] Expected primary "
-                   "expression opening."));
+        return Fail(c, ExpectedPrimaryExpression(c));
       }
+
       // Identity
-      if (c.TypeIs(eTk::kIdentifier)) {
+      if (c.TypeIs(Ident)) {
         method_parameter_node.PushBack(c.Get());
       } else {
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xExpectedToken(
-                   ToCStr(eTk::kIdentifier), c.Literal(),
-                   "[ParseMethodParameters] Expected identifier."));
+        return Fail(c, ExpectedToken(Ident, c));
       }
 
       // Add to list
-      method_parameters_list_node.PushBack(method_parameter_node);
+      method_parameters_list_node.PushBack(move(method_parameter_node));
     } else {
-      if (scope.ContainedBegin()->TypeIs(eTk::kIdentifier)) {
+      if (scope.ContainedBegin()->TypeIs(Ident)) {
         method_parameters_list_node.PushBack(
-            Ast(eAst::kMethodParameter, "",
-                Ast(eAst::kModifiers, "", Ast(eAst::kNone)), Ast(eAst::kAny),
+            Ast(eAst::MethodParameter, "",
+                Ast(eAst::Modifiers, "", Ast(eAst::NONE)), Ast(eAst::KwAny),
                 Ast(*scope.ContainedBegin())));
       } else {
-        return ParseResultWithOffset::Failure(
-            c, compiler_error::parser::xExpectedToken(
-                   ToCStr(eTk::kIdentifier), scope.ContainedBegin()->Literal(),
-                   "[ParseMethodParameters]"));
+        c.Advance(scope.ContainedBegin());
+        return Fail(c, ExpectedToken(Ident, c));
       }
     }
   }
-  return ParseResultWithOffset::Success(c.Advance(arg_scopes.back().End()),
-                                        method_parameters_list_node);
+  return Success(c.Advance(arg_scopes.back().End()),
+                 move(method_parameters_list_node));
 }
 
-ParseResultWithOffset parser::ParseMethodReturnParameters(TkCursor c) {
-  Ast method_return_type_node(eAst::kMethodReturnType);
+OffsetParseResult parser::ParseMethodReturnParameters(TkCursor c) {
+  using namespace caerr;
+  Ast method_return_type_node{eAst::MethodReturnType};
   // Expect any number of modifiers.
   if (c.IsModifierKeyword()) {
-    ParseResultWithOffset method_mods_result = ParseModifiers(c);
-    if (!method_mods_result) {
-      return method_mods_result.ChainFailure("[ParseMethodReturnParameters]");
+    auto method_mods_result = ParseModifiers(c);
+    if (not method_mods_result) {
+      return method_mods_result;
     }
-    c.Advance(method_mods_result.Always().Iter());
-    method_return_type_node.PushBack(method_mods_result.Extract());
+    c.Advance(method_mods_result);
+    method_return_type_node.ExtractAndPush(method_mods_result);
   }
 
   // Expecting a primary expression ending in a colon.
-  if (c.IsPrimaryExpressionOpening()) {
+  if (c.IsPrimary()) {
     auto ret_type_result = ParsePrimaryPostIdentifier(c);
-    if (!ret_type_result) {
-      return ret_type_result.ChainFailure("[ParseMethodReturnParameters]");
+    if (not ret_type_result) {
+      return ret_type_result;
     }
-    c.Advance(ret_type_result.Always().Iter());
-    method_return_type_node.PushBack(ret_type_result.Extract());
+    c.Advance(ret_type_result);
+    method_return_type_node.ExtractAndPush(ret_type_result);
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xExpectedToken(
-               "Primary Expression", c.Literal(),
-               "[ParseMethodReturnParameters]Expected Primary "
-               "expression opening."));
+    return Fail(c, ExpectedPrimaryExpression(c));
   }
 
-  return ParseResultWithOffset::Success(c, method_return_type_node);
+  return Success(c, move(method_return_type_node));
 }
 
-ParseResultWithOffset parser::ParseMethodSignature(TkCursor c) {
-  const LAMBDA xMakeSingleParamMethodSignatureAst = [](Ast ret, Ast param) {
-    return Ast(eAst::kMethodSignature, "",
-               Ast(eAst::kMethodParameterList, "",
-                   Ast(eAst::kMethodParameter, "", param)),
-               Ast(eAst::kMethodReturnType, "", ret));
+OffsetParseResult parser::ParseMethodSignature(TkCursor c) {
+  using namespace caerr;
+  using enum eAst;
+  static const LAMBDA xMake1ParamSigAst = [](Ast ret, Ast param) {
+    return Ast(MethodSignature, "",
+               Ast(MethodParameterList, "", Ast(MethodParameter, "", param)),
+               Ast(MethodReturnType, "", ret));
   };
 
-  const LAMBDA xMakeMethodSignatureAst = [](Ast ret_type_ast,
-                                            Ast param_list_ast) {
-    return Ast(eAst::kMethodSignature, "", param_list_ast, ret_type_ast);
+  static const LAMBDA xMakeSigAst = [](Ast ret_type_ast, Ast param_list_ast) {
+    return Ast(MethodSignature, "", param_list_ast, ret_type_ast);
   };
-  // Colon after identifier.
-  // Implicit void arg, no return.
-  if (c.TypeIs(eTk::kColon)) {
-    return ParseResultWithOffset::Success(
-        c, xMakeSingleParamMethodSignatureAst(eAst::kMethodVoid,
-                                              eAst::kMethodVoid));
+
+  //----------------------------------------------------------------------------//
+  // Colon after identifier -> Implicit void arg, no return.
+  //----------------------------------------------------------------------------//
+  if (c.TypeIs(eTk::Colon)) {
+    return Success(c, xMake1ParamSigAst(MethodVoid, MethodVoid));
   }
-  // GreaterThan after identifier.
-  // Some sort of void arg with a return.
-  else if (c.TypeIs(eTk::kGreaterThan)) {
+
+  //----------------------------------------------------------------------------//
+  // GreaterThan after identifier -> Some sort of void arg with a return.
+  //----------------------------------------------------------------------------//
+  else if (c.TypeIs(eTk::Gt)) {
     c.Advance();
-    if (c.TypeIs(eTk::kColon)) {  // Implicit any return void method.
+    if (c.TypeIs(eTk::Colon)) {  // Implicit any return void method.
       c.Advance();
-      return ParseResultWithOffset::Success(
-          c, xMakeSingleParamMethodSignatureAst(eAst::kAny, eAst::kMethodVoid));
+      return Success(c, xMake1ParamSigAst(KwAny, MethodVoid));
     }
 
-    if (c.TypeIs(eTk::kSemicolon)) {
-      return ParseResultWithOffset::Success(
-          c, xMakeSingleParamMethodSignatureAst(eAst::kAny, eAst::kMethodVoid));
+    if (c.TypeIs(eTk::Semicolon)) {
+      return Success(c, xMake1ParamSigAst(KwAny, MethodVoid));
     }
 
     // Parse the return type.
-    ParseResultWithOffset return_type_result = ParseMethodReturnParameters(c);
-    if (!return_type_result) {
-      return return_type_result.ChainFailure("[ParseMethodSignature]");
+    auto return_type_result = ParseMethodReturnParameters(c);
+    if (not return_type_result) {
+      return return_type_result;
     }
 
     // Return type must end in a colon. If it doesn't, error above.
-    c.Advance(return_type_result.Always().Iter());
-    return ParseResultWithOffset::Success(
-        c, xMakeMethodSignatureAst(
-               return_type_result.Extract(),
-               Ast{eAst::kMethodParameterList, "",
-                   Ast{eAst::kMethodParameter, "", Ast{eAst::kMethodVoid}}}));
+    c.Advance(return_type_result);
+    return Success(c,
+                   xMakeSigAst(return_type_result.Extract(),
+                               Ast{MethodParameterList, "",
+                                   Ast{MethodParameter, "", Ast{MethodVoid}}}));
   }
-  // Open Paren After Identifier.
-  // Method with arguments.
-  // Parse the method parameters.
-  else if (c.TypeIs(eTk::kOpenParen)) {
-    // Parse the method parameters.
-    ParseResultWithOffset method_params_result = ParseMethodParameters(c);
-    if (!method_params_result) {
-      return method_params_result.ChainFailure("[ParseMethodSignature]");
+
+  //----------------------------------------------------------------------------//
+  // Open Paren After Identifier -> Method with arguments.
+  //----------------------------------------------------------------------------//
+  else if (c.TypeIs(eTk::LParen)) {
+    auto method_params_result = ParseMethodParameters(c);
+    if (not method_params_result) {
+      return method_params_result;
     }
-    c.Advance(method_params_result.Always().Iter());
-    if (c.TypeIs(eTk::kSemicolon)) {
-      return ParseResultWithOffset::Success(
-          c, xMakeMethodSignatureAst(
-                 Ast(eAst::kMethodReturnType, "", Ast(eAst::kMethodVoid)),
-                 method_params_result.Extract()));
+    c.Advance(method_params_result);
+    if (c.TypeIs(eTk::Semicolon)) {
+      return Success(c, xMakeSigAst(Ast(MethodReturnType, "", Ast(MethodVoid)),
+                                    method_params_result.Extract()));
     }
 
     // Expecting a colon or a greater than.
-    if (c.TypeIs(eTk::kColon)) {
+    if (c.TypeIs(eTk::Colon)) {
       c.Advance();
-      return ParseResultWithOffset::Success(
-          c, xMakeMethodSignatureAst(
-                 Ast(eAst::kMethodReturnType, "", Ast(eAst::kMethodVoid)),
-                 method_params_result.Extract()));
-    } else if (c.TypeIs(eTk::kGreaterThan)) {
+      return Success(c, xMakeSigAst(Ast(MethodReturnType, "", Ast(MethodVoid)),
+                                    method_params_result.Extract()));
+    } else if (c.TypeIs(eTk::Gt)) {
       c.Advance();
       // if the next token is a colon, then the return type is any.
-      if (c.TypeIs(eTk::kColon)) {
+      if (c.TypeIs(eTk::Colon)) {
         c.Advance();
-        return ParseResultWithOffset::Success(
-            c, xMakeMethodSignatureAst(
-                   Ast(eAst::kMethodReturnType, "", Ast(eAst::kAny)),
-                   method_params_result.Extract()));
+        return Success(c, xMakeSigAst(Ast(MethodReturnType, "", Ast(KwAny)),
+                                      method_params_result.Extract()));
       }
 
-      if (c.TypeIs(eTk::kSemicolon)) {
-        return ParseResultWithOffset::Success(
-            c, xMakeMethodSignatureAst(
-                   Ast(eAst::kMethodReturnType, "", Ast(eAst::kAny)),
-                   method_params_result.Extract()));
+      if (c.TypeIs(eTk::Semicolon)) {
+        return Success(c, xMakeSigAst(Ast(MethodReturnType, "", Ast(KwAny)),
+                                      method_params_result.Extract()));
       }
 
-      ParseResultWithOffset return_type_result = ParseMethodReturnParameters(c);
-      if (!return_type_result) {
-        return return_type_result.ChainFailure("[ParseMethodSignature]");
+      auto return_type_result = ParseMethodReturnParameters(c);
+      if (not return_type_result) {
+        return return_type_result;
       }
-      c.Advance(return_type_result.Always().Iter());
-      return ParseResultWithOffset::Success(
-          c, xMakeMethodSignatureAst(return_type_result.Extract(),
-                                     method_params_result.Extract()));
+      c.Advance(return_type_result);
+      return Success(c, xMakeSigAst(return_type_result.Extract(),
+                                    method_params_result.Extract()));
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xExpectedToken(
-                 std::string(ToCStr(eTk::kColon)) + " or " +
-                     ToCStr(eTk::kGreaterThan),
-                 c.Literal(),
-                 "[ParseMethodSignature] Expected colon or "
-                 "greater than."));
+      return Fail(c, ExpectedToken(eTk::Colon, c));
     }
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xProgrammerLogicError(
-               Ast(c.Get()).Type(), c.Iter(),
-               "[ParseMethodSignature] Invalid token following method name."));
+    return Fail(c, ImplParserExpectedToken(c));
   }
 }
 
-ParseResultWithOffset parser::ParseMethodDef(TkCursor c) {
-  Ast node(eAst::kMethodDefinition);
-  TkScope statement_scope = TkScope::FindBrace(c);
-  if (!statement_scope.Valid()) {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xMismatchedParentheses(
-               c.Iter(), "[ParseLibDef] Mismatched braces."));
+OffsetParseResult parser::ParseMethodDef(TkCursor c) {
+  using namespace caerr;
+
+  Ast node{eAst::MethodDefinition};
+  auto statement_scope = TkScope::FindBrace(c);
+  if (not statement_scope) {
+    return Fail(c, MismatchedScope(c));
   }
-  c.Advance();  // advance past the opening brace.
-  // Parse until end of scope.
+  c.Advance();
+
   while (c.Iter() != statement_scope.ContainedEnd()) {
-    if (c.IsModifierKeyword() || c.IsDeclarativeKeyword()) {
-      ParseResultWithOffset decl_result = ParseFunctionalStmt(c);
-      if (!decl_result) {
-        return decl_result.ChainFailure(
-            "[Parsing Method Declarative Statement]");
+    if (c.IsPragmatic()) {
+      auto decl_result = ParseFunctionalStmt(c);
+      if (not decl_result) {
+        return decl_result;
       }
-      node.PushBack(decl_result.Extract());
-      c.Advance(decl_result.Always().Iter());
-    } else if (c.IsPrimaryExpressionOpening()) {
-      ParseResultWithOffset primary_result = ParsePrimaryStatement(c);
-      if (!primary_result) {
-        return primary_result.ChainFailure(
-            "[Parsing Method Primary Statement]");
+      node.ExtractAndPush(decl_result);
+      c.Advance(decl_result);
+    } else if (c.IsPrimary()) {
+      auto primary_result = ParsePrimaryStatement(c);
+      if (not primary_result) {
+        return primary_result;
       }
-      node.PushBack(primary_result.Extract());
-      c.Advance(primary_result.Always().Iter());
+      node.ExtractAndPush(primary_result);
+      c.Advance(primary_result);
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xUserSyntaxError(
-                 c.Iter(), "[Parsing Method Primary Statement]"));
+      return Fail(c, ExpectedPragmaticDeclaration(c));
     }
   }
-  c.Advance();  // advance to scope end.
-  return ParseResultWithOffset::Success(c, node);
+  c.Advance();
+
+  return Success(c, move(node));
 }
 
-ParseResultWithOffset parser::ParseMainDef(TkCursor c) {
-  Ast node(eAst::kMainDefinition);
-  TkScope statement_scope = TkScope::FindBrace(c);
-  if (!statement_scope.Valid()) {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xMismatchedParentheses(
-               c.Iter(), "[ParseLibDef] Mismatched braces."));
+OffsetParseResult parser::ParseMainDef(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+
+  Ast node{eAst::MainDefinition};
+  auto statement_scope = TkScope::FindBrace(c);
+  if (not statement_scope) {
+    return Fail(c, MismatchedScope(c));
   }
-  c.Advance();  // advance past the opening brace.
-  // Parse until end of scope.
+  c.Advance();
+
   while (c.Iter() != statement_scope.ContainedEnd()) {
-    if (c.IsModifierKeyword() || c.IsDeclarativeKeyword()) {
-      ParseResultWithOffset decl_result = ParseFunctionalStmt(c);
-      if (!decl_result) {
-        return decl_result.ChainFailure(
-            "[Parsing Method Declarative Statement]");
+    if (c.IsPragmatic()) {
+      auto decl_result = ParseFunctionalStmt(c);
+      if (not decl_result) {
+        return decl_result;
       }
-      node.PushBack(decl_result.Extract());
-      c.Advance(decl_result.Always().Iter());
-    } else if (c.IsPrimaryExpressionOpening()) {
-      ParseResultWithOffset primary_result = ParsePrimaryStatement(c);
-      if (!primary_result) {
-        return primary_result.ChainFailure(
-            "[Parsing Method Primary Statement]");
+      node.ExtractAndPush(decl_result);
+      c.Advance(decl_result);
+    } else if (c.IsPrimary()) {
+      auto primary_result = ParsePrimaryStatement(c);
+      if (not primary_result) {
+        return primary_result;
       }
-      node.PushBack(primary_result.Extract());
-      c.Advance(primary_result.Always().Iter());
+      node.ExtractAndPush(primary_result);
+      c.Advance(primary_result);
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xUserSyntaxError(
-                 c.Iter(), "[Parsing Method Primary Statement]"));
+      return Fail(c, ExpectedPragmaticDeclaration(c));
     }
   }
-  c.Advance();  // advance to scope end.
-  // expect semicolon
-  return ParseResultWithOffset::Success(c, node);
+  c.Advance();
+
+  return Success(c, move(node));
 }
 
-ParseResultWithOffset parser::ParseClassDef(TkCursor c) {
-  // Format: <open_brace> <statement?*> <close_brace>
-  Ast node(eAst::kClassDefinition);
-  TkScope statement_scope = TkScope::FindBrace(c);
-  if (!statement_scope.Valid()) {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xMismatchedParentheses(
-               c.Iter(), "[ParseLibDef] Mismatched braces."));
+OffsetParseResult parser::ParseClassDef(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+
+  Ast node{eAst::ClassDefinition};
+  auto statement_scope = TkScope::FindBrace(c);
+  if (not statement_scope) {
+    return Fail(c, MismatchedScope(c));
   }
-  c.Advance();  // advance past the opening brace.
-  // Parse until end of scope.
+  c.Advance();
+
   while (c.Iter() != statement_scope.ContainedEnd()) {
-    if (c.IsModifierKeyword() || c.IsDeclarativeKeyword()) {
-      ParseResultWithOffset decl_result = ParsePragmaticStmt(c);
-      if (!decl_result) {
-        return decl_result.ChainFailure(
-            "[Parsing Global Declarative Statement]");
+    if (c.IsPragmatic()) {
+      auto decl_result = ParsePragmaticStmt(c);
+      if (not decl_result) {
+        return decl_result;
       }
-      node.PushBack(decl_result.Extract());
-      c.Advance(decl_result.Always().Iter());
+      node.ExtractAndPush(decl_result);
+      c.Advance(decl_result);
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xUserSyntaxError(
-                 c.Iter(), "[Parsing Global Primary Statement]"));
+      return Fail(c, ExpectedPragmaticDeclaration(c));
     }
   }
-  c.Advance();  // advance to scope end.
-  // expect semicolon
-  if (c.TypeIs(eTk::kSemicolon)) {
+  c.Advance();
+
+  if (c.TypeIs(Semicolon)) {
     c.Advance();
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xExpectedToken(
-               ToCStr(eTk::kSemicolon), c.Literal(),
-               "[ParseLibDef] Expected semicolon."));
+    return Fail(c, ExpectedToken(Semicolon, c));
   }
-  return ParseResultWithOffset::Success(c, node);
+  return Success(c, move(node));
 }
 
-ParseResultWithOffset parser::ParseLibDef(TkCursor c) {
-  // Format: <open_brace> <statement?*> <close_brace>
-  Ast node(eAst::kLibraryDefinition);
-  TkScope statement_scope = TkScope::FindBrace(c);
-  if (!statement_scope.Valid()) {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xMismatchedParentheses(
-               c.Iter(), "[ParseLibDef] Mismatched braces."));
+OffsetParseResult parser::ParseLibDef(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+
+  Ast node{eAst::LibraryDefinition};
+  auto statement_scope = TkScope::FindBrace(c);
+  if (not statement_scope) {
+    return Fail(c, MismatchedScope(c));
   }
-  c.Advance();  // advance past the opening brace.
-  // Parse until end of scope.
+  c.Advance();
+
   while (c.Iter() != statement_scope.ContainedEnd()) {
-    if (c.IsModifierKeyword() || c.IsDeclarativeKeyword()) {
-      ParseResultWithOffset decl_result = ParsePragmaticStmt(c);
-      if (!decl_result) {
-        return decl_result.ChainFailure(
-            "[Parsing Global Declarative Statement]");
+    if (c.IsPragmatic()) {
+      auto decl_result = ParsePragmaticStmt(c);
+      if (not decl_result) {
+        return decl_result;
       }
-      node.PushBack(decl_result.Extract());
-      c.Advance(decl_result.Always().Iter());
+      node.ExtractAndPush(decl_result);
+      c.Advance(decl_result);
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xUserSyntaxError(
-                 c.Iter(), "[Parsing Global Primary Statement]"));
+      return Fail(c, ExpectedPragmaticDeclaration(c));
     }
   }
-  c.Advance();  // advance to scope end.
-  // expect semicolon
-  if (c.TypeIs(eTk::kSemicolon)) {
+  c.Advance();
+
+  if (c.TypeIs(Semicolon)) {
     c.Advance();
   } else {
-    return ParseResultWithOffset::Failure(
-        c, compiler_error::parser::xExpectedToken(
-               ToCStr(eTk::kSemicolon), c.Literal(),
-               "[ParseLibDef] Expected semicolon."));
+    return Fail(c, ExpectedToken(Semicolon, c));
   }
-  return ParseResultWithOffset::Success(c, node);
+  return Success(c, move(node));
 }
 
-ParseResultWithOffset parser::ParseProgram(TkCursor c) {
-  Ast program_node(eAst::kProgram);
-  while (!c.AtEnd()) {
-    if (c.IsModifierKeyword() || c.IsDeclarativeKeyword()) {
-      ParseResultWithOffset decl_result = ParsePragmaticStmt(c);
-      if (!decl_result) {
-        return decl_result.ChainFailure(
-            "[Parsing Global Declarative Statement]");
+OffsetParseResult parser::ParseProgram(TkCursor c) {
+  using namespace caerr;
+  Ast program_node{eAst::Program};
+  while (not c.AtEnd()) {
+    if (c.IsPragmatic()) {
+      OffsetParseResult decl_result = ParsePragmaticStmt(c);
+      if (not decl_result) {
+        return decl_result;
       }
-      program_node.PushBack(decl_result.Extract());
-      c.Advance(decl_result.Always().Iter());
+      program_node.ExtractAndPush(decl_result);
+      c.Advance(decl_result);
     } else {
-      return ParseResultWithOffset::Failure(
-          c, compiler_error::parser::xUserSyntaxError(
-                 c.Iter(), "[Parsing Global Primary Statement]"));
+      return Fail(c, ExpectedPragmaticDeclaration(c));
     }
   }
-  return ParseResultWithOffset::Success(c, program_node);
+  return Success(c, move(program_node));
 }
+
+//---------------------------------------------------------------------------//
+// EndSection:{Internal parsing methods impl}
+//---------------------------------------------------------------------------//
 }  // namespace parser
 
-static ParseResult ParseTokens(const TkVector& c) {
+static ExpectedAst ParseTokens(const TkVector& c) {
   auto parsed = parser::ParseProgram({c.cbegin(), c.cend()});
   if (parsed) {
-    return ParseResult::Success(parsed.Extract());
+    return ExpectedAst::Success(parsed.Extract());
   } else {
-    return ParseResult::Failure(parsed.Error());
+    return ExpectedAst::Failure(parsed.Error());
   }
 }
 

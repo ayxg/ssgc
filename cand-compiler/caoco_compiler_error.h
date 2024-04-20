@@ -19,197 +19,244 @@
 #include "cppsextended.h"
 // Includes:
 #include "caoco_ast.h"
-#include "caoco_enum.h"
 #include "caoco_grammar.h"
 #include "caoco_token.h"
-#include "caoco_token_traits.h"
+#include "caoco_token_cursor.h"
 //---------------------------------------------------------------------------//
+
+#define ERROR_LAMBDA(errname, ...) \
+  static inline LAMBDA errname = [](__VA_ARGS__)
 
 namespace caoco {
 enum class eCaErr : std::size_t {
   kNone = 0,
+  // Lexer errors
   kLexerUnknownChar,
-  kLexerSyntaxError,
-
+  kLexerUnknownDirective,
+  kLexerUnknownElement,
+  // Parser errors
+  kMismatchedScope,
+  kExpectedPragmaticDeclaration,
+  kExpectedPrimaryExpression,
+  kExpectedToken,
+  kNotImplemented,
+  kInvalidForLoopSyntax,
+  kUserSyntaxError,
+  // Error codes for complier implementers. These should never be seen by the
+  // end user. If they are, it means the compiler has a bug in its
+  // implementation logic.
+  kImplParserExpectedToken,
+  kImplParserInvalidSingularOperand = std::numeric_limits<std::size_t>::max(),
 };
 
 namespace caerr {
-constexpr inline string GenErrorHeader(eCaErr error_code) {
-  return string("[C&][ERROR:") +
-         std::to_string(static_cast<size_t>(error_code)) + "]";
+
+constexpr inline string GenLineColLocation(size_t line, size_t col) {
+  return "  [ Line: " + std::to_string(line) +
+         "| Column: " + std::to_string(col) + "]";
 }
 
 constexpr inline string GenErrorName(eCaErr error_code) {
   switch (error_code) {
     case eCaErr::kNone:
-      return GenErrorHeader(error_code) + "[No Error]: ";
+      return "[No Error]: ";
+    // Lexer errors
     case eCaErr::kLexerUnknownChar:
-      return GenErrorHeader(error_code) + "[Lexer][UnknownChar]: ";
-    case eCaErr::kLexerSyntaxError:
-      return GenErrorHeader(error_code) + "[Lexer][SyntaxError]: ";
+      return "[Lexer][UnknownChar]: \n";
+    case eCaErr::kLexerUnknownDirective:
+      return "[Lexer][SyntaxError]: ";
+
+    case eCaErr::kLexerUnknownElement:
+      return "[Lexer][UnknownElement]: ";
+    // Parser errors
+    case eCaErr::kExpectedPragmaticDeclaration:
+      return "[Parser][ExpectedPragmaticDeclaration]: ";
+    case eCaErr::kExpectedPrimaryExpression:
+      return "[Parser][ExpectedPrimaryExpression]: ";
+    case eCaErr::kMismatchedScope:
+      return "[Parser][MismatchedScope]: ";
+    case eCaErr::kExpectedToken:
+      return "[Parser][ExpectedToken]: ";
+    case eCaErr::kUserSyntaxError:
+      return "[Parser][UserSyntaxError]";
+    case eCaErr::kNotImplemented:
+      return "[Parser][NotImplemented]: ";
+    case eCaErr::kInvalidForLoopSyntax:
+      return "[Parser][InvalidForLoopSyntax]: ";
+      // Compiler Implementation errors
+    case eCaErr::kImplParserExpectedToken:
+      return "[Compiler Implementation][Parser][ExpectedToken]: ";
+    case eCaErr::kImplParserInvalidSingularOperand:
+      return "[Compiler Implementation][Parser][InvalidSingularOperand]: ";
     default:
-      return GenErrorHeader(error_code) + "[Unknown Error]: ";
+      return "[Unimplemented error desriptor in caoco_compiler_error.h]: ";
   }
 }
 
-using UnknownCharacter =
-    decltype([](size_t line, size_t col, char c, string error = "") {
-      // Specific errors for specific characters.
-      // if c == \" then we can assume the user attempted to use " to
-      // denote a string literal. C& uses ' for string literals.
-      string special_case_error = "";
+constexpr inline string GenErrorHeader(eCaErr error_code) {
+  return string("[C&][ERROR:") + to_string(static_cast<size_t>(error_code)) +
+         "]" + GenErrorName(error_code);
+}
 
-      if (c == '\"') {
-        special_case_error =
-            "Did you mean to use ' for a string literal? \nC& uses single "
-            "apostrophes to enclose string literals. ex 'Hello World!'.\n";
-      }
+constexpr inline string GenErrorHeaderWithLoc(eCaErr error_code, size_t line,
+                                              size_t col) {
+  return string("[C&][ERROR:") + to_string(static_cast<size_t>(error_code)) +
+         "]" + GenErrorName(error_code) + "[Line: " + to_string(line) +
+         "| Column: " + to_string(col) + "]";
+}
 
-      return GenErrorName(eCaErr::kLexerUnknownChar) +
-             "\nUnknown character at line: " + std::to_string(line) +
-             " column: " + std::to_string(col) + +"\nOffending Char: '" +
-             string(1, c) + " \nError detail: " + special_case_error + error;
-    });
+constexpr inline string GenPrettyPrintToken(const Tk& token) {
+  return string("\nToken: ") + token.TypeStr().data() +
+         "\nline: " + std::to_string(token.Line()) +
+         "\ncolumn: " + std::to_string(token.Col()) +
+         "\nliteral: " + token.Literal();
+};
+
+constexpr inline string GenCppSourceLocation(std::source_location err_loc) {
+  return "\n[C++ Source][File: " + string(err_loc.file_name()) +
+         "| Line: " + std::to_string(err_loc.line()) +
+         "| Column: " + std::to_string(err_loc.column()) + "]" +
+         "\n[ Method: " + err_loc.function_name() + "]";
+  ;
+}
+
+//---------------------------------------------------------------------------//
+// Section:{Lexer Errors}
+// Brief:{}
+//---------------------------------------------------------------------------//
+ERROR_LAMBDA(LexerUnknownChar, size_t line, size_t col, char c,
+             string pretty_line_loc) {
+  // if c == \" then we can assume the user attempted to use " to
+  // denote a string literal. C& uses ' for string literals.
+  string special_case_error = "";
+
+  if (c == '\"') {
+    special_case_error =
+        "Did you mean to use ' for a string literal? \nC& uses single "
+        "apostrophes to enclose string literals. ex 'Hello World!'.\n";
+  }
+  string ret =
+      GenErrorHeaderWithLoc(eCaErr::kLexerUnknownChar, line, col) +
+      "\nUnknown character detected in source file at the lexing phase." +
+      "\nOffending Char: '" + string(1, c) + "'.\n" + pretty_line_loc;
+
+  if (!special_case_error.empty()) {
+    ret += "\nError detail: " + special_case_error;
+  }
+
+  return ret;
+};
+
+ERROR_LAMBDA(LexerUnknownElement, size_t line, size_t col, char c,
+             string pretty_line_loc, const string& special_case_error) {
+  // if c == \" then we can assume the user attempted to use " to
+  // denote a string literal. C& uses ' for string literals.
+  string ret =
+      GenErrorHeaderWithLoc(eCaErr::kLexerUnknownElement, line, col) +
+      "\nUnknown token format detected in source file at the lexing phase." +
+      "\nOffending Char: '" + string(1, c) + "'.\n" + pretty_line_loc;
+
+  if (!special_case_error.empty()) {
+    ret += "\nError detail: " + special_case_error;
+  }
+
+  return ret;
+};
+
+//---------------------------------------------------------------------------//
+// EndSection:{Lexer Errors}
+//---------------------------------------------------------------------------//
+
+//---------------------------------------------------------------------------//
+// Section:{Compiler Implementation Errors}
+// Brief:{}
+//---------------------------------------------------------------------------//
+ERROR_LAMBDA(ImplParserInvalidSingularOperand, const TkCursor& token_location,
+             std::source_location err_loc = {}) {
+  err_loc = std::source_location::current();
+  return GenErrorHeader(eCaErr::kImplParserInvalidSingularOperand) +
+         GenPrettyPrintToken(token_location.Get()) +
+         GenCppSourceLocation(err_loc);
+};
+
+ERROR_LAMBDA(ImplParserExpectedToken, const TkCursor& token_location,
+             std::string error_message = "",
+             std::source_location err_loc = {}) {
+  err_loc = std::source_location::current();
+  return GenErrorHeader(eCaErr::kImplParserExpectedToken) +
+         GenPrettyPrintToken(token_location.Get()) +
+         GenCppSourceLocation(err_loc);
+};
+//---------------------------------------------------------------------------//
+// EndSection:{Compiler Implementation Errors}
+//---------------------------------------------------------------------------//
+
+//---------------------------------------------------------------------------//
+// Section:{Parser Errors}
+// Brief:{}
+//---------------------------------------------------------------------------//
+ERROR_LAMBDA(MismatchedScope, const TkCursor& token_location,
+             std::string error_message = "",
+             std::source_location err_loc = std::source_location::current()) {
+  return GenErrorHeader(eCaErr::kMismatchedScope) +
+         GenPrettyPrintToken(token_location.Get()) +
+         GenCppSourceLocation(err_loc);
+};
+
+ERROR_LAMBDA(NotImplemented, const TkCursor& token_location,
+             std::string error_message = "",
+             std::source_location err_loc = std::source_location::current()) {
+  return GenErrorHeader(eCaErr::kNotImplemented) +
+         GenPrettyPrintToken(token_location.Get()) +
+         GenCppSourceLocation(err_loc);
+};
+
+ERROR_LAMBDA(ExpectedPragmaticDeclaration, const TkCursor& token_location,
+             std::string error_message = "",
+             std::source_location err_loc = std::source_location::current()) {
+  return GenErrorHeader(eCaErr::kExpectedPragmaticDeclaration) +
+         GenPrettyPrintToken(token_location.Get()) +
+         GenCppSourceLocation(err_loc);
+};
+
+ERROR_LAMBDA(ExpectedPrimaryExpression, const TkCursor& token_location,
+             std::string error_message = "",
+             std::source_location err_loc = std::source_location::current()) {
+  return GenErrorHeader(eCaErr::kExpectedPrimaryExpression) +
+         GenPrettyPrintToken(token_location.Get()) +
+         GenCppSourceLocation(err_loc);
+};
+
+ERROR_LAMBDA(InvalidForLoopSyntax, const TkCursor& token_location,
+             std::string error_message = "",
+             std::source_location err_loc = std::source_location::current()) {
+  return GenErrorHeader(eCaErr::kInvalidForLoopSyntax) +
+         GenPrettyPrintToken(token_location.Get()) +
+         GenCppSourceLocation(err_loc);
+};
+
+ERROR_LAMBDA(UserSyntaxError, const TkCursor& token_location,
+             std::string error_message = "",
+             std::source_location err_loc = std::source_location::current()) {
+  return GenErrorHeader(eCaErr::kInvalidForLoopSyntax) +
+         GenPrettyPrintToken(token_location.Get()) +
+         GenCppSourceLocation(err_loc);
+};
+
+ERROR_LAMBDA(ExpectedToken, eTk expected, const TkCursor& token_location,
+             std::string error_message = "",
+             std::source_location err_loc = std::source_location::current()) {
+  return GenErrorHeader(eCaErr::kExpectedToken) +
+         "Expected: " + eTkEnumStr(expected).data() +
+         " Found: " + token_location.Get().TypeStr().data() + error_message +
+         GenCppSourceLocation(err_loc);
+};
+
+//---------------------------------------------------------------------------//
+// EndSection:{Parser Errors}
+//---------------------------------------------------------------------------//
+
 }  // namespace caerr
-
-namespace compiler_error {
-
-namespace tokenizer {
-
-#define SXLAMBDA static constexpr LAMBDA
-
-SXLAMBDA xInvalidChar = [](size_t line, size_t col, char c, string error = "") {
-  return string("\n[User Syntax Error]: ") +
-         "\nInvalid character at line: " + std::to_string(line) +
-         " column: " + std::to_string(col) + " \nerror detail: " + error +
-         +"\n Offending character: '" + string(1, c);
-};
-
-SXLAMBDA xLexerSyntaxError = [](std::size_t line, std::size_t col, char8_t c,
-                                std::string error = "") {
-  std::stringstream ss;
-  ss << "\n[User Syntax Error]: ";
-  ss << "\nLexer syntax error at line: " << line << " column: " << col
-     << "\n Offending character: " << static_cast<char>(c)
-     << "\nerror detail: " << error;
-  return ss.str();
-};
-
-static constexpr LAMBDA xProgrammerLogicError =
-    [](std::size_t line, std::size_t col, char8_t c, std::string error = "") {
-      std::stringstream ss;
-      ss << "\n[Compiler programmer logic error]: ";
-      ss << "\nFailed to tokenize at line: " << line << " column: " << col
-         << "\n Offending character: " << static_cast<char>(c)
-         << " \nerror detail: " << error;
-      return ss.str();
-    };
-}  // namespace tokenizer
-namespace parser {
-static constexpr LAMBDA xPrettyPrintToken = [](const Tk& token) {
-  std::stringstream ss;
-  ss << "\nToken: " << ToCStr(token.Type()) << "\nline: " << token.Line()
-     << "\ncolumn: " << token.Col() << "\nliteral: " << token.Literal();
-  return ss.str();
-};
-
-static LAMBDA xProgrammerLogicError =
-    [](eAst attempted_astnode_type, TkVectorConstIter error_location,
-       std::string error_message = "",
-       std::source_location err_loc = std::source_location::current()) {
-      std::stringstream ss;
-      ss << "\n[Compiler programmer logic error]: ";
-      ss << "\nFailed to parse ast of type " << ToCStr(attempted_astnode_type)
-         << " at: " << xPrettyPrintToken(*error_location);
-      if (!error_message.empty()) {
-        ss << "\n[Detail]: " << error_message;
-      }
-      ss << "\n[Compiler Error Location]: " << err_loc.file_name()
-         << " line: " << err_loc.line() << " column: " << err_loc.column();
-      ss << "\n[Compiler Method]: " << err_loc.function_name();
-      return ss.str();
-    };
-
-static constexpr LAMBDA xOperationMissingOperand =
-    [](eAst attempted_operator_type, TkVectorConstIter error_location,
-       std::string error_message = "") {
-      std::stringstream ss;
-      ss << "\n[User Syntax Error]: ";
-      ss << "\nOperation" << ToCStr(attempted_operator_type)
-         << " missing operand at : "
-         << " at: " << xPrettyPrintToken(*error_location)
-         << "\nerror detail: " << error_message;
-      return ss.str();
-    };
-
-static LAMBDA xMismatchedParentheses =
-    [](TkVectorConstIter error_location, std::string error_message = "",
-       std::source_location err_loc = std::source_location::current()) {
-      std::stringstream ss;
-      ss << "\n[C&][ERROR][xMismatchedParentheses]: ";
-      ss << "\nMismatched parenthesis at: "
-         << " at: " << xPrettyPrintToken(*error_location);
-      if (!error_message.empty()) {
-        ss << "\n[Detail]: " << error_message;
-      }
-      ss << "\n[Compiler Error Location]: " << err_loc.file_name()
-         << " line: " << err_loc.line() << " column: " << err_loc.column();
-      ss << "\n[Compiler Method]: " << err_loc.function_name();
-      return ss.str();
-    };
-
-static LAMBDA xInvalidForLoopConditionSyntax =
-    [](TkVectorConstIter error_location, std::string error_message = "",
-       std::source_location err_loc = std::source_location::current()) {
-      std::stringstream ss;
-      ss << "\n[C&][ERROR][xInvalidForLoopConditionSyntax]: ";
-      ss << "\nInvalid for loop syntax at: "
-         << " at: " << xPrettyPrintToken(*error_location);
-      if (!error_message.empty()) {
-        ss << "\n[Detail]: " << error_message;
-      }
-      ss << "\n[Compiler Error Location]: " << err_loc.file_name()
-         << " line: " << err_loc.line() << " column: " << err_loc.column();
-      ss << "\n[Compiler Method]: " << err_loc.function_name();
-      return ss.str();
-    };
-
-static constexpr LAMBDA xInvalidExpression =
-    [](TkVectorConstIter error_location, std::string error_message = "") {
-      std::stringstream ss;
-      ss << "\n[User Syntax Error]: ";
-      ss << "\nInvalid expression at: "
-         << " at: " << xPrettyPrintToken(*error_location)
-         << "\nerror detail: " << error_message;
-      return ss.str();
-    };
-
-static LAMBDA xExpectedToken =
-    [](const std::string& expected, const std::string& found,
-       const std::string& error_message = "",
-       std::source_location err_loc = std::source_location::current()) {
-      std::stringstream ss;
-      ss << "\n[C&][ERROR][xExpectedToken] ";
-      ss << "Expected: " << expected << " found: " << found;
-      if (!error_message.empty()) {
-        ss << "\n[Detail]: " << error_message;
-      }
-      ss << "\n[Compiler Error Location]: " << err_loc.file_name()
-         << " line: " << err_loc.line() << " column: " << err_loc.column();
-      ss << "\n[Compiler Method]: " << err_loc.function_name();
-      return ss.str();
-    };
-
-static constexpr LAMBDA xUserSyntaxError = [](TkVectorConstIter error_location,
-                                              std::string error_message = "") {
-  std::stringstream ss;
-  ss << "\n[C&][ERROR][User Syntax Error]: "
-     << " at: " << xPrettyPrintToken(*error_location)
-     << "\nerror detail: " << error_message;
-  return ss.str();
-};
-}  // namespace parser
-}  // namespace compiler_error
 
 }  // namespace caoco
 //---------------------------------------------------------------------------//

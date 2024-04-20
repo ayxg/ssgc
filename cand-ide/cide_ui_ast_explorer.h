@@ -42,7 +42,7 @@ class AstExplorerInterface {
     // 1. Node Type as Text
     // 2. Node Literal as Text
     // 3. Children As a TreeNode
-    bool is_node_open = ImGui::TreeNode(caoco::ToCStr(node.Type()));
+    bool is_node_open = ImGui::TreeNode(caoco::eAstEnumStr(node.Type()).data());
     if (is_node_open) {
       if (node.Literal() != "") {
         bool is_data_node_open = ImGui::TreeNode("data:");
