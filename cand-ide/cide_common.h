@@ -21,17 +21,21 @@ using std::string;
 using std::vector;
 using std::string_view;
 
-
 using cstring = const char*;
 using wcstring = const wchar_t*;
 
+// The lambdas and typedefs below are default values for callbacks 
+// from frontend.
+// They are used to avoid null checks in the backend code.
 static constexpr LAMBDA xNullVoidCallback = []() {};
 using VoidCallbackT = function<void(void)>;
 
+// Boolean callback should be used when an error may occur.
+// The callback should return false if an error occurred.
 static constexpr LAMBDA xNullBoolCallback = []() { return false; };
 using BoolCallbackT = function<bool(void)>;
 
-
+// Defines file extensions used by the IDE.
 namespace file_extension {
 constexpr string_view kCaIdeSettings = ".caide";
 constexpr string_view kCaSolution = ".casln";
@@ -56,5 +60,7 @@ constexpr wcstring kCSource = L".c";
 constexpr wcstring kCHeader = L".h";
 }  // namespace wide
 }  // namespace file_extension
+
+
 
 }  // namespace cide::backend

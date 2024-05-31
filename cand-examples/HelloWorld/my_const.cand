@@ -1,0 +1,4 @@
+#include 'camath.cand'
+
+const def @my_constant : csl::INTMAX - 1;
+def @my_mutable : csl::INTMAX - 2;

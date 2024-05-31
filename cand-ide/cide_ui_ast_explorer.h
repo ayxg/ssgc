@@ -12,6 +12,7 @@
 namespace cide::ui {
 
 class AstExplorerInterface {
+  // Functionality is built into the interface for now.
   inline void ParseInputBuffer() {
     try {
       auto lex_result = caoco::Lexer::Lex(input_text_buffer_);

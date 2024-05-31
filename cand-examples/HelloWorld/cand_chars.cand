@@ -1,0 +1,68 @@
+fn@IsSymbol(char c)>bool:
+  switch (c) {
+     '!'c:'@'c:'#'c:'$'c:'%'c:'^'c:'&'c:'*'c:'-'c:'+'c:'='c:'{'c:'}'c:'['c:']'c:'|'c:'\\'c:';'c:
+     ':'c: '\''c: '\"'c: '<'c:'>'c:'?'c:'/'c:'~'c:'`'c:'.'c:','c:'('c:')'c:'_'c:
+      return true;
+    default:
+      return false;
+};
+
+fn@IsAlpha(char c)>bool: switch (c) {
+    case 'a'c:'b'c:'c'c:'d'c:'e'c:'f'c:'g'c:'h'c:'i'c:'j'c:'k'c:'l'c:'m'c:'n'c:
+ 'o'c:'p'c:'q'c:'r'c:'s'c:'t'c:'u'c:'v'c:'w'c:'x'c:'y'c:'z'c:'A'c:'B'c:'C'c:'D'c:
+ 'E'c:'F'c:'G'c:'H'c:'I'c:'J'c:'K'c:'L'c:'M'c:'N'c:'O'c:'P'c:'Q'c:'R'c:'S'c:'T'c:
+ 'U'c:'V'c:'W'c:'X'c:'Y'c:'Z'c:
+      return true;
+    default:
+      return false;
+};
+
+fn@IsNumeric(char c)>bool: switch (c) {
+    case '0'c:'1'c:'2'c:'3'c:'4'c:'5'c:'6'c:'7'c:'8'c:'9'c:
+      return true;
+    default:
+      return false;
+};
+
+fn@IsUnderscore(char c)>bool: return c == '_';
+
+fn@IsAlphanumeric(char c)>bool: 
+	return IsAlpha(c) || IsNumeric(c);
+
+fn@IsAlphaUnderscore(char c)>bool: 
+	return IsAlpha(c) || IsUnderscore(c);
+
+fn@IsAlnumus(char c)>bool: 
+	return IsAlpha(c) || IsNumeric(c) || IsUnderscore(c);
+
+fn@IsCoreSymbol(char c)>bool:
+  return IsSymbol(c);
+
+fn@IsPrintableSpace(char c)>bool:
+  return c == ' 'c || c == '\t'c;
+  
+fn@IsPrintable(char c)>bool:
+  return IsAlpha(c) || IsNumeric(c) || IsCoreSymbol(c) || IsPrintableSpace(c);
+
+fn@IsWhitespace(char c)>bool:
+  switch (c) {
+  case ' 'c:'\n'c:'\r'c:'\v'c:'\f'c:'\t'c:
+      return true;
+    default:
+      return false;
+};
+
+fn@IsNewline(char c)>bool:
+  switch (c) {
+    case '\n'c:'\r'c:'\v'c:'\f'c:
+      return true;
+    default:
+      return false;
+};
+
+fn@IsCoreControl(char c)>bool: switch (c) {
+    case '\0'c:'\a'c:'\b'c:'\t'c:'\n'c:'\v'c:'\f'c:'\r'c:'\x1b'c:
+      return true;
+    default:
+      return false;
+};

@@ -1,0 +1,5 @@
+#include 'cand_chars.cand'
+
+main: {
+
+}

@@ -281,8 +281,14 @@ constexpr Lexer::LexMethodResult Lexer::LexQuotation(CharVectorCIter it) {
 
     while (!(Get(it) == kApostropheChar && Peek(it, -1) != kBacklashChar)) {
       Advance(it);
+      // Special case '\\'. If there are two backslashes, then it is an escaped
+      // backslash. If next is quotation -> escape. Else continue.
+      if (Get(it) == kApostropheChar && Peek(it, -1) == kBacklashChar &&
+          Peek(it, -2) == kBacklashChar) {
+        break;
+      }
     }
-    Advance(it);
+    if (Get(it) == kApostropheChar) Advance(it);
 
     // Check for byte literal
     if (Get(it) == u8'c') {
@@ -669,6 +675,7 @@ constexpr Lexer::LexMethodResult Lexer::LexPeriod(CharVectorCIter it) {
 
 // Main tokenizer method
 constexpr Lexer::LexerResult Lexer::Lex() {
+  using namespace caerr;
   CharVectorCIter it = Begin();
   TkVector output_tokens;
   std::size_t current_line = 1;
@@ -683,7 +690,7 @@ constexpr Lexer::LexerResult Lexer::Lex() {
 #pragma warning(default : 6001)
     if (!lex_result.Valid()) {
       CalculateLineColPos(it, current_line, current_col);
-      return Expected<bool>::Failure(caerr::LexerUnknownElement(
+      return Expected<bool>::Failure(CaErr::ErrDetail<CaErr::LexerUnknownChar>(
           current_line, current_col, *it, GeneratePrettyErrorLineLocation(it),
           lex_result.Error()));
     }
@@ -732,7 +739,7 @@ constexpr Lexer::LexerResult Lexer::Lex() {
     // Update position based on the number of characters consumed
     if (!match) {
       CalculateLineColPos(it, current_line, current_col);
-      return LexerResult::Failure(caerr::LexerUnknownChar(
+      return LexerResult::Failure(CaErr::ErrDetail<CaErr::LexerUnknownChar>(
           current_line, current_col, *it, GeneratePrettyErrorLineLocation(it)));
     }
   }  // end while
