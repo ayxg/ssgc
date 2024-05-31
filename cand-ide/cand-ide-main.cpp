@@ -15,7 +15,7 @@
 #include "ut_cand_compiler.h"
 #include "ut_expected.h"
 
-//// CIDE
+// CIDE 
 #include "cide_backend.h"
 #include "cide_ui.h"
 #include "imgui-SFML.h"
@@ -29,7 +29,7 @@
 // For now im clearing the imgui.ini file on startup.
 // This is a temporary fix. Cannot find the root cause.
 // Error only happens if a window is moved around. When the project is reloaded.
-// It crashes saying that endChild() or End() wasnt called..
+// It crashes saying that endChild() or End() wasn't called..
 static int gFlushImGuiIniFile = []() {
   std::ofstream ofs;
   ofs.open("imgui.ini", std::ofstream::out | std::ofstream::trunc);
@@ -52,18 +52,8 @@ int main() {
   cide::ui::CideUserInterface cide_ui;
   cide::ui::CideTestExplorerInterface cide_test_explorer;
   cide::ui::AstExplorerInterface ast_explorer;
-  // cide_test_explorer.RegisterTestCase([]() {
-  //   using namespace ut;
-  //   MINITEST_RUN_INLINE(Test_CxxExpected, TestCase_CxxExpected);
-  //   MINITEST_RUN_INLINE(Test_CxxExpected,
-  //   TestCase_PartialExpectedConstrtuct);
-  //   MINITEST_RUN_INLINE(Test_CxxExpected, TestCase_BoolError);
-  // });
-  // cide_test_explorer.RegisterTestCase(
-  //     ut::modules::RUN_INLINE_MINITESTS_UT_EXPECTED_H, "UT_EXPECTED_H");
 
   // Register Test Modules
-
   // cppstandard extended
   cide_test_explorer.RegisterTestCase(
       MINITEST_FUNCTOR_RUN_INLINE(Test_CxxExpected), "UT_EXPECTED_H");
@@ -76,9 +66,9 @@ int main() {
                                       "UT_TOKENSCOPE_H");
   cide_test_explorer.RegisterTestCase(
       MINITEST_FUNCTOR_RUN_INLINE(Test_ParserBasics), "UT_PARSER_H");
+  cide_test_explorer.RegisterTestCase(MINITEST_FUNCTOR_RUN_INLINE(Test_Build),
+                                      "UT_BUILD_H");
 
-
-  //// cide::IdeInterface idei;
   sf::Clock deltaClock;
   while (window.isOpen()) {
     sf::Event event;

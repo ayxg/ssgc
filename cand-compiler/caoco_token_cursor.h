@@ -61,7 +61,7 @@ class TkCursor {
     auto& c = Get();
     return c.IsModifier() || c.IsDeclarative();
   }
-    constexpr inline eAst NodeType() const noexcept { return Get().NodeType(); }
+  constexpr inline eAst NodeType() const noexcept { return Get().NodeType(); }
 
   // Iteration
   // advances the cursor by n.

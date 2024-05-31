@@ -15,7 +15,7 @@
 #define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_GRAMMAR_H
 //---------------------------------------------------------------------------//
 // Brief: Describes the grammar of the C& programming language.
-//        Punctuation, keywords, operators, and other syntax elements.
+//        Punctuation, keywords, operators, errors and other syntax elements.
 // Details: See compiler reference manual for details.
 //---------------------------------------------------------------------------//
 // Includes:
@@ -40,42 +40,45 @@ namespace grammar {
 //-------------------------------------------------------------------//
 #define DEF_GRAMMAR_CHAR_ELEMENT(n, v) \
   static constexpr inline auto k##n##Char = v;
+
+// Get Grammar Char Element
 #define _GGCE(n) k##n##Char
 
-DEF_GRAMMAR_CHAR_ELEMENT(Eof, '\0');
-DEF_GRAMMAR_CHAR_ELEMENT(Whitespace, ' ');
-DEF_GRAMMAR_CHAR_ELEMENT(Newline, '\n');
-DEF_GRAMMAR_CHAR_ELEMENT(Hash, '#');
-DEF_GRAMMAR_CHAR_ELEMENT(CommercialAt, '@');
-DEF_GRAMMAR_CHAR_ELEMENT(Add, '+');
-DEF_GRAMMAR_CHAR_ELEMENT(Sub, '-');
-DEF_GRAMMAR_CHAR_ELEMENT(Mul, '*');
-DEF_GRAMMAR_CHAR_ELEMENT(Div, '/');
-DEF_GRAMMAR_CHAR_ELEMENT(Mod, '%');
-DEF_GRAMMAR_CHAR_ELEMENT(And, '&');
-DEF_GRAMMAR_CHAR_ELEMENT(Or, '|');
-DEF_GRAMMAR_CHAR_ELEMENT(Xor, '^');
-DEF_GRAMMAR_CHAR_ELEMENT(Not, '!');
-DEF_GRAMMAR_CHAR_ELEMENT(Lt, '<');
-DEF_GRAMMAR_CHAR_ELEMENT(Gt, '>');
-DEF_GRAMMAR_CHAR_ELEMENT(Eq, '=');
-DEF_GRAMMAR_CHAR_ELEMENT(LParen, '(');
-DEF_GRAMMAR_CHAR_ELEMENT(RParen, ')');
-DEF_GRAMMAR_CHAR_ELEMENT(LBrace, '{');
-DEF_GRAMMAR_CHAR_ELEMENT(RBrace, '}');
-DEF_GRAMMAR_CHAR_ELEMENT(LBracket, '[');
-DEF_GRAMMAR_CHAR_ELEMENT(RBracket, ']');
-DEF_GRAMMAR_CHAR_ELEMENT(Semicolon, ';');
-DEF_GRAMMAR_CHAR_ELEMENT(Colon, ':');
-DEF_GRAMMAR_CHAR_ELEMENT(Comma, ',');
-DEF_GRAMMAR_CHAR_ELEMENT(Period, '.');
-DEF_GRAMMAR_CHAR_ELEMENT(Backlash, '\\');
-DEF_GRAMMAR_CHAR_ELEMENT(Apostrophe, '\'');
-DEF_GRAMMAR_CHAR_ELEMENT(Tilde, '~');
-DEF_GRAMMAR_CHAR_ELEMENT(DoubleQuote, '"');
-DEF_GRAMMAR_CHAR_ELEMENT(Backtick, '`');
-DEF_GRAMMAR_CHAR_ELEMENT(Underscore, '_');
-DEF_GRAMMAR_CHAR_ELEMENT(SingleQuote, '\'');
+static constexpr inline char kEofChar = '\0';
+static constexpr inline char kWhitespaceChar = ' ';
+static constexpr inline char kNewlineChar = '\n';
+static constexpr inline char kHashChar = '#';
+static constexpr inline char kCommercialAtChar = '@';
+static constexpr inline char kAddChar = '+';
+static constexpr inline char kSubChar = '-';
+static constexpr inline char kMulChar = '*';
+static constexpr inline char kDivChar = '/';
+static constexpr inline char kModChar = '%';
+static constexpr inline char kAndChar = '&';
+static constexpr inline char kOrChar = '|';
+static constexpr inline char kXorChar = '^';
+static constexpr inline char kNotChar = '!';
+static constexpr inline char kLtChar = '<';
+static constexpr inline char kGtChar = '>';
+static constexpr inline char kEqChar = '=';
+static constexpr inline char kLParenChar = '(';
+static constexpr inline char kRParenChar = ')';
+static constexpr inline char kLBraceChar = '{';
+static constexpr inline char kRBraceChar = '}';
+static constexpr inline char kLBracketChar = '[';
+static constexpr inline char kRBracketChar = ']';
+static constexpr inline char kSemicolonChar = ';';
+static constexpr inline char kColonChar = ':';
+static constexpr inline char kCommaChar = ',';
+static constexpr inline char kPeriodChar = '.';
+static constexpr inline char kBacklashChar = '\\';
+static constexpr inline char kApostropheChar = '\'';
+static constexpr inline char kTildeChar = '~';
+static constexpr inline char kDoubleQuoteChar = '"';
+static constexpr inline char kBacktickChar = '`';
+static constexpr inline char kUnderscoreChar = '_';
+static constexpr inline char kSingleQuoteChar = '\'';
+;
 
 #define CAOCO_GRAMMAR_CHAR_ELEMENTS                                         \
   _GGCE(Eof), _GGCE(Whitespace), _GGCE(Newline), _GGCE(Hash),               \
@@ -245,48 +248,6 @@ DEF_GRAMMAR_ELEMENT(Ident, "");  // Identifier
 //-------------------------------------------------------------------//
 // Section:{C& Grammar Elements}
 //-------------------------------------------------------------------//
-
-static constexpr inline auto kAllKeywords = array{
-    kKwDef,    kKwFn,     kKwClass,  kKwMain,    kKwImport,   kKwNamespace,
-    kKwUse,    kKwLib,    kKwDll,    kKwIf,      kKwElif,     kKwElse,
-    kKwCxif,   kKwCxelif, kKwCxelse, kKwSwitch,  kKwCase,     kKwDefault,
-    kKwWhile,  kKwFor,    kKwReturn, kKwBreak,   kKwContinue, kKwInt,
-    kKwUint,   kKwReal,   kKwBool,   kKwChar,    kKwByte,     kKwCstr,
-    kKwStr,    kKwPtr,    kKwList,   kKwArray,   kKwTrue,     kKwFalse,
-    kKwNone,   kKwVoid,   kKwIn,     kKwAs,      kKwCin,      kKwCout,
-    kKwNative, kKwConst,  kKwRef,    kKwPrivate, kKwPublic,   kKwStatic,
-    kKwAny,    kKwAuto,   kKwType,   kKwValue,   kKwTemplate};
-
-static constexpr inline auto kAllDirectives = array{
-    kDirectiveInclude, kDirectiveDefMacro, kDirectiveEndmacro, kDirectiveIf,
-    kDirectiveElse,    kDirectiveElif,     kDirectiveEndif,    kDirectiveIfdef,
-    kDirectiveIfndef,  kDirectiveUndef};
-
-static constexpr inline auto kAll = mta::merge_arrays(
-    kAllKeywords, kAllDirectives,
-    std::array{
-        kHash,      kAdd,        kSub,         kMul,          kDiv,
-        kMod,       kAnd,        kOr,          kXor,          kNot,
-        kLsh,       kRsh,        kEq,          kNeq,          kLt,
-        kGt,        kLte,        kGte,         kSpaceship,    kAssign,
-        kNewAssign, kAddAssign,  kSubAssign,   kMulAssign,    kDivAssign,
-        kModAssign, kAndAssign,  kOrAssign,    kXorAssign,    kLshAssign,
-        kRshAssign, kInc,        kDec,         kDot,          kBnot,
-        kBand,      kBor,        kLParen,      kRParen,       kLBrace,
-        kRBrace,    kLBracket,   kRBracket,    kSemicolon,    kColon,
-        kComma,     kPeriod,     kDoubleColon, kEllipsis,     kCommercialAt,
-        kEofile,    kWhitespace, kNewline,     kBlockComment, kLineComment,
-        kLitInt,    kLitUint,    kLitReal,     kLitBool,      kLitChar,
-        kLitByte,   kLitCstr,    kIdent});
-
-//-----------------------------------------------------------------------//
-}  // namespace grammar
-//-----------------------------------------------------------------------//
-
-//-----------------------------------------------------------------------//
-// Section:{Compiler Enums}
-// Brief:{Enums used in the lexing and parsing phases of the compiler.}
-//-----------------------------------------------------------------------//
 #define COMPILER_UTIL_GRAMMAR_ELEMENTS NONE, INVALID
 
 #define DIRECTIVE_GRAMMAR_ELEMENTS                                     \
@@ -335,6 +296,48 @@ static constexpr inline auto kAll = mta::merge_arrays(
       Subexpression, TypeList, GenericList, FunctionCall, Arguments, TypeCall, \
       TypeArguments, IndexOperator, ListingOperator, IndexArguments,           \
       Modifiers, UnaryMinus, Dereference, AddressOf
+
+static constexpr inline auto kAllKeywords = array{
+    kKwDef,    kKwFn,     kKwClass,  kKwMain,    kKwImport,   kKwNamespace,
+    kKwUse,    kKwLib,    kKwDll,    kKwIf,      kKwElif,     kKwElse,
+    kKwCxif,   kKwCxelif, kKwCxelse, kKwSwitch,  kKwCase,     kKwDefault,
+    kKwWhile,  kKwFor,    kKwReturn, kKwBreak,   kKwContinue, kKwInt,
+    kKwUint,   kKwReal,   kKwBool,   kKwChar,    kKwByte,     kKwCstr,
+    kKwStr,    kKwPtr,    kKwList,   kKwArray,   kKwTrue,     kKwFalse,
+    kKwNone,   kKwVoid,   kKwIn,     kKwAs,      kKwCin,      kKwCout,
+    kKwNative, kKwConst,  kKwRef,    kKwPrivate, kKwPublic,   kKwStatic,
+    kKwAny,    kKwAuto,   kKwType,   kKwValue,   kKwTemplate};
+
+static constexpr inline auto kAllDirectives = array{
+    kDirectiveInclude, kDirectiveDefMacro, kDirectiveEndmacro, kDirectiveIf,
+    kDirectiveElse,    kDirectiveElif,     kDirectiveEndif,    kDirectiveIfdef,
+    kDirectiveIfndef,  kDirectiveUndef};
+
+static constexpr inline auto kAll = mta::merge_arrays(
+    kAllKeywords, kAllDirectives,
+    std::array{
+        kHash,      kAdd,        kSub,         kMul,          kDiv,
+        kMod,       kAnd,        kOr,          kXor,          kNot,
+        kLsh,       kRsh,        kEq,          kNeq,          kLt,
+        kGt,        kLte,        kGte,         kSpaceship,    kAssign,
+        kNewAssign, kAddAssign,  kSubAssign,   kMulAssign,    kDivAssign,
+        kModAssign, kAndAssign,  kOrAssign,    kXorAssign,    kLshAssign,
+        kRshAssign, kInc,        kDec,         kDot,          kBnot,
+        kBand,      kBor,        kLParen,      kRParen,       kLBrace,
+        kRBrace,    kLBracket,   kRBracket,    kSemicolon,    kColon,
+        kComma,     kPeriod,     kDoubleColon, kEllipsis,     kCommercialAt,
+        kEofile,    kWhitespace, kNewline,     kBlockComment, kLineComment,
+        kLitInt,    kLitUint,    kLitReal,     kLitBool,      kLitChar,
+        kLitByte,   kLitCstr,    kIdent});
+
+//-----------------------------------------------------------------------//
+}  // namespace grammar
+//-----------------------------------------------------------------------//
+
+//-----------------------------------------------------------------------//
+// Section:{Compiler Enums}
+// Brief:{Enums used in the lexing and parsing phases of the compiler.}
+//-----------------------------------------------------------------------//
 
 enum class eTk { ALL_GRAMMAR_ELEMENTS };
 
@@ -419,6 +422,42 @@ constexpr bool eTkIsPrimary(eTk t) {
   return eTkIsAnOperand(t) || eTkIsAPrefixOperator(t) || t == eTk::LParen;
 }
 
+constexpr eAssoc eAstAssoc(eAst t);
+
+constexpr eOperation eAstOperation(eAst t);
+
+constexpr ePriority eAstPriority(eAst t);
+
+constexpr std::string_view eAstLiteral(eAst t);
+
+constexpr bool eAstIsKeyword(eAst t);
+
+constexpr bool eAstIsLScope(eAst t);
+
+constexpr bool eAstIsRScope(eAst t);
+
+constexpr bool eAstIsRScopeOf(eAst topen, eAst tclose);
+
+constexpr bool eAstIsModifier(eAst t);
+
+constexpr bool eAstIsDeclarative(eAst t);
+
+constexpr bool eAstIsAnOperand(eAst t);
+
+constexpr bool eAstIsAPrefixOperator(eAst t);
+
+constexpr bool eAstIsPrimary(eAst t) {
+  return eAstIsAnOperand(t) || eAstIsAPrefixOperator(t) || t == eAst::LParen;
+}
+
+constexpr bool eTkIsPragmatic(eTk t) {
+  return eTkIsModifier(t) || eTkIsDeclarative(t);
+}
+
+constexpr bool eAstIsPragmatic(eAst t) {
+  return eAstIsModifier(t) || eAstIsDeclarative(t);
+}
+
 //-----------------------------------------------------------------------//
 // Section:{Token Traits Implementation}
 //-----------------------------------------------------------------------//
@@ -426,7 +465,6 @@ constexpr eAst eTkToAstEnum(eTk t) {
 #define ETK_TO_AST(n) \
   case eTk::n:        \
     return eAst::n
-
   switch (t) {
     ETK_TO_AST(NONE);
     ETK_TO_AST(INVALID);
@@ -1463,6 +1501,583 @@ constexpr bool eTkIsAPrefixOperator(eTk t) {
       return false;
   }
 }
+
+constexpr eAssoc eAstAssoc(eAst t) {
+  switch (t) {
+    case eAst::Assign:
+    case eAst::AddAssign:
+    case eAst::SubAssign:
+    case eAst::MulAssign:
+    case eAst::DivAssign:
+    case eAst::ModAssign:
+    case eAst::AndAssign:
+    case eAst::OrAssign:
+    case eAst::XorAssign:
+    case eAst::LshAssign:
+    case eAst::RshAssign:
+    case eAst::Not:
+    case eAst::Bnot:
+    case eAst::Ellipsis:
+    case eAst::CommercialAt:
+      return eAssoc::Right;
+    case eAst::Add:
+    case eAst::Sub:
+    case eAst::Mul:
+    case eAst::Div:
+    case eAst::Mod:
+    case eAst::Band:
+    case eAst::Bor:
+    case eAst::Xor:
+    case eAst::Lsh:
+    case eAst::Rsh:
+    case eAst::And:
+    case eAst::Or:
+    case eAst::Eq:
+    case eAst::Neq:
+    case eAst::Lt:
+    case eAst::Gt:
+    case eAst::Lte:
+    case eAst::Gte:
+    case eAst::Inc:
+    case eAst::Dec:
+    case eAst::DoubleColon:
+    case eAst::Period:
+      return eAssoc::Left;
+    default:
+      return eAssoc::None;
+  }
+}
+
+constexpr eOperation eAstOperation(eAst t) {
+  switch (t) {
+    case eAst::Assign:
+    case eAst::AddAssign:
+    case eAst::SubAssign:
+    case eAst::MulAssign:
+    case eAst::DivAssign:
+    case eAst::ModAssign:
+    case eAst::AndAssign:
+    case eAst::OrAssign:
+    case eAst::XorAssign:
+    case eAst::LshAssign:
+    case eAst::RshAssign:
+      return eOperation::Binary;
+      break;
+    case eAst::Inc:
+    case eAst::Dec:
+      return eOperation::Postfix;
+      break;
+    case eAst::Add:
+    case eAst::Sub:
+    case eAst::Mul:
+    case eAst::Div:
+    case eAst::Mod:
+    case eAst::Band:
+    case eAst::Bor:
+    case eAst::Xor:
+    case eAst::Lsh:
+    case eAst::Rsh:
+      return eOperation::Binary;
+      break;
+    case eAst::Not:
+    case eAst::Bnot:
+      return eOperation::Prefix;
+      break;
+    case eAst::And:
+    case eAst::Or:
+    case eAst::Eq:
+    case eAst::Neq:
+    case eAst::Lt:
+    case eAst::Gt:
+    case eAst::Lte:
+    case eAst::Gte:
+      return eOperation::Binary;
+    case eAst::LParen:
+    case eAst::RParen:
+    case eAst::LBrace:
+    case eAst::RBrace:
+    case eAst::LBracket:
+    case eAst::RBracket:
+      return eOperation::Postfix;
+    case eAst::Period:
+    case eAst::DoubleColon:
+      return eOperation::Binary;
+    case eAst::Ellipsis:
+      return eOperation::Binary;
+    case eAst::CommercialAt:
+      return eOperation::Prefix;
+    default:
+      return eOperation::None;
+  }
+}
+
+constexpr ePriority eAstPriority(eAst t) {
+  switch (t) {
+    using enum eAst;
+    case NONE:
+    case INVALID:
+    case Eofile:
+    case LineComment:
+    case BlockComment:
+    case Newline:
+    case Whitespace:
+      return ePriority::None;
+      break;
+    case LitCstr:
+    case LitInt:
+    case LitUint:
+    case LitReal:
+    case LitBool:
+    case LitChar:
+    case LitByte:
+    case Ident:
+      return ePriority::Max;
+      break;
+    case Assign:
+    case AddAssign:
+    case SubAssign:
+    case MulAssign:
+    case DivAssign:
+    case ModAssign:
+    case AndAssign:
+    case OrAssign:
+    case XorAssign:
+    case LshAssign:
+    case RshAssign:
+      return ePriority::Assignment;
+      break;
+    case Inc:
+    case Dec:
+      return ePriority::Postfix;
+      break;
+    case Add:
+    case Sub:
+      return ePriority::Term;
+      break;
+    case Mul:
+    case Div:
+    case Mod:
+      return ePriority::Factor;
+      break;
+    case Not:
+    case Bnot:
+      return ePriority::Prefix;
+      break;
+    case Band:
+    case Bor:
+    case Xor:
+    case Lsh:
+    case Rsh:
+    case And:
+    case Or:
+    case Eq:
+    case Neq:
+    case Lt:
+    case Gt:
+    case Lte:
+    case Gte:
+      return ePriority::Comparison;
+      break;
+    case LParen:
+    case RParen:
+    case LBrace:
+    case RBrace:
+    case LBracket:
+    case RBracket:
+      return ePriority::Postfix;
+      break;
+    case Semicolon:
+    case Colon:
+    case Comma:
+    case Ellipsis:
+    case CommercialAt:
+      return ePriority::Max;
+      break;
+    case Period:
+    case DoubleColon:
+      return ePriority::Access;
+      break;
+    case KwDef:
+    case KwFn:
+    case KwClass:
+    case KwMain:
+    case KwImport:
+    case KwNamespace:
+    case KwUse:
+    case KwLib:
+    case KwDll:
+    case KwIf:
+    case KwElif:
+    case KwElse:
+    case KwCxif:
+    case KwCxelif:
+    case KwCxelse:
+    case KwSwitch:
+    case KwCase:
+    case KwDefault:
+    case KwWhile:
+    case KwFor:
+    case KwReturn:
+    case KwBreak:
+    case KwContinue:
+    case KwInt:
+    case KwUint:
+    case KwReal:
+    case KwBool:
+    case KwChar:
+    case KwByte:
+    case KwCstr:
+    case KwStr:
+    case KwPtr:
+    case KwList:
+    case KwArray:
+    case KwTrue:
+    case KwFalse:
+    case KwNone:
+    case KwVoid:
+    case KwIn:
+    case KwAs:
+    case KwCin:
+    case KwCout:
+    case KwNative:
+    case KwConst:
+    case KwRef:
+    case KwPrivate:
+    case KwPublic:
+    case KwStatic:
+    case KwAny:
+    case KwAuto:
+    case KwType:
+    case KwValue:
+    case KwTemplate:
+      return ePriority::Max;
+      break;
+    default:
+      return ePriority::None;
+  }
+}
+
+constexpr std::string_view eAstLiteral(eAst t) {
+#define ETK_LITERAL_CASE(n) \
+  case eAst::n:              \
+    return grammar::k##n
+
+  switch (t) {
+    ETK_LITERAL_CASE(NONE);
+    ETK_LITERAL_CASE(INVALID);
+    ETK_LITERAL_CASE(KwDef);
+    ETK_LITERAL_CASE(KwFn);
+    ETK_LITERAL_CASE(KwClass);
+    ETK_LITERAL_CASE(KwMain);
+    ETK_LITERAL_CASE(KwImport);
+    ETK_LITERAL_CASE(KwNamespace);
+    ETK_LITERAL_CASE(KwUse);
+    ETK_LITERAL_CASE(KwLib);
+    ETK_LITERAL_CASE(KwDll);
+    ETK_LITERAL_CASE(KwIf);
+    ETK_LITERAL_CASE(KwElif);
+    ETK_LITERAL_CASE(KwElse);
+    ETK_LITERAL_CASE(KwCxif);
+    ETK_LITERAL_CASE(KwCxelif);
+    ETK_LITERAL_CASE(KwCxelse);
+    ETK_LITERAL_CASE(KwSwitch);
+    ETK_LITERAL_CASE(KwCase);
+    ETK_LITERAL_CASE(KwDefault);
+    ETK_LITERAL_CASE(KwWhile);
+    ETK_LITERAL_CASE(KwFor);
+    ETK_LITERAL_CASE(KwReturn);
+    ETK_LITERAL_CASE(KwBreak);
+    ETK_LITERAL_CASE(KwContinue);
+    ETK_LITERAL_CASE(KwInt);
+    ETK_LITERAL_CASE(KwUint);
+    ETK_LITERAL_CASE(KwReal);
+    ETK_LITERAL_CASE(KwBool);
+    ETK_LITERAL_CASE(KwChar);
+    ETK_LITERAL_CASE(KwByte);
+    ETK_LITERAL_CASE(KwCstr);
+    ETK_LITERAL_CASE(KwStr);
+    ETK_LITERAL_CASE(KwPtr);
+    ETK_LITERAL_CASE(KwList);
+    ETK_LITERAL_CASE(KwArray);
+    ETK_LITERAL_CASE(KwTrue);
+    ETK_LITERAL_CASE(KwFalse);
+    ETK_LITERAL_CASE(KwNone);
+    ETK_LITERAL_CASE(KwVoid);
+    ETK_LITERAL_CASE(KwIn);
+    ETK_LITERAL_CASE(KwAs);
+    ETK_LITERAL_CASE(KwCin);
+    ETK_LITERAL_CASE(KwCout);
+    ETK_LITERAL_CASE(KwNative);
+    ETK_LITERAL_CASE(KwConst);
+    ETK_LITERAL_CASE(KwRef);
+    ETK_LITERAL_CASE(KwPrivate);
+    ETK_LITERAL_CASE(KwPublic);
+    ETK_LITERAL_CASE(KwStatic);
+    ETK_LITERAL_CASE(KwAny);
+    ETK_LITERAL_CASE(KwAuto);
+    ETK_LITERAL_CASE(KwType);
+    ETK_LITERAL_CASE(KwValue);
+    ETK_LITERAL_CASE(KwTemplate);
+    ETK_LITERAL_CASE(DirectiveInclude);
+    ETK_LITERAL_CASE(DirectiveDefMacro);
+    ETK_LITERAL_CASE(DirectiveEndmacro);
+    ETK_LITERAL_CASE(DirectiveIf);
+    ETK_LITERAL_CASE(DirectiveElse);
+    ETK_LITERAL_CASE(DirectiveElif);
+    ETK_LITERAL_CASE(DirectiveEndif);
+    ETK_LITERAL_CASE(DirectiveIfdef);
+    ETK_LITERAL_CASE(DirectiveIfndef);
+    ETK_LITERAL_CASE(DirectiveUndef);
+    ETK_LITERAL_CASE(Hash);
+    ETK_LITERAL_CASE(Add);
+    ETK_LITERAL_CASE(Sub);
+    ETK_LITERAL_CASE(Mul);
+    ETK_LITERAL_CASE(Div);
+    ETK_LITERAL_CASE(Mod);
+    ETK_LITERAL_CASE(And);
+    ETK_LITERAL_CASE(Or);
+    ETK_LITERAL_CASE(Xor);
+    ETK_LITERAL_CASE(Not);
+    ETK_LITERAL_CASE(Lsh);
+    ETK_LITERAL_CASE(Rsh);
+    ETK_LITERAL_CASE(Eq);
+    ETK_LITERAL_CASE(Neq);
+    ETK_LITERAL_CASE(Lt);
+    ETK_LITERAL_CASE(Gt);
+    ETK_LITERAL_CASE(Lte);
+    ETK_LITERAL_CASE(Gte);
+    ETK_LITERAL_CASE(Assign);
+    ETK_LITERAL_CASE(NewAssign);
+    ETK_LITERAL_CASE(AddAssign);
+    ETK_LITERAL_CASE(SubAssign);
+    ETK_LITERAL_CASE(MulAssign);
+    ETK_LITERAL_CASE(DivAssign);
+    ETK_LITERAL_CASE(ModAssign);
+    ETK_LITERAL_CASE(AndAssign);
+    ETK_LITERAL_CASE(OrAssign);
+    ETK_LITERAL_CASE(XorAssign);
+    ETK_LITERAL_CASE(LshAssign);
+    ETK_LITERAL_CASE(RshAssign);
+    ETK_LITERAL_CASE(Inc);
+    ETK_LITERAL_CASE(Dec);
+    ETK_LITERAL_CASE(Dot);
+    ETK_LITERAL_CASE(Bnot);
+    ETK_LITERAL_CASE(Band);
+    ETK_LITERAL_CASE(Bor);
+    ETK_LITERAL_CASE(LParen);
+    ETK_LITERAL_CASE(RParen);
+    ETK_LITERAL_CASE(LBrace);
+    ETK_LITERAL_CASE(RBrace);
+    ETK_LITERAL_CASE(LBracket);
+    ETK_LITERAL_CASE(RBracket);
+    ETK_LITERAL_CASE(Semicolon);
+    ETK_LITERAL_CASE(Colon);
+    ETK_LITERAL_CASE(Comma);
+    ETK_LITERAL_CASE(Period);
+    ETK_LITERAL_CASE(DoubleColon);
+    ETK_LITERAL_CASE(Ellipsis);
+    ETK_LITERAL_CASE(CommercialAt);
+    ETK_LITERAL_CASE(Eofile);
+    ETK_LITERAL_CASE(Whitespace);
+    ETK_LITERAL_CASE(Newline);
+    ETK_LITERAL_CASE(BlockComment);
+    ETK_LITERAL_CASE(LineComment);
+    ETK_LITERAL_CASE(LitInt);
+    ETK_LITERAL_CASE(LitUint);
+    ETK_LITERAL_CASE(LitReal);
+    ETK_LITERAL_CASE(LitBool);
+    ETK_LITERAL_CASE(LitChar);
+    ETK_LITERAL_CASE(LitByte);
+    ETK_LITERAL_CASE(LitCstr);
+    ETK_LITERAL_CASE(Ident);
+  }
+
+#undef ETK_LITERAL_CASE
+}
+
+constexpr bool eAstIsKeyword(eAst t) {
+  switch (t) {
+    using enum eAst;
+    case KwDef:
+    case KwFn:
+    case KwClass:
+    case KwMain:
+    case KwImport:
+    case KwNamespace:
+    case KwUse:
+    case KwLib:
+    case KwDll:
+    case KwIf:
+    case KwElif:
+    case KwElse:
+    case KwCxif:
+    case KwCxelif:
+    case KwCxelse:
+    case KwSwitch:
+    case KwCase:
+    case KwDefault:
+    case KwWhile:
+    case KwFor:
+    case KwReturn:
+    case KwBreak:
+    case KwContinue:
+    case KwInt:
+    case KwUint:
+    case KwReal:
+    case KwBool:
+    case KwChar:
+    case KwByte:
+    case KwCstr:
+    case KwStr:
+    case KwPtr:
+    case KwList:
+    case KwArray:
+    case KwTrue:
+    case KwFalse:
+    case KwNone:
+    case KwVoid:
+    case KwIn:
+    case KwAs:
+    case KwCin:
+    case KwCout:
+    case KwNative:
+    case KwConst:
+    case KwRef:
+    case KwPrivate:
+    case KwPublic:
+    case KwStatic:
+    case KwAny:
+    case KwAuto:
+    case KwType:
+    case KwValue:
+    case KwTemplate:
+      return true;
+    default:
+      return false;
+  }
+}
+
+constexpr bool eAstIsModifier(eAst t) {
+  switch (t) {
+    using enum eAst;
+    case KwPrivate:
+    case KwPublic:
+    case KwConst:
+    case KwStatic:
+    case KwRef:
+      return true;
+    default:
+      return false;
+  }
+}
+
+constexpr bool eAstIsDeclarative(eAst t) {
+  // One of: def,fn,class,obj,use,lib,main,import
+  switch (t) {
+    using enum eAst;
+    case KwDef:
+    case KwFn:
+    case KwClass:
+    case KwMain:
+    case KwImport:
+    case KwNamespace:
+    case KwUse:
+    case KwLib:
+    case KwDll:
+    case KwIf:
+    case KwElif:
+    case KwElse:
+    case KwCxif:
+    case KwCxelif:
+    case KwCxelse:
+    case KwSwitch:
+    case KwCase:
+    case KwDefault:
+    case KwWhile:
+    case KwFor:
+    case KwReturn:
+    case KwBreak:
+    case KwContinue:
+    case KwTemplate:
+      return true;
+    default:
+      return false;
+  }
+}
+
+constexpr bool eAstIsLScope(eAst t) {
+  switch (t) {
+    case eAst::LParen:
+    case eAst::LBrace:
+    case eAst::LBracket:
+      return true;
+    default:
+      return false;
+  }
+}
+
+constexpr bool eAstIsRScope(eAst t) {
+  switch (t) {
+    case eAst::RParen:
+    case eAst::RBrace:
+    case eAst::RBracket:
+      return true;
+    default:
+      return false;
+  }
+}
+
+constexpr bool eAstIsRScopeOf(eAst topen, eAst tclose) {
+  using enum eAst;
+  return (topen == LParen && tclose == RParen) ||
+         (topen == LBrace && tclose == RBrace) ||
+         (topen == LBracket && tclose == RBracket);
+}
+
+constexpr bool eAstIsAnOperand(eAst t) {
+  switch (t) {
+    using enum eAst;
+      // Literals
+    case LitCstr:
+    case LitInt:
+    case LitUint:
+    case LitReal:
+    case LitBool:
+    case LitChar:
+    case LitByte:
+    case Ident:
+      // Keyword Types which are operands.
+    case KwInt:
+    case KwUint:
+    case KwReal:
+    case KwBool:
+    case KwChar:
+    case KwByte:
+    case KwCstr:
+    case KwStr:
+    case KwPtr:
+    case KwList:
+    case KwArray:
+    case KwTrue:
+    case KwFalse:
+    case KwNone:
+    case KwVoid:
+      return true;
+    default:
+      return false;
+  }
+}
+
+constexpr bool eAstIsAPrefixOperator(eAst t) {
+  switch (t) {
+    case eAst::Not:
+    case eAst::Bnot:
+      return true;
+    default:
+      return false;
+  }
+}
+
 //-----------------------------------------------------------------------//
 // EndSection:{Token Traits Implementation}
 //-----------------------------------------------------------------------//

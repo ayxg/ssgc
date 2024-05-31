@@ -26,6 +26,8 @@
 #include "caoco_token_scope.h"
 //---------------------------------------------------------------------------//
 
+#define CPP_LOC std::source_location::current()
+
 namespace caoco {
 using OffsetParseResult = cxx::PartialExpected<Ast, TkCursor>;
 using ExpectedAst = cxx::Expected<Ast>;
@@ -769,7 +771,8 @@ ExpectedAst ExprParser::ParseImpl(TkCursor c) {
   if (c.TypeIs(LParen)) {
     auto scope = TkScope::FindParen(c);
     if (not scope) {
-      return ExpectedAst::Failure(MismatchedScope(c));
+      return ExpectedAst::Failure(
+          CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
     } else {
       // 1. Check for redundant paren-> Parse the inside of the paren instead.
       if (scope.End() == c.End()) {
@@ -790,7 +793,8 @@ ExpectedAst ExprParser::ParseImpl(TkCursor c) {
           if (c.TypeIs(LParen)) {
             auto scope = TkScope::FindParen(c);
             if (not scope) {
-              return ExpectedAst::Failure(MismatchedScope(c));
+              return ExpectedAst::Failure(
+                  CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
             }
             // Parse the arguments
             auto arguments_result = ParseArguments(c);
@@ -805,7 +809,8 @@ ExpectedAst ExprParser::ParseImpl(TkCursor c) {
           else if (c.TypeIs(LBracket)) {
             auto scope = TkScope::FindBracket(c);
             if (not scope) {
-              return ExpectedAst::Failure(MismatchedScope(c));
+              return ExpectedAst::Failure(
+                  CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
             }
             auto arguments_result = ParseIndexingArguments(c);
             if (not arguments_result) {
@@ -819,7 +824,8 @@ ExpectedAst ExprParser::ParseImpl(TkCursor c) {
           else if (c.TypeIs(LBrace)) {
             auto scope = TkScope::FindBrace(c);
             if (not scope) {
-              return ExpectedAst::Failure(MismatchedScope(c));
+              return ExpectedAst::Failure(
+                  CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
             }
             auto arguments_result = ParseListingArguments(c);
             if (not arguments_result) {
@@ -845,7 +851,8 @@ ExpectedAst ExprParser::ParseImpl(TkCursor c) {
           if (c.TypeIs(LParen)) {
             auto scope = TkScope::FindParen(c);
             if (not scope) {
-              return ExpectedAst::Failure(MismatchedScope(c));
+              return ExpectedAst::Failure(
+                  CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
             } else {
               ExpectedAst rhs_result =
                   ParseImpl({scope.ContainedBegin(), scope.ContainedEnd()});
@@ -894,7 +901,8 @@ ExpectedAst ExprParser::ParseImpl(TkCursor c) {
       if (c.TypeIs(LParen)) {
         auto scope = TkScope::FindParen(c);
         if (not scope) {
-          return ExpectedAst::Failure(MismatchedScope(c));
+          return ExpectedAst::Failure(
+              CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
         }
         // Parse the arguments
         auto arguments_result = ParseArguments(c);
@@ -909,7 +917,8 @@ ExpectedAst ExprParser::ParseImpl(TkCursor c) {
       else if (c.TypeIs(LBracket)) {
         auto scope = TkScope::FindBracket(c);
         if (not scope) {
-          return ExpectedAst::Failure(MismatchedScope(c));
+          return ExpectedAst::Failure(
+              CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
         }
         auto arguments_result = ParseIndexingArguments(c);
         if (not arguments_result) {
@@ -923,7 +932,8 @@ ExpectedAst ExprParser::ParseImpl(TkCursor c) {
       else if (c.TypeIs(LBrace)) {
         auto scope = TkScope::FindBrace(c);
         if (not scope) {
-          return ExpectedAst::Failure(MismatchedScope(c));
+          return ExpectedAst::Failure(
+              CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
         }
         auto arguments_result = ParseListingArguments(c);
         if (not arguments_result) {
@@ -949,7 +959,8 @@ ExpectedAst ExprParser::ParseImpl(TkCursor c) {
       if (c.TypeIs(LParen)) {
         auto scope = TkScope::FindParen(c);
         if (not scope) {
-          return ExpectedAst::Failure(MismatchedScope(c));
+          return ExpectedAst::Failure(
+              CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
         } else {
           ExpectedAst rhs_result =
               ParseImpl({scope.ContainedBegin(), scope.ContainedEnd()});
@@ -989,15 +1000,16 @@ ExpectedAst ExprParser::ParseImpl(TkCursor c) {
     c.Advance();
 
     if (c.AtEnd()) {
-      return ExpectedAst::Failure(
-          UserSyntaxError(c, "Prefix operator at end of expression."));
+      return ExpectedAst::Failure(CaErr::ErrDetail<CaErr::UserSyntaxError>(
+          c, CPP_LOC, "Prefix operator at end of expression."));
     }
 
     // 1. Open Paren -> Subexpr
     if (c.TypeIs(LParen)) {
       auto scope = TkScope::FindParen(c);
       if (not scope) {
-        return ExpectedAst::Failure(MismatchedScope(c));
+        return ExpectedAst::Failure(
+            CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
       } else {
         ExpectedAst lhs_result =
             ParseImpl({scope.ContainedBegin(), scope.ContainedEnd()});
@@ -1042,7 +1054,7 @@ OffsetParseResult parser::ParseOperand(TkCursor c) {
   if (c.IsAnOperand())
     return Success(c.Next(), c.Get());
   else
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
 };
 
 OffsetParseResult parser::ParseArguments(TkCursor c) {
@@ -1056,7 +1068,7 @@ OffsetParseResult parser::ParseArguments(TkCursor c) {
     TkScope::Vector arg_scopes = TkScope::FindSeperatedParen(c, Comma);
 
     if (not arg_scopes.front()) {
-      return Fail(c, MismatchedScope(c));
+      return Fail(c, CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
     } else {
       Ast arguments_node = eAst::Arguments;
       for (const TkScope& arg_scope : arg_scopes) {
@@ -1069,7 +1081,7 @@ OffsetParseResult parser::ParseArguments(TkCursor c) {
       return Success(c.Advance(arg_scopes.back().End()), move(arguments_node));
     }
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -1084,7 +1096,7 @@ OffsetParseResult parser::ParseIndexingArguments(TkCursor c) {
 
     TkScope::Vector arg_scopes = TkScope::FindSeperatedBracket(c, Comma);
     if (not arg_scopes.front()) {
-      return Fail(c, MismatchedScope(c));
+      return Fail(c, CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
     } else {
       Ast arguments_node(eAst::Arguments);
       for (const TkScope& arg_scope : arg_scopes) {
@@ -1098,7 +1110,7 @@ OffsetParseResult parser::ParseIndexingArguments(TkCursor c) {
       return Success(c.Advance(arg_scopes.back().End()), move(arguments_node));
     }
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -1113,7 +1125,7 @@ OffsetParseResult parser::ParseListingArguments(TkCursor c) {
 
     TkScope::Vector arg_scopes = TkScope::FindSeperatedBrace(c, Comma);
     if (not arg_scopes.front()) {
-      return Fail(c, MismatchedScope(c));
+      return Fail(c, CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
     } else {
       Ast arguments_node(eAst::Arguments);
       for (const TkScope& arg_scope : arg_scopes) {
@@ -1127,7 +1139,7 @@ OffsetParseResult parser::ParseListingArguments(TkCursor c) {
       return Success(c.Advance(arg_scopes.back().End()), move(arguments_node));
     }
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -1144,10 +1156,10 @@ OffsetParseResult parser::ParsePrimaryStatement(TkCursor c) {
       return Success(c.Advance(statement_scope.End()),
                      statement_result.Extract());
     } else {
-      return Fail(c, MismatchedScope(c));
+      return Fail(c, CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
     }
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -1163,11 +1175,12 @@ OffsetParseResult parser::ParseConditionalSubExpression(TkCursor c) {
       }
       return Success(c.Advance(paren_scope.End()), subexpr_result.Extract());
     } else {
-      return Fail(c, UserSyntaxError(
-                         c, "Invalid start of conditional sub-expression."));
+      return Fail(
+          c, CaErr::ErrDetail<CaErr::UserSyntaxError>(
+                 c, CPP_LOC, "Invalid start of conditional sub-expression."));
     }
   } else {
-    return Fail(c, MismatchedScope(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
   }
 }
 
@@ -1186,7 +1199,7 @@ OffsetParseResult parser::ParsePrimaryPreIdentifier(TkCursor c) {
       return Success(c.Advance(statement_scope.End()),
                      statement_result.Extract());
     } else {
-      return Fail(c, MismatchedScope(c));
+      return Fail(c, CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
     }
   } else {
     // Else the type is implicitly an any type.
@@ -1195,7 +1208,7 @@ OffsetParseResult parser::ParsePrimaryPreIdentifier(TkCursor c) {
       return Success(c.Advance(), eAst::KwAny);
     }
 
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -1222,7 +1235,7 @@ OffsetParseResult parser::ParsePrimaryPostIdentifier(TkCursor c) {
       return Success(c.Advance(statement_scope.End()),
                      statement_result.Extract());
     } else {
-      return Fail(c, MismatchedScope(c));
+      return Fail(c, CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
     }
   } else {
     // Implicit any type.
@@ -1230,7 +1243,7 @@ OffsetParseResult parser::ParsePrimaryPostIdentifier(TkCursor c) {
       return Success(c.Advance(), eAst::KwAny);
     }
 
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -1244,7 +1257,7 @@ OffsetParseResult parser::ParseModifiers(TkCursor c) {
     }
     return Success(c, move(mod_node));
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -1267,7 +1280,7 @@ OffsetParseResult parser::ParseReturnStmt(TkCursor c) {
     return_statement_node.ExtractAndPush(value_expr_result);
     return Success(c, move(return_statement_node));
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -1311,17 +1324,19 @@ OffsetParseResult parser::ParsePragmaticStmt(TkCursor c) {
         return ParseLibDecl(c);
       case KwUse:
       case KwMain:
-        return Fail(c, UserSyntaxError(
-                           c, c.Literal() +
-                                  " declaration keyword cannot be modified."));
+        return Fail(
+            c, CaErr::ErrDetail<CaErr::UserSyntaxError>(
+                   c, CPP_LOC,
+                   c.Literal() + " declaration keyword cannot be modified."));
       default:
-        return Fail(c,
-                    UserSyntaxError(c, c.Literal() +
-                                           " declaration keyword not permitted "
-                                           "inside pragmatic code block."));
+        return Fail(c, CaErr::ErrDetail<CaErr::UserSyntaxError>(
+                           c, CPP_LOC,
+                           c.Literal() + " declaration keyword not permitted "
+                                         "inside pragmatic code block."));
     }
   } else {
-    return Fail(c, ExpectedPragmaticDeclaration(c));
+    return Fail(
+        c, CaErr::ErrDetail<CaErr::ExpectedPragmaticDeclaration>(c, CPP_LOC));
   }
 }
 
@@ -1367,17 +1382,19 @@ OffsetParseResult parser::ParseFunctionalStmt(TkCursor c) {
       case KwClass:
         return ParseClassDecl(c);
       case KwUse:
-        return Fail(c, UserSyntaxError(
-                           c, c.Literal() +
-                                  " declaration keyword cannot be modified."));
+        return Fail(
+            c, CaErr::ErrDetail<CaErr::UserSyntaxError>(
+                   c, CPP_LOC,
+                   c.Literal() + " declaration keyword cannot be modified."));
       default:
-        return Fail(c,
-                    UserSyntaxError(c, c.Literal() +
-                                           " declaration keyword not permitted "
-                                           "inside functional code block."));
+        return Fail(c, CaErr::ErrDetail<CaErr::UserSyntaxError>(
+                           c, CPP_LOC,
+                           c.Literal() + " declaration keyword not permitted "
+                                         "inside functional code block."));
     }
   } else {
-    return Fail(c, ExpectedPragmaticDeclaration(c));
+    return Fail(
+        c, CaErr::ErrDetail<CaErr::ExpectedPragmaticDeclaration>(c, CPP_LOC));
   }
 }
 
@@ -1410,17 +1427,19 @@ OffsetParseResult parser::ParseConditionalStmt(TkCursor c) {
       case KwClass:
         return ParseClassDecl(c);
       case KwUse:
-        return Fail(c, UserSyntaxError(
-                           c, c.Literal() +
-                                  " declaration keyword cannot be modified."));
+        return Fail(
+            c, CaErr::ErrDetail<CaErr::UserSyntaxError>(
+                   c, CPP_LOC,
+                   c.Literal() + " declaration keyword cannot be modified."));
       default:
-        return Fail(c,
-                    UserSyntaxError(c, c.Literal() +
-                                           " declaration keyword not permitted "
-                                           "inside conditional code block."));
+        return Fail(c, CaErr::ErrDetail<CaErr::UserSyntaxError>(
+                           c, CPP_LOC,
+                           c.Literal() + " declaration keyword not permitted "
+                                         "inside conditional code block."));
     }
   } else {
-    return Fail(c, ExpectedPragmaticDeclaration(c));
+    return Fail(
+        c, CaErr::ErrDetail<CaErr::ExpectedPragmaticDeclaration>(c, CPP_LOC));
   }
 }
 
@@ -1433,13 +1452,13 @@ OffsetParseResult parser::ParseIfDecl(TkCursor c) {
       c.Advance();
       auto condition_result = ParseConditionalSubExpression(c);
       if (not condition_result) {
-        return Fail(c, ExpectedToken(LParen, c));
+        return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(LParen, c));
       }
       c.Advance(condition_result);
       // Parse the body.
       auto body_result = ParseMethodDef(c);
       if (not body_result) {
-        return Fail(c, ExpectedToken(LBrace, c));
+        return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(LBrace, c));
       }
       c.Advance(body_result);
       return Success(c, Ast(ast_type, "", condition_result.Extract(),
@@ -1448,18 +1467,18 @@ OffsetParseResult parser::ParseIfDecl(TkCursor c) {
       c.Advance();
       auto body_result = ParseMethodDef(c);
       if (not body_result) {
-        return Fail(c, ExpectedToken(LBrace, c));
+        return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(LBrace, c));
       }
       c.Advance(body_result);
       return Success(c, Ast(ast_type, "", body_result.Extract()));
     } else {
-      return Fail(c,
-                  ImplParserExpectedToken(c, "Expected if or elif or else."));
+      return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(
+                         c, CPP_LOC, "Expected if or elif or else."));
     }
   };
 
   if (c.TypeIsnt(KwIf)) {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 
   Ast ifelifelse_statement = eAst::IfStatement;
@@ -1497,19 +1516,19 @@ OffsetParseResult parser::ParseWhileDecl(TkCursor c) {
   using enum eTk;
   // While Keyword, Conditional subexpression, Functional Block, Semicolon.
   if (c.TypeIsnt(KwWhile)) {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
   c.Advance();
 
   auto condition_result = ParseConditionalSubExpression(c);
   if (not condition_result) {
-    return Fail(c, ExpectedToken(LParen, c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(LParen, c));
   }
   c.Advance(condition_result);
 
   auto body_result = ParseMethodDef(c);
   if (not body_result) {
-    return Fail(c, ExpectedToken(LBrace, c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(LBrace, c));
   }
   c.Advance(body_result);
 
@@ -1519,29 +1538,30 @@ OffsetParseResult parser::ParseWhileDecl(TkCursor c) {
                        body_result.Extract()));
   }
 
-  return Fail(c, ExpectedToken(Semicolon, c));
+  return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Semicolon, c));
 }
 
 OffsetParseResult parser::ParseForDecl(TkCursor c) {
   using namespace caerr;
 
   if (c.TypeIsnt(eTk::KwFor)) {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
   c.Advance();
 
   auto condition_scope = TkScope::FindParen(c);
   if (not condition_scope) {
-    return Fail(c, MismatchedScope(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
   }
 
   TkScope::Vector condition_scopes =
       TkScope::FindSeperatedParen(c, eTk::Semicolon);
   if (condition_scopes.size() > 3) {
     return Fail(
-        c, InvalidForLoopSyntax(
-               c, "For condition may have a maximum of 3 statements.Detected:" +
-                      std::to_string(condition_scopes.size())));
+        c, CaErr::ErrDetail<CaErr::InvalidForLoopSyntax>(
+               c, CPP_LOC,
+               "For condition may have a maximum of 3 statements.Detected:" +
+                   std::to_string(condition_scopes.size())));
   }
 
   auto init_var_result = ParseVariableDecl(
@@ -1576,7 +1596,8 @@ OffsetParseResult parser::ParseForDecl(TkCursor c) {
                        body_result.Extract()));
   }
 
-  return Fail(c, ExpectedToken(eTk::Semicolon, c));
+  return Fail(c,
+              CaErr::ErrDetail<CaErr::ParserExpectedToken>(eTk::Semicolon, c));
 }
 
 OffsetParseResult parser::ParseUsingDecl(TkCursor c) {
@@ -1590,13 +1611,13 @@ OffsetParseResult parser::ParseUsingDecl(TkCursor c) {
     if (c.TypeIs(CommercialAt)) {
       c.Advance();
       if (c.TypeIsnt(Ident)) {
-        return Fail(c, ExpectedToken(Ident, c));
+        return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Ident, c));
       }
       Ast typedef_identifier = Ast(c.Get());
       c.Advance();
 
       if (c.TypeIsnt(Colon)) {
-        return Fail(c, ExpectedToken(Colon, c));
+        return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Colon, c));
       }
       c.Advance();
 
@@ -1657,13 +1678,14 @@ OffsetParseResult parser::ParseUsingDecl(TkCursor c) {
           c, Ast(eAst::NamespaceObjectInclusion, "", primary_result.Extract()));
 
     } else {
-      return Fail(c, ExpectedToken(Colon, c,
-                                   "Expected commercial at or lib or namespace "
-                                   "or type expression."));
+      return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(
+                         Colon, c,
+                         "Expected commercial at or lib or namespace "
+                         "or type expression."));
     }
 
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 };
 
@@ -1701,7 +1723,7 @@ OffsetParseResult parser::ParseVariableDecl(TkCursor c) {
 
     // Expecting an identifier.
     if (c.TypeIsnt(Ident)) {
-      return Fail(c, ExpectedToken(Ident, c));
+      return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Ident, c));
     }
     Ast ident_node = Ast(c.Get());
     c.Advance();
@@ -1723,11 +1745,12 @@ OffsetParseResult parser::ParseVariableDecl(TkCursor c) {
       return Success(c, Ast(eAst::VariableDeclaration, "", mod_node, what_node,
                             ident_node));
     } else {
-      return Fail(c, ExpectedToken(Colon, c, "Expected colon or semicolon."));
+      return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(
+                         Colon, c, "Expected colon or semicolon."));
     }
 
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -1755,13 +1778,14 @@ OffsetParseResult parser::ParseMethodDecl(TkCursor c) {
     c.Advance();
     // Expecting a commercial @
     if (c.TypeIsnt(CommercialAt)) {
-      return Fail(c, ExpectedToken(CommercialAt, c));
+      return Fail(
+          c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(CommercialAt, c));
     }
     c.Advance();
 
     // Expecting an identifier.
     if (c.TypeIsnt(Ident)) {
-      return Fail(c, ExpectedToken(Ident, c));
+      return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Ident, c));
     }
     Ast ident_node = Ast(c.Get());
     c.Advance();
@@ -1797,7 +1821,8 @@ OffsetParseResult parser::ParseMethodDecl(TkCursor c) {
       c.Advance(def_result);
       // Expect semicolon
       if (c.TypeIsnt(Semicolon)) {
-        return Fail(c, ExpectedToken(Semicolon, c));
+        return Fail(c,
+                    CaErr::ErrDetail<CaErr::ParserExpectedToken>(Semicolon, c));
       }
       c.Advance();
       return Success(c, Ast(eAst::MethodDeclaration, "", mod_node, ident_node,
@@ -1809,11 +1834,12 @@ OffsetParseResult parser::ParseMethodDecl(TkCursor c) {
           c, Ast(eAst::MethodDeclaration, "", mod_node, ident_node, sig_node));
 
     } else {
-      return Fail(c, ExpectedToken(Colon, c, "Expected colon or semicolon."));
+      return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(
+                         Colon, c, "Expected colon or semicolon."));
     }
 
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -1840,12 +1866,13 @@ OffsetParseResult parser::ParseClassDecl(TkCursor c) {
     c.Advance();
 
     if (c.TypeIsnt(CommercialAt)) {
-      return Fail(c, ExpectedToken(CommercialAt, c));
+      return Fail(
+          c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(CommercialAt, c));
     }
     c.Advance();
 
     if (c.TypeIsnt(Ident)) {
-      return Fail(c, ExpectedToken(Ident, c));
+      return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Ident, c));
     }
     Ast ident_node = Ast(c.Get());
     c.Advance();
@@ -1866,10 +1893,11 @@ OffsetParseResult parser::ParseClassDecl(TkCursor c) {
       c.Advance();
       return Success(c, Ast(eAst::ClassDeclaration, "", mod_node, ident_node));
     } else {
-      return Fail(c, ExpectedToken(Colon, c, "Expected colon or semicolon."));
+      return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(
+                         Colon, c, "Expected colon or semicolon."));
     }
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -1881,7 +1909,7 @@ OffsetParseResult parser::ParseImportDecl(TkCursor c) {
     c.Advance();
     // Expecting an identifier.
     if (not c.TypeIs(Ident)) {
-      return Fail(c, ExpectedToken(Ident, c));
+      return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Ident, c));
     }
     Ast ident_node = Ast(c.Get());
     c.Advance();
@@ -1891,10 +1919,11 @@ OffsetParseResult parser::ParseImportDecl(TkCursor c) {
       c.Advance();
       return Success(c, Ast(eAst::ImportDeclaration, "", ident_node));
     } else {
-      return Fail(c, ExpectedToken(Semicolon, c));
+      return Fail(c,
+                  CaErr::ErrDetail<CaErr::ParserExpectedToken>(Semicolon, c));
     }
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -1936,13 +1965,14 @@ OffsetParseResult parser::ParseLibDecl(TkCursor c) {
     // If there is a @ following the lib keyword, this is a named library.
     // Expecting a commercial @ followed by an identifier.
     if (c.TypeIsnt(CommercialAt)) {
-      return Fail(c, ExpectedToken(CommercialAt, c));
+      return Fail(
+          c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(CommercialAt, c));
     }
     c.Advance();
 
     // Expecting an identifier.
     if (c.TypeIsnt(Ident)) {
-      return Fail(c, ExpectedToken(Ident, c));
+      return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Ident, c));
     }
     Ast ident_node{c.Get()};
     c.Advance();
@@ -1955,7 +1985,7 @@ OffsetParseResult parser::ParseLibDecl(TkCursor c) {
 
     // Expecting a colon and a definition.
     if (c.TypeIsnt(Colon)) {
-      return Fail(c, ExpectedToken(Colon, c));
+      return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Colon, c));
     }
     c.Advance();
 
@@ -1969,7 +1999,7 @@ OffsetParseResult parser::ParseLibDecl(TkCursor c) {
     return Success(
         c, Ast(eAst::LibraryDeclaration, "", mod_node, ident_node, def_node));
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -1987,7 +2017,8 @@ OffsetParseResult parser::ParseMainDecl(TkCursor c) {
     // If there is a commercial at following the main keyword, this is a named
     // main. Expecting a commercial @ followed by an identifier.
     if (c.TypeIs(CommercialAt)) {
-      return Fail(c, NotImplemented(c, "Named main not implemented."));
+      return Fail(c, CaErr::ErrDetail<CaErr::NotImplemented>(
+                         c, CPP_LOC, "Named main not implemented."));
     } else {
       // This is an unnamed main.
       // Expecting a function signature followed by a colon and a definition.
@@ -2015,7 +2046,8 @@ OffsetParseResult parser::ParseMainDecl(TkCursor c) {
 
       // Expect semicolon
       if (c.TypeIsnt(Semicolon)) {
-        return Fail(c, ExpectedToken(Semicolon, c));
+        return Fail(c,
+                    CaErr::ErrDetail<CaErr::ParserExpectedToken>(Semicolon, c));
       }
       c.Advance();
 
@@ -2023,7 +2055,7 @@ OffsetParseResult parser::ParseMainDecl(TkCursor c) {
     }
 
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -2044,7 +2076,7 @@ OffsetParseResult parser::ParseMethodParameters(TkCursor c) {
   };
 
   if (c.TypeIsnt(LParen)) {
-    return Fail(c, ExpectedToken(LParen, c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(LParen, c));
   }
 
   // Check for empty arguments.
@@ -2056,7 +2088,7 @@ OffsetParseResult parser::ParseMethodParameters(TkCursor c) {
 
   TkScope::Vector arg_scopes = TkScope::FindSeperatedParen(c, Comma);
   if (not arg_scopes.front()) {
-    return Fail(c, MismatchedScope(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
   }
 
   // For each arg:
@@ -2096,14 +2128,15 @@ OffsetParseResult parser::ParseMethodParameters(TkCursor c) {
         // Implied any type.
         method_parameter_node.PushBack(eAst::KwAny);
       } else {
-        return Fail(c, ExpectedPrimaryExpression(c));
+        return Fail(
+            c, CaErr::ErrDetail<CaErr::ExpectedPrimaryExpression>(c, CPP_LOC));
       }
 
       // Identity
       if (c.TypeIs(Ident)) {
         method_parameter_node.PushBack(c.Get());
       } else {
-        return Fail(c, ExpectedToken(Ident, c));
+        return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Ident, c));
       }
 
       // Add to list
@@ -2116,7 +2149,7 @@ OffsetParseResult parser::ParseMethodParameters(TkCursor c) {
                 Ast(*scope.ContainedBegin())));
       } else {
         c.Advance(scope.ContainedBegin());
-        return Fail(c, ExpectedToken(Ident, c));
+        return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Ident, c));
       }
     }
   }
@@ -2146,7 +2179,8 @@ OffsetParseResult parser::ParseMethodReturnParameters(TkCursor c) {
     c.Advance(ret_type_result);
     method_return_type_node.ExtractAndPush(ret_type_result);
   } else {
-    return Fail(c, ExpectedPrimaryExpression(c));
+    return Fail(c,
+                CaErr::ErrDetail<CaErr::ExpectedPrimaryExpression>(c, CPP_LOC));
   }
 
   return Success(c, move(method_return_type_node));
@@ -2241,10 +2275,11 @@ OffsetParseResult parser::ParseMethodSignature(TkCursor c) {
       return Success(c, xMakeSigAst(return_type_result.Extract(),
                                     method_params_result.Extract()));
     } else {
-      return Fail(c, ExpectedToken(eTk::Colon, c));
+      return Fail(c,
+                  CaErr::ErrDetail<CaErr::ParserExpectedToken>(eTk::Colon, c));
     }
   } else {
-    return Fail(c, ImplParserExpectedToken(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
   }
 }
 
@@ -2254,7 +2289,7 @@ OffsetParseResult parser::ParseMethodDef(TkCursor c) {
   Ast node{eAst::MethodDefinition};
   auto statement_scope = TkScope::FindBrace(c);
   if (not statement_scope) {
-    return Fail(c, MismatchedScope(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
   }
   c.Advance();
 
@@ -2274,7 +2309,8 @@ OffsetParseResult parser::ParseMethodDef(TkCursor c) {
       node.ExtractAndPush(primary_result);
       c.Advance(primary_result);
     } else {
-      return Fail(c, ExpectedPragmaticDeclaration(c));
+      return Fail(
+          c, CaErr::ErrDetail<CaErr::ExpectedPragmaticDeclaration>(c, CPP_LOC));
     }
   }
   c.Advance();
@@ -2289,7 +2325,7 @@ OffsetParseResult parser::ParseMainDef(TkCursor c) {
   Ast node{eAst::MainDefinition};
   auto statement_scope = TkScope::FindBrace(c);
   if (not statement_scope) {
-    return Fail(c, MismatchedScope(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
   }
   c.Advance();
 
@@ -2309,7 +2345,8 @@ OffsetParseResult parser::ParseMainDef(TkCursor c) {
       node.ExtractAndPush(primary_result);
       c.Advance(primary_result);
     } else {
-      return Fail(c, ExpectedPragmaticDeclaration(c));
+      return Fail(
+          c, CaErr::ErrDetail<CaErr::ExpectedPragmaticDeclaration>(c, CPP_LOC));
     }
   }
   c.Advance();
@@ -2324,7 +2361,7 @@ OffsetParseResult parser::ParseClassDef(TkCursor c) {
   Ast node{eAst::ClassDefinition};
   auto statement_scope = TkScope::FindBrace(c);
   if (not statement_scope) {
-    return Fail(c, MismatchedScope(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
   }
   c.Advance();
 
@@ -2337,7 +2374,8 @@ OffsetParseResult parser::ParseClassDef(TkCursor c) {
       node.ExtractAndPush(decl_result);
       c.Advance(decl_result);
     } else {
-      return Fail(c, ExpectedPragmaticDeclaration(c));
+      return Fail(
+          c, CaErr::ErrDetail<CaErr::ExpectedPragmaticDeclaration>(c, CPP_LOC));
     }
   }
   c.Advance();
@@ -2345,7 +2383,7 @@ OffsetParseResult parser::ParseClassDef(TkCursor c) {
   if (c.TypeIs(Semicolon)) {
     c.Advance();
   } else {
-    return Fail(c, ExpectedToken(Semicolon, c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Semicolon, c));
   }
   return Success(c, move(node));
 }
@@ -2357,7 +2395,7 @@ OffsetParseResult parser::ParseLibDef(TkCursor c) {
   Ast node{eAst::LibraryDefinition};
   auto statement_scope = TkScope::FindBrace(c);
   if (not statement_scope) {
-    return Fail(c, MismatchedScope(c));
+    return Fail(c, CaErr::ErrDetail<CaErr::MismatchedScope>(c, CPP_LOC));
   }
   c.Advance();
 
@@ -2370,7 +2408,8 @@ OffsetParseResult parser::ParseLibDef(TkCursor c) {
       node.ExtractAndPush(decl_result);
       c.Advance(decl_result);
     } else {
-      return Fail(c, ExpectedPragmaticDeclaration(c));
+      return Fail(
+          c, CaErr::ErrDetail<CaErr::ExpectedPragmaticDeclaration>(c, CPP_LOC));
     }
   }
   c.Advance();
@@ -2378,7 +2417,7 @@ OffsetParseResult parser::ParseLibDef(TkCursor c) {
   if (c.TypeIs(Semicolon)) {
     c.Advance();
   } else {
-    return Fail(c, ExpectedToken(Semicolon, c));
+    return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Semicolon, c));
   }
   return Success(c, move(node));
 }
@@ -2395,7 +2434,8 @@ OffsetParseResult parser::ParseProgram(TkCursor c) {
       program_node.ExtractAndPush(decl_result);
       c.Advance(decl_result);
     } else {
-      return Fail(c, ExpectedPragmaticDeclaration(c));
+      return Fail(
+          c, CaErr::ErrDetail<CaErr::ExpectedPragmaticDeclaration>(c, CPP_LOC));
     }
   }
   return Success(c, move(program_node));

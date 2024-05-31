@@ -71,6 +71,7 @@ class Ast {
   bool TypeIsnt(eAst type) const noexcept;
   bool IsLiteral() const noexcept;
   bool IsArithmeticBinaryOp() const noexcept;
+  bool IsPragmatic() const noexcept;
 
   // Source location
   constexpr inline size_t SourceLine() const noexcept { return source_line_; }
@@ -326,6 +327,8 @@ bool Ast::IsArithmeticBinaryOp() const noexcept {
       return false;
   }
 }
+
+bool Ast::IsPragmatic() const noexcept { return eAstIsPragmatic(type_); }
 
 //---------------------------------------------------------------------------//
 }  // namespace caoco

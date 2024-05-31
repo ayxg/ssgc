@@ -25,24 +25,26 @@
 //---------------------------------------------------------------------------//
 
 namespace caoco {
-  using std::vector;
+using std::string_view;
+using std::vector;
+
 // Error codes
-static constexpr std::string_view kIrErrorNoProgramDefinition =
+static constexpr string_view kIrErrorNoProgramDefinition =
     "[C&][ERROR][CRITICAL] No program definition found.";
 
-static constexpr std::string_view kIrErrorDeclarationCannotAppearInContext =
+static constexpr string_view kIrErrorDeclarationCannotAppearInContext =
     "[C&][ERROR][CRITICAL] Declaration cannot appear in this context.";
 
-static constexpr std::string_view kIrErrorInvalidNumberLiteral =
+static constexpr string_view kIrErrorInvalidNumberLiteral =
     "[C&][ERROR][CRITICAL] Invalid number literal.";
 
-static constexpr std::string_view kIrErrorInvalidLiteralAstType =
+static constexpr string_view kIrErrorInvalidLiteralAstType =
     "[C&][ERROR][CRITICAL] Invalid literal AST type.";
 
-static constexpr std::string_view kIrErrorInvalidStringLiteral =
+static constexpr string_view kIrErrorInvalidStringLiteral =
     "[C&][ERROR][CRITICAL] Invalid string literal.";
 
-static constexpr std::string_view kIrErrorInvalidPrimaryExpression =
+static constexpr string_view kIrErrorInvalidPrimaryExpression =
     "[C&][ERROR][CRITICAL] Invalid primary expression.";
 
 enum class eIrOp {
@@ -85,25 +87,31 @@ using IrSize = NativeUnsignedT;
 using IrBool = NativeBoolT;
 using IrDouble = NativeDoubleT;
 using IrString = NativeCStringT;
-using IrArgVariant = std::variant<int, double, std::string_view>;
+using IrArgVariant = std::variant<IrInt, IrSize, IrBool, IrDouble, IrString>;
 static const vector<IrArgVariant> kIrOpNullArguments = {};
 
+// An IR line describes a singlular action in the IR code.
+// It contains an operation enum and a list of arguments.
+// Also it contains the line index of the block it belongs to.
 struct IrLine {
-  const std::size_t code_line;
-  const eIrOp op;
-  const vector<IrArgVariant> args;
+  const size_t code_line;  // Line in the source code for error reporting.
+  const size_t block_idx;  // Line of a block, generated, or temp scope.
+                           // consisting of one or multiple lines.
+  const size_t line_idx;   // Line index in the block.
+  const eIrOp op;          // operation to perform.
+  const vector<IrArgVariant> args; // arguments for the operation.
 };
+
 
 struct IrCode {
   std::list<IrLine> lines;
 
-  
-
   std::list<IrLine>::iterator AddLine(std::size_t line_index, eIrOp op,
-                  std::vector<IrArgVariant> args) {
+                                      std::vector<IrArgVariant> args) {
     lines.push_back(IrLine{line_index, op, args});
-    return lines.back();
+    return lines.end()--;
   }
+
   IrLine& AddLine(IrLine line) {
     lines.push_back(line);
     return lines.back();
