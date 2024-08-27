@@ -20,7 +20,7 @@
 #include "cppsextended.h"
 #include "minitest.h"
 // Testing:
-#include "caoco_build.h"
+//#include "caoco_build.h"
 
 /// @warning This test currently uses a local file existing only on my computer.
 /// C:\\Users\\Anton\\source\\repos\\CandRuntime\\cand-examples\\HelloWorld\\main.cand
