@@ -1,29 +1,29 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the Apache License, Version 2.0(the "License");
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_ast.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_compiler_data
+/// @brief C& abstract syntax tree object.
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cand_compiler_data
+/// @{
 #ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_AST_H
 #define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_AST_H
-//---------------------------------------------------------------------------//
-// Brief: brief
-//---------------------------------------------------------------------------//
+
 #include "cppsextended.h"
 // Includes:
+#include "caoco_grammar.h"
 #include "caoco_token.h"
-#include "caoco_token_traits.h"
-//---------------------------------------------------------------------------//
 
 namespace caoco {
 
+// C& abstract syntax tree node structure.
 class Ast {
  public:
   // Properties
@@ -51,34 +51,54 @@ class Ast {
   Ast& Back();
   Ast& At(std::size_t index);
   const std::list<Ast>& Children() const;
-  // Index operator accesses children.
+  /// Index operator accesses children.
   const Ast& operator[](std::size_t index) const;
   Ast& operator[](std::size_t index);
 
-  //// Fast type queries.
+  // Fast type queries.
   bool TypeIs(eAst type) const noexcept;
   bool TypeIsnt(eAst type) const noexcept;
   bool IsLiteral() const noexcept;
   bool IsArithmeticBinaryOp() const noexcept;
+  bool IsPragmatic() const noexcept;
+
+  // Source location
+  constexpr inline size_t SourceLine() const noexcept { return source_line_; }
+  constexpr inline size_t SourceColumn() const noexcept {
+    return source_column_;
+  }
+  constexpr inline size_t SetSourceLine(size_t line) {
+    return source_line_ = line;
+  }
+  constexpr inline size_t SetSourceColumn(size_t column) {
+    return source_column_ = column;
+  }
+
+  /// Special PushBack methods for  parser results.
+  template <typename AlwaysT>
+  Ast& ExtractAndPush(cxx::PartialExpected<Ast, AlwaysT>& nd) {
+    assert(nd && "Ast::ExtractAndPushBack() called with an empty node.");
+    children_.push_back(std::forward<Ast>(nd.Extract()));
+    auto& pushed = children_.back();
+    pushed.SetParent(this);
+    return pushed;
+  }
+
+  Ast& ExtractAndPush(cxx::Expected<Ast>& nd);
 
  public:
-  Ast() : type_(eAst::kInvalid) {}
-
+  Ast() : type_(eAst::INVALID) {}
+  Ast(const Tk& t);
   Ast(eAst type) : type_(type) {}
-
   Ast(eAst type, const std::string& literal) : type_(type), literal_(literal) {}
-
   Ast(eAst type, std::string&& literal)
       : type_(type), literal_(std::move(literal)) {}
-
   Ast(eAst type, const char* literal) : type_(type), literal_(literal) {}
+  Ast(eAst type, std::vector<Tk>::iterator beg, std::vector<Tk>::iterator end);
 
   template <std::size_t LIT_SIZE>
   Ast(eAst type, const char literal[LIT_SIZE])
       : type_(type), literal_(literal) {}
-
-  Ast(const Tk& t);
-  Ast(eAst type, std::vector<Tk>::iterator beg, std::vector<Tk>::iterator end);
 
   template <typename... ChildTs>
     requires(std::is_same_v<Ast, std::decay_t<ChildTs>> && ...)
@@ -100,14 +120,15 @@ class Ast {
   }
 
  private:
-  eAst type_{eAst::kInvalid};
+  size_t source_line_{0};
+  size_t source_column_{0};
+  eAst type_{eAst::INVALID};
   std::string literal_{""};
   Ast* parent_{nullptr};
   std::list<Ast> children_;
 };
 
-Ast::Ast(const Tk& t)
-    : type_(tk_traits::kTkTypeToAstNodeType(t.Type())), literal_(t.Literal()) {}
+Ast::Ast(const Tk& t) : type_(eTkToAstEnum(t.Type())), literal_(t.Literal()) {}
 
 Ast::Ast(eAst type, std::vector<Tk>::iterator beg,
          std::vector<Tk>::iterator end)
@@ -129,20 +150,20 @@ constexpr bool Ast::Root() const noexcept { return parent_ == nullptr; }
 bool Ast::Branch() const noexcept { return !children_.empty(); }
 
 Ast& Ast::Parent() {
-  if (parent_ != nullptr)
-    return *parent_;
-  else
-    throw std::out_of_range("ast node parent() called on node with no parent.");
+  assert(parent_ != nullptr &&
+         "[Ast& Ast::Parent()] Called on node with no parent. (this->parent_ "
+         "is nullptr).");
+  return *parent_;
 }
 
 constexpr void Ast::SetParent(Ast* parent) { parent_ = parent; }
 
 constexpr void Ast::PopParent() {
-  if (parent_ != nullptr)
-    parent_ = nullptr;
-  else
-    throw std::out_of_range(
-        "Ast node PopParent() called on node with no parent.");
+  assert(
+      parent_ != nullptr &&
+      "[Ast& Ast::PopParent()] Called on node with no parent. (this->parent_ "
+      "is nullptr).");
+  parent_ = nullptr;
 }
 
 bool Ast::Empty() const noexcept { return children_.empty(); }
@@ -164,6 +185,15 @@ Ast& Ast::PushFront(const Ast& nd) {
 
 Ast& Ast::PushBack(Ast&& nd) {
   children_.push_back(std::move(nd));
+  auto& pushed = children_.back();
+  pushed.SetParent(this);
+  return pushed;
+}
+
+
+Ast& Ast::ExtractAndPush(cxx::Expected<Ast>& nd) {
+  assert(nd && "Ast::ExtractAndPushBack() called with an empty node.");
+  children_.push_back(std::forward<Ast>(nd.Extract()));
   auto& pushed = children_.back();
   pushed.SetParent(this);
   return pushed;
@@ -245,40 +275,57 @@ const Ast& Ast::operator[](std::size_t index) const {
   }();
 }
 
-Ast& Ast::operator[](std::size_t index) {
-  if (index >= children_.size())
-    throw std::out_of_range(
-        "ast node [] index operator called with index out of range.");
-  if (index == 0) return children_.front();
-
-  return [this, &index]() -> Ast& {
-    auto it = children_.begin();
-    for (std::size_t i = 0; i < index; i++) {
-      it++;
-    }
-    return *it;
-  }();
-}
+Ast& Ast::operator[](std::size_t index) { return At(index); }
 
 bool Ast::TypeIs(eAst type) const noexcept { return type_ == type; }
 
 bool Ast::TypeIsnt(eAst type) const noexcept { return type_ != type; }
 
 bool Ast::IsLiteral() const noexcept {
-  return type_ == eAst::kStringLiteral || type_ == eAst::kNumberLiteral ||
-         type_ == eAst::kDoubleLiteral || type_ == eAst::kBoolLiteral ||
-         type_ == eAst::kByteLiteral || type_ == eAst::kNoneLiteral ||
-         type_ == eAst::kTrueLiteral || type_ == eAst::kFalseLiteral;
+  switch (type_) {
+    using enum eAst;
+    case LitCstr:
+    case LitInt:
+    case LitUint:
+    case LitBool:
+    case LitReal:
+    case LitChar:
+    case LitByte:
+    case KwNone:
+    case KwTrue:
+    case KwFalse:
+      return true;
+    default:
+      return false;
+  }
 }
+
 bool Ast::IsArithmeticBinaryOp() const noexcept {
-  return type_ == eAst::kAddition || type_ == eAst::kSubtraction ||
-         type_ == eAst::kMultiplication || type_ == eAst::kDivision ||
-         type_ == eAst::kRemainder;
+  switch (type_) {
+    using enum eAst;
+    case Add:
+    case Sub:
+    case Mul:
+    case Div:
+    case Mod:
+      return true;
+    default:
+      return false;
+  }
 }
+
+bool Ast::IsPragmatic() const noexcept { return eAstIsPragmatic(type_); }
 
 }  // namespace caoco
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_AST_H
+/// @} // end of cand_compiler_data
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the Apache License, Version 2.0(the "License");
@@ -292,15 +339,4 @@ bool Ast::IsArithmeticBinaryOp() const noexcept {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: cand_ast.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_AST_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

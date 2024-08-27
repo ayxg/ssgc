@@ -1,0 +1,247 @@
+\doxysection{cgui\+::scoped\+\_\+widget\+::Tab\+Bar Class Reference}
+\hypertarget{classcgui_1_1scoped__widget_1_1_tab_bar}{}\label{classcgui_1_1scoped__widget_1_1_tab_bar}\index{cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}}
+
+
+{\ttfamily \#include $<$imgui\+\_\+interface.\+h$>$}
+
+Inheritance diagram for cgui\+::scoped\+\_\+widget\+::Tab\+Bar\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcgui_1_1scoped__widget_1_1_tab_bar}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::string \& \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar_ac2b783698495c7eae9bd5d4d6e700998}{Name}} () const
+\item 
+\mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{Tab\+Bar\+Flags}} \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar_a3396c0a6532dc8ea05b5e16cdb40ceac}{Get\+Flags}} () const
+\item 
+\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar_a660469d75d304e52dbe3448b003043ec}{Tab\+Bar}} (const std\+::string \&name, \mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{Tab\+Bar\+Flags}} flags=\mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{Tab\+Bar\+Flags}}(), bool delay\+\_\+begin=\mbox{\hyperlink{namespacecgui_a79f511149d5c2e46e93904c5c462ba1bab736956b863d2c0f986fc1837c86e88f}{k\+Widget\+Init\+Immediate}})
+\item 
+bool \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar_a01091faac6e1a190a0392cd28cfd9472}{Begin\+Late}} () override
+\item 
+void \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar_a1dd2776ae062722a4f15a4a58cb02c4f}{End\+Early}} () override
+\item 
+\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar_af184f68f9ced83e4c92b3a57d9a845d6}{\texorpdfstring{$\sim$}{\string~}\+Tab\+Bar}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcgui_1_1_scoped_widget_base}{cgui\+::\+Scoped\+Widget\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+constexpr bool \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a5531139dfd6bbe1b0e2f6a79e3634242}{Is\+Scope\+Active}} () const
+\begin{DoxyCompactList}\small\item\em Returns true is the Begin() function has been called further gui commands will add to this scope. \end{DoxyCompactList}\item 
+constexpr bool \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a4ce88b7d309f601ff5d11a18f1de8398}{Is\+On}} () const
+\begin{DoxyCompactList}\small\item\em The meaning of is\+\_\+on\+\_\+ may vary based on the \doxylink{namespace_im_gui}{Im\+Gui} widget call. Usually indicates if this object was rendered by \doxylink{namespace_im_gui}{Im\+Gui}. Some Object will always render, while the result represents a state. These objects must be ended with \doxylink{classcgui_1_1_scoped_widget_base_a91a8721c45aaf54b9b24fbc1b3460349}{Force\+End\+Impl()}. Ex. Windows will return false for this parameter if they are minimized, but the top bar will still be rendered. So the window is NOT displayed but it IS rendered. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_abbf8edf9433756d731fa533a4b9455ad}{\texorpdfstring{$\sim$}{\string~}\+Scoped\+Widget\+Base}} ()=default
+\item 
+\mbox{\hyperlink{classcgui_1_1_scoped_widget_base_ae12f283260ae599d4368dc3a7d99dba2}{Scoped\+Widget\+Base}} (bool is\+\_\+delayed)
+\begin{DoxyCompactList}\small\item\em Default object is a null widget,Begin() will always return false. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a16c52e3132efa685a6f289730af27b1f}{Scoped\+Widget\+Base}} (const \mbox{\hyperlink{classcgui_1_1_scoped_widget_base}{Scoped\+Widget\+Base}} \&other)=default
+\begin{DoxyCompactList}\small\item\em Copy is allowed, but the name\+\_\+map and id\+\_\+gen are shared. The uniqueness of the name or id is only checked on construction. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcgui_1_1_scoped_widget_base_aef5825dcb0f187a28fba979e856c6fa4}{Scoped\+Widget\+Base}} (\mbox{\hyperlink{classcgui_1_1_scoped_widget_base}{Scoped\+Widget\+Base}} \&\&other) noexcept=default
+\begin{DoxyCompactList}\small\item\em Move is allowed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a8eeff864df1c97f5431ba599ef9b0732}{operator bool}} ()
+\begin{DoxyCompactList}\small\item\em Boolean conversion, returns \doxylink{classcgui_1_1_scoped_widget_base_a4ce88b7d309f601ff5d11a18f1de8398}{Is\+On()} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar}{Tab\+Bar}} \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar_a2404e52d09424b936e235b9faed217c9}{Delayed}} (const std\+::string \&name, \mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{Tab\+Bar\+Flags}} flags=\mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{Tab\+Bar\+Flags}}())
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar_aa677c92fcc9ee716bb1901cdba96f482}{Bound\+Begin}} () override
+\item 
+void \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar_ab8966c8d5a732acb1f542415cf85e0c2}{Bound\+End}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcgui_1_1_scoped_widget_base}{cgui\+::\+Scoped\+Widget\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_aa3f82dc9a73537481f3d503fb9bd2cf4}{Begin\+Impl}} ()
+\begin{DoxyCompactList}\small\item\em Implementations of the Begin\+Late and End\+Early methods. Begin and End implementations are ment for the constructor and destructor respectivley. Force\+End is for widgets which must call End() even if Begin() returns false. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a1091f0985ff468b96955c64f8106d09c}{Begin\+Late\+Impl}} ()
+\item 
+void \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a02a1ea1a2aad0e6434d078b4b3fd9e2d}{End\+Impl}} ()
+\item 
+void \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_ae0c194667758a3a7dafb2a0fb28c6df5}{End\+Early\+Impl}} ()
+\item 
+void \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a91a8721c45aaf54b9b24fbc1b3460349}{Force\+End\+Impl}} ()
+\item 
+void \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a5dfa6681fa114e12468b0c43e08fe820}{Force\+End\+Early\+Impl}} ()
+\item 
+\mbox{\hyperlink{classcxx_1_1_bool_error}{cxx\+::\+Bool\+Error}} \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a7c4c38d6ac994ce476855e2b3a857b11}{Request\+New\+Name}} (const std\+::string \&str)
+\begin{DoxyCompactList}\small\item\em Name must not exist. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_ac351cc7d0f951197a34a768116c30490}{Release\+Name}} (const std\+::string \&str)
+\item 
+\mbox{\hyperlink{classcgui_1_1_u_i_d_gen_a36a52a548db13af71c67da7b80daac9b}{UIDGen\+::\+Iter}} \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a1fa40adae0271c28494efe61d06a47bb}{Request\+Id}} ()
+\begin{DoxyCompactList}\small\item\em Generate a new uuid. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a21bccfc02d40c6368810d94831da1102}{Release\+Id}} (\mbox{\hyperlink{classcgui_1_1_u_i_d_gen_a36a52a548db13af71c67da7b80daac9b}{UIDGen\+::\+Iter}} id\+\_\+iter)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar_a734ceb81ad0741c6e7fd1b4b38fa0a84}{name\+\_\+}}
+\item 
+\mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{Tab\+Bar\+Flags}} \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar_ad397e850e8a47fbcae56ba7ee5de7dfd}{flags\+\_\+}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcgui_1_1_scoped_widget_base}{cgui\+::\+Scoped\+Widget\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcgui_1_1_unique_name_map}{Unique\+Name\+Map}} \& \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a3b20c61d14ddee46166d3d833f496eba}{name\+\_\+map\+\_\+}}
+\item 
+\mbox{\hyperlink{classcgui_1_1_u_i_d_gen}{UIDGen}} \& \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_ab6451f1ee54e7bfc078e5a0738a68bae}{id\+\_\+gen\+\_\+}}
+\item 
+bool \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a68e3ca6be1ce93d8a25a328db4fb0fc6}{is\+\_\+scope\+\_\+active\+\_\+}}
+\item 
+bool \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_aedfe9787e113ba1759b50369110f9590}{is\+\_\+on\+\_\+}}
+\item 
+bool \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_ad29eb03536382d0b650d10930138fe3d}{is\+\_\+delayed\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00736}{736}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcgui_1_1scoped__widget_1_1_tab_bar_a660469d75d304e52dbe3448b003043ec}\index{cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}!TabBar@{TabBar}}
+\index{TabBar@{TabBar}!cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}}
+\doxysubsubsection{\texorpdfstring{TabBar()}{TabBar()}}
+{\footnotesize\ttfamily \label{classcgui_1_1scoped__widget_1_1_tab_bar_a660469d75d304e52dbe3448b003043ec} 
+cgui\+::scoped\+\_\+widget\+::\+Tab\+Bar\+::\+Tab\+Bar (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{\mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{Tab\+Bar\+Flags}}}]{flags}{ = {\ttfamily \mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{Tab\+Bar\+Flags}}()}, }\item[{bool}]{delay\+\_\+begin}{ = {\ttfamily \mbox{\hyperlink{namespacecgui_a79f511149d5c2e46e93904c5c462ba1bab736956b863d2c0f986fc1837c86e88f}{k\+Widget\+Init\+Immediate}}}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00747}{747}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{classcgui_1_1scoped__widget_1_1_tab_bar_af184f68f9ced83e4c92b3a57d9a845d6}\index{cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}!````~TabBar@{\texorpdfstring{$\sim$}{\string~}TabBar}}
+\index{````~TabBar@{\texorpdfstring{$\sim$}{\string~}TabBar}!cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}TabBar()}{\string~TabBar()}}
+{\footnotesize\ttfamily \label{classcgui_1_1scoped__widget_1_1_tab_bar_af184f68f9ced83e4c92b3a57d9a845d6} 
+cgui\+::scoped\+\_\+widget\+::\+Tab\+Bar\+::\texorpdfstring{$\sim$}{\string~}\+Tab\+Bar (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00768}{768}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcgui_1_1scoped__widget_1_1_tab_bar_a01091faac6e1a190a0392cd28cfd9472}\index{cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}!BeginLate@{BeginLate}}
+\index{BeginLate@{BeginLate}!cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}}
+\doxysubsubsection{\texorpdfstring{BeginLate()}{BeginLate()}}
+{\footnotesize\ttfamily \label{classcgui_1_1scoped__widget_1_1_tab_bar_a01091faac6e1a190a0392cd28cfd9472} 
+bool cgui\+::scoped\+\_\+widget\+::\+Tab\+Bar\+::\+Begin\+Late (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a7562f686058523ea8c668e256925f7c4}{cgui\+::\+Scoped\+Widget\+Base}}.
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00764}{764}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{classcgui_1_1scoped__widget_1_1_tab_bar_aa677c92fcc9ee716bb1901cdba96f482}\index{cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}!BoundBegin@{BoundBegin}}
+\index{BoundBegin@{BoundBegin}!cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}}
+\doxysubsubsection{\texorpdfstring{BoundBegin()}{BoundBegin()}}
+{\footnotesize\ttfamily \label{classcgui_1_1scoped__widget_1_1_tab_bar_aa677c92fcc9ee716bb1901cdba96f482} 
+bool cgui\+::scoped\+\_\+widget\+::\+Tab\+Bar\+::\+Bound\+Begin (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_addcdf89dad6345a0cf3ff87f228fce08}{cgui\+::\+Scoped\+Widget\+Base}}.
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00775}{775}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{classcgui_1_1scoped__widget_1_1_tab_bar_ab8966c8d5a732acb1f542415cf85e0c2}\index{cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}!BoundEnd@{BoundEnd}}
+\index{BoundEnd@{BoundEnd}!cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}}
+\doxysubsubsection{\texorpdfstring{BoundEnd()}{BoundEnd()}}
+{\footnotesize\ttfamily \label{classcgui_1_1scoped__widget_1_1_tab_bar_ab8966c8d5a732acb1f542415cf85e0c2} 
+void cgui\+::scoped\+\_\+widget\+::\+Tab\+Bar\+::\+Bound\+End (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_a2f4b1d1ac65e446a647e4bf034266a01}{cgui\+::\+Scoped\+Widget\+Base}}.
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00779}{779}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{classcgui_1_1scoped__widget_1_1_tab_bar_a2404e52d09424b936e235b9faed217c9}\index{cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}!Delayed@{Delayed}}
+\index{Delayed@{Delayed}!cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}}
+\doxysubsubsection{\texorpdfstring{Delayed()}{Delayed()}}
+{\footnotesize\ttfamily \label{classcgui_1_1scoped__widget_1_1_tab_bar_a2404e52d09424b936e235b9faed217c9} 
+static \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar}{Tab\+Bar}} cgui\+::scoped\+\_\+widget\+::\+Tab\+Bar\+::\+Delayed (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{\mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{Tab\+Bar\+Flags}}}]{flags}{ = {\ttfamily \mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{Tab\+Bar\+Flags}}()}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00742}{742}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{classcgui_1_1scoped__widget_1_1_tab_bar_a1dd2776ae062722a4f15a4a58cb02c4f}\index{cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}!EndEarly@{EndEarly}}
+\index{EndEarly@{EndEarly}!cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}}
+\doxysubsubsection{\texorpdfstring{EndEarly()}{EndEarly()}}
+{\footnotesize\ttfamily \label{classcgui_1_1scoped__widget_1_1_tab_bar_a1dd2776ae062722a4f15a4a58cb02c4f} 
+void cgui\+::scoped\+\_\+widget\+::\+Tab\+Bar\+::\+End\+Early (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcgui_1_1_scoped_widget_base_aadfd5dc8109b53857260042ebee8c03b}{cgui\+::\+Scoped\+Widget\+Base}}.
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00766}{766}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{classcgui_1_1scoped__widget_1_1_tab_bar_a3396c0a6532dc8ea05b5e16cdb40ceac}\index{cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}!GetFlags@{GetFlags}}
+\index{GetFlags@{GetFlags}!cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}}
+\doxysubsubsection{\texorpdfstring{GetFlags()}{GetFlags()}}
+{\footnotesize\ttfamily \label{classcgui_1_1scoped__widget_1_1_tab_bar_a3396c0a6532dc8ea05b5e16cdb40ceac} 
+\mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{Tab\+Bar\+Flags}} cgui\+::scoped\+\_\+widget\+::\+Tab\+Bar\+::\+Get\+Flags (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00739}{739}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{classcgui_1_1scoped__widget_1_1_tab_bar_ac2b783698495c7eae9bd5d4d6e700998}\index{cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}!Name@{Name}}
+\index{Name@{Name}!cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}}
+\doxysubsubsection{\texorpdfstring{Name()}{Name()}}
+{\footnotesize\ttfamily \label{classcgui_1_1scoped__widget_1_1_tab_bar_ac2b783698495c7eae9bd5d4d6e700998} 
+const std\+::string \& cgui\+::scoped\+\_\+widget\+::\+Tab\+Bar\+::\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00738}{738}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcgui_1_1scoped__widget_1_1_tab_bar_ad397e850e8a47fbcae56ba7ee5de7dfd}\index{cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}!flags\_@{flags\_}}
+\index{flags\_@{flags\_}!cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}}
+\doxysubsubsection{\texorpdfstring{flags\_}{flags\_}}
+{\footnotesize\ttfamily \label{classcgui_1_1scoped__widget_1_1_tab_bar_ad397e850e8a47fbcae56ba7ee5de7dfd} 
+\mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{Tab\+Bar\+Flags}} cgui\+::scoped\+\_\+widget\+::\+Tab\+Bar\+::flags\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00783}{783}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{classcgui_1_1scoped__widget_1_1_tab_bar_a734ceb81ad0741c6e7fd1b4b38fa0a84}\index{cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}!name\_@{name\_}}
+\index{name\_@{name\_}!cgui::scoped\_widget::TabBar@{cgui::scoped\_widget::TabBar}}
+\doxysubsubsection{\texorpdfstring{name\_}{name\_}}
+{\footnotesize\ttfamily \label{classcgui_1_1scoped__widget_1_1_tab_bar_a734ceb81ad0741c6e7fd1b4b38fa0a84} 
+std\+::string cgui\+::scoped\+\_\+widget\+::\+Tab\+Bar\+::name\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00782}{782}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/ide/\mbox{\hyperlink{imgui__interface_8h}{imgui\+\_\+interface.\+h}}\end{DoxyCompactItemize}

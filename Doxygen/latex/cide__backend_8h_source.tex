@@ -1,0 +1,697 @@
+\doxysection{cide\+\_\+backend.\+h}
+\hypertarget{cide__backend_8h_source}{}\label{cide__backend_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/ide/cide\_backend.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/ide/cide\_backend.h}}
+\mbox{\hyperlink{cide__backend_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00001}00001\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00002}00002\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00003}00003\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00004}00004\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00005}00005\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00006}00006\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00007}00007\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00008}00008\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00009}00009\ \textcolor{comment}{///\ @file}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00010}00010\ \textcolor{comment}{///\ @ingroup\ cand\_cide}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00011}00011\ \textcolor{comment}{///\ @brief\ CIDE\ Backend\ Implementation.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00012}00012\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00014}00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00015}00015\ \textcolor{comment}{//\ Standard}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00016}00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cppsextended_8h}{"{}cppsextended.h"{}}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00018}00018\ \textcolor{comment}{//\ CIDE\ Common\ Defs}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00019}00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cide__common_8h}{"{}cide\_common.h"{}}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00021}\mbox{\hyperlink{cide__backend_8h_ab92ccc975525811ccf2a76d990e486de}{00021}}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{cide__backend_8h_ab92ccc975525811ccf2a76d990e486de}{AdvanceIt}}(\textcolor{keyword}{auto}\&\&\ iter,\ size\_t\ i)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00022}00022\ \ \ std::advance(iter,\ i);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00023}00023\ \ \ \textcolor{keywordflow}{return}\ iter;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00024}00024\ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00026}\mbox{\hyperlink{namespacecide}{00026}}\ \textcolor{keyword}{namespace}\ cide::\mbox{\hyperlink{namespacecide}{backend}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00027}00027\ \textcolor{comment}{///\ @addtogroup\ cand\_cide\_backend}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00028}00028\ \textcolor{comment}{///\ @\{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00030}00030\ \textcolor{comment}{//\ Utils}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00031}\mbox{\hyperlink{group__cand__cide__backend_ga66fd1e3d802744e29cc0faba457c1875}{00031}}\ \textcolor{keyword}{static}\ string\ \mbox{\hyperlink{group__cand__cide__backend_ga66fd1e3d802744e29cc0faba457c1875}{LoadFileToStr}}(stdfs::path\ file\_path)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00032}00032\ \ \ std::filesystem::path\ filepath(}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00033}00033\ \ \ \ \ \ \ std::filesystem::absolute(std::filesystem::path(file\_path)));}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00035}00035\ \ \ std::uintmax\_t\ fsize;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00037}00037\ \ \ \textcolor{keywordflow}{if}\ (std::filesystem::exists(filepath))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00038}00038\ \ \ \ \ fsize\ =\ std::filesystem::file\_size(filepath);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00039}00039\ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00040}00040\ \ \ \ \ \textcolor{keywordflow}{throw}(std::invalid\_argument(\textcolor{stringliteral}{"{}File\ not\ found:\ "{}}\ +\ filepath.string()));}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00041}00041\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00043}00043\ \ \ std::ifstream\ infile;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00044}00044\ \ \ infile.exceptions(std::ifstream::failbit\ |\ std::ifstream::badbit);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00045}00045\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00046}00046\ \ \ \ \ infile.open(filepath.c\_str(),\ std::ios::in\ |\ std::ifstream::binary);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00047}00047\ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00048}00048\ \ \ \ \ std::throw\_with\_nested(}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00049}00049\ \ \ \ \ \ \ \ \ std::runtime\_error(\textcolor{stringliteral}{"{}Can't\ open\ input\ file\ "{}}\ +\ filepath.string()));}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00050}00050\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00052}00052\ \ \ string\ fileStr;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00054}00054\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00055}00055\ \ \ \ \ fileStr.resize(fsize);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00056}00056\ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00057}00057\ \ \ \ \ std::stringstream\ err;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00058}00058\ \ \ \ \ err\ <<\ \textcolor{stringliteral}{"{}Can't\ resize\ to\ "{}}\ <<\ fsize\ <<\ \textcolor{stringliteral}{"{}\ bytes"{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00059}00059\ \ \ \ \ std::throw\_with\_nested(std::runtime\_error(err.str()));}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00060}00060\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00062}00062\ \ \ infile.read(fileStr.data(),\ fsize);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00063}00063\ \ \ infile.close();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00065}00065\ \ \ \textcolor{keywordflow}{return}\ fileStr;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00066}00066\ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00067}\mbox{\hyperlink{group__cand__cide__backend_gaabd2b7483a9d09e51ff676f63debf12b}{00067}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ string\ \mbox{\hyperlink{group__cand__cide__backend_gaabd2b7483a9d09e51ff676f63debf12b}{LoadFileToStr}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ file\_path)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00068}00068\ \ \ \textcolor{keywordflow}{return}\ LoadFileToStr(std::filesystem::path(file\_path));}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00069}00069\ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00070}\mbox{\hyperlink{group__cand__cide__backend_ga555fa83b63b86f41df72574ccbe99190}{00070}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ string\ \mbox{\hyperlink{group__cand__cide__backend_ga555fa83b63b86f41df72574ccbe99190}{LoadFileToStr}}(\textcolor{keyword}{const}\ string\&\ file\_path)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00071}00071\ \ \ \textcolor{keywordflow}{return}\ LoadFileToStr(file\_path.c\_str());}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00072}00072\ \};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00074}\mbox{\hyperlink{group__cand__cide__backend_gad2d5fe94ad31cb1ae4e841900bd9ecbb}{00074}}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group__cand__cide__backend_gad2d5fe94ad31cb1ae4e841900bd9ecbb}{SaveStrToFile}}(\textcolor{keyword}{const}\ string\&\ file\_path,}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00075}00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ string\&\ file\_contents)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00076}00076\ \ \ std::ofstream\ outfile;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00077}00077\ \ \ outfile.exceptions(std::ifstream::failbit\ |\ std::ifstream::badbit);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00078}00078\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00079}00079\ \ \ \ \ outfile.open(file\_path.c\_str(),\ std::ios::out\ |\ std::ofstream::binary);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00080}00080\ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00081}00081\ \ \ \ \ std::throw\_with\_nested(}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00082}00082\ \ \ \ \ \ \ \ \ std::runtime\_error(\textcolor{stringliteral}{"{}Can't\ open\ output\ file\ "{}}\ +\ file\_path));}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00083}00083\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00085}00085\ \ \ outfile.write(file\_contents.data(),\ file\_contents.size());}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00086}00086\ \ \ outfile.close();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00087}00087\ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00089}00089\ \textcolor{comment}{//\ \#def\#}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00090}00090\ \textcolor{comment}{//\ solution\_dir}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00091}00091\ \textcolor{comment}{//\ dafsldkfjaslkdfjalks}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00092}00092\ \textcolor{comment}{//\ \#end\#}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00094}00094\ \textcolor{comment}{//\ \#def\#}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00095}00095\ \textcolor{comment}{//\ cached\_files}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00096}00096\ \textcolor{comment}{//\ file1.cpp}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00097}00097\ \textcolor{comment}{//\ file2.cpp}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00098}00098\ \textcolor{comment}{//\ file3.cpp}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00099}00099\ \textcolor{comment}{//\ \#end\#}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00101}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{00101}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{CacheFile}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00102}00102\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00103}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a9ef569095095de2c6632ec8bd5c06309}{00103}}\ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{TaggedLinesMap}}\ =\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{std}}::\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{map}}<\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{string}},\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{vector}}<\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{string}}>>;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00104}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a9b46e9fa05b66a0e329dd4d0471131d4}{00104}}\ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{TaggedLinesMapIter}}\ =\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{TaggedLinesMap}}::\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{iterator}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00105}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a29a012bd734ee4f8b7774d8123738d4d}{00105}}\ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{TaggedLinesMapNode}}\ =\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{TaggedLinesMap}}::\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{node\_type}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00106}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a39e2f4e4cbdd044cdd6414683dd5f032}{00106}}\ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{TaggedLineMapNodeVec}}\ =\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{std}}::\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{vector}}<\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{TaggedLinesMapNode}}>;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00107}00107\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00108}00108\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00109}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a1fbc71d5309268910a39e26561e410d0}{00109}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a1fbc71d5309268910a39e26561e410d0}{ContainsTag}}(\textcolor{keyword}{const}\ string\&\ tag)\ \{\ \textcolor{keywordflow}{return}\ live\_cache.contains(tag);\ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00110}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a2b9a424224f7d663cded4907a6a63928}{00110}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a2b9a424224f7d663cded4907a6a63928}{ContainsLineByTagAndIndex}}(\textcolor{keyword}{const}\ string\&\ tag,\ std::size\_t\ index\ =\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00111}00111\ \ \ \ \ \textcolor{keywordflow}{if}\ (live\_cache.contains(tag))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00112}00112\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ index\ <\ live\_cache[tag].size();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00113}00113\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00114}00114\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00115}00115\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00116}00116\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00117}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a1e70eb1977ad916a12a4de42bc4dfec2}{00117}}\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a1e70eb1977ad916a12a4de42bc4dfec2}{vector}}<\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a1e70eb1977ad916a12a4de42bc4dfec2}{string}}>\&\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a1e70eb1977ad916a12a4de42bc4dfec2}{GetLinesByTag}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a1e70eb1977ad916a12a4de42bc4dfec2}{string}}\&\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a1e70eb1977ad916a12a4de42bc4dfec2}{tag}})\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00118}00118\ \ \ \ \ \textcolor{keywordflow}{if}\ (live\_cache.contains(tag))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00119}00119\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ live\_cache[tag];}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00120}00120\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00121}00121\ \ \ \ \ \textcolor{keywordflow}{return}\ \{\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00122}00122\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00123}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_acf0ca1e86b647e1524234ef8464e3ebd}{00123}}\ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_acf0ca1e86b647e1524234ef8464e3ebd}{vector}}<\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_acf0ca1e86b647e1524234ef8464e3ebd}{stdfs}}::\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_acf0ca1e86b647e1524234ef8464e3ebd}{path}}>\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_acf0ca1e86b647e1524234ef8464e3ebd}{GetLinesByTagAsPath}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_acf0ca1e86b647e1524234ef8464e3ebd}{string}}\&\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_acf0ca1e86b647e1524234ef8464e3ebd}{tag}})\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00124}00124\ \ \ \ \ vector<stdfs::path>\ ret\{\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00125}00125\ \ \ \ \ \textcolor{keywordflow}{if}\ (live\_cache.contains(tag))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00126}00126\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ entry\ :\ live\_cache[tag])\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00127}00127\ \ \ \ \ \ \ \ \ ret.push\_back(stdfs::path(entry));}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00128}00128\ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00129}00129\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00130}00130\ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00131}00131\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00132}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a56f663825b039ca10aac2a3d3c4b0c27}{00132}}\ \ \ \textcolor{keyword}{const}\ string\&\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a56f663825b039ca10aac2a3d3c4b0c27}{GetLineByTagAndIndex}}(\textcolor{keyword}{const}\ string\&\ tag,\ std::size\_t\ index\ =\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00133}00133\ \ \ \ \ \textcolor{keywordflow}{if}\ (live\_cache.contains(tag))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00134}00134\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (index\ <\ live\_cache[tag].size())\ \textcolor{keywordflow}{return}\ live\_cache[tag][index];}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00135}00135\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00136}00136\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00137}00137\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00139}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a931a78f4ada8d57a9ce80d6d8e0c9671}{00139}}\ \ \ \mbox{\hyperlink{namespacecxx}{cxx}}::\mbox{\hyperlink{classcxx_1_1_bool_error}{BoolError}}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a931a78f4ada8d57a9ce80d6d8e0c9671}{ReplaceLinesByTag}}(\textcolor{keyword}{const}\ string\&\ tag,}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00140}00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ vector<string>\&\ new\_lines)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00141}00141\ \ \ \ \ \textcolor{keywordflow}{if}\ (live\_cache.contains(tag))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00142}00142\ \ \ \ \ \ \ live\_cache[tag].clear();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00143}00143\ \ \ \ \ \ \ live\_cache[tag].insert(live\_cache[tag].end(),\ new\_lines.begin(),}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ new\_lines.end());}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00145}00145\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00146}00146\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00147}00147\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}No\ chache\ lines\ with\ this\ tag\ exist"{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00148}00148\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00149}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a484e5d4325062b7ed2fe7361f9314043}{00149}}\ \ \ \mbox{\hyperlink{namespacecxx}{cxx}}::\mbox{\hyperlink{classcxx_1_1_bool_error}{BoolError}}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a484e5d4325062b7ed2fe7361f9314043}{ReplaceLineByTagAndIndex}}(\textcolor{keyword}{const}\ string\&\ tag,\ std::size\_t\ index,}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00150}00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ string\&\ new\_line)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00151}00151\ \ \ \ \ \textcolor{keywordflow}{if}\ (live\_cache.contains(tag))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00152}00152\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (index\ <\ live\_cache[tag].size())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00153}00153\ \ \ \ \ \ \ \ \ live\_cache[tag][index]\ =\ new\_line;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00154}00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00155}00155\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00156}00156\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00157}00157\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}No\ chache\ lines\ with\ this\ tag\ exist"{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00158}00158\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00159}00159\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00160}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a7d5fc4523f1cafdafb03218d1fa8f3e9}{00160}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a7d5fc4523f1cafdafb03218d1fa8f3e9}{PushLinesToLiveCache}}(\textcolor{keyword}{const}\ TaggedLineMapNodeVec\&\ file\_nodes)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00161}00161\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ nd\ :\ file\_nodes)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00162}00162\ \ \ \ \ \ \ PushLinesToLiveCache(nd.key(),\ nd.mapped());}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00163}00163\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00164}00164\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00165}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a527a8c1e6263c0fdaee992b9f0735bf2}{00165}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a527a8c1e6263c0fdaee992b9f0735bf2}{PushLinesToLiveCache}}(\textcolor{keyword}{const}\ string\&\ tag,\ \textcolor{keyword}{const}\ vector<string>\&\ lines)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00166}00166\ \ \ \ \ \textcolor{keywordflow}{if}\ (live\_cache.contains(tag))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00167}00167\ \ \ \ \ \ \ live\_cache[tag].insert(live\_cache[tag].end(),\ lines.begin(),\ lines.end());}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00168}00168\ \ \ \ \ \}\ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00169}00169\ \ \ \ \ \ \ live\_cache[tag]\ =\ lines;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00170}00170\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00172}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a2497ea23878d532f897db7ab1f076a70}{00172}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a2497ea23878d532f897db7ab1f076a70}{RemoveLiveCacheLinesByTag}}(\textcolor{keyword}{const}\ string\&\ tag)\ \{\ live\_cache.erase(tag);\ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00173}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_ab36108308afdb8f5fbaf7f244aba4682}{00173}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_ab36108308afdb8f5fbaf7f244aba4682}{PopLineFromLiveCacheByTag}}(\textcolor{keyword}{const}\ string\&\ tag)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00174}00174\ \ \ \ \ \textcolor{keywordflow}{if}\ (live\_cache.contains(tag))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00175}00175\ \ \ \ \ \ \ live\_cache[tag].pop\_back();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00176}00176\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00177}00177\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00178}00178\ \ \ \textcolor{comment}{//\ Loads\ entire\ file\ into\ the\ live\ cache.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00179}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a386bc008e366ae99d46e9370dfc0953c}{00179}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a386bc008e366ae99d46e9370dfc0953c}{LoadLinesToLiveCache}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00180}00180\ \ \ \ \ std::ifstream\ in\_file\_stream\{file\_path\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00181}00181\ \ \ \ \ string\ line;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00182}00182\ \ \ \ \ \textcolor{keywordflow}{while}\ (std::getline(in\_file\_stream,\ line))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00183}00183\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (line\ ==\ \textcolor{stringliteral}{"{}\#def\#"{}})\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00184}00184\ \ \ \ \ \ \ \ \ std::getline(in\_file\_stream,\ line);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00185}00185\ \ \ \ \ \ \ \ \ string\ tag\ =\ line;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00186}00186\ \ \ \ \ \ \ \ \ vector<string>\ lines;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00187}00187\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (std::getline(in\_file\_stream,\ line))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00188}00188\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (line\ ==\ \textcolor{stringliteral}{"{}\#end\#"{}})\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00189}00189\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00190}00190\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00191}00191\ \ \ \ \ \ \ \ \ \ \ lines.push\_back(line);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00192}00192\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00193}00193\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00194}00194\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Append\ vectors\ if\ the\ tag\ already\ exists.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00195}00195\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (live\_cache.contains(tag))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00196}00196\ \ \ \ \ \ \ \ \ \ \ live\_cache[tag].insert(live\_cache[tag].end(),\ lines.begin(),}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lines.end());}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00198}00198\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00199}00199\ \ \ \ \ \ \ \ \ \ \ live\_cache[tag]\ =\ lines;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00200}00200\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00201}00201\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00202}00202\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00203}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_af0c6514c15fa340ea2615dfde00f2be2}{00203}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_af0c6514c15fa340ea2615dfde00f2be2}{SaveLiveCacheToFile}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00204}00204\ \ \ \ \ std::ofstream\ out\_file\_stream\{file\_path\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00205}00205\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ [tag,\ lines]\ :\ live\_cache)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00206}00206\ \ \ \ \ \ \ out\_file\_stream\ <<\ \textcolor{stringliteral}{"{}\#def\#\(\backslash\)n"{}}\ <<\ tag\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00207}00207\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ line\ :\ lines)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00208}00208\ \ \ \ \ \ \ \ \ out\_file\_stream\ <<\ line\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00209}00209\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00210}00210\ \ \ \ \ \ \ out\_file\_stream\ <<\ \textcolor{stringliteral}{"{}\#end\#\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00211}00211\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00212}00212\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00213}00213\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00214}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_afe95ad76a5d4a9085fa7bf6a0035d845}{00214}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_afe95ad76a5d4a9085fa7bf6a0035d845}{ClearLiveCache}}()\ \{\ live\_cache.clear();\ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00215}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a7291dc80c4f783a1c744fa5496a6e994}{00215}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a7291dc80c4f783a1c744fa5496a6e994}{RefreshCacheFile}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00216}00216\ \ \ \ \ std::ofstream\ cache\_fstream(file\_path);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00217}00217\ \ \ \ \ cache\_fstream.clear();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00218}00218\ \ \ \ \ cache\_fstream.close();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00219}00219\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00220}00220\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00221}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_ae6d56c0befb0d93a97745ababeb76063}{00221}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_ae6d56c0befb0d93a97745ababeb76063}{DoesFileExist}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ stdfs::exists(file\_path);\ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00222}00222\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00223}00223\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00224}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a874c2ec609697bfef1d3301e7c3ca62f}{00224}}\ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a874c2ec609697bfef1d3301e7c3ca62f}{CacheFile}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00225}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a6755cb83a70b8b1bfcf7d8406db34d71}{00225}}\ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a6755cb83a70b8b1bfcf7d8406db34d71}{CacheFile}}(\textcolor{keyword}{const}\ stdfs::path\&\ file\_path)\ :\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a6755cb83a70b8b1bfcf7d8406db34d71}{file\_path}}(\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a6755cb83a70b8b1bfcf7d8406db34d71}{file\_path}})\ \{\}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00226}00226\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00227}00227\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00228}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a2720ddc74bbf18308f1b1cd99963afe8}{00228}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a2720ddc74bbf18308f1b1cd99963afe8}{PushLinesToFile}}(\textcolor{keyword}{const}\ TaggedLineMapNodeVec\&\ file\_nodes)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00229}00229\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ nd\ :\ file\_nodes)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00230}00230\ \ \ \ \ \ \ PushLinesToFile(nd.key(),\ nd.mapped());}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00231}00231\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00232}00232\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00233}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_abf34de8b50d546d7e60fbb35df19cc89}{00233}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_abf34de8b50d546d7e60fbb35df19cc89}{PushLinesToFile}}(\textcolor{keyword}{const}\ string\&\ tag,\ \textcolor{keyword}{const}\ vector<string>\&\ lines)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00234}00234\ \ \ \ \ \textcolor{comment}{//\ 1\ line\ for\ \#def\#\ directive}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00235}00235\ \ \ \ \ \textcolor{comment}{//\ 1\ line\ for\ \#end\#\ directive}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00236}00236\ \ \ \ \ \textcolor{comment}{//\ 1\ line\ for\ the\ tag.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00237}00237\ \ \ \ \ \textcolor{comment}{//\ 1\ line\ for\ each\ line\ in\ the\ cache.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00238}00238\ \ \ \ \ std::ofstream\ out\_file\_stream\{file\_path,\ std::ios::app\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00239}00239\ \ \ \ \ out\_file\_stream\ <<\ \textcolor{stringliteral}{"{}\#def\#\(\backslash\)n"{}}\ <<\ tag\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00240}00240\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ line\ :\ lines)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00241}00241\ \ \ \ \ \ \ out\_file\_stream\ <<\ line\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00242}00242\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00243}00243\ \ \ \ \ out\_file\_stream\ <<\ \textcolor{stringliteral}{"{}\#end\#\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00244}00244\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00245}00245\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00246}00246\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00247}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_abb2113600f945669ef5f7c336819add7}{00247}}\ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_abb2113600f945669ef5f7c336819add7}{stdfs}}::\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_abb2113600f945669ef5f7c336819add7}{path}}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_abb2113600f945669ef5f7c336819add7}{file\_path}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00248}\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_ac03c37fd1bd3a246b89c170bc194f650}{00248}}\ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_ac03c37fd1bd3a246b89c170bc194f650}{TaggedLinesMap}}\ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_ac03c37fd1bd3a246b89c170bc194f650}{live\_cache}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00249}00249\ \};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00250}00250\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00251}00251\ \textcolor{comment}{//auto\ cache\_file\_test()\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00252}00252\ \textcolor{comment}{//\ \ CacheFile\ cache\_file\{"{}C:\(\backslash\)\(\backslash\)candide\(\backslash\)\(\backslash\)cache\(\backslash\)\(\backslash\)file1.cpp"{}\};}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00253}00253\ \textcolor{comment}{//\ \ cache\_file.LoadLinesToLiveCache();}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00254}00254\ \textcolor{comment}{//\ \ cache\_file.PushLinesToLiveCache("{}binary\_path"{},\ \{"{}file1.cpp"{},\ "{}file2.cpp"{}\});}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00255}00255\ \textcolor{comment}{//\ \ cache\_file.PushLinesToLiveCache("{}cached\_files"{},\ \{"{}file3.cpp"{},\ "{}file4.cpp"{}\});}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00256}00256\ \textcolor{comment}{//\ \ cache\_file.SaveLiveCacheToFile();}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00257}00257\ \textcolor{comment}{//\}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00258}00258\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00259}00259\ \textcolor{comment}{//\ IDE\ startup\ settings,\ all\ values\ must\ be\ known\ at\ compile\ time.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00260}00260\ \textcolor{comment}{//\ Represent\ a\ .caide\ file}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00261}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings}{00261}}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings}{IdeSettings}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00262}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a5a6a846cb35393c01dc827fcf47bc30d}{00262}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{wchar\_t}*\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a5a6a846cb35393c01dc827fcf47bc30d}{kSolutionCacheSettingTag}}\ =\ L"{}\#\(\backslash\)n"{};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00263}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a58946bbdc06714b8090dbcca1a54661e}{00263}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a58946bbdc06714b8090dbcca1a54661e}{kDefaultRepoPath}}\ =\ L"{}C:\(\backslash\)\(\backslash\)candide\(\backslash\)\(\backslash\)repository\(\backslash\)\(\backslash\)"{};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00264}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a7123d7b81438ffe06044ff2e03dde9ab}{00264}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a7123d7b81438ffe06044ff2e03dde9ab}{stdfs}}::\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a7123d7b81438ffe06044ff2e03dde9ab}{path}}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a7123d7b81438ffe06044ff2e03dde9ab}{GetDefaultBinaryPath}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00265}00265\ \ \ \ \ \textcolor{keywordflow}{return}\ stdfs::path\{std::filesystem::current\_path().native()\ +\ L"{}\(\backslash\)\(\backslash\)"{}\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00266}00266\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00267}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a54b6b36ae4e61ae74de3d9de7ab2e033}{00267}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a54b6b36ae4e61ae74de3d9de7ab2e033}{stdfs}}::\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a54b6b36ae4e61ae74de3d9de7ab2e033}{path}}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a54b6b36ae4e61ae74de3d9de7ab2e033}{GetDefaultRepoPath}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00268}00268\ \ \ \ \ \textcolor{keywordflow}{return}\ stdfs::path(L"{}C:\(\backslash\)\(\backslash\)candide\(\backslash\)\(\backslash\)repository\(\backslash\)\(\backslash\)"{});}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00269}00269\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00270}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a96948f9001e66b404ccfc84d44ff5c63}{00270}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a96948f9001e66b404ccfc84d44ff5c63}{stdfs}}::\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a96948f9001e66b404ccfc84d44ff5c63}{path}}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a96948f9001e66b404ccfc84d44ff5c63}{GetDefaultSettingsFilePath}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00271}00271\ \ \ \ \ \textcolor{keywordflow}{return}\ GetDefaultBinaryPath().append(file\_extension::wide::kCaIdeSettings);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00272}00272\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00273}00273\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00274}00274\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00275}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a2d4fe8ddc4a866e6b249c36e2db2b9c0}{00275}}\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a2d4fe8ddc4a866e6b249c36e2db2b9c0}{stdfs}}::\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a2d4fe8ddc4a866e6b249c36e2db2b9c0}{path}}\&\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a2d4fe8ddc4a866e6b249c36e2db2b9c0}{ViewRepoPath}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ repository\_path;\ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00276}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a58c4e6fda4f6932221f6aa12d87d9592}{00276}}\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a58c4e6fda4f6932221f6aa12d87d9592}{stdfs}}::\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a58c4e6fda4f6932221f6aa12d87d9592}{path}}\&\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a58c4e6fda4f6932221f6aa12d87d9592}{ViewBinaryPath}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ binary\_path;\ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00277}00277\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00278}00278\ \ \ \textcolor{comment}{//\ Load\ the\ settings\ from\ a\ file.\ Return\ false\ if\ the\ file\ is\ invalid.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00279}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_aa023e556fbb0a904fa7dd54ec643caf7}{00279}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_aa023e556fbb0a904fa7dd54ec643caf7}{Load}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00280}00280\ \ \ \ \ \textcolor{comment}{//\ If\ file\ does\ not\ exist\ create\ a\ new\ default\ settings\ file.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00281}00281\ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{not}\ settings\_cache\_file.DoesFileExist())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00282}00282\ \ \ \ \ \ \ settings\_cache\_file.RefreshCacheFile();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00283}00283\ \ \ \ \ \ \ settings\_cache\_file.PushLinesToLiveCache(}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00284}00284\ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}binary\_path"{}},\ \{GetDefaultBinaryPath().string()\});}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00285}00285\ \ \ \ \ \ \ settings\_cache\_file.PushLinesToLiveCache(\textcolor{stringliteral}{"{}repository\_path"{}},}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00286}00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{GetDefaultRepoPath().string()\});}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00287}00287\ \ \ \ \ \ \ settings\_cache\_file.SaveLiveCacheToFile();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00288}00288\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00289}00289\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00290}00290\ \ \ \ \ settings\_cache\_file.LoadLinesToLiveCache();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00291}00291\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00292}00292\ \ \ \ \ \textcolor{keywordflow}{if}\ (settings\_cache\_file.ContainsTag(\textcolor{stringliteral}{"{}binary\_path"{}}))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00293}00293\ \ \ \ \ \ \ binary\_path\ =\ settings\_cache\_file.GetLineByTagAndIndex(\textcolor{stringliteral}{"{}binary\_path"{}},\ 0);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00294}00294\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00295}00295\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00296}00296\ \ \ \ \ \textcolor{keywordflow}{if}\ (settings\_cache\_file.ContainsTag(\textcolor{stringliteral}{"{}repository\_path"{}}))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00297}00297\ \ \ \ \ \ \ repository\_path\ =}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00298}00298\ \ \ \ \ \ \ \ \ \ \ settings\_cache\_file.GetLineByTagAndIndex(\textcolor{stringliteral}{"{}repository\_path"{}},\ 0);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00299}00299\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00300}00300\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00301}00301\ \ \ \ \ \textcolor{keywordflow}{if}\ (settings\_cache\_file.ContainsTag(\textcolor{stringliteral}{"{}cached\_solutions"{}}))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00302}00302\ \ \ \ \ \ \ cached\_solutions\ =}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00303}00303\ \ \ \ \ \ \ \ \ \ \ settings\_cache\_file.GetLinesByTagAsPath(\textcolor{stringliteral}{"{}cached\_solutions"{}});}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00304}00304\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00305}00305\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00306}00306\ \ \ \ \ settings\_cache\_file.ClearLiveCache();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00307}00307\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00308}00308\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00309}00309\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00310}00310\ \ \ \ \ \textcolor{comment}{//\ if\ (!std::filesystem::exists(GetSettingsFilePath()))\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00311}00311\ \ \ \ \ \textcolor{comment}{//\ \ \ //\ If\ no\ settings\ exist.\ Load\ defaults.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00312}00312\ \ \ \ \ \textcolor{comment}{//\ \ \ return\ Default();}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00313}00313\ \ \ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00314}00314\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00315}00315\ \ \ \ \ \textcolor{comment}{////\ Load.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00316}00316\ \ \ \ \ \textcolor{comment}{//\ string\ settings\ =\ LoadFileToStr(GetSettingsFilePath().string());}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00317}00317\ \ \ \ \ \textcolor{comment}{////\ Extract\ the\ binary\_path}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00318}00318\ \ \ \ \ \textcolor{comment}{//\ auto\ c\ =\ settings.begin();}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00319}00319\ \ \ \ \ \textcolor{comment}{//\ while\ (c\ !=\ settings.end())\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00320}00320\ \ \ \ \ \textcolor{comment}{//\ \ \ if\ (*c\ =\ '\(\backslash\)n')\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00321}00321\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ break;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00322}00322\ \ \ \ \ \textcolor{comment}{//\ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00323}00323\ \ \ \ \ \textcolor{comment}{//\ \ \ c++;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00324}00324\ \ \ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00325}00325\ \ \ \ \ \textcolor{comment}{//\ binary\_path\ =\ string(settings.begin(),\ c);}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00326}00326\ \ \ \ \ \textcolor{comment}{//\ c++;\ \ //\ advance\ past\ newline.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00327}00327\ \ \ \ \ \textcolor{comment}{//\ string::iterator\ repo\_path\_begin\ =\ c;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00328}00328\ \ \ \ \ \textcolor{comment}{////\ Extract\ the\ repository\ path.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00329}00329\ \ \ \ \ \textcolor{comment}{//\ while\ (c\ !=\ settings.end())\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00330}00330\ \ \ \ \ \textcolor{comment}{//\ \ \ if\ (*c\ =\ '\(\backslash\)n')\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00331}00331\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ break;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00332}00332\ \ \ \ \ \textcolor{comment}{//\ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00333}00333\ \ \ \ \ \textcolor{comment}{//\ \ \ c++;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00334}00334\ \ \ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00335}00335\ \ \ \ \ \textcolor{comment}{//\ repository\_path\ =\ string(settings.begin(),\ c);}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00336}00336\ \ \ \ \ \textcolor{comment}{//\ c++;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00337}00337\ \ \ \ \ \textcolor{comment}{////\ If\ there\ is\ more,\ it\ must\ be\ a\ \#\ indicating\ start\ of}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00338}00338\ \ \ \ \ \textcolor{comment}{////\ solution\ cache.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00339}00339\ \ \ \ \ \textcolor{comment}{//\ if\ (c\ !=\ settings.end()\ \&\&\ *c\ ==\ '\#')\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00340}00340\ \ \ \ \ \textcolor{comment}{//\ \ \ c\ +=\ 2;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00341}00341\ \ \ \ \ \textcolor{comment}{//\ \ \ string::iterator\ last\_cache\_begin\ =\ c;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00342}00342\ \ \ \ \ \textcolor{comment}{//\ \ \ //\ consume\ lines\ until\ next\ '\#'}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00343}00343\ \ \ \ \ \textcolor{comment}{//\ \ \ while\ (c\ !=\ settings.end()\ ||\ *c\ ==\ '\#')\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00344}00344\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ if\ (*c\ =\ '\(\backslash\)n')\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00345}00345\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ cached\_solutions.push\_back(string(last\_cache\_begin,\ c));}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00346}00346\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ c++;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00347}00347\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ last\_cache\_begin\ =\ c;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00348}00348\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \}\ else}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00349}00349\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ c++;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00350}00350\ \ \ \ \ \textcolor{comment}{//\ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00351}00351\ \ \ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00352}00352\ \ \ \ \ \textcolor{comment}{//\ return\ true;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00353}00353\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00354}00354\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00355}00355\ \ \ \textcolor{comment}{//\ Save\ the\ settings\ to\ a\ file\ in\ the\ current\ binary\ path.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00356}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a3672b0ca29f05d184f7f665b5c42cd95}{00356}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a3672b0ca29f05d184f7f665b5c42cd95}{Save}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00357}00357\ \ \ \ \ settings\_cache\_file.RefreshCacheFile();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00358}00358\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00359}00359\ \ \ \ \ settings\_cache\_file.PushLinesToLiveCache(\textcolor{stringliteral}{"{}binary\_path"{}},}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00360}00360\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{binary\_path.string()\});}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00361}00361\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00362}00362\ \ \ \ \ settings\_cache\_file.PushLinesToLiveCache(\textcolor{stringliteral}{"{}repository\_path"{}},}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00363}00363\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{repository\_path.string()\});}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00364}00364\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00365}00365\ \ \ \ \ vector<std::string>\ cached\_sln\_lines;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00366}00366\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ sln\ :\ cached\_solutions)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00367}00367\ \ \ \ \ \ \ cached\_sln\_lines.push\_back(sln.string());}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00368}00368\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00369}00369\ \ \ \ \ settings\_cache\_file.PushLinesToLiveCache(\textcolor{stringliteral}{"{}cached\_solutions"{}},}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00370}00370\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cached\_sln\_lines);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00371}00371\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00372}00372\ \ \ \ \ settings\_cache\_file.SaveLiveCacheToFile();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00373}00373\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00374}00374\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00375}00375\ \ \ \ \ \textcolor{comment}{////\ Overwrite\ previous\ file.\ Delete\ it.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00376}00376\ \ \ \ \ \textcolor{comment}{//\ stdfs::path\ file\ =\ GetSettingsFilePath();}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00377}00377\ \ \ \ \ \textcolor{comment}{//\ if\ (std::filesystem::exists(file))\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00378}00378\ \ \ \ \ \textcolor{comment}{//\ \ \ //\ If\ its\ empty\ dont\ have\ to\ clear.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00379}00379\ \ \ \ \ \textcolor{comment}{//\ \ \ if\ (!file.empty())\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00380}00380\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ std::filesystem::remove(file);}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00381}00381\ \ \ \ \ \textcolor{comment}{//\ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00382}00382\ \ \ \ \ \textcolor{comment}{//\ \ \ //\ Generate\ the\ new\ file.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00383}00383\ \ \ \ \ \textcolor{comment}{//\ \ \ GenerateSettingsFile();}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00384}00384\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00385}00385\ \ \ \ \ \textcolor{comment}{//\}\ else\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00386}00386\ \ \ \ \ \textcolor{comment}{//\ \ GenerateSettingsFile();}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00387}00387\ \ \ \ \ \textcolor{comment}{//\}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00388}00388\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00389}00389\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00390}00390\ \ \ \textcolor{comment}{//\ Cache\ a\ solution\ folder,\ if\ already\ chached,\ returns\ false.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00391}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a0ed5866dc03f1e17fcf849e015f00291}{00391}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a0ed5866dc03f1e17fcf849e015f00291}{CacheSolution}}(\textcolor{keyword}{const}\ stdfs::path\&\ sln\_folder)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00392}00392\ \ \ \ \ \textcolor{keywordflow}{if}\ (cached\_solutions.end()\ !=\ std::find(cached\_solutions.begin(),}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00393}00393\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cached\_solutions.end(),}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00394}00394\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sln\_folder))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00395}00395\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ \ \textcolor{comment}{//\ Solution\ is\ already\ cached...}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00396}00396\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00397}00397\ \ \ \ \ cached\_solutions.push\_back(sln\_folder);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00398}00398\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00399}00399\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00400}00400\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00401}00401\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00402}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a9ac74dcc401a04add18a81072240c359}{00402}}\ \ \ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a9ac74dcc401a04add18a81072240c359}{IdeSettings}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00403}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a5f42bbdc22bc8a0d5c9344509c860b39}{00403}}\ \ \ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a5f42bbdc22bc8a0d5c9344509c860b39}{IdeSettings}}(\textcolor{keyword}{const}\ stdfs::path\&\ bin\_path)\ :\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a5f42bbdc22bc8a0d5c9344509c860b39}{binary\_path}}(\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a5f42bbdc22bc8a0d5c9344509c860b39}{bin\_path}})\ \{\}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00404}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a8897b26dd7a9432c681ddbc999e1a79a}{00404}}\ \ \ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a8897b26dd7a9432c681ddbc999e1a79a}{IdeSettings}}(\textcolor{keyword}{const}\ stdfs::path\&\ bin\_path,\ \textcolor{keyword}{const}\ stdfs::path\&\ repo\_path)}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00405}00405\ \ \ \ \ \ \ :\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a8897b26dd7a9432c681ddbc999e1a79a}{binary\_path}}(\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a8897b26dd7a9432c681ddbc999e1a79a}{bin\_path}}),\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a8897b26dd7a9432c681ddbc999e1a79a}{repository\_path}}(\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a8897b26dd7a9432c681ddbc999e1a79a}{repo\_path}})\ \{\}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00406}00406\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00407}00407\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00408}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a4661fdc5d5adce2ff2a1fe527565da85}{00408}}\ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{CacheFile}}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a4661fdc5d5adce2ff2a1fe527565da85}{settings\_cache\_file}}\{\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings}{GetDefaultSettingsFilePath}}()\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00409}00409\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00410}00410\ \ \ \textcolor{comment}{//\ Get\ the\ binary\ path\ of\ the\ IDE.\ Current\ working\ directory\ of\ the\ C++}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00411}00411\ \ \ \textcolor{comment}{//\ context.\ NOTE:\ this\ a\ copy\ not\ reference.\ current\_path()\ is\ a\ dangerous}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00412}00412\ \ \ \textcolor{comment}{//\ global.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00413}00413\ \ \ \textcolor{comment}{//\ In\ the\ context\ of\ development\ it\ will\ be\ the\ cand-\/ide\ project\ folder.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00414}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_aa90461cb05632d1cf44f88a0b8da3e7d}{00414}}\ \ \ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_aa90461cb05632d1cf44f88a0b8da3e7d}{stdfs}}::\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_aa90461cb05632d1cf44f88a0b8da3e7d}{path}}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_aa90461cb05632d1cf44f88a0b8da3e7d}{binary\_path}}\{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00415}00415\ \ \ \ \ \ \ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings}{GetDefaultBinaryPath}}()\};\ \ \textcolor{comment}{//\ fs::path\ to\ the\ IDE\ executable/binaries.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00416}00416\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ is\ the\ current\ working\ path\ of}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00417}00417\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ the\ C++\ backend.\ fs::path\ to\ the}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00418}00418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cand-\/ide.exe\ folder.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00419}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_ac2db5f7f574c8f4b8a334ca0077228ea}{00419}}\ \ \ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_ac2db5f7f574c8f4b8a334ca0077228ea}{stdfs}}::\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_ac2db5f7f574c8f4b8a334ca0077228ea}{path}}\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_ac2db5f7f574c8f4b8a334ca0077228ea}{repository\_path}}\{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00420}00420\ \ \ \ \ \ \ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings}{GetDefaultRepoPath}}()\};\ \ \textcolor{comment}{//\ fs::path\ to\ the\ folder\ containing\ all\ solutions}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00421}00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Which\ belong\ to\ this\ IDE.\ Only\ these\ will\ be}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00422}00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Scanned\ and\ populated\ in\ the\ solution\ list.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00423}00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Each\ folder\ which\ ccontains\ a\ '.casln'\ file}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00424}00424\ \ \ \textcolor{comment}{//\ is\ a\ solution.\ Only\ one\ .casln\ is\ loaded\ per\ folder.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00425}00425\ \ \ \textcolor{comment}{//\ The\ rest\ are\ ignored.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00426}00426\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00427}\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_acbeaabc2562f4a969432dc12ffbaaed2}{00427}}\ \ \ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_acbeaabc2562f4a969432dc12ffbaaed2}{std}}::\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_acbeaabc2562f4a969432dc12ffbaaed2}{vector}}<\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_acbeaabc2562f4a969432dc12ffbaaed2}{stdfs}}::\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_acbeaabc2562f4a969432dc12ffbaaed2}{path}}>\ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_acbeaabc2562f4a969432dc12ffbaaed2}{cached\_solutions}}\{\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00428}00428\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00429}00429\ \ \ \textcolor{comment}{//\ inline\ void\ GenerateSettingsFile()\ const\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00430}00430\ \ \ \textcolor{comment}{//\ \ \ std::ofstream(GetSettingsFilePath())}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00431}00431\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ //\ 1.\ Binary\ fs::path}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00432}00432\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ <<\ binary\_path.string()}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00433}00433\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ <<\ '\(\backslash\)n'}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00434}00434\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ //\ 2.\ Repository\ fs::path}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00435}00435\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ <<\ repository\_path.string()}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00436}00436\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ <<\ '\(\backslash\)n'}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00437}00437\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ //\ 3.\ Cached\ Solutions}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00438}00438\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ <<\ [this]()\ -\/>\ string\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00439}00439\ \ \ \textcolor{comment}{//\ \ \ \ \ std::wstring\ sln\_folders\ =\ kSolutionCacheSettingTag;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00440}00440\ \ \ \textcolor{comment}{//\ \ \ \ \ for\ (auto\&\ cached\_sln\ :\ this-\/>cached\_solutions)\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00441}00441\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ sln\_folders\ +=\ cached\_sln.native()\ +\ L'\(\backslash\)n';}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00442}00442\ \ \ \textcolor{comment}{//\ \ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00443}00443\ \ \ \textcolor{comment}{//\ \ \ \ \ sln\_folders\ +=\ kSolutionCacheSettingTag;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00444}00444\ \ \ \textcolor{comment}{//\ \ \ \ \ return\ string(sln\_folders.cbegin(),\ sln\_folders.cend());}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00445}00445\ \ \ \textcolor{comment}{//\ \ \ \}();}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00446}00446\ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00447}00447\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00448}00448\ \ \ \textcolor{comment}{////\ Create\ folder\ default\ repository\ path\ of\ C://candide/repository/}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00449}00449\ \ \ \textcolor{comment}{////\ If\ folder\ does\ not\ exist.\ Adds\ repo\ path.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00450}00450\ \ \ \textcolor{comment}{////\ Generate\ a\ default\ settings\ file\ and\ save\ it\ in\ the\ current\ binary\ path.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00451}00451\ \ \ \textcolor{comment}{//\ bool\ Default()\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00452}00452\ \ \ \textcolor{comment}{//\ \ \ repository\_path\ =\ "{}C:\(\backslash\)\(\backslash\)candide\(\backslash\)\(\backslash\)repository\(\backslash\)\(\backslash\)"{};}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00453}00453\ \ \ \textcolor{comment}{//\ \ \ try\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00454}00454\ \ \ \textcolor{comment}{//\ \ \ \ \ std::filesystem::create\_directories(repository\_path);}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00455}00455\ \ \ \textcolor{comment}{//\ \ \ \ \ GenerateSettingsFile();}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00456}00456\ \ \ \textcolor{comment}{//\ \ \ \}\ catch\ (...)\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00457}00457\ \ \ \textcolor{comment}{//\ \ \ \ \ //\ Failed\ to\ load/create\ file.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00458}00458\ \ \ \textcolor{comment}{//\ \ \ \ \ return\ false;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00459}00459\ \ \ \textcolor{comment}{//\ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00460}00460\ \ \ \textcolor{comment}{//\ \ \ return\ true;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00461}00461\ \ \ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00462}00462\ \};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00463}00463\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00464}00464\ \textcolor{comment}{//\ Represent\ a\ .casln\ file\ which\ holds\ metadata\ about\ the\ solution.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00465}00465\ \textcolor{comment}{//\ Can\ be\ saved\ and\ reloaded.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00466}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings}{00466}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings}{SolutionSettings}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00467}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a837b0afd7a853c86aa2697739be216c4}{00467}}\ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a837b0afd7a853c86aa2697739be216c4}{stdfs}}::\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a837b0afd7a853c86aa2697739be216c4}{path}}\ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a837b0afd7a853c86aa2697739be216c4}{GetSettingsFilePath}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00468}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ad1629683aa47a8ecf30ea1f5e155e676}{00468}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ad1629683aa47a8ecf30ea1f5e155e676}{Default}}();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00469}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a3db9f1aaf4a8810e807a5d5c2a7e16d9}{00469}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a3db9f1aaf4a8810e807a5d5c2a7e16d9}{Save}}();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00470}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a77c77e2d6caa1ae2db04555fd08e8c5c}{00470}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a77c77e2d6caa1ae2db04555fd08e8c5c}{Load}}();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00471}00471\ \ \ \textcolor{comment}{//\ Directory\ of\ the\ solution.[RELATIVE:\ Relative\ to\ the\ repository\ path.]}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00472}00472\ \ \ \textcolor{comment}{//\ This\ is\ the\ working\ directory\ of\ the\ Solution's\ filesystem.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00473}00473\ \ \ \textcolor{comment}{//\ If\ you\ load\ a\ file\ from\ IDE\ code.\ This\ is\ the\ root\ directory.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00474}00474\ \ \ \textcolor{comment}{//\ For\ this\ solution's\ executable.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00475}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ad1eac1ed3dbc499f9d0cee7b0225e565}{00475}}\ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ad1eac1ed3dbc499f9d0cee7b0225e565}{stdfs}}::\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ad1eac1ed3dbc499f9d0cee7b0225e565}{path}}\ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ad1eac1ed3dbc499f9d0cee7b0225e565}{solution\_path}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00476}00476\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00477}00477\ \ \ \textcolor{comment}{//\ Solution\ file\ [RELATIVE:\ Relative\ to\ the\ repository\ path]}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00478}00478\ \ \ \textcolor{comment}{//\ .cansln\ file\ where\ solution\ metadata\ is\ stored.\ Only\ 1\ per\ solution.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00479}00479\ \ \ \textcolor{comment}{//\ It\ is\ auto-\/inferred\ to\ be\ the\ file\ named\ '.casln'\ inside\ the\ solution\ path.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00480}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a8898e1eb13d4a29b9ec90962547bbd02}{00480}}\ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a8898e1eb13d4a29b9ec90962547bbd02}{stdfs}}::\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a8898e1eb13d4a29b9ec90962547bbd02}{path}}\ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a8898e1eb13d4a29b9ec90962547bbd02}{solution\_file}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00481}00481\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00482}00482\ \ \ \textcolor{comment}{//\ .camake\ files\ describing\ a\ build\ process\ of\ this\ solution.Autogenerated,}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00483}00483\ \ \ \textcolor{comment}{//\ user-\/editable.\ unnamed\ file\ '.camake'\ is\ automatically\ included\ as\ the}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00484}00484\ \ \ \textcolor{comment}{//\ first\ and\ default\ build\ file.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00485}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a60f13b556199b983920c64ac586585c4}{00485}}\ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a60f13b556199b983920c64ac586585c4}{std}}::\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a60f13b556199b983920c64ac586585c4}{vector}}<\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a60f13b556199b983920c64ac586585c4}{stdfs}}::\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a60f13b556199b983920c64ac586585c4}{path}}>\ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a60f13b556199b983920c64ac586585c4}{build\_files}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00486}00486\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00487}00487\ \ \ \textcolor{comment}{//\ Working\ files\ which\ belong\ to\ the\ solution.\ Not\ including\ .casln\ /\ .camake}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00488}00488\ \ \ \textcolor{comment}{//\ files.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00489}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ab4bfcc15ebc4b0e8e5dafd12775c60b5}{00489}}\ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ab4bfcc15ebc4b0e8e5dafd12775c60b5}{std}}::\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ab4bfcc15ebc4b0e8e5dafd12775c60b5}{vector}}<\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ab4bfcc15ebc4b0e8e5dafd12775c60b5}{stdfs}}::\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ab4bfcc15ebc4b0e8e5dafd12775c60b5}{path}}>\ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ab4bfcc15ebc4b0e8e5dafd12775c60b5}{working\_files}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00490}00490\ \};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00491}00491\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00492}00492\ \textcolor{comment}{//\ Model\ of\ an\ instance\ of\ a\ file\ tab\ in\ the\ editor.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00493}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab}{00493}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab}{IdeFileTab}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00494}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab_ae58ae85f4296353ed4165d4f12d3446c}{00494}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab_ae58ae85f4296353ed4165d4f12d3446c}{is\_active}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00495}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab_aca2eb2d886786dac33d1c5abb0c0d5a9}{00495}}\ \ \ string*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab_aca2eb2d886786dac33d1c5abb0c0d5a9}{text\_buffer}}\{\textcolor{keyword}{new}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab}{string}}(\textcolor{stringliteral}{"{}"{}})\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00496}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab_a24bd1e8fcd2e9c9e43c70ff4e20451f4}{00496}}\ \ \ \textcolor{keyword}{const}\ string\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab_a24bd1e8fcd2e9c9e43c70ff4e20451f4}{tab\_name}}\{\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00497}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab_a53065ded4fc09ae62756c1d3bc683ff5}{00497}}\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab_a53065ded4fc09ae62756c1d3bc683ff5}{stdfs}}::\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab_a53065ded4fc09ae62756c1d3bc683ff5}{path}}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab_a53065ded4fc09ae62756c1d3bc683ff5}{file\_path}}\{\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00498}00498\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00499}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab_af5356e9597c8167cb546d47fa7eb8fcd}{00499}}\ \ \ \string~\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab_af5356e9597c8167cb546d47fa7eb8fcd}{IdeFileTab}}()\ \{\ \textcolor{keyword}{delete}\ text\_buffer;\ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00500}00500\ \};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00501}00501\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00502}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor}{00502}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor}{IdeFileEditor}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00503}00503\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00504}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a75b09fb2e537c89610e084811285cb4d}{00504}}\ \ \ \textcolor{keyword}{using}\ FileTab\ =\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab}{IdeFileTab}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00505}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a8794a471f7bc4bfbcfb27bc74bf8075c}{00505}}\ \ \ \textcolor{keyword}{using}\ ExpectedFileTabRef\ =\ \mbox{\hyperlink{namespacecxx}{cxx}}::\mbox{\hyperlink{classcxx_1_1_expected}{Expected}}<std::reference\_wrapper<\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab}{IdeFileTab}}>>;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00506}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a34bbdada374bfa608356abc53ffe91bd}{00506}}\ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor}{FileTabVec}}\ =\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor}{vector}}<\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor}{IdeFileTab}}>;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00507}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a50d6a0f3ed7ca3dd87f0d00baf27fef0}{00507}}\ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor}{FileTabVecIter}}\ =\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor}{vector}}<\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor}{IdeFileTab}}>::\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor}{iterator}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00508}00508\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00509}00509\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00510}00510\ \ \ \textcolor{comment}{//\ Add\ a\ new\ file\ tab\ to\ the\ editor\ given\ a\ file\ path.Also\ make\ it\ active.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00511}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a2c5e8c8cd0bedca270d9edbd5eb70dcf}{00511}}\ \ \ FileTab\&\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a2c5e8c8cd0bedca270d9edbd5eb70dcf}{AddFileTab}}(\textcolor{keyword}{const}\ stdfs::path\&\ file\_path)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00512}00512\ \ \ \ \ file\_tabs.emplace\_back(FileTab\{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00513}00513\ \ \ \ \ \ \ \ \ .is\_active\ =\ \textcolor{keyword}{false},}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00514}00514\ \ \ \ \ \ \ \ \ .text\_buffer\ =\ \textcolor{keyword}{new}\ string(\textcolor{stringliteral}{"{}"{}}),}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00515}00515\ \ \ \ \ \ \ \ \ .tab\_name\ =\ file\_path.filename().string(),}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00516}00516\ \ \ \ \ \ \ \ \ .file\_path\ =\ file\_path,}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00517}00517\ \ \ \ \ \});}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00518}00518\ \ \ \ \ \textcolor{keywordflow}{return}\ SetFileTabActiveUnchecked(file\_tabs.size()\ -\/\ 1);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00519}00519\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00520}00520\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00521}00521\ \ \ \textcolor{comment}{//\ Sets\ a\ file\ tab\ as\ active\ given\ a\ file\ path.\ If\ the\ file\ is\ not\ open,\ it}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00522}00522\ \ \ \textcolor{comment}{//\ will\ be\ opened\ and\ set\ as\ active.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00523}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_ae0756fa670445ab8d58369834fe58444}{00523}}\ \ \ FileTab\&\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_ae0756fa670445ab8d58369834fe58444}{SetFileTabActive}}(\textcolor{keyword}{const}\ stdfs::path\&\ file\_path)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00524}00524\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ tab\ :\ file\_tabs)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00525}00525\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tab.file\_path\ ==\ file\_path)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00526}00526\ \ \ \ \ \ \ \ \ tab.is\_active\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00527}00527\ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00528}00528\ \ \ \ \ \ \ \ \ tab.is\_active\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00529}00529\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00530}00530\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00531}00531\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00532}00532\ \ \ \ \ \textcolor{keyword}{auto}\ active\_tab\ =}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00533}00533\ \ \ \ \ \ \ \ \ std::find\_if(file\_tabs.begin(),\ file\_tabs.end(),}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00534}00534\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [](\textcolor{keyword}{const}\ FileTab\&\ tab)\ \{\ \textcolor{keywordflow}{return}\ tab.is\_active;\ \});}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00535}00535\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00536}00536\ \ \ \ \ \textcolor{keywordflow}{if}\ (active\_tab\ ==\ file\_tabs.end())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00537}00537\ \ \ \ \ \ \ AddFileTab(file\_path);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00538}00538\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ SetFileTabActive(file\_path);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00539}00539\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00540}00540\ \ \ \ \ \ \ active\_tab\_\ =\ active\_tab;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00541}00541\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *active\_tab;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00542}00542\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00543}00543\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00544}00544\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00545}00545\ \ \ \textcolor{comment}{//\ Sets\ active\ file\ tab\ given\ an\ index.\ if\ the\ index\ is\ out\ of\ bounds}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00546}00546\ \ \ \textcolor{comment}{//\ method\ will\ return\ error.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00547}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a4c49450156359fa16ea34b9241b7ccc8}{00547}}\ \ \ ExpectedFileTabRef\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a4c49450156359fa16ea34b9241b7ccc8}{SetFileTabActive}}(std::size\_t\ index)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00548}00548\ \ \ \ \ \textcolor{keywordflow}{if}\ (index\ >=\ file\_tabs.size())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00549}00549\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ExpectedFileTabRef::Failure(\textcolor{stringliteral}{"{}Index\ out\ of\ bounds."{}});}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00550}00550\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00551}00551\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00552}00552\ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ i\ =\ 0;\ i\ <\ file\_tabs.size();\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00553}00553\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ ==\ index)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00554}00554\ \ \ \ \ \ \ \ \ active\_tab\_\ =\ AdvanceIt(file\_tabs.begin(),\ i);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00555}00555\ \ \ \ \ \ \ \ \ active\_tab\_-\/>is\_active\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00556}00556\ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00557}00557\ \ \ \ \ \ \ \ \ file\_tabs[i].is\_active\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00558}00558\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00559}00559\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00560}00560\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00561}00561\ \ \ \ \ \textcolor{keywordflow}{return}\ ExpectedFileTabRef::Success(file\_tabs[index]);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00562}00562\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00563}00563\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00564}00564\ \ \ \textcolor{comment}{//\ Sets\ active\ file\ tab\ without\ checking\ out\ of\ bounds.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00565}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a2cf0f3dbebfc8c74072ab9a2316f5dfd}{00565}}\ \ \ FileTab\&\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a2cf0f3dbebfc8c74072ab9a2316f5dfd}{SetFileTabActiveUnchecked}}(std::size\_t\ index)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00566}00566\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ t\ :\ file\_tabs)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00567}00567\ \ \ \ \ \ \ t.is\_active\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00568}00568\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00569}00569\ \ \ \ \ file\_tabs[index].is\_active\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00570}00570\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00571}00571\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00572}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_adc3988927ebe11b7ac0b5c2961b11e1e}{00572}}\ \ \ string\&\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_adc3988927ebe11b7ac0b5c2961b11e1e}{GetActiveTextBuffer}}()\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00573}00573\ \ \ \ \ \textcolor{keywordflow}{return}\ *active\_tab\_-\/>text\_buffer;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00574}00574\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00575}00575\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00576}00576\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00577}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a96d955b82a60318e716846f19cfa5556}{00577}}\ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a96d955b82a60318e716846f19cfa5556}{FileTabVec}}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a96d955b82a60318e716846f19cfa5556}{file\_tabs}}\{\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00578}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_afa791428018924215e6510362404e03a}{00578}}\ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_afa791428018924215e6510362404e03a}{FileTabVecIter}}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_afa791428018924215e6510362404e03a}{active\_tab\_}}\{\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00579}00579\ \};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00580}00580\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00581}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_model}{00581}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_model}{IdeModel}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00582}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_model_aec6910eba9373a708b688a1140f37340}{00582}}\ \ \ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings}{IdeSettings}}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_model_aec6910eba9373a708b688a1140f37340}{settings}}\{\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00583}00583\ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings}{SolutionSettings}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00584}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_model_ae0ab527724c88a5a0823bd012e65b869}{00584}}\ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_model_ae0ab527724c88a5a0823bd012e65b869}{active\_sln\_settings}};\ \ \textcolor{comment}{//\ Settings\ of\ the\ currently\ active\ solution.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00585}00585\ \ \ \textcolor{comment}{//\ Initialize\ the\ IDE.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00586}00586\ \ \ \textcolor{comment}{//\ 1.\ Load\ settings\ from\ the\ IDE\ settings\ file.\ If\ the\ settings\ file\ does\ not}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00587}00587\ \ \ \textcolor{comment}{//\ exist,\ create\ it.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00588}00588\ \ \ \textcolor{comment}{//\ \ \ \ Default\ settings\ file:}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00589}00589\ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00590}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_model_af173f9906078413c01949a79f3da6be9}{00590}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_model_af173f9906078413c01949a79f3da6be9}{startup}}()\ \{\ \textcolor{keywordflow}{return}\ settings.Load();\ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00591}00591\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00592}00592\ \ \ \textcolor{comment}{//\ Creates\ a\ new\ solution.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00593}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_model_a9804ac49e4f37afe2b998213f3d3ff8f}{00593}}\ \ \ \mbox{\hyperlink{namespacecxx}{cxx}}::\mbox{\hyperlink{classcxx_1_1_bool_error}{BoolError}}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_model_a9804ac49e4f37afe2b998213f3d3ff8f}{NewSolution}}(\textcolor{keyword}{const}\ string\&\ name)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00594}00594\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ path\ exists.\ If\ it\ already\ does\ cancel.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00595}00595\ \ \ \ \ \textcolor{comment}{//\ Query\ for\ a\ diffrent\ solution\ name.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00596}00596\ \ \ \ \ stdfs::path\ sln\_folder\_path\ =\ settings.ViewRepoPath();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00597}00597\ \ \ \ \ sln\_folder\_path\ +=\ name;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00598}00598\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00599}00599\ \ \ \ \ \textcolor{keywordflow}{if}\ (stdfs::exists(sln\_folder\_path))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00600}00600\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Could\ not\ create\ solution\ dirs:\ Solution\ folder\ is\ already\ in\ "{}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00601}00601\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}use."{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00602}00602\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00603}00603\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00604}00604\ \ \ \ \ \textcolor{keywordflow}{if}\ (!stdfs::create\_directories(sln\_folder\_path))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00605}00605\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Could\ not\ create\ solution\ dirs:\ OS\ write\ access\ may\ not\ be\ "{}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00606}00606\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}available."{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00607}00607\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00608}00608\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00609}00609\ \ \ \ \ \textcolor{comment}{//\ Add\ this\ solution\ to\ the\ solution\ cache.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00610}00610\ \ \ \ \ settings.CacheSolution(sln\_folder\_path);}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00611}00611\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00612}00612\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ solution\ settings\ file.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00613}00613\ \ \ \ \ \textcolor{comment}{//\ Arg\ to\ constructor\ is\ the\ root\ solution\ dir.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00614}00614\ \ \ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings}{SolutionSettings}}\ sln\_settings\{sln\_folder\_path\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00615}00615\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00616}00616\ \ \ \ \ \textcolor{comment}{//\ Generate\ default\ solution\ settings.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00617}00617\ \ \ \ \ sln\_settings\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ad1629683aa47a8ecf30ea1f5e155e676}{.}}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ad1629683aa47a8ecf30ea1f5e155e676}{Default}}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ad1629683aa47a8ecf30ea1f5e155e676}{(}}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_ad1629683aa47a8ecf30ea1f5e155e676}{)}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00618}00618\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00619}00619\ \ \ \ \ \textcolor{comment}{//\ Set\ as\ current\ active\ solution.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00620}00620\ \ \ \ \ active\_sln\_settings\ =\ sln\_settings;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00621}00621\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00622}00622\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00623}00623\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00624}00624\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00625}00625\ \ \ \textcolor{comment}{//\ Open\ an\ existing\ solution\ as\ the\ active\ solution.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00626}00626\ \ \ \textcolor{comment}{//\ Impl\ Detail:}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00627}00627\ \ \ \textcolor{comment}{//\ \ 1.\ Find\ the\ directory\ with\ the\ same\ name\ as\ solution\ in\ the\ repo\ folder.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00628}00628\ \ \ \textcolor{comment}{//\ \ 2.\ Load\ the\ .casln\ settings\ file.\ If\ file\ is\ invalid,\ solution\ is}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00629}00629\ \ \ \textcolor{comment}{//\ \ corrupted.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00630}00630\ \ \ \textcolor{comment}{//\ \ 3.\ Load\ all\ the\ cached\ working\ files\ from\ the\ .casln\ settings\ into\ the}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00631}00631\ \ \ \textcolor{comment}{//\ \ file\ editor.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00632}00632\ \ \ \textcolor{comment}{//\ \ 4.\ Load\ last-\/active\ cached\ file.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00633}\mbox{\hyperlink{structcide_1_1backend_1_1_ide_model_aa2dba535f9fc7c90dda15ea2666968be}{00633}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcide_1_1backend_1_1_ide_model_aa2dba535f9fc7c90dda15ea2666968be}{OpenSolution}}(\textcolor{keyword}{const}\ string\&\ name)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00634}00634\ \ \ \ \ stdfs::path\ sln\_folder\_path\ =\ settings.ViewRepoPath();}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00635}00635\ \ \ \ \ sln\_folder\_path\ +=\ name;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00636}00636\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00637}00637\ \ \ \ \ \textcolor{keywordflow}{if}\ (!stdfs::exists(sln\_folder\_path))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00638}00638\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Could\ not\ open\ solution:\ solution\ folder\ does\ not\ exist."{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00639}00639\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00640}00640\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00641}00641\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ solution\ settings\ file.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00642}00642\ \ \ \ \ \mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings}{SolutionSettings}}\ sln\_settings\{sln\_folder\_path\};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00643}00643\ \ \ \ \ \textcolor{keywordflow}{if}\ (!sln\_settings\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a77c77e2d6caa1ae2db04555fd08e8c5c}{.}}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a77c77e2d6caa1ae2db04555fd08e8c5c}{Load}}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a77c77e2d6caa1ae2db04555fd08e8c5c}{(}}\mbox{\hyperlink{structcide_1_1backend_1_1_solution_settings_a77c77e2d6caa1ae2db04555fd08e8c5c}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00644}00644\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Could\ not\ open\ solution:\ .casln'\ solution\ settings\ file\ possibly\ "{}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00645}00645\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}corrupted."{}};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00646}00646\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00647}00647\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00648}00648\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ solution\ settings\ into\ the\ active\ solution.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00649}00649\ \ \ \ \ active\_sln\_settings\ =\ sln\_settings;}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00650}00650\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00651}00651\ \ \ \ \ \textcolor{comment}{////\ Load\ all\ the\ cached\ working\ files\ from\ the\ .casln\ settings\ into\ the}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00652}00652\ \ \ \ \ \textcolor{comment}{///\ file\ /\ editor.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00653}00653\ \ \ \ \ \textcolor{comment}{//\ for\ (auto\&\ file\ :\ active\_sln\_settings.working\_files)\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00654}00654\ \ \ \ \ \textcolor{comment}{//\ \ \ //\ Load\ the\ file\ into\ the\ editor.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00655}00655\ \ \ \ \ \textcolor{comment}{//\ \ \ //\ If\ the\ file\ is\ not\ found,\ skip\ it.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00656}00656\ \ \ \ \ \textcolor{comment}{//\ \ \ if\ (!stdfs::exists(file))\ \{}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00657}00657\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ continue;}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00658}00658\ \ \ \ \ \textcolor{comment}{//\ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00659}00659\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00660}00660\ \};}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00661}00661\ \textcolor{comment}{///\ @\}\ //\ end\ of\ cand\_cide\_backend}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00662}00662\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00663}00663\ \}\ \ \textcolor{comment}{//\ namespace\ cide::backend}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00664}00664\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00665}00665\ \textcolor{comment}{//\ Implementation}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00666}00666\ \textcolor{keyword}{namespace}\ cide::\mbox{\hyperlink{namespacecide}{backend}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00667}00667\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00668}00668\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00669}00669\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00670}00670\ \}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00671}00671\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00672}00672\ }
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00673}00673\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00674}00674\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00675}00675\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00676}00676\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00677}00677\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00678}00678\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00679}00679\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00680}00680\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00681}00681\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00682}00682\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00683}00683\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00684}00684\ \textcolor{comment}{//\ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00685}00685\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00686}00686\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00687}00687\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00688}00688\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00689}00689\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00690}00690\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{cide__backend_8h_source_l00691}00691\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+
+\end{DoxyCode}

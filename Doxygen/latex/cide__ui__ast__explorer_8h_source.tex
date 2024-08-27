@@ -1,0 +1,166 @@
+\doxysection{cide\+\_\+ui\+\_\+ast\+\_\+explorer.\+h}
+\hypertarget{cide__ui__ast__explorer_8h_source}{}\label{cide__ui__ast__explorer_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/ide/cide\_ui\_ast\_explorer.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/ide/cide\_ui\_ast\_explorer.h}}
+\mbox{\hyperlink{cide__ui__ast__explorer_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00001}00001\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00002}00002\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00003}00003\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00004}00004\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00005}00005\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00006}00006\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00007}00007\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00008}00008\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00009}00009\ \textcolor{comment}{///\ @file}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00010}00010\ \textcolor{comment}{///\ @ingroup\ cand\_cide}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00011}00011\ \textcolor{comment}{///\ @brief\ CIDE\ AST\ Explorer\ Widget.}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00012}00012\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00014}00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00015}00015\ \textcolor{comment}{//\ CIDE\ Common\ Defs}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00016}00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cide__common_8h}{"{}cide\_common.h"{}}}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00017}00017\ \textcolor{comment}{//\ CIDE\ Backend}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00018}00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cide__backend_8h}{"{}cide\_backend.h"{}}}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00019}00019\ \textcolor{comment}{//\ ImGui}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00020}00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{imgui__interface_8h}{"{}imgui\_interface.h"{}}}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00021}00021\ \textcolor{comment}{//\ C\&\ Compiler}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00022}00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__lexer_8h}{"{}caoco\_lexer.h"{}}}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00023}00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__parser_8h}{"{}caoco\_parser.h"{}}}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00025}00025\ \textcolor{keyword}{namespace}\ cide::\mbox{\hyperlink{namespacecide_1_1ui}{ui}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00026}00026\ \textcolor{comment}{///\ @addtogroup\ cand\_cide\_frontend}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00027}00027\ \textcolor{comment}{///\ @\{}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00029}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{00029}}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{AstExplorerInterface}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00030}00030\ \ \ \textcolor{comment}{//\ Functionality\ is\ built\ into\ the\ interface\ for\ now.}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00031}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a4c5e13605458ad6937cc4eb00ae8393b}{00031}}\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a4c5e13605458ad6937cc4eb00ae8393b}{ParseInputBuffer}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00032}00032\ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00033}00033\ \ \ \ \ \ \ \textcolor{keyword}{auto}\ lex\_result\ =\ caoco::Lexer::Lex(input\_text\_buffer\_);}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00034}00034\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{not}\ lex\_result)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00035}00035\ \ \ \ \ \ \ \ \ error\_text\_buffer\_\ =\ lex\_result.Error();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00036}00036\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00037}00037\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00038}00038\ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00039}00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ parse\_result\ =\ caoco::ParseTokens(lex\_result.Value());}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00040}00040\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{not}\ parse\_result)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00041}00041\ \ \ \ \ \ \ \ \ \ \ error\_text\_buffer\_\ =\ parse\_result.Error();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00043}00043\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00044}00044\ \ \ \ \ \ \ \ \ output\_ast\_\ =\ parse\_result.Extract();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00045}00045\ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::exception\&)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00046}00046\ \ \ \ \ \ \ \ \ error\_text\_buffer\_\ =\ \textcolor{stringliteral}{"{}Critical\ Error:\ parsing\ caused\ a\ throw."{}};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00047}00047\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00048}00048\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::exception\&)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00049}00049\ \ \ \ \ \ \ error\_text\_buffer\_\ =\ \textcolor{stringliteral}{"{}Critical\ Error:\ lexing\ caused\ a\ throw."{}};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00050}00050\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00052}00052\ \ \ \ \ error\_text\_buffer\_\ =\ \textcolor{stringliteral}{"{}[Parsing\ Success!]"{}};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00053}00053\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00055}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a9d0a99e7d3fe5acb36d0ca541b1018e3}{00055}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a9d0a99e7d3fe5acb36d0ca541b1018e3}{RecursiveDisplayAstTree}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco}{caoco}}::\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ node)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00056}00056\ \ \ \ \ \textcolor{comment}{//\ Each\ node\ is\ a\ tree\ node.}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00057}00057\ \ \ \ \ \textcolor{comment}{//\ Containing:}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00058}00058\ \ \ \ \ \textcolor{comment}{//\ 1.\ Node\ Type\ as\ Text}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00059}00059\ \ \ \ \ \textcolor{comment}{//\ 2.\ Node\ Literal\ as\ Text}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00060}00060\ \ \ \ \ \textcolor{comment}{//\ 3.\ Children\ As\ a\ TreeNode}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00061}00061\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_node\_open\ =\ ImGui::TreeNode(caoco::eAstEnumStr(node.Type()).data());}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00062}00062\ \ \ \ \ \textcolor{keywordflow}{if}\ (is\_node\_open)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00063}00063\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (node.Literal()\ !=\ \textcolor{stringliteral}{"{}"{}})\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00064}00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_data\_node\_open\ =\ ImGui::TreeNode(\textcolor{stringliteral}{"{}data:"{}});}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00065}00065\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (is\_data\_node\_open)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00066}00066\ \ \ \ \ \ \ \ \ \ \ ImGui::Text(\textcolor{stringliteral}{"{}Literal:\ \%s"{}},\ node.Literal().c\_str());}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ ImGui::TreePop();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00068}00068\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00069}00069\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00070}00070\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{not}\ node\mbox{\hyperlink{classcaoco_1_1_ast_a8b1ba9cd7fd95dda3614640192c21a8f}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_a8b1ba9cd7fd95dda3614640192c21a8f}{Empty}}\mbox{\hyperlink{classcaoco_1_1_ast_a8b1ba9cd7fd95dda3614640192c21a8f}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_a8b1ba9cd7fd95dda3614640192c21a8f}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00071}00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_children\_node\_open\ =\ ImGui::TreeNode(\textcolor{stringliteral}{"{}children:"{}});}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00072}00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (is\_children\_node\_open)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00073}00073\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ child\ :\ node.Children())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00074}00074\ \ \ \ \ \ \ \ \ \ \ \ \ RecursiveDisplayAstTree(child);}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00075}00075\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00076}00076\ \ \ \ \ \ \ \ \ \ \ ImGui::TreePop();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00077}00077\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00078}00078\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00079}00079\ \ \ \ \ \ \ ImGui::TreePop();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00080}00080\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00081}00081\ \ \ \};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00083}00083\ \ \ \textcolor{comment}{//\ Display\ the\ ast\ as\ a\ tree\ node\ view.}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00084}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_aee297b95f6d306e7bdb3ef573f9d41ae}{00084}}\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_aee297b95f6d306e7bdb3ef573f9d41ae}{DisplayAstView}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00085}00085\ \ \ \ \ \textcolor{keywordflow}{if}\ (ast\_view\_context.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00086}00086\ \ \ \ \ \ \ RecursiveDisplayAstTree(output\_ast\_);}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00087}00087\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00088}00088\ \ \ \ \ \textcolor{comment}{//\ ast\_view\_.Display();}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00089}00089\ \ \ \ \ ast\_view\_context.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00090}00090\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00092}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a82230e9ddd85ccbcd0cb127eaaba7cc6}{00092}}\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a82230e9ddd85ccbcd0cb127eaaba7cc6}{DisplayTextInput}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00093}00093\ \ \ \ \ \textcolor{keywordflow}{if}\ (text\_input\_context\_.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00094}00094\ \ \ \ \ \ \ text\_input\_.BeginLate();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00095}00095\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00096}00096\ \ \ \ \ text\_input\_context\_.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00097}00097\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00099}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a3fc04a84fa5a59a02f4b3b9cc043a16c}{00099}}\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a3fc04a84fa5a59a02f4b3b9cc043a16c}{DisplayToolbar}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00100}00100\ \ \ \ \ \textcolor{keywordflow}{if}\ (toolbar\_context\_.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00101}00101\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (parse\_button\_.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00102}00102\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Parse\ the\ input\ text.}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00103}00103\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a4c5e13605458ad6937cc4eb00ae8393b}{ParseInputBuffer}}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a4c5e13605458ad6937cc4eb00ae8393b}{(}}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a4c5e13605458ad6937cc4eb00ae8393b}{)}};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00104}00104\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00105}00105\ \ \ \ \ \ \ cgui::SameLine();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00106}00106\ \ \ \ \ \ \ error\_output\_.BeginLate();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00107}00107\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00108}00108\ \ \ \ \ toolbar\_context\_.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00109}00109\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00110}00110\ }
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00111}00111\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00112}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a6ffe2cfae0706b35e3779f05dfac29f1}{00112}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a6ffe2cfae0706b35e3779f05dfac29f1}{Display}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00113}00113\ \ \ \ \ window\_.BeginLate();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00114}00114\ \ \ \ \ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a3fc04a84fa5a59a02f4b3b9cc043a16c}{DisplayToolbar}}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a3fc04a84fa5a59a02f4b3b9cc043a16c}{(}}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a3fc04a84fa5a59a02f4b3b9cc043a16c}{)}};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00115}00115\ \ \ \ \ cgui::Separator();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00116}00116\ \ \ \ \ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a82230e9ddd85ccbcd0cb127eaaba7cc6}{DisplayTextInput}}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a82230e9ddd85ccbcd0cb127eaaba7cc6}{(}}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a82230e9ddd85ccbcd0cb127eaaba7cc6}{)}};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00117}00117\ \ \ \ \ cgui::SameLine();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00118}00118\ \ \ \ \ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_aee297b95f6d306e7bdb3ef573f9d41ae}{DisplayAstView}}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_aee297b95f6d306e7bdb3ef573f9d41ae}{(}}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_aee297b95f6d306e7bdb3ef573f9d41ae}{)}};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00119}00119\ \ \ \ \ window\_.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00120}00120\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00122}00122\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00123}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a3a5365c51a4d10e68567d387988eddef}{00123}}\ \ \ \mbox{\hyperlink{namespacecaoco}{caoco}}::\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a3a5365c51a4d10e68567d387988eddef}{output\_ast\_}};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00124}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_aaebc572f3c91f1f0b8222c6ff87bc002}{00124}}\ \ \ string\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_aaebc572f3c91f1f0b8222c6ff87bc002}{input\_text\_buffer\_}};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00125}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_acc02b4bbc78700fa1970e881cebd6e8c}{00125}}\ \ \ string\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_acc02b4bbc78700fa1970e881cebd6e8c}{error\_text\_buffer\_}};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00126}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_aaf814ed96cf10d253d3044b8f2617751}{00126}}\ \ \ CguiWindow\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_aaf814ed96cf10d253d3044b8f2617751}{window\_}}\{\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{CguiWindow}}::\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{Delayed}}(\textcolor{stringliteral}{"{}Ast\ Explorer"{}})\};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00127}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a10f390e2f96ddbcb2485ddab839cdb55}{00127}}\ \ \ CguiSubcontext\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a10f390e2f96ddbcb2485ddab839cdb55}{toolbar\_context\_}}\{\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{CguiSubcontext}}::\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{Delayed}}(\{1280.f,\ 100.f\})\};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00128}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_af48bc238007da88dfd43a580c9863307}{00128}}\ \ \ CguiButton\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_af48bc238007da88dfd43a580c9863307}{parse\_button\_}}\{\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{CguiButton}}::\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{Delayed}}(\textcolor{stringliteral}{"{}Parse"{}})\};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00129}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_af35e043f014ee165d775373f9c5d2031}{00129}}\ \ \ CguiSubcontext\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_af35e043f014ee165d775373f9c5d2031}{text\_input\_context\_}}\{\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{CguiSubcontext}}::\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{Delayed}}(\{640.f,\ 600.f\})\};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00130}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a955792c6c19ee224e99f0d01e6c46726}{00130}}\ \ \ CguiMultilineTextInput\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a955792c6c19ee224e99f0d01e6c46726}{text\_input\_}}\{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00131}00131\ \ \ \ \ \ \ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{CguiMultilineTextInput}}::\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{Delayed}}(\textcolor{stringliteral}{"{}Ast\ Explorer\ Input"{}},\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{input\_text\_buffer\_}},}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00132}00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{cgui}}::\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{kExpandWidgetToRemainingSpaceXY}})\};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00133}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a19bdeb953d3b35e0ba021f518210bdcd}{00133}}\ \ \ CguiMultilineTextInput\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a19bdeb953d3b35e0ba021f518210bdcd}{error\_output\_}}\{}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00134}00134\ \ \ \ \ \ \ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{CguiMultilineTextInput}}::\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{Delayed}}(\textcolor{stringliteral}{"{}Error\ Output"{}},\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{error\_text\_buffer\_}},}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00135}00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{cgui}}::\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{kExpandWidgetToRemainingSpaceXY}})\};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00136}\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a7c5299a7a2459e94f259c928761fc3cc}{00136}}\ \ \ CguiSubcontext\ \mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface_a7c5299a7a2459e94f259c928761fc3cc}{ast\_view\_context}}\{\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{CguiSubcontext}}::\mbox{\hyperlink{classcide_1_1ui_1_1_ast_explorer_interface}{Delayed}}(\{640.f,\ 600.f\})\};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00137}00137\ \};}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00138}00138\ \textcolor{comment}{///\ @\}\ //\ end\ of\ cand\_cide\_frontend}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00140}00140\ \}\ \ \textcolor{comment}{//\ namespace\ cide::ui}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00141}00141\ }
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00142}00142\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00143}00143\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00144}00144\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00145}00145\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00146}00146\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00147}00147\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00148}00148\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00149}00149\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00150}00150\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00151}00151\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00152}00152\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00153}00153\ \textcolor{comment}{//\ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00154}00154\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00155}00155\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00156}00156\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00157}00157\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00158}00158\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00159}00159\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{cide__ui__ast__explorer_8h_source_l00160}00160\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+
+\end{DoxyCode}

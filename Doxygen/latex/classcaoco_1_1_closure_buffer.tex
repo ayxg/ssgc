@@ -1,0 +1,279 @@
+\doxysection{caoco\+::Closure\+Buffer Class Reference}
+\hypertarget{classcaoco_1_1_closure_buffer}{}\label{classcaoco_1_1_closure_buffer}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+
+
+Container for a list of closures referencing a token stream.  
+
+
+
+
+{\ttfamily \#include $<$caoco\+\_\+token\+\_\+closure.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcaoco_1_1_closure_buffer_aa5142015bc89079371d01a22e2c001ef}{Push\+Front\+Closure}} (\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} front)
+\item 
+void \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a8b4c57ceba4dfff3fc6217620e81fe5e}{Push\+Front\+Closure}} (\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} front, \mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} back)
+\item 
+void \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a7cae5484598cf10b7ace0ba0ce5a08bc}{Push\+Back\+Closure}} (\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} front)
+\item 
+void \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a980ef04166352403e9d9afd352f1a9dc}{Push\+Back\+Closure}} (\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} front, \mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} back)
+\item 
+void \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a4f269010528fc6e6553d3171b4f78a44}{Pop\+Closure}} ()
+\item 
+void \mbox{\hyperlink{classcaoco_1_1_closure_buffer_aadc4e04f21454014076e78b5b0a1d88a}{Pop\+Closure}} (\mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}} which)
+\item 
+void \mbox{\hyperlink{classcaoco_1_1_closure_buffer_ad8406739b27f444266249f7bf24ea627}{Pop\+Closure\+If}} (auto \&\&condition)
+\item 
+std\+::size\+\_\+t \mbox{\hyperlink{classcaoco_1_1_closure_buffer_abb4e7cd01a052de0e224d4f399e05c85}{Closure\+Count}} () const
+\begin{DoxyCompactList}\small\item\em Returns the size of the internal closure list minus the sentinel begin. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}} \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a779f95a2f87f6d998d27aced21c284c2}{Last\+Closure}} ()
+\begin{DoxyCompactList}\small\item\em Returns iter to the last closure.(One before the end). \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} \mbox{\hyperlink{classcaoco_1_1_closure_buffer_afa780af951c7c40cbeca048cb37a5e34}{Last\+Closure\+Front}} ()
+\begin{DoxyCompactList}\small\item\em Returns the token iterator at the front of the last closure. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} \mbox{\hyperlink{classcaoco_1_1_closure_buffer_ab8b13c7830e0f34c6a9e266ddab8c726}{Last\+Closure\+Back}} ()
+\begin{DoxyCompactList}\small\item\em Returns the token iterator at the back of the last closure. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}} \mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{Find\+Closure\+Reverse}} (std\+::function$<$ bool(\mbox{\hyperlink{classcaoco_1_1_closure}{Closure}} \&)$>$ \&\&condition)
+\begin{DoxyCompactList}\small\item\em Search from the end of the closure list until first occurence. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}} $>$ \mbox{\hyperlink{group__cand__compiler__parser__closure_ga3605863364783548715e4b08e6313a54}{Find\+Closure\+Reverse\+Consecutive}} (std\+::function$<$ bool(\mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}}, \mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}})$>$ \&\&condition)
+\begin{DoxyCompactList}\small\item\em Search from the end of the closure list for repeated occurences. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}} $>$ \mbox{\hyperlink{group__cand__compiler__parser__closure_gae3630edc555f5019d8e36afea25cd36e}{Find\+Closure\+Reverse\+Consecutive\+And\+Ignore}} (std\+::function$<$ bool(\mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}}, \mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}})$>$ \&\&condition, std\+::function$<$ bool(\mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}})$>$ \&\&ignore\+\_\+condition)
+\begin{DoxyCompactList}\small\item\em Search from the end of the closure list for repeated occurences ignoring certain elements based on ignore\+\_\+condition. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__cand__compiler__parser__closure_gac10b01009cb8e30ed8601a0932bc05bc}{Stream\+Insert\+Before\+Closure}} (\mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}} closure\+\_\+it, \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} token)
+\begin{DoxyCompactList}\small\item\em Insert token before the front of the specified closure in the token stream. \doxylink{classcaoco_1_1_closure}{Closure} must be retrieved from this \doxylink{classcaoco_1_1_closure_buffer}{Closure\+Buffer} instance. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__cand__compiler__parser__closure_ga8d2591ec561f1273293dbfef6738489d}{Stream\+Insert\+After\+Closure}} (\mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}} closure\+\_\+it, \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} token)
+\begin{DoxyCompactList}\small\item\em Insert token after the back of the specified closure in the token stream. \doxylink{classcaoco_1_1_closure}{Closure} must be retrieved from this \doxylink{classcaoco_1_1_closure_buffer}{Closure\+Buffer} instance. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} \mbox{\hyperlink{classcaoco_1_1_closure_buffer_af96339d1817d830c83517be14f35806d}{Last\+Streamed}} ()
+\begin{DoxyCompactList}\small\item\em Get the last pushed token in the token stream. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a64f76c53db25161e5bb2306a8a669507}{Stream\+Push\+Back}} (\mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} token)
+\item 
+\mbox{\hyperlink{namespacecaoco_ac7aba1688b4d2fd41f7896171c3c75b2}{Tk\+Vector}} \mbox{\hyperlink{group__cand__compiler__parser__closure_ga22618655133d195babd2e7527828e240}{Stream\+To\+Vector}} ()
+\item 
+\mbox{\hyperlink{classcaoco_1_1_closure_buffer_a440e13926982ebd9f672124d464dd2a9}{Closure\+Buffer}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gaf99934bb2c8e64d032bbd5ff13901867}{Tk\+List}} \mbox{\hyperlink{classcaoco_1_1_closure_buffer_ae2650add0cd14b9235da505bf1afe11f}{token\+\_\+stream\+\_\+}}
+\item 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gaf9f577b209e0349d3b6330edd1a85af9}{Cosure\+List}} \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a271e5675acadb15d5fadf3ca47c88242}{closures\+\_\+}}
+\item 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}} \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a1921b41df67aebac4f8504eaa67f5e8c}{sentinel\+\_\+begin\+\_\+closure\+\_\+}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} \mbox{\hyperlink{group__cand__compiler__parser__closure_ga079d9a591eeebc62d596bcb5d5b72706}{k\+Sentinel\+Begin}}
+\begin{DoxyCompactList}\small\item\em Sentinel beginning of closure buffer. HAS to be set or else begin is the end before and after first insertion. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Container for a list of closures referencing a token stream. 
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00083}{83}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcaoco_1_1_closure_buffer_a440e13926982ebd9f672124d464dd2a9}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!ClosureBuffer@{ClosureBuffer}}
+\index{ClosureBuffer@{ClosureBuffer}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{ClosureBuffer()}{ClosureBuffer()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_a440e13926982ebd9f672124d464dd2a9} 
+caoco\+::\+Closure\+Buffer\+::\+Closure\+Buffer (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00145}{145}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcaoco_1_1_closure_buffer_abb4e7cd01a052de0e224d4f399e05c85}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!ClosureCount@{ClosureCount}}
+\index{ClosureCount@{ClosureCount}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{ClosureCount()}{ClosureCount()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_abb4e7cd01a052de0e224d4f399e05c85} 
+std\+::size\+\_\+t caoco\+::\+Closure\+Buffer\+::\+Closure\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns the size of the internal closure list minus the sentinel begin. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00104}{104}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_a779f95a2f87f6d998d27aced21c284c2}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!LastClosure@{LastClosure}}
+\index{LastClosure@{LastClosure}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{LastClosure()}{LastClosure()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_a779f95a2f87f6d998d27aced21c284c2} 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}} caoco\+::\+Closure\+Buffer\+::\+Last\+Closure (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns iter to the last closure.(One before the end). 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00107}{107}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_ab8b13c7830e0f34c6a9e266ddab8c726}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!LastClosureBack@{LastClosureBack}}
+\index{LastClosureBack@{LastClosureBack}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{LastClosureBack()}{LastClosureBack()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_ab8b13c7830e0f34c6a9e266ddab8c726} 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} caoco\+::\+Closure\+Buffer\+::\+Last\+Closure\+Back (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns the token iterator at the back of the last closure. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00113}{113}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_afa780af951c7c40cbeca048cb37a5e34}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!LastClosureFront@{LastClosureFront}}
+\index{LastClosureFront@{LastClosureFront}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{LastClosureFront()}{LastClosureFront()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_afa780af951c7c40cbeca048cb37a5e34} 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} caoco\+::\+Closure\+Buffer\+::\+Last\+Closure\+Front (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns the token iterator at the front of the last closure. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00110}{110}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_af96339d1817d830c83517be14f35806d}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!LastStreamed@{LastStreamed}}
+\index{LastStreamed@{LastStreamed}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{LastStreamed()}{LastStreamed()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_af96339d1817d830c83517be14f35806d} 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} caoco\+::\+Closure\+Buffer\+::\+Last\+Streamed (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the last pushed token in the token stream. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00138}{138}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_a4f269010528fc6e6553d3171b4f78a44}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!PopClosure@{PopClosure}}
+\index{PopClosure@{PopClosure}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{PopClosure()}{PopClosure()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_a4f269010528fc6e6553d3171b4f78a44} 
+void caoco\+::\+Closure\+Buffer\+::\+Pop\+Closure (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00097}{97}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_aadc4e04f21454014076e78b5b0a1d88a}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!PopClosure@{PopClosure}}
+\index{PopClosure@{PopClosure}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{PopClosure()}{PopClosure()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_aadc4e04f21454014076e78b5b0a1d88a} 
+void caoco\+::\+Closure\+Buffer\+::\+Pop\+Closure (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}}}]{which}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00098}{98}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_ad8406739b27f444266249f7bf24ea627}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!PopClosureIf@{PopClosureIf}}
+\index{PopClosureIf@{PopClosureIf}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{PopClosureIf()}{PopClosureIf()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_ad8406739b27f444266249f7bf24ea627} 
+void caoco\+::\+Closure\+Buffer\+::\+Pop\+Closure\+If (\begin{DoxyParamCaption}\item[{auto \&\&}]{condition}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00099}{99}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_a7cae5484598cf10b7ace0ba0ce5a08bc}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!PushBackClosure@{PushBackClosure}}
+\index{PushBackClosure@{PushBackClosure}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{PushBackClosure()}{PushBackClosure()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_a7cae5484598cf10b7ace0ba0ce5a08bc} 
+void caoco\+::\+Closure\+Buffer\+::\+Push\+Back\+Closure (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}}}]{front}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00091}{91}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_a980ef04166352403e9d9afd352f1a9dc}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!PushBackClosure@{PushBackClosure}}
+\index{PushBackClosure@{PushBackClosure}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{PushBackClosure()}{PushBackClosure()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_a980ef04166352403e9d9afd352f1a9dc} 
+void caoco\+::\+Closure\+Buffer\+::\+Push\+Back\+Closure (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}}}]{front}{, }\item[{\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}}}]{back}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00094}{94}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_aa5142015bc89079371d01a22e2c001ef}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!PushFrontClosure@{PushFrontClosure}}
+\index{PushFrontClosure@{PushFrontClosure}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{PushFrontClosure()}{PushFrontClosure()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_aa5142015bc89079371d01a22e2c001ef} 
+void caoco\+::\+Closure\+Buffer\+::\+Push\+Front\+Closure (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}}}]{front}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00085}{85}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_a8b4c57ceba4dfff3fc6217620e81fe5e}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!PushFrontClosure@{PushFrontClosure}}
+\index{PushFrontClosure@{PushFrontClosure}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{PushFrontClosure()}{PushFrontClosure()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_a8b4c57ceba4dfff3fc6217620e81fe5e} 
+void caoco\+::\+Closure\+Buffer\+::\+Push\+Front\+Closure (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}}}]{front}{, }\item[{\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}}}]{back}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00088}{88}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_a64f76c53db25161e5bb2306a8a669507}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!StreamPushBack@{StreamPushBack}}
+\index{StreamPushBack@{StreamPushBack}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{StreamPushBack()}{StreamPushBack()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_a64f76c53db25161e5bb2306a8a669507} 
+void caoco\+::\+Closure\+Buffer\+::\+Stream\+Push\+Back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}}]{token}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00140}{140}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcaoco_1_1_closure_buffer_a271e5675acadb15d5fadf3ca47c88242}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!closures\_@{closures\_}}
+\index{closures\_@{closures\_}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{closures\_}{closures\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_a271e5675acadb15d5fadf3ca47c88242} 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gaf9f577b209e0349d3b6330edd1a85af9}{Cosure\+List}} caoco\+::\+Closure\+Buffer\+::closures\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00156}{156}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_a1921b41df67aebac4f8504eaa67f5e8c}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!sentinel\_begin\_closure\_@{sentinel\_begin\_closure\_}}
+\index{sentinel\_begin\_closure\_@{sentinel\_begin\_closure\_}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{sentinel\_begin\_closure\_}{sentinel\_begin\_closure\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_a1921b41df67aebac4f8504eaa67f5e8c} 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{Closure\+List\+Iter}} caoco\+::\+Closure\+Buffer\+::sentinel\+\_\+begin\+\_\+closure\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00157}{157}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_buffer_ae2650add0cd14b9235da505bf1afe11f}\index{caoco::ClosureBuffer@{caoco::ClosureBuffer}!token\_stream\_@{token\_stream\_}}
+\index{token\_stream\_@{token\_stream\_}!caoco::ClosureBuffer@{caoco::ClosureBuffer}}
+\doxysubsubsection{\texorpdfstring{token\_stream\_}{token\_stream\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_buffer_ae2650add0cd14b9235da505bf1afe11f} 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gaf99934bb2c8e64d032bbd5ff13901867}{Tk\+List}} caoco\+::\+Closure\+Buffer\+::token\+\_\+stream\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00155}{155}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/\mbox{\hyperlink{caoco__token__closure_8h}{caoco\+\_\+token\+\_\+closure.\+h}}\end{DoxyCompactItemize}

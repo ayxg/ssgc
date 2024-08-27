@@ -1,0 +1,314 @@
+\doxysection{cide\+\_\+ui.\+h}
+\hypertarget{cide__ui_8h_source}{}\label{cide__ui_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/ide/cide\_ui.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/ide/cide\_ui.h}}
+\mbox{\hyperlink{cide__ui_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00001}00001\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00002}00002\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00003}00003\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00004}00004\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00005}00005\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00006}00006\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00007}00007\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00008}00008\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00009}00009\ \textcolor{comment}{///\ @file}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00010}00010\ \textcolor{comment}{///\ @ingroup\ cand\_cide}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00011}00011\ \textcolor{comment}{///\ @brief\ CIDE\ graphical\ user\ interface\ and\ presentation\ implementation.}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00012}00012\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00014}00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00015}00015\ \textcolor{comment}{//\ CIDE\ Common\ Defs}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00016}00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cide__common_8h}{"{}cide\_common.h"{}}}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00017}00017\ \textcolor{comment}{//\ CIDE\ Backend}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00018}00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cide__backend_8h}{"{}cide\_backend.h"{}}}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00019}00019\ \textcolor{comment}{//\ ImGui}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00020}00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{imgui__interface_8h}{"{}imgui\_interface.h"{}}}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00022}00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h}{"{}cide\_ui\_cpp\_test\_explorer.h"{}}}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00023}00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cide__ui__ast__explorer_8h}{"{}cide\_ui\_ast\_explorer.h"{}}}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00025}\mbox{\hyperlink{namespacecide_1_1ui}{00025}}\ \textcolor{keyword}{namespace}\ cide::\mbox{\hyperlink{namespacecide_1_1ui}{ui}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00026}00026\ \textcolor{comment}{///\ @addtogroup\ cand\_cide\_frontend}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00027}00027\ \textcolor{comment}{///\ @\{}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00029}00029\ \textcolor{comment}{//\ Main\ CIDE\ Interface}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00030}00030\ \textcolor{keyword}{class}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{CideTopMenuBarInterface}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00031}00031\ \textcolor{keyword}{class}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface}{CideFileEditorInterface}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00032}00032\ \textcolor{keyword}{class}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{CideSolutionToolbarInterface}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00033}00033\ \textcolor{keyword}{class}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface}{CideUserInterface}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00035}\mbox{\hyperlink{group__cand__cide__frontend_gaaa34c847cd5e14c04c0d1c8a9d08aa9c}{00035}}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{group__cand__cide__frontend_gaaa34c847cd5e14c04c0d1c8a9d08aa9c}{kWindowWidth}}\ =\ 800.f;}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00036}\mbox{\hyperlink{group__cand__cide__frontend_ga7ef61779ef6719f987000c5f32fda49d}{00036}}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{group__cand__cide__frontend_ga7ef61779ef6719f987000c5f32fda49d}{kWindowHeight}}\ =\ 800.f;}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00038}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{00038}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{CideTopMenuBarInterface}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00039}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a52c3d822036a98aa117cfa5142954fc8}{00039}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{group__cppmodule2__cppextended_ga738607799d6938e1b15f463688029cd5}{LAMBDA}}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a52c3d822036a98aa117cfa5142954fc8}{xNullCallback}}\ =\ []()\ \{\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00040}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a658f5cd479d214afab6bb434a28e2bdf}{00040}}\ \ \ \textcolor{keyword}{using}\ CallbackT\ =\ std::function<\textcolor{keywordtype}{void}(\textcolor{keywordtype}{void})>;}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00041}00041\ \ \ \textcolor{comment}{//\ File\ Menu}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00042}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_ad9be38109a0b35b7e7d1c0eeedca2725}{00042}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_ad9be38109a0b35b7e7d1c0eeedca2725}{callback\_file\_new\_solution}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00044}00044\ \ \ \textcolor{comment}{//\ Edit\ menu}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00045}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_afd65cd2f16ca9d5f411a68df570ccdb3}{00045}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_afd65cd2f16ca9d5f411a68df570ccdb3}{callback\_edit\_undo}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00046}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a2b1acf8eae40096b9ab9fdca2bc75fbe}{00046}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a2b1acf8eae40096b9ab9fdca2bc75fbe}{callback\_edit\_redo}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00047}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a3d8f9295ebccc0e34c61c02aa2b396d8}{00047}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a3d8f9295ebccc0e34c61c02aa2b396d8}{callback\_edit\_cut}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00048}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a8afb32382cea24e749f640b48c5a8357}{00048}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a8afb32382cea24e749f640b48c5a8357}{callback\_edit\_copy}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00049}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a22bcc07d16e0560e5fcdff5353e370d6}{00049}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a22bcc07d16e0560e5fcdff5353e370d6}{callback\_edit\_paste}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00051}00051\ \ \ \textcolor{comment}{//\ Project\ Menu}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00052}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_ad3ae59e5b6ba9bcd0338cafef2c71b2a}{00052}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_ad3ae59e5b6ba9bcd0338cafef2c71b2a}{callback\_project\_addfile}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00053}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_aacd7955ba7f18c4905d831424ad6b046}{00053}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_aacd7955ba7f18c4905d831424ad6b046}{callback\_project\_addactivefile}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00054}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a75b50b9e82cede4eae29af7906e6de3f}{00054}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a75b50b9e82cede4eae29af7906e6de3f}{callback\_project\_addexistingfile}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00055}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a2b4f6a08a7ed12daf0029418d032e1d4}{00055}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a2b4f6a08a7ed12daf0029418d032e1d4}{callback\_project\_solutionproperties}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00056}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a8149173a89c2cb94579047a0d4e43fd7}{00056}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a8149173a89c2cb94579047a0d4e43fd7}{callback\_project\_clonesolution}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00058}00058\ \ \ \textcolor{comment}{//\ Widgets}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00059}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_aeaeaee82245653167bb841f9c40373b6}{00059}}\ \ \ CguiMenuBar\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_aeaeaee82245653167bb841f9c40373b6}{main\_menu\_bar}}\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu_bar_a98f8917d6b1885542858ac7b2cbd3d31}{\{}}cgui\mbox{\hyperlink{namespacecgui_a79f511149d5c2e46e93904c5c462ba1baeaf1b571da7747037056255592479bb9}{::}}\mbox{\hyperlink{namespacecgui_a79f511149d5c2e46e93904c5c462ba1baeaf1b571da7747037056255592479bb9}{kWidgetInitDelayed}}\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu_bar_a98f8917d6b1885542858ac7b2cbd3d31}{\}}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00060}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_abc565d6078e4ef621942f4983f7b3f05}{00060}}\ \ \ CguiMenu\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_abc565d6078e4ef621942f4983f7b3f05}{file\_menu}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{CguiMenu}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{Delayed}}(\textcolor{stringliteral}{"{}File"{}})\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00061}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a9617908d1207f81e6a4106b43b2024b9}{00061}}\ \ \ CguiMenu\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a9617908d1207f81e6a4106b43b2024b9}{edit\_menu}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{CguiMenu}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{Delayed}}(\textcolor{stringliteral}{"{}Edit"{}})\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00062}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a26cd4ffb4bcd8c2293ff40254f9b1000}{00062}}\ \ \ CguiMenu\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a26cd4ffb4bcd8c2293ff40254f9b1000}{project\_menu}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{CguiMenu}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{Delayed}}(\textcolor{stringliteral}{"{}Project"{}})\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00063}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a2a28009105c50230308a9f1c84f075cf}{00063}}\ \ \ CguiMenu\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a2a28009105c50230308a9f1c84f075cf}{file\_new\_submenu}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{CguiMenu}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{Delayed}}(\textcolor{stringliteral}{"{}New"{}})\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00065}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a32c11d7dc97c8f083ea46c784aa497d2}{00065}}\ \ \ CguiMenuItem\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a32c11d7dc97c8f083ea46c784aa497d2}{file\_new\_solution\_item}}\{\textcolor{stringliteral}{"{}Solution"{}},\ \textcolor{stringliteral}{"{}"{}},\ \textcolor{keyword}{true},}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00066}00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{kWidgetInitDelayed}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00067}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a2f8d9957265db939c5495f96020b2f3d}{00067}}\ \ \ CguiMenuItem\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a2f8d9957265db939c5495f96020b2f3d}{edit\_undo\_item}}\{\textcolor{stringliteral}{"{}Undo"{}},\ \textcolor{stringliteral}{"{}CTRL+Z"{}},\ \textcolor{keyword}{true},\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{kWidgetInitDelayed}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00068}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a12b7dcdaa731737d44d7db5c6972788d}{00068}}\ \ \ CguiMenuItem\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a12b7dcdaa731737d44d7db5c6972788d}{edit\_redo\_item}}\{\textcolor{stringliteral}{"{}Redo"{}},\ \textcolor{stringliteral}{"{}CTRL+Y"{}},\ \textcolor{keyword}{true},\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{kWidgetInitDelayed}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00069}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a04a14981141adef690c068d004c78ff6}{00069}}\ \ \ CguiMenuItem\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a04a14981141adef690c068d004c78ff6}{edit\_cut\_item}}\{\textcolor{stringliteral}{"{}Cut"{}},\ \textcolor{stringliteral}{"{}CTRL+X"{}},\ \textcolor{keyword}{true},\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{kWidgetInitDelayed}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00070}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a3a3984a01e02b7aa993aaa630f19be93}{00070}}\ \ \ CguiMenuItem\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a3a3984a01e02b7aa993aaa630f19be93}{edit\_copy\_item}}\{\textcolor{stringliteral}{"{}Copy"{}},\ \textcolor{stringliteral}{"{}CTRL+C"{}},\ \textcolor{keyword}{true},\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{kWidgetInitDelayed}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00071}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_aa4dac5efb52de608d5f7fe7ed87afa3a}{00071}}\ \ \ CguiMenuItem\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_aa4dac5efb52de608d5f7fe7ed87afa3a}{edit\_paste\_item}}\{\textcolor{stringliteral}{"{}Paste"{}},\ \textcolor{stringliteral}{"{}CTRL+V"{}},\ \textcolor{keyword}{true},}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00072}00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{kWidgetInitDelayed}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00074}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a9ca818a2fc2d8d5182a47217c558a0f2}{00074}}\ \ \ CguiMenuItem\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a9ca818a2fc2d8d5182a47217c558a0f2}{project\_addfile\_item}}\{\textcolor{stringliteral}{"{}Add\ File"{}},\ \textcolor{stringliteral}{"{}"{}},\ \textcolor{keyword}{true},}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00075}00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{kWidgetInitDelayed}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00076}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_ab1184c5a6cc9ece8419250c128aef83e}{00076}}\ \ \ CguiMenuItem\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_ab1184c5a6cc9ece8419250c128aef83e}{project\_addactivefile\_item}}\{\textcolor{stringliteral}{"{}Add\ Active\ File"{}},\ \textcolor{stringliteral}{"{}"{}},\ \textcolor{keyword}{true},}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00077}00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{kWidgetInitDelayed}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00078}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a47ad2f9422a67f6483438ddc96c3648e}{00078}}\ \ \ CguiMenuItem\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a47ad2f9422a67f6483438ddc96c3648e}{project\_addexistingfile\_item}}\{\textcolor{stringliteral}{"{}Add\ Existing\ File"{}},\ \textcolor{stringliteral}{"{}"{}},\ \textcolor{keyword}{true},}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00079}00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{kWidgetInitDelayed}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00080}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a6c9faa1bf5ab92cc28bd1b7246b75518}{00080}}\ \ \ CguiMenuItem\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a6c9faa1bf5ab92cc28bd1b7246b75518}{project\_solutionproperties\_item}}\{\textcolor{stringliteral}{"{}Solution\ Properties"{}},\ \textcolor{stringliteral}{"{}"{}},\ \textcolor{keyword}{true},}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00081}00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{kWidgetInitDelayed}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00082}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a137da6b394f3a6a3c6fb58ec9ed8db43}{00082}}\ \ \ CguiMenuItem\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a137da6b394f3a6a3c6fb58ec9ed8db43}{project\_clonesolution\_item}}\{\textcolor{stringliteral}{"{}Clone\ Solution"{}},\ \textcolor{stringliteral}{"{}"{}},\ \textcolor{keyword}{true},}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00083}00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{kWidgetInitDelayed}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00085}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a58565d1f6221259472a573fcfecf89cf}{00085}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_a58565d1f6221259472a573fcfecf89cf}{Display}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00086}00086\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_aeaeaee82245653167bb841f9c40373b6}{main\_menu\_bar}}\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu_bar_a931472245726998fd443f60f7e3376ca}{.}}\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu_bar_a931472245726998fd443f60f7e3376ca}{BeginLate}}\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu_bar_a931472245726998fd443f60f7e3376ca}{(}}\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu_bar_a931472245726998fd443f60f7e3376ca}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00087}00087\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (file\_menu.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00088}00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (file\_new\_submenu.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00089}00089\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (file\_new\_solution\_item.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00090}00090\ \ \ \ \ \ \ \ \ \ \ \ \ callback\_file\_new\_solution();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00091}00091\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00092}00092\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00093}00093\ \ \ \ \ \ \ \ \ file\_new\_submenu.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00094}00094\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00095}00095\ \ \ \ \ \ \ file\_menu.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00097}00097\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (edit\_menu.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00098}00098\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (edit\_undo\_item.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00099}00099\ \ \ \ \ \ \ \ \ \ \ callback\_edit\_undo();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00100}00100\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00101}00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (edit\_redo\_item.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00102}00102\ \ \ \ \ \ \ \ \ \ \ callback\_edit\_redo();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00103}00103\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00104}00104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (edit\_cut\_item.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00105}00105\ \ \ \ \ \ \ \ \ \ \ callback\_edit\_cut();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00106}00106\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00107}00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (edit\_copy\_item.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00108}00108\ \ \ \ \ \ \ \ \ \ \ callback\_edit\_copy();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00109}00109\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00110}00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (edit\_paste\_item.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00111}00111\ \ \ \ \ \ \ \ \ \ \ callback\_edit\_paste();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00112}00112\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00113}00113\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00114}00114\ \ \ \ \ \ \ edit\_menu.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00116}00116\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (project\_menu.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00117}00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (project\_addfile\_item.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00118}00118\ \ \ \ \ \ \ \ \ \ \ callback\_project\_addfile();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00119}00119\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00120}00120\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (project\_addactivefile\_item.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00121}00121\ \ \ \ \ \ \ \ \ \ \ callback\_project\_addactivefile();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00122}00122\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00123}00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (project\_addexistingfile\_item.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00124}00124\ \ \ \ \ \ \ \ \ \ \ callback\_project\_addexistingfile();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00125}00125\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00126}00126\ \ \ \ \ \ \ \ \ cgui::Separator();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00127}00127\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (project\_solutionproperties\_item.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00128}00128\ \ \ \ \ \ \ \ \ \ \ callback\_project\_solutionproperties();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00129}00129\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00130}00130\ \ \ \ \ \ \ \ \ cgui::Separator();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00131}00131\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (project\_clonesolution\_item.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00132}00132\ \ \ \ \ \ \ \ \ \ \ callback\_project\_clonesolution();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00133}00133\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00134}00134\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00135}00135\ \ \ \ \ \ \ project\_menu.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00136}00136\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00137}00137\ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface_aeaeaee82245653167bb841f9c40373b6}{main\_menu\_bar}}\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu_bar_a7a0afec08377ae28af0603145e38dde6}{.}}\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu_bar_a7a0afec08377ae28af0603145e38dde6}{EndEarly}}\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu_bar_a7a0afec08377ae28af0603145e38dde6}{(}}\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu_bar_a7a0afec08377ae28af0603145e38dde6}{)}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00138}00138\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00139}00139\ \};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00140}00140\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00141}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface}{00141}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface}{CideFileEditorInterface}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00142}00142\ \ \ \textcolor{comment}{//\ Properties}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00143}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_ab125fc6fd2baf3ef44bc87b2cd746be8}{00143}}\ \ \ CguiVec2\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_ab125fc6fd2baf3ef44bc87b2cd746be8}{context\_size}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00144}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a189906a2327a9d17b24e61a45b74bcc4}{00144}}\ \ \ CguiNamedSubcontext\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a189906a2327a9d17b24e61a45b74bcc4}{editor\_context}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00145}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a3f7ed2485f710a2a3f778ef63b2a3a3d}{00145}}\ \ \ CguiTabBar\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a3f7ed2485f710a2a3f778ef63b2a3a3d}{editor\_tab\_bar}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00146}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a2b179d907dc9fe1858953ddf83459817}{00146}}\ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a2b179d907dc9fe1858953ddf83459817}{vector}}<\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a2b179d907dc9fe1858953ddf83459817}{CguiTabItem}}>\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a2b179d907dc9fe1858953ddf83459817}{open\_file\_tabs}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00147}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a1e4262255245455246039023e75e9653}{00147}}\ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a1e4262255245455246039023e75e9653}{vector}}<\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a1e4262255245455246039023e75e9653}{CguiMultilineTextInput}}>\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a1e4262255245455246039023e75e9653}{open\_file\_tab\_text\_inputs}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00148}00148\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00149}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{00149}}\ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{CideFileEditorInterface}}(\textcolor{keyword}{const}\ std::string\&\ name,\ CguiVec2\ context\_size)}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00150}00150\ \ \ \ \ \ \ :\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{context\_size}}(\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{context\_size}}),}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00151}00151\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{editor\_context}}(\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{CguiNamedSubcontext}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{Delayed}}(\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{name}},\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{context\_size}})),}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00152}00152\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{editor\_tab\_bar}}(\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{CguiTabBar}}(}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00153}00153\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\#\#file-\/tabs"{}},\ \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{eTabBarFlags}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{ImGuiTabBarFlags\_Reorderable}}\},}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00154}00154\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{kWidgetInitDelayed}}))\ \{\}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00155}00155\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00156}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_ad1c692479ed5206bcaffd0155189a283}{00156}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_ad1c692479ed5206bcaffd0155189a283}{Display}}()\ \{\ \ \textcolor{comment}{//\ Editor\ Subcontext}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00157}00157\ \ \ \ \ \textcolor{keywordflow}{if}\ (editor\_context.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00158}00158\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (editor\_tab\_bar.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00159}00159\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (size\_t\ idx\ =\ 0;\ \textcolor{keyword}{auto}\&\ file\_tab\ :\ open\_file\_tabs)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00160}00160\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (file\_tab.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00161}00161\ \ \ \ \ \ \ \ \ \ \ \ \ open\_file\_tab\_text\_inputs[idx].BeginLate();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00162}00162\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ file\_tab.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00164}00164\ \ \ \ \ \ \ \ \ \ \ idx++;}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00165}00165\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00166}00166\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00167}00167\ \ \ \ \ \ \ editor\_tab\_bar.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00168}00168\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00169}00169\ \ \ \ \ editor\_context.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00170}00170\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00172}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a63c4e1aaf0bacd29d78b4dc25f2a4c09}{00172}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a63c4e1aaf0bacd29d78b4dc25f2a4c09}{AddTab}}(\textcolor{keyword}{const}\ string\&\ tab\_name,\ string\&\ text\_buffer)\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00173}00173\ \ \ \ \ open\_file\_tabs.push\_back(}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00174}00174\ \ \ \ \ \ \ \ \ CguiTabItem(tab\_name,\ CguiTabItemFlags(),\ cgui::kWidgetInitDelayed));}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00175}00175\ \ \ \ \ open\_file\_tab\_text\_inputs.push\_back(}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00176}00176\ \ \ \ \ \ \ \ \ CguiMultilineTextInput::Delayed(tab\_name\ +\ \textcolor{stringliteral}{"{}\#\#\#textbox"{}},\ text\_buffer,}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00177}00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cgui::kExpandWidgetToRemainingSpaceXY));}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00178}00178\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00179}00179\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00180}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_ae97ec9df02c4d76c2f6d4c0dc01b8246}{00180}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_ae97ec9df02c4d76c2f6d4c0dc01b8246}{PopTab}}()\ \{\ open\_file\_tabs.pop\_back();\ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00181}00181\ \};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00182}00182\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00183}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{00183}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{CideSolutionToolbarInterface}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00184}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{00184}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{group__cppmodule2__cppextended_ga738607799d6938e1b15f463688029cd5}{LAMBDA}}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{xNullCallback}}\ =\ [](\textcolor{keyword}{const}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{stdfs}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{path}}\&)\ \{\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00185}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{00185}}\ \ \ \textcolor{keyword}{using}\ CallbackT\ =\ function<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ stdfs::path\&)>;}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00186}00186\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00187}00187\ \ \ \textcolor{comment}{//\ By\ default\ select\ file\ callback\ will\ store\ the\ selected\ file\ in}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00188}00188\ \ \ \textcolor{comment}{//\ the\ local\ temp\_file\_buffer.}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00189}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a3af5287e9177f342657587d901d9b610}{00189}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a3af5287e9177f342657587d901d9b610}{select\_file\_callback}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00190}00190\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00191}00191\ \ \ \textcolor{comment}{//\ Edit\ menu}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00192}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a35db12caf1235038c43ac3430e1a835a}{00192}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a35db12caf1235038c43ac3430e1a835a}{callback\_edit\_open}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00193}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a0a010312d0eec3d0a098491a6b5efeac}{00193}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a0a010312d0eec3d0a098491a6b5efeac}{callback\_edit\_delete}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00194}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a238310ba8778a51c1412cb52f5781b00}{00194}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a238310ba8778a51c1412cb52f5781b00}{callback\_edit\_cut}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00195}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ae38ec783cb54cf383ac33f5ee66ab765}{00195}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ae38ec783cb54cf383ac33f5ee66ab765}{callback\_edit\_copy}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00196}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_add6f36eb30879aeba5642bf32056eb18}{00196}}\ \ \ CallbackT\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_add6f36eb30879aeba5642bf32056eb18}{callback\_edit\_paste}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{xNullCallback}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00197}00197\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00198}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a1c739b8241f555800dbc40bb31c45cc2}{00198}}\ \ \ CguiVec2\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a1c739b8241f555800dbc40bb31c45cc2}{requested\_size}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00199}00199\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00200}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6d0741658e834b9c911d098a24fafd79}{00200}}\ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6d0741658e834b9c911d098a24fafd79}{stdfs}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6d0741658e834b9c911d098a24fafd79}{path}}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6d0741658e834b9c911d098a24fafd79}{root\_dir}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00201}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a2a9ae22b39c1abf03ccf43fefb4b320e}{00201}}\ \ \ std::string\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a2a9ae22b39c1abf03ccf43fefb4b320e}{temp\_file\_buffer}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00202}00202\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00203}00203\ \ \ \textcolor{comment}{//\ Widgets}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00204}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a0a110c7af30a5c7d8fe359c46bfc4b00}{00204}}\ \ \ CguiNamedSubcontext\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a0a110c7af30a5c7d8fe359c46bfc4b00}{solution\_toolbar\_context}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00205}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a82a8201eec61fa6a484377965b1efc9c}{00205}}\ \ \ CguiTabBar\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a82a8201eec61fa6a484377965b1efc9c}{solution\_toolbar\_tab\_bar}}\{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00206}00206\ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{CguiTabBar}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{Delayed}}(\textcolor{stringliteral}{"{}solution\_toolbar\_tab\_bar"{}})\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00207}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab4b1877a5be6d298541304496f6fba86}{00207}}\ \ \ CguiTabItem\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab4b1877a5be6d298541304496f6fba86}{solution\_explorer\_tab\_item}}\{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{CguiTabItem}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{Delayed}}(\textcolor{stringliteral}{"{}Solution\ View"{}})\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00208}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a00660349280acd20e4cf0ef99ccba20e}{00208}}\ \ \ CguiDirectoryView\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a00660349280acd20e4cf0ef99ccba20e}{dir\_tree\_view}};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00209}00209\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00210}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a095efc101b2f6ab22eadd7e63a7843b5}{00210}}\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a095efc101b2f6ab22eadd7e63a7843b5}{BeginRightClickContextMenu}}(\textcolor{keyword}{const}\ stdfs::path\&\ p)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00211}00211\ \ \ \ \ \textcolor{comment}{//\ New\ Menu:}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00212}00212\ \ \ \ \ \textcolor{keywordflow}{if}\ (CguiMenuItem(\textcolor{stringliteral}{"{}Open"{}}))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00213}00213\ \ \ \ \ \ \ callback\_edit\_open(p);}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00214}00214\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00215}00215\ \ \ \ \ \textcolor{keywordflow}{if}\ (CguiMenuItem(\textcolor{stringliteral}{"{}Copy"{}}))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00216}00216\ \ \ \ \ \ \ callback\_edit\_copy(p);}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00217}00217\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00218}00218\ \ \ \ \ \textcolor{keywordflow}{if}\ (CguiMenuItem(\textcolor{stringliteral}{"{}Paste"{}}))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00219}00219\ \ \ \ \ \ \ callback\_edit\_paste(p);}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00220}00220\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00221}00221\ \ \ \ \ \textcolor{keywordflow}{if}\ (CguiMenuItem(\textcolor{stringliteral}{"{}Cut"{}}))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00222}00222\ \ \ \ \ \ \ callback\_edit\_cut(p);}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00223}00223\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00224}00224\ \ \ \ \ \textcolor{keywordflow}{if}\ (CguiMenuItem(\textcolor{stringliteral}{"{}Delete"{}}))\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00225}00225\ \ \ \ \ \ \ callback\_edit\_delete(p);}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00226}00226\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00227}00227\ \ \ \};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00228}00228\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00229}00229\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00230}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{00230}}\ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{CideSolutionToolbarInterface}}(\textcolor{keyword}{const}\ CguiVec2\&\ requested\_size\ =\ \{\})}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00231}00231\ \ \ \ \ \ \ :\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{requested\_size}}(\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{requested\_size}}),}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00232}00232\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{solution\_toolbar\_context}}(}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00233}00233\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{CguiNamedSubcontext}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{Delayed}}(\textcolor{stringliteral}{"{}Solution\ Toolbar"{}},\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{requested\_size}})),}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00234}00234\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{root\_dir}}(\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{std}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{filesystem}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{current\_path}}()),}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00235}00235\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{dir\_tree\_view}}(}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00236}00236\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{root\_dir}},}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00237}00237\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ callback\ for\ selectting\ an\ item}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00238}00238\ \ \ \ \ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{stdfs}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{path}}\&\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{p}})\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00239}00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{temp\_file\_buffer}}\ =\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{backend}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{LoadFileToStr}}(\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{p}}.\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{string}}());}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00240}00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{select\_file\_callback}}(\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{p}});}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00241}00241\ \ \ \ \ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00242}00242\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ callback\ for\ right\ clicking\ an\ item}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00243}00243\ \ \ \ \ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{stdfs}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{path}}\&\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{p}})\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00244}00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ New\ Menu:}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00245}00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{BeginRightClickContextMenu}}(\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{p}});}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00246}00246\ \ \ \ \ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00247}00247\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{kWidgetInitDelayed}})\ \{\}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00248}00248\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00249}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a5f0dbe65e5683387c1311a7138c1a709}{00249}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a5f0dbe65e5683387c1311a7138c1a709}{Display}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00250}00250\ \ \ \ \ \textcolor{keywordflow}{if}\ (solution\_toolbar\_context.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00251}00251\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (solution\_toolbar\_tab\_bar.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00252}00252\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (solution\_explorer\_tab\_item.BeginLate())\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00253}00253\ \ \ \ \ \ \ \ \ \ \ dir\_tree\_view.BeginLate();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00254}00254\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00255}00255\ \ \ \ \ \ \ \ \ solution\_explorer\_tab\_item.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00256}00256\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00257}00257\ \ \ \ \ \ \ solution\_toolbar\_tab\_bar.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00258}00258\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00259}00259\ \ \ \ \ solution\_toolbar\_context.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00260}00260\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00261}00261\ \};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00262}00262\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00263}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface}{00263}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface}{CideUserInterface}}\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00264}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface_ac7fb74845ad5fe9d8f0259247643a2ff}{00264}}\ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_top_menu_bar_interface}{CideTopMenuBarInterface}}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface_ac7fb74845ad5fe9d8f0259247643a2ff}{top\_menu\_bar\_interface}}\{\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00265}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface_a660ea0c6b2b904cc729390d315bafb8b}{00265}}\ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface}{CideFileEditorInterface}}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface_a660ea0c6b2b904cc729390d315bafb8b}{file\_editor\_interface}}\{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00266}00266\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Editor"{}},\ \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface}{kWindowWidth}}\ *\ 0.75f,\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface}{kWindowHeight}}\ *\ 0.75f\}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00267}00267\ \ \ ;}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00268}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface_a0a68edfa9ac113716f800d378c0d8dea}{00268}}\ \ \ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{CideSolutionToolbarInterface}}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface_a0a68edfa9ac113716f800d378c0d8dea}{solution\_toolbar\_interface}}\{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00269}00269\ \ \ \ \ \ \ \{0,\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface}{kWindowHeight}}\ *\ 0.75f\}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00270}00270\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00271}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface_a0ae82fe6595a796f0fc33d40ca2359e7}{00271}}\ \ \ CguiWindow\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface_a0ae82fe6595a796f0fc33d40ca2359e7}{main\_ide\_context}}\{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00272}00272\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}C\&-\/IDE"{}},\ \textcolor{keyword}{false},\ \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface}{ImGuiWindowFlags\_MenuBar}}\},\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface}{cgui}}::\mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface}{kWidgetInitDelayed}}\};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00273}00273\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00274}\mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface_ad33df4a7f93be461bee7a5af61bffa1e}{00274}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_user_interface_ad33df4a7f93be461bee7a5af61bffa1e}{Display}}()\ \{}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00275}00275\ \ \ \ \ cgui::SetNextWindowSize(\{kWindowWidth,\ kWindowHeight\});}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00276}00276\ \ \ \ \ cgui::SetNextWindowPos(\{0,\ 0\});}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00277}00277\ \ \ \ \ main\_ide\_context.BeginLate();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00278}00278\ \ \ \ \ top\_menu\_bar\_interface.Display();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00279}00279\ \ \ \ \ file\_editor\_interface.Display();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00280}00280\ \ \ \ \ cgui::SameLine();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00281}00281\ \ \ \ \ solution\_toolbar\_interface.Display();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00282}00282\ \ \ \ \ main\_ide\_context.EndEarly();}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00283}00283\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00284}00284\ \};}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00285}00285\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00286}00286\ \textcolor{comment}{///\ @\}\ //\ end\ of\ cand\_cide\_frontend}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00287}00287\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00288}00288\ \};\ \ \textcolor{comment}{//\ namespace\ cide::ui}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00289}00289\ }
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00290}00290\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00291}00291\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00292}00292\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00293}00293\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00294}00294\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00295}00295\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00296}00296\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00297}00297\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00298}00298\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00299}00299\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00300}00300\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00301}00301\ \textcolor{comment}{//\ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00302}00302\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00303}00303\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00304}00304\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00305}00305\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00306}00306\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00307}00307\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{cide__ui_8h_source_l00308}00308\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+
+\end{DoxyCode}

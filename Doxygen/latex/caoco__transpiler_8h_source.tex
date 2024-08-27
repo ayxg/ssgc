@@ -1,0 +1,209 @@
+\doxysection{caoco\+\_\+transpiler.\+h}
+\hypertarget{caoco__transpiler_8h_source}{}\label{caoco__transpiler_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_transpiler.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_transpiler.h}}
+\mbox{\hyperlink{caoco__transpiler_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00001}00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAOCO\_TRANSPILER\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00002}00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAOCO\_TRANSPILER\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00003}00003\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00004}00004\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00005}00005\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00006}00006\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00007}00007\ \textcolor{comment}{//\ Author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00008}00008\ \textcolor{comment}{//\ Email:\ ntondev@gmail.com}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00009}00009\ \textcolor{comment}{//\ Website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00010}00010\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00011}00011\ \textcolor{comment}{///\ @file\ C\&\ Official\ Compiler\ (CAOCO)\ transpiler}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00012}00012\ \textcolor{comment}{///\ @brief\ Handles\ conversion\ of\ IRAST\ Format\ Program\ to\ C++\ source\ code.}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00013}00013\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00014}00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__ceval_8h}{"{}caoco\_ceval.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00016}00016\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecaoco}{caoco}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00018}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code}{00018}}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code}{CppSourceCode}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00019}00019\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00020}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a1158380c1aac212c9ef0fc0cac21d89e}{00020}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a1158380c1aac212c9ef0fc0cac21d89e}{CppSourceCode}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00021}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_ac8cee9c6581eb33613c0d69362c68a4e}{00021}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_ac8cee9c6581eb33613c0d69362c68a4e}{CppSourceCode}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code}{CppSourceCode}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00022}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a9831bbc864a69d4acc6d34256ce6c4b4}{00022}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code}{CppSourceCode}}\&\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a9831bbc864a69d4acc6d34256ce6c4b4}{operator}}=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code}{CppSourceCode}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00023}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a6d2a2584ddba3c05d78d499ff0c8e53a}{00023}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a6d2a2584ddba3c05d78d499ff0c8e53a}{CppSourceCode}}(\mbox{\hyperlink{classcaoco_1_1_cpp_source_code}{CppSourceCode}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00024}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_ab6d67dab26a6f5895fbc0d4e2e3d4f81}{00024}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code}{CppSourceCode}}\&\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_ab6d67dab26a6f5895fbc0d4e2e3d4f81}{operator}}=(\mbox{\hyperlink{classcaoco_1_1_cpp_source_code}{CppSourceCode}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00025}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a608d076621e974ed238118bf8a7417e0}{00025}}\ \ \ \string~\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a608d076621e974ed238118bf8a7417e0}{CppSourceCode}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00027}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a8fe449f95723f6de1f52366e7c401184}{00027}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a8fe449f95723f6de1f52366e7c401184}{Add}}(\textcolor{keyword}{const}\ std::string\&\ code)\ \{\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a5f2927d89f12f544acbcfb9c370e13f8}{code\_}}\ +=\ code;\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00028}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a031a5e3ab03645d7b9a1533af2bca9e1}{00028}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a031a5e3ab03645d7b9a1533af2bca9e1}{AddLine}}(\textcolor{keyword}{const}\ std::string\&\ code)\ \{\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a5f2927d89f12f544acbcfb9c370e13f8}{code\_}}\ +=\ code\ +\ \textcolor{stringliteral}{'\(\backslash\)n'};\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00029}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a0bcf2425156786c99c0f8d2381d9f24d}{00029}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a0bcf2425156786c99c0f8d2381d9f24d}{AddLine}}()\ \{\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a5f2927d89f12f544acbcfb9c370e13f8}{code\_}}\ +=\ \textcolor{stringliteral}{'\(\backslash\)n'};\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00030}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_aee747959320ce180f07487cbf4d5e23f}{00030}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_aee747959320ce180f07487cbf4d5e23f}{AddLine}}(\textcolor{keyword}{const}\ std::string\&\ code,\ \textcolor{keywordtype}{int}\ indent)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00031}00031\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a5f2927d89f12f544acbcfb9c370e13f8}{code\_}}\ +=\ std::string(indent,\ \textcolor{stringliteral}{'\ '})\ +\ code\ +\ \textcolor{stringliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00032}00032\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00033}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_acc87d4f8437b585694a1593fbf51745b}{00033}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_acc87d4f8437b585694a1593fbf51745b}{AddLine}}(\textcolor{keywordtype}{int}\ indent)\ \{\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a5f2927d89f12f544acbcfb9c370e13f8}{code\_}}\ +=\ std::string(indent,\ \textcolor{stringliteral}{'\ '})\ +\ \textcolor{stringliteral}{'\(\backslash\)n'};\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00034}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a4eea38902c123450828f685f7ea1611a}{00034}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a4eea38902c123450828f685f7ea1611a}{AddLine}}(\textcolor{keyword}{const}\ std::string\&\ code,\ \textcolor{keyword}{const}\ std::string\&\ comment)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00035}00035\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a5f2927d89f12f544acbcfb9c370e13f8}{code\_}}\ +=\ code\ +\ \textcolor{stringliteral}{"{}\ //\ "{}}\ +\ comment\ +\ \textcolor{stringliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00036}00036\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00038}00038\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00039}\mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a5f2927d89f12f544acbcfb9c370e13f8}{00039}}\ \ \ string\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code_a5f2927d89f12f544acbcfb9c370e13f8}{code\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00040}00040\ \};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00042}\mbox{\hyperlink{classcaoco_1_1_transpiler}{00042}}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcaoco_1_1_transpiler}{Transpiler}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00043}\mbox{\hyperlink{classcaoco_1_1_transpiler_aae1d36130983a5d40553ca1347f2b883}{00043}}\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_program}{Program}}\&\ \mbox{\hyperlink{classcaoco_1_1_transpiler_aae1d36130983a5d40553ca1347f2b883}{program\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00044}\mbox{\hyperlink{classcaoco_1_1_transpiler_af949fe2ff7aead9afe64bc7ee7b17d56}{00044}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code}{CppSourceCode}}\&\ \mbox{\hyperlink{classcaoco_1_1_transpiler_af949fe2ff7aead9afe64bc7ee7b17d56}{out\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00046}\mbox{\hyperlink{classcaoco_1_1_transpiler_aab560b5d378a6ae28adf6e0c41b25389}{00046}}\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcaoco_1_1_transpiler_aab560b5d378a6ae28adf6e0c41b25389}{Transpile}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_program}{Program}}\&\ program,\ \mbox{\hyperlink{classcaoco_1_1_cpp_source_code}{CppSourceCode}}\&\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00047}\mbox{\hyperlink{classcaoco_1_1_transpiler_a6df16417bbab38c09ebbdd1061ef8eda}{00047}}\ \ \ string\ \mbox{\hyperlink{classcaoco_1_1_transpiler_a6df16417bbab38c09ebbdd1061ef8eda}{TanspilePragmaticVarDecl}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl}{VarDecl}}\&\ var\_decl)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00048}00048\ \ \ \ \ string\ ret;}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00050}00050\ \ \ \ \ \textcolor{comment}{//\ When\ no\ value\ category\ mods\ are\ applied\ to\ the\ definition}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00051}00051\ \ \ \ \ \textcolor{comment}{//\ it\ is\ by\ default\ a\ mutable\ stack\ value.}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00052}00052\ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl.IsMutableValue)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00053}00053\ \ \ \ \ \ \ \textcolor{comment}{//\ C++\ Native\ Definition}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00054}00054\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl.IsNative())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00055}00055\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ Invariants\ as\ normal\ C++\ definitions}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00056}00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl.IsInvariant())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl.IsStatic())}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00058}00058\ \ \ \ \ \ \ \ \ \ \ \ \ ret\ +=\ \textcolor{stringliteral}{"{}static\ "{}};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl.IsConst())}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ ret\ +=\ \textcolor{stringliteral}{"{}const\ "{}};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ ret\ +=\ var\_decl\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a410f194527a9c1fcc761ebabf09afdd4}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a410f194527a9c1fcc761ebabf09afdd4}{constraints}}.First().Literal()\ +\ \textcolor{stringliteral}{"{}\ "{}};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00062}00062\ \ \ \ \ \ \ \ \ \ \ ret\ +=\ var\_decl\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_afe6be1f9926b8aed62badd644612c8b4}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_afe6be1f9926b8aed62badd644612c8b4}{name}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_ident_aa15a84996589ac622f7a06573163b789}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_ident_aa15a84996589ac622f7a06573163b789}{name}}\ +\ \textcolor{stringliteral}{'\{'};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00063}00063\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl.HasInitializer())\ \textcolor{comment}{//\ transpile\ initializer}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00064}00064\ \ \ \ \ \ \ \ \ \ \ \ \ ret\ +=\ TranspilePrimaryExpr(var\_decl\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a2d3d8836da82bd969e54526cc74d39b6}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a2d3d8836da82bd969e54526cc74d39b6}{initializer}})\ +\ \textcolor{stringliteral}{'\};'};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00065}00065\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{comment}{//\ or\ call\ the\ default\ constructor\ of\ the\ invariant\ type.}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00066}00066\ \ \ \ \ \ \ \ \ \ \ \ \ ret\ +=\ var\_decl\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a410f194527a9c1fcc761ebabf09afdd4}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a410f194527a9c1fcc761ebabf09afdd4}{constraints}}.First().Literal()\ +\ \textcolor{stringliteral}{'()\};'};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00068}00068\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00069}00069\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Else\ its\ a\ multi-\/typed\ constraint.\ -\/>\ CandUnion<T...>}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00070}00070\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl.IsStatic())\ ret\ +=\ \textcolor{stringliteral}{"{}static\ "{}};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00071}00071\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl.IsConst())\ ret\ +=\ \textcolor{stringliteral}{"{}const\ "{}};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00072}00072\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl.IsConstrained())}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00073}00073\ \ \ \ \ \ \ \ \ \ \ \ \ ret\ +=\ \textcolor{stringliteral}{"{}\_\_cand\_\_::CandUnion<"{}}+\ var\_decl\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a410f194527a9c1fcc761ebabf09afdd4}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a410f194527a9c1fcc761ebabf09afdd4}{constraints}}.LiteralList()\ +\ \textcolor{stringliteral}{"{}>\ "{}};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00074}00074\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00075}00075\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \textcolor{stringliteral}{"{}Native\ Invariants\ must\ be\ constrained\ to\ one\ or\ more\ types."{}};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00076}00076\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00077}00077\ \ \ \ \ \ \ \ \ \ \ ret\ +=\ var\_decl\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_afe6be1f9926b8aed62badd644612c8b4}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_afe6be1f9926b8aed62badd644612c8b4}{name}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_ident_aa15a84996589ac622f7a06573163b789}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_ident_aa15a84996589ac622f7a06573163b789}{name}}\ +\ \textcolor{stringliteral}{'\{'};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00078}00078\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl.HasInitializer())\ \ \textcolor{comment}{//\ transpile\ initializer}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00079}00079\ \ \ \ \ \ \ \ \ \ \ \ \ ret\ +=\ TranspilePrimaryExpr(var\_decl\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a2d3d8836da82bd969e54526cc74d39b6}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a2d3d8836da82bd969e54526cc74d39b6}{initializer}})\ +\ \textcolor{stringliteral}{'\};'};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00080}00080\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \ \textcolor{comment}{//\ or\ call\ the\ default\ constructor\ of\ the\ first\ index\ variant\ type.}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00081}00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ todo:\ check\ if\ the\ class\ implements\ default\ -\/\ else\ try\ next\ type.}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00082}00082\ \ \ \ \ \ \ \ \ \ \ \ \ ret\ +=\ var\_decl\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a410f194527a9c1fcc761ebabf09afdd4}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a410f194527a9c1fcc761ebabf09afdd4}{constraints}}.Invariant().Literal()\ +\ \textcolor{stringliteral}{'()\};'};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00083}00083\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00084}00084\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00085}00085\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00086}00086\ \ \ \ \ \ \ \textcolor{comment}{//\ C\&\ stack\ value\ definition.}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00087}00087\ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00088}00088\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [mods]\ \_\_cand\_\_::CandValue<T...>\ name\ =\ [initializer];}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00089}00089\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00090}00090\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (var\_decl.IsMutableReference)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00091}00091\ \ \ \ \ \ \ \textcolor{comment}{//\ ref\ def\ @name\ :\ initializer;}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00092}00092\ \ \ \ \ \ \ \textcolor{comment}{//\ Mutable\ references:}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00093}00093\ \ \ \ \ \ \ \textcolor{comment}{//\ -\/\ Must\ explicitly\ be\ provided\ an\ initializer.}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00094}00094\ \ \ \ \ \ \ \textcolor{comment}{//\ -\/\ Must\ be\ of\ equal\ or\ broader\ but\ matching\ constraints.\ }}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00095}00095\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ eg.\ }}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00096}00096\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ def\ [int.float,str]\ @a;\ }}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00097}00097\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ Can\ be\ referenced\ by:}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00098}00098\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ ref\ def\ [int,float,str]\ @c:a;}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00099}00099\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ ref\ def\ [int,float,str,char]\ @b:a;}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00100}00100\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ ref\ def\ @e:a;}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00101}00101\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ ref\ def\ any\ @g:a;}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00102}00102\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ ref\ def\ [str,float,int]\ @i;}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00103}00103\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ The\ following\ definitions\ will\ fail:}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00104}00104\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ ref\ def\ [int]\ @h:a;\ \`{}\ [E000122]\ Constraint\ Failure.\ }}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00105}00105\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Pragmatic\ mutable\ variable\ reference\ definition\ 'h'\ has\ narrower\ constraints\ than\ the\ variable\ it\ refers\ to.}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00106}00106\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Must\ be\ of\ equal\ or\ broader\ but\ matching\ constraints.\ }}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00107}00107\ \ \ \ \ \ \ \textcolor{comment}{//\ }}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00108}00108\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ ref\ def\ [int,float]\ @j:a;\ \`{}\ [E000122]}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00109}00109\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ ref\ def\ [uint,float,str]\ @k:a;\ \`{}\ [E000122]}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00110}00110\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ ref\ def\ @e:a;\ \`{}\ [E000123]\ No\ initializer\ provided\ for\ pragmatic\ mutable\ variable\ reference\ definition.\ Initializer\ must\ be\ explicitly\ provided.\ }}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00112}00112\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (var\_decl.IsImmutableReference)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00113}00113\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (var\_decl.IsOwnedValue)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00114}00114\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00116}00116\ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl.IsRef())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00117}00117\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00118}00118\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00120}00120\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00121}00121\ \ \ \ \ \textcolor{comment}{//\ Handle\ cpp\ def}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00122}00122\ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl.IsNative())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00123}00123\ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ Invariants\ as\ normal\ C++\ definitions}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00124}00124\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl.IsInvariant())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00125}00125\ \ \ \ \ \ \ \ \ out\_.AddLine(}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00126}00126\ \ \ \ \ \ \ \ \ \ \ var\_decl.constraints.At(0)\ +\ \textcolor{stringliteral}{'\ '}\ +\ var\_decl.name}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00127}00127\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00129}00129\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00131}00131\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00132}00132\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00133}00133\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00134}00134\ \};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00135}00135\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00136}\mbox{\hyperlink{namespacecaoco_1_1transpiler}{00136}}\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecaoco_1_1transpiler}{transpiler}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00138}00138\ \textcolor{comment}{//\ Pragmatic\ Statements.}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00139}\mbox{\hyperlink{namespacecaoco_1_1transpiler_aeb24a7197fa31acc01e5480eb5dbf786}{00139}}\ string\ \mbox{\hyperlink{namespacecaoco_1_1transpiler_aeb24a7197fa31acc01e5480eb5dbf786}{Transpile}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl}{VarDecl}}\&\ var\_decl)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00140}00140\ \ \ string\ out;}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00141}00141\ \ \ \textcolor{keywordflow}{if}\ (var\_decl\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_aabbb6a6237acbe46a085cdd019db78ba}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_aabbb6a6237acbe46a085cdd019db78ba}{is\_invariant}}())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00142}00142\ \ \ \ \ out\ +=}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00143}00143\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}static\ "{}}\ +\ Transpile(var\_decl\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a410f194527a9c1fcc761ebabf09afdd4}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a410f194527a9c1fcc761ebabf09afdd4}{constraints}})\ +\ \textcolor{stringliteral}{"{}\ "{}}\ +\ var\_decl\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_afe6be1f9926b8aed62badd644612c8b4}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_afe6be1f9926b8aed62badd644612c8b4}{name}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_ident_aa15a84996589ac622f7a06573163b789}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_ident_aa15a84996589ac622f7a06573163b789}{name}};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00144}00144\ \ \ \ \ \textcolor{keywordflow}{if}\ (var\_decl\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_ac72447110bc3138184c141d3a689c4fc}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_ac72447110bc3138184c141d3a689c4fc}{is\_initialized}}())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00145}00145\ \ \ \ \ \ \ out\ +=\ \textcolor{stringliteral}{"{}\ =\ "{}}\ +\ Transpile(var\_decl\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a2d3d8836da82bd969e54526cc74d39b6}{.}}\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl_a2d3d8836da82bd969e54526cc74d39b6}{initializer}})\ +\ \textcolor{stringliteral}{"{};\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00146}00146\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00147}00147\ \ \ \ \ \ \ out\ +=\ \textcolor{stringliteral}{"{};\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00148}00148\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00149}00149\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00150}00150\ \};}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00151}\mbox{\hyperlink{namespacecaoco_1_1transpiler_ac23b21f1c6072a9cc643fdddf6ac9c67}{00151}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecaoco_1_1transpiler_ac23b21f1c6072a9cc643fdddf6ac9c67}{TranspilePragmaticStmt}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_fn_decl}{FnDecl}}\&\ fn\_decl,\ std::ostream\&\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00152}\mbox{\hyperlink{namespacecaoco_1_1transpiler_ace1f0911df7e901216e38c2bc205593c}{00152}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecaoco_1_1transpiler_ace1f0911df7e901216e38c2bc205593c}{TranspilePragmaticStmt}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_class_decl}{ClassDecl}}\&\ class\_decl,}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00153}00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ostream\&\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00154}\mbox{\hyperlink{namespacecaoco_1_1transpiler_aef7191740544b60ab1d2fea976272a8b}{00154}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecaoco_1_1transpiler_aef7191740544b60ab1d2fea976272a8b}{TranspilePragmaticStmt}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_using_decl}{UsingDecl}}\&\ using\_decl,}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00155}00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ostream\&\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00156}\mbox{\hyperlink{namespacecaoco_1_1transpiler_af40ec552c19776ca9ccff103b0e4a23b}{00156}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecaoco_1_1transpiler_af40ec552c19776ca9ccff103b0e4a23b}{TranspilePragmaticStmt}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_namespace_decl}{NamespaceDecl}}\&\ ns\_decl,}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00157}00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ostream\&\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00158}00158\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00159}00159\ \textcolor{comment}{//\ Primary\ Expressions.}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00160}\mbox{\hyperlink{namespacecaoco_1_1transpiler_a4fb1ba9c4d5a142a5775ea879cdf7ddc}{00160}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecaoco_1_1transpiler_a4fb1ba9c4d5a142a5775ea879cdf7ddc}{TranspileFunctionalStmt}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_primary_expr}{PrimaryExpr}}\&\ primary\_expr,}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00161}00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ostream\&\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00162}\mbox{\hyperlink{namespacecaoco_1_1transpiler_ab8071e8ce107d4416f5153087c1f0556}{00162}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecaoco_1_1transpiler_ab8071e8ce107d4416f5153087c1f0556}{TranspileFunctionalStmt}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_var_decl}{VarDecl}}\&\ var\_decl,\ std::ostream\&\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00163}\mbox{\hyperlink{namespacecaoco_1_1transpiler_a2d875e354bcd3c1746b06fb7170e9e4f}{00163}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecaoco_1_1transpiler_a2d875e354bcd3c1746b06fb7170e9e4f}{TranspileFunctionalStmt}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_fn_decl}{FnDecl}}\&\ fn\_decl,\ std::ostream\&\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00164}\mbox{\hyperlink{namespacecaoco_1_1transpiler_a77d3d0ee36fd71a8cd9926a9b4c36fef}{00164}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecaoco_1_1transpiler_a77d3d0ee36fd71a8cd9926a9b4c36fef}{TranspileFunctionalStmt}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_class_decl}{ClassDecl}}\&\ class\_decl,}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00165}00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ostream\&\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00166}\mbox{\hyperlink{namespacecaoco_1_1transpiler_a0dbf8ce555c2629e193078ad880a713c}{00166}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecaoco_1_1transpiler_a0dbf8ce555c2629e193078ad880a713c}{TranspileFunctionalStmt}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_using_decl}{UsingDecl}}\&\ using\_decl,}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ostream\&\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00168}\mbox{\hyperlink{namespacecaoco_1_1transpiler_a705792a1f81b58d5b30874195e502cc1}{00168}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecaoco_1_1transpiler_a705792a1f81b58d5b30874195e502cc1}{TranspileFunctionalStmt}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_namespace_decl}{NamespaceDecl}}\&\ ns\_decl,}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00169}00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ostream\&\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00170}00170\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00171}00171\ \}\ \ \textcolor{comment}{//\ namespace\ transpiler}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00172}00172\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00173}\mbox{\hyperlink{namespacecaoco_a7696b2ab4a72f09b799e82f49215dba1}{00173}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespacecaoco_a7696b2ab4a72f09b799e82f49215dba1}{Transpile}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_1_1irast}{irast}}::\mbox{\hyperlink{structcaoco_1_1irast_1_1_program}{Program}}\&\ program,\ std::ostream\&\ out)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00174}00174\ \ \ EnterProgramDefinition(program,\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00175}00175\ \ \ IncludeCandStandardLibraries(program,\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00176}00176\ \ \ IncludePredefinedCppLibraries(program,\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00177}00177\ \ \ IncludeUserDefinedCppFiles(program,\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00178}00178\ \ \ EnterGlobalNamespace(program,\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00179}00179\ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ irast::Statement\&\ stmt\ :\ program.statements)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00180}00180\ \ \ \ \ std::visit([\&](\textcolor{keyword}{auto}\&\&\ arg)\ \{\ TranspilePragmaticStmt(arg,\ out);\ \},\ stmt);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00181}00181\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00182}00182\ \ \ ExitGlobalNamespace(program,\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00183}00183\ \ \ ExitProgramDefinition(program,\ out);}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00184}00184\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00185}00185\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00186}00186\ \}\ \ \textcolor{comment}{//\ namespace\ caoco}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00188}00188\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00189}00189\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00190}00190\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00191}00191\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00192}00192\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00193}00193\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00194}00194\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00195}00195\ \textcolor{comment}{//\ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00196}00196\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00197}00197\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00198}00198\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00199}00199\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00200}00200\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00201}00201\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00202}00202\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__transpiler_8h_source_l00203}00203\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \ \textcolor{comment}{//\ HEADER\_GUARD\_CALE\_CAOCO\_TRANSPILER\_H}}
+
+\end{DoxyCode}

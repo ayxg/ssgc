@@ -1,0 +1,190 @@
+\doxysection{caoco\+::ast\+\_\+view\+::Var\+Decl Struct Reference}
+\hypertarget{structcaoco_1_1ast__view_1_1_var_decl}{}\label{structcaoco_1_1ast__view_1_1_var_decl}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}
+
+
+{\ttfamily \#include $<$caoco\+\_\+ceval.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6}{e\+Var\+Decl\+Category}} \{ \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6a85eefff97bc150fe0d56bd4e8a946eb4}{k\+Program\+Var}}
+, \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6a60cdc77d4c992afe675c93f9e55e5b6f}{k\+Class\+Member}}
+, \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6a50cf90bb0c220748861d1cd8d4f23f85}{k\+Functional}}
+, \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6afe24d9ce0417e386c9aeac02d194a093}{k\+Iterative}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classcxx_1_1_expected}{Expected}}$<$ \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl}{Var\+Decl}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_a63df2580e339d9c2669b582694d917c3}{From\+Ast}} (const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&ast, \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_program}{Program}} \&program, \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_namespace_decl}{Namespace\+Decl}} \&ns, size\+\_\+t \&\mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_a34d0daa1bcd7584c8d12ba80896b71a7}{eval\+\_\+order}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+size\+\_\+t \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_a34d0daa1bcd7584c8d12ba80896b71a7}{eval\+\_\+order}}
+\item 
+\mbox{\hyperlink{namespacecaoco_1_1ast__view_a997b02354eeb7d72ae180319aa2bd69a}{e\+Decl\+Visibility}} \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_af5906e3d6450c91d92a633831f7eb0dd}{visibility}}
+\item 
+\mbox{\hyperlink{structcaoco_1_1ast__view_1_1_ident}{Ident}} \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_a4e3191cfd55e43ef2229e841f5bc9f83}{name}}
+\item 
+vector$<$ \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_ident}{Ident}} $>$ \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_a16d60b031715b50d173bce0a80c12b1a}{qualified\+\_\+name}}
+\item 
+\mbox{\hyperlink{structcaoco_1_1ast__view_1_1_val_mods}{Val\+Mods}} \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_a27545d0436f8e0b2e6342436e8e1cc5a}{mods}}
+\item 
+\mbox{\hyperlink{structcaoco_1_1ast__view_1_1_type_list}{Type\+List}} \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_a9527b5d10c816da94a44ae6bd15c1224}{constraints}}
+\item 
+bool \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_ae99637ce0891321c3325dd6109aa866e}{is\+\_\+invariant}}
+\item 
+bool \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_ae82aba00de3d8736720348ea7674a35e}{is\+\_\+initialized}}
+\item 
+\mbox{\hyperlink{structcaoco_1_1ast__view_1_1_primary_expr}{Primary\+Expr}} \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_afd1c0182796b34b9e7b24c41a0639b05}{initializer}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{caoco__ceval_8h_source_l00484}{484}} of file \mbox{\hyperlink{caoco__ceval_8h_source}{caoco\+\_\+ceval.\+h}}.
+
+
+
+\doxysubsection{Member Enumeration Documentation}
+\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!eVarDeclCategory@{eVarDeclCategory}}
+\index{eVarDeclCategory@{eVarDeclCategory}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}
+\doxysubsubsection{\texorpdfstring{eVarDeclCategory}{eVarDeclCategory}}
+{\footnotesize\ttfamily \label{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6} 
+enum \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6}{caoco\+::ast\+\_\+view\+::\+Var\+Decl\+::e\+Var\+Decl\+Category}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kProgramVar@{kProgramVar}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!kProgramVar@{kProgramVar}}}\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6a85eefff97bc150fe0d56bd4e8a946eb4}\label{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6} 
+k\+Program\+Var&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kClassMember@{kClassMember}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!kClassMember@{kClassMember}}}\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6a60cdc77d4c992afe675c93f9e55e5b6f}\label{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6} 
+k\+Class\+Member&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kFunctional@{kFunctional}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!kFunctional@{kFunctional}}}\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6a50cf90bb0c220748861d1cd8d4f23f85}\label{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6} 
+k\+Functional&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kIterative@{kIterative}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!kIterative@{kIterative}}}\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6afe24d9ce0417e386c9aeac02d194a093}\label{structcaoco_1_1ast__view_1_1_var_decl_aad712be0e943a0f7b3c81ad13dcd78a6} 
+k\+Iterative&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line \mbox{\hyperlink{caoco__ceval_8h_source_l00491}{491}} of file \mbox{\hyperlink{caoco__ceval_8h_source}{caoco\+\_\+ceval.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_a63df2580e339d9c2669b582694d917c3}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!FromAst@{FromAst}}
+\index{FromAst@{FromAst}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}
+\doxysubsubsection{\texorpdfstring{FromAst()}{FromAst()}}
+{\footnotesize\ttfamily \label{structcaoco_1_1ast__view_1_1_var_decl_a63df2580e339d9c2669b582694d917c3} 
+\mbox{\hyperlink{classcxx_1_1_expected}{Expected}}$<$ \mbox{\hyperlink{structcaoco_1_1ast__view_1_1_var_decl}{Var\+Decl}} \texorpdfstring{$\ast$}{*} $>$ caoco\+::ast\+\_\+view\+::\+Var\+Decl\+::\+From\+Ast (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&}]{ast}{, }\item[{\mbox{\hyperlink{structcaoco_1_1ast__view_1_1_program}{Program}} \&}]{program}{, }\item[{\mbox{\hyperlink{structcaoco_1_1ast__view_1_1_namespace_decl}{Namespace\+Decl}} \&}]{ns}{, }\item[{size\+\_\+t \&}]{eval\+\_\+order}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ceval_8h_source_l01011}{1011}} of file \mbox{\hyperlink{caoco__ceval_8h_source}{caoco\+\_\+ceval.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_a9527b5d10c816da94a44ae6bd15c1224}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!constraints@{constraints}}
+\index{constraints@{constraints}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}
+\doxysubsubsection{\texorpdfstring{constraints}{constraints}}
+{\footnotesize\ttfamily \label{structcaoco_1_1ast__view_1_1_var_decl_a9527b5d10c816da94a44ae6bd15c1224} 
+\mbox{\hyperlink{structcaoco_1_1ast__view_1_1_type_list}{Type\+List}} caoco\+::ast\+\_\+view\+::\+Var\+Decl\+::constraints}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ceval_8h_source_l00504}{504}} of file \mbox{\hyperlink{caoco__ceval_8h_source}{caoco\+\_\+ceval.\+h}}.
+
+\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_a34d0daa1bcd7584c8d12ba80896b71a7}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!eval\_order@{eval\_order}}
+\index{eval\_order@{eval\_order}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}
+\doxysubsubsection{\texorpdfstring{eval\_order}{eval\_order}}
+{\footnotesize\ttfamily \label{structcaoco_1_1ast__view_1_1_var_decl_a34d0daa1bcd7584c8d12ba80896b71a7} 
+size\+\_\+t caoco\+::ast\+\_\+view\+::\+Var\+Decl\+::eval\+\_\+order}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ceval_8h_source_l00493}{493}} of file \mbox{\hyperlink{caoco__ceval_8h_source}{caoco\+\_\+ceval.\+h}}.
+
+\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_afd1c0182796b34b9e7b24c41a0639b05}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!initializer@{initializer}}
+\index{initializer@{initializer}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}
+\doxysubsubsection{\texorpdfstring{initializer}{initializer}}
+{\footnotesize\ttfamily \label{structcaoco_1_1ast__view_1_1_var_decl_afd1c0182796b34b9e7b24c41a0639b05} 
+\mbox{\hyperlink{structcaoco_1_1ast__view_1_1_primary_expr}{Primary\+Expr}} caoco\+::ast\+\_\+view\+::\+Var\+Decl\+::initializer}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ceval_8h_source_l00507}{507}} of file \mbox{\hyperlink{caoco__ceval_8h_source}{caoco\+\_\+ceval.\+h}}.
+
+\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_ae82aba00de3d8736720348ea7674a35e}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!is\_initialized@{is\_initialized}}
+\index{is\_initialized@{is\_initialized}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}
+\doxysubsubsection{\texorpdfstring{is\_initialized}{is\_initialized}}
+{\footnotesize\ttfamily \label{structcaoco_1_1ast__view_1_1_var_decl_ae82aba00de3d8736720348ea7674a35e} 
+bool caoco\+::ast\+\_\+view\+::\+Var\+Decl\+::is\+\_\+initialized}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ceval_8h_source_l00506}{506}} of file \mbox{\hyperlink{caoco__ceval_8h_source}{caoco\+\_\+ceval.\+h}}.
+
+\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_ae99637ce0891321c3325dd6109aa866e}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!is\_invariant@{is\_invariant}}
+\index{is\_invariant@{is\_invariant}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}
+\doxysubsubsection{\texorpdfstring{is\_invariant}{is\_invariant}}
+{\footnotesize\ttfamily \label{structcaoco_1_1ast__view_1_1_var_decl_ae99637ce0891321c3325dd6109aa866e} 
+bool caoco\+::ast\+\_\+view\+::\+Var\+Decl\+::is\+\_\+invariant}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ceval_8h_source_l00505}{505}} of file \mbox{\hyperlink{caoco__ceval_8h_source}{caoco\+\_\+ceval.\+h}}.
+
+\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_a27545d0436f8e0b2e6342436e8e1cc5a}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!mods@{mods}}
+\index{mods@{mods}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}
+\doxysubsubsection{\texorpdfstring{mods}{mods}}
+{\footnotesize\ttfamily \label{structcaoco_1_1ast__view_1_1_var_decl_a27545d0436f8e0b2e6342436e8e1cc5a} 
+\mbox{\hyperlink{structcaoco_1_1ast__view_1_1_val_mods}{Val\+Mods}} caoco\+::ast\+\_\+view\+::\+Var\+Decl\+::mods}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ceval_8h_source_l00503}{503}} of file \mbox{\hyperlink{caoco__ceval_8h_source}{caoco\+\_\+ceval.\+h}}.
+
+\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_a4e3191cfd55e43ef2229e841f5bc9f83}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!name@{name}}
+\index{name@{name}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily \label{structcaoco_1_1ast__view_1_1_var_decl_a4e3191cfd55e43ef2229e841f5bc9f83} 
+\mbox{\hyperlink{structcaoco_1_1ast__view_1_1_ident}{Ident}} caoco\+::ast\+\_\+view\+::\+Var\+Decl\+::name}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ceval_8h_source_l00495}{495}} of file \mbox{\hyperlink{caoco__ceval_8h_source}{caoco\+\_\+ceval.\+h}}.
+
+\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_a16d60b031715b50d173bce0a80c12b1a}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!qualified\_name@{qualified\_name}}
+\index{qualified\_name@{qualified\_name}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}
+\doxysubsubsection{\texorpdfstring{qualified\_name}{qualified\_name}}
+{\footnotesize\ttfamily \label{structcaoco_1_1ast__view_1_1_var_decl_a16d60b031715b50d173bce0a80c12b1a} 
+vector$<$\mbox{\hyperlink{structcaoco_1_1ast__view_1_1_ident}{Ident}}$>$ caoco\+::ast\+\_\+view\+::\+Var\+Decl\+::qualified\+\_\+name}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ceval_8h_source_l00497}{497}} of file \mbox{\hyperlink{caoco__ceval_8h_source}{caoco\+\_\+ceval.\+h}}.
+
+\Hypertarget{structcaoco_1_1ast__view_1_1_var_decl_af5906e3d6450c91d92a633831f7eb0dd}\index{caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}!visibility@{visibility}}
+\index{visibility@{visibility}!caoco::ast\_view::VarDecl@{caoco::ast\_view::VarDecl}}
+\doxysubsubsection{\texorpdfstring{visibility}{visibility}}
+{\footnotesize\ttfamily \label{structcaoco_1_1ast__view_1_1_var_decl_af5906e3d6450c91d92a633831f7eb0dd} 
+\mbox{\hyperlink{namespacecaoco_1_1ast__view_a997b02354eeb7d72ae180319aa2bd69a}{e\+Decl\+Visibility}} caoco\+::ast\+\_\+view\+::\+Var\+Decl\+::visibility}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ceval_8h_source_l00494}{494}} of file \mbox{\hyperlink{caoco__ceval_8h_source}{caoco\+\_\+ceval.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/\mbox{\hyperlink{caoco__ceval_8h}{caoco\+\_\+ceval.\+h}}\end{DoxyCompactItemize}

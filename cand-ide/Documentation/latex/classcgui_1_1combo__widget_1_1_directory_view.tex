@@ -1,0 +1,131 @@
+\doxysection{cgui\+::combo\+\_\+widget\+::Directory\+View Class Reference}
+\hypertarget{classcgui_1_1combo__widget_1_1_directory_view}{}\label{classcgui_1_1combo__widget_1_1_directory_view}\index{cgui::combo\_widget::DirectoryView@{cgui::combo\_widget::DirectoryView}}
+
+
+{\ttfamily \#include $<$imgui\+\_\+interface.\+h$>$}
+
+Inheritance diagram for cgui\+::combo\+\_\+widget\+::Directory\+View\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcgui_1_1combo__widget_1_1_directory_view}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_aacdfe0c38a50735092279c4fdcd09722}{PathT}} = typename std\+::filesystem\+::path
+\item 
+using \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_a2ad61574e84ae0985ee24d83528abe0d}{Selected\+CallbackT}} = std\+::function$<$void(const \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_aacdfe0c38a50735092279c4fdcd09722}{PathT}}\&)$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_adc26b2862f00ed4c4a58cce6aee5b9df}{Directory\+View}} (const \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_aacdfe0c38a50735092279c4fdcd09722}{PathT}} \&path, \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_a2ad61574e84ae0985ee24d83528abe0d}{Selected\+CallbackT}} selected\+\_\+callback=\mbox{[}$\,$\mbox{]}(auto \&\&a) \{\}, bool is\+\_\+delayed=false)
+\item 
+\mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_acf6ee9590fcfe7a8a956503fb90095fe}{Directory\+View}} (const \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_aacdfe0c38a50735092279c4fdcd09722}{PathT}} \&path, \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_a2ad61574e84ae0985ee24d83528abe0d}{Selected\+CallbackT}} selected\+\_\+callback=\mbox{[}$\,$\mbox{]}(auto \&\&a) \{\}, \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_a2ad61574e84ae0985ee24d83528abe0d}{Selected\+CallbackT}} right\+\_\+click\+\_\+callback=\mbox{[}$\,$\mbox{]}(auto \&\&a) \{\}, bool is\+\_\+delayed=false)
+\item 
+bool \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_a0323abed9dcd45a31e9326d4f837c9f3}{Begin\+Late}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcgui_1_1_singular_widget_base}{cgui\+::\+Singular\+Widget\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classcgui_1_1_singular_widget_base_ae98de68c3e093919ae95192355ef71fa}{Is\+On}} () const
+\item 
+bool \mbox{\hyperlink{classcgui_1_1_singular_widget_base_a9caedcef3552fce797687a1b998e7891}{Is\+Delayed}} () const
+\item 
+\mbox{\hyperlink{classcgui_1_1_singular_widget_base_aee6f2d7e4f89424448c19616686dcb00}{operator bool}} ()
+\item 
+\mbox{\hyperlink{classcgui_1_1_singular_widget_base_af5e51952757a701c0e4d720ab4eca025}{Singular\+Widget\+Base}} (bool is\+\_\+delayed)
+\item 
+virtual \mbox{\hyperlink{classcgui_1_1_singular_widget_base_ae8970cd93653929aded9a50e43050d73}{\texorpdfstring{$\sim$}{\string~}\+Singular\+Widget\+Base}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcgui_1_1_singular_widget_base}{cgui\+::\+Singular\+Widget\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classcgui_1_1_singular_widget_base_abda5237bf63ebb731cf2356c0dc38f33}{Begin\+Impl}} ()
+\item 
+bool \mbox{\hyperlink{classcgui_1_1_singular_widget_base_a8b48847fec43e99fc8b79b8a58cdd840}{Begin\+Late\+Impl}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcgui_1_1_singular_widget_base}{cgui\+::\+Singular\+Widget\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classcgui_1_1_singular_widget_base_a0b41e8ebc2af2282aaaf5ef1ba7b569c}{is\+\_\+on\+\_\+}}
+\item 
+bool \mbox{\hyperlink{classcgui_1_1_singular_widget_base_ad2c0a6f500399ef741bbbe90e8acb910}{is\+\_\+delayed\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l01050}{1050}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+
+
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{classcgui_1_1combo__widget_1_1_directory_view_aacdfe0c38a50735092279c4fdcd09722}\index{cgui::combo\_widget::DirectoryView@{cgui::combo\_widget::DirectoryView}!PathT@{PathT}}
+\index{PathT@{PathT}!cgui::combo\_widget::DirectoryView@{cgui::combo\_widget::DirectoryView}}
+\doxysubsubsection{\texorpdfstring{PathT}{PathT}}
+{\footnotesize\ttfamily \label{classcgui_1_1combo__widget_1_1_directory_view_aacdfe0c38a50735092279c4fdcd09722} 
+using \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_aacdfe0c38a50735092279c4fdcd09722}{cgui\+::combo\+\_\+widget\+::\+Directory\+View\+::\+PathT}} = typename std\+::filesystem\+::path}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l01052}{1052}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{classcgui_1_1combo__widget_1_1_directory_view_a2ad61574e84ae0985ee24d83528abe0d}\index{cgui::combo\_widget::DirectoryView@{cgui::combo\_widget::DirectoryView}!SelectedCallbackT@{SelectedCallbackT}}
+\index{SelectedCallbackT@{SelectedCallbackT}!cgui::combo\_widget::DirectoryView@{cgui::combo\_widget::DirectoryView}}
+\doxysubsubsection{\texorpdfstring{SelectedCallbackT}{SelectedCallbackT}}
+{\footnotesize\ttfamily \label{classcgui_1_1combo__widget_1_1_directory_view_a2ad61574e84ae0985ee24d83528abe0d} 
+using \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_a2ad61574e84ae0985ee24d83528abe0d}{cgui\+::combo\+\_\+widget\+::\+Directory\+View\+::\+Selected\+CallbackT}} = std\+::function$<$void(const \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_aacdfe0c38a50735092279c4fdcd09722}{PathT}}\&)$>$}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l01053}{1053}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcgui_1_1combo__widget_1_1_directory_view_adc26b2862f00ed4c4a58cce6aee5b9df}\index{cgui::combo\_widget::DirectoryView@{cgui::combo\_widget::DirectoryView}!DirectoryView@{DirectoryView}}
+\index{DirectoryView@{DirectoryView}!cgui::combo\_widget::DirectoryView@{cgui::combo\_widget::DirectoryView}}
+\doxysubsubsection{\texorpdfstring{DirectoryView()}{DirectoryView()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcgui_1_1combo__widget_1_1_directory_view_adc26b2862f00ed4c4a58cce6aee5b9df} 
+cgui\+::combo\+\_\+widget\+::\+Directory\+View\+::\+Directory\+View (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_aacdfe0c38a50735092279c4fdcd09722}{PathT}} \&}]{path}{, }\item[{\mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_a2ad61574e84ae0985ee24d83528abe0d}{Selected\+CallbackT}}}]{selected\+\_\+callback}{ = {\ttfamily \mbox{[}\mbox{]}(auto\&\&~a)~\{\}}, }\item[{bool}]{is\+\_\+delayed}{ = {\ttfamily false}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l01056}{1056}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{classcgui_1_1combo__widget_1_1_directory_view_acf6ee9590fcfe7a8a956503fb90095fe}\index{cgui::combo\_widget::DirectoryView@{cgui::combo\_widget::DirectoryView}!DirectoryView@{DirectoryView}}
+\index{DirectoryView@{DirectoryView}!cgui::combo\_widget::DirectoryView@{cgui::combo\_widget::DirectoryView}}
+\doxysubsubsection{\texorpdfstring{DirectoryView()}{DirectoryView()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcgui_1_1combo__widget_1_1_directory_view_acf6ee9590fcfe7a8a956503fb90095fe} 
+cgui\+::combo\+\_\+widget\+::\+Directory\+View\+::\+Directory\+View (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_aacdfe0c38a50735092279c4fdcd09722}{PathT}} \&}]{path}{, }\item[{\mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_a2ad61574e84ae0985ee24d83528abe0d}{Selected\+CallbackT}}}]{selected\+\_\+callback}{ = {\ttfamily \mbox{[}\mbox{]}(auto\&\&~a)~\{\}}, }\item[{\mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view_a2ad61574e84ae0985ee24d83528abe0d}{Selected\+CallbackT}}}]{right\+\_\+click\+\_\+callback}{ = {\ttfamily \mbox{[}\mbox{]}(auto\&\&~a)~\{\}}, }\item[{bool}]{is\+\_\+delayed}{ = {\ttfamily false}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l01065}{1065}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcgui_1_1combo__widget_1_1_directory_view_a0323abed9dcd45a31e9326d4f837c9f3}\index{cgui::combo\_widget::DirectoryView@{cgui::combo\_widget::DirectoryView}!BeginLate@{BeginLate}}
+\index{BeginLate@{BeginLate}!cgui::combo\_widget::DirectoryView@{cgui::combo\_widget::DirectoryView}}
+\doxysubsubsection{\texorpdfstring{BeginLate()}{BeginLate()}}
+{\footnotesize\ttfamily \label{classcgui_1_1combo__widget_1_1_directory_view_a0323abed9dcd45a31e9326d4f837c9f3} 
+bool cgui\+::combo\+\_\+widget\+::\+Directory\+View\+::\+Begin\+Late (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcgui_1_1_singular_widget_base_ab1c604d586194309a64e27659b76b520}{cgui\+::\+Singular\+Widget\+Base}}.
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l01076}{1076}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/ide/\mbox{\hyperlink{imgui__interface_8h}{imgui\+\_\+interface.\+h}}\end{DoxyCompactItemize}

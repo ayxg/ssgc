@@ -1,0 +1,166 @@
+\doxysection{minitest-\/example.cpp}
+\hypertarget{minitest-example_8cpp_source}{}\label{minitest-example_8cpp_source}\index{C:/Users/Anton/source/repos/CandRuntime/submodules/mini-\/test/minitest-\/example.cpp@{C:/Users/Anton/source/repos/CandRuntime/submodules/mini-\/test/minitest-\/example.cpp}}
+\mbox{\hyperlink{minitest-example_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00001}00001\ \textcolor{comment}{////\ Include\ the\ minitest.h\ file\ to\ use\ the\ minimal\ unit\ testing\ framework}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00002}00002\ \textcolor{comment}{//\#include\ "{}minitest.h"{}\ \ //\ Minimal\ Unit\ Testing\ Framework}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00004}00004\ \textcolor{comment}{////=-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/=//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00005}00005\ \textcolor{comment}{////\ Project\ Includes}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00006}00006\ \textcolor{comment}{////-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00007}00007\ \textcolor{comment}{////\ \#include\ "{}parser.h"{}\ //\ all\ the\ headers\ of\ your\ project\ to\ test...}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00008}00008\ \textcolor{comment}{//\#include\ <iostream>\ \ //\ for\ example}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00009}00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00010}00010\ \textcolor{comment}{////=-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/=//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00011}00011\ \textcolor{comment}{////\ Unit\ Tests\ Recommended\ Conventions}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00012}00012\ \textcolor{comment}{////-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00013}00013\ \textcolor{comment}{////\ 0.\ Create\ few\ headers\ to\ organize\ the\ unit\ test\ depndencies\ and}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00014}00014\ \textcolor{comment}{////\ configurations.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00015}00015\ \textcolor{comment}{////}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00016}00016\ \textcolor{comment}{////\ \#include\ "{}minitest\_flags.h"{}\ \ //\ Flags\ to\ enable\ or\ disable\ the\ unit\ tests}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00017}00017\ \textcolor{comment}{////\ \#include\ "{}minitest\_pch.h"{}\ \ \ \ //\ All\ pre\ includes/dependencies\ for\ all\ unit}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00018}00018\ \textcolor{comment}{////\ tests}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00019}00019\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ eg.\ standard\ library}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00020}00020\ \textcolor{comment}{////\ \#include\ "{}minitest\_util.h"{}\ \ \ //\ Utility\ methods\ shared\ among\ the\ all\ unit}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00021}00021\ \textcolor{comment}{////\ tests}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00022}00022\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ seperate\ from\ your\ project's\ files.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00023}00023\ \textcolor{comment}{////\ 1.\ All\ unit\ test\ files\ should\ be\ named\ as\ utX\_testModuleName.h}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00024}00024\ \textcolor{comment}{////\ \ \ \ \ \ where\ X\ is\ the\ iteration\ of\ the\ unit\ test\ module.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00025}00025\ \textcolor{comment}{////}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00026}00026\ \textcolor{comment}{////\ 2.\ All\ unit\ test\ files\ should\ include\ the\ following\ headers}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00027}00027\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \#include\ "{}minitest\_flags.h"{}\ //\ Flags\ to\ enable\ or\ disable\ the\ unit}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00028}00028\ \textcolor{comment}{////\ \ \ \ \ \ \ \ tests\ \#include\ "{}minitest\_pch.h"{}\ //\ All\ pre\ includes\ for\ each\ unit\ test}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00029}00029\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \#include\ "{}minitest\_util.h"{}\ //\ Utility\ methods\ shared\ among\ the\ all}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00030}00030\ \textcolor{comment}{////\ \ \ \ \ \ \ \ unit\ tests}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00031}00031\ \textcolor{comment}{////}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00032}00032\ \textcolor{comment}{////\ 3.\ Unit\ test\ headers\ must\ NOT\ EVER\ include\ another\ unit\ test\ 'utX\_'\ header.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00033}00033\ \textcolor{comment}{////\ \ \ \ or\ have\ dependencies\ on\ other\ unit\ tests.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00034}00034\ \textcolor{comment}{////}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00035}00035\ \textcolor{comment}{////\ 4.\ Unit\ tests\ auto-\/register.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00036}00036\ \textcolor{comment}{////\ \ \ \ To\ disable\ and\ enable\ a\ test\ create\ a\ flag\ in\ minitest\_flags.h.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00037}00037\ \textcolor{comment}{////\ \ \ \ The\ format\ should\ be\ for\ example\ unit\ test\ of\ parser\_utils.h:}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00038}00038\ \textcolor{comment}{////\ \ \ \ \ \ 1.Inside\ minitest\_flags.h:}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00039}00039\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \#define\ CAOCO\_UNIT\_TEST0\_PARSER\_UTILS\ 1}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00040}00040\ \textcolor{comment}{////\ \ \ \ \ \ 2.Inside\ your\ unit\ test\ file:}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00041}00041\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \#if\ CAOCO\_UNIT\_TEST0\_PARSER\_UTILS}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00042}00042\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \#define\ CAOCO\_UNIT\_TEST0\_PARSER\_UTILS\_BasicScopeFinder\ 1}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00043}00043\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \#define\ CAOCO\_UNIT\_TEST0\_PARSER\_UTILS\_ListScopeFinder\ 1}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00044}00044\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \#define\ CAOCO\_UNIT\_TEST0\_PARSER\_UTILS\_FrameScopeFinder\ 1}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00045}00045\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \#define\ CAOCO\_UNIT\_TEST0\_PARSER\_UTILS\_StatementScopeFinder\ 1}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00046}00046\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \#endif}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00047}00047\ \textcolor{comment}{////\ \ \ \ Surround\ each\ unit\ test\ with\ \#if\ \#endif.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00048}00048\ \textcolor{comment}{////\ 5.\ Provide\ detailed\ description\ of\ the\ unit\ test\ above\ the\ include.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00049}00049\ \textcolor{comment}{////\ \ \ \ \ \ \ \ -\/\ Provide\ the\ macro\ to\ enable\ or\ disable\ the\ unit\ test.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00050}00050\ \textcolor{comment}{////\ \ \ \ \ \ \ \ -\/\ Provide\ the\ sub-\/macros\ to\ enable\ or\ disable\ the\ sub-\/tests.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00051}00051\ \textcolor{comment}{////\ \ \ \ \ \ \ \ -\/\ Provide\ info\ on\ which\ header\ file\ is\ being\ tested.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00052}00052\ \textcolor{comment}{////\ \ \ \ \ \ \ \ -\/\ Provide\ a\ brief\ description\ of\ the\ unit\ test.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00053}00053\ \textcolor{comment}{////\ \ \ \ For\ example:}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00054}00054\ \textcolor{comment}{////\ \ \ \ \ \ \ \ //\ Unit\ Test:\ parser\_utils.h}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00055}00055\ \textcolor{comment}{////\ \ \ \ \ \ \ \ //\ Header:\ parser\_utils.h}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00056}00056\ \textcolor{comment}{////\ \ \ \ \ \ \ \ //\ Description:\ testing\ scope\ finders\ in\ parser\_utils.h}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00057}00057\ \textcolor{comment}{////\ \ \ \ \ \ \ \ //\ Macros:}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00058}00058\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \ \ 1.CAOCO\_UNIT\_TEST0\_PARSER\_UTILS}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00059}00059\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \ \ \ \ 1.1.CAOCO\_UNIT\_TEST0\_PARSER\_UTILS\_BasicScopeFinder}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00060}00060\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \ \ \ \ 1.2.CAOCO\_UNIT\_TEST0\_PARSER\_UTILS\_ListScopeFinder}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00061}00061\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \ \ \ \ 1.3.CAOCO\_UNIT\_TEST0\_PARSER\_UTILS\_FrameScopeFinder}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00062}00062\ \textcolor{comment}{////\ \ \ \ \ \ \ \ \ \ \ \ \ \ 1.4.CAOCO\_UNIT\_TEST0\_PARSER\_UTILS\_StatementScopeFinder}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00063}00063\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00064}00064\ \textcolor{comment}{////=-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/=//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00065}00065\ \textcolor{comment}{////\ Unit\ Test\ Includes}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00066}00066\ \textcolor{comment}{////-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00067}00067\ \textcolor{comment}{////\ \#include\ "{}ut0\_parser\_utils.h"{}}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00068}00068\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00069}00069\ \textcolor{comment}{////\ Example\ of\ a\ unit\ test.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00070}00070\ \textcolor{comment}{////\ NOTE:\ the\ braces\{\}\ are\ optional\ but\ recommended\ for\ better\ readability.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00071}00071\ \textcolor{comment}{//auto\ my\_method()\ \{\ return\ true;\ \}}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00072}00072\ \textcolor{comment}{//MINITEST(MyTest,MyTestCase)\{}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00073}00073\ \textcolor{comment}{//\ \ EXPECT\_TRUE(my\_method());}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00074}00074\ \textcolor{comment}{//\ \ EXPECT\_TRUE(false);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00075}00075\ \textcolor{comment}{//\ \ EXPECT\_FALSE(false);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00076}00076\ \textcolor{comment}{//\ \ EXPECT\_FALSE(true);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00077}00077\ \textcolor{comment}{//\ \ EXPECT\_EQ(1,1);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00078}00078\ \textcolor{comment}{//\ \ EXPECT\_EQ(1,2);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00079}00079\ \textcolor{comment}{//\ \ EXPECT\_NE(1,2);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00080}00080\ \textcolor{comment}{//\ \ EXPECT\_NE(1,1);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00081}00081\ \textcolor{comment}{//\ \ EXPECT\_ANY\_THROW([]()\{\ throw\ std::runtime\_error("{}error"{});\ \});}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00082}00082\ \textcolor{comment}{//\ \ EXPECT\_ANY\_THROW([]()\{\});}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00083}00083\ \textcolor{comment}{//\ \ EXPECT\_NO\_THROW([]()\{\});}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00084}00084\ \textcolor{comment}{//\ \ EXPECT\_NO\_THROW([]()\{\ throw\ std::runtime\_error("{}error"{});\ \});}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00085}00085\ \textcolor{comment}{//\}}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00086}00086\ \textcolor{comment}{//END\_MINITEST;}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00087}00087\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00088}00088\ \textcolor{comment}{////\ Example\ of\ a\ fixture.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00089}00089\ \textcolor{comment}{//struct\ MyFixture\ :\ minitest::Fixture\ \{}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00090}00090\ \textcolor{comment}{//\ \ int\ my\_foo\ =\ 0;}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00091}00091\ \textcolor{comment}{//\ \ void\ SetUp()\ override\ \{}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00092}00092\ \textcolor{comment}{//\ \ \ \ std::cout\ <<\ "{}Setting\ up\ the\ fixture\(\backslash\)n"{};}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00093}00093\ \textcolor{comment}{//\ \ \}}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00094}00094\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00095}00095\ \textcolor{comment}{//\ \ void\ TearDown()\ override\ \{}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00096}00096\ \textcolor{comment}{//\ \ \ \ std::cout\ <<\ "{}Tearing\ down\ the\ fixture\(\backslash\)n"{};}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00097}00097\ \textcolor{comment}{//\ \ \}}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00098}00098\ \textcolor{comment}{//\};}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00099}00099\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00100}00100\ \textcolor{comment}{////\ Example\ of\ a\ fixture\ unit\ test.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00101}00101\ \textcolor{comment}{//MINITEST\_F(MyFixtureTest,\ MyFixtureTestCase,\ MyFixture)\ \{}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00102}00102\ \textcolor{comment}{//\ \ EXPECT\_TRUE(my\_foo\ ==\ 0);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00103}00103\ \textcolor{comment}{//\ \ EXPECT\_TRUE(my\_foo\ !=\ 1);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00104}00104\ \textcolor{comment}{//\ \ EXPECT\_FALSE(my\_foo\ ==\ 1);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00105}00105\ \textcolor{comment}{//\ \ EXPECT\_FALSE(my\_foo\ !=\ 0);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00106}00106\ \textcolor{comment}{//\ \ EXPECT\_EQ(my\_foo,0);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00107}00107\ \textcolor{comment}{//\ \ EXPECT\_EQ(my\_foo,1);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00108}00108\ \textcolor{comment}{//\ \ EXPECT\_NE(my\_foo,1);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00109}00109\ \textcolor{comment}{//\ \ EXPECT\_NE(my\_foo,0);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00110}00110\ \textcolor{comment}{//\ \ EXPECT\_ANY\_THROW([]()\{\ throw\ std::runtime\_error("{}error"{});\ \});}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00111}00111\ \textcolor{comment}{//\ \ EXPECT\_ANY\_THROW([]()\{\});}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00112}00112\ \textcolor{comment}{//\ \ EXPECT\_NO\_THROW([]()\{\});}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00113}00113\ \textcolor{comment}{//\ \ EXPECT\_NO\_THROW([]()\{\ throw\ std::runtime\_error("{}error"{});\ \});}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00114}00114\ \textcolor{comment}{//\}}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00115}00115\ \textcolor{comment}{//END\_MINITEST\_F(MyFixtureTestCase);}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00116}00116\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00117}00117\ \textcolor{comment}{//FINISH\_MINITESTS;\ \ //\ Macro\ to\ finish\ the\ test\ suite\ call\ before\ main\ function.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00118}00118\ \textcolor{comment}{////\ Undefine\ all\ the\ minitest\ macros\ except\ MINITESTS\_RESULT}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00119}00119\ \textcolor{comment}{////\ Not\ necessary\ but\ recommended.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00120}00120\ \textcolor{comment}{//\#undef\ MINITEST}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00121}00121\ \textcolor{comment}{//\#undef\ END\_MINITEST}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00122}00122\ \textcolor{comment}{//\#undef\ FINISH\_MINITESTS}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00123}00123\ \textcolor{comment}{//\#undef\ EXPECT\_TRUE}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00124}00124\ \textcolor{comment}{//\#undef\ EXPECT\_FALSE}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00125}00125\ \textcolor{comment}{//\#undef\ EXPECT\_EQ}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00126}00126\ \textcolor{comment}{//\#undef\ EXPECT\_NE}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00127}00127\ \textcolor{comment}{//\#undef\ EXPECT\_ANY\_THROW}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00128}00128\ \textcolor{comment}{//\#undef\ EXPECT\_NO\_THROW}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00129}00129\ \textcolor{comment}{//\#undef\ ASSERT\_TRUE}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00130}00130\ \textcolor{comment}{//\#undef\ ASSERT\_FALSE}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00131}00131\ \textcolor{comment}{//\#undef\ ASSERT\_EQ}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00132}00132\ \textcolor{comment}{//\#undef\ ASSERT\_NE}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00133}00133\ \textcolor{comment}{//\#undef\ ASSERT\_ANY\_THROW}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00134}00134\ \textcolor{comment}{//\#undef\ ASSERT\_NO\_THROW}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00135}00135\ \textcolor{comment}{//\#undef\ EXPECT\_TRUE\_LOG}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00136}00136\ \textcolor{comment}{//\#undef\ EXPECT\_FALSE\_LOG}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00137}00137\ \textcolor{comment}{//\#undef\ EXPECT\_EQ\_LOG}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00138}00138\ \textcolor{comment}{//\#undef\ EXPECT\_NE\_LOG}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00139}00139\ \textcolor{comment}{//\#undef\ EXPECT\_ANY\_THROW\_LOG}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00140}00140\ \textcolor{comment}{//\#undef\ EXPECT\_NO\_THROW\_LOG}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00141}00141\ \textcolor{comment}{//\#undef\ ASSERT\_TRUE\_LOG}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00142}00142\ \textcolor{comment}{//\#undef\ ASSERT\_FALSE\_LOG}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00143}00143\ \textcolor{comment}{//\#undef\ ASSERT\_EQ\_LOG}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00144}00144\ \textcolor{comment}{//\#undef\ ASSERT\_NE\_LOG}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00145}00145\ \textcolor{comment}{//\#undef\ ASSERT\_ANY\_THROW\_LOG}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00146}00146\ \textcolor{comment}{//\#undef\ ASSERT\_NO\_THROW\_LOG}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00147}00147\ \textcolor{comment}{////-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00148}00148\ \textcolor{comment}{////=-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/=//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00149}00149\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00150}00150\ \textcolor{comment}{////\ Main\ Function\ is\ unaffected\ by\ the\ unit\ tests.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00151}00151\ \textcolor{comment}{//int\ main()\ \{}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00152}00152\ \textcolor{comment}{//\ \ std::cout\ <<\ "{}Hello\ World!\(\backslash\)n"{};}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00153}00153\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00154}00154\ \textcolor{comment}{//\ \ if\ (MINITESTS\_RESULT)}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00155}00155\ \textcolor{comment}{//\ \ \ \ std::cout\ <<\ "{}Testing\ was\ successful.\(\backslash\)n"{};}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00156}00156\ \textcolor{comment}{//\ \ else}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00157}00157\ \textcolor{comment}{//\ \ \ \ std::cout\ <<\ "{}A\ test\ case\ failed.\(\backslash\)n"{};}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00158}00158\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00159}00159\ \textcolor{comment}{//\ \ return\ MINITESTS\_RESULT\ ?\ 0\ :\ 1;\ //\ example\ of\ return\ result\ based\ on\ tests.}}
+\DoxyCodeLine{\Hypertarget{minitest-example_8cpp_source_l00160}00160\ \textcolor{comment}{//\}}}
+
+\end{DoxyCode}

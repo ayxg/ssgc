@@ -1,0 +1,637 @@
+\doxysection{caoco\+::Ast Class Reference}
+\hypertarget{classcaoco_1_1_ast}{}\label{classcaoco_1_1_ast}\index{caoco::Ast@{caoco::Ast}}
+
+
+{\ttfamily \#include $<$caoco\+\_\+ast.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} \mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{Type}} () const noexcept
+\item 
+constexpr const std\+::string \& \mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{Literal}} () const noexcept
+\item 
+bool \mbox{\hyperlink{classcaoco_1_1_ast_ab7f01380dc444b679eee0d05208cc9b9}{Leaf}} () const noexcept
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_ast_a6fff35d07cef587b83394fd7a2f31f80}{Root}} () const noexcept
+\item 
+bool \mbox{\hyperlink{classcaoco_1_1_ast_a0672f242929c105014f3834ffb8bdfd3}{Branch}} () const noexcept
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& \mbox{\hyperlink{classcaoco_1_1_ast_a66e27b0e73ec105d6e53e677d63f31cc}{Parent}} ()
+\item 
+constexpr void \mbox{\hyperlink{classcaoco_1_1_ast_ad1669c17c8562aad32dec842231b177e}{Set\+Parent}} (\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \texorpdfstring{$\ast$}{*}parent)
+\item 
+constexpr void \mbox{\hyperlink{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad}{Pop\+Parent}} ()
+\item 
+bool \mbox{\hyperlink{classcaoco_1_1_ast_a8b1ba9cd7fd95dda3614640192c21a8f}{Empty}} () const noexcept
+\item 
+std\+::size\+\_\+t \mbox{\hyperlink{classcaoco_1_1_ast_a37a8537d75ea9a4694ad81be8c973298}{Size}} () const
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& \mbox{\hyperlink{classcaoco_1_1_ast_a87de9ffa1763fd4b5b4f5c16d7b99366}{Push\+Back}} (const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&nd)
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& \mbox{\hyperlink{classcaoco_1_1_ast_a8775840994d6ea5ab5a29be155f4907b}{Push\+Front}} (const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&nd)
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& \mbox{\hyperlink{classcaoco_1_1_ast_a0331fbcda77290b4a0279fe81579cf97}{Push\+Back}} (\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&\&nd)
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& \mbox{\hyperlink{classcaoco_1_1_ast_a0378fc8c0a32d4b1d2bb348dcc73c7c0}{Push\+Front}} (\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&\&nd)
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \mbox{\hyperlink{classcaoco_1_1_ast_a615d9659390d98bebdeeba363f36580a}{Pop\+Back}} ()
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \mbox{\hyperlink{classcaoco_1_1_ast_a5bee2c126e7126c281b0ca9727e4e9bc}{Pop\+Front}} ()
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& \mbox{\hyperlink{classcaoco_1_1_ast_af472d3115cb8d4370c5e0fbe373f7649}{Front}} ()
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& \mbox{\hyperlink{classcaoco_1_1_ast_a34e50d9fd784d3c6dcbbfa291b61b477}{Back}} ()
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& \mbox{\hyperlink{classcaoco_1_1_ast_a70851d50210966386d88fe15c27bf1f7}{At}} (std\+::size\+\_\+t index)
+\item 
+const std\+::list$<$ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} $>$ \& \mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{Children}} () const
+\item 
+const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& \mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{operator\mbox{[}$\,$\mbox{]}}} (std\+::size\+\_\+t index) const
+\begin{DoxyCompactList}\small\item\em Index operator accesses children. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& \mbox{\hyperlink{classcaoco_1_1_ast_a9562aecf121645d9b0ad896c30b9a3dd}{operator\mbox{[}$\,$\mbox{]}}} (std\+::size\+\_\+t index)
+\item 
+bool \mbox{\hyperlink{classcaoco_1_1_ast_a4081fac748bfd983d2b1cf55f07031c0}{Type\+Is}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} type) const noexcept
+\item 
+bool \mbox{\hyperlink{classcaoco_1_1_ast_ad8e57a57376b480573e3a98babbcccd5}{Type\+Isnt}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} type) const noexcept
+\item 
+bool \mbox{\hyperlink{classcaoco_1_1_ast_a3272e983930c5e52c24c3e172c83835d}{Is\+Literal}} () const noexcept
+\item 
+bool \mbox{\hyperlink{classcaoco_1_1_ast_a996eaf66dce6e44ae92852b95424bf64}{Is\+Arithmetic\+Binary\+Op}} () const noexcept
+\item 
+bool \mbox{\hyperlink{classcaoco_1_1_ast_ac95fb717a1e1283ce77393322a92a7c6}{Is\+Pragmatic}} () const noexcept
+\item 
+constexpr size\+\_\+t \mbox{\hyperlink{classcaoco_1_1_ast_a6651a1603017301b5ebd3f826d5ef3f1}{Source\+Line}} () const noexcept
+\item 
+constexpr size\+\_\+t \mbox{\hyperlink{classcaoco_1_1_ast_a8742edbd86055ecd006f4c1adb6b6887}{Source\+Column}} () const noexcept
+\item 
+constexpr size\+\_\+t \mbox{\hyperlink{classcaoco_1_1_ast_a4c652df3704133bce2b135143edb05ea}{Set\+Source\+Line}} (size\+\_\+t line)
+\item 
+constexpr size\+\_\+t \mbox{\hyperlink{classcaoco_1_1_ast_a2756ff6862ebea61109842adfbf69cb6}{Set\+Source\+Column}} (size\+\_\+t column)
+\item 
+{\footnotesize template$<$typename AlwaysT $>$ }\\\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& \mbox{\hyperlink{classcaoco_1_1_ast_ad4b62d6ceb1276f1e634eba9bbd81bfb}{Extract\+And\+Push}} (\mbox{\hyperlink{classcxx_1_1_partial_expected}{cxx\+::\+Partial\+Expected}}$<$ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}, AlwaysT $>$ \&nd)
+\begin{DoxyCompactList}\small\item\em Special Push\+Back methods for parser results. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& \mbox{\hyperlink{classcaoco_1_1_ast_ace497f7b751e0b5b213ae573cfc765ce}{Extract\+And\+Push}} (\mbox{\hyperlink{classcxx_1_1_expected}{cxx\+::\+Expected}}$<$ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} $>$ \&nd)
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast_aef52fc8f4cc21ce56fdcc31c954b2200}{Ast}} ()
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast_a20ce0861bfe675a3ab9c9f8d9581c55d}{Ast}} (const \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} \&t)
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast_aa06ede329c6acfc9c210b6b38633def9}{Ast}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} type)
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast_a5a9aae7f42f58fd5eb3a1abcf7956939}{Ast}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} type, const std\+::string \&literal)
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast_a754c8af4073e2c5da61d2770816329a3}{Ast}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} type, std\+::string \&\&literal)
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast_ae17954297c398598658bd5e96ca9d120}{Ast}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} type, const char \texorpdfstring{$\ast$}{*}literal)
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast_a596b510a2d365539ae8c91c5238d22e4}{Ast}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} type, std\+::vector$<$ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} $>$\+::iterator beg, std\+::vector$<$ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} $>$\+::iterator end)
+\item 
+{\footnotesize template$<$std\+::size\+\_\+t LIT\+\_\+\+SIZE$>$ }\\\mbox{\hyperlink{classcaoco_1_1_ast_af9028200dfc64737e61bef0c02f18a3b}{Ast}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} type, const char literal\mbox{[}LIT\+\_\+\+SIZE\mbox{]})
+\item 
+{\footnotesize template$<$typename... Child\+Ts$>$ \newline
+requires (std\+::is\+\_\+same\+\_\+v$<$\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}, std\+::decay\+\_\+t$<$Child\+Ts$>$$>$ \&\& ...)}\\\mbox{\hyperlink{classcaoco_1_1_ast_a0e0ef16564c6c1cfa17e4ae12bf5997f}{Ast}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} type, const std\+::string \&literal, Child\+Ts... children)
+\item 
+{\footnotesize template$<$typename... Child\+Ts$>$ \newline
+requires (std\+::is\+\_\+same\+\_\+v$<$\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}, std\+::decay\+\_\+t$<$Child\+Ts$>$$>$ \&\& ...)}\\\mbox{\hyperlink{classcaoco_1_1_ast_a6f3881c5da14ebd46b8f85c0757150a5}{Ast}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} type, std\+::vector$<$ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} $>$\+::iterator beg, std\+::vector$<$ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} $>$\+::iterator end, Child\+Ts... children)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+size\+\_\+t \mbox{\hyperlink{classcaoco_1_1_ast_a6cb87b20e8204985e88f2008bbae7597}{source\+\_\+line\+\_\+}} \{0\}
+\item 
+size\+\_\+t \mbox{\hyperlink{classcaoco_1_1_ast_a61e6329cf82d7dc4def48346bdf6ae77}{source\+\_\+column\+\_\+}} \{0\}
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} \mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\+\_\+}} \{e\+Ast\+::\+INVALID\}
+\item 
+std\+::string \mbox{\hyperlink{classcaoco_1_1_ast_aacd26ae188b8cb255d53e0223923e391}{literal\+\_\+}} \{"{}"{}\}
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcaoco_1_1_ast_aa69765a8cb57740cab5457a5b5c89063}{parent\+\_\+}} \{nullptr\}
+\item 
+std\+::list$<$ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} $>$ \mbox{\hyperlink{classcaoco_1_1_ast_a63e2e84eefb95acd3772cd133103fbaa}{children\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00027}{27}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcaoco_1_1_ast_aef52fc8f4cc21ce56fdcc31c954b2200}\index{caoco::Ast@{caoco::Ast}!Ast@{Ast}}
+\index{Ast@{Ast}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Ast()}{Ast()}\hspace{0.1cm}{\footnotesize\ttfamily [1/10]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_aef52fc8f4cc21ce56fdcc31c954b2200} 
+caoco\+::\+Ast\+::\+Ast (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00090}{90}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a20ce0861bfe675a3ab9c9f8d9581c55d}\index{caoco::Ast@{caoco::Ast}!Ast@{Ast}}
+\index{Ast@{Ast}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Ast()}{Ast()}\hspace{0.1cm}{\footnotesize\ttfamily [2/10]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a20ce0861bfe675a3ab9c9f8d9581c55d} 
+caoco\+::\+Ast\+::\+Ast (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} \&}]{t}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00131}{131}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_aa06ede329c6acfc9c210b6b38633def9}\index{caoco::Ast@{caoco::Ast}!Ast@{Ast}}
+\index{Ast@{Ast}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Ast()}{Ast()}\hspace{0.1cm}{\footnotesize\ttfamily [3/10]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_aa06ede329c6acfc9c210b6b38633def9} 
+caoco\+::\+Ast\+::\+Ast (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{type}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00092}{92}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a5a9aae7f42f58fd5eb3a1abcf7956939}\index{caoco::Ast@{caoco::Ast}!Ast@{Ast}}
+\index{Ast@{Ast}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Ast()}{Ast()}\hspace{0.1cm}{\footnotesize\ttfamily [4/10]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a5a9aae7f42f58fd5eb3a1abcf7956939} 
+caoco\+::\+Ast\+::\+Ast (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{type}{, }\item[{const std\+::string \&}]{literal}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00093}{93}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a754c8af4073e2c5da61d2770816329a3}\index{caoco::Ast@{caoco::Ast}!Ast@{Ast}}
+\index{Ast@{Ast}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Ast()}{Ast()}\hspace{0.1cm}{\footnotesize\ttfamily [5/10]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a754c8af4073e2c5da61d2770816329a3} 
+caoco\+::\+Ast\+::\+Ast (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{type}{, }\item[{std\+::string \&\&}]{literal}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00094}{94}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_ae17954297c398598658bd5e96ca9d120}\index{caoco::Ast@{caoco::Ast}!Ast@{Ast}}
+\index{Ast@{Ast}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Ast()}{Ast()}\hspace{0.1cm}{\footnotesize\ttfamily [6/10]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_ae17954297c398598658bd5e96ca9d120} 
+caoco\+::\+Ast\+::\+Ast (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{type}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{literal}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00096}{96}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a596b510a2d365539ae8c91c5238d22e4}\index{caoco::Ast@{caoco::Ast}!Ast@{Ast}}
+\index{Ast@{Ast}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Ast()}{Ast()}\hspace{0.1cm}{\footnotesize\ttfamily [7/10]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a596b510a2d365539ae8c91c5238d22e4} 
+caoco\+::\+Ast\+::\+Ast (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{type}{, }\item[{std\+::vector$<$ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} $>$\+::iterator}]{beg}{, }\item[{std\+::vector$<$ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} $>$\+::iterator}]{end}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00133}{133}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_af9028200dfc64737e61bef0c02f18a3b}\index{caoco::Ast@{caoco::Ast}!Ast@{Ast}}
+\index{Ast@{Ast}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Ast()}{Ast()}\hspace{0.1cm}{\footnotesize\ttfamily [8/10]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_af9028200dfc64737e61bef0c02f18a3b} 
+template$<$std\+::size\+\_\+t LIT\+\_\+\+SIZE$>$ \\
+caoco\+::\+Ast\+::\+Ast (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{type}{, }\item[{const char}]{literal}{\mbox{[}\+LIT\+\_\+\+SIZE\mbox{]}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00100}{100}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a0e0ef16564c6c1cfa17e4ae12bf5997f}\index{caoco::Ast@{caoco::Ast}!Ast@{Ast}}
+\index{Ast@{Ast}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Ast()}{Ast()}\hspace{0.1cm}{\footnotesize\ttfamily [9/10]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a0e0ef16564c6c1cfa17e4ae12bf5997f} 
+template$<$typename... Child\+Ts$>$ \newline
+requires (std\+::is\+\_\+same\+\_\+v$<$\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}, std\+::decay\+\_\+t$<$Child\+Ts$>$$>$ \&\& ...)\\
+caoco\+::\+Ast\+::\+Ast (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{type}{, }\item[{const std\+::string \&}]{literal}{, }\item[{Child\+Ts...}]{children}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00105}{105}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a6f3881c5da14ebd46b8f85c0757150a5}\index{caoco::Ast@{caoco::Ast}!Ast@{Ast}}
+\index{Ast@{Ast}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Ast()}{Ast()}\hspace{0.1cm}{\footnotesize\ttfamily [10/10]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a6f3881c5da14ebd46b8f85c0757150a5} 
+template$<$typename... Child\+Ts$>$ \newline
+requires (std\+::is\+\_\+same\+\_\+v$<$\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}, std\+::decay\+\_\+t$<$Child\+Ts$>$$>$ \&\& ...)\\
+caoco\+::\+Ast\+::\+Ast (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{type}{, }\item[{std\+::vector$<$ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} $>$\+::iterator}]{beg}{, }\item[{std\+::vector$<$ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} $>$\+::iterator}]{end}{, }\item[{Child\+Ts...}]{children}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00112}{112}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcaoco_1_1_ast_a70851d50210966386d88fe15c27bf1f7}\index{caoco::Ast@{caoco::Ast}!At@{At}}
+\index{At@{At}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{At()}{At()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a70851d50210966386d88fe15c27bf1f7} 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& caoco\+::\+Ast\+::\+At (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{index}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00247}{247}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a34e50d9fd784d3c6dcbbfa291b61b477}\index{caoco::Ast@{caoco::Ast}!Back@{Back}}
+\index{Back@{Back}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Back()}{Back()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a34e50d9fd784d3c6dcbbfa291b61b477} 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& caoco\+::\+Ast\+::\+Back (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00239}{239}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a0672f242929c105014f3834ffb8bdfd3}\index{caoco::Ast@{caoco::Ast}!Branch@{Branch}}
+\index{Branch@{Branch}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Branch()}{Branch()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a0672f242929c105014f3834ffb8bdfd3} 
+bool caoco\+::\+Ast\+::\+Branch (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00150}{150}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}\index{caoco::Ast@{caoco::Ast}!Children@{Children}}
+\index{Children@{Children}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Children()}{Children()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a} 
+const std\+::list$<$ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} $>$ \& caoco\+::\+Ast\+::\+Children (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00261}{261}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a8b1ba9cd7fd95dda3614640192c21a8f}\index{caoco::Ast@{caoco::Ast}!Empty@{Empty}}
+\index{Empty@{Empty}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Empty()}{Empty()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a8b1ba9cd7fd95dda3614640192c21a8f} 
+bool caoco\+::\+Ast\+::\+Empty (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00169}{169}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_ace497f7b751e0b5b213ae573cfc765ce}\index{caoco::Ast@{caoco::Ast}!ExtractAndPush@{ExtractAndPush}}
+\index{ExtractAndPush@{ExtractAndPush}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{ExtractAndPush()}{ExtractAndPush()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_ace497f7b751e0b5b213ae573cfc765ce} 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& caoco\+::\+Ast\+::\+Extract\+And\+Push (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcxx_1_1_expected}{cxx\+::\+Expected}}$<$ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} $>$ \&}]{nd}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00194}{194}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_ad4b62d6ceb1276f1e634eba9bbd81bfb}\index{caoco::Ast@{caoco::Ast}!ExtractAndPush@{ExtractAndPush}}
+\index{ExtractAndPush@{ExtractAndPush}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{ExtractAndPush()}{ExtractAndPush()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_ad4b62d6ceb1276f1e634eba9bbd81bfb} 
+template$<$typename AlwaysT $>$ \\
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& caoco\+::\+Ast\+::\+Extract\+And\+Push (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcxx_1_1_partial_expected}{cxx\+::\+Partial\+Expected}}$<$ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}, AlwaysT $>$ \&}]{nd}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Special Push\+Back methods for parser results. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00079}{79}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_af472d3115cb8d4370c5e0fbe373f7649}\index{caoco::Ast@{caoco::Ast}!Front@{Front}}
+\index{Front@{Front}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Front()}{Front()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_af472d3115cb8d4370c5e0fbe373f7649} 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& caoco\+::\+Ast\+::\+Front (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00231}{231}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a996eaf66dce6e44ae92852b95424bf64}\index{caoco::Ast@{caoco::Ast}!IsArithmeticBinaryOp@{IsArithmeticBinaryOp}}
+\index{IsArithmeticBinaryOp@{IsArithmeticBinaryOp}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{IsArithmeticBinaryOp()}{IsArithmeticBinaryOp()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a996eaf66dce6e44ae92852b95424bf64} 
+bool caoco\+::\+Ast\+::\+Is\+Arithmetic\+Binary\+Op (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00303}{303}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a3272e983930c5e52c24c3e172c83835d}\index{caoco::Ast@{caoco::Ast}!IsLiteral@{IsLiteral}}
+\index{IsLiteral@{IsLiteral}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{IsLiteral()}{IsLiteral()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a3272e983930c5e52c24c3e172c83835d} 
+bool caoco\+::\+Ast\+::\+Is\+Literal (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00284}{284}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_ac95fb717a1e1283ce77393322a92a7c6}\index{caoco::Ast@{caoco::Ast}!IsPragmatic@{IsPragmatic}}
+\index{IsPragmatic@{IsPragmatic}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{IsPragmatic()}{IsPragmatic()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_ac95fb717a1e1283ce77393322a92a7c6} 
+bool caoco\+::\+Ast\+::\+Is\+Pragmatic (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00317}{317}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_ab7f01380dc444b679eee0d05208cc9b9}\index{caoco::Ast@{caoco::Ast}!Leaf@{Leaf}}
+\index{Leaf@{Leaf}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Leaf()}{Leaf()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_ab7f01380dc444b679eee0d05208cc9b9} 
+bool caoco\+::\+Ast\+::\+Leaf (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00146}{146}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}\index{caoco::Ast@{caoco::Ast}!Literal@{Literal}}
+\index{Literal@{Literal}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Literal()}{Literal()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803} 
+const std\+::string \& caoco\+::\+Ast\+::\+Literal (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00144}{144}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a9562aecf121645d9b0ad896c30b9a3dd}\index{caoco::Ast@{caoco::Ast}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a9562aecf121645d9b0ad896c30b9a3dd} 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& caoco\+::\+Ast\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{index}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00278}{278}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}\index{caoco::Ast@{caoco::Ast}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778} 
+const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& caoco\+::\+Ast\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{index}{}\end{DoxyParamCaption}) const}
+
+
+
+Index operator accesses children. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00263}{263}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a66e27b0e73ec105d6e53e677d63f31cc}\index{caoco::Ast@{caoco::Ast}!Parent@{Parent}}
+\index{Parent@{Parent}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Parent()}{Parent()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a66e27b0e73ec105d6e53e677d63f31cc} 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& caoco\+::\+Ast\+::\+Parent (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00152}{152}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a615d9659390d98bebdeeba363f36580a}\index{caoco::Ast@{caoco::Ast}!PopBack@{PopBack}}
+\index{PopBack@{PopBack}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{PopBack()}{PopBack()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a615d9659390d98bebdeeba363f36580a} 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} caoco\+::\+Ast\+::\+Pop\+Back (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00209}{209}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a5bee2c126e7126c281b0ca9727e4e9bc}\index{caoco::Ast@{caoco::Ast}!PopFront@{PopFront}}
+\index{PopFront@{PopFront}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{PopFront()}{PopFront()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a5bee2c126e7126c281b0ca9727e4e9bc} 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} caoco\+::\+Ast\+::\+Pop\+Front (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00220}{220}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad}\index{caoco::Ast@{caoco::Ast}!PopParent@{PopParent}}
+\index{PopParent@{PopParent}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{PopParent()}{PopParent()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad} 
+void caoco\+::\+Ast\+::\+Pop\+Parent (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00161}{161}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a0331fbcda77290b4a0279fe81579cf97}\index{caoco::Ast@{caoco::Ast}!PushBack@{PushBack}}
+\index{PushBack@{PushBack}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{PushBack()}{PushBack()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a0331fbcda77290b4a0279fe81579cf97} 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& caoco\+::\+Ast\+::\+Push\+Back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&\&}]{nd}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00186}{186}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a87de9ffa1763fd4b5b4f5c16d7b99366}\index{caoco::Ast@{caoco::Ast}!PushBack@{PushBack}}
+\index{PushBack@{PushBack}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{PushBack()}{PushBack()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a87de9ffa1763fd4b5b4f5c16d7b99366} 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& caoco\+::\+Ast\+::\+Push\+Back (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&}]{nd}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00172}{172}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a0378fc8c0a32d4b1d2bb348dcc73c7c0}\index{caoco::Ast@{caoco::Ast}!PushFront@{PushFront}}
+\index{PushFront@{PushFront}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{PushFront()}{PushFront()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a0378fc8c0a32d4b1d2bb348dcc73c7c0} 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& caoco\+::\+Ast\+::\+Push\+Front (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&\&}]{nd}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00202}{202}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a8775840994d6ea5ab5a29be155f4907b}\index{caoco::Ast@{caoco::Ast}!PushFront@{PushFront}}
+\index{PushFront@{PushFront}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{PushFront()}{PushFront()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a8775840994d6ea5ab5a29be155f4907b} 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \& caoco\+::\+Ast\+::\+Push\+Front (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&}]{nd}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00179}{179}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a6fff35d07cef587b83394fd7a2f31f80}\index{caoco::Ast@{caoco::Ast}!Root@{Root}}
+\index{Root@{Root}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Root()}{Root()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a6fff35d07cef587b83394fd7a2f31f80} 
+bool caoco\+::\+Ast\+::\+Root (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00148}{148}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_ad1669c17c8562aad32dec842231b177e}\index{caoco::Ast@{caoco::Ast}!SetParent@{SetParent}}
+\index{SetParent@{SetParent}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{SetParent()}{SetParent()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_ad1669c17c8562aad32dec842231b177e} 
+void caoco\+::\+Ast\+::\+Set\+Parent (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \texorpdfstring{$\ast$}{*}}]{parent}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00159}{159}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a2756ff6862ebea61109842adfbf69cb6}\index{caoco::Ast@{caoco::Ast}!SetSourceColumn@{SetSourceColumn}}
+\index{SetSourceColumn@{SetSourceColumn}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{SetSourceColumn()}{SetSourceColumn()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a2756ff6862ebea61109842adfbf69cb6} 
+size\+\_\+t caoco\+::\+Ast\+::\+Set\+Source\+Column (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{column}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00073}{73}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a4c652df3704133bce2b135143edb05ea}\index{caoco::Ast@{caoco::Ast}!SetSourceLine@{SetSourceLine}}
+\index{SetSourceLine@{SetSourceLine}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{SetSourceLine()}{SetSourceLine()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a4c652df3704133bce2b135143edb05ea} 
+size\+\_\+t caoco\+::\+Ast\+::\+Set\+Source\+Line (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{line}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00070}{70}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a37a8537d75ea9a4694ad81be8c973298}\index{caoco::Ast@{caoco::Ast}!Size@{Size}}
+\index{Size@{Size}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Size()}{Size()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a37a8537d75ea9a4694ad81be8c973298} 
+std\+::size\+\_\+t caoco\+::\+Ast\+::\+Size (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00170}{170}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a8742edbd86055ecd006f4c1adb6b6887}\index{caoco::Ast@{caoco::Ast}!SourceColumn@{SourceColumn}}
+\index{SourceColumn@{SourceColumn}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{SourceColumn()}{SourceColumn()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a8742edbd86055ecd006f4c1adb6b6887} 
+size\+\_\+t caoco\+::\+Ast\+::\+Source\+Column (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00067}{67}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a6651a1603017301b5ebd3f826d5ef3f1}\index{caoco::Ast@{caoco::Ast}!SourceLine@{SourceLine}}
+\index{SourceLine@{SourceLine}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{SourceLine()}{SourceLine()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a6651a1603017301b5ebd3f826d5ef3f1} 
+size\+\_\+t caoco\+::\+Ast\+::\+Source\+Line (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00066}{66}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}\index{caoco::Ast@{caoco::Ast}!Type@{Type}}
+\index{Type@{Type}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{Type()}{Type()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} caoco\+::\+Ast\+::\+Type (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00142}{142}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a4081fac748bfd983d2b1cf55f07031c0}\index{caoco::Ast@{caoco::Ast}!TypeIs@{TypeIs}}
+\index{TypeIs@{TypeIs}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{TypeIs()}{TypeIs()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a4081fac748bfd983d2b1cf55f07031c0} 
+bool caoco\+::\+Ast\+::\+Type\+Is (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{type}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00280}{280}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_ad8e57a57376b480573e3a98babbcccd5}\index{caoco::Ast@{caoco::Ast}!TypeIsnt@{TypeIsnt}}
+\index{TypeIsnt@{TypeIsnt}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{TypeIsnt()}{TypeIsnt()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_ad8e57a57376b480573e3a98babbcccd5} 
+bool caoco\+::\+Ast\+::\+Type\+Isnt (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{type}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00282}{282}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcaoco_1_1_ast_a63e2e84eefb95acd3772cd133103fbaa}\index{caoco::Ast@{caoco::Ast}!children\_@{children\_}}
+\index{children\_@{children\_}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{children\_}{children\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a63e2e84eefb95acd3772cd133103fbaa} 
+std\+::list$<$\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}$>$ caoco\+::\+Ast\+::children\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00128}{128}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_aacd26ae188b8cb255d53e0223923e391}\index{caoco::Ast@{caoco::Ast}!literal\_@{literal\_}}
+\index{literal\_@{literal\_}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{literal\_}{literal\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_aacd26ae188b8cb255d53e0223923e391} 
+std\+::string caoco\+::\+Ast\+::literal\+\_\+ \{"{}"{}\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00126}{126}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_aa69765a8cb57740cab5457a5b5c89063}\index{caoco::Ast@{caoco::Ast}!parent\_@{parent\_}}
+\index{parent\_@{parent\_}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{parent\_}{parent\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_aa69765a8cb57740cab5457a5b5c89063} 
+\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\texorpdfstring{$\ast$}{*} caoco\+::\+Ast\+::parent\+\_\+ \{nullptr\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00127}{127}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a61e6329cf82d7dc4def48346bdf6ae77}\index{caoco::Ast@{caoco::Ast}!source\_column\_@{source\_column\_}}
+\index{source\_column\_@{source\_column\_}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{source\_column\_}{source\_column\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a61e6329cf82d7dc4def48346bdf6ae77} 
+size\+\_\+t caoco\+::\+Ast\+::source\+\_\+column\+\_\+ \{0\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00124}{124}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_a6cb87b20e8204985e88f2008bbae7597}\index{caoco::Ast@{caoco::Ast}!source\_line\_@{source\_line\_}}
+\index{source\_line\_@{source\_line\_}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{source\_line\_}{source\_line\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_a6cb87b20e8204985e88f2008bbae7597} 
+size\+\_\+t caoco\+::\+Ast\+::source\+\_\+line\+\_\+ \{0\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00123}{123}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}\index{caoco::Ast@{caoco::Ast}!type\_@{type\_}}
+\index{type\_@{type\_}!caoco::Ast@{caoco::Ast}}
+\doxysubsubsection{\texorpdfstring{type\_}{type\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} caoco\+::\+Ast\+::type\+\_\+ \{e\+Ast\+::\+INVALID\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ast_8h_source_l00125}{125}} of file \mbox{\hyperlink{caoco__ast_8h_source}{caoco\+\_\+ast.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/\mbox{\hyperlink{caoco__ast_8h}{caoco\+\_\+ast.\+h}}\end{DoxyCompactItemize}

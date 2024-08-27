@@ -1,0 +1,140 @@
+\doxysection{Cand\+\_\+compiler\+\_\+cppcodegen}
+\hypertarget{group__cand__compiler__cppcodegen}{}\label{group__cand__compiler__cppcodegen}\index{Cand\_compiler\_cppcodegen@{Cand\_compiler\_cppcodegen}}
+\doxysubsubsection*{Topics}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group__cand__compiler__cppcodegen__utils}{Codegen Utils}}
+\begin{DoxyCompactList}\small\item\em \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Concepts}
+\begin{DoxyCompactItemize}
+\item 
+concept \mbox{\hyperlink{conceptcaoco_1_1cppcodegen_1_1i_code_generator}{caoco\+::cppcodegen\+::i\+Code\+Generator}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_include_directive}{caoco\+::cppcodegen\+::\+Include\+Directive}}
+\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_macro_define}{caoco\+::cppcodegen\+::\+Macro\+Define}}
+\begin{DoxyCompactList}\small\item\em Generates a \#define macro. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_template_type_param}{caoco\+::cppcodegen\+::\+Template\+Type\+Param}}
+\begin{DoxyCompactList}\small\item\em Represents a template parameter (either a class or a specific type). \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_template_signature}{caoco\+::cppcodegen\+::\+Template\+Signature}}
+\begin{DoxyCompactList}\small\item\em Generates a template signature, e.\+g., template$<$class T$>$ \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_template_specialization}{caoco\+::cppcodegen\+::\+Template\+Specialization}}
+\begin{DoxyCompactList}\small\item\em Generates a template specialization, e.\+g., NAME$<$\+TYPE\+\_\+\+LIST$>$ \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_variable_decl}{caoco\+::cppcodegen\+::\+Variable\+Decl}}
+\begin{DoxyCompactList}\small\item\em Generates a variable declaration eg. int foo = 42;. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_using_decl}{caoco\+::cppcodegen\+::\+Using\+Decl}}
+\begin{DoxyCompactList}\small\item\em Generates a using declaration eg. using Int = int;. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_enum_entry}{caoco\+::cppcodegen\+::\+Enum\+Entry}}
+\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_enum_decl}{caoco\+::cppcodegen\+::\+Enum\+Decl}}
+\begin{DoxyCompactList}\small\item\em Generates an enum declaration. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_union_member}{caoco\+::cppcodegen\+::\+Union\+Member}}
+\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_parameter}{caoco\+::cppcodegen\+::\+Method\+Parameter}}
+\begin{DoxyCompactList}\small\item\em Generates a method parameter. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_modifiers}{caoco\+::cppcodegen\+::\+Method\+Decl\+Modifiers}}
+\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_post_initializer}{caoco\+::cppcodegen\+::\+Method\+Post\+Initializer}}
+\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl}{caoco\+::cppcodegen\+::\+Method\+Decl}}
+\begin{DoxyCompactList}\small\item\em Represents a method declaration and optionally its definition. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_union_decl}{caoco\+::cppcodegen\+::\+Union\+Decl}}
+\begin{DoxyCompactList}\small\item\em Generates a union declaration. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_class_decl}{caoco\+::cppcodegen\+::\+Class\+Decl}}
+\begin{DoxyCompactList}\small\item\em Represents a class declaration. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{caoco__cppcodegen_8h_ad7eb5e6dc6c15aee1fa56eee1e9c0389}{\+\_\+scxin}} string \mbox{\hyperlink{group__cand__compiler__cppcodegen_ga57a8e5c61c0f32d753e363c0b4cb432d}{caoco\+::cppcodegen\+::\+Generate\+Expr\+List}} (const vector$<$ string $>$ \&exprs, const string \&separator=\mbox{\hyperlink{group__cand__compiler__cppcodegen_gaed8c02eebe4d82a671963c973541a5f4}{k\+Comma\+Separator}}, bool separator\+\_\+after\+\_\+last=false, const string \&open\+\_\+with="{}"{}, const string \&close\+\_\+with="{}"{}, const string \&prefix="{}"{})
+\item 
+\mbox{\hyperlink{caoco__cppcodegen_8h_ad7eb5e6dc6c15aee1fa56eee1e9c0389}{\+\_\+scxin}} string \mbox{\hyperlink{group__cand__compiler__cppcodegen_ga9c7da6cfcb2dcf97502a0a6ac32747b3}{caoco\+::cppcodegen\+::\+Generate\+Expr\+List}} (const vector$<$ std\+::reference\+\_\+wrapper$<$ const string $>$ $>$ \&exprs, const string \&separator=\mbox{\hyperlink{group__cand__compiler__cppcodegen_gaed8c02eebe4d82a671963c973541a5f4}{k\+Comma\+Separator}}, bool separator\+\_\+after\+\_\+last=false, const string \&open\+\_\+with="{}"{}, const string \&close\+\_\+with="{}"{}, const string \&prefix="{}"{})
+\item 
+{\footnotesize template$<$class T $>$ \newline
+requires i\+Code\+Generator$<$T$>$}\\\mbox{\hyperlink{caoco__cppcodegen_8h_ad7eb5e6dc6c15aee1fa56eee1e9c0389}{\+\_\+scxin}} string \mbox{\hyperlink{group__cand__compiler__cppcodegen_ga5a6e5ef81afcf5653bbf47d96b8aa8db}{caoco\+::cppcodegen\+::\+Generate\+Expr\+List}} (const vector$<$ T $>$ \&exprs, const string \&separator=\mbox{\hyperlink{group__cand__compiler__cppcodegen_gaed8c02eebe4d82a671963c973541a5f4}{k\+Comma\+Separator}}, bool separator\+\_\+after\+\_\+last=false, const string \&open\+\_\+with="{}"{}, const string \&close\+\_\+with="{}"{}, const string \&prefix="{}"{})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{caoco__cppcodegen_8h_ad7eb5e6dc6c15aee1fa56eee1e9c0389}{\+\_\+scxin}} \mbox{\hyperlink{namespacecaoco_1_1cppcodegen_a28fa25265ac99051dbcc1928565c4e6d}{cstring}} \mbox{\hyperlink{group__cand__compiler__cppcodegen_gaed8c02eebe4d82a671963c973541a5f4}{caoco\+::cppcodegen\+::k\+Comma\+Separator}} = "{}, "{}
+\item 
+constexpr \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_modifiers}{Method\+Decl\+Modifiers}} \mbox{\hyperlink{group__cand__compiler__cppcodegen_gac3d07ccb7e5a33f93ea70be67197b17d}{caoco\+::cppcodegen\+::k\+Scxin\+Mods}} = \{true, true, true, false, false\}
+\item 
+constexpr \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_modifiers}{Method\+Decl\+Modifiers}} \mbox{\hyperlink{group__cand__compiler__cppcodegen_ga418b31264992b6893c3a1fd7df7f5ce8}{caoco\+::cppcodegen\+::k\+Cxin\+Mods}} = \{true, false, true, false, false\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{group__cand__compiler__cppcodegen_ga9c7da6cfcb2dcf97502a0a6ac32747b3}\index{Cand\_compiler\_cppcodegen@{Cand\_compiler\_cppcodegen}!GenerateExprList@{GenerateExprList}}
+\index{GenerateExprList@{GenerateExprList}!Cand\_compiler\_cppcodegen@{Cand\_compiler\_cppcodegen}}
+\doxysubsubsection{\texorpdfstring{GenerateExprList()}{GenerateExprList()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{group__cand__compiler__cppcodegen_ga9c7da6cfcb2dcf97502a0a6ac32747b3} 
+\mbox{\hyperlink{caoco__cppcodegen_8h_ad7eb5e6dc6c15aee1fa56eee1e9c0389}{\+\_\+scxin}} string caoco\+::cppcodegen\+::\+Generate\+Expr\+List (\begin{DoxyParamCaption}\item[{const vector$<$ std\+::reference\+\_\+wrapper$<$ const string $>$ $>$ \&}]{exprs}{, }\item[{const string \&}]{separator}{ = {\ttfamily \mbox{\hyperlink{group__cand__compiler__cppcodegen_gaed8c02eebe4d82a671963c973541a5f4}{k\+Comma\+Separator}}}, }\item[{bool}]{separator\+\_\+after\+\_\+last}{ = {\ttfamily false}, }\item[{const string \&}]{open\+\_\+with}{ = {\ttfamily "{}"{}}, }\item[{const string \&}]{close\+\_\+with}{ = {\ttfamily "{}"{}}, }\item[{const string \&}]{prefix}{ = {\ttfamily "{}"{}}}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00077}{77}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{group__cand__compiler__cppcodegen_ga57a8e5c61c0f32d753e363c0b4cb432d}\index{Cand\_compiler\_cppcodegen@{Cand\_compiler\_cppcodegen}!GenerateExprList@{GenerateExprList}}
+\index{GenerateExprList@{GenerateExprList}!Cand\_compiler\_cppcodegen@{Cand\_compiler\_cppcodegen}}
+\doxysubsubsection{\texorpdfstring{GenerateExprList()}{GenerateExprList()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{group__cand__compiler__cppcodegen_ga57a8e5c61c0f32d753e363c0b4cb432d} 
+\mbox{\hyperlink{caoco__cppcodegen_8h_ad7eb5e6dc6c15aee1fa56eee1e9c0389}{\+\_\+scxin}} string caoco\+::cppcodegen\+::\+Generate\+Expr\+List (\begin{DoxyParamCaption}\item[{const vector$<$ string $>$ \&}]{exprs}{, }\item[{const string \&}]{separator}{ = {\ttfamily \mbox{\hyperlink{group__cand__compiler__cppcodegen_gaed8c02eebe4d82a671963c973541a5f4}{k\+Comma\+Separator}}}, }\item[{bool}]{separator\+\_\+after\+\_\+last}{ = {\ttfamily false}, }\item[{const string \&}]{open\+\_\+with}{ = {\ttfamily "{}"{}}, }\item[{const string \&}]{close\+\_\+with}{ = {\ttfamily "{}"{}}, }\item[{const string \&}]{prefix}{ = {\ttfamily "{}"{}}}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00058}{58}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{group__cand__compiler__cppcodegen_ga5a6e5ef81afcf5653bbf47d96b8aa8db}\index{Cand\_compiler\_cppcodegen@{Cand\_compiler\_cppcodegen}!GenerateExprList@{GenerateExprList}}
+\index{GenerateExprList@{GenerateExprList}!Cand\_compiler\_cppcodegen@{Cand\_compiler\_cppcodegen}}
+\doxysubsubsection{\texorpdfstring{GenerateExprList()}{GenerateExprList()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{group__cand__compiler__cppcodegen_ga5a6e5ef81afcf5653bbf47d96b8aa8db} 
+template$<$class T $>$ \newline
+requires i\+Code\+Generator$<$T$>$\\
+\mbox{\hyperlink{caoco__cppcodegen_8h_ad7eb5e6dc6c15aee1fa56eee1e9c0389}{\+\_\+scxin}} string caoco\+::cppcodegen\+::\+Generate\+Expr\+List (\begin{DoxyParamCaption}\item[{const vector$<$ T $>$ \&}]{exprs}{, }\item[{const string \&}]{separator}{ = {\ttfamily \mbox{\hyperlink{group__cand__compiler__cppcodegen_gaed8c02eebe4d82a671963c973541a5f4}{k\+Comma\+Separator}}}, }\item[{bool}]{separator\+\_\+after\+\_\+last}{ = {\ttfamily false}, }\item[{const string \&}]{open\+\_\+with}{ = {\ttfamily "{}"{}}, }\item[{const string \&}]{close\+\_\+with}{ = {\ttfamily "{}"{}}, }\item[{const string \&}]{prefix}{ = {\ttfamily "{}"{}}}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00097}{97}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{group__cand__compiler__cppcodegen_gaed8c02eebe4d82a671963c973541a5f4}\index{Cand\_compiler\_cppcodegen@{Cand\_compiler\_cppcodegen}!kCommaSeparator@{kCommaSeparator}}
+\index{kCommaSeparator@{kCommaSeparator}!Cand\_compiler\_cppcodegen@{Cand\_compiler\_cppcodegen}}
+\doxysubsubsection{\texorpdfstring{kCommaSeparator}{kCommaSeparator}}
+{\footnotesize\ttfamily \label{group__cand__compiler__cppcodegen_gaed8c02eebe4d82a671963c973541a5f4} 
+\mbox{\hyperlink{caoco__cppcodegen_8h_ad7eb5e6dc6c15aee1fa56eee1e9c0389}{\+\_\+scxin}} \mbox{\hyperlink{namespacecaoco_1_1cppcodegen_a28fa25265ac99051dbcc1928565c4e6d}{cstring}} caoco\+::cppcodegen\+::k\+Comma\+Separator = "{}, "{}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00056}{56}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{group__cand__compiler__cppcodegen_ga418b31264992b6893c3a1fd7df7f5ce8}\index{Cand\_compiler\_cppcodegen@{Cand\_compiler\_cppcodegen}!kCxinMods@{kCxinMods}}
+\index{kCxinMods@{kCxinMods}!Cand\_compiler\_cppcodegen@{Cand\_compiler\_cppcodegen}}
+\doxysubsubsection{\texorpdfstring{kCxinMods}{kCxinMods}}
+{\footnotesize\ttfamily \label{group__cand__compiler__cppcodegen_ga418b31264992b6893c3a1fd7df7f5ce8} 
+\mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_modifiers}{Method\+Decl\+Modifiers}} caoco\+::cppcodegen\+::k\+Cxin\+Mods = \{true, false, true, false, false\}\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00388}{388}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{group__cand__compiler__cppcodegen_gac3d07ccb7e5a33f93ea70be67197b17d}\index{Cand\_compiler\_cppcodegen@{Cand\_compiler\_cppcodegen}!kScxinMods@{kScxinMods}}
+\index{kScxinMods@{kScxinMods}!Cand\_compiler\_cppcodegen@{Cand\_compiler\_cppcodegen}}
+\doxysubsubsection{\texorpdfstring{kScxinMods}{kScxinMods}}
+{\footnotesize\ttfamily \label{group__cand__compiler__cppcodegen_gac3d07ccb7e5a33f93ea70be67197b17d} 
+\mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_modifiers}{Method\+Decl\+Modifiers}} caoco\+::cppcodegen\+::k\+Scxin\+Mods = \{true, true, true, false, false\}\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00387}{387}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\input{group__cand__compiler__cppcodegen__utils}

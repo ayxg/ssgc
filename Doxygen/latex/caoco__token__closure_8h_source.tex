@@ -1,0 +1,277 @@
+\doxysection{caoco\+\_\+token\+\_\+closure.\+h}
+\hypertarget{caoco__token__closure_8h_source}{}\label{caoco__token__closure_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_token\_closure.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_token\_closure.h}}
+\mbox{\hyperlink{caoco__token__closure_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00001}00001\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00002}00002\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00003}00003\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00004}00004\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00005}00005\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00006}00006\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00007}00007\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00008}00008\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00009}00009\ \textcolor{comment}{///\ @file}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00010}00010\ \textcolor{comment}{///\ @ingroup\ cand\_compiler\_parser}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00011}00011\ \textcolor{comment}{///\ @brief\ Closure\ and\ ClosureBuffer\ classes\ for\ shift\ reduction\ parsing.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00012}00012\ \textcolor{comment}{///\ @see\ caoco::parser::ExprParser}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00013}00013\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00015}00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_TOKEN\_CLOSURE\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00016}00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_TOKEN\_CLOSURE\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00017}00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cppsextended_8h}{"{}cppsextended.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00018}00018\ \textcolor{comment}{//\ Includes:}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00019}00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__grammar_8h}{"{}caoco\_grammar.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00021}00021\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecaoco}{caoco}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00022}00022\ \textcolor{comment}{///\ @defgroup\ cand\_compiler\_parser\_closure\ Token\ Closure}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00023}00023\ \textcolor{comment}{///\ @ingroup\ cand\_compiler\_parser}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00024}00024\ \textcolor{comment}{///\ Closure\ and\ ClosureBuffer\ classes\ for\ shift\ reduction\ parsing.\ Used\ in}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00025}00025\ \textcolor{comment}{///\ primary\ expression\ parsing\ method.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00026}00026\ \textcolor{comment}{///\ @see\ caoco::parser::ExprParser}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00027}00027\ \textcolor{comment}{///\ @\{}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00029}00029\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcaoco_1_1_closure}{Closure}};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00030}\mbox{\hyperlink{group__cand__compiler__parser__closure_gaf99934bb2c8e64d032bbd5ff13901867}{00030}}\ \textcolor{keyword}{using}\ \mbox{\hyperlink{namespacecaoco}{TkList}}\ =\ \mbox{\hyperlink{namespacecaoco}{std}}::\mbox{\hyperlink{namespacecaoco}{list}}<\mbox{\hyperlink{namespacecaoco}{Tk}}>;}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00031}\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{00031}}\ \textcolor{keyword}{using}\ \mbox{\hyperlink{namespacecaoco}{TkListIter}}\ =\ \mbox{\hyperlink{namespacecaoco}{TkList}}::\mbox{\hyperlink{namespacecaoco}{iterator}};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00032}\mbox{\hyperlink{group__cand__compiler__parser__closure_gaf9f577b209e0349d3b6330edd1a85af9}{00032}}\ \textcolor{keyword}{using}\ \mbox{\hyperlink{namespacecaoco}{CosureList}}\ =\ \mbox{\hyperlink{namespacecaoco}{std}}::\mbox{\hyperlink{namespacecaoco}{list}}<\mbox{\hyperlink{namespacecaoco}{Closure}}>;}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00033}\mbox{\hyperlink{group__cand__compiler__parser__closure_gae50f7e31d947a76328b97a96fa776a21}{00033}}\ \textcolor{keyword}{using}\ \mbox{\hyperlink{namespacecaoco}{ClosureListIter}}\ =\ \mbox{\hyperlink{namespacecaoco}{CosureList}}::\mbox{\hyperlink{namespacecaoco}{iterator}};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00035}00035\ \textcolor{comment}{///\ \ A\ closure\ is\ a\ range\ of\ tokens\ representing\ a\ singular\ ast\ node.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00036}00036\ \textcolor{comment}{///\ }}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00037}00037\ \textcolor{comment}{///\ \ All\ tokens\ from\ front\ to\ back\ are\ a\ single\ ast\ node\ with\ no\ children.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00038}00038\ \textcolor{comment}{///\ \ When\ a\ closure\ is\ a\ single\ token,\ the\ front\ and\ back\ are\ the\ same.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00039}00039\ \textcolor{comment}{///\ \ Example:\ 1\ +\ 2\ -\/>\ Closure\ \#2\ is\ +,\ •+\ is\ the\ front\ and\ +•\ is\ the\ back.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00040}00040\ \textcolor{comment}{///\ \ Example:\ 1(abcd)\ +\ 2\ -\/>\ Closure\ \#2\ is\ (abcd),\ •(abcd)\ is\ the\ front}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00041}00041\ \textcolor{comment}{///\ \ and\ (abcd)•\ is\ the\ back.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00042}\mbox{\hyperlink{classcaoco_1_1_closure}{00042}}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcaoco_1_1_closure}{Closure}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00043}00043\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00044}\mbox{\hyperlink{classcaoco_1_1_closure_ac4eeeae08847e0f46c4f1b2457a94253}{00044}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_ac4eeeae08847e0f46c4f1b2457a94253}{TkListIter}}\ \mbox{\hyperlink{classcaoco_1_1_closure_ac4eeeae08847e0f46c4f1b2457a94253}{Front}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ front\_;\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00045}\mbox{\hyperlink{classcaoco_1_1_closure_abed3ea0adc84045086cc3130f6ae99f3}{00045}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_abed3ea0adc84045086cc3130f6ae99f3}{TkListIter}}\ \mbox{\hyperlink{classcaoco_1_1_closure_abed3ea0adc84045086cc3130f6ae99f3}{Back}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ back\_;\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00047}00047\ \ \ \textcolor{comment}{///\ Operation\ of\ the\ front\ token.\ (\ [\ \{\ are\ postfix\ operators.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00048}\mbox{\hyperlink{classcaoco_1_1_closure_a66a9602aef76f0c4cb2e150cc054342e}{00048}}\ \ \ \mbox{\hyperlink{group__cand__compiler__data__enums_gaeb4e062a441166ab5c693ea608b63b3f}{eOperation}}\ \mbox{\hyperlink{classcaoco_1_1_closure_a66a9602aef76f0c4cb2e150cc054342e}{Operation}}()\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00049}00049\ \ \ \ \ \textcolor{comment}{//\ Special\ case\ for\ (,\ [,\ \{,\ and\ postfix\ operators.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00050}00050\ \ \ \ \ \textcolor{keywordflow}{if}\ (front\_-\/>TypeIs(eTk::LParen)\ ||\ front\_-\/>TypeIs(eTk::LBrace)\ ||}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00051}00051\ \ \ \ \ \ \ \ \ front\_-\/>TypeIs(eTk::LBracket))\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00052}00052\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{group__cand__compiler__data__enums_gaeb4e062a441166ab5c693ea608b63b3f}{eOperation}}\mbox{\hyperlink{group__cand__compiler__data__enums_ggaeb4e062a441166ab5c693ea608b63b3fae5cc2a8a065c6272466ee0277ccc417f}{::}}\mbox{\hyperlink{group__cand__compiler__data__enums_ggaeb4e062a441166ab5c693ea608b63b3fae5cc2a8a065c6272466ee0277ccc417f}{Postfix}};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00053}00053\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00054}00054\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ front\_-\/>Operation();}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00055}00055\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00056}00056\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00058}00058\ \ \ \textcolor{comment}{///\ Priority\ of\ the\ front\ token.\ (\ [\ \{\ are\ postfix\ priority.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00059}\mbox{\hyperlink{classcaoco_1_1_closure_ae4c6df257c40cf4d70149905ad636863}{00059}}\ \ \ \mbox{\hyperlink{group__cand__compiler__data__enums_gaa35814be433c3f8998dabf2429e90817}{ePriority}}\ \mbox{\hyperlink{classcaoco_1_1_closure_ae4c6df257c40cf4d70149905ad636863}{Priority}}()\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00060}00060\ \ \ \ \ \textcolor{comment}{//\ Special\ case\ for\ (,\ [,\ \{,\ are\ postfix\ priority.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00061}00061\ \ \ \ \ \textcolor{keywordflow}{if}\ (front\_-\/>TypeIs(eTk::LParen)\ ||\ front\_-\/>TypeIs(eTk::LBrace)\ ||}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00062}00062\ \ \ \ \ \ \ \ \ front\_-\/>TypeIs(eTk::LBracket))\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00063}00063\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{group__cand__compiler__data__enums_gaa35814be433c3f8998dabf2429e90817}{ePriority}}\mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817ae5cc2a8a065c6272466ee0277ccc417f}{::}}\mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817ae5cc2a8a065c6272466ee0277ccc417f}{Postfix}};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00064}00064\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00065}00065\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ front\_-\/>Priority();}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00066}00066\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00067}00067\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00069}00069\ \ \ \textcolor{comment}{///\ Associativity\ of\ the\ front\ token.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00070}\mbox{\hyperlink{classcaoco_1_1_closure_a68500bbcfe053e4e96896475f86e641e}{00070}}\ \ \ \mbox{\hyperlink{group__cand__compiler__data__enums_gafd75ad634f57c34cbd68d308c97df3e2}{eAssoc}}\ \mbox{\hyperlink{classcaoco_1_1_closure_a68500bbcfe053e4e96896475f86e641e}{Assoc}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ front\_-\/>Assoc();\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00072}00072\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00073}\mbox{\hyperlink{classcaoco_1_1_closure_a27dfb6e2d719ef77834fd0d21dd0f796}{00073}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_a27dfb6e2d719ef77834fd0d21dd0f796}{Closure}}(TkListIter\ front)\ :\ \mbox{\hyperlink{classcaoco_1_1_closure_a27dfb6e2d719ef77834fd0d21dd0f796}{front\_}}(\mbox{\hyperlink{classcaoco_1_1_closure_a27dfb6e2d719ef77834fd0d21dd0f796}{front}}),\ \mbox{\hyperlink{classcaoco_1_1_closure_a27dfb6e2d719ef77834fd0d21dd0f796}{back\_}}(\mbox{\hyperlink{classcaoco_1_1_closure_a27dfb6e2d719ef77834fd0d21dd0f796}{front}})\ \{\}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00074}\mbox{\hyperlink{classcaoco_1_1_closure_af4bd90d9c168cb87f6a8f800e450d832}{00074}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_af4bd90d9c168cb87f6a8f800e450d832}{Closure}}(TkListIter\ front,\ TkListIter\ back)\ :\ \mbox{\hyperlink{classcaoco_1_1_closure_af4bd90d9c168cb87f6a8f800e450d832}{front\_}}(\mbox{\hyperlink{classcaoco_1_1_closure_af4bd90d9c168cb87f6a8f800e450d832}{front}}),\ \mbox{\hyperlink{classcaoco_1_1_closure_af4bd90d9c168cb87f6a8f800e450d832}{back\_}}(\mbox{\hyperlink{classcaoco_1_1_closure_af4bd90d9c168cb87f6a8f800e450d832}{back}})\ \{\}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00076}00076\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00077}\mbox{\hyperlink{classcaoco_1_1_closure_a8c162f14b4a869217a9e8cd2ffbabbf8}{00077}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_a8c162f14b4a869217a9e8cd2ffbabbf8}{TkListIter}}\ \mbox{\hyperlink{classcaoco_1_1_closure_a8c162f14b4a869217a9e8cd2ffbabbf8}{front\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00078}\mbox{\hyperlink{classcaoco_1_1_closure_a88dd90e155d92d08a9d91a31dea2a39e}{00078}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_a88dd90e155d92d08a9d91a31dea2a39e}{TkListIter}}\ \mbox{\hyperlink{classcaoco_1_1_closure_a88dd90e155d92d08a9d91a31dea2a39e}{back\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00079}00079\ \};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00080}00080\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00082}00082\ \textcolor{comment}{///\ Container\ for\ a\ list\ of\ closures\ referencing\ a\ token\ stream.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00083}\mbox{\hyperlink{classcaoco_1_1_closure_buffer}{00083}}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer}{ClosureBuffer}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00084}00084\ \ \textcolor{keyword}{public}:\ \ \textcolor{comment}{//\ Closure\ Operations}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00085}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_aa5142015bc89079371d01a22e2c001ef}{00085}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_aa5142015bc89079371d01a22e2c001ef}{PushFrontClosure}}(TkListIter\ front)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00086}00086\ \ \ \ \ closures\_.push\_front(Closure(front));}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00087}00087\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00088}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_a8b4c57ceba4dfff3fc6217620e81fe5e}{00088}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a8b4c57ceba4dfff3fc6217620e81fe5e}{PushFrontClosure}}(TkListIter\ front,\ TkListIter\ back)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00089}00089\ \ \ \ \ closures\_.push\_front(Closure(front,\ back));}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00090}00090\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00091}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_a7cae5484598cf10b7ace0ba0ce5a08bc}{00091}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a7cae5484598cf10b7ace0ba0ce5a08bc}{PushBackClosure}}(TkListIter\ front)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00092}00092\ \ \ \ \ closures\_.push\_back(Closure(front));}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00093}00093\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00094}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_a980ef04166352403e9d9afd352f1a9dc}{00094}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a980ef04166352403e9d9afd352f1a9dc}{PushBackClosure}}(TkListIter\ front,\ TkListIter\ back)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00095}00095\ \ \ \ \ closures\_.push\_back(Closure(front,\ back));}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00096}00096\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00097}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_a4f269010528fc6e6553d3171b4f78a44}{00097}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a4f269010528fc6e6553d3171b4f78a44}{PopClosure}}()\ \{\ closures\_.pop\_back();\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00098}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_aadc4e04f21454014076e78b5b0a1d88a}{00098}}\ \ \ \textcolor{keywordtype}{void}\ PopClosure(ClosureListIter\ which)\ \{\ closures\_.erase(which);\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00099}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_ad8406739b27f444266249f7bf24ea627}{00099}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_ad8406739b27f444266249f7bf24ea627}{PopClosureIf}}(\textcolor{keyword}{auto}\&\&\ condition)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00100}00100\ \ \ \ \ closures\_.remove\_if(std::move(condition));}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00101}00101\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00103}00103\ \ \ \textcolor{comment}{///\ Returns\ the\ size\ of\ the\ internal\ closure\ list\ minus\ the\ sentinel\ begin.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00104}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_abb4e7cd01a052de0e224d4f399e05c85}{00104}}\ \ \ std::size\_t\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_abb4e7cd01a052de0e224d4f399e05c85}{ClosureCount}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ closures\_.size()\ -\/\ 1;\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00105}00105\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00106}00106\ \ \ \textcolor{comment}{///\ Returns\ iter\ to\ the\ last\ closure.(One\ before\ the\ end).}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00107}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_a779f95a2f87f6d998d27aced21c284c2}{00107}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a779f95a2f87f6d998d27aced21c284c2}{ClosureListIter}}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a779f95a2f87f6d998d27aced21c284c2}{LastClosure}}()\ \{\ \textcolor{keywordflow}{return}\ std::prev(closures\_.end());\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00109}00109\ \ \ \textcolor{comment}{///\ Returns\ the\ token\ iterator\ at\ the\ front\ of\ the\ last\ closure.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00110}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_afa780af951c7c40cbeca048cb37a5e34}{00110}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_afa780af951c7c40cbeca048cb37a5e34}{TkListIter}}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_afa780af951c7c40cbeca048cb37a5e34}{LastClosureFront}}()\ \{\ \textcolor{keywordflow}{return}\ closures\_.back().Front();\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00112}00112\ \ \ \textcolor{comment}{///\ Returns\ the\ token\ iterator\ at\ the\ back\ of\ the\ last\ closure.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00113}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_ab8b13c7830e0f34c6a9e266ddab8c726}{00113}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_ab8b13c7830e0f34c6a9e266ddab8c726}{TkListIter}}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_ab8b13c7830e0f34c6a9e266ddab8c726}{LastClosureBack}}()\ \{\ \textcolor{keywordflow}{return}\ closures\_.back().Back();\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00115}00115\ \ \ \textcolor{comment}{///\ Search\ from\ the\ end\ of\ the\ closure\ list\ until\ first\ occurence.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00116}00116\ \ \ \mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{ClosureListIter}}\ \mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{FindClosureReverse}}(\mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{std}}::\mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{function}}<\textcolor{keywordtype}{bool}(\mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{Closure}}\&)>\&\&\ \mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{condition}});}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00117}00117\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00118}00118\ \ \ \textcolor{comment}{///\ Search\ from\ the\ end\ of\ the\ closure\ list\ for\ repeated\ occurences.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00119}00119\ \ \ std::vector<ClosureListIter>\ FindClosureReverseConsecutive(}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00120}00120\ \ \ \ \ \ \ std::function<\textcolor{keywordtype}{bool}(ClosureListIter,\ ClosureListIter)>\&\&\ condition);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00122}00122\ \ \ \textcolor{comment}{///\ Search\ from\ the\ end\ of\ the\ closure\ list\ for\ repeated\ occurences}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00123}00123\ \ \ \textcolor{comment}{///\ ignoring\ certain\ elements\ based\ on\ ignore\_condition.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00124}00124\ \ \ std::vector<ClosureListIter>\ FindClosureReverseConsecutiveAndIgnore(}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00125}00125\ \ \ \ \ \ \ std::function<\textcolor{keywordtype}{bool}(ClosureListIter,\ ClosureListIter)>\&\&\ condition,}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00126}00126\ \ \ \ \ \ \ std::function<\textcolor{keywordtype}{bool}(ClosureListIter)>\&\&\ ignore\_condition);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00128}00128\ \ \textcolor{keyword}{public}:\ \ \textcolor{comment}{//\ Token\ stream\ operations}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00129}00129\ \ \ \textcolor{comment}{///\ Insert\ token\ before\ the\ front\ of\ the\ specified\ closure\ in\ the\ token\ stream.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00130}00130\ \ \ \textcolor{comment}{///\ Closure\ must\ be\ retrieved\ from\ this\ ClosureBuffer\ instance.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00131}00131\ \ \ \textcolor{keywordtype}{void}\ StreamInsertBeforeClosure(ClosureListIter\ closure\_it,\ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}\ token);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00132}00132\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00133}00133\ \ \ \textcolor{comment}{///\ Insert\ token\ after\ the\ back\ of\ the\ specified\ closure\ in\ the\ token\ stream.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00134}00134\ \ \ \textcolor{comment}{///\ Closure\ must\ be\ retrieved\ from\ this\ ClosureBuffer\ instance.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00135}00135\ \ \ \textcolor{keywordtype}{void}\ StreamInsertAfterClosure(ClosureListIter\ closure\_it,\ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}\ token);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00136}00136\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00137}00137\ \ \ \textcolor{comment}{///\ Get\ the\ last\ pushed\ token\ in\ the\ token\ stream.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00138}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_af96339d1817d830c83517be14f35806d}{00138}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_af96339d1817d830c83517be14f35806d}{TkListIter}}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_af96339d1817d830c83517be14f35806d}{LastStreamed}}()\ \{\ \textcolor{keywordflow}{return}\ std::prev(token\_stream\_.end());\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00140}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_a64f76c53db25161e5bb2306a8a669507}{00140}}\ \ \ \textcolor{keywordtype}{void}\ StreamPushBack(\mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}\ token)\ \{\ token\_stream\_.push\_back(token);\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00141}00141\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00142}00142\ \ \ \mbox{\hyperlink{group__cand__compiler__parser__closure_ga22618655133d195babd2e7527828e240}{TkVector}}\ \mbox{\hyperlink{group__cand__compiler__parser__closure_ga22618655133d195babd2e7527828e240}{StreamToVector}}();}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00144}00144\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00145}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_a440e13926982ebd9f672124d464dd2a9}{00145}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a440e13926982ebd9f672124d464dd2a9}{ClosureBuffer}}()\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00146}00146\ \ \ \ \ \textcolor{comment}{//\ Create\ sentinel\ begin\ closure.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00147}00147\ \ \ \ \ \textcolor{comment}{//\ HAS\ to\ be\ set\ or\ else\ begin\ is\ the\ end\ before\ and\ after\ first\ insertion.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00148}00148\ \ \ \ \ token\_stream\_.push\_back(kSentinelBegin);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00149}00149\ \ \ \ \ closures\_.push\_back(Closure(token\_stream\_.begin()));}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00150}00150\ \ \ \ \ sentinel\_begin\_closure\_\ =\ closures\_.begin();}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00151}00151\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00152}00152\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00153}00153\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00154}\mbox{\hyperlink{group__cand__compiler__parser__closure_ga079d9a591eeebc62d596bcb5d5b72706}{00154}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}\ \mbox{\hyperlink{group__cand__compiler__parser__closure_ga079d9a591eeebc62d596bcb5d5b72706}{kSentinelBegin}};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00155}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_ae2650add0cd14b9235da505bf1afe11f}{00155}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_ae2650add0cd14b9235da505bf1afe11f}{TkList}}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_ae2650add0cd14b9235da505bf1afe11f}{token\_stream\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00156}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_a271e5675acadb15d5fadf3ca47c88242}{00156}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a271e5675acadb15d5fadf3ca47c88242}{CosureList}}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a271e5675acadb15d5fadf3ca47c88242}{closures\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00157}\mbox{\hyperlink{classcaoco_1_1_closure_buffer_a1921b41df67aebac4f8504eaa67f5e8c}{00157}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a1921b41df67aebac4f8504eaa67f5e8c}{ClosureListIter}}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer_a1921b41df67aebac4f8504eaa67f5e8c}{sentinel\_begin\_closure\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00158}00158\ \};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00159}00159\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00160}00160\ \textcolor{comment}{///\ Sentinel\ beginning\ of\ closure\ buffer.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00161}00161\ \textcolor{comment}{///\ HAS\ to\ be\ set\ or\ else\ begin\ is\ the\ end\ before\ and\ after\ first\ insertion.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00162}00162\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer}{ClosureBuffer}}::\mbox{\hyperlink{group__cand__compiler__parser__closure_ga079d9a591eeebc62d596bcb5d5b72706}{kSentinelBegin}}\ =\ \{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{eTk}}::NONE,}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}ClosureBuffer\ sentinel\ begin."{}}\};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00164}00164\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00165}00165\ \textcolor{comment}{///\ Search\ from\ the\ end\ of\ the\ closure\ list\ until\ first\ occurrence.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00166}\mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{00166}}\ \mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{ClosureListIter}}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer}{ClosureBuffer}}::\mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{FindClosureReverse}}(}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00167}00167\ \ \ \ \ \mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{std}}::\mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{function}}<\textcolor{keywordtype}{bool}(\mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{Closure}}\&)>\&\&\ \mbox{\hyperlink{group__cand__compiler__parser__closure_ga931c5ca7e1a643450e4f52e281056cf6}{condition}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00168}00168\ \ \ \textcolor{keywordflow}{return}\ std::find\_if(closures\_.rbegin(),\ closures\_.rend(),\ condition).base();}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00169}00169\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00170}00170\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00171}\mbox{\hyperlink{group__cand__compiler__parser__closure_ga3605863364783548715e4b08e6313a54}{00171}}\ std::vector<ClosureListIter>\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer}{ClosureBuffer}}::FindClosureReverseConsecutive(}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00172}00172\ \ \ \ \ std::function<\textcolor{keywordtype}{bool}(ClosureListIter,\ ClosureListIter)>\&\&\ condition)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00173}00173\ \ \ \textcolor{keyword}{auto}\ it\ =\ closures\_.rbegin();}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00174}00174\ \ \ \textcolor{keyword}{auto}\ end\ =\ closures\_.rend();}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00175}00175\ \ \ std::vector<ClosureListIter>\ accumulated\_iterators;}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00176}00176\ \ \ \textcolor{keywordflow}{while}\ (it\ !=\ end)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00177}00177\ \ \ \ \ \textcolor{keyword}{auto}\ next\ =\ std::next(it);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00178}00178\ \ \ \ \ \textcolor{keywordflow}{if}\ (condition(std::prev(it.base()),\ std::prev(next.base())))\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00179}00179\ \ \ \ \ \ \ accumulated\_iterators.push\_back(std::prev(it.base()));}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00180}00180\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00181}00181\ \ \ \ \ \ \ accumulated\_iterators.push\_back(std::prev(it.base()));}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00182}00182\ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00183}00183\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00184}00184\ \ \ \ \ ++it;}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00185}00185\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00186}00186\ \ \ \textcolor{keywordflow}{return}\ accumulated\_iterators;}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00187}00187\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00188}00188\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00189}00189\ std::vector<ClosureListIter>}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00190}\mbox{\hyperlink{group__cand__compiler__parser__closure_gae3630edc555f5019d8e36afea25cd36e}{00190}}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer}{ClosureBuffer}}::FindClosureReverseConsecutiveAndIgnore(}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00191}00191\ \ \ \ \ std::function<\textcolor{keywordtype}{bool}(ClosureListIter,\ ClosureListIter)>\&\&\ condition,}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00192}00192\ \ \ \ \ std::function<\textcolor{keywordtype}{bool}(ClosureListIter)>\&\&\ ignore\_condition)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00193}00193\ \ \ \textcolor{keyword}{auto}\ it\ =\ closures\_.rbegin();}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00194}00194\ \ \ \textcolor{keyword}{auto}\ end\ =\ closures\_.rend();}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00195}00195\ \ \ std::vector<ClosureListIter>\ accumulated\_iterators;}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00196}00196\ \ \ \textcolor{keywordflow}{while}\ (it\ !=\ end)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00197}00197\ \ \ \ \ \textcolor{keyword}{auto}\ next\ =\ std::next(it);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00198}00198\ \ \ \ \ \textcolor{keywordflow}{if}\ (ignore\_condition(next.base()))\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00199}00199\ \ \ \ \ \ \ it++;}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00200}00200\ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00201}00201\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00202}00202\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (condition(std::prev(it.base()),\ std::prev(next.base())))\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00203}00203\ \ \ \ \ \ \ \ \ accumulated\_iterators.push\_back(std::prev(it.base()));}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00204}00204\ \ \ \ \ \ \ \ \ it++;}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00205}00205\ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00206}00206\ \ \ \ \ \ \ \ \ accumulated\_iterators.push\_back(std::prev(it.base()));}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00207}00207\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00208}00208\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00209}00209\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00210}00210\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00211}00211\ \ \ \textcolor{keywordflow}{return}\ accumulated\_iterators;}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00212}00212\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00213}00213\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00214}\mbox{\hyperlink{group__cand__compiler__parser__closure_gac10b01009cb8e30ed8601a0932bc05bc}{00214}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer}{ClosureBuffer}}::StreamInsertBeforeClosure(ClosureListIter\ closure\_it,}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00215}00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}\ token)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00216}00216\ \ \ \textcolor{keywordflow}{if}\ (closure\_it\ ==\ sentinel\_begin\_closure\_)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00217}00217\ \ \ \ \ token\_stream\_.insert(std::next(token\_stream\_.begin()),\ token);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00218}00218\ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00219}00219\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00220}00220\ \ \ \textcolor{keyword}{auto}\ front\ =\ closure\_it-\/>Front();}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00221}00221\ \ \ token\_stream\_.insert(front,\ token);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00222}00222\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00223}00223\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00224}\mbox{\hyperlink{group__cand__compiler__parser__closure_ga8d2591ec561f1273293dbfef6738489d}{00224}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer}{ClosureBuffer}}::StreamInsertAfterClosure(ClosureListIter\ closure\_it,}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00225}00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}\ token)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00226}00226\ \ \ \textcolor{keyword}{auto}\ back\ =\ closure\_it-\/>Back();}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00227}00227\ \ \ \textcolor{keyword}{auto}\ next\ =\ std::next(back);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00228}00228\ \ \ \textcolor{keywordflow}{if}\ (next\ ==\ token\_stream\_.end())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00229}00229\ \ \ \ \ token\_stream\_.push\_back(token);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00230}00230\ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00231}00231\ \ \ \ \ token\_stream\_.insert(next,\ token);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00232}00232\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00233}00233\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00234}00234\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00235}\mbox{\hyperlink{group__cand__compiler__parser__closure_ga22618655133d195babd2e7527828e240}{00235}}\ \mbox{\hyperlink{group__cand__compiler__parser__closure_ga22618655133d195babd2e7527828e240}{TkVector}}\ \mbox{\hyperlink{classcaoco_1_1_closure_buffer}{ClosureBuffer}}::\mbox{\hyperlink{group__cand__compiler__parser__closure_ga22618655133d195babd2e7527828e240}{StreamToVector}}()\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00236}00236\ \ \ \textcolor{comment}{//\ Temporarily\ remove\ sentinel\ begin\ token.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00237}00237\ \ \ token\_stream\_.pop\_front();}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00238}00238\ \ \ TkVector\ vec;}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00239}00239\ \ \ vec.reserve(token\_stream\_.size());}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00240}00240\ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ tk\ :\ token\_stream\_)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00241}00241\ \ \ \ \ vec.push\_back(tk);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00242}00242\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00243}00243\ \ \ \textcolor{comment}{//\ Re-\/add\ sentinel\ begin\ token.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00244}00244\ \ \ token\_stream\_.push\_front(kSentinelBegin);}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00245}00245\ \ \ \textcolor{keywordflow}{return}\ vec;}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00246}00246\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00247}00247\ \textcolor{comment}{///\ @\}\ //\ end\ of\ cand\_compiler\_parser\_closure}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00248}00248\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00249}00249\ \}\ \ \textcolor{comment}{//\ namespace\ caoco}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00250}00250\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00251}00251\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_TOKEN\_CLOSURE\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00252}00252\ }
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00253}00253\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00254}00254\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00255}00255\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00256}00256\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00257}00257\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00258}00258\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00259}00259\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00260}00260\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00261}00261\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00262}00262\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00263}00263\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00264}00264\ \textcolor{comment}{//\ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00265}00265\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00266}00266\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00267}00267\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00268}00268\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00269}00269\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00270}00270\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{caoco__token__closure_8h_source_l00271}00271\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+
+\end{DoxyCode}

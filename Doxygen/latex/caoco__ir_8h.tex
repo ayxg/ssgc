@@ -1,0 +1,79 @@
+\doxysection{C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/caoco\+\_\+ir.h File Reference}
+\hypertarget{caoco__ir_8h}{}\label{caoco__ir_8h}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_ir.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_ir.h}}
+{\ttfamily \#include "{}cppsextended.\+h"{}}\newline
+{\ttfamily \#include "{}caoco\+\_\+rtval.\+h"{}}\newline
+{\ttfamily \#include "{}caoco\+\_\+rtalloc.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1iraction_1_1_ir_action_base}{caoco\+::iraction\+::\+Ir\+Action\+Base}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1iraction_1_1_declare_local_var}{caoco\+::iraction\+::\+Declare\+Local\+Var}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1iraction_1_1_resolve_local_var}{caoco\+::iraction\+::\+Resolve\+Local\+Var}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1iraction_1_1_assign_local_var}{caoco\+::iraction\+::\+Assign\+Local\+Var}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1iraction_1_1_unary_negation}{caoco\+::iraction\+::\+Unary\+Negation}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1iraction_1_1_binary_addition}{caoco\+::iraction\+::\+Binary\+Addition}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1_ir_action_block}{caoco\+::\+Ir\+Action\+Block}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecaoco}{caoco}}
+\item 
+namespace \mbox{\hyperlink{namespacecaoco_1_1iraction}{caoco\+::iraction}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{caoco__ir_8h_a7d83efe21bbcea2a750b7e4b8a9dd337}{USING\+\_\+\+DECAYED\+\_\+T}}(v)~using T = std\+::decay\+\_\+t$<$decltype(v)$>$
+\item 
+\#define \mbox{\hyperlink{caoco__ir_8h_af64e281ddd8c95330251ffec9fec91f0}{CXIF}}~if constexpr
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{namespacecaoco_a5f340697fccb6414fb147588a0d2c825}{caoco\+::\+Program\+Action\+Arg\+Variant}}
+\item 
+using \mbox{\hyperlink{namespacecaoco_ade3850f9082b9cc4f543357dab54af65}{caoco\+::\+Ir\+Action\+Variant}} = std\+::variant$<$iraction\+::\+Debug\+Print$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{namespacecaoco_1_1iraction_a00c4a5fb4baba42b602ac1056be06146}{caoco\+::iraction\+::e\+Rt\+Error\+Code}} \+: size\+\_\+t \{ \newline
+\mbox{\hyperlink{namespacecaoco_1_1iraction_a00c4a5fb4baba42b602ac1056be06146afcd1af9ec66cb99f2d106d7fdc865c8b}{caoco\+::iraction\+::k\+No\+Error}} = 0
+, \mbox{\hyperlink{namespacecaoco_1_1iraction_a00c4a5fb4baba42b602ac1056be06146ab13ead8838f9e6ae120ddcb6a6d87c37}{caoco\+::iraction\+::k\+Undefined\+Value}}
+, \mbox{\hyperlink{namespacecaoco_1_1iraction_a00c4a5fb4baba42b602ac1056be06146a21875b4c228f751f4d23857e3d56eea6}{caoco\+::iraction\+::k\+Null\+Pointer\+Operation}}
+, \mbox{\hyperlink{namespacecaoco_1_1iraction_a00c4a5fb4baba42b602ac1056be06146a179a455a9361798d811c68e818c11590}{caoco\+::iraction\+::k\+Var\+Already\+Declared}}
+, \newline
+\mbox{\hyperlink{namespacecaoco_1_1iraction_a00c4a5fb4baba42b602ac1056be06146af2db7c31cb1cd457e53794998de77afd}{caoco\+::iraction\+::k\+Var\+Not\+Declared}}
+, \mbox{\hyperlink{namespacecaoco_1_1iraction_a00c4a5fb4baba42b602ac1056be06146ae8024a6eeff9d90cc3babff8acaec9c9}{caoco\+::iraction\+::k\+Not\+Implemented}}
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{caoco__ir_8h_af64e281ddd8c95330251ffec9fec91f0}\index{caoco\_ir.h@{caoco\_ir.h}!CXIF@{CXIF}}
+\index{CXIF@{CXIF}!caoco\_ir.h@{caoco\_ir.h}}
+\doxysubsubsection{\texorpdfstring{CXIF}{CXIF}}
+{\footnotesize\ttfamily \label{caoco__ir_8h_af64e281ddd8c95330251ffec9fec91f0} 
+\#define CXIF~if constexpr}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ir_8h_source_l00095}{95}} of file \mbox{\hyperlink{caoco__ir_8h_source}{caoco\+\_\+ir.\+h}}.
+
+\Hypertarget{caoco__ir_8h_a7d83efe21bbcea2a750b7e4b8a9dd337}\index{caoco\_ir.h@{caoco\_ir.h}!USING\_DECAYED\_T@{USING\_DECAYED\_T}}
+\index{USING\_DECAYED\_T@{USING\_DECAYED\_T}!caoco\_ir.h@{caoco\_ir.h}}
+\doxysubsubsection{\texorpdfstring{USING\_DECAYED\_T}{USING\_DECAYED\_T}}
+{\footnotesize\ttfamily \label{caoco__ir_8h_a7d83efe21bbcea2a750b7e4b8a9dd337} 
+\#define USING\+\_\+\+DECAYED\+\_\+T(\begin{DoxyParamCaption}\item[{}]{v}{}\end{DoxyParamCaption})~using T = std\+::decay\+\_\+t$<$decltype(v)$>$}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__ir_8h_source_l00094}{94}} of file \mbox{\hyperlink{caoco__ir_8h_source}{caoco\+\_\+ir.\+h}}.
+

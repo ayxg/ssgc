@@ -1,0 +1,195 @@
+\doxysection{caoco\+::Named\+Rt\+Val Class Reference}
+\hypertarget{classcaoco_1_1_named_rt_val}{}\label{classcaoco_1_1_named_rt_val}\index{caoco::NamedRtVal@{caoco::NamedRtVal}}
+
+
+{\ttfamily \#include $<$caoco\+\_\+rtval.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{classcaoco_1_1_named_rt_val_a2049d790e72ef82f5693b0d4bc38cd55}{Val\+Ptr}} = \mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}}\texorpdfstring{$\ast$}{*} const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+constexpr const string\+\_\+view \& \mbox{\hyperlink{classcaoco_1_1_named_rt_val_aa3a3478b120552cb3b134375e1127dcb}{Name}} () const
+\item 
+constexpr \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5c}{e\+Native\+Type\+Index\+::enum\+\_\+type}} \mbox{\hyperlink{classcaoco_1_1_named_rt_val_a496acdfd90d52a7e61a597460fec8f87}{Native\+Idx}} () const
+\item 
+constexpr \mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \& \mbox{\hyperlink{classcaoco_1_1_named_rt_val_a22413e4bf62dafe8f72d85ff28986419}{Value}} ()
+\item 
+constexpr \mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcaoco_1_1_named_rt_val_ac2c121a28f4f145da465ce75c26fecc4}{Value\+Ptr}} () const
+\item 
+constexpr void \mbox{\hyperlink{classcaoco_1_1_named_rt_val_a89e73b34e3e5abeae413196293ec30f3}{Set\+Value}} (\mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \&new\+\_\+val)
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_named_rt_val_a655b17f8e15183f5f197c5afd86af1e1}{Is\+Null}} () const
+\item 
+constexpr \mbox{\hyperlink{classcaoco_1_1_named_rt_val_a1a546c3651090775df2fcceba8e080d4}{Named\+Rt\+Val}} (const string\+\_\+view \&name, \mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \&value)
+\item 
+constexpr \mbox{\hyperlink{classcaoco_1_1_named_rt_val_a8c8f01d6db9429ac62be0e2be723c62f}{Named\+Rt\+Val}} (const string\+\_\+view \&name)
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_named_rt_val_a6b3109df581b4e4e07f27391ae111db7}{operator==}} (const \mbox{\hyperlink{classcaoco_1_1_named_rt_val}{Named\+Rt\+Val}} \&other) const
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_named_rt_val_afbea8e6774db3d50d6fd8926b0b9722a}{operator==}} (const string\+\_\+view \&other) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+string\+\_\+view \mbox{\hyperlink{classcaoco_1_1_named_rt_val_a5f081f6fed7e5b77c2e83be80d6c7633}{name\+\_\+}} \{"{}"{}\}
+\item 
+\mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcaoco_1_1_named_rt_val_adededa61e08c53f64b516cb5308ac327}{value\+\_\+}} \{nullptr\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00270}{270}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+
+
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{classcaoco_1_1_named_rt_val_a2049d790e72ef82f5693b0d4bc38cd55}\index{caoco::NamedRtVal@{caoco::NamedRtVal}!ValPtr@{ValPtr}}
+\index{ValPtr@{ValPtr}!caoco::NamedRtVal@{caoco::NamedRtVal}}
+\doxysubsubsection{\texorpdfstring{ValPtr}{ValPtr}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_named_rt_val_a2049d790e72ef82f5693b0d4bc38cd55} 
+using \mbox{\hyperlink{classcaoco_1_1_named_rt_val_a2049d790e72ef82f5693b0d4bc38cd55}{caoco\+::\+Named\+Rt\+Val\+::\+Val\+Ptr}} = \mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}}\texorpdfstring{$\ast$}{*} const}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00272}{272}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcaoco_1_1_named_rt_val_a1a546c3651090775df2fcceba8e080d4}\index{caoco::NamedRtVal@{caoco::NamedRtVal}!NamedRtVal@{NamedRtVal}}
+\index{NamedRtVal@{NamedRtVal}!caoco::NamedRtVal@{caoco::NamedRtVal}}
+\doxysubsubsection{\texorpdfstring{NamedRtVal()}{NamedRtVal()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_named_rt_val_a1a546c3651090775df2fcceba8e080d4} 
+caoco\+::\+Named\+Rt\+Val\+::\+Named\+Rt\+Val (\begin{DoxyParamCaption}\item[{const string\+\_\+view \&}]{name}{, }\item[{\mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \&}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00283}{283}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_named_rt_val_a8c8f01d6db9429ac62be0e2be723c62f}\index{caoco::NamedRtVal@{caoco::NamedRtVal}!NamedRtVal@{NamedRtVal}}
+\index{NamedRtVal@{NamedRtVal}!caoco::NamedRtVal@{caoco::NamedRtVal}}
+\doxysubsubsection{\texorpdfstring{NamedRtVal()}{NamedRtVal()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_named_rt_val_a8c8f01d6db9429ac62be0e2be723c62f} 
+caoco\+::\+Named\+Rt\+Val\+::\+Named\+Rt\+Val (\begin{DoxyParamCaption}\item[{const string\+\_\+view \&}]{name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00285}{285}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcaoco_1_1_named_rt_val_a655b17f8e15183f5f197c5afd86af1e1}\index{caoco::NamedRtVal@{caoco::NamedRtVal}!IsNull@{IsNull}}
+\index{IsNull@{IsNull}!caoco::NamedRtVal@{caoco::NamedRtVal}}
+\doxysubsubsection{\texorpdfstring{IsNull()}{IsNull()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_named_rt_val_a655b17f8e15183f5f197c5afd86af1e1} 
+bool caoco\+::\+Named\+Rt\+Val\+::\+Is\+Null (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00280}{280}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_named_rt_val_aa3a3478b120552cb3b134375e1127dcb}\index{caoco::NamedRtVal@{caoco::NamedRtVal}!Name@{Name}}
+\index{Name@{Name}!caoco::NamedRtVal@{caoco::NamedRtVal}}
+\doxysubsubsection{\texorpdfstring{Name()}{Name()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_named_rt_val_aa3a3478b120552cb3b134375e1127dcb} 
+const string\+\_\+view \& caoco\+::\+Named\+Rt\+Val\+::\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00273}{273}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_named_rt_val_a496acdfd90d52a7e61a597460fec8f87}\index{caoco::NamedRtVal@{caoco::NamedRtVal}!NativeIdx@{NativeIdx}}
+\index{NativeIdx@{NativeIdx}!caoco::NamedRtVal@{caoco::NamedRtVal}}
+\doxysubsubsection{\texorpdfstring{NativeIdx()}{NativeIdx()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_named_rt_val_a496acdfd90d52a7e61a597460fec8f87} 
+\mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5c}{e\+Native\+Type\+Index\+::enum\+\_\+type}} caoco\+::\+Named\+Rt\+Val\+::\+Native\+Idx (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00274}{274}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_named_rt_val_a6b3109df581b4e4e07f27391ae111db7}\index{caoco::NamedRtVal@{caoco::NamedRtVal}!operator==@{operator==}}
+\index{operator==@{operator==}!caoco::NamedRtVal@{caoco::NamedRtVal}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_named_rt_val_a6b3109df581b4e4e07f27391ae111db7} 
+bool caoco\+::\+Named\+Rt\+Val\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_named_rt_val}{Named\+Rt\+Val}} \&}]{other}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00288}{288}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_named_rt_val_afbea8e6774db3d50d6fd8926b0b9722a}\index{caoco::NamedRtVal@{caoco::NamedRtVal}!operator==@{operator==}}
+\index{operator==@{operator==}!caoco::NamedRtVal@{caoco::NamedRtVal}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_named_rt_val_afbea8e6774db3d50d6fd8926b0b9722a} 
+bool caoco\+::\+Named\+Rt\+Val\+::operator== (\begin{DoxyParamCaption}\item[{const string\+\_\+view \&}]{other}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00292}{292}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_named_rt_val_a89e73b34e3e5abeae413196293ec30f3}\index{caoco::NamedRtVal@{caoco::NamedRtVal}!SetValue@{SetValue}}
+\index{SetValue@{SetValue}!caoco::NamedRtVal@{caoco::NamedRtVal}}
+\doxysubsubsection{\texorpdfstring{SetValue()}{SetValue()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_named_rt_val_a89e73b34e3e5abeae413196293ec30f3} 
+void caoco\+::\+Named\+Rt\+Val\+::\+Set\+Value (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \&}]{new\+\_\+val}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00279}{279}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_named_rt_val_a22413e4bf62dafe8f72d85ff28986419}\index{caoco::NamedRtVal@{caoco::NamedRtVal}!Value@{Value}}
+\index{Value@{Value}!caoco::NamedRtVal@{caoco::NamedRtVal}}
+\doxysubsubsection{\texorpdfstring{Value()}{Value()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_named_rt_val_a22413e4bf62dafe8f72d85ff28986419} 
+\mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \& caoco\+::\+Named\+Rt\+Val\+::\+Value (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00277}{277}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_named_rt_val_ac2c121a28f4f145da465ce75c26fecc4}\index{caoco::NamedRtVal@{caoco::NamedRtVal}!ValuePtr@{ValuePtr}}
+\index{ValuePtr@{ValuePtr}!caoco::NamedRtVal@{caoco::NamedRtVal}}
+\doxysubsubsection{\texorpdfstring{ValuePtr()}{ValuePtr()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_named_rt_val_ac2c121a28f4f145da465ce75c26fecc4} 
+\mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \texorpdfstring{$\ast$}{*}const caoco\+::\+Named\+Rt\+Val\+::\+Value\+Ptr (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00278}{278}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcaoco_1_1_named_rt_val_a5f081f6fed7e5b77c2e83be80d6c7633}\index{caoco::NamedRtVal@{caoco::NamedRtVal}!name\_@{name\_}}
+\index{name\_@{name\_}!caoco::NamedRtVal@{caoco::NamedRtVal}}
+\doxysubsubsection{\texorpdfstring{name\_}{name\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_named_rt_val_a5f081f6fed7e5b77c2e83be80d6c7633} 
+string\+\_\+view caoco\+::\+Named\+Rt\+Val\+::name\+\_\+ \{"{}"{}\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00297}{297}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_named_rt_val_adededa61e08c53f64b516cb5308ac327}\index{caoco::NamedRtVal@{caoco::NamedRtVal}!value\_@{value\_}}
+\index{value\_@{value\_}!caoco::NamedRtVal@{caoco::NamedRtVal}}
+\doxysubsubsection{\texorpdfstring{value\_}{value\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_named_rt_val_adededa61e08c53f64b516cb5308ac327} 
+\mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}}\texorpdfstring{$\ast$}{*} caoco\+::\+Named\+Rt\+Val\+::value\+\_\+ \{nullptr\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00298}{298}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/\mbox{\hyperlink{caoco__rtval_8h}{caoco\+\_\+rtval.\+h}}\end{DoxyCompactItemize}

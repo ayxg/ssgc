@@ -1,0 +1,70 @@
+\doxysection{minitest Namespace Reference}
+\hypertarget{namespaceminitest}{}\label{namespaceminitest}\index{minitest@{minitest}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structminitest_1_1_fixture}{Fixture}}
+\begin{DoxyCompactList}\small\item\em Base class for all fixtures. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structminitest_1_1_test}{Test}}
+\begin{DoxyCompactList}\small\item\em A template for a test case, the main \textquotesingle{}testing\textquotesingle{} structure. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structminitest_1_1_test_result}{Test\+Result}}
+\begin{DoxyCompactList}\small\item\em Stores results and metadata of a recorded test. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Concepts}
+\begin{DoxyCompactItemize}
+\item 
+concept \mbox{\hyperlink{conceptminitest_1_1i_streamable}{i\+Streamable}}
+\begin{DoxyCompactList}\small\item\em Concept to check if a type is streamable. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{group__cppmodule1__minitest__internal_ga9c1650db31c407aa418eb1be7cdc5dc5}{Expect\+True}} (bool b)
+\begin{DoxyCompactList}\small\item\em DO NOT USE. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{group__cppmodule1__minitest__internal_ga312d6e0117e8a8a6165eb605214853b6}{Expect\+False}} (bool b)
+\begin{DoxyCompactList}\small\item\em DO NOT USE. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename LT , typename RT $>$ \newline
+requires std\+::equality\+\_\+comparable\+\_\+with$<$LT, RT$>$}\\static bool \mbox{\hyperlink{group__cppmodule1__minitest__internal_gaa666f55a9d412f1f797d3f14b7f24b63}{Expect\+Eq}} (LT lhs, RT rhs)
+\begin{DoxyCompactList}\small\item\em DO NOT USE. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename LT , typename RT $>$ \newline
+requires std\+::equality\+\_\+comparable\+\_\+with$<$LT, RT$>$}\\static bool \mbox{\hyperlink{group__cppmodule1__minitest__internal_ga45625ea82e44227cb373aaa45d4c7995}{Expect\+Ne}} (LT lhs, RT rhs)
+\begin{DoxyCompactList}\small\item\em DO NOT USE. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{group__cppmodule1__minitest__internal_gafdc83ddc2e8e3c4f0e48fb99971e75bf}{Expect\+Any\+Throw}} (auto \&\&f)
+\begin{DoxyCompactList}\small\item\em DO NOT USE. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{group__cppmodule1__minitest__internal_ga5b338333137f466cf11f44dd5184ffcf}{Expect\+No\+Throw}} (auto \&\&f)
+\begin{DoxyCompactList}\small\item\em DO NOT USE. \end{DoxyCompactList}\item 
+std\+::ostream \& \mbox{\hyperlink{group__cppmodule1__minitest_ga7d467f038ac911d67ded87c7b57b04db}{operator$<$$<$}} (std\+::ostream \&ss, const \mbox{\hyperlink{structminitest_1_1_test_result}{Test\+Result}} \&t)
+\begin{DoxyCompactList}\small\item\em QOL std\+::ostream overload to directly print test results. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{group__cppmodule1__minitest_gaabb4cb57cc18aaa7432054d87c4926cc}{Register\+Test}} (const std\+::string\+\_\+view \&test\+\_\+name, std\+::function$<$ bool()$>$ test)
+\begin{DoxyCompactList}\small\item\em ! DO NOT USE, impl detail. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{group__cppmodule1__minitest_gaaefa0504cb1a7690cccf4a3f5c89fa45}{Run\+Registered\+Test\+Module}} (const std\+::string\+\_\+view \&test\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Runs all the tests associated with a given test name or module name. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{group__cppmodule1__minitest_ga1df17d88c718f56866c894b90da78089}{Add\+Failed\+Test\+Log}} (const std\+::string \&log, const char \texorpdfstring{$\ast$}{*}test, const char \texorpdfstring{$\ast$}{*}tcase, const std\+::source\+\_\+location location=std\+::source\+\_\+location\+::current())
+\begin{DoxyCompactList}\small\item\em For internal mini-\/test use only. Adds a formatted error log to the g\+Failed\+Test\+Logs. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{group__cppmodule1__minitest_ga642ed5685a8d27de403039bc9c0122c0}{Print\+Failed\+Test\+Logs}} ()
+\begin{DoxyCompactList}\small\item\em Prints all failed test logs, or "{}\+All Tests Passed!"{} when none. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{group__cppmodule1__minitest_gaade7b698ae5dc14367b1ac4181c3a263}{Record\+Test\+Log}} (bool passed, const std\+::string \&log, const char \texorpdfstring{$\ast$}{*}test, const char \texorpdfstring{$\ast$}{*}tcase, const std\+::source\+\_\+location location=std\+::source\+\_\+location\+::current())
+\begin{DoxyCompactList}\small\item\em Adds a \doxylink{structminitest_1_1_test_result}{Test\+Result} to \textquotesingle{}g\+Recorded\+Test\+Logs\textquotesingle{}. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{group__cppmodule1__minitest_gaee7d11b43b0c3dd3a7085ebde6d40619}{Print\+Recorded\+Test\+Logs}} ()
+\begin{DoxyCompactList}\small\item\em Prints all recorded test logs or "{}\+No tests were run"{} if none. \end{DoxyCompactList}\item 
+static const std\+::vector$<$ \mbox{\hyperlink{structminitest_1_1_test_result}{Test\+Result}} $>$ \& \mbox{\hyperlink{group__cppmodule1__minitest_ga91c6d252501a60bb2a6f4e52f2f05eca}{View\+Test\+Results}} ()
+\begin{DoxyCompactList}\small\item\em Access the recorded test logs stored in g\+Recorded\+Test\+Logs. \end{DoxyCompactList}\item 
+static const std\+::vector$<$ std\+::string $>$ \& \mbox{\hyperlink{group__cppmodule1__minitest_gabd1911d1338c063dd54ddec80a91b4e8}{View\+Failed\+Test\+Results}} ()
+\begin{DoxyCompactList}\small\item\em Access the failed test logs stored in g\+Failed\+Test\+Logs. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{group__cppmodule1__minitest_ga78e78c765a31e712188deae6512e93e4}{Flush\+Test\+Results}} ()
+\begin{DoxyCompactList}\small\item\em Clears recorded test logs. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{group__cppmodule1__minitest_gae726a73b589cdd69209f74dee3eef54c}{Flush\+Failed\+Test\+Results}} ()
+\begin{DoxyCompactList}\small\item\em Clears failed test logs. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr auto \mbox{\hyperlink{group__cppmodule1__minitest_gaccdf49b4ef3ecde4b4f9386cd86fb473}{k\+Separator}} = \mbox{\hyperlink{group__cppmodule1__minitest_ga0ffe3c938ff37673a32f6a4dbdf93f10}{MINITEST\+\_\+\+CONFIG\+\_\+\+CUSTOM\+\_\+\+SEPARATOR}}
+\begin{DoxyCompactList}\small\item\em Used as a separator between sections in the output. \end{DoxyCompactList}\item 
+static std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{group__cppmodule1__minitest_gaa308e08c55b22011c31c87f561001f46}{g\+Failed\+Test\+Logs}}
+\item 
+static std\+::vector$<$ \mbox{\hyperlink{structminitest_1_1_test_result}{Test\+Result}} $>$ \mbox{\hyperlink{group__cppmodule1__minitest_ga77ab0a6895ce9cdd2ee81ce1eb993d75}{g\+Recorded\+Test\+Logs}}
+\begin{DoxyCompactList}\small\item\em ! Stores failed test logs. \end{DoxyCompactList}\item 
+static std\+::map$<$ std\+::string\+\_\+view, std\+::vector$<$ std\+::function$<$ bool()$>$ $>$ $>$ \mbox{\hyperlink{group__cppmodule1__minitest_ga560bc0cfddb4b094140b35881d5e3c5a}{g\+Registered\+Tests}}
+\begin{DoxyCompactList}\small\item\em ! Stores all test results if enabled. \end{DoxyCompactList}\item 
+static const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{group__cppmodule1__minitest_gad0a0585cd334a97ee18efeb0c8096f37}{g\+Last\+Failed\+Test\+Name}} = "{}"{}
+\item 
+static const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{group__cppmodule1__minitest_ga8ee0a0baf988addd786c415a705cedbe}{g\+Last\+Failed\+Test\+Case\+Name}} = "{}"{}
+\begin{DoxyCompactList}\small\item\em ! DO NOT USE, impl detail. \end{DoxyCompactList}\end{DoxyCompactItemize}

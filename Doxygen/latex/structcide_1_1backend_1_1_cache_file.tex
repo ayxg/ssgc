@@ -1,0 +1,350 @@
+\doxysection{cide\+::backend\+::Cache\+File Struct Reference}
+\hypertarget{structcide_1_1backend_1_1_cache_file}{}\label{structcide_1_1backend_1_1_cache_file}\index{cide::backend::CacheFile@{cide::backend::CacheFile}}
+
+
+{\ttfamily \#include $<$cide\+\_\+backend.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a9ef569095095de2c6632ec8bd5c06309}{Tagged\+Lines\+Map}} = std\+::map$<$string, vector$<$string$>$$>$
+\item 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a9b46e9fa05b66a0e329dd4d0471131d4}{Tagged\+Lines\+Map\+Iter}} = Tagged\+Lines\+Map\+::iterator
+\item 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a29a012bd734ee4f8b7774d8123738d4d}{Tagged\+Lines\+Map\+Node}} = Tagged\+Lines\+Map\+::node\+\_\+type
+\item 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a39e2f4e4cbdd044cdd6414683dd5f032}{Tagged\+Line\+Map\+Node\+Vec}} = std\+::vector$<$\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a29a012bd734ee4f8b7774d8123738d4d}{Tagged\+Lines\+Map\+Node}}$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a1fbc71d5309268910a39e26561e410d0}{Contains\+Tag}} (const string \&tag)
+\item 
+bool \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a2b9a424224f7d663cded4907a6a63928}{Contains\+Line\+By\+Tag\+And\+Index}} (const string \&tag, std\+::size\+\_\+t index=0)
+\item 
+const vector$<$ string $>$ \& \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a1e70eb1977ad916a12a4de42bc4dfec2}{Get\+Lines\+By\+Tag}} (const string \&tag)
+\item 
+vector$<$ stdfs\+::path $>$ \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_acf0ca1e86b647e1524234ef8464e3ebd}{Get\+Lines\+By\+Tag\+As\+Path}} (const string \&tag)
+\item 
+const string \& \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a56f663825b039ca10aac2a3d3c4b0c27}{Get\+Line\+By\+Tag\+And\+Index}} (const string \&tag, std\+::size\+\_\+t index=0)
+\item 
+\mbox{\hyperlink{classcxx_1_1_bool_error}{cxx\+::\+Bool\+Error}} \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a931a78f4ada8d57a9ce80d6d8e0c9671}{Replace\+Lines\+By\+Tag}} (const string \&tag, const vector$<$ string $>$ \&new\+\_\+lines)
+\item 
+\mbox{\hyperlink{classcxx_1_1_bool_error}{cxx\+::\+Bool\+Error}} \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a484e5d4325062b7ed2fe7361f9314043}{Replace\+Line\+By\+Tag\+And\+Index}} (const string \&tag, std\+::size\+\_\+t index, const string \&new\+\_\+line)
+\item 
+void \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a7d5fc4523f1cafdafb03218d1fa8f3e9}{Push\+Lines\+To\+Live\+Cache}} (const \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a39e2f4e4cbdd044cdd6414683dd5f032}{Tagged\+Line\+Map\+Node\+Vec}} \&file\+\_\+nodes)
+\item 
+void \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a527a8c1e6263c0fdaee992b9f0735bf2}{Push\+Lines\+To\+Live\+Cache}} (const string \&tag, const vector$<$ string $>$ \&lines)
+\item 
+void \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a2497ea23878d532f897db7ab1f076a70}{Remove\+Live\+Cache\+Lines\+By\+Tag}} (const string \&tag)
+\item 
+void \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_ab36108308afdb8f5fbaf7f244aba4682}{Pop\+Line\+From\+Live\+Cache\+By\+Tag}} (const string \&tag)
+\item 
+void \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a386bc008e366ae99d46e9370dfc0953c}{Load\+Lines\+To\+Live\+Cache}} ()
+\item 
+void \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_af0c6514c15fa340ea2615dfde00f2be2}{Save\+Live\+Cache\+To\+File}} ()
+\item 
+void \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_afe95ad76a5d4a9085fa7bf6a0035d845}{Clear\+Live\+Cache}} ()
+\item 
+void \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a7291dc80c4f783a1c744fa5496a6e994}{Refresh\+Cache\+File}} ()
+\item 
+bool \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_ae6d56c0befb0d93a97745ababeb76063}{Does\+File\+Exist}} () const
+\item 
+\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a874c2ec609697bfef1d3301e7c3ca62f}{Cache\+File}} ()=default
+\item 
+\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a6755cb83a70b8b1bfcf7d8406db34d71}{Cache\+File}} (const stdfs\+::path \&\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_abb2113600f945669ef5f7c336819add7}{file\+\_\+path}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a2720ddc74bbf18308f1b1cd99963afe8}{Push\+Lines\+To\+File}} (const \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a39e2f4e4cbdd044cdd6414683dd5f032}{Tagged\+Line\+Map\+Node\+Vec}} \&file\+\_\+nodes)
+\item 
+void \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_abf34de8b50d546d7e60fbb35df19cc89}{Push\+Lines\+To\+File}} (const string \&tag, const vector$<$ string $>$ \&lines)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+stdfs\+::path \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_abb2113600f945669ef5f7c336819add7}{file\+\_\+path}}
+\item 
+\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a9ef569095095de2c6632ec8bd5c06309}{Tagged\+Lines\+Map}} \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_ac03c37fd1bd3a246b89c170bc194f650}{live\+\_\+cache}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00101}{101}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+
+
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a39e2f4e4cbdd044cdd6414683dd5f032}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!TaggedLineMapNodeVec@{TaggedLineMapNodeVec}}
+\index{TaggedLineMapNodeVec@{TaggedLineMapNodeVec}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{TaggedLineMapNodeVec}{TaggedLineMapNodeVec}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a39e2f4e4cbdd044cdd6414683dd5f032} 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a39e2f4e4cbdd044cdd6414683dd5f032}{cide\+::backend\+::\+Cache\+File\+::\+Tagged\+Line\+Map\+Node\+Vec}} = std\+::vector$<$\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a29a012bd734ee4f8b7774d8123738d4d}{Tagged\+Lines\+Map\+Node}}$>$}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00106}{106}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a9ef569095095de2c6632ec8bd5c06309}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!TaggedLinesMap@{TaggedLinesMap}}
+\index{TaggedLinesMap@{TaggedLinesMap}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{TaggedLinesMap}{TaggedLinesMap}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a9ef569095095de2c6632ec8bd5c06309} 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a9ef569095095de2c6632ec8bd5c06309}{cide\+::backend\+::\+Cache\+File\+::\+Tagged\+Lines\+Map}} = std\+::map$<$string, vector$<$string$>$$>$}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00103}{103}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a9b46e9fa05b66a0e329dd4d0471131d4}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!TaggedLinesMapIter@{TaggedLinesMapIter}}
+\index{TaggedLinesMapIter@{TaggedLinesMapIter}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{TaggedLinesMapIter}{TaggedLinesMapIter}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a9b46e9fa05b66a0e329dd4d0471131d4} 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a9b46e9fa05b66a0e329dd4d0471131d4}{cide\+::backend\+::\+Cache\+File\+::\+Tagged\+Lines\+Map\+Iter}} = Tagged\+Lines\+Map\+::iterator}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00104}{104}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a29a012bd734ee4f8b7774d8123738d4d}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!TaggedLinesMapNode@{TaggedLinesMapNode}}
+\index{TaggedLinesMapNode@{TaggedLinesMapNode}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{TaggedLinesMapNode}{TaggedLinesMapNode}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a29a012bd734ee4f8b7774d8123738d4d} 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a29a012bd734ee4f8b7774d8123738d4d}{cide\+::backend\+::\+Cache\+File\+::\+Tagged\+Lines\+Map\+Node}} = Tagged\+Lines\+Map\+::node\+\_\+type}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00105}{105}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a874c2ec609697bfef1d3301e7c3ca62f}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!CacheFile@{CacheFile}}
+\index{CacheFile@{CacheFile}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{CacheFile()}{CacheFile()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a874c2ec609697bfef1d3301e7c3ca62f} 
+cide\+::backend\+::\+Cache\+File\+::\+Cache\+File (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a6755cb83a70b8b1bfcf7d8406db34d71}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!CacheFile@{CacheFile}}
+\index{CacheFile@{CacheFile}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{CacheFile()}{CacheFile()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a6755cb83a70b8b1bfcf7d8406db34d71} 
+cide\+::backend\+::\+Cache\+File\+::\+Cache\+File (\begin{DoxyParamCaption}\item[{const stdfs\+::path \&}]{file\+\_\+path}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00225}{225}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structcide_1_1backend_1_1_cache_file_afe95ad76a5d4a9085fa7bf6a0035d845}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!ClearLiveCache@{ClearLiveCache}}
+\index{ClearLiveCache@{ClearLiveCache}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{ClearLiveCache()}{ClearLiveCache()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_afe95ad76a5d4a9085fa7bf6a0035d845} 
+void cide\+::backend\+::\+Cache\+File\+::\+Clear\+Live\+Cache (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00214}{214}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a2b9a424224f7d663cded4907a6a63928}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!ContainsLineByTagAndIndex@{ContainsLineByTagAndIndex}}
+\index{ContainsLineByTagAndIndex@{ContainsLineByTagAndIndex}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{ContainsLineByTagAndIndex()}{ContainsLineByTagAndIndex()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a2b9a424224f7d663cded4907a6a63928} 
+bool cide\+::backend\+::\+Cache\+File\+::\+Contains\+Line\+By\+Tag\+And\+Index (\begin{DoxyParamCaption}\item[{const string \&}]{tag}{, }\item[{std\+::size\+\_\+t}]{index}{ = {\ttfamily 0}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00110}{110}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a1fbc71d5309268910a39e26561e410d0}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!ContainsTag@{ContainsTag}}
+\index{ContainsTag@{ContainsTag}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{ContainsTag()}{ContainsTag()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a1fbc71d5309268910a39e26561e410d0} 
+bool cide\+::backend\+::\+Cache\+File\+::\+Contains\+Tag (\begin{DoxyParamCaption}\item[{const string \&}]{tag}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00109}{109}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_ae6d56c0befb0d93a97745ababeb76063}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!DoesFileExist@{DoesFileExist}}
+\index{DoesFileExist@{DoesFileExist}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{DoesFileExist()}{DoesFileExist()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_ae6d56c0befb0d93a97745ababeb76063} 
+bool cide\+::backend\+::\+Cache\+File\+::\+Does\+File\+Exist (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00221}{221}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a56f663825b039ca10aac2a3d3c4b0c27}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!GetLineByTagAndIndex@{GetLineByTagAndIndex}}
+\index{GetLineByTagAndIndex@{GetLineByTagAndIndex}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{GetLineByTagAndIndex()}{GetLineByTagAndIndex()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a56f663825b039ca10aac2a3d3c4b0c27} 
+const string \& cide\+::backend\+::\+Cache\+File\+::\+Get\+Line\+By\+Tag\+And\+Index (\begin{DoxyParamCaption}\item[{const string \&}]{tag}{, }\item[{std\+::size\+\_\+t}]{index}{ = {\ttfamily 0}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00132}{132}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a1e70eb1977ad916a12a4de42bc4dfec2}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!GetLinesByTag@{GetLinesByTag}}
+\index{GetLinesByTag@{GetLinesByTag}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{GetLinesByTag()}{GetLinesByTag()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a1e70eb1977ad916a12a4de42bc4dfec2} 
+const vector$<$ string $>$ \& cide\+::backend\+::\+Cache\+File\+::\+Get\+Lines\+By\+Tag (\begin{DoxyParamCaption}\item[{const string \&}]{tag}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00117}{117}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_acf0ca1e86b647e1524234ef8464e3ebd}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!GetLinesByTagAsPath@{GetLinesByTagAsPath}}
+\index{GetLinesByTagAsPath@{GetLinesByTagAsPath}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{GetLinesByTagAsPath()}{GetLinesByTagAsPath()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_acf0ca1e86b647e1524234ef8464e3ebd} 
+vector$<$ stdfs\+::path $>$ cide\+::backend\+::\+Cache\+File\+::\+Get\+Lines\+By\+Tag\+As\+Path (\begin{DoxyParamCaption}\item[{const string \&}]{tag}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00123}{123}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a386bc008e366ae99d46e9370dfc0953c}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!LoadLinesToLiveCache@{LoadLinesToLiveCache}}
+\index{LoadLinesToLiveCache@{LoadLinesToLiveCache}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{LoadLinesToLiveCache()}{LoadLinesToLiveCache()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a386bc008e366ae99d46e9370dfc0953c} 
+void cide\+::backend\+::\+Cache\+File\+::\+Load\+Lines\+To\+Live\+Cache (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00179}{179}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_ab36108308afdb8f5fbaf7f244aba4682}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!PopLineFromLiveCacheByTag@{PopLineFromLiveCacheByTag}}
+\index{PopLineFromLiveCacheByTag@{PopLineFromLiveCacheByTag}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{PopLineFromLiveCacheByTag()}{PopLineFromLiveCacheByTag()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_ab36108308afdb8f5fbaf7f244aba4682} 
+void cide\+::backend\+::\+Cache\+File\+::\+Pop\+Line\+From\+Live\+Cache\+By\+Tag (\begin{DoxyParamCaption}\item[{const string \&}]{tag}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00173}{173}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_abf34de8b50d546d7e60fbb35df19cc89}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!PushLinesToFile@{PushLinesToFile}}
+\index{PushLinesToFile@{PushLinesToFile}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{PushLinesToFile()}{PushLinesToFile()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_abf34de8b50d546d7e60fbb35df19cc89} 
+void cide\+::backend\+::\+Cache\+File\+::\+Push\+Lines\+To\+File (\begin{DoxyParamCaption}\item[{const string \&}]{tag}{, }\item[{const vector$<$ string $>$ \&}]{lines}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00233}{233}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a2720ddc74bbf18308f1b1cd99963afe8}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!PushLinesToFile@{PushLinesToFile}}
+\index{PushLinesToFile@{PushLinesToFile}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{PushLinesToFile()}{PushLinesToFile()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a2720ddc74bbf18308f1b1cd99963afe8} 
+void cide\+::backend\+::\+Cache\+File\+::\+Push\+Lines\+To\+File (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a39e2f4e4cbdd044cdd6414683dd5f032}{Tagged\+Line\+Map\+Node\+Vec}} \&}]{file\+\_\+nodes}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00228}{228}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a527a8c1e6263c0fdaee992b9f0735bf2}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!PushLinesToLiveCache@{PushLinesToLiveCache}}
+\index{PushLinesToLiveCache@{PushLinesToLiveCache}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{PushLinesToLiveCache()}{PushLinesToLiveCache()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a527a8c1e6263c0fdaee992b9f0735bf2} 
+void cide\+::backend\+::\+Cache\+File\+::\+Push\+Lines\+To\+Live\+Cache (\begin{DoxyParamCaption}\item[{const string \&}]{tag}{, }\item[{const vector$<$ string $>$ \&}]{lines}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00165}{165}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a7d5fc4523f1cafdafb03218d1fa8f3e9}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!PushLinesToLiveCache@{PushLinesToLiveCache}}
+\index{PushLinesToLiveCache@{PushLinesToLiveCache}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{PushLinesToLiveCache()}{PushLinesToLiveCache()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a7d5fc4523f1cafdafb03218d1fa8f3e9} 
+void cide\+::backend\+::\+Cache\+File\+::\+Push\+Lines\+To\+Live\+Cache (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a39e2f4e4cbdd044cdd6414683dd5f032}{Tagged\+Line\+Map\+Node\+Vec}} \&}]{file\+\_\+nodes}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00160}{160}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a7291dc80c4f783a1c744fa5496a6e994}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!RefreshCacheFile@{RefreshCacheFile}}
+\index{RefreshCacheFile@{RefreshCacheFile}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{RefreshCacheFile()}{RefreshCacheFile()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a7291dc80c4f783a1c744fa5496a6e994} 
+void cide\+::backend\+::\+Cache\+File\+::\+Refresh\+Cache\+File (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00215}{215}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a2497ea23878d532f897db7ab1f076a70}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!RemoveLiveCacheLinesByTag@{RemoveLiveCacheLinesByTag}}
+\index{RemoveLiveCacheLinesByTag@{RemoveLiveCacheLinesByTag}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{RemoveLiveCacheLinesByTag()}{RemoveLiveCacheLinesByTag()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a2497ea23878d532f897db7ab1f076a70} 
+void cide\+::backend\+::\+Cache\+File\+::\+Remove\+Live\+Cache\+Lines\+By\+Tag (\begin{DoxyParamCaption}\item[{const string \&}]{tag}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00172}{172}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a484e5d4325062b7ed2fe7361f9314043}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!ReplaceLineByTagAndIndex@{ReplaceLineByTagAndIndex}}
+\index{ReplaceLineByTagAndIndex@{ReplaceLineByTagAndIndex}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{ReplaceLineByTagAndIndex()}{ReplaceLineByTagAndIndex()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a484e5d4325062b7ed2fe7361f9314043} 
+\mbox{\hyperlink{classcxx_1_1_bool_error}{cxx\+::\+Bool\+Error}} cide\+::backend\+::\+Cache\+File\+::\+Replace\+Line\+By\+Tag\+And\+Index (\begin{DoxyParamCaption}\item[{const string \&}]{tag}{, }\item[{std\+::size\+\_\+t}]{index}{, }\item[{const string \&}]{new\+\_\+line}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00149}{149}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_a931a78f4ada8d57a9ce80d6d8e0c9671}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!ReplaceLinesByTag@{ReplaceLinesByTag}}
+\index{ReplaceLinesByTag@{ReplaceLinesByTag}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{ReplaceLinesByTag()}{ReplaceLinesByTag()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_a931a78f4ada8d57a9ce80d6d8e0c9671} 
+\mbox{\hyperlink{classcxx_1_1_bool_error}{cxx\+::\+Bool\+Error}} cide\+::backend\+::\+Cache\+File\+::\+Replace\+Lines\+By\+Tag (\begin{DoxyParamCaption}\item[{const string \&}]{tag}{, }\item[{const vector$<$ string $>$ \&}]{new\+\_\+lines}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00139}{139}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_af0c6514c15fa340ea2615dfde00f2be2}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!SaveLiveCacheToFile@{SaveLiveCacheToFile}}
+\index{SaveLiveCacheToFile@{SaveLiveCacheToFile}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{SaveLiveCacheToFile()}{SaveLiveCacheToFile()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_af0c6514c15fa340ea2615dfde00f2be2} 
+void cide\+::backend\+::\+Cache\+File\+::\+Save\+Live\+Cache\+To\+File (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00203}{203}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structcide_1_1backend_1_1_cache_file_abb2113600f945669ef5f7c336819add7}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!file\_path@{file\_path}}
+\index{file\_path@{file\_path}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{file\_path}{file\_path}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_abb2113600f945669ef5f7c336819add7} 
+stdfs\+::path cide\+::backend\+::\+Cache\+File\+::file\+\_\+path\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00247}{247}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_cache_file_ac03c37fd1bd3a246b89c170bc194f650}\index{cide::backend::CacheFile@{cide::backend::CacheFile}!live\_cache@{live\_cache}}
+\index{live\_cache@{live\_cache}!cide::backend::CacheFile@{cide::backend::CacheFile}}
+\doxysubsubsection{\texorpdfstring{live\_cache}{live\_cache}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_cache_file_ac03c37fd1bd3a246b89c170bc194f650} 
+\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file_a9ef569095095de2c6632ec8bd5c06309}{Tagged\+Lines\+Map}} cide\+::backend\+::\+Cache\+File\+::live\+\_\+cache\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00248}{248}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/ide/\mbox{\hyperlink{cide__backend_8h}{cide\+\_\+backend.\+h}}\end{DoxyCompactItemize}

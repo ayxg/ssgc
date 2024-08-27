@@ -1,0 +1,85 @@
+\doxysection{ut\+\_\+caoco\+\_\+lexer.\+h}
+\hypertarget{ut__caoco__lexer_8h_source}{}\label{ut__caoco__lexer_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/unit-\/tests/ut-\/cand-\/compiler/ut\_caoco\_lexer.h@{C:/Users/Anton/source/repos/CandRuntime/unit-\/tests/ut-\/cand-\/compiler/ut\_caoco\_lexer.h}}
+\mbox{\hyperlink{ut__caoco__lexer_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00001}00001\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00002}00002\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00003}00003\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00004}00004\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00005}00005\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00006}00006\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00007}00007\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00008}00008\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00009}00009\ \textcolor{comment}{///\ @file}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00010}00010\ \textcolor{comment}{///\ @ingroup\ unittest1\_cand\_compiler}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00011}00011\ \textcolor{comment}{///\ @brief\ UT\ C\&\ Lexer\ }}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00012}00012\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00014}00014\ \textcolor{comment}{///\ @addtogroup\ unittest1\_cand\_compiler}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00015}00015\ \textcolor{comment}{///\ @\{}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00016}00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_UT\_CAND\_OFFICIAL\_COMPILER\_UT\_CAOCO\_LEXER\_H}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00017}00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_UT\_CAND\_OFFICIAL\_COMPILER\_UT\_CAOCO\_LEXER\_H}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00018}00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cppsextended_8h}{"{}cppsextended.h"{}}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00019}00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{minitest_8h}{"{}minitest.h"{}}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00020}00020\ \textcolor{comment}{//\ Testing:}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00021}00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__lexer_8h}{"{}caoco\_lexer.h"{}}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00023}\mbox{\hyperlink{group__unittest1__cand__compiler_gaf85678534dfb56fe2bb357b780753b61}{00023}}\ \mbox{\hyperlink{group__cppmodule1__minitest_ga16b6293f45f5812814524ad4a9c1f99a}{INLINE\_MINITEST}}(Test\_Lexer,\ TestCase\_Keywords)\ \{}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00024}00024\ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ caoco;}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00025}00025\ \ \ \textcolor{keyword}{auto}\ keywords\ =\ Lexer::Lex(}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00026}00026\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}def\ class\ fn\ import\ main\ namespace\ using\ lib\ dll\ if\ elif\ else\ cxif\ "{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00027}00027\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}cxelif\ cxelse\ switch\ case\ default\ while\ for\ return\ break\ continue\ int\ "{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00028}00028\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}uint\ real\ bool\ char\ byte\ cstr\ str\ ptr\ list\ array\ true\ false\ none\ void\ "{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00029}00029\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}in\ as\ cin\ cout\ native\ const\ ref\ private\ public\ static\ any\ auto\ type\ "{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00030}00030\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}value\ template"{}});}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00031}00031\ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{enum}\ caoco::eTk;}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00032}00032\ \ \ TkVector\ expected\_test\_result\ =\ TkVector(}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00033}00033\ \ \ \ \ \ \ \{KwDef,\ \ \ \ KwClass,\ \ KwFn,\ \ \ \ \ KwImport,\ \ KwMain,\ \ \ \ \ KwNamespace,}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00034}00034\ \ \ \ \ \ \ \ KwUse,\ \ \ \ KwLib,\ \ \ \ KwDll,\ \ \ \ KwIf,\ \ \ \ \ \ KwElif,\ \ \ \ \ KwElse,}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00035}00035\ \ \ \ \ \ \ \ KwCxif,\ \ \ KwCxelif,\ KwCxelse,\ KwSwitch,\ \ KwCase,\ \ \ \ \ KwDefault,}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00036}00036\ \ \ \ \ \ \ \ KwWhile,\ \ KwFor,\ \ \ \ KwReturn,\ KwBreak,\ \ \ KwContinue,\ KwInt,}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00037}00037\ \ \ \ \ \ \ \ KwUint,\ \ \ KwReal,\ \ \ KwBool,\ \ \ KwChar,\ \ \ \ KwByte,\ \ \ \ \ KwCstr,}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00038}00038\ \ \ \ \ \ \ \ KwStr,\ \ \ \ KwPtr,\ \ \ \ KwList,\ \ \ KwArray,\ \ \ KwTrue,\ \ \ \ \ KwFalse,}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00039}00039\ \ \ \ \ \ \ \ KwNone,\ \ \ KwVoid,\ \ \ KwIn,\ \ \ \ \ KwAs,\ \ \ \ \ \ KwCin,\ \ \ \ \ \ KwCout,}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00040}00040\ \ \ \ \ \ \ \ KwNative,\ KwConst,\ \ KwRef,\ \ \ \ KwPrivate,\ KwPublic,\ \ \ KwStatic,}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00041}00041\ \ \ \ \ \ \ \ KwAny,\ \ \ \ KwAuto,\ \ \ KwType,\ \ \ KwValue,\ \ \ KwTemplate\});}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00043}00043\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(keywords.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00045}00045\ \ \ \textcolor{keywordflow}{if}\ (keywords.Valid())\ \{}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00046}00046\ \ \ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__asserts_ga9cc34fd87cb865c77439a5d39b3b111b}{ASSERT\_EQ}}(keywords.Value().size(),\ expected\_test\_result.size());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00047}00047\ \ \ \ \ TkVector\ result\ =\ keywords.Extract();}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00048}00048\ \ \ \ \ \textcolor{keywordflow}{for}\ (size\_t\ i\ =\ 0;\ i\ <\ result.size();\ ++i)\ \{}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00049}00049\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (result[i].Type()\ !=\ expected\_test\_result[i].Type())}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00050}00050\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Expected:\ "{}}\ <<\ expected\_test\_result[i].TypeStr().data()}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\ Got:\ "{}}\ <<\ result[i].TypeStr().data()\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00052}00052\ \ \ \ \ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga7c198106d8a380a0b194d16c918943d2}{EXPECT\_EQ}}(result[i].Type(),\ expected\_test\_result[i].Type());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00053}00053\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00054}00054\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00055}00055\ \}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00056}\mbox{\hyperlink{group__unittest1__cand__compiler_ga2e83d6e9b06a2c1bd80920564129f53c}{00056}}\ \mbox{\hyperlink{group__cppmodule1__minitest_gae37c9f962bfb51057579a751801e801b}{INLINE\_END\_MINITEST}};}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00057}\mbox{\hyperlink{group__unittest1__cand__compiler_gab1beb8ddebfbc5458072d51a87dd71f0}{00057}}\ \mbox{\hyperlink{group__cppmodule1__minitest_ga8db0f406d4ab1ca94afb507d9350374d}{MINITEST\_REGISTER\_CASE}}(Test\_Lexer,\ TestCase\_Keywords);}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00059}00059\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_UT\_CAND\_OFFICIAL\_COMPILER\_UT\_CAOCO\_LEXER\_H}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00060}00060\ \textcolor{comment}{///\ @\}\ //\ end\ of\ unittest1\_cand\_compiler}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00061}00061\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00062}00062\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00063}00063\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00064}00064\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00065}00065\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00066}00066\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00067}00067\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00068}00068\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00069}00069\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00070}00070\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00071}00071\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00072}00072\ \textcolor{comment}{//\ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00073}00073\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00074}00074\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00075}00075\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00076}00076\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00077}00077\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00078}00078\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__lexer_8h_source_l00079}00079\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+
+\end{DoxyCode}

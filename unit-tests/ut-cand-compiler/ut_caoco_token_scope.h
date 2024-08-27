@@ -1,28 +1,27 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the Apache License, Version 2.0(the "License");
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: ut-cand-official-compiler
-// File: ut_caoco_token_scope.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup unittest1_cand_compiler
+/// @brief UT C& Token Scope Method
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup unittest1_cand_compiler
+/// @{
 #ifndef HEADER_GUARD_CALE_UT_CAND_OFFICIAL_COMPILER_UT_TOKEN_SCOPE_H
 #define HEADER_GUARD_CALE_UT_CAND_OFFICIAL_COMPILER_UT_TOKEN_SCOPE_H
-//---------------------------------------------------------------------------//
-// Brief: brief
-//---------------------------------------------------------------------------//
+
 // Includes:
 #include "cppsextended.h"
 #include "minitest.h"
 // Testing:
 #include "caoco_lexer.h"
 #include "caoco_token_scope.h"
-//---------------------------------------------------------------------------//
 
 INLINE_MINITEST(Test_TkScope, TestCase_ParenScopeFinder) {
   using namespace caoco;
@@ -133,34 +132,41 @@ INLINE_MINITEST(Test_TkScope, TestCase_StatementScopeFinder) {
 
   // Single value statement : 1;
   TkScope empty_statement = TkScope::FindStatement(
-      eTk::kNumberLiteral, eTk::kSemicolon, result.cbegin(), result.cend());
+      eTk::LitInt, eTk::Semicolon, result.cbegin(), result.cend());
   EXPECT_TRUE(empty_statement.Valid());
   // statement with multiple tokens: a = 1;
   TkScope multiple_token_statement = TkScope::FindStatement(
-      eTk::kIdentifier, eTk::kSemicolon, empty_statement.End(), result.cend());
+      eTk::Ident, eTk::Semicolon, empty_statement.End(), result.cend());
   EXPECT_TRUE(multiple_token_statement.Valid());
   // statement with multiple tokens and scopes: a = (1;2;3);
   TkScope multiple_token_scope_statement =
-      TkScope::FindStatement(eTk::kIdentifier, eTk::kSemicolon,
+      TkScope::FindStatement(eTk::Ident, eTk::Semicolon,
                              multiple_token_statement.End(), result.cend());
   EXPECT_TRUE(multiple_token_scope_statement.Valid());
   // statement with lists frames and scopes nested in diffrent ways containing
   // end tokens. a = 1 + ([ 2 ;3 + {4;5;6}]);
   TkScope complex_statement = TkScope::FindStatement(
-      eTk::kIdentifier, eTk::kSemicolon, multiple_token_scope_statement.End(),
+      eTk::Ident, eTk::Semicolon, multiple_token_scope_statement.End(),
       result.cend());
   EXPECT_TRUE(complex_statement.Valid());
   // Test finding an "open" statement which allows for repeated open tokens. ex
   // a = a + a + ([ a ;a + {a;a;a}]);
-  TkScope open_statement =
-      TkScope::FindOpenStatement(eTk::kIdentifier, eTk::kSemicolon,
+  TkScope open_statement = TkScope::FindOpenStatement(
+      eTk::Ident, eTk::Semicolon,
                              complex_statement.End(), result.cend());
   EXPECT_TRUE(open_statement.Valid());
   EXPECT_TRUE(open_statement.End() == result.cend());
 }
 INLINE_END_MINITEST;
 MINITEST_REGISTER_CASE(Test_TkScope, TestCase_StatementScopeFinder);
-//---------------------------------------------------------------------------//
+
+#endif HEADER_GUARD_CALE_UT_CAND_OFFICIAL_COMPILER_UT_TOKEN_SCOPE_H
+/// @} // end of unittest1_cand_compiler
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the Apache License, Version 2.0(the "License");
@@ -174,15 +180,4 @@ MINITEST_REGISTER_CASE(Test_TkScope, TestCase_StatementScopeFinder);
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: ut-cand-official-compiler
-// File: ut_caoco_token_scope.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_UT_CAND_OFFICIAL_COMPILER_UT_TOKEN_SCOPE_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,7 @@
+#include "file1.cand"
+#include "file2.cand"
+#include "file3.cand"
+
+main:{
+  return 0;
+};

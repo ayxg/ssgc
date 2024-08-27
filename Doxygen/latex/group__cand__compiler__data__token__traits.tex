@@ -1,0 +1,414 @@
+\doxysubsubsection{Token Traits}
+\hypertarget{group__cand__compiler__data__token__traits}{}\label{group__cand__compiler__data__token__traits}\index{Token Traits@{Token Traits}}
+\doxysubsubsubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecaoco_1_1tk__traits}{caoco\+::tk\+\_\+traits}}
+\end{DoxyCompactItemize}
+\doxysubsubsubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcaoco_1_1_tk_trait}{caoco\+::\+Tk\+Trait$<$ Tk\+Type $>$}}
+\end{DoxyCompactItemize}
+\doxysubsubsubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$e\+Tk... Tk\+Type$>$ }\\using \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga554d9594f8f0058c321908dfa2720a54}{caoco\+::\+Traits\+Of}} = tuple$<$\mbox{\hyperlink{structcaoco_1_1_tk_trait}{Tk\+Trait}}$<$Tk\+Type$>$...$>$
+\end{DoxyCompactItemize}
+\doxysubsubsubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_gaf16a41b8c80415590ebcf2fcf40f5e45}{caoco\+::e\+Tk\+To\+Ast\+Enum}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_gafd75ad634f57c34cbd68d308c97df3e2}{e\+Assoc}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga608a4c222cef288eb4173084b582fd5b}{caoco\+::e\+Tk\+Assoc}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_gaeb4e062a441166ab5c693ea608b63b3f}{e\+Operation}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga4200233a31a3488b1acb301b17e76920}{caoco\+::e\+Tk\+Operation}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_gaa35814be433c3f8998dabf2429e90817}{e\+Priority}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga1bf555bd0ee07089013235da49d93f0a}{caoco\+::e\+Tk\+Priority}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr std\+::string\+\_\+view \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga7d693bc88c4fda7b19982f98769c656e}{caoco\+::e\+Tk\+Literal}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gaa413fc60635739d657b08eeecc35505e}{caoco\+::e\+Tk\+Is\+Keyword}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gacccaa5fe487fc278f8450df7b61b6596}{caoco\+::e\+Tk\+Is\+LScope}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gaa4fec31ec74cb63bbe84c645bf395a47}{caoco\+::e\+Tk\+Is\+RScope}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gaf38fbe12f257dcc30cd6d167c15547a0}{caoco\+::e\+Tk\+Is\+RScope\+Of}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} topen, \mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} tclose)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga91dec043fb5e299ccc5b8bcd39fde003}{caoco\+::e\+Tk\+Is\+Modifier}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gac1d2f9d11fa83135b1d8082dd7ae57dd}{caoco\+::e\+Tk\+Is\+Declarative}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga055a13fddcea604f8ee6c00a6c8dcb2c}{caoco\+::e\+Tk\+Is\+An\+Operand}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gab274fd17e5c51d6a2bcb5532d72938ec}{caoco\+::e\+Tk\+Is\+APrefix\+Operator}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr std\+::string\+\_\+view \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga6d71746c75ea78972b72a29284e9a2a6}{caoco\+::e\+Tk\+Enum\+Str}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr string\+\_\+view \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga3b1018af3843123fc0c614fe129b05da}{caoco\+::e\+Ast\+Enum\+Str}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga85ccc0c530aa2046798cc16e419ad876}{caoco\+::e\+Tk\+Is\+Primary}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_gafd75ad634f57c34cbd68d308c97df3e2}{e\+Assoc}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_gaa7bf5885d5d84f747a861cc895e7327c}{caoco\+::e\+Ast\+Assoc}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_gaeb4e062a441166ab5c693ea608b63b3f}{e\+Operation}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga0aa97567859ef1557e75283fe0335171}{caoco\+::e\+Ast\+Operation}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_gaa35814be433c3f8998dabf2429e90817}{e\+Priority}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_gae5735a5293126936cee6dc388d1220d9}{caoco\+::e\+Ast\+Priority}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr std\+::string\+\_\+view \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga49450481cbd8f0e74dd7bdcb8217bf47}{caoco\+::e\+Ast\+Literal}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gace698af8fc6e1bdaef649315160602a9}{caoco\+::e\+Ast\+Is\+Keyword}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gab54f06e289d20d04542db28a1586f312}{caoco\+::e\+Ast\+Is\+LScope}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga046cc6692fb047f551ae527ff0145bed}{caoco\+::e\+Ast\+Is\+RScope}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gae9b660bb72f631406674b0645a69a83a}{caoco\+::e\+Ast\+Is\+RScope\+Of}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} topen, \mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} tclose)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga9fdd8a0b2a3fede9ccd51d85bb5b6959}{caoco\+::e\+Ast\+Is\+Modifier}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gabd18023821b2c1d40bcf00c6dd5623b2}{caoco\+::e\+Ast\+Is\+Declarative}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga8d8469c2e00badc28463e5924876aa36}{caoco\+::e\+Ast\+Is\+An\+Operand}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga5b7af52f6da6d28f16f97a3969f23fdd}{caoco\+::e\+Ast\+Is\+APrefix\+Operator}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga5708134c325533050e0cac2bc08a1dc8}{caoco\+::e\+Ast\+Is\+Primary}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga1916dc3bb4fb6ed449e8a7b1fcdc9216}{caoco\+::e\+Tk\+Is\+Pragmatic}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gad896a181c35ae4b3646a2db7c656b2ad}{caoco\+::e\+Ast\+Is\+Pragmatic}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsubsection{Detailed Description}
+
+
+Various properties of the \textquotesingle{}e\+Tk\textquotesingle{} token type enum. 
+
+\doxysubsubsubsection{Typedef Documentation}
+\Hypertarget{group__cand__compiler__data__token__traits_ga554d9594f8f0058c321908dfa2720a54}\index{Token Traits@{Token Traits}!TraitsOf@{TraitsOf}}
+\index{TraitsOf@{TraitsOf}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{TraitsOf}{TraitsOf}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga554d9594f8f0058c321908dfa2720a54} 
+template$<$e\+Tk... Tk\+Type$>$ \\
+using \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga554d9594f8f0058c321908dfa2720a54}{caoco\+::\+Traits\+Of}} = tuple$<$\mbox{\hyperlink{structcaoco_1_1_tk_trait}{Tk\+Trait}}$<$Tk\+Type$>$...$>$}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l02112}{2112}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+
+
+\doxysubsubsubsection{Function Documentation}
+\Hypertarget{group__cand__compiler__data__token__traits_gaa7bf5885d5d84f747a861cc895e7327c}\index{Token Traits@{Token Traits}!eAstAssoc@{eAstAssoc}}
+\index{eAstAssoc@{eAstAssoc}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstAssoc()}{eAstAssoc()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gaa7bf5885d5d84f747a861cc895e7327c} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gafd75ad634f57c34cbd68d308c97df3e2}{e\+Assoc}} caoco\+::e\+Ast\+Assoc (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01511}{1511}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga3b1018af3843123fc0c614fe129b05da}\index{Token Traits@{Token Traits}!eAstEnumStr@{eAstEnumStr}}
+\index{eAstEnumStr@{eAstEnumStr}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstEnumStr()}{eAstEnumStr()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga3b1018af3843123fc0c614fe129b05da} 
+string\+\_\+view caoco\+::e\+Ast\+Enum\+Str (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01142}{1142}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga8d8469c2e00badc28463e5924876aa36}\index{Token Traits@{Token Traits}!eAstIsAnOperand@{eAstIsAnOperand}}
+\index{eAstIsAnOperand@{eAstIsAnOperand}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstIsAnOperand()}{eAstIsAnOperand()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga8d8469c2e00badc28463e5924876aa36} 
+bool caoco\+::e\+Ast\+Is\+An\+Operand (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l02043}{2043}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga5b7af52f6da6d28f16f97a3969f23fdd}\index{Token Traits@{Token Traits}!eAstIsAPrefixOperator@{eAstIsAPrefixOperator}}
+\index{eAstIsAPrefixOperator@{eAstIsAPrefixOperator}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstIsAPrefixOperator()}{eAstIsAPrefixOperator()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga5b7af52f6da6d28f16f97a3969f23fdd} 
+bool caoco\+::e\+Ast\+Is\+APrefix\+Operator (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l02077}{2077}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_gabd18023821b2c1d40bcf00c6dd5623b2}\index{Token Traits@{Token Traits}!eAstIsDeclarative@{eAstIsDeclarative}}
+\index{eAstIsDeclarative@{eAstIsDeclarative}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstIsDeclarative()}{eAstIsDeclarative()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gabd18023821b2c1d40bcf00c6dd5623b2} 
+bool caoco\+::e\+Ast\+Is\+Declarative (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01980}{1980}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_gace698af8fc6e1bdaef649315160602a9}\index{Token Traits@{Token Traits}!eAstIsKeyword@{eAstIsKeyword}}
+\index{eAstIsKeyword@{eAstIsKeyword}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstIsKeyword()}{eAstIsKeyword()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gace698af8fc6e1bdaef649315160602a9} 
+bool caoco\+::e\+Ast\+Is\+Keyword (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01904}{1904}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_gab54f06e289d20d04542db28a1586f312}\index{Token Traits@{Token Traits}!eAstIsLScope@{eAstIsLScope}}
+\index{eAstIsLScope@{eAstIsLScope}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstIsLScope()}{eAstIsLScope()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gab54f06e289d20d04542db28a1586f312} 
+bool caoco\+::e\+Ast\+Is\+LScope (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l02014}{2014}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga9fdd8a0b2a3fede9ccd51d85bb5b6959}\index{Token Traits@{Token Traits}!eAstIsModifier@{eAstIsModifier}}
+\index{eAstIsModifier@{eAstIsModifier}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstIsModifier()}{eAstIsModifier()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga9fdd8a0b2a3fede9ccd51d85bb5b6959} 
+bool caoco\+::e\+Ast\+Is\+Modifier (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01966}{1966}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_gad896a181c35ae4b3646a2db7c656b2ad}\index{Token Traits@{Token Traits}!eAstIsPragmatic@{eAstIsPragmatic}}
+\index{eAstIsPragmatic@{eAstIsPragmatic}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstIsPragmatic()}{eAstIsPragmatic()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gad896a181c35ae4b3646a2db7c656b2ad} 
+bool caoco\+::e\+Ast\+Is\+Pragmatic (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l00463}{463}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga5708134c325533050e0cac2bc08a1dc8}\index{Token Traits@{Token Traits}!eAstIsPrimary@{eAstIsPrimary}}
+\index{eAstIsPrimary@{eAstIsPrimary}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstIsPrimary()}{eAstIsPrimary()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga5708134c325533050e0cac2bc08a1dc8} 
+bool caoco\+::e\+Ast\+Is\+Primary (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l00455}{455}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga046cc6692fb047f551ae527ff0145bed}\index{Token Traits@{Token Traits}!eAstIsRScope@{eAstIsRScope}}
+\index{eAstIsRScope@{eAstIsRScope}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstIsRScope()}{eAstIsRScope()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga046cc6692fb047f551ae527ff0145bed} 
+bool caoco\+::e\+Ast\+Is\+RScope (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l02025}{2025}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_gae9b660bb72f631406674b0645a69a83a}\index{Token Traits@{Token Traits}!eAstIsRScopeOf@{eAstIsRScopeOf}}
+\index{eAstIsRScopeOf@{eAstIsRScopeOf}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstIsRScopeOf()}{eAstIsRScopeOf()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gae9b660bb72f631406674b0645a69a83a} 
+bool caoco\+::e\+Ast\+Is\+RScope\+Of (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{topen}{, }\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{tclose}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l02036}{2036}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga49450481cbd8f0e74dd7bdcb8217bf47}\index{Token Traits@{Token Traits}!eAstLiteral@{eAstLiteral}}
+\index{eAstLiteral@{eAstLiteral}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstLiteral()}{eAstLiteral()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga49450481cbd8f0e74dd7bdcb8217bf47} 
+std\+::string\+\_\+view caoco\+::e\+Ast\+Literal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01766}{1766}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga0aa97567859ef1557e75283fe0335171}\index{Token Traits@{Token Traits}!eAstOperation@{eAstOperation}}
+\index{eAstOperation@{eAstOperation}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstOperation()}{eAstOperation()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga0aa97567859ef1557e75283fe0335171} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gaeb4e062a441166ab5c693ea608b63b3f}{e\+Operation}} caoco\+::e\+Ast\+Operation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01557}{1557}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_gae5735a5293126936cee6dc388d1220d9}\index{Token Traits@{Token Traits}!eAstPriority@{eAstPriority}}
+\index{eAstPriority@{eAstPriority}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eAstPriority()}{eAstPriority()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gae5735a5293126936cee6dc388d1220d9} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gaa35814be433c3f8998dabf2429e90817}{e\+Priority}} caoco\+::e\+Ast\+Priority (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01620}{1620}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga608a4c222cef288eb4173084b582fd5b}\index{Token Traits@{Token Traits}!eTkAssoc@{eTkAssoc}}
+\index{eTkAssoc@{eTkAssoc}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkAssoc()}{eTkAssoc()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga608a4c222cef288eb4173084b582fd5b} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gafd75ad634f57c34cbd68d308c97df3e2}{e\+Assoc}} caoco\+::e\+Tk\+Assoc (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l00609}{609}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga6d71746c75ea78972b72a29284e9a2a6}\index{Token Traits@{Token Traits}!eTkEnumStr@{eTkEnumStr}}
+\index{eTkEnumStr@{eTkEnumStr}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkEnumStr()}{eTkEnumStr()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga6d71746c75ea78972b72a29284e9a2a6} 
+std\+::string\+\_\+view caoco\+::e\+Tk\+Enum\+Str (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01002}{1002}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga055a13fddcea604f8ee6c00a6c8dcb2c}\index{Token Traits@{Token Traits}!eTkIsAnOperand@{eTkIsAnOperand}}
+\index{eTkIsAnOperand@{eTkIsAnOperand}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkIsAnOperand()}{eTkIsAnOperand()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga055a13fddcea604f8ee6c00a6c8dcb2c} 
+bool caoco\+::e\+Tk\+Is\+An\+Operand (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01467}{1467}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_gab274fd17e5c51d6a2bcb5532d72938ec}\index{Token Traits@{Token Traits}!eTkIsAPrefixOperator@{eTkIsAPrefixOperator}}
+\index{eTkIsAPrefixOperator@{eTkIsAPrefixOperator}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkIsAPrefixOperator()}{eTkIsAPrefixOperator()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gab274fd17e5c51d6a2bcb5532d72938ec} 
+bool caoco\+::e\+Tk\+Is\+APrefix\+Operator (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01501}{1501}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_gac1d2f9d11fa83135b1d8082dd7ae57dd}\index{Token Traits@{Token Traits}!eTkIsDeclarative@{eTkIsDeclarative}}
+\index{eTkIsDeclarative@{eTkIsDeclarative}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkIsDeclarative()}{eTkIsDeclarative()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gac1d2f9d11fa83135b1d8082dd7ae57dd} 
+bool caoco\+::e\+Tk\+Is\+Declarative (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01404}{1404}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_gaa413fc60635739d657b08eeecc35505e}\index{Token Traits@{Token Traits}!eTkIsKeyword@{eTkIsKeyword}}
+\index{eTkIsKeyword@{eTkIsKeyword}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkIsKeyword()}{eTkIsKeyword()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gaa413fc60635739d657b08eeecc35505e} 
+bool caoco\+::e\+Tk\+Is\+Keyword (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01328}{1328}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_gacccaa5fe487fc278f8450df7b61b6596}\index{Token Traits@{Token Traits}!eTkIsLScope@{eTkIsLScope}}
+\index{eTkIsLScope@{eTkIsLScope}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkIsLScope()}{eTkIsLScope()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gacccaa5fe487fc278f8450df7b61b6596} 
+bool caoco\+::e\+Tk\+Is\+LScope (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01438}{1438}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga91dec043fb5e299ccc5b8bcd39fde003}\index{Token Traits@{Token Traits}!eTkIsModifier@{eTkIsModifier}}
+\index{eTkIsModifier@{eTkIsModifier}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkIsModifier()}{eTkIsModifier()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga91dec043fb5e299ccc5b8bcd39fde003} 
+bool caoco\+::e\+Tk\+Is\+Modifier (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01390}{1390}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga1916dc3bb4fb6ed449e8a7b1fcdc9216}\index{Token Traits@{Token Traits}!eTkIsPragmatic@{eTkIsPragmatic}}
+\index{eTkIsPragmatic@{eTkIsPragmatic}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkIsPragmatic()}{eTkIsPragmatic()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga1916dc3bb4fb6ed449e8a7b1fcdc9216} 
+bool caoco\+::e\+Tk\+Is\+Pragmatic (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l00459}{459}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga85ccc0c530aa2046798cc16e419ad876}\index{Token Traits@{Token Traits}!eTkIsPrimary@{eTkIsPrimary}}
+\index{eTkIsPrimary@{eTkIsPrimary}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkIsPrimary()}{eTkIsPrimary()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga85ccc0c530aa2046798cc16e419ad876} 
+bool caoco\+::e\+Tk\+Is\+Primary (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l00427}{427}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_gaa4fec31ec74cb63bbe84c645bf395a47}\index{Token Traits@{Token Traits}!eTkIsRScope@{eTkIsRScope}}
+\index{eTkIsRScope@{eTkIsRScope}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkIsRScope()}{eTkIsRScope()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gaa4fec31ec74cb63bbe84c645bf395a47} 
+bool caoco\+::e\+Tk\+Is\+RScope (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01449}{1449}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_gaf38fbe12f257dcc30cd6d167c15547a0}\index{Token Traits@{Token Traits}!eTkIsRScopeOf@{eTkIsRScopeOf}}
+\index{eTkIsRScopeOf@{eTkIsRScopeOf}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkIsRScopeOf()}{eTkIsRScopeOf()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gaf38fbe12f257dcc30cd6d167c15547a0} 
+bool caoco\+::e\+Tk\+Is\+RScope\+Of (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{topen}{, }\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{tclose}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l01460}{1460}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga7d693bc88c4fda7b19982f98769c656e}\index{Token Traits@{Token Traits}!eTkLiteral@{eTkLiteral}}
+\index{eTkLiteral@{eTkLiteral}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkLiteral()}{eTkLiteral()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga7d693bc88c4fda7b19982f98769c656e} 
+std\+::string\+\_\+view caoco\+::e\+Tk\+Literal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l00864}{864}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga4200233a31a3488b1acb301b17e76920}\index{Token Traits@{Token Traits}!eTkOperation@{eTkOperation}}
+\index{eTkOperation@{eTkOperation}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkOperation()}{eTkOperation()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga4200233a31a3488b1acb301b17e76920} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gaeb4e062a441166ab5c693ea608b63b3f}{e\+Operation}} caoco\+::e\+Tk\+Operation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l00655}{655}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_ga1bf555bd0ee07089013235da49d93f0a}\index{Token Traits@{Token Traits}!eTkPriority@{eTkPriority}}
+\index{eTkPriority@{eTkPriority}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkPriority()}{eTkPriority()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_ga1bf555bd0ee07089013235da49d93f0a} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gaa35814be433c3f8998dabf2429e90817}{e\+Priority}} caoco\+::e\+Tk\+Priority (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l00718}{718}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+\Hypertarget{group__cand__compiler__data__token__traits_gaf16a41b8c80415590ebcf2fcf40f5e45}\index{Token Traits@{Token Traits}!eTkToAstEnum@{eTkToAstEnum}}
+\index{eTkToAstEnum@{eTkToAstEnum}!Token Traits@{Token Traits}}
+\doxysubsubsubsubsection{\texorpdfstring{eTkToAstEnum()}{eTkToAstEnum()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__data__token__traits_gaf16a41b8c80415590ebcf2fcf40f5e45} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} caoco\+::e\+Tk\+To\+Ast\+Enum (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__grammar_8h_source_l00470}{470}} of file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+

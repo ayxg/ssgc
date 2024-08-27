@@ -1,0 +1,465 @@
+\doxysection{caoco\+\_\+irgen.\+h}
+\hypertarget{caoco__irgen_8h_source}{}\label{caoco__irgen_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_irgen.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_irgen.h}}
+\mbox{\hyperlink{caoco__irgen_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00001}00001\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00002}00002\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00003}00003\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00004}00004\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00005}00005\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00006}00006\ \textcolor{comment}{//\ Author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00007}00007\ \textcolor{comment}{//\ Email:\ ntondev@gmail.com}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00008}00008\ \textcolor{comment}{//\ Website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00009}00009\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00010}00010\ \textcolor{comment}{//\ Project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00011}00011\ \textcolor{comment}{//\ Directory:\ cand-\/official-\/compiler}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00012}00012\ \textcolor{comment}{//\ File:\ caoco\_irgen.h}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00013}00013\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00014}00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_IRGEN\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00015}00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_IRGEN\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00016}00016\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00017}00017\ \textcolor{comment}{//\ Brief:\ Generates\ an\ IrActionBlock\ from\ an\ AST.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00018}00018\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00019}00019\ \textcolor{comment}{//\ Includes:}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00020}00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cppsextended_8h}{"{}cppsextended.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00021}00021\ \textcolor{comment}{//\ Caoco}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00022}00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__ast_8h}{"{}caoco\_ast.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00023}00023\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00024}00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__rtval_8h}{"{}caoco\_rtval.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00025}00025\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00027}00027\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecaoco}{caoco}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00028}00028\ \textcolor{keyword}{using}\ std::string\_view;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00029}00029\ \textcolor{keyword}{using}\ std::vector;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00031}00031\ \textcolor{comment}{//\ Error\ codes}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00032}\mbox{\hyperlink{namespacecaoco_a23ee2606637a47942a0e12cbc3f97d0a}{00032}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{namespacecaoco_a23ee2606637a47942a0e12cbc3f97d0a}{string\_view}}\ \mbox{\hyperlink{namespacecaoco_a23ee2606637a47942a0e12cbc3f97d0a}{kIrErrorNoProgramDefinition}}\ =}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00033}00033\ \ \ \ \ \textcolor{stringliteral}{"{}[C\&][ERROR][CRITICAL]\ No\ program\ definition\ found."{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00035}\mbox{\hyperlink{namespacecaoco_a8b795c72781ad294f731f0b1344bf58c}{00035}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{namespacecaoco_a8b795c72781ad294f731f0b1344bf58c}{string\_view}}\ \mbox{\hyperlink{namespacecaoco_a8b795c72781ad294f731f0b1344bf58c}{kIrErrorDeclarationCannotAppearInContext}}\ =}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00036}00036\ \ \ \ \ \textcolor{stringliteral}{"{}[C\&][ERROR][CRITICAL]\ Declaration\ cannot\ appear\ in\ this\ context."{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00038}\mbox{\hyperlink{namespacecaoco_a53db64c0190d815fcfa9c0293216405f}{00038}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{namespacecaoco_a53db64c0190d815fcfa9c0293216405f}{string\_view}}\ \mbox{\hyperlink{namespacecaoco_a53db64c0190d815fcfa9c0293216405f}{kIrErrorInvalidNumberLiteral}}\ =}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00039}00039\ \ \ \ \ \textcolor{stringliteral}{"{}[C\&][ERROR][CRITICAL]\ Invalid\ number\ literal."{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00041}\mbox{\hyperlink{namespacecaoco_a9724cca9c06724e1a8d97749ca90864b}{00041}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{namespacecaoco_a9724cca9c06724e1a8d97749ca90864b}{string\_view}}\ \mbox{\hyperlink{namespacecaoco_a9724cca9c06724e1a8d97749ca90864b}{kIrErrorInvalidLiteralAstType}}\ =}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00042}00042\ \ \ \ \ \textcolor{stringliteral}{"{}[C\&][ERROR][CRITICAL]\ Invalid\ literal\ AST\ type."{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00044}\mbox{\hyperlink{namespacecaoco_a5ab818b22195cf040db8eaaddef2b515}{00044}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{namespacecaoco_a5ab818b22195cf040db8eaaddef2b515}{string\_view}}\ \mbox{\hyperlink{namespacecaoco_a5ab818b22195cf040db8eaaddef2b515}{kIrErrorInvalidStringLiteral}}\ =}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00045}00045\ \ \ \ \ \textcolor{stringliteral}{"{}[C\&][ERROR][CRITICAL]\ Invalid\ string\ literal."{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00047}\mbox{\hyperlink{namespacecaoco_acec87f83342c7417edddc650468bd14d}{00047}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{namespacecaoco_acec87f83342c7417edddc650468bd14d}{string\_view}}\ \mbox{\hyperlink{namespacecaoco_acec87f83342c7417edddc650468bd14d}{kIrErrorInvalidPrimaryExpression}}\ =}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00048}00048\ \ \ \ \ \textcolor{stringliteral}{"{}[C\&][ERROR][CRITICAL]\ Invalid\ primary\ expression."{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00050}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{00050}}\ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00051}00051\ \ \ \textcolor{comment}{//\ Program}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00052}00052\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ad475449b6e0e8c6625b513bb4d1e469e}{ENTER\_PROGRAM\_DEFINITION}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00053}00053\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ae08e8b34d3d10ba933e4fb9e345e9377}{ABORT\_AND\_ERROR}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00054}00054\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a711c16892e49778bb026ca6046a01d54}{ALLOCATE\_LITERAL}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00055}00055\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ad1815f1b43ab6a341ffadd6c95507c3f}{ALLOCATE\_STACK\_VALUE}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00057}00057\ \ \ \textcolor{comment}{//\ Variables}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00058}00058\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ae6e698ffe7107c2c763094722bad3c59}{DECLARE\_VARIABLE}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00059}00059\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7af40a01a2e2ed7eb9a6ba025fef0f11d3}{DEFINE\_VARIABLE}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00061}00061\ \ \ \textcolor{comment}{//\ Methods}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00062}00062\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ae66f3091170db6c8da6fb3d9fbc12ca2}{DECLARE\_METHOD}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00063}00063\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a634fc72b0057056b992a7286ed0281f4}{DEFINE\_METHOD}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00065}00065\ \ \ \textcolor{comment}{//\ Object}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00066}00066\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7acd066cece55a187be29c280a377673a6}{DECLARE\_OBJECT}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00067}00067\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ac2330e7ae77f25a615fd8c90f612c233}{DEFINE\_OBJECT}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00068}00068\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a64171a86202bb70aef12f2cbdc284a34}{ADD\_OBJECT\_STATIC\_MEMBER}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00069}00069\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a0d431991ff4baea8f27d9db034353903}{ADD\_OBJECT\_STATIC\_METHOD}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00070}00070\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ad8efc96627e183e03bcfd89005c051b7}{ADD\_OBJECT\_MEMBER}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00071}00071\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ad9deaa8bfe93a8b22162f7464c839160}{ADD\_OBJECT\_METHOD}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00072}00072\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7afd436332a56d92196d574ce42e0f80cc}{ADD\_OBJECT\_CONSTRUCTOR}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00073}00073\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7aa030e7f04e70a63d6563edf35c7a5c6e}{ADD\_OBJECT\_DESTRUCTOR}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00075}00075\ \ \ \textcolor{comment}{//\ Control\ flow}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00077}00077\ \ \ \textcolor{comment}{//\ Operators}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00078}00078\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a7d9202c0323461755baa131936e66bba}{BINARY\_ADD}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00079}00079\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a1b726759371bffa534c1607bff59240f}{BINARY\_SUB}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00080}00080\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a9fe99a7d7982978f06a71bd3599d3404}{BINARY\_MUL}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00081}00081\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a40e46acdfc8261f1324aa2be7e4e3dc4}{BINARY\_DIV}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00082}00082\ \ \ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7aca3efb6c3042c7324cc59ea5ef46af74}{BINARY\_MOD}},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00083}00083\ \};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00085}\mbox{\hyperlink{namespacecaoco_aec37afbead90ac54ebbaf3980c58320a}{00085}}\ \textcolor{keyword}{using}\ IrInt\ =\ NativeIntT;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00086}\mbox{\hyperlink{namespacecaoco_a81fe3653290a8d3b9d08d2f8a6972dfe}{00086}}\ \textcolor{keyword}{using}\ IrSize\ =\ NativeUnsignedT;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00087}\mbox{\hyperlink{namespacecaoco_ae6b45c140354c7899cd5a9569fc20648}{00087}}\ \textcolor{keyword}{using}\ IrBool\ =\ NativeBoolT;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00088}\mbox{\hyperlink{namespacecaoco_ab051c40b0241e4fe75040f6c0408a477}{00088}}\ \textcolor{keyword}{using}\ IrDouble\ =\ NativeDoubleT;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00089}\mbox{\hyperlink{namespacecaoco_aaa2a248ae64f361e6d3f582d51859988}{00089}}\ \textcolor{keyword}{using}\ \mbox{\hyperlink{namespacecaoco}{IrString}}\ =\ \mbox{\hyperlink{namespacecaoco}{NativeCStringT}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00090}\mbox{\hyperlink{namespacecaoco_aeac94068766ff80349643f1d1ff8d2b0}{00090}}\ \textcolor{keyword}{using}\ \mbox{\hyperlink{namespacecaoco}{IrArgVariant}}\ =\ \mbox{\hyperlink{namespacecaoco}{std}}::\mbox{\hyperlink{namespacecaoco}{variant}}<\mbox{\hyperlink{namespacecaoco}{IrInt}},\ \mbox{\hyperlink{namespacecaoco}{IrSize}},\ \mbox{\hyperlink{namespacecaoco}{IrBool}},\ \mbox{\hyperlink{namespacecaoco}{IrDouble}},\ \mbox{\hyperlink{namespacecaoco}{IrString}}>;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00091}\mbox{\hyperlink{namespacecaoco_a62005511cbc4d3c0b016e66a9805c7b6}{00091}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_a62005511cbc4d3c0b016e66a9805c7b6}{vector}}<\mbox{\hyperlink{namespacecaoco_a62005511cbc4d3c0b016e66a9805c7b6}{IrArgVariant}}>\ \mbox{\hyperlink{namespacecaoco_a62005511cbc4d3c0b016e66a9805c7b6}{kIrOpNullArguments}}\ =\ \{\};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00092}00092\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00093}00093\ \textcolor{comment}{//\ An\ IR\ line\ describes\ a\ singlular\ action\ in\ the\ IR\ code.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00094}00094\ \textcolor{comment}{//\ It\ contains\ an\ operation\ enum\ and\ a\ list\ of\ arguments.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00095}00095\ \textcolor{comment}{//\ Also\ it\ contains\ the\ line\ index\ of\ the\ block\ it\ belongs\ to.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00096}\mbox{\hyperlink{structcaoco_1_1_ir_line}{00096}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcaoco_1_1_ir_line}{IrLine}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00097}\mbox{\hyperlink{structcaoco_1_1_ir_line_a4a6a80073e6a15489c1af3311dcf57ec}{00097}}\ \ \ \textcolor{keyword}{const}\ size\_t\ \mbox{\hyperlink{structcaoco_1_1_ir_line_a4a6a80073e6a15489c1af3311dcf57ec}{code\_line}};\ \ \textcolor{comment}{//\ Line\ in\ the\ source\ code\ for\ error\ reporting.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00098}\mbox{\hyperlink{structcaoco_1_1_ir_line_ad7bc6446df8410c7aab9aea43dd264e8}{00098}}\ \ \ \textcolor{keyword}{const}\ size\_t\ \mbox{\hyperlink{structcaoco_1_1_ir_line_ad7bc6446df8410c7aab9aea43dd264e8}{block\_idx}};\ \ \textcolor{comment}{//\ Line\ of\ a\ block,\ generated,\ or\ temp\ scope.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00099}00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ consisting\ of\ one\ or\ multiple\ lines.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00100}\mbox{\hyperlink{structcaoco_1_1_ir_line_a3554861cbf4c286be9d6559f4629e904}{00100}}\ \ \ \textcolor{keyword}{const}\ size\_t\ \mbox{\hyperlink{structcaoco_1_1_ir_line_a3554861cbf4c286be9d6559f4629e904}{line\_idx}};\ \ \ \textcolor{comment}{//\ Line\ index\ in\ the\ block.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00101}\mbox{\hyperlink{structcaoco_1_1_ir_line_ae9d7ef196eefdf64fe10b0aa8ac294dd}{00101}}\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\ \mbox{\hyperlink{structcaoco_1_1_ir_line_ae9d7ef196eefdf64fe10b0aa8ac294dd}{op}};\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ operation\ to\ perform.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00102}\mbox{\hyperlink{structcaoco_1_1_ir_line_a41d8f7f3cc61e200943509beeecb6958}{00102}}\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcaoco_1_1_ir_line_a41d8f7f3cc61e200943509beeecb6958}{vector}}<\mbox{\hyperlink{structcaoco_1_1_ir_line_a41d8f7f3cc61e200943509beeecb6958}{IrArgVariant}}>\ \mbox{\hyperlink{structcaoco_1_1_ir_line_a41d8f7f3cc61e200943509beeecb6958}{args}};\ \textcolor{comment}{//\ arguments\ for\ the\ operation.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00103}00103\ \};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00105}00105\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00106}\mbox{\hyperlink{structcaoco_1_1_ir_code}{00106}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcaoco_1_1_ir_code}{IrCode}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00107}\mbox{\hyperlink{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7}{00107}}\ \ \ std::list<\mbox{\hyperlink{structcaoco_1_1_ir_line}{IrLine}}>\ \mbox{\hyperlink{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7}{lines}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00109}\mbox{\hyperlink{structcaoco_1_1_ir_code_aeae7a56d268f0abdf060a6fb8982eca3}{00109}}\ \ \ std::list<\mbox{\hyperlink{structcaoco_1_1_ir_line}{IrLine}}>::iterator\ \mbox{\hyperlink{structcaoco_1_1_ir_code_aeae7a56d268f0abdf060a6fb8982eca3}{AddLine}}(std::size\_t\ line\_index,\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\ op,}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00110}00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<IrArgVariant>\ args)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00111}00111\ \ \ \ \ lines.push\_back(IrLine\{line\_index,\ op,\ args\});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00112}00112\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7}{lines}}.end()-\/-\/;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00113}00113\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00115}\mbox{\hyperlink{structcaoco_1_1_ir_code_a6ffad3dd203fa094c326c17c9900fb84}{00115}}\ \ \ \mbox{\hyperlink{structcaoco_1_1_ir_line}{IrLine}}\&\ \mbox{\hyperlink{structcaoco_1_1_ir_code_a6ffad3dd203fa094c326c17c9900fb84}{AddLine}}(\mbox{\hyperlink{structcaoco_1_1_ir_line}{IrLine}}\ line)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00116}00116\ \ \ \ \ \mbox{\hyperlink{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7}{lines}}.push\_back(line);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00117}00117\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7}{lines}}.back();}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00118}00118\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00119}\mbox{\hyperlink{structcaoco_1_1_ir_code_a262f5b3f7ffd132e4339d235936ed9d6}{00119}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcaoco_1_1_ir_code_a262f5b3f7ffd132e4339d235936ed9d6}{AddLines}}(std::list<\mbox{\hyperlink{structcaoco_1_1_ir_line}{IrLine}}>\ lines\_vec)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00120}00120\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ line\ :\ lines\_vec)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00121}00121\ \ \ \ \ \ \ \mbox{\hyperlink{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7}{lines}}.push\_back(line);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00122}00122\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00123}00123\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00124}\mbox{\hyperlink{structcaoco_1_1_ir_code_ad8740c1f4285d85b8984a08278371d04}{00124}}\ \ \ \textcolor{keyword}{const}\ std::list<\mbox{\hyperlink{structcaoco_1_1_ir_line}{IrLine}}>\&\ \mbox{\hyperlink{structcaoco_1_1_ir_code_ad8740c1f4285d85b8984a08278371d04}{GetLines}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7}{lines}};\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00125}00125\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00126}\mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{00126}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{isAborted}}()\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00127}00127\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7}{lines}}.back()\mbox{\hyperlink{structcaoco_1_1_ir_line_ae9d7ef196eefdf64fe10b0aa8ac294dd}{.}}\mbox{\hyperlink{structcaoco_1_1_ir_line_ae9d7ef196eefdf64fe10b0aa8ac294dd}{op}}\ ==\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ae08e8b34d3d10ba933e4fb9e345e9377}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ae08e8b34d3d10ba933e4fb9e345e9377}{ABORT\_AND\_ERROR}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00128}00128\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00129}00129\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00130}00130\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00131}00131\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00132}00132\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00134}\mbox{\hyperlink{structcaoco_1_1_ir_code_ac38d6e93648a97e780381dd79ffc0dba}{00134}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcaoco_1_1_ir_code_ac38d6e93648a97e780381dd79ffc0dba}{PrintDisassembly}}()\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00135}00135\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ line\ :\ \mbox{\hyperlink{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7}{lines}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00136}00136\ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Line\ "{}}\ <<\ line.index\ <<\ \textcolor{stringliteral}{"{}:\ "{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00137}00137\ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (line\mbox{\hyperlink{structcaoco_1_1_ir_line_ae9d7ef196eefdf64fe10b0aa8ac294dd}{.}}\mbox{\hyperlink{structcaoco_1_1_ir_line_ae9d7ef196eefdf64fe10b0aa8ac294dd}{op}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00138}00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ad475449b6e0e8c6625b513bb4d1e469e}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ad475449b6e0e8c6625b513bb4d1e469e}{ENTER\_PROGRAM\_DEFINITION}}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00139}00139\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}ENTER\_PROGRAM\_DEFINITION"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00140}00140\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00141}00141\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ae08e8b34d3d10ba933e4fb9e345e9377}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ae08e8b34d3d10ba933e4fb9e345e9377}{ABORT\_AND\_ERROR}}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00142}00142\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}ABORT\_AND\_ERROR"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00143}00143\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00144}00144\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a711c16892e49778bb026ca6046a01d54}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a711c16892e49778bb026ca6046a01d54}{ALLOCATE\_LITERAL}}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00145}00145\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}ALLOCATE\_LITERAL"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00146}00146\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00147}00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ad1815f1b43ab6a341ffadd6c95507c3f}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ad1815f1b43ab6a341ffadd6c95507c3f}{ALLOCATE\_STACK\_VALUE}}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00148}00148\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}ALLOCATE\_STACK\_VALUE"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00149}00149\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00150}00150\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ae6e698ffe7107c2c763094722bad3c59}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ae6e698ffe7107c2c763094722bad3c59}{DECLARE\_VARIABLE}}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00151}00151\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}DECLARE\_VARIABLE"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00152}00152\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00153}00153\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7af40a01a2e2ed7eb9a6ba025fef0f11d3}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7af40a01a2e2ed7eb9a6ba025fef0f11d3}{DEFINE\_VARIABLE}}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00154}00154\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}DEFINE\_VARIABLE"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00155}00155\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00156}00156\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a7d9202c0323461755baa131936e66bba}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a7d9202c0323461755baa131936e66bba}{BINARY\_ADD}}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00157}00157\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}BINARY\_ADD"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00158}00158\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00159}00159\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a1b726759371bffa534c1607bff59240f}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a1b726759371bffa534c1607bff59240f}{BINARY\_SUB}}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00160}00160\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}BINARY\_SUB"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00161}00161\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00162}00162\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a9fe99a7d7982978f06a71bd3599d3404}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a9fe99a7d7982978f06a71bd3599d3404}{BINARY\_MUL}}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}BINARY\_MUL"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00164}00164\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00165}00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a40e46acdfc8261f1324aa2be7e4e3dc4}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a40e46acdfc8261f1324aa2be7e4e3dc4}{BINARY\_DIV}}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}BINARY\_DIV"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00168}00168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7aca3efb6c3042c7324cc59ea5ef46af74}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7aca3efb6c3042c7324cc59ea5ef46af74}{BINARY\_MOD}}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00169}00169\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}BINARY\_MOD"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00170}00170\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00171}00171\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00172}00172\ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ Args:\ "{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00173}00173\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ arg\ :\ line.args)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00174}00174\ \ \ \ \ \ \ \ \ std::visit(}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00175}00175\ \ \ \ \ \ \ \ \ \ \ \ \ [](\textcolor{keyword}{auto}\&\&\ arg)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00176}00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{using}\ T\ =\ std::decay\_t<\textcolor{keyword}{decltype}(arg)>;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00177}00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_same\_v<T,\ \textcolor{keywordtype}{int}>)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00178}00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ arg\ <<\ \textcolor{stringliteral}{"{}\ "{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00179}00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_same\_v<T,\ \textcolor{keywordtype}{double}>)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00180}00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ arg\ <<\ \textcolor{stringliteral}{"{}\ "{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00181}00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_same\_v<T,\ std::string\_view>)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00182}00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ arg\ <<\ \textcolor{stringliteral}{"{}\ "{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00183}00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00184}00184\ \ \ \ \ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00185}00185\ \ \ \ \ \ \ \ \ \ \ \ \ arg);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00186}00186\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00187}00187\ \ \ \ \ \ \ std::cout\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00188}00188\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00189}00189\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00190}00190\ \};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00191}00191\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00192}\mbox{\hyperlink{classcaoco_1_1_ir_gen}{00192}}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcaoco_1_1_ir_gen}{IrGen}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00193}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a6a1e55c8abb3c392f79eaa8188379016}{00193}}\ \ \ \textcolor{keyword}{using}\ IrLineList\ =\ std::list<\mbox{\hyperlink{structcaoco_1_1_ir_line}{IrLine}}>;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00194}\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad1c5c8bc20d6c12418833a9c682850fd}{00194}}\ \ \ \textcolor{keyword}{using}\ LineIndex\ =\ std::size\_t;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00195}\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad38e25a0f1d001d72ee50f20c415969d}{00195}}\ \ \ \mbox{\hyperlink{structcaoco_1_1_ir_code}{IrCode}}\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_ad38e25a0f1d001d72ee50f20c415969d}{ir}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00196}\mbox{\hyperlink{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24}{00196}}\ \ \ LineIndex\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24}{line\_index}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00197}00197\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00198}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a1d67b81047ecb7beb83165e3353a21e5}{00198}}\ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structcaoco_1_1_ir_line}{IrLine}}\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a1d67b81047ecb7beb83165e3353a21e5}{LineGenNumberLiteral}}(LineIndex\ line\_index,}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00199}00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ literal)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00200}00200\ \ \ \ \ \textcolor{keywordtype}{int}\ value\{\};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00201}00201\ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00202}00202\ \ \ \ \ \ \ value\ =\ std::stoi(literal);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00203}00203\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::exception\&)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00204}00204\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ IrLine(line\_index,\ eIrOp::ABORT\_AND\_ERROR,}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00205}00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{kIrErrorInvalidNumberLiteral\});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00206}00206\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00207}00207\ \ \ \ \ \textcolor{keywordflow}{return}\ IrLine(line\_index,\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a711c16892e49778bb026ca6046a01d54}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a711c16892e49778bb026ca6046a01d54}{ALLOCATE\_LITERAL}},\ \{value\});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00208}00208\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00209}00209\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00210}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a2cc6f16c374fc919870c469261ba84b0}{00210}}\ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structcaoco_1_1_ir_line}{IrLine}}\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a2cc6f16c374fc919870c469261ba84b0}{LineGenDoubleLiteral}}(LineIndex\ line\_index,}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00211}00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ literal)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00212}00212\ \ \ \ \ \textcolor{keywordtype}{float}\ value\{\};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00213}00213\ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00214}00214\ \ \ \ \ \ \ value\ =\ std::stof(literal);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00215}00215\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::exception\&)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00216}00216\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ IrLine(line\_index,\ eIrOp::ABORT\_AND\_ERROR,}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00217}00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{kIrErrorInvalidNumberLiteral\});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00218}00218\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00219}00219\ \ \ \ \ \textcolor{keywordflow}{return}\ IrLine(line\_index,\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a711c16892e49778bb026ca6046a01d54}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a711c16892e49778bb026ca6046a01d54}{ALLOCATE\_LITERAL}},\ \{value\});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00220}00220\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00221}00221\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00222}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a84a6c77fd89def9c38d9491862aad97a}{00222}}\ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structcaoco_1_1_ir_line}{IrLine}}\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a84a6c77fd89def9c38d9491862aad97a}{LineGenStringLiteral}}(LineIndex\ line\_index,}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00223}00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ literal)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00224}00224\ \ \ \ \ \textcolor{comment}{//\ Process\ escape\ sequences}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00225}00225\ \ \ \ \ std::string\ value\ =\ literal;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00226}00226\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00227}00227\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ quotes}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00228}00228\ \ \ \ \ value\ =\ value.substr(1,\ value.size()\ -\/\ 2);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00229}00229\ \ \ \ \ std::string\ escaped\_value\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00230}00230\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ c\ =\ value.begin();\ c\ !=\ value.end();\ c++)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00231}00231\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (*c\ ==\ \textcolor{stringliteral}{'\(\backslash\)\(\backslash\)'})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00232}00232\ \ \ \ \ \ \ \ \ c++;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00233}00233\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ escape\ sequence}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00234}00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ value.end())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00235}00235\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Invalid\ escape\ sequence}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00236}00236\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ IrLine(line\_index,\ eIrOp::ABORT\_AND\_ERROR,}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00237}00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{kIrErrorInvalidStringLiteral\});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00238}00238\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00239}00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (*c)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00240}00240\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{stringliteral}{'n'}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00241}00241\ \ \ \ \ \ \ \ \ \ \ \ \ escaped\_value\ +=\ \textcolor{stringliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00242}00242\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00243}00243\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{stringliteral}{'t'}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00244}00244\ \ \ \ \ \ \ \ \ \ \ \ \ escaped\_value\ +=\ \textcolor{stringliteral}{'\(\backslash\)t'};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00245}00245\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00246}00246\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{stringliteral}{'r'}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00247}00247\ \ \ \ \ \ \ \ \ \ \ \ \ escaped\_value\ +=\ \textcolor{stringliteral}{'\(\backslash\)r'};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00248}00248\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00249}00249\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{stringliteral}{'0'}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00250}00250\ \ \ \ \ \ \ \ \ \ \ \ \ escaped\_value\ +=\ \textcolor{stringliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00251}00251\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{stringliteral}{'\(\backslash\)\(\backslash\)'}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00253}00253\ \ \ \ \ \ \ \ \ \ \ \ \ escaped\_value\ +=\ \textcolor{stringliteral}{'\(\backslash\)\(\backslash\)'};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00254}00254\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00255}00255\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{stringliteral}{'\(\backslash\)''}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00256}00256\ \ \ \ \ \ \ \ \ \ \ \ \ escaped\_value\ +=\ \textcolor{stringliteral}{'\(\backslash\)''};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00257}00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00258}00258\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{stringliteral}{'\(\backslash\)"{}'}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00259}00259\ \ \ \ \ \ \ \ \ \ \ \ \ escaped\_value\ +=\ \textcolor{stringliteral}{'\(\backslash\)"{}'};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00260}00260\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00261}00261\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00262}00262\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Invalid\ escape\ sequence}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00263}00263\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ IrLine(line\_index,\ eIrOp::ABORT\_AND\_ERROR,}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00264}00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{kIrErrorInvalidNumberLiteral\});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00265}00265\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00266}00266\ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00267}00267\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ regular\ character}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00268}00268\ \ \ \ \ \ \ \ \ escaped\_value\ +=\ *c;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00269}00269\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00270}00270\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00271}00271\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00272}00272\ \ \ \ \ \textcolor{keywordflow}{return}\ IrLine(line\_index,\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a711c16892e49778bb026ca6046a01d54}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7a711c16892e49778bb026ca6046a01d54}{ALLOCATE\_LITERAL}},\ \{escaped\_value\});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00273}00273\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00274}00274\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00275}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a0f335fd95d2f42177f0fdd3f079d0a08}{00275}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a0f335fd95d2f42177f0fdd3f079d0a08}{GenLiteral}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ ast)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00276}00276\ \ \ \ \ \mbox{\hyperlink{group__cppmodule2__cppextended_ga738607799d6938e1b15f463688029cd5}{LAMBDA}}\ xLineGenLiteral\ =\ [\&](std::string\ literal,\ \textcolor{keyword}{auto}\&\&\ visitor)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00277}00277\ \ \ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ir_gen_ad38e25a0f1d001d72ee50f20c415969d}{ir}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a6ffad3dd203fa094c326c17c9900fb84}{.}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a6ffad3dd203fa094c326c17c9900fb84}{AddLine}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a6ffad3dd203fa094c326c17c9900fb84}{(}}visitor(\mbox{\hyperlink{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24}{line\_index}},\ ast\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{Literal}}\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{)}})\mbox{\hyperlink{structcaoco_1_1_ir_code_a6ffad3dd203fa094c326c17c9900fb84}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00278}00278\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!(\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad38e25a0f1d001d72ee50f20c415969d}{ir}}\mbox{\hyperlink{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7}{.}}\mbox{\hyperlink{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7}{lines}}.back()\mbox{\hyperlink{structcaoco_1_1_ir_line_ae9d7ef196eefdf64fe10b0aa8ac294dd}{.}}\mbox{\hyperlink{structcaoco_1_1_ir_line_ae9d7ef196eefdf64fe10b0aa8ac294dd}{op}}\ ==\ \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{eIrOp}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ae08e8b34d3d10ba933e4fb9e345e9377}{::}}\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7ae08e8b34d3d10ba933e4fb9e345e9377}{ABORT\_AND\_ERROR}}))\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00279}00279\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24}{line\_index}}++;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00280}00280\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00281}00281\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00282}00282\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00283}00283\ \ \ \ \ \textcolor{keywordflow}{switch}\ (ast\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{Type}}\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00284}00284\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ eAst::kNumberLiteral:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00285}00285\ \ \ \ \ \ \ \ \ xLineGenLiteral(ast\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{Literal}}\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{)}},\ \&\mbox{\hyperlink{classcaoco_1_1_ir_gen_a1d67b81047ecb7beb83165e3353a21e5}{LineGenNumberLiteral}});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00286}00286\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00287}00287\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ eAst::kDoubleLiteral:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00288}00288\ \ \ \ \ \ \ \ \ xLineGenLiteral(ast\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{Literal}}\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{)}},\ \&\mbox{\hyperlink{classcaoco_1_1_ir_gen_a2cc6f16c374fc919870c469261ba84b0}{LineGenDoubleLiteral}});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00289}00289\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00290}00290\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ eAst::kStringLiteral:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00291}00291\ \ \ \ \ \ \ \ \ xLineGenLiteral(ast\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{Literal}}\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{)}},\ \&\mbox{\hyperlink{classcaoco_1_1_ir_gen_a84a6c77fd89def9c38d9491862aad97a}{LineGenStringLiteral}});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00292}00292\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00293}00293\ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00294}00294\ \ \ \ \ \ \ \ \ ir.AddLine(IrLine(line\_index,\ eIrOp::ABORT\_AND\_ERROR,}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00295}00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{kIrErrorInvalidLiteralAstType\}));}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00296}00296\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00297}00297\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00298}00298\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00299}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872}{00299}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872}{GenPrimaryExpr}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ ast)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00300}00300\ \ \ \ \ \textcolor{comment}{//\ Handle\ literals}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00301}00301\ \ \ \ \ \textcolor{keywordflow}{if}\ (ast\mbox{\hyperlink{classcaoco_1_1_ast_a3272e983930c5e52c24c3e172c83835d}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_a3272e983930c5e52c24c3e172c83835d}{IsLiteral}}\mbox{\hyperlink{classcaoco_1_1_ast_a3272e983930c5e52c24c3e172c83835d}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_a3272e983930c5e52c24c3e172c83835d}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00302}00302\ \ \ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a0f335fd95d2f42177f0fdd3f079d0a08}{GenLiteral}}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a0f335fd95d2f42177f0fdd3f079d0a08}{(}}ast\mbox{\hyperlink{classcaoco_1_1_ir_gen_a0f335fd95d2f42177f0fdd3f079d0a08}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00303}00303\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00304}00304\ \ \ \ \ \textcolor{comment}{//\ Handle\ binary\ operations}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00305}00305\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (ast\mbox{\hyperlink{classcaoco_1_1_ast_a996eaf66dce6e44ae92852b95424bf64}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_a996eaf66dce6e44ae92852b95424bf64}{IsArithmeticBinaryOp}}\mbox{\hyperlink{classcaoco_1_1_ast_a996eaf66dce6e44ae92852b95424bf64}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_a996eaf66dce6e44ae92852b95424bf64}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00306}00306\ \ \ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a14b0b173545f19a76212d97f28f683a6}{GenBinaryExpr}}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a14b0b173545f19a76212d97f28f683a6}{(}}ast\mbox{\hyperlink{classcaoco_1_1_ir_gen_a14b0b173545f19a76212d97f28f683a6}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00307}00307\ \ \ \ \ \}\ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00308}00308\ \ \ \ \ \ \ ir.AddLine(line\_index,\ eIrOp::ABORT\_AND\_ERROR,}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00309}00309\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{kIrErrorInvalidPrimaryExpression\});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00310}00310\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00311}00311\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00312}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a14b0b173545f19a76212d97f28f683a6}{00312}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a14b0b173545f19a76212d97f28f683a6}{GenBinaryExpr}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ ast)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00313}00313\ \ \ \ \ \textcolor{keyword}{auto}\ binop\_type\ =\ ast\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{Type}}\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00314}00314\ \ \ \ \ std::vector<IrVariant>\ args;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00315}00315\ \ \ \ \ \textcolor{comment}{//\ Generate\ the\ binary\ operation}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00316}00316\ \ \ \ \ \mbox{\hyperlink{structcaoco_1_1_ir_line}{IrLine}}*\ binop\_line\ =\ \textcolor{keywordtype}{nullptr};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00317}00317\ \ \ \ \ \textcolor{keywordflow}{switch}\ (binop\_type)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00318}00318\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ eAst::kAddition:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00319}00319\ \ \ \ \ \ \ \ \ binop\_line\ =}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00320}00320\ \ \ \ \ \ \ \ \ \ \ \ \ \&ir.AddLine(line\_index,\ eIrOp::BINARY\_ADD,\ kIrOpNullArguments);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00321}00321\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00322}00322\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ eAst::kSubtraction:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00323}00323\ \ \ \ \ \ \ \ \ binop\_line\ =}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00324}00324\ \ \ \ \ \ \ \ \ \ \ \ \ \&ir.AddLine(line\_index,\ eIrOp::BINARY\_SUB,\ kIrOpNullArguments);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00325}00325\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00326}00326\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ eAst::kMultiplication:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00327}00327\ \ \ \ \ \ \ \ \ binop\_line\ =}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00328}00328\ \ \ \ \ \ \ \ \ \ \ \ \ \&ir.AddLine(line\_index,\ eIrOp::BINARY\_MUL,\ kIrOpNullArguments);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00329}00329\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00330}00330\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ eAst::kDivision:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00331}00331\ \ \ \ \ \ \ \ \ binop\_line\ =}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00332}00332\ \ \ \ \ \ \ \ \ \ \ \ \ \&ir.AddLine(line\_index,\ eIrOp::BINARY\_DIV,\ kIrOpNullArguments);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00333}00333\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00334}00334\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ eAst::kRemainder:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00335}00335\ \ \ \ \ \ \ \ \ binop\_line\ =}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00336}00336\ \ \ \ \ \ \ \ \ \ \ \ \ \&ir.AddLine(line\_index,\ eIrOp::BINARY\_MOD,\ kIrOpNullArguments);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00337}00337\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00338}00338\ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00339}00339\ \ \ \ \ \ \ \ \ binop\_line\ =\ \&ir.AddLine(line\_index,\ eIrOp::ABORT\_AND\_ERROR,}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00340}00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{kIrErrorInvalidLiteralAstType\});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00341}00341\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00342}00342\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00343}00343\ \ \ \ \ \textcolor{comment}{//\ Return\ early\ if\ binary\ operation\ type\ does\ not\ exist.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00344}00344\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad38e25a0f1d001d72ee50f20c415969d}{ir}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{.}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{isAborted}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{(}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00345}00345\ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00346}00346\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00347}00347\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00348}00348\ \ \ \ \ \textcolor{comment}{//\ Advance\ the\ line\ index}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00349}00349\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24}{line\_index}}++;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00350}00350\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00351}00351\ \ \ \ \ \textcolor{comment}{//\ First\ child\ is\ the\ left\ operand}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00352}00352\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ left\_operand\_ast\ =\ ast\mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{[}}0\mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{]}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00353}00353\ \ \ \ \ \textcolor{keyword}{auto}\ left\_operand\_start\ =\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24}{line\_index}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00354}00354\ \ \ \ \ args.push\_back((\textcolor{keywordtype}{int})line\_index);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00355}00355\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872}{GenPrimaryExpr}}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872}{(}}left\_operand\_ast\mbox{\hyperlink{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00356}00356\ \ \ \ \ args.push\_back((\textcolor{keywordtype}{int})line\_index\ -\/\ 1);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00357}00357\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad38e25a0f1d001d72ee50f20c415969d}{ir}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{.}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{isAborted}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{(}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00358}00358\ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00359}00359\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00360}00360\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00361}00361\ \ \ \ \ \textcolor{comment}{//\ Second\ child\ is\ the\ right\ operand}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00362}00362\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ right\_operand\_ast\ =\ ast\mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{[}}1\mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{]}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00363}00363\ \ \ \ \ args.push\_back((\textcolor{keywordtype}{int})line\_index);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00364}00364\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872}{GenPrimaryExpr}}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872}{(}}right\_operand\_ast\mbox{\hyperlink{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00365}00365\ \ \ \ \ args.push\_back((\textcolor{keywordtype}{int})line\_index\ -\/\ 1);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00366}00366\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad38e25a0f1d001d72ee50f20c415969d}{ir}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{.}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{isAborted}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{(}}\mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00367}00367\ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00368}00368\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00369}00369\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00370}00370\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ lines\ for\ the\ binop\ args.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00371}00371\ \ \ \ \ binop\_line-\/>args\ =\ args;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00372}00372\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00373}00373\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00374}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a82f4020feabf27abf7cedf6b92948c7d}{00374}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a82f4020feabf27abf7cedf6b92948c7d}{GenVariableDeclaration}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ ast)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00375}00375\ \ \ \ \ \textcolor{comment}{//\ First\ child\ is\ modifiers,\ ignore\ for\ now}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00376}00376\ \ \ \ \ \textcolor{keyword}{auto}\&\ var\_decl\_line\ =}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00377}00377\ \ \ \ \ \ \ \ \ ir.AddLine(line\_index,\ eIrOp::DECLARE\_VARIABLE,\ kIrOpNullArguments);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00378}00378\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24}{line\_index}}++;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00379}00379\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00380}00380\ \ \ \ \ \textcolor{comment}{//\ Second\ child\ is\ the\ type\ constraint.\ TEMP\ ignore\ for\ now}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00381}00381\ \ \ \ \ \textcolor{comment}{//\ const\ auto\&\ type\_constraint\_ast\ =\ ast[1];}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00382}00382\ \ \ \ \ \textcolor{comment}{//\ For\ now\ always\ push\ 'any'\ type\ index}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00383}00383\ \ \ \ \ var\_decl\_line.args.push\_back((\textcolor{keywordtype}{int})RtVal::Any::idx);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00384}00384\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00385}00385\ \ \ \ \ \textcolor{comment}{//\ Third\ child\ is\ the\ identifier}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00386}00386\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ identifier\_ast\ =\ ast\mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{[}}2\mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{]}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00387}00387\ \ \ \ \ var\_decl\_line.args.push\_back(identifier\_ast.Literal());}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00388}00388\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00389}00389\ \ \ \ \ \textcolor{comment}{//\ Fourth\ child\ is\ the\ initializer}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00390}00390\ \ \ \ \ \textcolor{comment}{//\ Format:\ [VariableDefinition]\ -\/>\ [Expr]}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00391}00391\ \ \ \ \ \textcolor{keywordflow}{if}\ (ast\mbox{\hyperlink{classcaoco_1_1_ast_a37a8537d75ea9a4694ad81be8c973298}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_a37a8537d75ea9a4694ad81be8c973298}{Size}}\mbox{\hyperlink{classcaoco_1_1_ast_a37a8537d75ea9a4694ad81be8c973298}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_a37a8537d75ea9a4694ad81be8c973298}{)}}\ ==\ 4)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00392}00392\ \ \ \ \ \ \ var\_decl\_line.args.push\_back((\textcolor{keywordtype}{int})line\_index);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00393}00393\ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ initializer\_ast\ =}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00394}00394\ \ \ \ \ \ \ \ \ \ \ ast\mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{[}}3\mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{]}}\mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{[}}0\mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{]}};\ \ \textcolor{comment}{//\ Get\ first\ child\ of\ initializer}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00395}00395\ \ \ \ \ \ \ \textcolor{comment}{//\ Ast\ has\ children.\ Must\ be\ an\ expression.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00396}00396\ \ \ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872}{GenPrimaryExpr}}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872}{(}}initializer\_ast\mbox{\hyperlink{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00397}00397\ \ \ \ \ \ \ var\_decl\_line.args.push\_back((\textcolor{keywordtype}{int})line\_index);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00398}00398\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00399}00399\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00400}00400\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00401}00401\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00402}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a9429a862be353554ec36b7db1334a036}{00402}}\ \ \ \mbox{\hyperlink{structcaoco_1_1_ir_code}{IrCode}}\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a9429a862be353554ec36b7db1334a036}{GenerateIr}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ ast)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00403}00403\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ entry\ initial\ block}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00404}00404\ \ \ \ \ ir.AddLine(line\_index,\ eIrOp::ENTER\_PROGRAM\_DEFINITION,\ kIrOpNullArguments);}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00405}00405\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24}{line\_index}}++;}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00406}00406\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00407}00407\ \ \ \ \ \textcolor{comment}{//\ First\ AST\ node\ must\ always\ be\ a\ Program}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00408}00408\ \ \ \ \ \textcolor{keywordflow}{if}\ (ast.Empty()\ ||\ ast.TypeIsnt(eAst::kProgram))\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00409}00409\ \ \ \ \ \ \ ir.AddLine(line\_index,\ eIrOp::ABORT\_AND\_ERROR,}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00410}00410\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{kIrErrorNoProgramDefinition\});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00411}00411\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_ad38e25a0f1d001d72ee50f20c415969d}{ir}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00412}00412\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00413}00413\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00414}00414\ \ \ \ \ \textcolor{comment}{//\ Read\ all\ declarations\ in\ the\ program\ from\ top\ to\ bottom.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00415}00415\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ decl\_ast\ :\ ast\mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{Children}}\mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00416}00416\ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (decl\_ast\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{Type}}\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00417}00417\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ eAst::kVariableDeclaration:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00418}00418\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ir_gen_a82f4020feabf27abf7cedf6b92948c7d}{GenVariableDeclaration}}\mbox{\hyperlink{classcaoco_1_1_ir_gen_a82f4020feabf27abf7cedf6b92948c7d}{(}}decl\_ast\mbox{\hyperlink{classcaoco_1_1_ir_gen_a82f4020feabf27abf7cedf6b92948c7d}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00419}00419\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00420}00420\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Default\ case,\ invalid\ declaration\ in\ this\ context.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00421}00421\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00422}00422\ \ \ \ \ \ \ \ \ \ \ ir.AddLine(line\_index,\ eIrOp::ABORT\_AND\_ERROR,}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00423}00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{kIrErrorDeclarationCannotAppearInContext\});}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00424}00424\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_ad38e25a0f1d001d72ee50f20c415969d}{ir}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00425}00425\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00426}00426\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00427}00427\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00428}00428\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcaoco_1_1_ir_gen_ad38e25a0f1d001d72ee50f20c415969d}{ir}};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00429}00429\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00430}00430\ \};}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00431}00431\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00432}00432\ \}\ \ \textcolor{comment}{//\ namespace\ caoco}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00433}00433\ }
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00434}00434\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00435}00435\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00436}00436\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00437}00437\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00438}00438\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00439}00439\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00440}00440\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00441}00441\ \textcolor{comment}{//\ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00442}00442\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00443}00443\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00444}00444\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00445}00445\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00446}00446\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00447}00447\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00448}00448\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00449}00449\ \textcolor{comment}{//\ Author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00450}00450\ \textcolor{comment}{//\ Email:\ ntondev@gmail.com}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00451}00451\ \textcolor{comment}{//\ Website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00452}00452\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00453}00453\ \textcolor{comment}{//\ Project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00454}00454\ \textcolor{comment}{//\ Directory:\ cand-\/official-\/compiler}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00455}00455\ \textcolor{comment}{//\ File:\ caoco\_irgen.h}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00456}00456\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00457}00457\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_IRGEN\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00458}00458\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__irgen_8h_source_l00459}00459\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+
+\end{DoxyCode}

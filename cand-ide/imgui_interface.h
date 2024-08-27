@@ -1,4 +1,20 @@
+///////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+// Licensed under the Apache License, Version 2.0(the "License");
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_cide
+/// @brief Interface for the ImGui library.
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cand_cide_cgui
+/// @{
 #pragma once
+// Includes:
 #include <atomic>
 #include <concepts>
 #include <filesystem>
@@ -8,33 +24,37 @@
 #include <type_traits>
 #include <unordered_set>
 
-#include "../submodules/extended-cpp-standard/cppsextended.h"
+#include "cppsextended.h"
 #include "imgui-SFML.h"
 #include "imgui.h"
 #include "imgui_stdlib.h"
 
-//===========================================================================//
-namespace cgui { /* cgui namespace */
-//===========================================================================//
-/* C++ 20 Interface to the ImGui library
- * 1. No need to call ImGui::Begin and ImGui::End for each window/widget.
- * 2. No raw pointers.
- * 3. Unified use of std::string.
- * 4. Names of windows must be unique. Handle possible errors from occurence.
- * 5. Widget IDs must be unique, are automatically generated.
- */
-//===========================================================================//
-
-//===========================================================================//
-/*<decls>*/
-//===========================================================================//
-
+///////////////////////////////////////////////////////////////////////////////
+/// @namespace cgui
+/// @brief A simple unified interface for the underlying graphics and windowing
+///        libraries. Only provides bare minimum functionality required for
+///        this project. Designed to potentially use other libraries in the
+///        future.
+///
+/// Current Features Related to ImGui:
+/// 1. No need to call ImGui::Begin and ImGui::End for each window/widget.
+/// 2. No raw pointers.
+/// 3. Unified use of std::string.
+/// 4. Names of windows must be unique. Handles possible errors from occurrence.
+/// 5. Widget IDs must be unique, are automatically generated.
+///////////////////////////////////////////////////////////////////////////////
+namespace cgui {
+///////////////////////////////////////////////////////////////////////////////
+// decls
+///////////////////////////////////////////////////////////////////////////////
 using std::size_t;
 using std::string;
 
-// Internal vec2 representation, for now its a pair to keep it simple.
+/// Internal vec2 representation, for now its a pair of floats to keep it
+/// simple.
 using CguiVec2 = std::pair<float, float>;
 
+/// Underlying type of widget gui flags (int).
 using GuiFlags = int;
 using eWindowFlags = ImGuiWindowFlags_;
 using eSubcontextFlags = ImGuiChildFlags_;
@@ -49,20 +69,27 @@ using TabBarFlags = cxx::EnumeratedFlags<eTabBarFlags, GuiFlags>;
 using TabItemFlags = cxx::EnumeratedFlags<eTabItemFlags, GuiFlags>;
 using InputTextFlags = cxx::EnumeratedFlags<eInputTextFlags, GuiFlags>;
 
+/// Specifies if a widget should be initialized immediately or delayed.
 enum eWidgetInit {
   kWidgetInitDelayed = true,
   kWidgetInitImmediate = false,
 };
 
-class UIDGen;              // Generates unique widget identifiers.
-class UniqueNameMap;       // Maintains unique names across widgets.
-class ScopedWidgetBase;    // Base class for all scoped widgets.
-class SingularWidgetBase;  // Base class for all singular widgets.
+/// Generates unique widget identifiers.
+class UIDGen;
+/// Maintains unique names across widgets.
+class UniqueNameMap;
+/// Base class for all scoped widgets.
+class ScopedWidgetBase;
+/// Base class for all singular widgets.
+class SingularWidgetBase;
 
 namespace scoped_widget {
 class Window;
-class Subcontext;       // Autogenerates unique id.
-class NamedSubcontext;  // Name must be unique or throws.
+/// Autogenerates unique id.
+class Subcontext;       
+/// Name must be unique or throws.
+class NamedSubcontext;  
 class MenuBar;
 class Menu;
 class TabBar;
@@ -78,32 +105,40 @@ class MultilineTextInput;
 }  // namespace single_widget
 
 namespace combo_widget {
-class DirectoryView;  // TreeNode view of a file path,single widget base.
+/// TreeNode view of a file path,single widget base.
+class DirectoryView;  
 }  // namespace combo_widget
 
-//===========================================================================//
-/*<enddecls>*/
-//===========================================================================//
+/// The OpenGl and Windowing context. At the moment only
+/// SFML. In the future will be extended to OpenGl/Vulkan
+/// + GLFW.
+class GraphicsContext;
 
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
+// end decls
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
 /*<constants>*/
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
+constexpr float kExpand = -FLT_MIN;
+constexpr CguiVec2 kExpandXY = {kExpand, kExpand};
 
 constexpr float kExpandWidgetToRemainingSpace() { return -FLT_MIN; }
 const CguiVec2 kExpandWidgetToRemainingSpaceXY = {
     kExpandWidgetToRemainingSpace(), kExpandWidgetToRemainingSpace()};
 
-//===========================================================================//
-/*<endconstants>*/
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
+// endconstants>*/
+///////////////////////////////////////////////////////////////////////////////
 
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 /* <defs> */
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:UIDGen> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class UIDGen {
  public:
   using Iter = std::unordered_set<size_t>::iterator;
@@ -121,10 +156,10 @@ class UIDGen {
   std::unordered_set<size_t> generated_ids_;
 };
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <impl:UIDGen> */
-//-------------------------------------------------------------------------//
-// Do a try catch block around this method if you wish to refresh on overflow.
+///////////////////////////////////////////////////////////////////////////////
+/// Do a try catch block around this method if you wish to refresh on overflow.
 UIDGen::Iter UIDGen::GetId() {
   if (next_id_ == SIZE_MAX) throw std::overflow_error("UIDGen: ID overflow");
   size_t id = next_id_;
@@ -141,8 +176,8 @@ void UIDGen::PopId() {
   next_id_--;
 }
 
-// Erases an id but does not reset counter. If generating many id and deleting
-// use Referesh() to reset the counter and set.
+/// Erases an id but does not reset counter.
+/// If generating many ids and deleting, use Referesh() to reset the counter.
 void UIDGen::EraseId(Iter it) {
   if (not generated_ids_.empty() and (it == std::prev(generated_ids_.end()))) {
     // If the id we are erasing is the last id, we can also pop to save make
@@ -155,26 +190,27 @@ void UIDGen::EraseId(Iter it) {
 
 const std::unordered_set<size_t>& UIDGen::Generated() { return generated_ids_; }
 
-// Pops all ids and sets next_id_ = 0;
+/// Pops all ids and sets next_id_ = 0;
 void UIDGen::Refresh() {
   generated_ids_.clear();
   next_id_ = 1;
 }
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <endimpl:UIDGen> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:UniqueNameMap> */
-//-------------------------------------------------------------------------//
-// Simple map which maintains unique names.
-// TODO: improve using appended unique ids,
-// in ImGui you can add "id" + "###tag" at the end
-// to seperate objects with the same name.
-// ## seems to also do something...search imgui src
-//   You can use the "##" or "###" markers to use the same label with different
-//   id, or same id with different label. See documentation at the top of this
-//   file.
+///////////////////////////////////////////////////////////////////////////////
+/// Simple map which maintains unique names.
+/// 
+/// TODO: improve using appended unique ids,
+/// in ImGui you can add "id" + "###tag" at the end
+/// to seperate objects with the same name.
+/// ## seems to also do something...search imgui src
+///   You can use the "##" or "###" markers to use the same label with different
+///   id, or same id with different label. See documentation at the top of this
+///   file.
 class UniqueNameMap {
  public:
   cxx::BoolError AddName(const std::string& str);
@@ -185,9 +221,9 @@ class UniqueNameMap {
   std::unordered_set<string> names_;
 };
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <impl:UniqueNameMap> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 cxx::BoolError UniqueNameMap::AddName(const std::string& str) {
   if (names_.contains(str))
     return "[UniqueNameMap:AddName:This widget name is already in use.]";
@@ -199,42 +235,42 @@ void UniqueNameMap::RemoveName(const std::string& str) {
   if (!names_.contains(str)) return;  // Do nothing if the name is not found.
   names_.erase(str);
 }
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <endimpl:UniqueNameMap> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 
-// Implicit global unique id generator for cgui widget classes.
-// !! Do not use/access directly, called by ScopedWidgetBase on default
-// construction.
+/// Implicit global unique id generator for cgui widget classes.
+/// !! Do not use/access directly, called by ScopedWidgetBase on default
+/// construction.
 static UIDGen gCguiDefaultUIDGenerator{};
-// Implicit global unique name map for cgui widget classes.
-// !! Do not use/access directly, called by ScopedWidgetBase on default
-// construction.
+/// Implicit global unique name map for cgui widget classes.
+/// !! Do not use/access directly, called by ScopedWidgetBase on default
+/// construction.
 static UniqueNameMap gCguiDefaultUniqueNameMap{};
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:ScopedWidgetBase> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class ScopedWidgetBase {
  public:
-  // Returns true is the Begin() function has been called
-  // further gui commands will add to this scope.
+  /// Returns true is the Begin() function has been called
+  /// further gui commands will add to this scope.
   constexpr inline bool IsScopeActive() const { return is_scope_active_; }
 
-  // The meaning of is_on_ may vary based on the ImGui widget call.
-  // Usually indicates if this object was rendered by ImGui.
-  // Some Object will always render, while the result represents a state.
-  // These objects must be ended with ForceEndImpl().
-  // Ex. Windows will return false for this parameter if they are minimized,
-  // but the top bar will still be rendered. So the window is NOT displayed
-  // but it IS rendered.
+  /// The meaning of is_on_ may vary based on the ImGui widget call.
+  /// Usually indicates if this object was rendered by ImGui.
+  /// Some Object will always render, while the result represents a state.
+  /// These objects must be ended with ForceEndImpl().
+  /// Ex. Windows will return false for this parameter if they are minimized,
+  /// but the top bar will still be rendered. So the window is NOT displayed
+  /// but it IS rendered.
   constexpr inline bool IsOn() const { return is_on_; }
 
-  // Implementations of the BeginLate and EndEarly methods.
-  // Begin and End implementations are ment for the constructor
-  //  and destructor respectivley.
-  // ForceEnd is for widgets which must call End()
-  //  even if Begin() returns false.
+  /// Implementations of the BeginLate and EndEarly methods.
+  /// Begin and End implementations are ment for the constructor
+  ///  and destructor respectivley.
+  /// ForceEnd is for widgets which must call End()
+  ///  even if Begin() returns false.
  protected:
   // void BindBegin(const BoundScopeBeginFuncT& bound_begin) {
   //   begin_func = bound_begin;
@@ -284,7 +320,7 @@ class ScopedWidgetBase {
   virtual ~ScopedWidgetBase() = default;
 
  public:
-  // Default object is a null widget,Begin() will always return false.
+  /// Default object is a null widget,Begin() will always return false.
   ScopedWidgetBase(bool is_delayed)
       : name_map_(gCguiDefaultUniqueNameMap),
         id_gen_(gCguiDefaultUIDGenerator),
@@ -293,14 +329,14 @@ class ScopedWidgetBase {
     is_scope_active_ = false;
   };
 
-  // Copy is allowed, but the name_map and id_gen are shared.
-  // The uniqueness of the name or id is only checked on construction.
+  /// Copy is allowed, but the name_map and id_gen are shared.
+  /// The uniqueness of the name or id is only checked on construction.
   ScopedWidgetBase(const ScopedWidgetBase& other) = default;
 
-  // Move is allowed.
+  /// Move is allowed.
   ScopedWidgetBase(ScopedWidgetBase&& other) noexcept = default;
 
-  // Boolean conversion, returns IsOn()
+  /// Boolean conversion, returns IsOn()
   operator bool() { return is_on_; }
 
  protected:
@@ -311,7 +347,7 @@ class ScopedWidgetBase {
   bool is_delayed_;
 
  protected:
-  // Name must not exist.
+  /// Name must not exist.
   cxx::BoolError RequestNewName(const std::string& str) {
     if (name_map_.Contains(str))
       return "[WidgetBase:NewName:This widget name is already in use.]";
@@ -320,34 +356,34 @@ class ScopedWidgetBase {
   };
 
   void ReleaseName(const std::string& str) {
-    // Remove the name from name map.
+    /// Remove the name from name map.
     name_map_.RemoveName(str);
   }
 
-  // Generate a new uuid
+  /// Generate a new uuid
   UIDGen::Iter RequestId() { return id_gen_.GetId(); }
 
   void ReleaseId(UIDGen::Iter id_iter) {
-    // Remove the id
+    /// Remove the id
     id_gen_.EraseId(id_iter);
   }
 };
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:SingularWidgetBase> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class SingularWidgetBase {
  public:
-  // Result of requesting to render this widget.
-  // Meaning varies from widget to widget.
-  // Indicated a pressed/released/displayed state.
+  /// Result of requesting to render this widget.
+  /// Meaning varies from widget to widget.
+  /// Indicated a pressed/released/displayed state.
   bool IsOn() const { return is_on_; }
 
-  // True if the widget is currently delayed
-  // eg. the widget has not been rendered yet.
+  /// True if the widget is currently delayed
+  /// eg. the widget has not been rendered yet.
   bool IsDelayed() const { return is_delayed_; }
 
-  // Boolean conversion, returns IsOn()
+  /// Boolean conversion, returns IsOn()
   operator bool() { return is_on_; }
 
  protected:
@@ -372,29 +408,30 @@ class SingularWidgetBase {
   virtual bool BoundBegin() = 0;
 
  protected:
-  bool is_on_;  // Result of requesting to render this widget.
+  /// Result of requesting to render this widget.
+  bool is_on_;  
   bool is_delayed_;
 };
 
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 namespace scoped_widget { /* cgui scoped_widget */
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:Window> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class Window : public ScopedWidgetBase {
  public:
   const std::string& Title() const { return title_; }
 
-  // !! Warning: Returns a mutable reference.
+  /// @warning Returns a mutable reference.
   WindowFlags& Flags() { return flags_; }
 
-  // Returns TRUE if the close button of the window was triggered this frame.
-  // From ImGui documentation as to why the implementation is inversed...:
-  // Passing 'bool* p_open' displays a Close button on the upper-right corner
-  // of the window, the pointed value will be set to false when the button is
-  // pressed.
+  /// Returns TRUE if the close button of the window was triggered this frame.
+  /// From ImGui documentation as to why the implementation is inversed...:
+  /// Passing 'bool* p_open' displays a Close button on the upper-right corner
+  /// of the window, the pointed value will be set to false when the button is
+  /// pressed.
   bool IsCloseButtonTriggered() const { return not *close_button_state_; }
 
   const CguiVec2& QuerySize() const { return size_; }
@@ -485,17 +522,17 @@ class Window : public ScopedWidgetBase {
   CguiVec2 size_{0.f, 0.f};
 };
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:Subcontext> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class Subcontext : public ScopedWidgetBase {
  public:
   std::size_t Id() const { return *uid_; }
 
-  // !! Warning: mutable reference
+  /// @warning Returns a mutable reference.
   WindowFlags GetWindowFlags() const { return win_flags_; }
 
-  // !! Warning: mutable reference
+  /// @warning Returns a mutable reference.
   SubcontextFlags GetSubcontextFlags() const { return subcontext_flags_; }
 
   const CguiVec2& RequestedSize() { return requested_size_; }
@@ -545,17 +582,17 @@ class Subcontext : public ScopedWidgetBase {
   CguiVec2 requested_size_;
 };
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:NamedSubcontext> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class NamedSubcontext : public ScopedWidgetBase {
  public:
   const std::string& Name() const { return name_; }
 
-  // !! Warning: mutable reference
+  /// @warning Returns a mutable reference.
   WindowFlags GetWindowFlags() const { return win_flags_; }
 
-  // !! Warning: mutable reference
+  /// @warning Returns a mutable reference.
   SubcontextFlags GetSubcontextFlags() const { return subcontext_flags_; }
 
   const CguiVec2& RequestedSize() { return requested_size_; }
@@ -616,9 +653,9 @@ class NamedSubcontext : public ScopedWidgetBase {
   CguiVec2 requested_size_;
 };
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:MenuBar> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class MenuBar : public ScopedWidgetBase {
  public:
   static inline MenuBar Delayed() { return MenuBar(kWidgetInitDelayed); }
@@ -641,9 +678,9 @@ class MenuBar : public ScopedWidgetBase {
   void BoundEnd() override { ImGui::EndMenuBar(); }
 };
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:Menu> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class Menu : public ScopedWidgetBase {
  public:
   const std::string& Title() const { return title_; }
@@ -693,9 +730,9 @@ class Menu : public ScopedWidgetBase {
   bool is_enabled_;
 };
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:TabBar> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class TabBar : public ScopedWidgetBase {
  public:
   const std::string& Name() const { return name_; }
@@ -746,9 +783,9 @@ class TabBar : public ScopedWidgetBase {
   TabBarFlags flags_;
 };
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:TabItem> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class TabItem : public ScopedWidgetBase {
  public:
   const std::string& Name() const { return name_; }
@@ -824,9 +861,9 @@ class TabItem : public ScopedWidgetBase {
   bool* is_selected_;
 };
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:TreeNode> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class TreeNode : public ScopedWidgetBase {
   std::string name_;
 
@@ -869,17 +906,17 @@ class TreeNode : public ScopedWidgetBase {
   void BoundEnd() override { ImGui::TreePop(); }
 };
 
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 };  // end namespace scoped_widget
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 namespace single_widget { /* cgui single_widget */
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:Button> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class Button : public SingularWidgetBase {
  public:
   const std::string& Text() const { return text_; }
@@ -913,9 +950,9 @@ class Button : public SingularWidgetBase {
   CguiVec2 size_;
 };
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:MenuItem> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class MenuItem : public SingularWidgetBase {
  public:
   const std::string& Text() const { return text_; }
@@ -955,9 +992,9 @@ class MenuItem : public SingularWidgetBase {
   bool is_enabled_;
 };
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:Selectable> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class Selectable : public SingularWidgetBase {
  public:
   const std::string& Text() const { return text_; }
@@ -985,9 +1022,9 @@ class Selectable : public SingularWidgetBase {
   std::string text_;
 };
 
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 /* <class:MultilineTextInput> */
-//-------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 class MultilineTextInput : public SingularWidgetBase {
   std::string label_;
   const CguiVec2& size_;
@@ -1034,13 +1071,13 @@ class MultilineTextInput : public SingularWidgetBase {
   }
 };
 
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 };  // namespace single_widget
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 namespace combo_widget {
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 
 //-----------------------------------------------------------------------//
 /*<class:DirectoryView>*/
@@ -1108,17 +1145,19 @@ class DirectoryView : public SingularWidgetBase {
   }
 };
 
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 }; /* end namespace combo_widget */
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 
-//===========================================================================//
+class GraphicsContext {};
+
+///////////////////////////////////////////////////////////////////////////////
 }; /* end namespace cgui */
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 /*<library interface>*/
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 
 // Forwarded methods from ImGui namespace.
 namespace cgui {
@@ -1168,9 +1207,9 @@ using CguiMultilineTextInput = cgui::single_widget::MultilineTextInput;
 // Combo widgets
 using CguiDirectoryView = cgui::combo_widget::DirectoryView;
 
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 /*<end library interface>*/
-//===========================================================================//
+///////////////////////////////////////////////////////////////////////////////
 
 // Some examples of how to use the library.
 namespace cgui::example {
@@ -1285,8 +1324,6 @@ void ExampleEditorTabs(sf::Window& window) {
     }
   }
 }
-};  // namespace cgui::example
-
 struct ExampleAppConsole {
   char InputBuf[256];
   ImVector<char*> Items;
@@ -1656,3 +1693,26 @@ static void ShowAppConsole() {
   static bool po{true};
   console.Draw("Example: Console", &po);
 }
+};  // namespace cgui::example
+
+/// @} // end of cand_cide_cgui
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+//
+// Licensed under the Apache License, Version 2.0(the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+///////////////////////////////////////////////////////////////////////////////

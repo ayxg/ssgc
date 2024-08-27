@@ -1,0 +1,25 @@
+\doxysection{mta\+::req\+::i\+Singular Concept Reference}
+\hypertarget{conceptmta_1_1req_1_1i_singular}{}\label{conceptmta_1_1req_1_1i_singular}\index{mta::req::iSingular@{mta::req::iSingular}}
+
+
+Cannot be moved copied or swapped.  
+
+
+
+
+{\ttfamily \#include $<$require.\+h$>$}
+
+\doxysubsection{Concept definition}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptmta_1_1req_1_1i_singular}{mta::req::iSingular}}\ =\ \ \mbox{\hyperlink{conceptmta_1_1req_1_1i_non_copyable}{iNonCopyable<T>}}\ \&\&\ \mbox{\hyperlink{conceptmta_1_1req_1_1i_non_movable}{iNonMovable<T>}}\ \&\&\ (not\ \mbox{\hyperlink{conceptmta_1_1req_1_1i_swappable}{iSwappable<T>}})}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Detailed Description}
+Cannot be moved copied or swapped. 
+
+Definition at line \mbox{\hyperlink{require_8h_source_l00451}{451}} of file \mbox{\hyperlink{require_8h_source}{require.\+h}}.
+

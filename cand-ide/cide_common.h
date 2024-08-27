@@ -1,3 +1,16 @@
+///////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+// Licensed under the Apache License, Version 2.0(the "License");
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_cide
+/// @brief Common typedefs and constants used in CIDE.
+///////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 #include <filesystem>
 #include <string>
@@ -13,6 +26,9 @@
 
 namespace cide {
 
+/// @addtogroup cand_cide_common
+/// @{
+
 namespace stdfs = std::filesystem;
 
 using std::size_t;
@@ -21,17 +37,21 @@ using std::string;
 using std::vector;
 using std::string_view;
 
-
 using cstring = const char*;
 using wcstring = const wchar_t*;
 
+// The lambdas and typedefs below are default values for callbacks 
+// from frontend.
+// They are used to avoid null checks in the backend code.
 static constexpr LAMBDA xNullVoidCallback = []() {};
 using VoidCallbackT = function<void(void)>;
 
+// Boolean callback should be used when an error may occur.
+// The callback should return false if an error occurred.
 static constexpr LAMBDA xNullBoolCallback = []() { return false; };
 using BoolCallbackT = function<bool(void)>;
 
-
+// Defines file extensions used by the IDE.
 namespace file_extension {
 constexpr string_view kCaIdeSettings = ".caide";
 constexpr string_view kCaSolution = ".casln";
@@ -57,4 +77,26 @@ constexpr wcstring kCHeader = L".h";
 }  // namespace wide
 }  // namespace file_extension
 
-}  // namespace cide::backend
+/// @} // end of cand_cide_common
+
+}  // namespace cide
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+//
+// Licensed under the Apache License, Version 2.0(the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+///////////////////////////////////////////////////////////////////////////////

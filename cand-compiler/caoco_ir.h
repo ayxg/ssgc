@@ -45,6 +45,7 @@ namespace iraction {
 //---------------------------------------------------------------------------//
 
 struct IrActionBase;  // Contains methods/members common to all actions.
+
 // Compiler Utils
 struct DebugPrint;
 // Variables

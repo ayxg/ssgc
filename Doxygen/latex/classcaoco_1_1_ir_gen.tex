@@ -1,0 +1,186 @@
+\doxysection{caoco\+::Ir\+Gen Class Reference}
+\hypertarget{classcaoco_1_1_ir_gen}{}\label{classcaoco_1_1_ir_gen}\index{caoco::IrGen@{caoco::IrGen}}
+
+
+{\ttfamily \#include $<$caoco\+\_\+irgen.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcaoco_1_1_ir_code}{Ir\+Code}} \mbox{\hyperlink{classcaoco_1_1_ir_gen_a9429a862be353554ec36b7db1334a036}{Generate\+Ir}} (const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&ast)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{classcaoco_1_1_ir_gen_a6a1e55c8abb3c392f79eaa8188379016}{Ir\+Line\+List}} = std\+::list$<$\mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}}$>$
+\item 
+using \mbox{\hyperlink{classcaoco_1_1_ir_gen_ad1c5c8bc20d6c12418833a9c682850fd}{Line\+Index}} = std\+::size\+\_\+t
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcaoco_1_1_ir_gen_a0f335fd95d2f42177f0fdd3f079d0a08}{Gen\+Literal}} (const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&ast)
+\item 
+void \mbox{\hyperlink{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872}{Gen\+Primary\+Expr}} (const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&ast)
+\item 
+void \mbox{\hyperlink{classcaoco_1_1_ir_gen_a14b0b173545f19a76212d97f28f683a6}{Gen\+Binary\+Expr}} (const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&ast)
+\item 
+void \mbox{\hyperlink{classcaoco_1_1_ir_gen_a82f4020feabf27abf7cedf6b92948c7d}{Gen\+Variable\+Declaration}} (const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&ast)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} \mbox{\hyperlink{classcaoco_1_1_ir_gen_a1d67b81047ecb7beb83165e3353a21e5}{Line\+Gen\+Number\+Literal}} (\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad1c5c8bc20d6c12418833a9c682850fd}{Line\+Index}} \mbox{\hyperlink{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24}{line\+\_\+index}}, std\+::string literal)
+\item 
+static \mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} \mbox{\hyperlink{classcaoco_1_1_ir_gen_a2cc6f16c374fc919870c469261ba84b0}{Line\+Gen\+Double\+Literal}} (\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad1c5c8bc20d6c12418833a9c682850fd}{Line\+Index}} \mbox{\hyperlink{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24}{line\+\_\+index}}, std\+::string literal)
+\item 
+static \mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} \mbox{\hyperlink{classcaoco_1_1_ir_gen_a84a6c77fd89def9c38d9491862aad97a}{Line\+Gen\+String\+Literal}} (\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad1c5c8bc20d6c12418833a9c682850fd}{Line\+Index}} \mbox{\hyperlink{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24}{line\+\_\+index}}, std\+::string literal)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcaoco_1_1_ir_code}{Ir\+Code}} \mbox{\hyperlink{classcaoco_1_1_ir_gen_ad38e25a0f1d001d72ee50f20c415969d}{ir}}
+\item 
+\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad1c5c8bc20d6c12418833a9c682850fd}{Line\+Index}} \mbox{\hyperlink{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24}{line\+\_\+index}} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00192}{192}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+
+
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{classcaoco_1_1_ir_gen_a6a1e55c8abb3c392f79eaa8188379016}\index{caoco::IrGen@{caoco::IrGen}!IrLineList@{IrLineList}}
+\index{IrLineList@{IrLineList}!caoco::IrGen@{caoco::IrGen}}
+\doxysubsubsection{\texorpdfstring{IrLineList}{IrLineList}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ir_gen_a6a1e55c8abb3c392f79eaa8188379016} 
+using \mbox{\hyperlink{classcaoco_1_1_ir_gen_a6a1e55c8abb3c392f79eaa8188379016}{caoco\+::\+Ir\+Gen\+::\+Ir\+Line\+List}} = std\+::list$<$\mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}}$>$\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00193}{193}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ir_gen_ad1c5c8bc20d6c12418833a9c682850fd}\index{caoco::IrGen@{caoco::IrGen}!LineIndex@{LineIndex}}
+\index{LineIndex@{LineIndex}!caoco::IrGen@{caoco::IrGen}}
+\doxysubsubsection{\texorpdfstring{LineIndex}{LineIndex}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ir_gen_ad1c5c8bc20d6c12418833a9c682850fd} 
+using \mbox{\hyperlink{classcaoco_1_1_ir_gen_ad1c5c8bc20d6c12418833a9c682850fd}{caoco\+::\+Ir\+Gen\+::\+Line\+Index}} = std\+::size\+\_\+t\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00194}{194}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcaoco_1_1_ir_gen_a14b0b173545f19a76212d97f28f683a6}\index{caoco::IrGen@{caoco::IrGen}!GenBinaryExpr@{GenBinaryExpr}}
+\index{GenBinaryExpr@{GenBinaryExpr}!caoco::IrGen@{caoco::IrGen}}
+\doxysubsubsection{\texorpdfstring{GenBinaryExpr()}{GenBinaryExpr()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ir_gen_a14b0b173545f19a76212d97f28f683a6} 
+void caoco\+::\+Ir\+Gen\+::\+Gen\+Binary\+Expr (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&}]{ast}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00312}{312}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ir_gen_a9429a862be353554ec36b7db1334a036}\index{caoco::IrGen@{caoco::IrGen}!GenerateIr@{GenerateIr}}
+\index{GenerateIr@{GenerateIr}!caoco::IrGen@{caoco::IrGen}}
+\doxysubsubsection{\texorpdfstring{GenerateIr()}{GenerateIr()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ir_gen_a9429a862be353554ec36b7db1334a036} 
+\mbox{\hyperlink{structcaoco_1_1_ir_code}{Ir\+Code}} caoco\+::\+Ir\+Gen\+::\+Generate\+Ir (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&}]{ast}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00402}{402}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ir_gen_a0f335fd95d2f42177f0fdd3f079d0a08}\index{caoco::IrGen@{caoco::IrGen}!GenLiteral@{GenLiteral}}
+\index{GenLiteral@{GenLiteral}!caoco::IrGen@{caoco::IrGen}}
+\doxysubsubsection{\texorpdfstring{GenLiteral()}{GenLiteral()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ir_gen_a0f335fd95d2f42177f0fdd3f079d0a08} 
+void caoco\+::\+Ir\+Gen\+::\+Gen\+Literal (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&}]{ast}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00275}{275}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872}\index{caoco::IrGen@{caoco::IrGen}!GenPrimaryExpr@{GenPrimaryExpr}}
+\index{GenPrimaryExpr@{GenPrimaryExpr}!caoco::IrGen@{caoco::IrGen}}
+\doxysubsubsection{\texorpdfstring{GenPrimaryExpr()}{GenPrimaryExpr()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ir_gen_a4bd76dfd7d2a52af184424594d981872} 
+void caoco\+::\+Ir\+Gen\+::\+Gen\+Primary\+Expr (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&}]{ast}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00299}{299}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ir_gen_a82f4020feabf27abf7cedf6b92948c7d}\index{caoco::IrGen@{caoco::IrGen}!GenVariableDeclaration@{GenVariableDeclaration}}
+\index{GenVariableDeclaration@{GenVariableDeclaration}!caoco::IrGen@{caoco::IrGen}}
+\doxysubsubsection{\texorpdfstring{GenVariableDeclaration()}{GenVariableDeclaration()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ir_gen_a82f4020feabf27abf7cedf6b92948c7d} 
+void caoco\+::\+Ir\+Gen\+::\+Gen\+Variable\+Declaration (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&}]{ast}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00374}{374}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ir_gen_a2cc6f16c374fc919870c469261ba84b0}\index{caoco::IrGen@{caoco::IrGen}!LineGenDoubleLiteral@{LineGenDoubleLiteral}}
+\index{LineGenDoubleLiteral@{LineGenDoubleLiteral}!caoco::IrGen@{caoco::IrGen}}
+\doxysubsubsection{\texorpdfstring{LineGenDoubleLiteral()}{LineGenDoubleLiteral()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ir_gen_a2cc6f16c374fc919870c469261ba84b0} 
+static \mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} caoco\+::\+Ir\+Gen\+::\+Line\+Gen\+Double\+Literal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad1c5c8bc20d6c12418833a9c682850fd}{Line\+Index}}}]{line\+\_\+index}{, }\item[{std\+::string}]{literal}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00210}{210}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ir_gen_a1d67b81047ecb7beb83165e3353a21e5}\index{caoco::IrGen@{caoco::IrGen}!LineGenNumberLiteral@{LineGenNumberLiteral}}
+\index{LineGenNumberLiteral@{LineGenNumberLiteral}!caoco::IrGen@{caoco::IrGen}}
+\doxysubsubsection{\texorpdfstring{LineGenNumberLiteral()}{LineGenNumberLiteral()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ir_gen_a1d67b81047ecb7beb83165e3353a21e5} 
+static \mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} caoco\+::\+Ir\+Gen\+::\+Line\+Gen\+Number\+Literal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad1c5c8bc20d6c12418833a9c682850fd}{Line\+Index}}}]{line\+\_\+index}{, }\item[{std\+::string}]{literal}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00198}{198}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ir_gen_a84a6c77fd89def9c38d9491862aad97a}\index{caoco::IrGen@{caoco::IrGen}!LineGenStringLiteral@{LineGenStringLiteral}}
+\index{LineGenStringLiteral@{LineGenStringLiteral}!caoco::IrGen@{caoco::IrGen}}
+\doxysubsubsection{\texorpdfstring{LineGenStringLiteral()}{LineGenStringLiteral()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ir_gen_a84a6c77fd89def9c38d9491862aad97a} 
+static \mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} caoco\+::\+Ir\+Gen\+::\+Line\+Gen\+String\+Literal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad1c5c8bc20d6c12418833a9c682850fd}{Line\+Index}}}]{line\+\_\+index}{, }\item[{std\+::string}]{literal}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00222}{222}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcaoco_1_1_ir_gen_ad38e25a0f1d001d72ee50f20c415969d}\index{caoco::IrGen@{caoco::IrGen}!ir@{ir}}
+\index{ir@{ir}!caoco::IrGen@{caoco::IrGen}}
+\doxysubsubsection{\texorpdfstring{ir}{ir}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ir_gen_ad38e25a0f1d001d72ee50f20c415969d} 
+\mbox{\hyperlink{structcaoco_1_1_ir_code}{Ir\+Code}} caoco\+::\+Ir\+Gen\+::ir\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00195}{195}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24}\index{caoco::IrGen@{caoco::IrGen}!line\_index@{line\_index}}
+\index{line\_index@{line\_index}!caoco::IrGen@{caoco::IrGen}}
+\doxysubsubsection{\texorpdfstring{line\_index}{line\_index}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_ir_gen_aeada881c04614dada7eca44793b53a24} 
+\mbox{\hyperlink{classcaoco_1_1_ir_gen_ad1c5c8bc20d6c12418833a9c682850fd}{Line\+Index}} caoco\+::\+Ir\+Gen\+::line\+\_\+index = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00196}{196}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/\mbox{\hyperlink{caoco__irgen_8h}{caoco\+\_\+irgen.\+h}}\end{DoxyCompactItemize}
