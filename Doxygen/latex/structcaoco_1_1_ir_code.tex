@@ -1,0 +1,114 @@
+\doxysection{caoco\+::Ir\+Code Struct Reference}
+\hypertarget{structcaoco_1_1_ir_code}{}\label{structcaoco_1_1_ir_code}\index{caoco::IrCode@{caoco::IrCode}}
+
+
+{\ttfamily \#include $<$caoco\+\_\+irgen.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::list$<$ \mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} $>$\+::iterator \mbox{\hyperlink{structcaoco_1_1_ir_code_aeae7a56d268f0abdf060a6fb8982eca3}{Add\+Line}} (std\+::size\+\_\+t line\+\_\+index, \mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{e\+Ir\+Op}} op, std\+::vector$<$ \mbox{\hyperlink{namespacecaoco_aeac94068766ff80349643f1d1ff8d2b0}{Ir\+Arg\+Variant}} $>$ args)
+\item 
+\mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} \& \mbox{\hyperlink{structcaoco_1_1_ir_code_a6ffad3dd203fa094c326c17c9900fb84}{Add\+Line}} (\mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} line)
+\item 
+void \mbox{\hyperlink{structcaoco_1_1_ir_code_a262f5b3f7ffd132e4339d235936ed9d6}{Add\+Lines}} (std\+::list$<$ \mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} $>$ lines\+\_\+vec)
+\item 
+const std\+::list$<$ \mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} $>$ \& \mbox{\hyperlink{structcaoco_1_1_ir_code_ad8740c1f4285d85b8984a08278371d04}{Get\+Lines}} ()
+\item 
+bool \mbox{\hyperlink{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}{is\+Aborted}} ()
+\item 
+void \mbox{\hyperlink{structcaoco_1_1_ir_code_ac38d6e93648a97e780381dd79ffc0dba}{Print\+Disassembly}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::list$<$ \mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} $>$ \mbox{\hyperlink{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7}{lines}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00106}{106}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structcaoco_1_1_ir_code_a6ffad3dd203fa094c326c17c9900fb84}\index{caoco::IrCode@{caoco::IrCode}!AddLine@{AddLine}}
+\index{AddLine@{AddLine}!caoco::IrCode@{caoco::IrCode}}
+\doxysubsubsection{\texorpdfstring{AddLine()}{AddLine()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1_ir_code_a6ffad3dd203fa094c326c17c9900fb84} 
+\mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} \& caoco\+::\+Ir\+Code\+::\+Add\+Line (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}}}]{line}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00115}{115}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{structcaoco_1_1_ir_code_aeae7a56d268f0abdf060a6fb8982eca3}\index{caoco::IrCode@{caoco::IrCode}!AddLine@{AddLine}}
+\index{AddLine@{AddLine}!caoco::IrCode@{caoco::IrCode}}
+\doxysubsubsection{\texorpdfstring{AddLine()}{AddLine()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1_ir_code_aeae7a56d268f0abdf060a6fb8982eca3} 
+std\+::list$<$ \mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} $>$\+::iterator caoco\+::\+Ir\+Code\+::\+Add\+Line (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{line\+\_\+index}{, }\item[{\mbox{\hyperlink{namespacecaoco_af77319a29f8ca94a74b8e7448cf274b7}{e\+Ir\+Op}}}]{op}{, }\item[{std\+::vector$<$ \mbox{\hyperlink{namespacecaoco_aeac94068766ff80349643f1d1ff8d2b0}{Ir\+Arg\+Variant}} $>$}]{args}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00109}{109}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{structcaoco_1_1_ir_code_a262f5b3f7ffd132e4339d235936ed9d6}\index{caoco::IrCode@{caoco::IrCode}!AddLines@{AddLines}}
+\index{AddLines@{AddLines}!caoco::IrCode@{caoco::IrCode}}
+\doxysubsubsection{\texorpdfstring{AddLines()}{AddLines()}}
+{\footnotesize\ttfamily \label{structcaoco_1_1_ir_code_a262f5b3f7ffd132e4339d235936ed9d6} 
+void caoco\+::\+Ir\+Code\+::\+Add\+Lines (\begin{DoxyParamCaption}\item[{std\+::list$<$ \mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} $>$}]{lines\+\_\+vec}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00119}{119}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{structcaoco_1_1_ir_code_ad8740c1f4285d85b8984a08278371d04}\index{caoco::IrCode@{caoco::IrCode}!GetLines@{GetLines}}
+\index{GetLines@{GetLines}!caoco::IrCode@{caoco::IrCode}}
+\doxysubsubsection{\texorpdfstring{GetLines()}{GetLines()}}
+{\footnotesize\ttfamily \label{structcaoco_1_1_ir_code_ad8740c1f4285d85b8984a08278371d04} 
+const std\+::list$<$ \mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}} $>$ \& caoco\+::\+Ir\+Code\+::\+Get\+Lines (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00124}{124}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1}\index{caoco::IrCode@{caoco::IrCode}!isAborted@{isAborted}}
+\index{isAborted@{isAborted}!caoco::IrCode@{caoco::IrCode}}
+\doxysubsubsection{\texorpdfstring{isAborted()}{isAborted()}}
+{\footnotesize\ttfamily \label{structcaoco_1_1_ir_code_a3775b821bee26629de116bda1fa9bde1} 
+bool caoco\+::\+Ir\+Code\+::is\+Aborted (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00126}{126}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+\Hypertarget{structcaoco_1_1_ir_code_ac38d6e93648a97e780381dd79ffc0dba}\index{caoco::IrCode@{caoco::IrCode}!PrintDisassembly@{PrintDisassembly}}
+\index{PrintDisassembly@{PrintDisassembly}!caoco::IrCode@{caoco::IrCode}}
+\doxysubsubsection{\texorpdfstring{PrintDisassembly()}{PrintDisassembly()}}
+{\footnotesize\ttfamily \label{structcaoco_1_1_ir_code_ac38d6e93648a97e780381dd79ffc0dba} 
+void caoco\+::\+Ir\+Code\+::\+Print\+Disassembly (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00134}{134}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7}\index{caoco::IrCode@{caoco::IrCode}!lines@{lines}}
+\index{lines@{lines}!caoco::IrCode@{caoco::IrCode}}
+\doxysubsubsection{\texorpdfstring{lines}{lines}}
+{\footnotesize\ttfamily \label{structcaoco_1_1_ir_code_ad582982b0e20982aef94ab426a4b9bd7} 
+std\+::list$<$\mbox{\hyperlink{structcaoco_1_1_ir_line}{Ir\+Line}}$>$ caoco\+::\+Ir\+Code\+::lines}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__irgen_8h_source_l00107}{107}} of file \mbox{\hyperlink{caoco__irgen_8h_source}{caoco\+\_\+irgen.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/\mbox{\hyperlink{caoco__irgen_8h}{caoco\+\_\+irgen.\+h}}\end{DoxyCompactItemize}

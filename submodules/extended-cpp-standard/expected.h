@@ -1,37 +1,40 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the Apache License, Version 2.0(the "License");
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: extended-cpp-standard
-// File: expected.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cppmodule2_cppextended
+/// @brief Structures for handling expected values and errors.
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cppmodule2_cppextended
+/// @{
 #ifndef HEADER_GUARD_EXTENDED_CPP_STANDARD_EXPECTED_H
 #define HEADER_GUARD_EXTENDED_CPP_STANDARD_EXPECTED_H
-//---------------------------------------------------------------------------//
-// Brief: Structures for handling expected values and errors.
-//---------------------------------------------------------------------------//
-// Includes:
+// Cxx C++ Standard Lib
 #include "import_std.h"
+// Cxx Macro Definitions
 #include "macrodef.h"
-//---------------------------------------------------------------------------//
 
 namespace cxx {
 
-//---------------------------------------------------------//
-// Class:{BoolError}
-// Brief:{
-// BoolError returns a boolean true value or an error message.
-// }
-//---------------------------------------------------------//
+/// Represents a boolean true value or an error message.
 class BoolError {
-  bool valid_;
-  std::string error_;
+ public:
+  constexpr bool Valid() const { return valid_; }
+  constexpr const std::string& Error() const { return error_; }
+
+  /// Creates a runtime_error exception out of the Error() string.
+  inline std::runtime_error Exception() const {
+    return std::runtime_error(error_.c_str());
+  }
+
+  /// True if object is in a valid state.
+  constexpr operator bool() const { return valid_; }
 
  public:
   BoolError(std::string error_message) : valid_(false), error_(error_message) {}
@@ -43,39 +46,18 @@ class BoolError {
     else
       error_ = "BoolError: Unspecified false error.";
   }
-  constexpr bool Valid() const { return valid_; }
-  constexpr const std::string& Error() const { return error_; }
-  // Creates a runtime_error exception out of the Error() string.
-  inline std::runtime_error Exception() const {
-    return std::runtime_error(error_.c_str());
-  }
-  constexpr operator bool() const { return valid_; }
-};
-//---------------------------------------------------------//
-// EndClass:{BoolError}
-//---------------------------------------------------------//
 
-//---------------------------------------------------------//
-// Template:{Expected}
-// Brief:{
-// Expected returns a value or an error message.
-// }
-//---------------------------------------------------------//
+ private:
+  /// Is this object in a valid state?
+  bool valid_;         
+  /// Error message if in error state.
+  std::string error_;  
+};
+
+/// @brief Represents an expected value or an error message.
+/// @tparam T The value type expected to be held in this object.
 template <typename T>
 class Expected {
-  std::optional<T> expected_{std::nullopt};
-  std::string error_{""};
-
-  constexpr Expected(T expected) : expected_(expected) {}
-  template <typename T>
-  constexpr Expected(const T& expected) : expected_(expected) {}
-
-#pragma warning( \
-    disable : 4100)  // Disable unused parameter warning for std::nullopt_t
-                     // Cannot be instantiated directly from type.
-  constexpr Expected(const std::nullopt_t& none, std::string error_message)
-      : expected_(std::nullopt), error_(error_message) {}
-#pragma warning(default : 4100)
  public:
   constexpr bool Valid() const { return expected_.has_value(); }
   constexpr T Extract() {
@@ -123,18 +105,28 @@ class Expected {
   constexpr Expected<T>&& ChainFailure(const Expected<U>& other) {
     return std::forward<Expected<T>>(Expected<T>::NewChainFailure<U>(other));
   }
-};
-//---------------------------------------------------------//
-// EndTemplate:{Expected}
-//---------------------------------------------------------//
 
-//---------------------------------------------------------//
-// Template:{PartialExpected}
-// Brief:{
-// PartialExpected returns a value or an error message, but also allows for
-// an additional value which will always be passed along with the expected.
-// }
-//---------------------------------------------------------//
+ private:
+  std::optional<T> expected_{std::nullopt};
+  std::string error_{""};
+
+  constexpr Expected(T expected) : expected_(expected) {}
+  template <typename T>
+  constexpr Expected(const T& expected) : expected_(expected) {}
+
+#pragma warning( \
+    disable : 4100)  // Disable unused parameter warning for std::nullopt_t
+                     // Cannot be instantiated directly from type.
+  constexpr Expected(const std::nullopt_t& none, std::string error_message)
+      : expected_(std::nullopt), error_(error_message) {}
+#pragma warning(default : 4100)
+};
+
+/// @brief PartialExpected returns a value or an error message, but also allows
+///        for an additional value which will always be passed along with the
+///        expected.
+/// @tparam T Expected value type.
+/// @tparam AlwaysT Value type that is always returned.
 template <typename T, typename AlwaysT>
 class PartialExpected {
   AlwaysT always_;
@@ -208,13 +200,16 @@ class PartialExpected {
     return ret;
   }
 };
-//---------------------------------------------------------//
-// EndTemplate:{PartialExpected}
-//---------------------------------------------------------//
 
 };  // namespace cxx
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_EXTENDED_CPP_STANDARD_EXPECTED_H
+/// @} // end of cppmodule2_cppextended
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the Apache License, Version 2.0(the "License");
@@ -228,15 +223,4 @@ class PartialExpected {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: extended-cpp-standard
-// File: expected.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_EXTENDED_CPP_STANDARD_EXPECTED_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

@@ -1,34 +1,34 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the Apache License, Version 2.0(the "License");
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_lexer.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_compiler_lexer
+/// @brief C& Lexer/Tokenizer.
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cand_compiler_lexer
+/// @{
 #ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_LEXER_H
 #define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_LEXER_H
-//---------------------------------------------------------------------------//
-// Brief: C& Lexer/Tokenizer
-//---------------------------------------------------------------------------//
 #include "cppsextended.h"
-// Includes:
+// 
 #include "caoco_char_traits.h"
 #include "caoco_grammar.h"
 //
 #include "caoco_compiler_error.h"
 #include "caoco_token.h"
-//---------------------------------------------------------------------------//
 
 namespace caoco {
 
 using CharVector = std::vector<char>;
 using CharVectorCIter = CharVector::const_iterator;
+
+/// Lexer Object
 class Lexer {
  public:
   static constexpr char kEofChar = grammar::kEofChar;
@@ -36,8 +36,12 @@ class Lexer {
   using LexerResult = cxx::Expected<TkVector>;
   using LexerSourceLoc = std::tuple<size_t, size_t>;
 
+  /// @defgroup cand_compiler_lexer_interface Public Interface
+  /// @ingroup cand_compiler_lexer
+  /// 
+  /// Static methods for easy lexing of vectors or strings
+  /// @{
  public:
-  // Util static methods for easy lexing of vectors or strings
   static constexpr inline LexerResult Lex(CharVectorCIter beg,
                                           CharVectorCIter end) {
     Lexer lexer(beg, end);
@@ -65,7 +69,13 @@ class Lexer {
     }
     return Lex();
   }
+  /// @} // end of cand_compiler_lexer_interface
 
+  /// @defgroup cand_compiler_lexer_util Lexing Utils
+  /// @ingroup cand_compiler_lexer
+  /// 
+  /// Lexer's utility methods.
+  /// @{
  private:
   constexpr inline LexMethodResult Success(eTk type, CharVectorCIter beg_it,
                                            CharVectorCIter end_it);
@@ -155,7 +165,13 @@ class Lexer {
     // Calculate the character index within the line
     col = static_cast<std::size_t>(std::distance(last_newline, it));
   }
+  /// @} // end of cand_compiler_lexer_util
 
+  /// @defgroup cand_compiler_lexer_lex Lexing Methods
+  /// @ingroup cand_compiler_lexer
+  ///
+  /// Lexing methods.
+  /// @{
   // Lexers
   constexpr LexMethodResult LexSolidus(CharVectorCIter it);
   constexpr LexMethodResult LexQuotation(CharVectorCIter it);
@@ -174,9 +190,12 @@ class Lexer {
   constexpr LexMethodResult LexPeriod(CharVectorCIter it);
 
   constexpr LexerResult Lex();
+  /// @} // end of cand_compiler_lexer_lex
 
   // Members
+  /// Start of the source string.
   CharVectorCIter beg_;
+  /// End of the source string.
   CharVectorCIter end_;
 };
 
@@ -199,9 +218,8 @@ constexpr inline Lexer::LexMethodResult Lexer::FailureResult(
     CharVectorCIter beg_it, const std::string& error) {
   return LexMethodResult::Failure(beg_it, error);
 }
-
+/// kEofChar if it is anything but a valid iterator
 constexpr char Lexer::Get(CharVectorCIter it) const {
-  // kEofChar if it is anything but a valid iterator
   if (it >= end_) return kEofChar;
   if (it < beg_) return kEofChar;
   return *it;
@@ -212,10 +230,10 @@ constexpr char Lexer::Peek(CharVectorCIter it, int n) {
   return Get(it + n);
 }
 
+/// Searches forward for a complete match of characters. Starting from it,
+/// inclusive.
 constexpr bool Lexer::FindForward(CharVectorCIter it,
                                   std::string_view characters) const {
-  // Searches forward for a complete match of characters. Starting from it,
-  // inclusive.
   if (std::distance(it, end_) < static_cast<std::ptrdiff_t>(characters.size()))
     return false;  // Out of bounds cant match
   auto end = std::next(it, static_cast<std::ptrdiff_t>(characters.size()));
@@ -223,8 +241,8 @@ constexpr bool Lexer::FindForward(CharVectorCIter it,
   return false;
 }
 
+/// No checks performed. Use with caution.
 constexpr CharVectorCIter& Lexer::Advance(CharVectorCIter& it, int n) {
-  // No checks performed. Use with caution.
   std::advance(it, n);
   return it;
 }
@@ -673,7 +691,7 @@ constexpr Lexer::LexMethodResult Lexer::LexPeriod(CharVectorCIter it) {
   }
 }
 
-// Main tokenizer method
+/// Main tokenizer method
 constexpr Lexer::LexerResult Lexer::Lex() {
   using namespace caerr;
   CharVectorCIter it = Begin();
@@ -769,7 +787,14 @@ constexpr Lexer::LexerResult Lexer::Lex() {
 
 }  // namespace caoco
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_LEXER_H
+/// @} // end of cand_compiler_lexer
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the Apache License, Version 2.0(the "License");
@@ -783,15 +808,4 @@ constexpr Lexer::LexerResult Lexer::Lex() {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_lexer.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_LEXER_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

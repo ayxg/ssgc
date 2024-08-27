@@ -1,0 +1,119 @@
+\doxysection{cx\+\_\+itos.\+h}
+\hypertarget{cx__itos_8h_source}{}\label{cx__itos_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/submodules/extended-\/cpp-\/standard/cx\_itos.h@{C:/Users/Anton/source/repos/CandRuntime/submodules/extended-\/cpp-\/standard/cx\_itos.h}}
+\mbox{\hyperlink{cx__itos_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00001}00001\ \textcolor{comment}{///*\ License\ provided\ with\ file:}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00002}00002\ \textcolor{comment}{//\ *\ f\_to\_string.hpp\ -\/\ Provides\ compile-\/time\ floating-\/point-\/to-\/string\ conversion.}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00003}00003\ \textcolor{comment}{//\ *\ Written\ by\ Clyne\ Sullivan.}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00004}00004\ \textcolor{comment}{//\ *\ Modified\ by\ Anton\ Yashchenko\ for\ the\ C++\ Extended\ Standard\ Library.}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00005}00005\ \textcolor{comment}{//\ *\ https://github.com/tcsullivan/constexpr-\/to-\/string}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00006}00006\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00007}00007\ \textcolor{comment}{//This\ is\ free\ and\ unencumbered\ software\ released\ into\ the\ public\ domain.}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00008}00008\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00009}00009\ \textcolor{comment}{//Anyone\ is\ free\ to\ copy,\ modify,\ publish,\ use,\ compile,\ sell,\ or}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00010}00010\ \textcolor{comment}{//distribute\ this\ software,\ either\ in\ source\ code\ form\ or\ as\ a\ compiled}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00011}00011\ \textcolor{comment}{//binary,\ for\ any\ purpose,\ commercial\ or\ non-\/commercial,\ and\ by\ any}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00012}00012\ \textcolor{comment}{//means.}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00013}00013\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00014}00014\ \textcolor{comment}{//In\ jurisdictions\ that\ recognize\ copyright\ laws,\ the\ author\ or\ authors}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00015}00015\ \textcolor{comment}{//of\ this\ software\ dedicate\ any\ and\ all\ copyright\ interest\ in\ the}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00016}00016\ \textcolor{comment}{//software\ to\ the\ public\ domain.\ We\ make\ this\ dedication\ for\ the\ benefit}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00017}00017\ \textcolor{comment}{//of\ the\ public\ at\ large\ and\ to\ the\ detriment\ of\ our\ heirs\ and}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00018}00018\ \textcolor{comment}{//successors.\ We\ intend\ this\ dedication\ to\ be\ an\ overt\ act\ of}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00019}00019\ \textcolor{comment}{//relinquishment\ in\ perpetuity\ of\ all\ present\ and\ future\ rights\ to\ this}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00020}00020\ \textcolor{comment}{//software\ under\ copyright\ law.}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00021}00021\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00022}00022\ \textcolor{comment}{//THE\ SOFTWARE\ IS\ PROVIDED\ "{}AS\ IS"{},\ WITHOUT\ WARRANTY\ OF\ ANY\ KIND,}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00023}00023\ \textcolor{comment}{//EXPRESS\ OR\ IMPLIED,\ INCLUDING\ BUT\ NOT\ LIMITED\ TO\ THE\ WARRANTIES\ OF}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00024}00024\ \textcolor{comment}{//MERCHANTABILITY,\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE\ AND\ NONINFRINGEMENT.}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00025}00025\ \textcolor{comment}{//IN\ NO\ EVENT\ SHALL\ THE\ AUTHORS\ BE\ LIABLE\ FOR\ ANY\ CLAIM,\ DAMAGES\ OR}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00026}00026\ \textcolor{comment}{//OTHER\ LIABILITY,\ WHETHER\ IN\ AN\ ACTION\ OF\ CONTRACT,\ TORT\ OR\ OTHERWISE,}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00027}00027\ \textcolor{comment}{//ARISING\ FROM,\ OUT\ OF\ OR\ IN\ CONNECTION\ WITH\ THE\ SOFTWARE\ OR\ THE\ USE\ OR}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00028}00028\ \textcolor{comment}{//OTHER\ DEALINGS\ IN\ THE\ SOFTWARE.}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00029}00029\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00030}00030\ \textcolor{comment}{//For\ more\ information,\ please\ refer\ to\ <https://unlicense.org>}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00031}00031\ \textcolor{comment}{//*/}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00032}00032\ \textcolor{comment}{//\#ifndef\ HEADER\_GUARD\_CALE\_EXTENDED\_CPP\_STANDARD\_CX\_ITOS\_H}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00033}00033\ \textcolor{comment}{//\#define\ HEADER\_GUARD\_CALE\_EXTENDED\_CPP\_STANDARD\_CX\_ITOS\_H}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00034}00034\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00035}00035\ \textcolor{comment}{//\#include\ <cstdint>}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00036}00036\ \textcolor{comment}{//\#include\ <type\_traits>}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00037}00037\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00038}00038\ \textcolor{comment}{//namespace\ cxx\ \{}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00039}00039\ \textcolor{comment}{//namespace\ constexpr\_to\_string\ \{}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00040}00040\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00041}00041\ \textcolor{comment}{//constexpr\ char\ digits[]\ =\ "{}0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"{};}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00042}00042\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00043}00043\ \textcolor{comment}{///**}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00044}\mbox{\hyperlink{structto__string__t}{00044}}\ \textcolor{comment}{//\ *\ @struct\ to\_string\_t}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00045}00045\ \textcolor{comment}{//\ *\ @brief\ Provides\ the\ ability\ to\ convert\ any\ integral\ to\ a\ string\ at}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00046}00046\ \textcolor{comment}{//\ *\ compile-\/time.}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00047}00047\ \textcolor{comment}{//\ *\ @tparam\ N\ Number\ to\ convert}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00048}00048\ \textcolor{comment}{//\ *\ @tparam\ base\ Desired\ base,\ can\ be\ from\ 2\ to\ 36}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00049}00049\ \textcolor{comment}{//\ */}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00050}00050\ \textcolor{comment}{//template\ <std::intmax\_t\ N,\ int\ base,\ typename\ char\_type,}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00051}00051\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ std::enable\_if\_t<(base\ >\ 1\ \&\&\ base\ <\ sizeof(digits)),\ int>\ =\ 0>}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00052}00052\ \textcolor{comment}{//class\ to\_string\_t\ \{}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00053}00053\ \textcolor{comment}{//\ \ constexpr\ static\ auto\ buflen()\ noexcept\ \{}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00054}00054\ \textcolor{comment}{//\ \ \ \ unsigned\ int\ len\ =\ N\ >\ 0\ ?\ 1\ :\ 2;}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00055}00055\ \textcolor{comment}{//\ \ \ \ for\ (auto\ n\ =\ N;\ n;\ len++,\ n\ /=\ base)}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00056}00056\ \textcolor{comment}{//\ \ \ \ \ \ ;}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00057}00057\ \textcolor{comment}{//\ \ \ \ return\ len;}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00058}00058\ \textcolor{comment}{//\ \ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00059}00059\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00060}00060\ \textcolor{comment}{//\ \ char\_type\ buf[buflen()]\ =\ \{\};}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00061}00061\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00062}00062\ \textcolor{comment}{//\ public:}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00063}00063\ \textcolor{comment}{//\ \ /**}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00064}00064\ \textcolor{comment}{//\ \ \ *\ Constructs\ the\ object,\ filling\ \`{}buf`\ with\ the\ string\ representation\ of\ N.}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00065}00065\ \textcolor{comment}{//\ \ \ */}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00066}00066\ \textcolor{comment}{//\ \ constexpr\ to\_string\_t()\ noexcept\ \{}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00067}00067\ \textcolor{comment}{//\ \ \ \ auto\ ptr\ =\ end();}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00068}00068\ \textcolor{comment}{//\ \ \ \ *-\/-\/ptr\ =\ '\(\backslash\)0';}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00069}00069\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00070}00070\ \textcolor{comment}{//\ \ \ \ if\ (N\ !=\ 0)\ \{}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00071}00071\ \textcolor{comment}{//\ \ \ \ \ \ for\ (auto\ n\ =\ N;\ n;\ n\ /=\ base)}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00072}00072\ \textcolor{comment}{//\ \ \ \ \ \ \ \ *-\/-\/ptr\ =\ digits[(N\ <\ 0\ ?\ -\/1\ :\ 1)\ *\ (n\ \%\ base)];}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00073}00073\ \textcolor{comment}{//\ \ \ \ \ \ if\ (N\ <\ 0)\ *-\/-\/ptr\ =\ '-\/';}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00074}00074\ \textcolor{comment}{//\ \ \ \ \}\ else\ \{}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00075}00075\ \textcolor{comment}{//\ \ \ \ \ \ buf[0]\ =\ '0';}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00076}00076\ \textcolor{comment}{//\ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00077}00077\ \textcolor{comment}{//\ \ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00078}00078\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00079}00079\ \textcolor{comment}{//\ \ //\ Support\ implicit\ casting\ to\ \`{}char\ *`\ or\ \`{}const\ char\ *`.}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00080}00080\ \textcolor{comment}{//\ \ constexpr\ operator\ char\_type*()\ noexcept\ \{\ return\ buf;\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00081}00081\ \textcolor{comment}{//\ \ constexpr\ operator\ const\ char\_type*()\ const\ noexcept\ \{\ return\ buf;\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00082}00082\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00083}00083\ \textcolor{comment}{//\ \ constexpr\ auto\ size()\ const\ noexcept\ \{\ return\ sizeof(buf)\ /\ sizeof(buf[0]);\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00084}00084\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00085}00085\ \textcolor{comment}{//\ \ //\ Element\ access}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00086}00086\ \textcolor{comment}{//\ \ constexpr\ auto\ data()\ noexcept\ \{\ return\ buf;\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00087}00087\ \textcolor{comment}{//\ \ constexpr\ const\ auto\ data()\ const\ noexcept\ \{\ return\ buf;\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00088}00088\ \textcolor{comment}{//\ \ constexpr\ auto\&\ operator[](unsigned\ int\ i)\ noexcept\ \{\ return\ buf[i];\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00089}00089\ \textcolor{comment}{//\ \ constexpr\ const\ auto\&\ operator[](unsigned\ int\ i)\ const\ noexcept\ \{}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00090}00090\ \textcolor{comment}{//\ \ \ \ return\ buf[i];}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00091}00091\ \textcolor{comment}{//\ \ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00092}00092\ \textcolor{comment}{//\ \ constexpr\ auto\&\ front()\ noexcept\ \{\ return\ buf[0];\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00093}00093\ \textcolor{comment}{//\ \ constexpr\ const\ auto\&\ front()\ const\ noexcept\ \{\ return\ buf[0];\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00094}00094\ \textcolor{comment}{//\ \ constexpr\ auto\&\ back()\ noexcept\ \{\ return\ buf[size()\ -\/\ 1];\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00095}00095\ \textcolor{comment}{//\ \ constexpr\ const\ auto\&\ back()\ const\ noexcept\ \{\ return\ buf[size()\ -\/\ 1];\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00096}00096\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00097}00097\ \textcolor{comment}{//\ \ //\ Iterators}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00098}00098\ \textcolor{comment}{//\ \ constexpr\ auto\ begin()\ noexcept\ \{\ return\ buf;\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00099}00099\ \textcolor{comment}{//\ \ constexpr\ const\ auto\ begin()\ const\ noexcept\ \{\ return\ buf;\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00100}00100\ \textcolor{comment}{//\ \ constexpr\ auto\ end()\ noexcept\ \{\ return\ buf\ +\ size();\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00101}00101\ \textcolor{comment}{//\ \ constexpr\ const\ auto\ end()\ const\ noexcept\ \{\ return\ buf\ +\ size();\ \}}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00102}00102\ \textcolor{comment}{//\};}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00103}00103\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00104}00104\ \textcolor{comment}{//\}\ \ //\ namespace\ constexpr\_to\_string}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00105}00105\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00106}00106\ \textcolor{comment}{///**}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00107}00107\ \textcolor{comment}{//\ *\ Simplifies\ use\ of\ \`{}to\_string\_t`\ from\ \`{}to\_string\_t<N>()`\ to\ \`{}to\_string<N>`.}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00108}00108\ \textcolor{comment}{//\ */}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00109}00109\ \textcolor{comment}{//template\ <std::intmax\_t\ N,\ int\ base\ =\ 10,\ typename\ char\_type\ =\ char>}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00110}00110\ \textcolor{comment}{//constexpr\ constexpr\_to\_string::to\_string\_t<N,\ base,\ char\_type>\ cx\_itos;}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00111}00111\ \textcolor{comment}{//\}\ \ //\ namespace\ cxx}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00112}00112\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{cx__itos_8h_source_l00113}00113\ \textcolor{comment}{//\#endif\ \ //\ HEADER\_GUARD\_CALE\_EXTENDED\_CPP\_STANDARD\_CX\_ITOS\_H}}
+
+\end{DoxyCode}

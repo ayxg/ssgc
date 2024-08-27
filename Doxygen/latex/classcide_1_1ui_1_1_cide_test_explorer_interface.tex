@@ -1,0 +1,296 @@
+\doxysection{cide\+::ui\+::Cide\+Test\+Explorer\+Interface Class Reference}
+\hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface}{}\label{classcide_1_1ui_1_1_cide_test_explorer_interface}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+
+
+{\ttfamily \#include $<$cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h$>$}
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_1_1_test_module_result}{Test\+Module\+Result}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_acb780eecd12736291a7d6d47f5c3992b}{Display}} ()
+\item 
+void \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_a8a641fc0076d9b1829d7c1a652faf2f0}{Register\+Test\+Case}} (\mbox{\hyperlink{group__cand__cide__common_ga260628e6d9e0bf938db1ea2e2d435531}{Bool\+CallbackT}} test\+\_\+case, const std\+::string \&test\+\_\+module\+\_\+name)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_a8bf23aac354760dcdc093fe2a62c7cec}{Run\+Enabled\+Module\+Tests}} ()
+\item 
+void \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_ac2fc7c3f9202f843c47b3ae17b1d46aa}{Fill\+Modules\+Table\+Fail\+Row\+Data}} (size\+\_\+t \&style\+\_\+id, \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_1_1_test_module_result}{Test\+Module\+Result}} \&t\+\_\+module)
+\item 
+void \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_aeb0e6c5ab37441940498ee69ef635c73}{Fill\+Modules\+Table\+Pass\+Row\+Data}} (size\+\_\+t \&style\+\_\+id, \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_1_1_test_module_result}{Test\+Module\+Result}} \&t\+\_\+module)
+\item 
+void \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_adf3c02e67c4a2f5b1b7b2e056b4d1ffe}{Fill\+Checks\+Table\+Fail\+Row\+Data}} (size\+\_\+t \&style\+\_\+id, const \mbox{\hyperlink{structminitest_1_1_test_result}{minitest\+::\+Test\+Result}} \&t\+\_\+case)
+\item 
+void \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_a6c2bda4ae533caa1d95ab28f22fc5354}{Fill\+Checks\+Table\+Pass\+Row\+Data}} (size\+\_\+t \&style\+\_\+id, const \mbox{\hyperlink{structminitest_1_1_test_result}{minitest\+::\+Test\+Result}} \&t\+\_\+case)
+\item 
+void \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_a594259dafb4f3efb36a21f84f960a53a}{Display\+Toolbar}} ()
+\item 
+void \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_aaf8895fdf7028b88213ab0fe51a9c27b}{Display\+Modules\+Table}} ()
+\item 
+void \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_adb8778f79c733a950c7a85702dae4b9f}{Display\+Checks\+Table}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_a8ed7ad0eebaf5d441e58de32ff2aeaf0}{window\+\_\+width}}
+\item 
+float \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_a1aa4c5b06b321c0a006c785f40ceac04}{window\+\_\+height}}
+\item 
+vector$<$ \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_1_1_test_module_result}{Test\+Module\+Result}} $>$ \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_af8666226e5886efcb9132f206646c7ff}{registered\+\_\+test\+\_\+cases}} \{\}
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_ga612654ee516a2049629aaf3f5101e452}{Cgui\+Window}} \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_a4a1078ac857bbfa4c94a0ec2164e8f09}{test\+\_\+explorer\+\_\+window}} = \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_window_a84e2600ed0f169a9b5be69ea1048060a}{Cgui\+Window\+::\+Delayed}}("{}Test Explorer"{})
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_gad4cc007562ccb98bf1cf50ed57fd4bf1}{Cgui\+Button}} \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_a22723ff7ae219c86e2285825f408d929}{run\+\_\+all\+\_\+tests\+\_\+button}}
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_gad4cc007562ccb98bf1cf50ed57fd4bf1}{Cgui\+Button}} \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_ae460320764307a56672332e95fce593b}{flush\+\_\+results\+\_\+button}}
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_ga2ca689f132dc04bb1cd3c2f54e5afe4d}{Cgui\+Named\+Subcontext}} \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_acf577fb82c0ce3ab988600c2800205de}{toolbar\+\_\+context}}
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_ga2ca689f132dc04bb1cd3c2f54e5afe4d}{Cgui\+Named\+Subcontext}} \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_a703878c28e3d577b9059b3bda75fa37c}{modules\+\_\+context}}
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_ga2ca689f132dc04bb1cd3c2f54e5afe4d}{Cgui\+Named\+Subcontext}} \mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_ac9e53981c376792cf32980166c01a039}{test\+\_\+results\+\_\+context}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00026}{26}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_acb780eecd12736291a7d6d47f5c3992b}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!Display@{Display}}
+\index{Display@{Display}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{Display()}{Display()}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_acb780eecd12736291a7d6d47f5c3992b} 
+void cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::\+Display (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00063}{63}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_adb8778f79c733a950c7a85702dae4b9f}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!DisplayChecksTable@{DisplayChecksTable}}
+\index{DisplayChecksTable@{DisplayChecksTable}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{DisplayChecksTable()}{DisplayChecksTable()}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_adb8778f79c733a950c7a85702dae4b9f} 
+void cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::\+Display\+Checks\+Table (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00218}{218}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_aaf8895fdf7028b88213ab0fe51a9c27b}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!DisplayModulesTable@{DisplayModulesTable}}
+\index{DisplayModulesTable@{DisplayModulesTable}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{DisplayModulesTable()}{DisplayModulesTable()}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_aaf8895fdf7028b88213ab0fe51a9c27b} 
+void cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::\+Display\+Modules\+Table (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00196}{196}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_a594259dafb4f3efb36a21f84f960a53a}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!DisplayToolbar@{DisplayToolbar}}
+\index{DisplayToolbar@{DisplayToolbar}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{DisplayToolbar()}{DisplayToolbar()}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_a594259dafb4f3efb36a21f84f960a53a} 
+void cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::\+Display\+Toolbar (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00182}{182}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_adf3c02e67c4a2f5b1b7b2e056b4d1ffe}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!FillChecksTableFailRowData@{FillChecksTableFailRowData}}
+\index{FillChecksTableFailRowData@{FillChecksTableFailRowData}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{FillChecksTableFailRowData()}{FillChecksTableFailRowData()}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_adf3c02e67c4a2f5b1b7b2e056b4d1ffe} 
+void cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::\+Fill\+Checks\+Table\+Fail\+Row\+Data (\begin{DoxyParamCaption}\item[{size\+\_\+t \&}]{style\+\_\+id}{, }\item[{const \mbox{\hyperlink{structminitest_1_1_test_result}{minitest\+::\+Test\+Result}} \&}]{t\+\_\+case}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00124}{124}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_a6c2bda4ae533caa1d95ab28f22fc5354}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!FillChecksTablePassRowData@{FillChecksTablePassRowData}}
+\index{FillChecksTablePassRowData@{FillChecksTablePassRowData}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{FillChecksTablePassRowData()}{FillChecksTablePassRowData()}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_a6c2bda4ae533caa1d95ab28f22fc5354} 
+void cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::\+Fill\+Checks\+Table\+Pass\+Row\+Data (\begin{DoxyParamCaption}\item[{size\+\_\+t \&}]{style\+\_\+id}{, }\item[{const \mbox{\hyperlink{structminitest_1_1_test_result}{minitest\+::\+Test\+Result}} \&}]{t\+\_\+case}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00153}{153}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_ac2fc7c3f9202f843c47b3ae17b1d46aa}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!FillModulesTableFailRowData@{FillModulesTableFailRowData}}
+\index{FillModulesTableFailRowData@{FillModulesTableFailRowData}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{FillModulesTableFailRowData()}{FillModulesTableFailRowData()}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_ac2fc7c3f9202f843c47b3ae17b1d46aa} 
+void cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::\+Fill\+Modules\+Table\+Fail\+Row\+Data (\begin{DoxyParamCaption}\item[{size\+\_\+t \&}]{style\+\_\+id}{, }\item[{\mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_1_1_test_module_result}{Test\+Module\+Result}} \&}]{t\+\_\+module}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00088}{88}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_aeb0e6c5ab37441940498ee69ef635c73}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!FillModulesTablePassRowData@{FillModulesTablePassRowData}}
+\index{FillModulesTablePassRowData@{FillModulesTablePassRowData}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{FillModulesTablePassRowData()}{FillModulesTablePassRowData()}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_aeb0e6c5ab37441940498ee69ef635c73} 
+void cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::\+Fill\+Modules\+Table\+Pass\+Row\+Data (\begin{DoxyParamCaption}\item[{size\+\_\+t \&}]{style\+\_\+id}{, }\item[{\mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_1_1_test_module_result}{Test\+Module\+Result}} \&}]{t\+\_\+module}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00106}{106}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_a8a641fc0076d9b1829d7c1a652faf2f0}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!RegisterTestCase@{RegisterTestCase}}
+\index{RegisterTestCase@{RegisterTestCase}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{RegisterTestCase()}{RegisterTestCase()}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_a8a641fc0076d9b1829d7c1a652faf2f0} 
+void cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::\+Register\+Test\+Case (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__cide__common_ga260628e6d9e0bf938db1ea2e2d435531}{Bool\+CallbackT}}}]{test\+\_\+case}{, }\item[{const std\+::string \&}]{test\+\_\+module\+\_\+name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00075}{75}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_a8bf23aac354760dcdc093fe2a62c7cec}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!RunEnabledModuleTests@{RunEnabledModuleTests}}
+\index{RunEnabledModuleTests@{RunEnabledModuleTests}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{RunEnabledModuleTests()}{RunEnabledModuleTests()}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_a8bf23aac354760dcdc093fe2a62c7cec} 
+void cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::\+Run\+Enabled\+Module\+Tests (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00082}{82}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_ae460320764307a56672332e95fce593b}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!flush\_results\_button@{flush\_results\_button}}
+\index{flush\_results\_button@{flush\_results\_button}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{flush\_results\_button}{flush\_results\_button}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_ae460320764307a56672332e95fce593b} 
+\mbox{\hyperlink{group__cand__cide__cgui_gad4cc007562ccb98bf1cf50ed57fd4bf1}{Cgui\+Button}} cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::flush\+\_\+results\+\_\+button\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \ \ \textcolor{stringliteral}{"{}Flush\ Results"{}},\ \{\},\ \mbox{\hyperlink{namespacecgui_a79f511149d5c2e46e93904c5c462ba1baeaf1b571da7747037056255592479bb9}{cgui::kWidgetInitDelayed}}\}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00253}{253}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_a703878c28e3d577b9059b3bda75fa37c}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!modules\_context@{modules\_context}}
+\index{modules\_context@{modules\_context}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{modules\_context}{modules\_context}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_a703878c28e3d577b9059b3bda75fa37c} 
+\mbox{\hyperlink{group__cand__cide__cgui_ga2ca689f132dc04bb1cd3c2f54e5afe4d}{Cgui\+Named\+Subcontext}} cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::modules\+\_\+context\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\ \ \ \ \ \ \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_named_subcontext_acebb85144aa0fa96b3da70ea74920e2a}{CguiNamedSubcontext::Delayed}}(\textcolor{stringliteral}{"{}testmodules"{}})}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00259}{259}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_af8666226e5886efcb9132f206646c7ff}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!registered\_test\_cases@{registered\_test\_cases}}
+\index{registered\_test\_cases@{registered\_test\_cases}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{registered\_test\_cases}{registered\_test\_cases}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_af8666226e5886efcb9132f206646c7ff} 
+vector$<$\mbox{\hyperlink{classcide_1_1ui_1_1_cide_test_explorer_interface_1_1_test_module_result}{Test\+Module\+Result}}$>$ cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::registered\+\_\+test\+\_\+cases \{\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00249}{249}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_a22723ff7ae219c86e2285825f408d929}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!run\_all\_tests\_button@{run\_all\_tests\_button}}
+\index{run\_all\_tests\_button@{run\_all\_tests\_button}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{run\_all\_tests\_button}{run\_all\_tests\_button}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_a22723ff7ae219c86e2285825f408d929} 
+\mbox{\hyperlink{group__cand__cide__cgui_gad4cc007562ccb98bf1cf50ed57fd4bf1}{Cgui\+Button}} cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::run\+\_\+all\+\_\+tests\+\_\+button\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \ \ \textcolor{stringliteral}{"{}Run\ All\ Tests"{}},\ \{\},\ \mbox{\hyperlink{namespacecgui_a79f511149d5c2e46e93904c5c462ba1baeaf1b571da7747037056255592479bb9}{cgui::kWidgetInitDelayed}}\}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00251}{251}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_a4a1078ac857bbfa4c94a0ec2164e8f09}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!test\_explorer\_window@{test\_explorer\_window}}
+\index{test\_explorer\_window@{test\_explorer\_window}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{test\_explorer\_window}{test\_explorer\_window}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_a4a1078ac857bbfa4c94a0ec2164e8f09} 
+\mbox{\hyperlink{group__cand__cide__cgui_ga612654ee516a2049629aaf3f5101e452}{Cgui\+Window}} cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::test\+\_\+explorer\+\_\+window = \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_window_a84e2600ed0f169a9b5be69ea1048060a}{Cgui\+Window\+::\+Delayed}}("{}Test Explorer"{})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00250}{250}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_ac9e53981c376792cf32980166c01a039}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!test\_results\_context@{test\_results\_context}}
+\index{test\_results\_context@{test\_results\_context}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{test\_results\_context}{test\_results\_context}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_ac9e53981c376792cf32980166c01a039} 
+\mbox{\hyperlink{group__cand__cide__cgui_ga2ca689f132dc04bb1cd3c2f54e5afe4d}{Cgui\+Named\+Subcontext}} cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::test\+\_\+results\+\_\+context\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\ \ \ \ \ \ \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_named_subcontext_acebb85144aa0fa96b3da70ea74920e2a}{CguiNamedSubcontext::Delayed}}(\textcolor{stringliteral}{"{}testchecks"{}})}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00261}{261}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_acf577fb82c0ce3ab988600c2800205de}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!toolbar\_context@{toolbar\_context}}
+\index{toolbar\_context@{toolbar\_context}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{toolbar\_context}{toolbar\_context}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_acf577fb82c0ce3ab988600c2800205de} 
+\mbox{\hyperlink{group__cand__cide__cgui_ga2ca689f132dc04bb1cd3c2f54e5afe4d}{Cgui\+Named\+Subcontext}} cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::toolbar\+\_\+context\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\ \ \ \ \ \ \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_named_subcontext_acebb85144aa0fa96b3da70ea74920e2a}{CguiNamedSubcontext::Delayed}}(\textcolor{stringliteral}{"{}testtoolbar"{}})}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00256}{256}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_a1aa4c5b06b321c0a006c785f40ceac04}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!window\_height@{window\_height}}
+\index{window\_height@{window\_height}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{window\_height}{window\_height}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_a1aa4c5b06b321c0a006c785f40ceac04} 
+float cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::window\+\_\+height\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00247}{247}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+\Hypertarget{classcide_1_1ui_1_1_cide_test_explorer_interface_a8ed7ad0eebaf5d441e58de32ff2aeaf0}\index{cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}!window\_width@{window\_width}}
+\index{window\_width@{window\_width}!cide::ui::CideTestExplorerInterface@{cide::ui::CideTestExplorerInterface}}
+\doxysubsubsection{\texorpdfstring{window\_width}{window\_width}}
+{\footnotesize\ttfamily \label{classcide_1_1ui_1_1_cide_test_explorer_interface_a8ed7ad0eebaf5d441e58de32ff2aeaf0} 
+float cide\+::ui\+::\+Cide\+Test\+Explorer\+Interface\+::window\+\_\+width\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source_l00246}{246}} of file \mbox{\hyperlink{cide__ui__cpp__test__explorer_8h_source}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/ide/\mbox{\hyperlink{cide__ui__cpp__test__explorer_8h}{cide\+\_\+ui\+\_\+cpp\+\_\+test\+\_\+explorer.\+h}}\end{DoxyCompactItemize}

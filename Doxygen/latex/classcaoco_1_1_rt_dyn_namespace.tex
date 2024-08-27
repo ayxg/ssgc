@@ -1,0 +1,491 @@
+\doxysection{caoco\+::Rt\+Dyn\+Namespace Class Reference}
+\hypertarget{classcaoco_1_1_rt_dyn_namespace}{}\label{classcaoco_1_1_rt_dyn_namespace}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+
+
+{\ttfamily \#include $<$caoco\+\_\+rtval.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994}{e\+Category}} \{ \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994a7934d40c7c17315d892e8d5d745b1c66}{k\+Undefined}}
+, \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994aa28886f1e6b46d18364aa513e58413c7}{k\+Namespace}}
+, \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994aca5f49c58b1ea579a3ed3e0bc6a0d176}{k\+Class}}
+, \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994a53bd3be702935175a01da237d5083537}{k\+Global}}
+ \}
+\item 
+using \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a6cdb2680cdfa5fda8b2540a8f27eba81}{Expected\+Rt\+Val\+Ptr}} = \mbox{\hyperlink{classcaoco_1_1_named_rt_val_set_a0cb2078ae67eb168b0fbc016c4eb8367}{Named\+Rt\+Val\+Set\+::\+Expected\+Rt\+Val\+Ptr}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+constexpr \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994}{e\+Category}} \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_accfcfdfe03c51a3bd05c5c8344d90b24}{Category}} () const
+\item 
+constexpr size\+\_\+t \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a121a9d623f43d73888811a54b7833052}{Rtti}} () const
+\item 
+constexpr string\+\_\+view \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_afffe04820133b88bfaed8ce0092d4b95}{Name}} () const
+\item 
+constexpr \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \& \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a9d061aac136c616aa44ea2d7cdbf241a}{Parent}} ()
+\item 
+constexpr const \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \& \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a69a76d41ca76f11b4af40e9ed687f2c0}{Parent}} () const
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_ab320dc56c1dc10b450dd56299bb67976}{Is\+Undefined}} () const
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a9d954cc72f572fa37a92afc7cf4da4aa}{Is\+Namespace}} () const
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_ac44191548d345c9626d770cc42266d61}{Is\+Class}} () const
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aba0ce755697c545a5130bf9e14091b6b}{Is\+Global}} () const
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a0faea223b2be94e288dc9b5449b659f4}{Add\+Instance\+Decl}} (const \mbox{\hyperlink{classcaoco_1_1_named_rt_val}{Named\+Rt\+Val}} \&named\+\_\+val)
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a043e1d055614188f87749520b0574f50}{Add\+Instance\+Decl}} (\mbox{\hyperlink{classcaoco_1_1_named_rt_val}{Named\+Rt\+Val}} \&\&named\+\_\+val)
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a07b9f6a57b2a91bec45ff019be58b357}{Add\+Instance\+Decl}} (const string\+\_\+view \&name, \mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \&value)
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_ac9336a834655a6f6f88f8866c0fa3140}{Add\+Decl}} (const \mbox{\hyperlink{classcaoco_1_1_named_rt_val}{Named\+Rt\+Val}} \&named\+\_\+val)
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a32b2a69fdce06bc7d09cf4643a844b1d}{Add\+Decl}} (\mbox{\hyperlink{classcaoco_1_1_named_rt_val}{Named\+Rt\+Val}} \&\&named\+\_\+val)
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a1dc250622b276fd2816383bb36bce63d}{Add\+Decl}} (const string\+\_\+view \&name, \mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \&value)
+\item 
+constexpr const \mbox{\hyperlink{classcaoco_1_1_named_rt_val_set}{Named\+Rt\+Val\+Set}} \& \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a7ac5540518bb3ec99e1550caea5d9e31}{Instance\+Decls}} () const
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a4594efb46a760a47922eaac9a3cbaf59}{Contains\+Local}} (const string\+\_\+view \&name) const
+\item 
+constexpr \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a6cdb2680cdfa5fda8b2540a8f27eba81}{Expected\+Rt\+Val\+Ptr}} \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a1317a8870667627ef2c2725741e9175f}{Resolve\+Local}} (const string\+\_\+view \&name)
+\item 
+constexpr \mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \& \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a5e6eb80fc58dad307d86385d074a9436}{Resolve\+Local\+Unchecked}} (const string\+\_\+view \&name)
+\item 
+constexpr bool \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_ae17735db036355cdd1412202bc5ef07e}{Contains}} (const string\+\_\+view \&name) const
+\item 
+constexpr \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a6cdb2680cdfa5fda8b2540a8f27eba81}{Expected\+Rt\+Val\+Ptr}} \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa4e0e4262dea0bfd58f9fcff1bedc7a7}{Resolve}} (const string\+\_\+view \&name)
+\item 
+constexpr \mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \& \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a9c1ea56ed4fa4f0d41c6fb429157e267}{Resolve\+Unchecked}} (const string\+\_\+view \&name)
+\item 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a33b33dbf26aaa8638e65fcadeac3cdb6}{Rt\+Dyn\+Namespace}} ()=default
+\item 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a5f29d5ca466262762276454f562db01c}{Rt\+Dyn\+Namespace}} (const \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \&)=default
+\item 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa19b8fa3d0c34ae8af67c0f435a27eb5}{Rt\+Dyn\+Namespace}} (\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \&\&)=default
+\item 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \& \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_ad433933f074851abcbd01d72e323d7cc}{operator=}} (const \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \&)=default
+\item 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \& \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa6fc05276c257bdae37c8ee99d12e9e7}{operator=}} (\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \&\&)=default
+\item 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_ab51da5c378c0897cb14ffbaec5b77424}{Rt\+Dyn\+Namespace}} (const string\+\_\+view \&name)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a1da18c28c41c811ecc363507832ecdac}{g\+Static\+Undefined\+Namespace}} \{\}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994}{e\+Category}} \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_ab9c7374093f3e952deaade1ed4f49d0c}{category\+\_\+}} \{\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994a7934d40c7c17315d892e8d5d745b1c66}{e\+Category\+::k\+Undefined}}\}
+\item 
+size\+\_\+t \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a53b073125b6df100185123f256637836}{rtti\+\_\+}} \{\mbox{\hyperlink{namespacecaoco_ad35e3bae4fa83b156dac59505e196649}{k\+Undefined\+Rtti}}\}
+\item 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a51692b613449e7a05f5d8b076d265da0}{parent\+\_\+}} \{nullptr\}
+\item 
+string\+\_\+view \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_ad846cced8845de3a96a2e74c19ed0ea2}{name\+\_\+}} \{\mbox{\hyperlink{namespacecaoco_aed346e234ddfb0a2476d2f439799de99}{k\+Undefined\+Namespace\+Name}}\}
+\item 
+\mbox{\hyperlink{classcaoco_1_1_named_rt_val_set}{Named\+Rt\+Val\+Set}} \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a28251539b43ef4d0589b83c207ecf955}{decls\+\_\+}}
+\item 
+\mbox{\hyperlink{classcaoco_1_1_named_rt_val_set}{Named\+Rt\+Val\+Set}} \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_af0b422765c364db50a1b6af2cb58e0ad}{instance\+\_\+decls\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00508}{508}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+
+
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a6cdb2680cdfa5fda8b2540a8f27eba81}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!ExpectedRtValPtr@{ExpectedRtValPtr}}
+\index{ExpectedRtValPtr@{ExpectedRtValPtr}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{ExpectedRtValPtr}{ExpectedRtValPtr}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a6cdb2680cdfa5fda8b2540a8f27eba81} 
+using \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a6cdb2680cdfa5fda8b2540a8f27eba81}{caoco\+::\+Rt\+Dyn\+Namespace\+::\+Expected\+Rt\+Val\+Ptr}} = \mbox{\hyperlink{classcaoco_1_1_named_rt_val_set_a0cb2078ae67eb168b0fbc016c4eb8367}{Named\+Rt\+Val\+Set\+::\+Expected\+Rt\+Val\+Ptr}}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00510}{510}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+
+
+\doxysubsection{Member Enumeration Documentation}
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!eCategory@{eCategory}}
+\index{eCategory@{eCategory}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{eCategory}{eCategory}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994} 
+enum class \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994}{caoco\+::\+Rt\+Dyn\+Namespace\+::e\+Category}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kUndefined@{kUndefined}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!kUndefined@{kUndefined}}}\Hypertarget{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994a7934d40c7c17315d892e8d5d745b1c66}\label{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994} 
+k\+Undefined&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kNamespace@{kNamespace}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!kNamespace@{kNamespace}}}\Hypertarget{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994aa28886f1e6b46d18364aa513e58413c7}\label{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994} 
+k\+Namespace&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kClass@{kClass}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!kClass@{kClass}}}\Hypertarget{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994aca5f49c58b1ea579a3ed3e0bc6a0d176}\label{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994} 
+k\+Class&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kGlobal@{kGlobal}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!kGlobal@{kGlobal}}}\Hypertarget{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994a53bd3be702935175a01da237d5083537}\label{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994} 
+k\+Global&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00512}{512}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a33b33dbf26aaa8638e65fcadeac3cdb6}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!RtDynNamespace@{RtDynNamespace}}
+\index{RtDynNamespace@{RtDynNamespace}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{RtDynNamespace()}{RtDynNamespace()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a33b33dbf26aaa8638e65fcadeac3cdb6} 
+caoco\+::\+Rt\+Dyn\+Namespace\+::\+Rt\+Dyn\+Namespace (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a5f29d5ca466262762276454f562db01c}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!RtDynNamespace@{RtDynNamespace}}
+\index{RtDynNamespace@{RtDynNamespace}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{RtDynNamespace()}{RtDynNamespace()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a5f29d5ca466262762276454f562db01c} 
+caoco\+::\+Rt\+Dyn\+Namespace\+::\+Rt\+Dyn\+Namespace (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \&}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_aa19b8fa3d0c34ae8af67c0f435a27eb5}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!RtDynNamespace@{RtDynNamespace}}
+\index{RtDynNamespace@{RtDynNamespace}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{RtDynNamespace()}{RtDynNamespace()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_aa19b8fa3d0c34ae8af67c0f435a27eb5} 
+caoco\+::\+Rt\+Dyn\+Namespace\+::\+Rt\+Dyn\+Namespace (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \&\&}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_ab51da5c378c0897cb14ffbaec5b77424}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!RtDynNamespace@{RtDynNamespace}}
+\index{RtDynNamespace@{RtDynNamespace}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{RtDynNamespace()}{RtDynNamespace()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_ab51da5c378c0897cb14ffbaec5b77424} 
+caoco\+::\+Rt\+Dyn\+Namespace\+::\+Rt\+Dyn\+Namespace (\begin{DoxyParamCaption}\item[{const string\+\_\+view \&}]{name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00622}{622}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_ac9336a834655a6f6f88f8866c0fa3140}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!AddDecl@{AddDecl}}
+\index{AddDecl@{AddDecl}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{AddDecl()}{AddDecl()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_ac9336a834655a6f6f88f8866c0fa3140} 
+bool caoco\+::\+Rt\+Dyn\+Namespace\+::\+Add\+Decl (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_named_rt_val}{Named\+Rt\+Val}} \&}]{named\+\_\+val}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00554}{554}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a1dc250622b276fd2816383bb36bce63d}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!AddDecl@{AddDecl}}
+\index{AddDecl@{AddDecl}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{AddDecl()}{AddDecl()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a1dc250622b276fd2816383bb36bce63d} 
+bool caoco\+::\+Rt\+Dyn\+Namespace\+::\+Add\+Decl (\begin{DoxyParamCaption}\item[{const string\+\_\+view \&}]{name}{, }\item[{\mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \&}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00562}{562}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a32b2a69fdce06bc7d09cf4643a844b1d}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!AddDecl@{AddDecl}}
+\index{AddDecl@{AddDecl}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{AddDecl()}{AddDecl()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a32b2a69fdce06bc7d09cf4643a844b1d} 
+bool caoco\+::\+Rt\+Dyn\+Namespace\+::\+Add\+Decl (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_named_rt_val}{Named\+Rt\+Val}} \&\&}]{named\+\_\+val}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00558}{558}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a0faea223b2be94e288dc9b5449b659f4}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!AddInstanceDecl@{AddInstanceDecl}}
+\index{AddInstanceDecl@{AddInstanceDecl}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{AddInstanceDecl()}{AddInstanceDecl()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a0faea223b2be94e288dc9b5449b659f4} 
+bool caoco\+::\+Rt\+Dyn\+Namespace\+::\+Add\+Instance\+Decl (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_named_rt_val}{Named\+Rt\+Val}} \&}]{named\+\_\+val}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00542}{542}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a07b9f6a57b2a91bec45ff019be58b357}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!AddInstanceDecl@{AddInstanceDecl}}
+\index{AddInstanceDecl@{AddInstanceDecl}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{AddInstanceDecl()}{AddInstanceDecl()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a07b9f6a57b2a91bec45ff019be58b357} 
+bool caoco\+::\+Rt\+Dyn\+Namespace\+::\+Add\+Instance\+Decl (\begin{DoxyParamCaption}\item[{const string\+\_\+view \&}]{name}{, }\item[{\mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \&}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00550}{550}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a043e1d055614188f87749520b0574f50}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!AddInstanceDecl@{AddInstanceDecl}}
+\index{AddInstanceDecl@{AddInstanceDecl}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{AddInstanceDecl()}{AddInstanceDecl()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a043e1d055614188f87749520b0574f50} 
+bool caoco\+::\+Rt\+Dyn\+Namespace\+::\+Add\+Instance\+Decl (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_named_rt_val}{Named\+Rt\+Val}} \&\&}]{named\+\_\+val}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00546}{546}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_accfcfdfe03c51a3bd05c5c8344d90b24}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!Category@{Category}}
+\index{Category@{Category}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{Category()}{Category()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_accfcfdfe03c51a3bd05c5c8344d90b24} 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994}{e\+Category}} caoco\+::\+Rt\+Dyn\+Namespace\+::\+Category (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00519}{519}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_ae17735db036355cdd1412202bc5ef07e}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!Contains@{Contains}}
+\index{Contains@{Contains}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{Contains()}{Contains()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_ae17735db036355cdd1412202bc5ef07e} 
+bool caoco\+::\+Rt\+Dyn\+Namespace\+::\+Contains (\begin{DoxyParamCaption}\item[{const string\+\_\+view \&}]{name}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00584}{584}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a4594efb46a760a47922eaac9a3cbaf59}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!ContainsLocal@{ContainsLocal}}
+\index{ContainsLocal@{ContainsLocal}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{ContainsLocal()}{ContainsLocal()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a4594efb46a760a47922eaac9a3cbaf59} 
+bool caoco\+::\+Rt\+Dyn\+Namespace\+::\+Contains\+Local (\begin{DoxyParamCaption}\item[{const string\+\_\+view \&}]{name}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00571}{571}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a7ac5540518bb3ec99e1550caea5d9e31}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!InstanceDecls@{InstanceDecls}}
+\index{InstanceDecls@{InstanceDecls}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{InstanceDecls()}{InstanceDecls()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a7ac5540518bb3ec99e1550caea5d9e31} 
+const \mbox{\hyperlink{classcaoco_1_1_named_rt_val_set}{Named\+Rt\+Val\+Set}} \& caoco\+::\+Rt\+Dyn\+Namespace\+::\+Instance\+Decls (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00567}{567}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_ac44191548d345c9626d770cc42266d61}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!IsClass@{IsClass}}
+\index{IsClass@{IsClass}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{IsClass()}{IsClass()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_ac44191548d345c9626d770cc42266d61} 
+bool caoco\+::\+Rt\+Dyn\+Namespace\+::\+Is\+Class (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00539}{539}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_aba0ce755697c545a5130bf9e14091b6b}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!IsGlobal@{IsGlobal}}
+\index{IsGlobal@{IsGlobal}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{IsGlobal()}{IsGlobal()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_aba0ce755697c545a5130bf9e14091b6b} 
+bool caoco\+::\+Rt\+Dyn\+Namespace\+::\+Is\+Global (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00540}{540}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a9d954cc72f572fa37a92afc7cf4da4aa}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!IsNamespace@{IsNamespace}}
+\index{IsNamespace@{IsNamespace}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{IsNamespace()}{IsNamespace()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a9d954cc72f572fa37a92afc7cf4da4aa} 
+bool caoco\+::\+Rt\+Dyn\+Namespace\+::\+Is\+Namespace (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00536}{536}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_ab320dc56c1dc10b450dd56299bb67976}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!IsUndefined@{IsUndefined}}
+\index{IsUndefined@{IsUndefined}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{IsUndefined()}{IsUndefined()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_ab320dc56c1dc10b450dd56299bb67976} 
+bool caoco\+::\+Rt\+Dyn\+Namespace\+::\+Is\+Undefined (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00533}{533}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_afffe04820133b88bfaed8ce0092d4b95}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!Name@{Name}}
+\index{Name@{Name}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{Name()}{Name()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_afffe04820133b88bfaed8ce0092d4b95} 
+string\+\_\+view caoco\+::\+Rt\+Dyn\+Namespace\+::\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00521}{521}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_ad433933f074851abcbd01d72e323d7cc}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!operator=@{operator=}}
+\index{operator=@{operator=}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_ad433933f074851abcbd01d72e323d7cc} 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \& caoco\+::\+Rt\+Dyn\+Namespace\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \&}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_aa6fc05276c257bdae37c8ee99d12e9e7}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!operator=@{operator=}}
+\index{operator=@{operator=}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_aa6fc05276c257bdae37c8ee99d12e9e7} 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \& caoco\+::\+Rt\+Dyn\+Namespace\+::operator= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \&\&}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a9d061aac136c616aa44ea2d7cdbf241a}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!Parent@{Parent}}
+\index{Parent@{Parent}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{Parent()}{Parent()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a9d061aac136c616aa44ea2d7cdbf241a} 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \& caoco\+::\+Rt\+Dyn\+Namespace\+::\+Parent (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00525}{525}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a69a76d41ca76f11b4af40e9ed687f2c0}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!Parent@{Parent}}
+\index{Parent@{Parent}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{Parent()}{Parent()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a69a76d41ca76f11b4af40e9ed687f2c0} 
+const \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} \& caoco\+::\+Rt\+Dyn\+Namespace\+::\+Parent (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00529}{529}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_aa4e0e4262dea0bfd58f9fcff1bedc7a7}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!Resolve@{Resolve}}
+\index{Resolve@{Resolve}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{Resolve()}{Resolve()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_aa4e0e4262dea0bfd58f9fcff1bedc7a7} 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a6cdb2680cdfa5fda8b2540a8f27eba81}{Expected\+Rt\+Val\+Ptr}} caoco\+::\+Rt\+Dyn\+Namespace\+::\+Resolve (\begin{DoxyParamCaption}\item[{const string\+\_\+view \&}]{name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00592}{592}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a1317a8870667627ef2c2725741e9175f}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!ResolveLocal@{ResolveLocal}}
+\index{ResolveLocal@{ResolveLocal}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{ResolveLocal()}{ResolveLocal()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a1317a8870667627ef2c2725741e9175f} 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_a6cdb2680cdfa5fda8b2540a8f27eba81}{Expected\+Rt\+Val\+Ptr}} caoco\+::\+Rt\+Dyn\+Namespace\+::\+Resolve\+Local (\begin{DoxyParamCaption}\item[{const string\+\_\+view \&}]{name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00575}{575}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a5e6eb80fc58dad307d86385d074a9436}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!ResolveLocalUnchecked@{ResolveLocalUnchecked}}
+\index{ResolveLocalUnchecked@{ResolveLocalUnchecked}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{ResolveLocalUnchecked()}{ResolveLocalUnchecked()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a5e6eb80fc58dad307d86385d074a9436} 
+\mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \& caoco\+::\+Rt\+Dyn\+Namespace\+::\+Resolve\+Local\+Unchecked (\begin{DoxyParamCaption}\item[{const string\+\_\+view \&}]{name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00580}{580}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a9c1ea56ed4fa4f0d41c6fb429157e267}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!ResolveUnchecked@{ResolveUnchecked}}
+\index{ResolveUnchecked@{ResolveUnchecked}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{ResolveUnchecked()}{ResolveUnchecked()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a9c1ea56ed4fa4f0d41c6fb429157e267} 
+\mbox{\hyperlink{classcaoco_1_1_rt_val}{Rt\+Val}} \& caoco\+::\+Rt\+Dyn\+Namespace\+::\+Resolve\+Unchecked (\begin{DoxyParamCaption}\item[{const string\+\_\+view \&}]{name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00607}{607}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a121a9d623f43d73888811a54b7833052}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!Rtti@{Rtti}}
+\index{Rtti@{Rtti}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{Rtti()}{Rtti()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a121a9d623f43d73888811a54b7833052} 
+size\+\_\+t caoco\+::\+Rt\+Dyn\+Namespace\+::\+Rtti (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00520}{520}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_ab9c7374093f3e952deaade1ed4f49d0c}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!category\_@{category\_}}
+\index{category\_@{category\_}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{category\_}{category\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_ab9c7374093f3e952deaade1ed4f49d0c} 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994}{e\+Category}} caoco\+::\+Rt\+Dyn\+Namespace\+::category\+\_\+ \{\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace_aa1ee6dcf88cd22862f8a1ef77c192994a7934d40c7c17315d892e8d5d745b1c66}{e\+Category\+::k\+Undefined}}\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00626}{626}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a28251539b43ef4d0589b83c207ecf955}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!decls\_@{decls\_}}
+\index{decls\_@{decls\_}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{decls\_}{decls\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a28251539b43ef4d0589b83c207ecf955} 
+\mbox{\hyperlink{classcaoco_1_1_named_rt_val_set}{Named\+Rt\+Val\+Set}} caoco\+::\+Rt\+Dyn\+Namespace\+::decls\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00630}{630}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a1da18c28c41c811ecc363507832ecdac}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!gStaticUndefinedNamespace@{gStaticUndefinedNamespace}}
+\index{gStaticUndefinedNamespace@{gStaticUndefinedNamespace}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{gStaticUndefinedNamespace}{gStaticUndefinedNamespace}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a1da18c28c41c811ecc363507832ecdac} 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}} caoco\+::\+Rt\+Dyn\+Namespace\+::g\+Static\+Undefined\+Namespace \{\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00516}{516}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_af0b422765c364db50a1b6af2cb58e0ad}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!instance\_decls\_@{instance\_decls\_}}
+\index{instance\_decls\_@{instance\_decls\_}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{instance\_decls\_}{instance\_decls\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_af0b422765c364db50a1b6af2cb58e0ad} 
+\mbox{\hyperlink{classcaoco_1_1_named_rt_val_set}{Named\+Rt\+Val\+Set}} caoco\+::\+Rt\+Dyn\+Namespace\+::instance\+\_\+decls\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00631}{631}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_ad846cced8845de3a96a2e74c19ed0ea2}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!name\_@{name\_}}
+\index{name\_@{name\_}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{name\_}{name\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_ad846cced8845de3a96a2e74c19ed0ea2} 
+string\+\_\+view caoco\+::\+Rt\+Dyn\+Namespace\+::name\+\_\+ \{\mbox{\hyperlink{namespacecaoco_aed346e234ddfb0a2476d2f439799de99}{k\+Undefined\+Namespace\+Name}}\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00629}{629}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a51692b613449e7a05f5d8b076d265da0}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!parent\_@{parent\_}}
+\index{parent\_@{parent\_}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{parent\_}{parent\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a51692b613449e7a05f5d8b076d265da0} 
+\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}}\texorpdfstring{$\ast$}{*} caoco\+::\+Rt\+Dyn\+Namespace\+::parent\+\_\+ \{nullptr\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00628}{628}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+\Hypertarget{classcaoco_1_1_rt_dyn_namespace_a53b073125b6df100185123f256637836}\index{caoco::RtDynNamespace@{caoco::RtDynNamespace}!rtti\_@{rtti\_}}
+\index{rtti\_@{rtti\_}!caoco::RtDynNamespace@{caoco::RtDynNamespace}}
+\doxysubsubsection{\texorpdfstring{rtti\_}{rtti\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_rt_dyn_namespace_a53b073125b6df100185123f256637836} 
+size\+\_\+t caoco\+::\+Rt\+Dyn\+Namespace\+::rtti\+\_\+ \{\mbox{\hyperlink{namespacecaoco_ad35e3bae4fa83b156dac59505e196649}{k\+Undefined\+Rtti}}\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__rtval_8h_source_l00627}{627}} of file \mbox{\hyperlink{caoco__rtval_8h_source}{caoco\+\_\+rtval.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/\mbox{\hyperlink{caoco__rtval_8h}{caoco\+\_\+rtval.\+h}}\end{DoxyCompactItemize}

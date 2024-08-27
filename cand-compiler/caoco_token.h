@@ -1,45 +1,37 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the Apache License, Version 2.0(the "License");
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_token.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_compiler_data
+/// @brief C& source token object.
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cand_compiler_data
+/// @{
 #ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_H
 #define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_H
-//---------------------------------------------------------------------------//
-// Brief: brief
-//---------------------------------------------------------------------------//
+
 #include "cppsextended.h"
 // Includes:
 #include "caoco_grammar.h"
-//---------------------------------------------------------------------------//
 
-//---------------------------------------------------------------------------//
-// Namespace:{caoco}
-//---------------------------------------------------------------------------//
 namespace caoco {
-//---------------------------------------------------------------------------//
+
 class Tk;
 using TkVector = std::vector<Tk>;
 using TkVectorIter = TkVector::iterator;
 using TkVectorConstIter = TkVector::const_iterator;
 
-//---------------------------------------------------------//
-// Class:{Tk}
-// Brief:{
-//  C& Source Token.
-// }
-//---------------------------------------------------------//
+/// C& Source Token.
 class Tk {
  public:
   // Modifiers
+  constexpr void SetFile(size_t file) { file_ = file; }
   constexpr void SetLine(size_t line) { line_ = line; }
   constexpr void SetCol(size_t col) { col_ = col; }
   constexpr void SetSourceIndexBeg(size_t idx) { source_index_beg_ = idx; }
@@ -85,7 +77,7 @@ class Tk {
  public:
   constexpr Tk() noexcept : type_(eTk::NONE), line_(0), col_(0), literal_() {}
 
-  // Literal is implicitly set to the pre-defined literal if it exists.
+  /// Literal is implicitly set to the pre-defined literal if it exists.
   constexpr Tk(eTk type) noexcept
       : type_(type), line_(0), col_(0), literal_(eTkLiteral(type)) {
   }
@@ -112,14 +104,14 @@ class Tk {
  private:
   eTk type_{eTk::NONE};
   string literal_{""};
+  size_t file_{0};
   size_t line_{0};
   size_t col_{0};
-  size_t source_index_beg_{0};  // Index of start char in the source code.
-  size_t source_index_end_{0};  // 1 past the end char in the source code.
+  /// Index of start char in the source code.
+  size_t source_index_beg_{0};
+  /// 1 past the end char in the source code.
+  size_t source_index_end_{0};  
 };
-//---------------------------------------------------------//
-// EndClass:{Tk}
-//---------------------------------------------------------//
 
 constexpr Tk::Tk(eTk type, vector<char>::const_iterator beg,
                  vector<char>::const_iterator end) noexcept
@@ -192,11 +184,17 @@ constexpr auto Tk::operator=(Tk&& other) noexcept {
   source_index_end_ = other.source_index_end_;
   return *this;
 }
-//---------------------------------------------------------------------------//
-}  // namespace caoco
-//---------------------------------------------------------------------------//
 
-//---------------------------------------------------------------------------//
+}  // namespace caoco
+
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_H
+/// @} // end of cand_compiler_data
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the Apache License, Version 2.0(the "License");
@@ -210,15 +208,4 @@ constexpr auto Tk::operator=(Tk&& other) noexcept {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_token.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

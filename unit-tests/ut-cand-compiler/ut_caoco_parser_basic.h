@@ -1,29 +1,28 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the Apache License, Version 2.0(the "License");
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: ut-cand-official-compiler
-// File: ut_caoco_parser_basic.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup unittest1_cand_compiler
+/// @brief UT C& Parser Basics
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup unittest1_cand_compiler
+/// @{
 #ifndef HEADER_GUARD_CALE_UT_CAND_OFFICIAL_COMPILER_UT_CAOCO_PARSER_BASIC_H
 #define HEADER_GUARD_CALE_UT_CAND_OFFICIAL_COMPILER_UT_CAOCO_PARSER_BASIC_H
-//---------------------------------------------------------------------------//
-// Brief: brief
-//---------------------------------------------------------------------------//
 // Includes:
 #include "cppsextended.h"
 #include "minitest.h"
 // Testing:
 #include "caoco_lexer.h"
 #include "caoco_parser.h"
-//---------------------------------------------------------------------------//
 
+/// @brief Utility methods for unit testing the parser.
 namespace unit_test_parser_basic {
 using namespace caoco;
 bool CompareAst(const Ast& node1, const Ast& node2) {
@@ -404,6 +403,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_PrimaryStatement) {
 }
 INLINE_END_MINITEST;
 MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_PrimaryStatement);
+
 // Declarations
 
 INLINE_MINITEST(Test_ParserBasics,
@@ -834,7 +834,13 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_AnimalsExampleProgram) {
 INLINE_END_MINITEST;
 MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_AnimalsExampleProgram);
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_CALE_UT_CAND_OFFICIAL_COMPILER_UT_CAOCO_PARSER_BASIC_H
+/// @} // end of unittest1_cand_compiler
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the Apache License, Version 2.0(the "License");
@@ -848,15 +854,4 @@ MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_AnimalsExampleProgram);
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: ut-cand-official-compiler
-// File: ut_caoco_parser_basic.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_UT_CAND_OFFICIAL_COMPILER_UT_CAOCO_PARSER_BASIC_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

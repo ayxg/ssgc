@@ -1,0 +1,129 @@
+\doxysection{C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/caoco\+\_\+rtval.h File Reference}
+\hypertarget{caoco__rtval_8h}{}\label{caoco__rtval_8h}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_rtval.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_rtval.h}}
+{\ttfamily \#include "{}cppsextended.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1_rt_val}{caoco\+::\+Rt\+Val}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1_named_rt_val}{caoco\+::\+Named\+Rt\+Val}}
+\item 
+struct \mbox{\hyperlink{structcaoco_1_1_named_rt_val_hash}{caoco\+::\+Named\+Rt\+Val\+Hash}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1_named_rt_val_set}{caoco\+::\+Named\+Rt\+Val\+Set}}
+\item 
+struct \mbox{\hyperlink{structcaoco_1_1_rt_none}{caoco\+::\+Rt\+None}}
+\item 
+struct \mbox{\hyperlink{structcaoco_1_1_rt_undefined}{caoco\+::\+Rt\+Undefined}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{caoco\+::\+Rt\+Dyn\+Namespace}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1_rt_dyn_object}{caoco\+::\+Rt\+Dyn\+Object}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1_rt_dyn_method}{caoco\+::\+Rt\+Dyn\+Method}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1_rt_cpp_method}{caoco\+::\+Rt\+Cpp\+Method}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1_rt_dyn_ptr}{caoco\+::\+Rt\+Dyn\+Ptr}}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1_rt_dyn_list}{caoco\+::\+Rt\+Dyn\+List}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecaoco}{caoco}}
+\item 
+namespace \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index}{caoco\+::e\+Native\+Type\+Index}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Concepts}
+\begin{DoxyCompactItemize}
+\item 
+concept \mbox{\hyperlink{conceptcaoco_1_1i_one_of_native_literals}{caoco\+::i\+One\+Of\+Native\+Literals}}
+\item 
+concept \mbox{\hyperlink{conceptcaoco_1_1i_one_of_native_arithmetic}{caoco\+::i\+One\+Of\+Native\+Arithmetic}}
+\item 
+concept \mbox{\hyperlink{conceptcaoco_1_1i_one_of_native_non_literals}{caoco\+::i\+One\+Of\+Native\+Non\+Literals}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class T $>$ }\\using \mbox{\hyperlink{namespacecaoco_a061d58f732427f1b09feac40becc11d9}{caoco\+::\+Uptr}} = std\+::unique\+\_\+ptr$<$T$>$
+\item 
+using \mbox{\hyperlink{namespacecaoco_abda06b349cd946893d37c5cf1881fd5c}{caoco\+::\+Native\+Empty\+VariantT}} = std\+::monostate
+\item 
+using \mbox{\hyperlink{namespacecaoco_afb2b5843e841de1222531fbabcb56597}{caoco\+::\+Native\+IntT}} = int
+\item 
+using \mbox{\hyperlink{namespacecaoco_a79007a14d356fc6a26aeae7d33901bac}{caoco\+::\+Native\+UnsignedT}} = unsigned
+\item 
+using \mbox{\hyperlink{namespacecaoco_a0b0ec307fb27b121b732abe8d1a871de}{caoco\+::\+Native\+DoubleT}} = double
+\item 
+using \mbox{\hyperlink{namespacecaoco_ad44644b4f7d73685c19f34b88b348056}{caoco\+::\+Native\+BoolT}} = bool
+\item 
+using \mbox{\hyperlink{namespacecaoco_a6ec848ff10f2af44d70263830e3802c5}{caoco\+::\+Native\+CharT}} = char
+\item 
+using \mbox{\hyperlink{namespacecaoco_a1722502af8c8cdcb6c6bfd8e71532d21}{caoco\+::\+Native\+ByteT}} = unsigned char
+\item 
+using \mbox{\hyperlink{namespacecaoco_abe7d00b948856ed472aebaad9f2a44d6}{caoco\+::\+Native\+CStringT}} = string\+\_\+view
+\item 
+using \mbox{\hyperlink{namespacecaoco_ac0d641dd7c56cb1e540b526d089daa2a}{caoco\+::\+Native\+NoneT}} = \mbox{\hyperlink{structcaoco_1_1_rt_none}{Rt\+None}}
+\item 
+using \mbox{\hyperlink{namespacecaoco_a5c41892f2192425adad54e423a9b7d14}{caoco\+::\+Native\+UndefinedT}} = \mbox{\hyperlink{structcaoco_1_1_rt_undefined}{Rt\+Undefined}}
+\item 
+using \mbox{\hyperlink{namespacecaoco_aa60c09470d4dcb8912b03ad52562bf39}{caoco\+::\+Native\+PtrT}} = \mbox{\hyperlink{classcaoco_1_1_rt_dyn_ptr}{Rt\+Dyn\+Ptr}}
+\item 
+using \mbox{\hyperlink{namespacecaoco_abc3e8f7c75d6ad867236de8b95c17fee}{caoco\+::\+Native\+StringT}} = \mbox{\hyperlink{namespacecaoco_a061d58f732427f1b09feac40becc11d9}{Uptr}}$<$string$>$
+\item 
+using \mbox{\hyperlink{namespacecaoco_a25d3b0a66b3d54501ccf14b549186062}{caoco\+::\+Native\+NamespaceT}} = \mbox{\hyperlink{namespacecaoco_a061d58f732427f1b09feac40becc11d9}{Uptr}}$<$\mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{Rt\+Dyn\+Namespace}}$>$
+\item 
+using \mbox{\hyperlink{namespacecaoco_a6d0d9d109d551123d700724d7fdaa97c}{caoco\+::\+Native\+ObjectT}} = \mbox{\hyperlink{namespacecaoco_a061d58f732427f1b09feac40becc11d9}{Uptr}}$<$\mbox{\hyperlink{classcaoco_1_1_rt_dyn_object}{Rt\+Dyn\+Object}}$>$
+\item 
+using \mbox{\hyperlink{namespacecaoco_a5d6482729a1e8f0e4badfe07e7791e69}{caoco\+::\+Native\+MethodT}} = \mbox{\hyperlink{namespacecaoco_a061d58f732427f1b09feac40becc11d9}{Uptr}}$<$\mbox{\hyperlink{classcaoco_1_1_rt_dyn_method}{Rt\+Dyn\+Method}}$>$
+\item 
+using \mbox{\hyperlink{namespacecaoco_a579933e23347e4bec987b013fafb9404}{caoco\+::\+Native\+Cpp\+MethodT}} = \mbox{\hyperlink{namespacecaoco_a061d58f732427f1b09feac40becc11d9}{Uptr}}$<$\mbox{\hyperlink{classcaoco_1_1_rt_cpp_method}{Rt\+Cpp\+Method}}$>$
+\item 
+using \mbox{\hyperlink{namespacecaoco_a07946ddcc00010d7290856b950b05437}{caoco\+::\+Native\+ListT}} = \mbox{\hyperlink{namespacecaoco_a061d58f732427f1b09feac40becc11d9}{Uptr}}$<$\mbox{\hyperlink{classcaoco_1_1_rt_dyn_list}{Rt\+Dyn\+List}}$>$
+\item 
+using \mbox{\hyperlink{namespacecaoco_a698892022e40ffaa98d81c73f951c4cd}{caoco\+::\+Native\+Type\+Index\+List}}
+\item 
+using \mbox{\hyperlink{namespacecaoco_a6ac74de2f168d30e289da35e32773931}{caoco\+::\+Native\+Variant}} = \mbox{\hyperlink{structmta_1_1compile__time__type__index__list_a627c9626b8b5c191cb250e263deb1609}{Native\+Type\+Index\+List\+::types\+\_\+variant}}
+\item 
+using \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a8360540e6840922747f87b27db396dfb}{caoco\+::e\+Native\+Type\+Index\+::underlying\+\_\+type}} = size\+\_\+t
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5c}{caoco\+::e\+Native\+Type\+Index\+::enum\+\_\+type}} \+: size\+\_\+t \{ \newline
+\mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5cad17750b19798224154cc93100b1576c1}{caoco\+::e\+Native\+Type\+Index\+::k\+Empty}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+Empty\+VariantT\texorpdfstring{$>$}{>}()
+, \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca860d803cc14516eddaf220bb14d97d33}{caoco\+::e\+Native\+Type\+Index\+::k\+Int}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+IntT\texorpdfstring{$>$}{>}()
+, \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca41719ac176fa34fa6ae972b0ba40f769}{caoco\+::e\+Native\+Type\+Index\+::k\+Unsigned}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+UnsignedT\texorpdfstring{$>$}{>}()
+, \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca8452cbc4ab60bca6bf3d05d082dd378b}{caoco\+::e\+Native\+Type\+Index\+::k\+Double}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+DoubleT\texorpdfstring{$>$}{>}()
+, \newline
+\mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca6f4a2f24880952c81642dcd3333001dd}{caoco\+::e\+Native\+Type\+Index\+::k\+Bool}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+BoolT\texorpdfstring{$>$}{>}()
+, \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca93a441e53ba23448855380fa2fce566a}{caoco\+::e\+Native\+Type\+Index\+::k\+Char}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+CharT\texorpdfstring{$>$}{>}()
+, \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5cac9a4c61a054513e42c3a2086885b227d}{caoco\+::e\+Native\+Type\+Index\+::k\+Byte}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+ByteT\texorpdfstring{$>$}{>}()
+, \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca0bafa06adedb58d9305dcf5fed07b757}{caoco\+::e\+Native\+Type\+Index\+::k\+CString}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+CStringT\texorpdfstring{$>$}{>}()
+, \newline
+\mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca55acfbfbb840b8db8b0cf8649650fce5}{caoco\+::e\+Native\+Type\+Index\+::k\+None}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+NoneT\texorpdfstring{$>$}{>}()
+, \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca875eaa5d7d1d802725395d749cb3bd06}{caoco\+::e\+Native\+Type\+Index\+::k\+Undefined}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+UndefinedT\texorpdfstring{$>$}{>}()
+, \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca543cfb5298a4303965ecb03f2078c8f2}{caoco\+::e\+Native\+Type\+Index\+::k\+Dynamic\+Ptr}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+PtrT\texorpdfstring{$>$}{>}()
+, \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5cae270af257751a7d55cbb7f7f3965c693}{caoco\+::e\+Native\+Type\+Index\+::k\+String}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+StringT\texorpdfstring{$>$}{>}()
+, \newline
+\mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca76f74ea8ccbe58cbc922b955de1e5f22}{caoco\+::e\+Native\+Type\+Index\+::k\+Dynamic\+Namespace}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+NamespaceT\texorpdfstring{$>$}{>}()
+, \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5cadf6856cb7008001d173e7af1a344e93c}{caoco\+::e\+Native\+Type\+Index\+::k\+Dynamic\+Object}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+ObjectT\texorpdfstring{$>$}{>}()
+, \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca5342ebc4dd7cbd0fa1bc18c047863e87}{caoco\+::e\+Native\+Type\+Index\+::k\+Dynamic\+Method}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+MethodT\texorpdfstring{$>$}{>}()
+, \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca7f9c3d1527c758da55dd4e28bf5196bf}{caoco\+::e\+Native\+Type\+Index\+::k\+Cpp\+Method}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+Cpp\+MethodT\texorpdfstring{$>$}{>}()
+, \newline
+\mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5cacbd0a37e80eb7d9ce6426a9e9d18142f}{caoco\+::e\+Native\+Type\+Index\+::k\+Dynamic\+Runtime\+Array}} = Native\+Type\+Index\+List\+::index\+\_\+of\texorpdfstring{$<$}{<}Native\+ListT\texorpdfstring{$>$}{>}()
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr string\+\_\+view \mbox{\hyperlink{namespacecaoco_aed346e234ddfb0a2476d2f439799de99}{caoco\+::k\+Undefined\+Namespace\+Name}} = "{}\#"{}
+\item 
+static constexpr string\+\_\+view \mbox{\hyperlink{namespacecaoco_a558b0e6a80586caf79b2990af3c17eb0}{caoco\+::k\+Global\+Namespace\+Name}} = "{}\+\_\+global\+\_\+"{}
+\item 
+static constexpr string\+\_\+view \mbox{\hyperlink{namespacecaoco_a1633bbcf8da24298c2d84f5dc3d27ef3}{caoco\+::k\+Class\+Init\+Method\+Name}} = "{}\+\_\+init\+\_\+"{}
+\item 
+static constexpr size\+\_\+t \mbox{\hyperlink{namespacecaoco_ad35e3bae4fa83b156dac59505e196649}{caoco\+::k\+Undefined\+Rtti}} = 0
+\end{DoxyCompactItemize}

@@ -1,71 +1,23 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the Apache License, Version 2.0(the "License");
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: mini-test
-// File: minitest.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file 
+/// @ingroup cppmodule1_minitest
+/// @brief Mini-Test: A Minimal Unit Testing Framework for C++20
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cppmodule1_minitest
+/// @{
+
 #ifndef HEADER_GUARD_CALE_MINITEST_MINITEST_H
 #define HEADER_GUARD_CALE_MINITEST_MINITEST_H
-//---------------------------------------------------------------------------//
-// Mini-Test: A Minimal Unit Testing Framework for C++20
-// Requires:{
-//   - Compiler flag minimum /std:c++20
-//   - P0315R4 : Lambdas in unevaluated contexts
-//     https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0315r4.pdf
-// }
-// Brief: {
-//  This is a single header file unit testing framework. Tests are defined as
-//  lambdas in a template parameter, which is executed upon initialization of
-//  static variables. As a result the order of tests is not guaranteed but the
-//  usual order of static initialization is followed. New: now supports fixtures
-//  and inline tests which can be run at a later time and defined inside
-//  methods.
-// 
-// (More examples available at bottom of this file...)
-// Sample Use: 
-//       auto my_method() { return true; }
-//       MINITEST(MyTest,MyTestCase){
-//         EXPECT_TRUE(my_method());
-//         EXPECT_TRUE(false);
-//         EXPECT_FALSE(false);
-//         EXPECT_FALSE(true);
-//         EXPECT_EQ(1,1);
-//         EXPECT_EQ(1,2);
-//         EXPECT_NE(1,2);
-//         EXPECT_NE(1,1);
-//         EXPECT_ANY_THROW([](){ throw std::runtime_error("error"); });
-//         EXPECT_ANY_THROW([](){});
-//         EXPECT_NO_THROW([](){});
-//         EXPECT_NO_THROW([](){ throw std::runtime_error("error"); });
-//        }
-//       END_MINITEST;
-//       FINISH_MINITESTS; // returns a boolean true if all tests passed
-//                         // call this right before your main function
-//                         // Macro MINITESTS_RESULT will contain result.
-//       int main() {
-//         return MINITESTS_RESULT ? 0 : 1;
-//       }
-//
-// Configuration Macros:
-//   - MINITEST_CONFIG_RECORD_ALL: If true, all test results are recorded and
-//                              can be viewed using MINITESTS_RECORDED macro.
-//
-//   - MINITEST_CONFIG_NO_CONSOLE_PRINT: If true, no output is printed to the
-//                                       console during the test run.
-//
-//   - MINITEST_CONFIG_CUSTOM_SEPARATOR: If defined, a custom separator is used
-//   between test sections which should be the macro def. Default is a dashed
-//   line. Definition must be a string literal with a newline.
-// }
-//---------------------------------------------------------------------------//
-// Includes:
+
+// @includes
 #include <concepts>
 #include <iostream>
 #include <source_location>
@@ -73,39 +25,51 @@
 #include <string>
 #include <type_traits>
 #include <vector>
-//---------------------------------------------------------------------------//
-//=-------------------------------------------------------------------------=//
 
-//---------------------------------------------------------------------------//
-// namespace minitest
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+/// @namespace minitest
+///////////////////////////////////////////////////////////////////////////////
 namespace minitest {
 
+/// @def MINITEST_CONFIG_CUSTOM_SEPARATOR
+/// 
+/// If defined by user, a custom separator is used between test sections which 
+/// should be the macro def. Default is a dashed line. 
+/// Definition must be a string literal with a newline.
 #ifndef MINITEST_CONFIG_CUSTOM_SEPARATOR
 #define MINITEST_CONFIG_CUSTOM_SEPARATOR                         \
   "------------------------------------------------------------" \
   "---------------------------------------------------------\n"
 #endif  // !MINITEST_CONFIG_CUSTOM_SEPARATOR
 
-// Used as a seperator between sections in the output.
+/// Used as a separator between sections in the output.
 static constexpr auto kSeparator = MINITEST_CONFIG_CUSTOM_SEPARATOR;
 
-// Concept to check if a type is streamable.
-// Non-streamable objects are output as their pointer address.
+
+/// @brief Concept to check if a type is streamable.
+/// 
+/// Non-streamable objects are output as their pointer address.
 template <typename T>
 concept iStreamable = requires(std::ostream os, std::decay_t<T> value) {
   { os << value } -> std::same_as<std::ostream&>;
 };
 
-// A template for a test case, the main 'testing' structure.
-// !! DO NOT directly create an instance of this template.
-// Always use MINITEST macro.
+/// @brief A template for a test case, the main 'testing' structure.
+/// 
+/// @warning: DO NOT directly create an instance of this template.
+///           Always use MINITEST macro.
 template <auto TestName, auto TestCaseName, typename TestImpl>
 struct Test {
   static constexpr auto test_name = TestName();
   static constexpr auto test_case_name = TestCaseName();
   static inline const TestImpl test_impl{};
   bool is_test_passed = true;
+
+  /// @brief Runs this test and logs result to console(if enabled).
+  /// @return bool always true
+  /// 
+  /// Define MINITEST_CONFIG_NO_CONSOLE_PRINT before including minitest to
+  /// disable printing to console when running tests.
   static inline bool Run() {
 #ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
     std::cout << kSeparator << "[Begin Mini Test] " << test_name << " [Case]"
@@ -122,19 +86,23 @@ struct Test {
   }
 };
 
-// Base class for all fixtures.
-// Inherit from this class to create a fixture.
-// All members of child class must be public or protected
-// If you wish to access them in your test cases.
+/// @brief Base class for all fixtures.
+/// 
+/// Inherit from this class to create a fixture.
+/// All members of child class must be public or protected
+/// If you wish to access them in your test cases.
 struct Fixture {
   virtual void SetUp() {}
   virtual void TearDown() {}
 };
 
-// !! DO NOT use the methods below directly in test cases.
-// Internal implementations of check and assert static methods.
+/// @defgroup cppmodule1_minitest_internal Internal Methods
+/// 
+/// !! DO NOT use the methods below directly in test cases.
+/// Internal implementations of check and assert static methods.
+/// @{
 
-// !! DO NOT USE
+/// DO NOT USE
 static inline bool ExpectTrue(bool b) {
   if (!b) {
 #ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
@@ -145,7 +113,7 @@ static inline bool ExpectTrue(bool b) {
   return true;
 }
 
-// !! DO NOT USE
+/// DO NOT USE
 static inline bool ExpectFalse(bool b) {
   if (b) {
 #ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
@@ -156,7 +124,7 @@ static inline bool ExpectFalse(bool b) {
   return true;
 }
 
-// !! DO NOT USE
+/// DO NOT USE
 template <typename LT, typename RT>
   requires std::equality_comparable_with<LT, RT>
 static inline bool ExpectEq(LT lhs, RT rhs) {
@@ -174,7 +142,7 @@ static inline bool ExpectEq(LT lhs, RT rhs) {
   }
 }
 
-// !! DO NOT USE
+/// DO NOT USE
 template <typename LT, typename RT>
   requires std::equality_comparable_with<LT, RT>
 static inline bool ExpectNe(LT lhs, RT rhs) {
@@ -192,7 +160,7 @@ static inline bool ExpectNe(LT lhs, RT rhs) {
   }
 }
 
-// !! DO NOT USE
+/// DO NOT USE
 static inline bool ExpectAnyThrow(auto&& f) {
   try {
     f();
@@ -205,7 +173,7 @@ static inline bool ExpectAnyThrow(auto&& f) {
   return false;
 }
 
-// !! DO NOT USE
+/// DO NOT USE
 static inline bool ExpectNoThrow(auto&& f) {
   try {
     f();
@@ -219,6 +187,9 @@ static inline bool ExpectNoThrow(auto&& f) {
   return true;
 }
 
+/// @} // end group cppmodule1_minitest_internal
+
+/// @brief Stores results and metadata of a recorded test.
 struct TestResult {
   bool is_test_passed;
   std::string test_name;
@@ -227,6 +198,7 @@ struct TestResult {
   std::string log;
 };
 
+/// @brief QOL std::ostream overload to directly print test results.
 std::ostream& operator<<(std::ostream& ss, const TestResult& t) {
   if (t.is_test_passed) {
     ss << "[PASSED] Test: " << t.test_name << "\n Case: " << t.test_case_name
@@ -239,17 +211,25 @@ std::ostream& operator<<(std::ostream& ss, const TestResult& t) {
   return ss;
 }
 
-static std::vector<std::string> gFailedTestLogs;
-static std::vector<TestResult> gRecordedTestLogs;
-static std::map<std::string_view, std::vector<std::function<bool()>>> gRegisteredTests;
-static const char* gLastFailedTestName = "";
-static const char* gLastFailedTestCaseName = "";
+static std::vector<std::string> gFailedTestLogs; ///! Stores failed test logs.
+static std::vector<TestResult> gRecordedTestLogs; ///! Stores all test results if enabled.
 
+/// Stores the function pointers to a modules test cases associated with a registered name.
+static std::map<std::string_view, std::vector<std::function<bool()>>> gRegisteredTests;
+static const char* gLastFailedTestName = ""; ///! DO NOT USE, impl detail.
+static const char* gLastFailedTestCaseName = ""; ///! DO NOT USE, impl detail.
+
+/// @brief Adds a test case to a test module with given test_name
+/// @param test_name Name of test or test module.
+/// @param test Function pointer to the test.
 static inline void RegisterTest(const std::string_view & test_name,
                                 std::function<bool()> test) {
   gRegisteredTests[test_name].push_back(test);
 }
 
+/// @brief Runs all the tests associated with a given test name or module name.
+/// @param test_name Name of the module to run, must be registered.
+/// @return True, unless a test failed - then false.
 static inline bool RunRegisteredTestModule(const std::string_view & test_name) {
   bool passed = true;
   for (const auto& test : gRegisteredTests[test_name]) {
@@ -260,6 +240,11 @@ static inline bool RunRegisteredTestModule(const std::string_view & test_name) {
   return passed;
 };
 
+/// @brief For internal mini-test use only. Adds a formatted error log to the
+///        gFailedTestLogs
+/// @param log Message to log.
+/// @param test Test name.
+/// @param tcase Test case name.
 static inline void AddFailedTestLog(
     const std::string& log, const char* test, const char* tcase,
     const std::source_location location = std::source_location::current()) {
@@ -271,6 +256,8 @@ static inline void AddFailedTestLog(
   gFailedTestLogs.push_back(ss.str());
 }
 
+/// @brief Prints all failed test logs, or "All Tests Passed!" when none.
+/// @return True if all tests passed, false otherwise.
 static inline bool PrintFailedTestLogs() {
   if (gFailedTestLogs.empty()) {
     std::cout << kSeparator << "All tests passed.\n" << kSeparator;
@@ -285,6 +272,7 @@ static inline bool PrintFailedTestLogs() {
   }
 }
 
+/// @brief Adds a TestResult to 'gRecordedTestLogs'
 static inline void RecordTestLog(
     bool passed, const std::string& log, const char* test, const char* tcase,
     const std::source_location location = std::source_location::current()) {
@@ -295,6 +283,8 @@ static inline void RecordTestLog(
                                          .log = log});
 }
 
+/// @brief Prints all recorded test logs or "No tests were run" if none.
+/// @return Returns true if no tests were ran, false otherwise.
 static inline bool PrintRecordedTestLogs() {
   if (gRecordedTestLogs.empty()) {
     std::cout << kSeparator << "No test were run.\n" << kSeparator;
@@ -309,38 +299,39 @@ static inline bool PrintRecordedTestLogs() {
   }
 }
 
+/// @brief Access the recorded test logs stored in gRecordedTestLogs
+/// @warning: DO NOT ever access gRecordedTestLogs directly.
 static inline const std::vector<TestResult>& ViewTestResults() {
   return gRecordedTestLogs;
 }
-
+/// @brief Access the failed test logs stored in gFailedTestLogs
+/// @warning: DO NOT ever access gFailedTestLogs directly.
 static inline const std::vector<std::string>& ViewFailedTestResults() {
   return gFailedTestLogs;
 }
 
+/// Clears recorded test logs.
 static inline void FlushTestResults() {
   gRecordedTestLogs.clear();
 }
 
+/// Clears failed test logs.
 static inline void FlushFailedTestResults() {
   gFailedTestLogs.clear();
 }
 
-}  // namespace minitest
-//---------------------------------------------------------------------------//
-//=-------------------------------------------------------------------------=//
+}  
+///////////////////////////////////////////////////////////////////////////////
+// @end namespace minitest
+///////////////////////////////////////////////////////////////////////////////
 
-//=---------------------------------=//
-// Macro:{MINITEST}
-// Brief:{Defines a static test case. Always close with 'END_MINITEST;'.}
-// Parameters:{
-//		1.TestName : Name of the test.
-//		2.TestCaseName : Name of the test case,must be unique per test.
-// }
-// Detail:{
-// - { } before and after the test case definition is optional
-//   but recommended for visibility.
-// }
-//-----------------------------------//
+/// @def MINITEST
+/// @brief Defines a static test case. Always close with 'END_MINITEST;'.
+/// @param TestName Name of the test.
+/// @param TestCaseName Name of the test case,must be unique per test.
+/// 
+/// { } before and after the test case definition is optional
+/// but recommended for visibility.
 #define MINITEST(TestName, TestCaseName) \
   namespace minitest_unit_test {         \
   namespace TestName {                   \
@@ -350,41 +341,31 @@ static inline void FlushFailedTestResults() {
        decltype([]() -> void {\
          minitest::gLastFailedTestName = #TestName;\
          minitest::gLastFailedTestCaseName = #TestCaseName;
-//-----------------------------------//
-//=---------------------------------=//
 
-//=---------------------------------=//
-// Macro:{END_MINITEST}
-// Brief:{Completes and runs a test case.
-//        Must be called after your test case definition.
-// }
-//-----------------------------------//
+/// @def END_MINITEST
+/// @brief Completes and runs a test case. 
+/// 
+/// Must be called after your test case definition.
 #define END_MINITEST \
   }                  \
-  )\
-  >\
+  )                  \
+  >                  \
   ::Run();           \
   }                  \
   ();                \
   }                  \
   ;                  \
   }
-//-----------------------------------//
-//=---------------------------------=//
 
-//=---------------------------------=//
-// Macro:{MINITEST_F}
-// Brief:{Defines a fixture test case.
-//        Always close with 'END_MINITEST_F(NameOfFixture);'.
-// }
-// Parameters:{
-//		1.TestName : Name of the test.
-//		2.TestCaseName : Name of the test case,must be unique per test.
-// 	    3.TestFixtureClass : Name of the fixture class.
-//                         Must inherit from minitest::Fixture.
-//                         See minitest::Fixture for more details.
-// }
-//-----------------------------------//
+/// @def MINITEST_F}
+/// @brief Defines a fixture test case.
+///        Always close with 'END_MINITEST_F(NameOfFixture);'.
+/// @param TestName Name of the test.
+/// @param TestCaseName Name of the test case,must be unique per test.
+/// @param TestFixtureClass Name of the fixture class.
+/// 
+/// Must inherit from minitest::Fixture.
+/// @see minitest::Fixture
 #define MINITEST_F(TestName, TestCaseName, TestFixtureClass) \
   namespace minitest_unit_test {                             \
   namespace TestName {                                       \
@@ -397,23 +378,17 @@ static inline void FlushFailedTestResults() {
   minitest::gLastFailedTestCaseName = #TestName;\
   minitest::gLastFailedTestName = #TestCaseName;\
   (*this).SetUp();
-//-----------------------------------//
-//=---------------------------------=//
 
-//=---------------------------------=//
-// Macro:{END_MINITEST_F}
-// Brief:{Closes a fixture test case. ONLY use after MINITEST_F with the SAME
-// TestCaseName.
-// }
-// Parameters:{
-//	    1.TestCaseName : Name of the last-called test case which created
-//      was created with MINITEST_F. MUST be the same as the last-called test
-//      case. Or else it will not compile.
-//
-//      eg. If you called MINITEST_F(MyTest,MyTestCase,MyFixture)
-//      then you must call END_MINITEST_F(MyTestCase);
-// }
-//-----------------------------------//
+
+/// @def END_MINITEST_F
+/// @brief Closes a fixture test case. ONLY use after MINITEST_F with the SAME
+///        TestCaseName.
+///	@param TestCaseName : Name of the last-called test case which created
+///         was created with MINITEST_F. MUST be the same as the last-called 
+///         test case. Or else it will not compile.
+/// 
+/// ex. If you called MINITEST_F(MyTest,MyTestCase,MyFixture)
+/// then you must call END_MINITEST_F(MyTestCase);
 #define END_MINITEST_F(TestCaseName)                                        \
   (*this).TearDown();                                                       \
   }                                                                         \
@@ -429,14 +404,10 @@ static inline void FlushFailedTestResults() {
   }                                                                         \
   ;                                                                         \
   }
-//-----------------------------------//
-//=---------------------------------=//
 
-//=---------------------------------=//
-// Macro:{INLINE_MINITEST}
-// Brief:{Defines an inline test case to be executed at a later time.
-// Always close with 'INLINE_END_MINITEST;'.}
-//-----------------------------------//
+/// @def INLINE_MINITEST
+/// @brief Defines an inline test case to be executed at a later time.
+///        Always close with 'INLINE_END_MINITEST;'.
 #define INLINE_MINITEST(TestName, TestCaseName) \
   auto INLINE_MINITEST_##TestName##TestCaseName = []() -> bool {\
   return minitest::Test < []() consteval -> const char* { return #TestName; },\
@@ -444,107 +415,72 @@ static inline void FlushFailedTestResults() {
        decltype([]() -> void {\
          minitest::gLastFailedTestName = #TestName;\
          minitest::gLastFailedTestCaseName = #TestCaseName;
-//-----------------------------------//
-//=---------------------------------=//
 
-//=---------------------------------=//
-// Macro:{INLINE_END_MINITEST}
-// Brief:{}
-//-----------------------------------//
+/// @def INLINE_END_MINITEST
 #define INLINE_END_MINITEST \
   }                         \
-  )\
-  >\
+  )                         \
+  >                         \
   ::Run();                  \
   }                         \
   ;
-//-----------------------------------//
-//=---------------------------------=//
 
-//=---------------------------------=//
-// Macro:{MINITEST_REGISTER_CASE}
-// Brief:{}
-//-----------------------------------//
+/// @def MINITEST_REGISTER_CASE
+/// @see minitest::RegisterTest
 #define MINITEST_REGISTER_CASE(TestName, TestCaseName) \
   const bool REGISTER_INLINE_MINITEST_##TestName##TestCaseName \
   = []{minitest::RegisterTest(#TestName, INLINE_MINITEST_##TestName##TestCaseName);return true;}()
-//-----------------------------------//
 
-//=---------------------------------=//
-// Macro:{MINITEST_RUN_REGISTERED_MODULE}
-// Brief:{}
-//-----------------------------------//
+/// @def MINITEST_RUN_REGISTERED_MODULE
+/// @see RunRegisteredTestModule
 #define MINITEST_RUN_REGISTERED_MODULE(TestName) \
   minitest::RunRegisteredTestModule(#TestName)
 
-//=---------------------------------=//
-// Macro:{REGISTERED_TEST_MODULE_METHOD}
-//-----------------------------------//
+/// @def REGISTERED_TEST_MODULE_METHOD
+/// @brief Lambda functor of a MINITEST_RUN_REGISTERED_MODULE call.
 #define MINITEST_FUNCTOR_RUN_INLINE(TestName) \
   []()->bool{return minitest::RunRegisteredTestModule(#TestName);}
 
-//=---------------------------------=//
-// Macro:{MINITEST_RUN_INLINE}
-// Brief:{Runs an inline minitest.}
-//-----------------------------------//
+/// @def MINITEST_RUN_INLINE
+/// @brief Runs an inline minitest.
 #define MINITEST_RUN_INLINE(TestName, TestCaseName) \
   INLINE_MINITEST_##TestName##TestCaseName();       \
-//-----------------------------------//
-//=---------------------------------=//
 
-//=---------------------------------=//
-// Macro:{FINISH_MINITESTS}
-// Brief:{ Completes the test suite and prints the result.
-//        Must be called right before your main function.
-//        This store a boolean true result in MINITESTS_RESULT
-//        if all tests passed - else false.
+/// @def FINISH_MINITESTS
+/// @brief  Completes the test suite and prints the result.
+///
+/// Must be called right before your main function.
+/// This store a boolean true result in MINITESTS_RESULT
+/// if all tests passed - else false.
 //
-//        This does not run the tests, it only prints the result.
-//        This must be called LAST, after all tests are defined.
-// }
-//-----------------------------------//
+/// This macro does not run the tests, it only prints the result.
+/// This macro must be called LAST, after all tests are defined.
 #define FINISH_MINITESTS                      \
   namespace minitest {                       \
   static const bool minitest_result = []() { \
     return minitest::PrintFailedTestLogs();  \
   }();                                       \
-  }  // namespace minitest
-//-----------------------------------//
-//=---------------------------------=//
+  }  
 
-//=---------------------------------=//
-// Macro:{MINITESTS_RESULT}
-// Brief:{
-//        Only valid after calling FINISH_MINITESTS.
-//        This macro contains the result of the tests as a static const bool.
-//        It is set to true if all tests passed, else false.
-// }
+/// @def MINITESTS_RESULT 
+/// @brief Result of the tests as a bool. True if all passed, else false.
+/// 
+/// Only valid after calling FINISH_MINITESTS.
+/// This macro contains the result of the tests as a static const bool.
 #define MINITESTS_RESULT minitest::minitest_result
-//-----------------------------------//
-//=---------------------------------=//
 
-//=---------------------------------=//
-// Macro:{MINITESTS_RECORDED}
+/// @def MINITESTS_RECORDED
+/// @see minitest::ViewTestResults
 #define MINITESTS_RECORDED minitest::ViewTestResults()
-//-----------------------------------//
-//=---------------------------------=//
 
-//=---------------------------------=//
-// Macro:{MINITESTS_FAILED}
+/// @def MINITESTS_FAILED
+/// @see minitest::ViewFailedTestResults
 #define MINITESTS_FAILED minitest::ViewFailedTestResults()
-//-----------------------------------//
-//=---------------------------------=//
 
-//---------------------------------------------------------------------------//
-// Check Macros
-//---------------------------------------------------------------------------//
-
-//=---------------------------------=//
-// Macro:{MINITEST_INTERNAL_CHECK_METHOD}
-// Brief:{Generates a checking macro for a given minitest method.
-//        DO NOT USE DIRECTLY.
-//        This is used internally by the EXPECT_ macros.
-// }
+/// @def MINITEST_INTERNAL_CHECK_METHOD
+/// @brief Generates a checking macro for a given minitest method.
+///        DO NOT USE DIRECTLY.
+///        This is used internally by the EXPECT_ macros.
 #ifdef MINITEST_CONFIG_RECORD_ALL
 #define MINITEST_INTERNAL_CHECK_METHOD(method, pmsg, msg, ...)         \
   if (!minitest::method(__VA_ARGS__)) {                                \
@@ -563,15 +499,11 @@ static inline void FlushFailedTestResults() {
                                minitest::gLastFailedTestCaseName); \
   }
 #endif
-//-----------------------------------//
-//=---------------------------------=//
 
-//=---------------------------------=//
-// Macro:{MINITEST_INTERNAL_ASSERT_METHOD}
-// Brief:{Generates am assertion macro for a given minitest method.
-//        DO NOT USE DIRECTLY.
-//        This is used internally by the ASSERT_ macros.
-// }
+/// @def MINITEST_INTERNAL_ASSERT_METHOD
+/// @brief Generates am assertion macro for a given minitest method.
+///        DO NOT USE DIRECTLY.
+///        This is used internally by the ASSERT_ macros.
 #ifdef MINITEST_CONFIG_RECORD_ALL
 #define MINITEST_INTERNAL_ASSERT_METHOD(method, pmsg, msg, ...)        \
   if (!minitest::method(__VA_ARGS__)) {                                \
@@ -593,17 +525,21 @@ static inline void FlushFailedTestResults() {
   }
 #endif
 
-//-----------------------------------//
-//=---------------------------------=//
-
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Test Macros
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 
-//=---------------------------------=//
+/// @defgroup cppmodule1_minitest_tests Check and Assertion Macros
+/// 
+/// Macros used to perform checks and assertions within a MINITEST definition.
+/// @{
+
+///////////////////////////////////////
 // Checks
-//=---------------------------------=//
+///////////////////////////////////////
 
+/// @defgroup cppmodule1_minitest_tests_checks Checks
+/// @{
 #define EXPECT_TRUE(b)                                               \
   MINITEST_INTERNAL_CHECK_METHOD(ExpectTrue, "[PASSED] EXPECT_TRUE", \
                                  "[EXPECTATION FAILED]: EXPECT_TRUE", b)
@@ -622,11 +558,14 @@ static inline void FlushFailedTestResults() {
 #define EXPECT_NO_THROW(f)                                                  \
   MINITEST_INTERNAL_CHECK_METHOD(ExpectNoThrow, "[PASSED] EXPECT_NO_THROW", \
                                  "[EXPECTATION FAILED]: EXPECT_NO_THROW", f)
+/// @} // end cppmodule1_minitest_tests_checks
 
-//=---------------------------------=//
+///////////////////////////////////////
 // Assertions
-//=---------------------------------=//
+///////////////////////////////////////
 
+/// @defgroup cppmodule1_minitest_tests_asserts Assertions
+/// @{
 #define ASSERT_TRUE(b)                                                \
   MINITEST_INTERNAL_ASSERT_METHOD(ExpectTrue, "[PASSED] ASSERT_TRUE", \
                                   "[ASSERTION FAILED]: ASSERT_TRUE", b)
@@ -645,15 +584,14 @@ static inline void FlushFailedTestResults() {
 #define ASSERT_NO_THROW(f)                                                   \
   MINITEST_INTERNAL_ASSERT_METHOD(ExpectNoThrow, "[PASSED] ASSERT_NO_THROW", \
                                   "[ASSERTION FAILED]: ASSERT_NO_THROW", f)
+/// @} // end cppmodule1_minitest_tests_asserts
 
-//---------------------------------------------------------------------------//
-// Logging Test Macros
-//---------------------------------------------------------------------------//
-
-//=---------------------------------=//
+///////////////////////////////////////
 // Logging checks
-//=---------------------------------=//
+///////////////////////////////////////
 
+/// @defgroup cppmodule1_minitest_tests_lchecks Logging Checks
+/// @{
 #define EXPECT_TRUE_LOG(b, plg, lg) \
   MINITEST_INTERNAL_CHECK_METHOD(ExpectTrue, plg, lg, b)
 #define EXPECT_FALSE_LOG(b, plg, lg) \
@@ -666,11 +604,14 @@ static inline void FlushFailedTestResults() {
   MINITEST_INTERNAL_CHECK_METHOD(ExpectAnyThrow, plg, lg, f)
 #define EXPECT_NO_THROW_LOG(f, plg, lg) \
   MINITEST_INTERNAL_CHECK_METHOD(ExpectNoThrow, plg, lg, f)
+/// @} // end cppmodule1_minitest_tests_lchecks
 
-//=---------------------------------=//
+///////////////////////////////////////
 // Logging assertions
-//=---------------------------------=//
+///////////////////////////////////////
 
+/// @defgroup cppmodule1_minitest_tests_lasserts Logging Asserts
+/// @{
 #define ASSERT_TRUE_LOG(b, plg, lg) \
   MINITEST_INTERNAL_ASSERT_METHOD(ExpectTrue, plg, lg, b)
 #define ASSERT_FALSE_LOG(b, plg, lg) \
@@ -683,9 +624,20 @@ static inline void FlushFailedTestResults() {
   MINITEST_INTERNAL_ASSERT_METHOD(ExpectAnyThrow, plg, lg, f)
 #define ASSERT_NO_THROW_LOG(f, plg, lg) \
   MINITEST_INTERNAL_ASSERT_METHOD(ExpectNoThrow, plg, lg, f)
+/// @} // end group cppmodule1_minitest_tests_lasserts
 
+///////////////////////////////////////////////////////////////////////////////
+// End Test Macros
+///////////////////////////////////////////////////////////////////////////////
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_CALE_MINITEST_MINITEST_H
+/// @} // end of cppmodule1_minitest
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the Apache License, Version 2.0(the "License");
@@ -699,43 +651,4 @@ static inline void FlushFailedTestResults() {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: mini-test
-// File: minitest.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_MINITEST_MINITEST_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
-
-//---------------------------------------------------------------------------//
-// More examples...
-//---------------------------------------------------------------------------//
-
-//-----------------------------------//
-// ex1. Using inline test cases.
-//-----------------------------------//
-/*
-INLINE_MINITEST(A, B) {
-  // Test code here.
-  int i;
-}
-INLINE_END_MINITEST;
-
-void ut_expected() {
-  INLINE_MINITEST(A, C) {
-    // Test code here.
-    int i;
-  }
-  INLINE_END_MINITEST;
-
-  MINITEST_RUN_INLINE(A, B)
-
-  MINITEST_RUN_INLINE(A, C)
-}
-*/
-//-----------------------------------//
+///////////////////////////////////////////////////////////////////////////////

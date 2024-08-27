@@ -1,0 +1,111 @@
+\doxysection{caoco\+::parser Namespace Reference}
+\hypertarget{namespacecaoco_1_1parser}{}\label{namespacecaoco_1_1parser}\index{caoco::parser@{caoco::parser}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser}{Expr\+Parser}}
+\begin{DoxyCompactList}\small\item\em Primary Expression Shift-\/\+Reduction Parser. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{namespacecaoco_1_1parser_ae116da4d9232d24e91c3c781a1fc02b2}{Success}} (const \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&c, \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&\&ast)
+\item 
+static constexpr \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{namespacecaoco_1_1parser_a7f4d88ab733be0e293eeb08878b9c305}{Fail}} (const \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&c, const std\+::string \&error)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga5201389c533270f1507559255a4e059e}{Parse\+Operand}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\begin{DoxyCompactList}\small\item\em Singular operands only, not subexpressions. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gaaaf72714db725594b8f2d9331938db4f}{Parse\+Arguments}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\begin{DoxyCompactList}\small\item\em Parse Arguments (\texorpdfstring{$<$}{<}primary\+\_\+expr?\texorpdfstring{$\ast$}{*}\texorpdfstring{$>$}{>},) \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gad8d56d98ca85cb5975d23fc8690afc78}{Parse\+Indexing\+Arguments}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\begin{DoxyCompactList}\small\item\em Parse Indexing Arguments \mbox{[}\texorpdfstring{$<$}{<}primary\+\_\+expr?\texorpdfstring{$\ast$}{*}\texorpdfstring{$>$}{>},\mbox{]}. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga5e071b23b89253fab9aecd74bd6144fd}{Parse\+Listing\+Arguments}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\begin{DoxyCompactList}\small\item\em Parse Listing Arguments \{\texorpdfstring{$<$}{<}primary\+\_\+expr?\texorpdfstring{$\ast$}{*}\texorpdfstring{$>$}{>},\}. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gacd08fcbbf1e5db877ef21bda0f16cacb}{Parse\+Primary\+Statement}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\begin{DoxyCompactList}\small\item\em Parse Primary Statement $<$primary\+\_\+expr$>$;. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga1dc0d55cdb5f383db4892c833a7b5ec3}{Parse\+Conditional\+Sub\+Expression}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} c)
+\begin{DoxyCompactList}\small\item\em Parse\+Conditional\+Sub\+Expression (\texorpdfstring{$<$}{<}primary\+\_\+expr?\texorpdfstring{$\ast$}{*}\texorpdfstring{$>$}{>},) \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga558139dd049cf5e6ee9dc414e90c4f7e}{Parse\+Primary\+Pre\+Identifier}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\begin{DoxyCompactList}\small\item\em Parse\+Primary\+Pre\+Identifier $<$primary\+\_\+expr$>$. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gac7e77bb6df33c2a3675b8c86cb13a5d4}{Parse\+Primary\+Post\+Identifier}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\begin{DoxyCompactList}\small\item\em Parse\+Primary\+Post\+Identifier $<$primary\+\_\+expr$>$\+: or $<$primary\+\_\+expr$>$;. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gae194aaf04367f789df9ad88db3306aec}{Parse\+Modifiers}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\begin{DoxyCompactList}\small\item\em Parse Modifiers \texorpdfstring{$<$}{<}modifier?\texorpdfstring{$\ast$}{*}\texorpdfstring{$>$}{>} \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gacf8f6ebb920a7a0f77029d9c79be55b7}{Parse\+Return\+Stmt}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\begin{DoxyCompactList}\small\item\em $<$\+Kw\+Return$>$ \texorpdfstring{$<$}{<}Value\+Expr?\texorpdfstring{$>$}{>} $<$\+Semicolon$>$ \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gaf1eb73776f9c4cb360655c36acce7e7f}{Parse\+Method\+Parameters}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gaa8eb7238a0b7e5af43c992c94b69710e}{Parse\+Method\+Return\+Parameters}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gafae1cfec98761e1a3cc2eeb6e36ea7a3}{Parse\+Method\+Signature}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga6745aa65d86fbecb24458b0d005b96c9}{Parse\+Method\+Def}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gaa006a1cc17a9d8338a1489a0f3ef0c3e}{Parse\+Main\+Def}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga0620b24107458bfef78399a96818ba4f}{Parse\+Class\+Def}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gab67a96c6a4230d18e1e344dc9dc16a0d}{Parse\+Lib\+Def}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga047f08fd390a8bb8ebc2f75d71c04734}{Parse\+Pragmatic\+Stmt}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga752735155aef029bc6ae174f0452022a}{Parse\+Functional\+Stmt}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gae69919e1d5e8e591308dfe2d5db3d4ec}{Parse\+Conditional\+Stmt}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} c)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gace65ca57f4ac9e6ab1163218681ba222}{Parse\+If\+Decl}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} c)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga8bf1796873014bcd24a5de3c73caeb8f}{Parse\+Main\+Decl}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gaeb371d189f95f7dd546f67e175f73aea}{Parse\+Lib\+Decl}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga48fd3e3c6cf0f26943ed0ef85bce0b69}{Parse\+Import\+Decl}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga0072df234dcc67521c23f640ad51f7f5}{Parse\+While\+Decl}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} c)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga288e23eae4e2d70fee833ce4269586a4}{Parse\+For\+Decl}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} c)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_gacc52bc137c3d4758c5404cefc07b91ac}{Parse\+Using\+Decl}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga2ebf78a685c144fb4afc155ebd518ac7}{Parse\+Variable\+Decl}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga11abebb0a7465f245a1afdf588d57df6}{Parse\+Method\+Decl}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga45ac46cd096d118a7b48fd68012831aa}{Parse\+Class\+Decl}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} \mbox{\hyperlink{group__cand__compiler__parser__parse_ga5ce5425043c507a38866b563a1bd6f6a}{Parse\+Program}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} current)
+\item 
+static \mbox{\hyperlink{namespacecaoco_a49023dd0304e9e8d4bfcdab14fba90aa}{Expected\+Ast}} \mbox{\hyperlink{namespacecaoco_1_1parser_ab44d40fbefb63c1b8e0dbfebb403cc19}{Parse\+Expr}} (const \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&c)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{namespacecaoco_1_1parser_a7f4d88ab733be0e293eeb08878b9c305}\index{caoco::parser@{caoco::parser}!Fail@{Fail}}
+\index{Fail@{Fail}!caoco::parser@{caoco::parser}}
+\doxysubsubsection{\texorpdfstring{Fail()}{Fail()}}
+{\footnotesize\ttfamily \label{namespacecaoco_1_1parser_a7f4d88ab733be0e293eeb08878b9c305} 
+static constexpr \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} caoco\+::parser\+::\+Fail (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&}]{c}{, }\item[{const std\+::string \&}]{error}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00042}{42}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{namespacecaoco_1_1parser_ab44d40fbefb63c1b8e0dbfebb403cc19}\index{caoco::parser@{caoco::parser}!ParseExpr@{ParseExpr}}
+\index{ParseExpr@{ParseExpr}!caoco::parser@{caoco::parser}}
+\doxysubsubsection{\texorpdfstring{ParseExpr()}{ParseExpr()}}
+{\footnotesize\ttfamily \label{namespacecaoco_1_1parser_ab44d40fbefb63c1b8e0dbfebb403cc19} 
+static \mbox{\hyperlink{namespacecaoco_a49023dd0304e9e8d4bfcdab14fba90aa}{Expected\+Ast}} caoco\+::parser\+::\+Parse\+Expr (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&}]{c}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00229}{229}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{namespacecaoco_1_1parser_ae116da4d9232d24e91c3c781a1fc02b2}\index{caoco::parser@{caoco::parser}!Success@{Success}}
+\index{Success@{Success}!caoco::parser@{caoco::parser}}
+\doxysubsubsection{\texorpdfstring{Success()}{Success()}}
+{\footnotesize\ttfamily \label{namespacecaoco_1_1parser_ae116da4d9232d24e91c3c781a1fc02b2} 
+static constexpr \mbox{\hyperlink{namespacecaoco_a75fc47537a619877b12797bbe1750f70}{Offset\+Parse\+Result}} caoco\+::parser\+::\+Success (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&}]{c}{, }\item[{\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}} \&\&}]{ast}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00037}{37}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+

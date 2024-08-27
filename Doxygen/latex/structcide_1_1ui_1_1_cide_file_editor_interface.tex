@@ -1,0 +1,141 @@
+\doxysection{cide\+::ui\+::Cide\+File\+Editor\+Interface Struct Reference}
+\hypertarget{structcide_1_1ui_1_1_cide_file_editor_interface}{}\label{structcide_1_1ui_1_1_cide_file_editor_interface}\index{cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}}
+
+
+{\ttfamily \#include $<$cide\+\_\+ui.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}{Cide\+File\+Editor\+Interface}} (const std\+::string \&name, \mbox{\hyperlink{group__cand__cide__cgui_gadbb52ed78c57df3c9bd2290700de3786}{Cgui\+Vec2}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_ab125fc6fd2baf3ef44bc87b2cd746be8}{context\+\_\+size}})
+\item 
+void \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_ad1c692479ed5206bcaffd0155189a283}{Display}} ()
+\item 
+void \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a63c4e1aaf0bacd29d78b4dc25f2a4c09}{Add\+Tab}} (const string \&tab\+\_\+name, string \&text\+\_\+buffer)
+\item 
+void \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_ae97ec9df02c4d76c2f6d4c0dc01b8246}{Pop\+Tab}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_gadbb52ed78c57df3c9bd2290700de3786}{Cgui\+Vec2}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_ab125fc6fd2baf3ef44bc87b2cd746be8}{context\+\_\+size}}
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_ga2ca689f132dc04bb1cd3c2f54e5afe4d}{Cgui\+Named\+Subcontext}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a189906a2327a9d17b24e61a45b74bcc4}{editor\+\_\+context}}
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_gaafb387908d4a268f8989dc88ce31e13b}{Cgui\+Tab\+Bar}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a3f7ed2485f710a2a3f778ef63b2a3a3d}{editor\+\_\+tab\+\_\+bar}}
+\item 
+vector$<$ \mbox{\hyperlink{group__cand__cide__cgui_ga28f50663038bed7ca332a424ac449abd}{Cgui\+Tab\+Item}} $>$ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a2b179d907dc9fe1858953ddf83459817}{open\+\_\+file\+\_\+tabs}}
+\item 
+vector$<$ \mbox{\hyperlink{group__cand__cide__cgui_ga039340f37e6d629a0df5a42cf85dad31}{Cgui\+Multiline\+Text\+Input}} $>$ \mbox{\hyperlink{structcide_1_1ui_1_1_cide_file_editor_interface_a1e4262255245455246039023e75e9653}{open\+\_\+file\+\_\+tab\+\_\+text\+\_\+inputs}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00141}{141}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072}\index{cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}!CideFileEditorInterface@{CideFileEditorInterface}}
+\index{CideFileEditorInterface@{CideFileEditorInterface}!cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}}
+\doxysubsubsection{\texorpdfstring{CideFileEditorInterface()}{CideFileEditorInterface()}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_file_editor_interface_a61080e8d82997bd6074be378b3572072} 
+cide\+::ui\+::\+Cide\+File\+Editor\+Interface\+::\+Cide\+File\+Editor\+Interface (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{\mbox{\hyperlink{group__cand__cide__cgui_gadbb52ed78c57df3c9bd2290700de3786}{Cgui\+Vec2}}}]{context\+\_\+size}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00149}{149}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structcide_1_1ui_1_1_cide_file_editor_interface_a63c4e1aaf0bacd29d78b4dc25f2a4c09}\index{cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}!AddTab@{AddTab}}
+\index{AddTab@{AddTab}!cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}}
+\doxysubsubsection{\texorpdfstring{AddTab()}{AddTab()}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_file_editor_interface_a63c4e1aaf0bacd29d78b4dc25f2a4c09} 
+void cide\+::ui\+::\+Cide\+File\+Editor\+Interface\+::\+Add\+Tab (\begin{DoxyParamCaption}\item[{const string \&}]{tab\+\_\+name}{, }\item[{string \&}]{text\+\_\+buffer}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00172}{172}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_file_editor_interface_ad1c692479ed5206bcaffd0155189a283}\index{cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}!Display@{Display}}
+\index{Display@{Display}!cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}}
+\doxysubsubsection{\texorpdfstring{Display()}{Display()}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_file_editor_interface_ad1c692479ed5206bcaffd0155189a283} 
+void cide\+::ui\+::\+Cide\+File\+Editor\+Interface\+::\+Display (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00156}{156}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_file_editor_interface_ae97ec9df02c4d76c2f6d4c0dc01b8246}\index{cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}!PopTab@{PopTab}}
+\index{PopTab@{PopTab}!cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}}
+\doxysubsubsection{\texorpdfstring{PopTab()}{PopTab()}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_file_editor_interface_ae97ec9df02c4d76c2f6d4c0dc01b8246} 
+void cide\+::ui\+::\+Cide\+File\+Editor\+Interface\+::\+Pop\+Tab (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00180}{180}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structcide_1_1ui_1_1_cide_file_editor_interface_ab125fc6fd2baf3ef44bc87b2cd746be8}\index{cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}!context\_size@{context\_size}}
+\index{context\_size@{context\_size}!cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}}
+\doxysubsubsection{\texorpdfstring{context\_size}{context\_size}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_file_editor_interface_ab125fc6fd2baf3ef44bc87b2cd746be8} 
+\mbox{\hyperlink{group__cand__cide__cgui_gadbb52ed78c57df3c9bd2290700de3786}{Cgui\+Vec2}} cide\+::ui\+::\+Cide\+File\+Editor\+Interface\+::context\+\_\+size}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00143}{143}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_file_editor_interface_a189906a2327a9d17b24e61a45b74bcc4}\index{cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}!editor\_context@{editor\_context}}
+\index{editor\_context@{editor\_context}!cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}}
+\doxysubsubsection{\texorpdfstring{editor\_context}{editor\_context}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_file_editor_interface_a189906a2327a9d17b24e61a45b74bcc4} 
+\mbox{\hyperlink{group__cand__cide__cgui_ga2ca689f132dc04bb1cd3c2f54e5afe4d}{Cgui\+Named\+Subcontext}} cide\+::ui\+::\+Cide\+File\+Editor\+Interface\+::editor\+\_\+context}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00144}{144}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_file_editor_interface_a3f7ed2485f710a2a3f778ef63b2a3a3d}\index{cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}!editor\_tab\_bar@{editor\_tab\_bar}}
+\index{editor\_tab\_bar@{editor\_tab\_bar}!cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}}
+\doxysubsubsection{\texorpdfstring{editor\_tab\_bar}{editor\_tab\_bar}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_file_editor_interface_a3f7ed2485f710a2a3f778ef63b2a3a3d} 
+\mbox{\hyperlink{group__cand__cide__cgui_gaafb387908d4a268f8989dc88ce31e13b}{Cgui\+Tab\+Bar}} cide\+::ui\+::\+Cide\+File\+Editor\+Interface\+::editor\+\_\+tab\+\_\+bar}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00145}{145}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_file_editor_interface_a1e4262255245455246039023e75e9653}\index{cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}!open\_file\_tab\_text\_inputs@{open\_file\_tab\_text\_inputs}}
+\index{open\_file\_tab\_text\_inputs@{open\_file\_tab\_text\_inputs}!cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}}
+\doxysubsubsection{\texorpdfstring{open\_file\_tab\_text\_inputs}{open\_file\_tab\_text\_inputs}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_file_editor_interface_a1e4262255245455246039023e75e9653} 
+vector$<$\mbox{\hyperlink{group__cand__cide__cgui_ga039340f37e6d629a0df5a42cf85dad31}{Cgui\+Multiline\+Text\+Input}}$>$ cide\+::ui\+::\+Cide\+File\+Editor\+Interface\+::open\+\_\+file\+\_\+tab\+\_\+text\+\_\+inputs}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00147}{147}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_file_editor_interface_a2b179d907dc9fe1858953ddf83459817}\index{cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}!open\_file\_tabs@{open\_file\_tabs}}
+\index{open\_file\_tabs@{open\_file\_tabs}!cide::ui::CideFileEditorInterface@{cide::ui::CideFileEditorInterface}}
+\doxysubsubsection{\texorpdfstring{open\_file\_tabs}{open\_file\_tabs}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_file_editor_interface_a2b179d907dc9fe1858953ddf83459817} 
+vector$<$\mbox{\hyperlink{group__cand__cide__cgui_ga28f50663038bed7ca332a424ac449abd}{Cgui\+Tab\+Item}}$>$ cide\+::ui\+::\+Cide\+File\+Editor\+Interface\+::open\+\_\+file\+\_\+tabs}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00146}{146}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/ide/\mbox{\hyperlink{cide__ui_8h}{cide\+\_\+ui.\+h}}\end{DoxyCompactItemize}

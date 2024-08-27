@@ -1,0 +1,187 @@
+\doxysection{caoco\+::cppcodegen\+::Method\+Decl Struct Reference}
+\hypertarget{structcaoco_1_1cppcodegen_1_1_method_decl}{}\label{structcaoco_1_1cppcodegen_1_1_method_decl}\index{caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}}
+
+
+Represents a method declaration and optionally its definition.  
+
+
+
+
+{\ttfamily \#include $<$caoco\+\_\+cppcodegen.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{caoco__cppcodegen_8h_a3a446efc553a369ea46509e2dff74e9b}{\+\_\+cx}} string \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_abc133b23151595a89451621a322b6760}{Codegen}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_a3d56e294188d4ed834f5acc3618a7eaa}{name}}
+\item 
+string \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_a0f0ef35adceca45fe3ed830412062fa5}{return\+\_\+type}} \{"{}void"{}\}
+\item 
+\mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_modifiers}{Method\+Decl\+Modifiers}} \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_a01d76c287fd45e3b640fa6ee2e8607e6}{mods}}
+\item 
+vector$<$ \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_parameter}{Method\+Parameter}} $>$ \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_adcc5425734bb64d96ff916a4f76c6420}{params}}
+\item 
+optional$<$ string $>$ \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_a7eb403507482729e97bd2782d2881c0d}{definition}}
+\item 
+optional$<$ \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_template_signature}{Template\+Signature}} $>$ \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_a2610160b0bbcf7dfd5f29aff938557b9}{template\+\_\+signature}}
+\item 
+optional$<$ std\+::vector$<$ string $>$ $>$ \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_a1ce792c5ba8547dd33559ceb60fee5da}{template\+\_\+specialization}}
+\item 
+optional$<$ string $>$ \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_ad3601b72d7390d9aece82f62d004f7df}{equal\+\_\+to}}
+\begin{DoxyCompactList}\small\item\em When set, will make the method assigned to string with \textquotesingle{}=\textquotesingle{} operator. Definition will be ignored. \end{DoxyCompactList}\item 
+vector$<$ \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_post_initializer}{Method\+Post\+Initializer}} $>$ \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_a8501d8bc4a62464d2b066c38b8d9ff59}{post\+\_\+initializer}}
+\begin{DoxyCompactList}\small\item\em for constructors, generated when not empty. \end{DoxyCompactList}\item 
+optional$<$ string $>$ \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_a9f87f8b62a4940d77f563538959ab356}{comment\+\_\+before}}
+\item 
+optional$<$ string $>$ \mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_ab6f40aa2f9247945ba4f52616a9437f4}{comment\+\_\+after}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a method declaration and optionally its definition. 
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00396}{396}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structcaoco_1_1cppcodegen_1_1_method_decl_abc133b23151595a89451621a322b6760}\index{caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}!Codegen@{Codegen}}
+\index{Codegen@{Codegen}!caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}}
+\doxysubsubsection{\texorpdfstring{Codegen()}{Codegen()}}
+{\footnotesize\ttfamily \label{structcaoco_1_1cppcodegen_1_1_method_decl_abc133b23151595a89451621a322b6760} 
+\mbox{\hyperlink{caoco__cppcodegen_8h_a3a446efc553a369ea46509e2dff74e9b}{\+\_\+cx}} string caoco\+::cppcodegen\+::\+Method\+Decl\+::\+Codegen (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00413}{413}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structcaoco_1_1cppcodegen_1_1_method_decl_ab6f40aa2f9247945ba4f52616a9437f4}\index{caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}!comment\_after@{comment\_after}}
+\index{comment\_after@{comment\_after}!caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}}
+\doxysubsubsection{\texorpdfstring{comment\_after}{comment\_after}}
+{\footnotesize\ttfamily \label{structcaoco_1_1cppcodegen_1_1_method_decl_ab6f40aa2f9247945ba4f52616a9437f4} 
+optional$<$string$>$ caoco\+::cppcodegen\+::\+Method\+Decl\+::comment\+\_\+after}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00412}{412}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{structcaoco_1_1cppcodegen_1_1_method_decl_a9f87f8b62a4940d77f563538959ab356}\index{caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}!comment\_before@{comment\_before}}
+\index{comment\_before@{comment\_before}!caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}}
+\doxysubsubsection{\texorpdfstring{comment\_before}{comment\_before}}
+{\footnotesize\ttfamily \label{structcaoco_1_1cppcodegen_1_1_method_decl_a9f87f8b62a4940d77f563538959ab356} 
+optional$<$string$>$ caoco\+::cppcodegen\+::\+Method\+Decl\+::comment\+\_\+before}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00411}{411}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{structcaoco_1_1cppcodegen_1_1_method_decl_a7eb403507482729e97bd2782d2881c0d}\index{caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}!definition@{definition}}
+\index{definition@{definition}!caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}}
+\doxysubsubsection{\texorpdfstring{definition}{definition}}
+{\footnotesize\ttfamily \label{structcaoco_1_1cppcodegen_1_1_method_decl_a7eb403507482729e97bd2782d2881c0d} 
+optional$<$string$>$ caoco\+::cppcodegen\+::\+Method\+Decl\+::definition}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00401}{401}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{structcaoco_1_1cppcodegen_1_1_method_decl_ad3601b72d7390d9aece82f62d004f7df}\index{caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}!equal\_to@{equal\_to}}
+\index{equal\_to@{equal\_to}!caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}}
+\doxysubsubsection{\texorpdfstring{equal\_to}{equal\_to}}
+{\footnotesize\ttfamily \label{structcaoco_1_1cppcodegen_1_1_method_decl_ad3601b72d7390d9aece82f62d004f7df} 
+optional$<$string$>$ caoco\+::cppcodegen\+::\+Method\+Decl\+::equal\+\_\+to}
+
+
+
+When set, will make the method assigned to string with \textquotesingle{}=\textquotesingle{} operator. Definition will be ignored. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00406}{406}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{structcaoco_1_1cppcodegen_1_1_method_decl_a01d76c287fd45e3b640fa6ee2e8607e6}\index{caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}!mods@{mods}}
+\index{mods@{mods}!caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}}
+\doxysubsubsection{\texorpdfstring{mods}{mods}}
+{\footnotesize\ttfamily \label{structcaoco_1_1cppcodegen_1_1_method_decl_a01d76c287fd45e3b640fa6ee2e8607e6} 
+\mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_decl_modifiers}{Method\+Decl\+Modifiers}} caoco\+::cppcodegen\+::\+Method\+Decl\+::mods}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00399}{399}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{structcaoco_1_1cppcodegen_1_1_method_decl_a3d56e294188d4ed834f5acc3618a7eaa}\index{caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}!name@{name}}
+\index{name@{name}!caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily \label{structcaoco_1_1cppcodegen_1_1_method_decl_a3d56e294188d4ed834f5acc3618a7eaa} 
+string caoco\+::cppcodegen\+::\+Method\+Decl\+::name}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00397}{397}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{structcaoco_1_1cppcodegen_1_1_method_decl_adcc5425734bb64d96ff916a4f76c6420}\index{caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}!params@{params}}
+\index{params@{params}!caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}}
+\doxysubsubsection{\texorpdfstring{params}{params}}
+{\footnotesize\ttfamily \label{structcaoco_1_1cppcodegen_1_1_method_decl_adcc5425734bb64d96ff916a4f76c6420} 
+vector$<$\mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_parameter}{Method\+Parameter}}$>$ caoco\+::cppcodegen\+::\+Method\+Decl\+::params}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00400}{400}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{structcaoco_1_1cppcodegen_1_1_method_decl_a8501d8bc4a62464d2b066c38b8d9ff59}\index{caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}!post\_initializer@{post\_initializer}}
+\index{post\_initializer@{post\_initializer}!caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}}
+\doxysubsubsection{\texorpdfstring{post\_initializer}{post\_initializer}}
+{\footnotesize\ttfamily \label{structcaoco_1_1cppcodegen_1_1_method_decl_a8501d8bc4a62464d2b066c38b8d9ff59} 
+vector$<$\mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_method_post_initializer}{Method\+Post\+Initializer}}$>$ caoco\+::cppcodegen\+::\+Method\+Decl\+::post\+\_\+initializer}
+
+
+
+for constructors, generated when not empty. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00409}{409}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{structcaoco_1_1cppcodegen_1_1_method_decl_a0f0ef35adceca45fe3ed830412062fa5}\index{caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}!return\_type@{return\_type}}
+\index{return\_type@{return\_type}!caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}}
+\doxysubsubsection{\texorpdfstring{return\_type}{return\_type}}
+{\footnotesize\ttfamily \label{structcaoco_1_1cppcodegen_1_1_method_decl_a0f0ef35adceca45fe3ed830412062fa5} 
+string caoco\+::cppcodegen\+::\+Method\+Decl\+::return\+\_\+type \{"{}void"{}\}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00398}{398}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{structcaoco_1_1cppcodegen_1_1_method_decl_a2610160b0bbcf7dfd5f29aff938557b9}\index{caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}!template\_signature@{template\_signature}}
+\index{template\_signature@{template\_signature}!caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}}
+\doxysubsubsection{\texorpdfstring{template\_signature}{template\_signature}}
+{\footnotesize\ttfamily \label{structcaoco_1_1cppcodegen_1_1_method_decl_a2610160b0bbcf7dfd5f29aff938557b9} 
+optional$<$\mbox{\hyperlink{structcaoco_1_1cppcodegen_1_1_template_signature}{Template\+Signature}}$>$ caoco\+::cppcodegen\+::\+Method\+Decl\+::template\+\_\+signature}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00402}{402}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+\Hypertarget{structcaoco_1_1cppcodegen_1_1_method_decl_a1ce792c5ba8547dd33559ceb60fee5da}\index{caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}!template\_specialization@{template\_specialization}}
+\index{template\_specialization@{template\_specialization}!caoco::cppcodegen::MethodDecl@{caoco::cppcodegen::MethodDecl}}
+\doxysubsubsection{\texorpdfstring{template\_specialization}{template\_specialization}}
+{\footnotesize\ttfamily \label{structcaoco_1_1cppcodegen_1_1_method_decl_a1ce792c5ba8547dd33559ceb60fee5da} 
+optional$<$std\+::vector$<$string$>$ $>$ caoco\+::cppcodegen\+::\+Method\+Decl\+::template\+\_\+specialization}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__cppcodegen_8h_source_l00403}{403}} of file \mbox{\hyperlink{caoco__cppcodegen_8h_source}{caoco\+\_\+cppcodegen.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/\mbox{\hyperlink{caoco__cppcodegen_8h}{caoco\+\_\+cppcodegen.\+h}}\end{DoxyCompactItemize}

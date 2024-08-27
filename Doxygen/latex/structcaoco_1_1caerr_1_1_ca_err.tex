@@ -1,0 +1,301 @@
+\doxysection{caoco\+::caerr\+::Ca\+Err Struct Reference}
+\hypertarget{structcaoco_1_1caerr_1_1_ca_err}{}\label{structcaoco_1_1caerr_1_1_ca_err}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+
+
+Empty struct which defines traits of C\& compiler errors.  
+
+
+
+
+{\ttfamily \#include $<$caoco\+\_\+compiler\+\_\+error.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_ac81068686a637514e035185fd409d365}{DEF\+\_\+\+ERROR\+\_\+\+DEFAULT}} (No\+Error, Compiler\+Impl)
+\item 
+\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_ab12704d35e05860a84e5de812d019e50}{DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER}} (Impl\+Expected\+Token)
+\item 
+\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_ae61ac25bee0f2074a2e5e8643b849948}{DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER}} (Mismatched\+Scope)
+\item 
+\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a8c737e79ad18e6d3d3f9a14edb4fc769}{DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER}} (Not\+Implemented)
+\item 
+\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a6010c962604af3cbb045b584921bef09}{DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER}} (Expected\+Pragmatic\+Declaration)
+\item 
+\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a4358a0802a946dadf7e24fbd2f631fa7}{DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER}} (Expected\+Primary\+Expression)
+\item 
+\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a56c55d00749fbe509ca6b2a8bc99c975}{DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER}} (Invalid\+For\+Loop\+Syntax)
+\item 
+\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a7aa9d1ad13e45aa01d802d921c0d9ecf}{DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER}} (User\+Syntax\+Error)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+size\+\_\+t \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a1a7bfb7664de1d7ec11889c003a862ae}{line}}
+\item 
+size\+\_\+t size\+\_\+t \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a82d45571107c19d0d2cc02017790b650}{col}}
+\item 
+size\+\_\+t size\+\_\+t char \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a0ba2c2e8612b9197cb518ac3c76f5e55}{c}}
+\item 
+size\+\_\+t size\+\_\+t char string \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a3605c63fabe27e08f8ab6e4a31ae9740}{pretty\+\_\+line\+\_\+loc}}
+\item 
+size\+\_\+t size\+\_\+t char string string \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_acc64f10c9f428479cdf7e94ce91a68e9}{detail}}
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_ad8f2f0fdabc916c37a72605a8ba866e0}{expected}}
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a3bf3977e4be407f4f82a9a2c6d70e9ef}{got}}
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} string \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_ae49a45464198e1f6632bf9f68c226757}{detail}}
+\item 
+string \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a3e5c3a6e2d872d6775a133a0b34d25a8}{lit}}
+\item 
+string size\+\_\+t \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a1a7bfb7664de1d7ec11889c003a862ae}{line}}
+\item 
+string size\+\_\+t size\+\_\+t \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a82d45571107c19d0d2cc02017790b650}{col}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Empty struct which defines traits of C\& compiler errors. 
+
+
+\begin{DoxyItemize}
+\item Encapsulates all the error type definitions.
+\item Provides a uniform interface to access error detail printing methods of each error type.
+\end{DoxyItemize}
+
+Use the method Err\+Detail$<$\+T$>$ where T is the error type. Each Err\+Detail method may have unique args but always returns a std\+::string. 
+
+Definition at line \mbox{\hyperlink{caoco__compiler__error_8h_source_l00143}{143}} of file \mbox{\hyperlink{caoco__compiler__error_8h_source}{caoco\+\_\+compiler\+\_\+error.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_ac81068686a637514e035185fd409d365}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!DEF\_ERROR\_DEFAULT@{DEF\_ERROR\_DEFAULT}}
+\index{DEF\_ERROR\_DEFAULT@{DEF\_ERROR\_DEFAULT}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{DEF\_ERROR\_DEFAULT()}{DEF\_ERROR\_DEFAULT()}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_ac81068686a637514e035185fd409d365} 
+caoco\+::caerr\+::\+Ca\+Err\+::\+DEF\+\_\+\+ERROR\+\_\+\+DEFAULT (\begin{DoxyParamCaption}\item[{No\+Error}]{}{, }\item[{Compiler\+Impl}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_a6010c962604af3cbb045b584921bef09}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}}
+\index{DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{DEF\_ERROR\_DEFAULT\_PARSER()}{DEF\_ERROR\_DEFAULT\_PARSER()}\hspace{0.1cm}{\footnotesize\ttfamily [1/7]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_a6010c962604af3cbb045b584921bef09} 
+caoco\+::caerr\+::\+Ca\+Err\+::\+DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER (\begin{DoxyParamCaption}\item[{Expected\+Pragmatic\+Declaration}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_a4358a0802a946dadf7e24fbd2f631fa7}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}}
+\index{DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{DEF\_ERROR\_DEFAULT\_PARSER()}{DEF\_ERROR\_DEFAULT\_PARSER()}\hspace{0.1cm}{\footnotesize\ttfamily [2/7]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_a4358a0802a946dadf7e24fbd2f631fa7} 
+caoco\+::caerr\+::\+Ca\+Err\+::\+DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER (\begin{DoxyParamCaption}\item[{Expected\+Primary\+Expression}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_ab12704d35e05860a84e5de812d019e50}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}}
+\index{DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{DEF\_ERROR\_DEFAULT\_PARSER()}{DEF\_ERROR\_DEFAULT\_PARSER()}\hspace{0.1cm}{\footnotesize\ttfamily [3/7]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_ab12704d35e05860a84e5de812d019e50} 
+caoco\+::caerr\+::\+Ca\+Err\+::\+DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER (\begin{DoxyParamCaption}\item[{Impl\+Expected\+Token}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_a56c55d00749fbe509ca6b2a8bc99c975}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}}
+\index{DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{DEF\_ERROR\_DEFAULT\_PARSER()}{DEF\_ERROR\_DEFAULT\_PARSER()}\hspace{0.1cm}{\footnotesize\ttfamily [4/7]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_a56c55d00749fbe509ca6b2a8bc99c975} 
+caoco\+::caerr\+::\+Ca\+Err\+::\+DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER (\begin{DoxyParamCaption}\item[{Invalid\+For\+Loop\+Syntax}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_ae61ac25bee0f2074a2e5e8643b849948}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}}
+\index{DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{DEF\_ERROR\_DEFAULT\_PARSER()}{DEF\_ERROR\_DEFAULT\_PARSER()}\hspace{0.1cm}{\footnotesize\ttfamily [5/7]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_ae61ac25bee0f2074a2e5e8643b849948} 
+caoco\+::caerr\+::\+Ca\+Err\+::\+DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER (\begin{DoxyParamCaption}\item[{Mismatched\+Scope}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_a8c737e79ad18e6d3d3f9a14edb4fc769}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}}
+\index{DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{DEF\_ERROR\_DEFAULT\_PARSER()}{DEF\_ERROR\_DEFAULT\_PARSER()}\hspace{0.1cm}{\footnotesize\ttfamily [6/7]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_a8c737e79ad18e6d3d3f9a14edb4fc769} 
+caoco\+::caerr\+::\+Ca\+Err\+::\+DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER (\begin{DoxyParamCaption}\item[{Not\+Implemented}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_a7aa9d1ad13e45aa01d802d921c0d9ecf}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}}
+\index{DEF\_ERROR\_DEFAULT\_PARSER@{DEF\_ERROR\_DEFAULT\_PARSER}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{DEF\_ERROR\_DEFAULT\_PARSER()}{DEF\_ERROR\_DEFAULT\_PARSER()}\hspace{0.1cm}{\footnotesize\ttfamily [7/7]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_a7aa9d1ad13e45aa01d802d921c0d9ecf} 
+caoco\+::caerr\+::\+Ca\+Err\+::\+DEF\+\_\+\+ERROR\+\_\+\+DEFAULT\+\_\+\+PARSER (\begin{DoxyParamCaption}\item[{User\+Syntax\+Error}]{}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_a0ba2c2e8612b9197cb518ac3c76f5e55}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!c@{c}}
+\index{c@{c}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{c}{c}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_a0ba2c2e8612b9197cb518ac3c76f5e55} 
+size\+\_\+t size\+\_\+t char caoco\+::caerr\+::\+Ca\+Err\+::c}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__compiler__error_8h_source_l00147}{147}} of file \mbox{\hyperlink{caoco__compiler__error_8h_source}{caoco\+\_\+compiler\+\_\+error.\+h}}.
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_a82d45571107c19d0d2cc02017790b650}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!col@{col}}
+\index{col@{col}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{col}{col}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_a82d45571107c19d0d2cc02017790b650} 
+string size\+\_\+t size\+\_\+t caoco\+::caerr\+::\+Ca\+Err\+::col}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ CevalIntegerOverflow::HeaderWithLocStr(\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a1a7bfb7664de1d7ec11889c003a862ae}{line}},\ \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a82d45571107c19d0d2cc02017790b650}{col}})\ +}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)nUnsigned\ integer\ overflow\ detected\ during\ constant\ evaluation\ of\ "{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}the\ "{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}literal:\ "{}}\ +}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a3e5c3a6e2d872d6775a133a0b34d25a8}{lit}}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{caoco__compiler__error_8h_source_l00147}{147}} of file \mbox{\hyperlink{caoco__compiler__error_8h_source}{caoco\+\_\+compiler\+\_\+error.\+h}}.
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_a82d45571107c19d0d2cc02017790b650}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!col@{col}}
+\index{col@{col}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{col}{col}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_a82d45571107c19d0d2cc02017790b650} 
+string size\+\_\+t size\+\_\+t caoco\+::caerr\+::\+Ca\+Err\+::col}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ CevalIntegerOverflow::HeaderWithLocStr(\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a1a7bfb7664de1d7ec11889c003a862ae}{line}},\ \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a82d45571107c19d0d2cc02017790b650}{col}})\ +}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)nInteger\ overflow\ detected\ during\ constant\ evaluation\ of\ the\ "{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}literal:\ "{}}\ +}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a3e5c3a6e2d872d6775a133a0b34d25a8}{lit}}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{caoco__compiler__error_8h_source_l00194}{194}} of file \mbox{\hyperlink{caoco__compiler__error_8h_source}{caoco\+\_\+compiler\+\_\+error.\+h}}.
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_acc64f10c9f428479cdf7e94ce91a68e9}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!detail@{detail}}
+\index{detail@{detail}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{detail}{detail}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_acc64f10c9f428479cdf7e94ce91a68e9} 
+size\+\_\+t size\+\_\+t char string string caoco\+::caerr\+::\+Ca\+Err\+::detail}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \textcolor{stringliteral}{"{}"{}})\ \{}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{string}\ special\_case\_error\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a0ba2c2e8612b9197cb518ac3c76f5e55}{c}}\ ==\ \textcolor{charliteral}{'\(\backslash\)"{}'})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ special\_case\_error\ =}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Did\ you\ mean\ to\ use\ '\ for\ a\ string\ literal?\ \(\backslash\)nC\&\ uses\ "{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}single\ "{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}apostrophes\ to\ enclose\ string\ literals.\ ex\ 'Hello\ "{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}World!'.\(\backslash\)n"{}};}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{string}\ ret\ =\ LexerUnknownChar::HeaderWithLocStr(\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a1a7bfb7664de1d7ec11889c003a862ae}{line}},\ \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a82d45571107c19d0d2cc02017790b650}{col}})\ +}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)nUnknown\ character\ detected\ in\ source\ file\ at\ the\ lexing\ "{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}phase."{}}\ +}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)nOffending\ Char:\ '"{}}\ +\ string(1,\ \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a0ba2c2e8612b9197cb518ac3c76f5e55}{c}})\ +\ \textcolor{stringliteral}{"{}'.\(\backslash\)n"{}}\ +}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a3605c63fabe27e08f8ab6e4a31ae9740}{pretty\_line\_loc}};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (!special\_case\_error.empty())\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ ret\ +=\ \textcolor{stringliteral}{"{}\(\backslash\)nError\ detail:\ "{}}\ +\ special\_case\_error;}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_acc64f10c9f428479cdf7e94ce91a68e9}{detail}}.empty())\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ ret\ +=\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}}\ +\ \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_acc64f10c9f428479cdf7e94ce91a68e9}{detail}};}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{\ \ \}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{caoco__compiler__error_8h_source_l00148}{148}} of file \mbox{\hyperlink{caoco__compiler__error_8h_source}{caoco\+\_\+compiler\+\_\+error.\+h}}.
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_ae49a45464198e1f6632bf9f68c226757}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!detail@{detail}}
+\index{detail@{detail}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{detail}{detail}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_ae49a45464198e1f6632bf9f68c226757} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} string caoco\+::caerr\+::\+Ca\+Err\+::detail}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \textcolor{stringliteral}{"{}"{}})\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ ParserExpectedToken::HeaderStr()\ +}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Expected:\ "{}}\ +\ \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga6d71746c75ea78972b72a29284e9a2a6}{eTkEnumStr}}(\mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_ad8f2f0fdabc916c37a72605a8ba866e0}{expected}}).data()\ +}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\ Found:\ "{}}\ +\ \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_a3bf3977e4be407f4f82a9a2c6d70e9ef}{got}}.\mbox{\hyperlink{group__cand__compiler__parser__cursor_ga9dc058a39a3afac5384a846760045459}{Get}}().\mbox{\hyperlink{classcaoco_1_1_tk_a9beb054e874ea4ca271278bd98f7364d}{TypeStr}}().data()\ +\ \mbox{\hyperlink{structcaoco_1_1caerr_1_1_ca_err_acc64f10c9f428479cdf7e94ce91a68e9}{detail}};}
+\DoxyCodeLine{\ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \mbox{\hyperlink{caoco__compiler__error_8h_a305586d507cdaaf5549527a022e277da}{DEF\_ERROR\_DEFAULT\_PARSER}}(InvalidSingularOperand)}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{caoco__compiler__error_8h_source_l00178}{178}} of file \mbox{\hyperlink{caoco__compiler__error_8h_source}{caoco\+\_\+compiler\+\_\+error.\+h}}.
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_ad8f2f0fdabc916c37a72605a8ba866e0}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!expected@{expected}}
+\index{expected@{expected}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{expected}{expected}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_ad8f2f0fdabc916c37a72605a8ba866e0} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} caoco\+::caerr\+::\+Ca\+Err\+::expected}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__compiler__error_8h_source_l00178}{178}} of file \mbox{\hyperlink{caoco__compiler__error_8h_source}{caoco\+\_\+compiler\+\_\+error.\+h}}.
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_a3bf3977e4be407f4f82a9a2c6d70e9ef}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!got@{got}}
+\index{got@{got}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{got}{got}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_a3bf3977e4be407f4f82a9a2c6d70e9ef} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} caoco\+::caerr\+::\+Ca\+Err\+::got}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__compiler__error_8h_source_l00178}{178}} of file \mbox{\hyperlink{caoco__compiler__error_8h_source}{caoco\+\_\+compiler\+\_\+error.\+h}}.
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_a1a7bfb7664de1d7ec11889c003a862ae}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!line@{line}}
+\index{line@{line}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{line}{line}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_a1a7bfb7664de1d7ec11889c003a862ae} 
+string size\+\_\+t caoco\+::caerr\+::\+Ca\+Err\+::line}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__compiler__error_8h_source_l00147}{147}} of file \mbox{\hyperlink{caoco__compiler__error_8h_source}{caoco\+\_\+compiler\+\_\+error.\+h}}.
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_a1a7bfb7664de1d7ec11889c003a862ae}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!line@{line}}
+\index{line@{line}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{line}{line}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_a1a7bfb7664de1d7ec11889c003a862ae} 
+string size\+\_\+t caoco\+::caerr\+::\+Ca\+Err\+::line}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__compiler__error_8h_source_l00194}{194}} of file \mbox{\hyperlink{caoco__compiler__error_8h_source}{caoco\+\_\+compiler\+\_\+error.\+h}}.
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_a3e5c3a6e2d872d6775a133a0b34d25a8}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!lit@{lit}}
+\index{lit@{lit}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{lit}{lit}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_a3e5c3a6e2d872d6775a133a0b34d25a8} 
+string caoco\+::caerr\+::\+Ca\+Err\+::lit}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__compiler__error_8h_source_l00194}{194}} of file \mbox{\hyperlink{caoco__compiler__error_8h_source}{caoco\+\_\+compiler\+\_\+error.\+h}}.
+
+\Hypertarget{structcaoco_1_1caerr_1_1_ca_err_a3605c63fabe27e08f8ab6e4a31ae9740}\index{caoco::caerr::CaErr@{caoco::caerr::CaErr}!pretty\_line\_loc@{pretty\_line\_loc}}
+\index{pretty\_line\_loc@{pretty\_line\_loc}!caoco::caerr::CaErr@{caoco::caerr::CaErr}}
+\doxysubsubsection{\texorpdfstring{pretty\_line\_loc}{pretty\_line\_loc}}
+{\footnotesize\ttfamily \label{structcaoco_1_1caerr_1_1_ca_err_a3605c63fabe27e08f8ab6e4a31ae9740} 
+size\+\_\+t size\+\_\+t char string caoco\+::caerr\+::\+Ca\+Err\+::pretty\+\_\+line\+\_\+loc}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__compiler__error_8h_source_l00147}{147}} of file \mbox{\hyperlink{caoco__compiler__error_8h_source}{caoco\+\_\+compiler\+\_\+error.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/\mbox{\hyperlink{caoco__compiler__error_8h}{caoco\+\_\+compiler\+\_\+error.\+h}}\end{DoxyCompactItemize}

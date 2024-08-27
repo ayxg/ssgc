@@ -1,0 +1,202 @@
+\doxysection{C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/ide/imgui\+\_\+interface.h File Reference}
+\hypertarget{imgui__interface_8h}{}\label{imgui__interface_8h}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/ide/imgui\_interface.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/ide/imgui\_interface.h}}
+
+
+Interface for the \doxylink{namespace_im_gui}{Im\+Gui} library.  
+
+
+{\ttfamily \#include $<$atomic$>$}\newline
+{\ttfamily \#include $<$concepts$>$}\newline
+{\ttfamily \#include $<$filesystem$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$tuple$>$}\newline
+{\ttfamily \#include $<$type\+\_\+traits$>$}\newline
+{\ttfamily \#include $<$unordered\+\_\+set$>$}\newline
+{\ttfamily \#include "{}cppsextended.\+h"{}}\newline
+{\ttfamily \#include "{}imgui-\/\+SFML.\+h"{}}\newline
+{\ttfamily \#include "{}imgui.\+h"{}}\newline
+{\ttfamily \#include "{}imgui\+\_\+stdlib.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcgui_1_1_u_i_d_gen}{cgui\+::\+UIDGen}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1_unique_name_map}{cgui\+::\+Unique\+Name\+Map}}
+\begin{DoxyCompactList}\small\item\em Simple map which maintains unique names. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classcgui_1_1_scoped_widget_base}{cgui\+::\+Scoped\+Widget\+Base}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1_singular_widget_base}{cgui\+::\+Singular\+Widget\+Base}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_window}{cgui\+::scoped\+\_\+widget\+::\+Window}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_subcontext}{cgui\+::scoped\+\_\+widget\+::\+Subcontext}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_named_subcontext}{cgui\+::scoped\+\_\+widget\+::\+Named\+Subcontext}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu_bar}{cgui\+::scoped\+\_\+widget\+::\+Menu\+Bar}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu}{cgui\+::scoped\+\_\+widget\+::\+Menu}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar}{cgui\+::scoped\+\_\+widget\+::\+Tab\+Bar}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_item}{cgui\+::scoped\+\_\+widget\+::\+Tab\+Item}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tree_node}{cgui\+::scoped\+\_\+widget\+::\+Tree\+Node}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1single__widget_1_1_button}{cgui\+::single\+\_\+widget\+::\+Button}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1single__widget_1_1_menu_item}{cgui\+::single\+\_\+widget\+::\+Menu\+Item}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1single__widget_1_1_selectable}{cgui\+::single\+\_\+widget\+::\+Selectable}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1single__widget_1_1_multiline_text_input}{cgui\+::single\+\_\+widget\+::\+Multiline\+Text\+Input}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view}{cgui\+::combo\+\_\+widget\+::\+Directory\+View}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1_graphics_context}{cgui\+::\+Graphics\+Context}}
+\item 
+struct \mbox{\hyperlink{structcgui_1_1example_1_1_example_app_console}{cgui\+::example\+::\+Example\+App\+Console}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecgui}{cgui}}
+\begin{DoxyCompactList}\small\item\em A simple unified interface for the underlying graphics and windowing libraries. Only provides bare minimum functionality required for this project. Designed to potentially use other libraries in the future. \end{DoxyCompactList}\item 
+namespace \mbox{\hyperlink{namespacecgui_1_1scoped__widget}{cgui\+::scoped\+\_\+widget}}
+\item 
+namespace \mbox{\hyperlink{namespacecgui_1_1single__widget}{cgui\+::single\+\_\+widget}}
+\item 
+namespace \mbox{\hyperlink{namespacecgui_1_1combo__widget}{cgui\+::combo\+\_\+widget}}
+\item 
+namespace \mbox{\hyperlink{namespacecgui_1_1example}{cgui\+::example}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{namespacecgui_accfa27c175381ca955fd8cc989fe25d2}{cgui\+::\+Cgui\+Vec2}} = std\+::pair$<$float, float$>$
+\begin{DoxyCompactList}\small\item\em Internal vec2 representation, for now its a pair of floats to keep it simple. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{cgui\+::\+Gui\+Flags}} = int
+\begin{DoxyCompactList}\small\item\em Underlying type of widget gui flags (int). \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespacecgui_a5865c494765aebe5686926a5939f4e6a}{cgui\+::e\+Window\+Flags}} = Im\+Gui\+Window\+Flags\+\_\+
+\item 
+using \mbox{\hyperlink{namespacecgui_abdd6ff50d7f278bb409de413071690a9}{cgui\+::e\+Subcontext\+Flags}} = Im\+Gui\+Child\+Flags\+\_\+
+\item 
+using \mbox{\hyperlink{namespacecgui_a29631cb1c8eb36a194e3cf9a68b8ee30}{cgui\+::e\+Tab\+Bar\+Flags}} = Im\+Gui\+Tab\+Bar\+Flags\+\_\+
+\item 
+using \mbox{\hyperlink{namespacecgui_a43bca1e0acc719cc03352edd0556339b}{cgui\+::e\+Tab\+Item\+Flags}} = Im\+Gui\+Tab\+Item\+Flags\+\_\+
+\item 
+using \mbox{\hyperlink{namespacecgui_afe47e64b4fbdd23309fafffafe0bdf88}{cgui\+::e\+Input\+Text\+Flags}} = Im\+Gui\+Input\+Text\+Flags\+\_\+
+\item 
+using \mbox{\hyperlink{namespacecgui_ae335cd7e1f998458e813bfe62942eb2d}{cgui\+::\+Window\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_a5865c494765aebe5686926a5939f4e6a}{e\+Window\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$
+\item 
+using \mbox{\hyperlink{namespacecgui_a7b249f1f35bad60706b57b67146b25d8}{cgui\+::\+Subcontext\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_abdd6ff50d7f278bb409de413071690a9}{e\+Subcontext\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$
+\item 
+using \mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{cgui\+::\+Tab\+Bar\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_a29631cb1c8eb36a194e3cf9a68b8ee30}{e\+Tab\+Bar\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$
+\item 
+using \mbox{\hyperlink{namespacecgui_aa2788b139f5b12284aeec459926ae443}{cgui\+::\+Tab\+Item\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_a43bca1e0acc719cc03352edd0556339b}{e\+Tab\+Item\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$
+\item 
+using \mbox{\hyperlink{namespacecgui_a14cde9d0a4b6d0c32cd3e760ec9ebd2c}{cgui\+::\+Input\+Text\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_afe47e64b4fbdd23309fafffafe0bdf88}{e\+Input\+Text\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_gadbb52ed78c57df3c9bd2290700de3786}{Cgui\+Vec2}} = \mbox{\hyperlink{namespacecgui_accfa27c175381ca955fd8cc989fe25d2}{cgui\+::\+Cgui\+Vec2}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga4c97dcf117d16f6cbff2a820261e4ac3}{Cgui\+UIDGen}} = \mbox{\hyperlink{classcgui_1_1_u_i_d_gen}{cgui\+::\+UIDGen}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_gaac5437f5a70c650bd97c0332fca3f8fd}{Cgui\+UIDIter}} = \mbox{\hyperlink{classcgui_1_1_u_i_d_gen_a36a52a548db13af71c67da7b80daac9b}{cgui\+::\+UIDGen\+::\+Iter}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga9e1fcaf306c019a511746f4358c6a41a}{Cgui\+Unique\+Name\+Map}} = \mbox{\hyperlink{classcgui_1_1_unique_name_map}{cgui\+::\+Unique\+Name\+Map}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga3a508886fd6ccd3df7131009d6c97542}{Cgui\+Flags}} = \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{cgui\+::\+Gui\+Flags}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga65b8ce8a81fefdd59445646ce5e2bf40}{Cgui\+Window\+Flags}} = \mbox{\hyperlink{namespacecgui_ae335cd7e1f998458e813bfe62942eb2d}{cgui\+::\+Window\+Flags}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga57b69a8ca7b0cd20f0449f02e8baf60a}{Cgui\+Subcontext\+Flags}} = \mbox{\hyperlink{namespacecgui_a7b249f1f35bad60706b57b67146b25d8}{cgui\+::\+Subcontext\+Flags}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga763c23cc1af8f771d0b9f1483a9b27d3}{Cgui\+Tab\+Bar\+Flags}} = \mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{cgui\+::\+Tab\+Bar\+Flags}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_gab29fd1076d23ca36f3940047c91a257b}{Cgui\+Tab\+Item\+Flags}} = \mbox{\hyperlink{namespacecgui_aa2788b139f5b12284aeec459926ae443}{cgui\+::\+Tab\+Item\+Flags}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_gad146269882c17d92c5ffcf37d8de8afb}{Cgui\+Input\+Text\+Flags}} = \mbox{\hyperlink{namespacecgui_a14cde9d0a4b6d0c32cd3e760ec9ebd2c}{cgui\+::\+Input\+Text\+Flags}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_gaef07753fe573a83da9182cf35298ca0a}{Cgui\+Window\+Flag\+Enum}} = \mbox{\hyperlink{namespacecgui_a5865c494765aebe5686926a5939f4e6a}{cgui\+::e\+Window\+Flags}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga4bf5a4c1a5be54e68d755fd81a6b5ece}{Cgui\+Subcontext\+Flag\+Enum}} = \mbox{\hyperlink{namespacecgui_abdd6ff50d7f278bb409de413071690a9}{cgui\+::e\+Subcontext\+Flags}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_gae5b0377318dd1edc091241aca7ac6f95}{Cgui\+Tab\+Bar\+Flag\+Enum}} = \mbox{\hyperlink{namespacecgui_a29631cb1c8eb36a194e3cf9a68b8ee30}{cgui\+::e\+Tab\+Bar\+Flags}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga34d4a2efa90a2dcc702cfb865a5815f2}{Cgui\+Tab\+Item\+Flag\+Enum}} = \mbox{\hyperlink{namespacecgui_a43bca1e0acc719cc03352edd0556339b}{cgui\+::e\+Tab\+Item\+Flags}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga978de1b5062b28255093a6ee16d0e586}{Cgui\+Input\+Text\+Flag\+Enum}} = \mbox{\hyperlink{namespacecgui_afe47e64b4fbdd23309fafffafe0bdf88}{cgui\+::e\+Input\+Text\+Flags}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga612654ee516a2049629aaf3f5101e452}{Cgui\+Window}} = \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_window}{cgui\+::scoped\+\_\+widget\+::\+Window}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga6b2fdd4215770945d6d8f87b200a54a7}{Cgui\+Subcontext}} = \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_subcontext}{cgui\+::scoped\+\_\+widget\+::\+Subcontext}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga2ca689f132dc04bb1cd3c2f54e5afe4d}{Cgui\+Named\+Subcontext}} = \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_named_subcontext}{cgui\+::scoped\+\_\+widget\+::\+Named\+Subcontext}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga6513a39066da2da377d4a6a53fe55216}{Cgui\+Menu\+Bar}} = \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu_bar}{cgui\+::scoped\+\_\+widget\+::\+Menu\+Bar}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_gaae2a2696713ff96ca0b813e8fd2e98b4}{Cgui\+Menu}} = \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_menu}{cgui\+::scoped\+\_\+widget\+::\+Menu}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_gaafb387908d4a268f8989dc88ce31e13b}{Cgui\+Tab\+Bar}} = \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar}{cgui\+::scoped\+\_\+widget\+::\+Tab\+Bar}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga28f50663038bed7ca332a424ac449abd}{Cgui\+Tab\+Item}} = \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_item}{cgui\+::scoped\+\_\+widget\+::\+Tab\+Item}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga7b8b9e82ed314c682fa18fe74364733b}{Cgui\+Tree\+Node}} = \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tree_node}{cgui\+::scoped\+\_\+widget\+::\+Tree\+Node}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_gad4cc007562ccb98bf1cf50ed57fd4bf1}{Cgui\+Button}} = \mbox{\hyperlink{classcgui_1_1single__widget_1_1_button}{cgui\+::single\+\_\+widget\+::\+Button}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga59912b5c6dce551baab9ee795036578d}{Cgui\+Menu\+Item}} = \mbox{\hyperlink{classcgui_1_1single__widget_1_1_menu_item}{cgui\+::single\+\_\+widget\+::\+Menu\+Item}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_gade2185ad56259dc7062725df5e0dbbbf}{Cgui\+Selectable}} = \mbox{\hyperlink{classcgui_1_1single__widget_1_1_selectable}{cgui\+::single\+\_\+widget\+::\+Selectable}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga039340f37e6d629a0df5a42cf85dad31}{Cgui\+Multiline\+Text\+Input}} = \mbox{\hyperlink{classcgui_1_1single__widget_1_1_multiline_text_input}{cgui\+::single\+\_\+widget\+::\+Multiline\+Text\+Input}}
+\item 
+using \mbox{\hyperlink{group__cand__cide__cgui_ga80e8056ba6717a74ba6597ee4f6cec29}{Cgui\+Directory\+View}} = \mbox{\hyperlink{classcgui_1_1combo__widget_1_1_directory_view}{cgui\+::combo\+\_\+widget\+::\+Directory\+View}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{namespacecgui_a79f511149d5c2e46e93904c5c462ba1b}{cgui\+::e\+Widget\+Init}} \{ \mbox{\hyperlink{namespacecgui_a79f511149d5c2e46e93904c5c462ba1baeaf1b571da7747037056255592479bb9}{cgui\+::k\+Widget\+Init\+Delayed}} = true
+, \mbox{\hyperlink{namespacecgui_a79f511149d5c2e46e93904c5c462ba1bab736956b863d2c0f986fc1837c86e88f}{cgui\+::k\+Widget\+Init\+Immediate}} = false
+ \}
+\begin{DoxyCompactList}\small\item\em Specifies if a widget should be initialized immediately or delayed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+constexpr float \mbox{\hyperlink{namespacecgui_a365384d0f4df323cacbe311f9bd7fefa}{cgui\+::k\+Expand\+Widget\+To\+Remaining\+Space}} ()
+\item 
+void \mbox{\hyperlink{namespacecgui_1_1example_abd8d0ff5c9cd28a5900caef3eba517cd}{cgui\+::example\+::\+Example\+Hello\+Window}} ()
+\item 
+void \mbox{\hyperlink{namespacecgui_1_1example_ae5a7e783d4c657dc5c9fa7b34d51d509}{cgui\+::example\+::\+Example\+Menu\+Bar}} ()
+\item 
+void \mbox{\hyperlink{namespacecgui_1_1example_a0927e7215f380b30617a8ae142f3fff7}{cgui\+::example\+::\+Example\+Window\+With\+Subcontext}} ()
+\item 
+void \mbox{\hyperlink{namespacecgui_1_1example_ada592156a156c166fa5b08c72f688e51}{cgui\+::example\+::\+Example\+Tab\+Bar}} ()
+\item 
+void \mbox{\hyperlink{namespacecgui_1_1example_a480be9df818545932bd724a7e4af97dc}{cgui\+::example\+::\+Example\+Editor\+Tabs}} (sf\+::\+Window \&window)
+\item 
+static void \mbox{\hyperlink{namespacecgui_1_1example_a247306168347ee9afad92db0961cb7c4}{cgui\+::example\+::\+Show\+App\+Console}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+constexpr float \mbox{\hyperlink{namespacecgui_a209c6fc57941cdeeac593bb793a4e399}{cgui\+::k\+Expand}} = -\/FLT\+\_\+\+MIN
+\item 
+constexpr \mbox{\hyperlink{namespacecgui_accfa27c175381ca955fd8cc989fe25d2}{Cgui\+Vec2}} \mbox{\hyperlink{namespacecgui_aee909040d7dbed78e15df6fd3153f013}{cgui\+::k\+Expand\+XY}} = \{\mbox{\hyperlink{namespacecgui_a209c6fc57941cdeeac593bb793a4e399}{k\+Expand}}, \mbox{\hyperlink{namespacecgui_a209c6fc57941cdeeac593bb793a4e399}{k\+Expand}}\}
+\item 
+const \mbox{\hyperlink{namespacecgui_accfa27c175381ca955fd8cc989fe25d2}{Cgui\+Vec2}} \mbox{\hyperlink{namespacecgui_a25b15a077e506a2db297ec5dcba2e259}{cgui\+::k\+Expand\+Widget\+To\+Remaining\+Space\+XY}}
+\item 
+static \mbox{\hyperlink{classcgui_1_1_u_i_d_gen}{UIDGen}} \mbox{\hyperlink{namespacecgui_aa7ac59429289e4a1321f622ffbf48371}{cgui\+::g\+Cgui\+Default\+UIDGenerator}} \{\}
+\begin{DoxyCompactList}\small\item\em Implicit global unique id generator for cgui widget classes. !! Do not use/access directly, called by \doxylink{classcgui_1_1_scoped_widget_base}{Scoped\+Widget\+Base} on default construction. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{classcgui_1_1_unique_name_map}{Unique\+Name\+Map}} \mbox{\hyperlink{namespacecgui_a2601831d3052aa0ad6987e2e8f49f684}{cgui\+::g\+Cgui\+Default\+Unique\+Name\+Map}} \{\}
+\begin{DoxyCompactList}\small\item\em Implicit global unique name map for cgui widget classes. !! Do not use/access directly, called by \doxylink{classcgui_1_1_scoped_widget_base}{Scoped\+Widget\+Base} on default construction. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Interface for the \doxylink{namespace_im_gui}{Im\+Gui} library. 
+
+
+
+Definition in file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+

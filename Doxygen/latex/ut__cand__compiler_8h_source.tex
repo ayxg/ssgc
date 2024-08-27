@@ -1,0 +1,58 @@
+\doxysection{ut\+\_\+cand\+\_\+compiler.\+h}
+\hypertarget{ut__cand__compiler_8h_source}{}\label{ut__cand__compiler_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/unit-\/tests/ut-\/cand-\/compiler/ut\_cand\_compiler.h@{C:/Users/Anton/source/repos/CandRuntime/unit-\/tests/ut-\/cand-\/compiler/ut\_cand\_compiler.h}}
+\mbox{\hyperlink{ut__cand__compiler_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00001}00001\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00002}00002\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00003}00003\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00004}00004\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00005}00005\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00006}00006\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00007}00007\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00008}00008\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00009}00009\ \textcolor{comment}{///\ @file}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00010}00010\ \textcolor{comment}{///\ @ingroup\ unittest1\_cand\_compiler}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00011}00011\ \textcolor{comment}{///\ @brief\ Includes\ all\ unit\ tests\ for\ the\ C\&\ compiler.}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00012}00012\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00014}00014\ \textcolor{comment}{///\ @addtogroup\ unittest1\_cand\_compiler}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00015}00015\ \textcolor{comment}{///\ @\{}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00016}00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{HEADER\_GUARD\_CAOCO\_UNIT\_TESTS\_UT\_CAND\_COMPILER\_H}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00017}00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{HEADER\_GUARD\_CAOCO\_UNIT\_TESTS\_UT\_CAND\_COMPILER\_H}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00018}00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{ut__caoco__lexer_8h}{"{}ut\_caoco\_lexer.h"{}}}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00019}00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{ut__caoco__token__scope_8h}{"{}ut\_caoco\_token\_scope.h"{}}}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00020}00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{ut__caoco__parser__basic_8h}{"{}ut\_caoco\_parser\_basic.h"{}}}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00021}00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{ut__caoco__build_8h}{"{}ut\_caoco\_build.h"{}}}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00023}\mbox{\hyperlink{namespaceut}{00023}}\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespaceut}{ut}}\ \{}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00024}\mbox{\hyperlink{namespaceut_af3309d259cda239c63813463e62cee07}{00024}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespaceut_af3309d259cda239c63813463e62cee07}{UnitTestCandCompiler}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00025}00025\ \ \ \ \ \mbox{\hyperlink{group__cppmodule1__minitest_ga07fdd35aae6c452b5bbfcb9441db7149}{MINITEST\_RUN\_REGISTERED\_MODULE}}(Test\_Lexer);}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00026}00026\ \ \ \ \ \mbox{\hyperlink{group__cppmodule1__minitest_ga07fdd35aae6c452b5bbfcb9441db7149}{MINITEST\_RUN\_REGISTERED\_MODULE}}(Test\_TkScope);}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00027}00027\ \ \ \ \ \mbox{\hyperlink{group__cppmodule1__minitest_ga07fdd35aae6c452b5bbfcb9441db7149}{MINITEST\_RUN\_REGISTERED\_MODULE}}(Test\_ParserBasics);}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00028}00028\ \ \ \ \ \mbox{\hyperlink{group__cppmodule1__minitest_ga07fdd35aae6c452b5bbfcb9441db7149}{MINITEST\_RUN\_REGISTERED\_MODULE}}(Test\_Build);}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00029}00029\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00030}00030\ \}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00032}00032\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{preprocessor}{HEADER\_GUARD\_CAOCO\_UNIT\_TESTS\_UT\_CAND\_COMPILER\_H}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00033}00033\ \textcolor{comment}{///\ @\}\ //\ end\ of\ unittest1\_cand\_compiler}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00034}00034\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00035}00035\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00036}00036\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00037}00037\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00038}00038\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00039}00039\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00040}00040\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00041}00041\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00042}00042\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00043}00043\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00044}00044\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00045}00045\ \textcolor{comment}{//\ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00046}00046\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00047}00047\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00048}00048\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00049}00049\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00050}00050\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00051}00051\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{ut__cand__compiler_8h_source_l00052}00052\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+
+\end{DoxyCode}

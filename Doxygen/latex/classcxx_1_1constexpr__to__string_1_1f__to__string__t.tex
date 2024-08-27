@@ -1,0 +1,272 @@
+\doxysection{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t\texorpdfstring{$<$}{<} N, char\+\_\+type \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{}\label{classcxx_1_1constexpr__to__string_1_1f__to__string__t}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+
+
+Provides the ability to convert a floating-\/point number to a string at compile-\/time.  
+
+
+
+
+{\ttfamily \#include $<$cx\+\_\+ftos.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+constexpr \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a6b8b589e7191f0de81201ec5ebd8dd03}{f\+\_\+to\+\_\+string\+\_\+t}} () noexcept
+\begin{DoxyCompactList}\small\item\em Constructs the object, filling {\ttfamily buf} with the string representation of N. \end{DoxyCompactList}\item 
+constexpr \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a07bb80aaf8e0c80d4a57029840699dc0}{operator char\+\_\+type \texorpdfstring{$\ast$}{*}}} () noexcept
+\item 
+constexpr \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_ac7edd3c5b9d82bab67308bccec8a336d}{operator const char\+\_\+type \texorpdfstring{$\ast$}{*}}} () const noexcept
+\item 
+constexpr auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a2c8517abc1a30b5d1b75076d21b96046}{size}} () const noexcept
+\item 
+constexpr auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a3d7cfd6232721c9ab9160f66767b0d5c}{data}} () noexcept
+\item 
+constexpr const auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a4add8a1cb0620c376d2e0d1748ffca3d}{data}} () const noexcept
+\item 
+constexpr auto \& \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a28ffe139978b6444efcd3b947d3f0e82}{operator\mbox{[}$\,$\mbox{]}}} (unsigned int i) noexcept
+\item 
+constexpr const auto \& \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a78d22bc3becd84fafdac568dabc4d8e5}{operator\mbox{[}$\,$\mbox{]}}} (unsigned int i) const noexcept
+\item 
+constexpr auto \& \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_afd49af60ac6b063984b7d415569e5565}{front}} () noexcept
+\item 
+constexpr const auto \& \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a03b83fec83dce916b1fed9b0062d542c}{front}} () const noexcept
+\item 
+constexpr auto \& \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a9ee1862355409ac4603e00518eac11a9}{back}} () noexcept
+\item 
+constexpr const auto \& \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a05bca5321322134e23d0c9557444ed7c}{back}} () const noexcept
+\item 
+constexpr auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a9dd08205de069c37d117fa1d929a136d}{begin}} () noexcept
+\item 
+constexpr const auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a8512c5101b4473a7bb6415b2d0e058c7}{begin}} () const noexcept
+\item 
+constexpr auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a2d83cd92e814ea4235df79489e3f4ecf}{end}} () noexcept
+\item 
+constexpr const auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_aa686d80bf3a8f72c9658143840c93830}{end}} () const noexcept
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+char\+\_\+type \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a0cb5ab487a0fd362f211453936ce15a2}{buf}} \mbox{[}(\mbox{[}$\,$\mbox{]}() constexpr noexcept \{ unsigned int len=2;if(N.\+whole$<$=0) len++;for(auto n=N.\+whole;n;len++, n/=10) ;if(N.\+frac==0\texorpdfstring{$\vert$}{|}\texorpdfstring{$\vert$}{|}(N.\+whole==0 \&\&N.\+frac$<$ 0)) len++;for(auto n=N.\+frac;n;len++, n/=10) ;return len;\}())\mbox{]} = \{\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type$>$\newline
+struct cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t$<$ N, char\+\_\+type $>$}
+Provides the ability to convert a floating-\/point number to a string at compile-\/time. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em N} & Number to convert \\
+\hline
+\end{DoxyTemplParams}
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00058}{58}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a6b8b589e7191f0de81201ec5ebd8dd03}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!f\_to\_string\_t@{f\_to\_string\_t}}
+\index{f\_to\_string\_t@{f\_to\_string\_t}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{f\_to\_string\_t()}{f\_to\_string\_t()}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a6b8b589e7191f0de81201ec5ebd8dd03} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+\mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::f\+\_\+to\+\_\+string\+\_\+t (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Constructs the object, filling {\ttfamily buf} with the string representation of N. 
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00074}{74}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a05bca5321322134e23d0c9557444ed7c}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!back@{back}}
+\index{back@{back}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{back()}{back()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a05bca5321322134e23d0c9557444ed7c} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+const auto \& \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::back (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00106}{106}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a9ee1862355409ac4603e00518eac11a9}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!back@{back}}
+\index{back@{back}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{back()}{back()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a9ee1862355409ac4603e00518eac11a9} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+auto \& \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::back (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00105}{105}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a8512c5101b4473a7bb6415b2d0e058c7}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!begin@{begin}}
+\index{begin@{begin}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{begin()}{begin()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a8512c5101b4473a7bb6415b2d0e058c7} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+const auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::begin (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00109}{109}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a9dd08205de069c37d117fa1d929a136d}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!begin@{begin}}
+\index{begin@{begin}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{begin()}{begin()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a9dd08205de069c37d117fa1d929a136d} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::begin (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00108}{108}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a4add8a1cb0620c376d2e0d1748ffca3d}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!data@{data}}
+\index{data@{data}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{data()}{data()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a4add8a1cb0620c376d2e0d1748ffca3d} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+const auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::data (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00098}{98}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a3d7cfd6232721c9ab9160f66767b0d5c}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!data@{data}}
+\index{data@{data}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{data()}{data()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a3d7cfd6232721c9ab9160f66767b0d5c} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::data (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00097}{97}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_aa686d80bf3a8f72c9658143840c93830}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!end@{end}}
+\index{end@{end}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{end()}{end()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_aa686d80bf3a8f72c9658143840c93830} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+const auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::end (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00111}{111}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a2d83cd92e814ea4235df79489e3f4ecf}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!end@{end}}
+\index{end@{end}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{end()}{end()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a2d83cd92e814ea4235df79489e3f4ecf} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::end (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00110}{110}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a03b83fec83dce916b1fed9b0062d542c}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!front@{front}}
+\index{front@{front}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{front()}{front()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a03b83fec83dce916b1fed9b0062d542c} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+const auto \& \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::front (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00104}{104}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_afd49af60ac6b063984b7d415569e5565}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!front@{front}}
+\index{front@{front}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{front()}{front()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_afd49af60ac6b063984b7d415569e5565} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+auto \& \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::front (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00103}{103}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a07bb80aaf8e0c80d4a57029840699dc0}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!operator char\_type \texorpdfstring{$\ast$}{*}@{operator char\_type \texorpdfstring{$\ast$}{*}}}
+\index{operator char\_type \texorpdfstring{$\ast$}{*}@{operator char\_type \texorpdfstring{$\ast$}{*}}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{operator char\_type \texorpdfstring{$\ast$}{*}()}{operator char\_type *()}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a07bb80aaf8e0c80d4a57029840699dc0} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+\mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::operator char\+\_\+type \texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00092}{92}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_ac7edd3c5b9d82bab67308bccec8a336d}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!operator const char\_type \texorpdfstring{$\ast$}{*}@{operator const char\_type \texorpdfstring{$\ast$}{*}}}
+\index{operator const char\_type \texorpdfstring{$\ast$}{*}@{operator const char\_type \texorpdfstring{$\ast$}{*}}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{operator const char\_type \texorpdfstring{$\ast$}{*}()}{operator const char\_type *()}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_ac7edd3c5b9d82bab67308bccec8a336d} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+\mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::operator const char\+\_\+type \texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00093}{93}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a78d22bc3becd84fafdac568dabc4d8e5}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a78d22bc3becd84fafdac568dabc4d8e5} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+const auto \& \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{unsigned int}]{i}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00100}{100}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a28ffe139978b6444efcd3b947d3f0e82}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a28ffe139978b6444efcd3b947d3f0e82} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+auto \& \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{unsigned int}]{i}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00099}{99}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a2c8517abc1a30b5d1b75076d21b96046}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!size@{size}}
+\index{size@{size}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a2c8517abc1a30b5d1b75076d21b96046} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+auto \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::size (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00095}{95}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a0cb5ab487a0fd362f211453936ce15a2}\index{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}!buf@{buf}}
+\index{buf@{buf}!cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$@{cxx::constexpr\_to\_string::f\_to\_string\_t$<$ N, char\_type $>$}}
+\doxysubsubsection{\texorpdfstring{buf}{buf}}
+{\footnotesize\ttfamily \label{classcxx_1_1constexpr__to__string_1_1f__to__string__t_a0cb5ab487a0fd362f211453936ce15a2} 
+template$<$\mbox{\hyperlink{structcxx_1_1constexpr__to__string_1_1double__wrapper}{double\+\_\+wrapper}} N, typename char\+\_\+type $>$ \\
+char\+\_\+type \mbox{\hyperlink{classcxx_1_1constexpr__to__string_1_1f__to__string__t}{cxx\+::constexpr\+\_\+to\+\_\+string\+::f\+\_\+to\+\_\+string\+\_\+t}}$<$ N, char\+\_\+type $>$\+::buf\mbox{[}(\mbox{[}$\,$\mbox{]}() constexpr noexcept \{ unsigned int len=2; if(N.\+whole$<$=0) len++; for(auto n=N.\+whole;n;len++, n/=10) ; if(N.\+frac==0\texorpdfstring{$\vert$}{|}\texorpdfstring{$\vert$}{|}(N.\+whole==0 \&\&N.\+frac$<$ 0)) len++; for(auto n=N.\+frac;n;len++, n/=10) ; return len; \}())\mbox{]} = \{\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cx__ftos_8h_source_l00059}{59}} of file \mbox{\hyperlink{cx__ftos_8h_source}{cx\+\_\+ftos.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/submodules/extended-\/cpp-\/standard/\mbox{\hyperlink{cx__ftos_8h}{cx\+\_\+ftos.\+h}}\end{DoxyCompactItemize}

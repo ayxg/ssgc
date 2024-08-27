@@ -1,0 +1,348 @@
+\doxysection{caoco\+\_\+ast.\+h}
+\hypertarget{caoco__ast_8h_source}{}\label{caoco__ast_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_ast.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_ast.h}}
+\mbox{\hyperlink{caoco__ast_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00001}00001\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00002}00002\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00003}00003\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00004}00004\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00005}00005\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00006}00006\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00007}00007\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00008}00008\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00009}00009\ \textcolor{comment}{///\ @file}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00010}00010\ \textcolor{comment}{///\ @ingroup\ cand\_compiler\_data}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00011}00011\ \textcolor{comment}{///\ @brief\ C\&\ abstract\ syntax\ tree\ object.}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00012}00012\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00014}00014\ \textcolor{comment}{///\ @addtogroup\ cand\_compiler\_data}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00015}00015\ \textcolor{comment}{///\ @\{}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00016}00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_AST\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00017}00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_AST\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00019}00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cppsextended_8h}{"{}cppsextended.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00020}00020\ \textcolor{comment}{//\ Includes:}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00021}00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__grammar_8h}{"{}caoco\_grammar.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00022}00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__token_8h}{"{}caoco\_token.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00024}\mbox{\hyperlink{namespacecaoco}{00024}}\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecaoco}{caoco}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00026}00026\ \textcolor{comment}{//\ C\&\ abstract\ syntax\ tree\ node\ structure.}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00027}\mbox{\hyperlink{classcaoco_1_1_ast}{00027}}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00028}00028\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00029}00029\ \ \ \textcolor{comment}{//\ Properties}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00030}00030\ \ \ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ \mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{Type}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00031}00031\ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{Literal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00032}00032\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast_ab7f01380dc444b679eee0d05208cc9b9}{Leaf}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00033}00033\ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast_a6fff35d07cef587b83394fd7a2f31f80}{Root}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00034}00034\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast_a0672f242929c105014f3834ffb8bdfd3}{Branch}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00036}00036\ \ \ \textcolor{comment}{//\ Parent\ operations.}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00037}00037\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast_a66e27b0e73ec105d6e53e677d63f31cc}{Parent}}();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00038}00038\ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_ast_ad1669c17c8562aad32dec842231b177e}{SetParent}}(\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}*\ parent);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00039}00039\ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad}{PopParent}}();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00041}00041\ \ \ \textcolor{comment}{//\ Child\ operations.}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00042}00042\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast_a8b1ba9cd7fd95dda3614640192c21a8f}{Empty}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00043}00043\ \ \ std::size\_t\ \mbox{\hyperlink{classcaoco_1_1_ast_a37a8537d75ea9a4694ad81be8c973298}{Size}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00044}00044\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast_a87de9ffa1763fd4b5b4f5c16d7b99366}{PushBack}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ nd);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00045}00045\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast_a8775840994d6ea5ab5a29be155f4907b}{PushFront}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ nd);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00046}00046\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast_a0331fbcda77290b4a0279fe81579cf97}{PushBack}}(\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\&\ nd);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00047}00047\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast_a0378fc8c0a32d4b1d2bb348dcc73c7c0}{PushFront}}(\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\&\ nd);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00048}00048\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\ \mbox{\hyperlink{classcaoco_1_1_ast_a615d9659390d98bebdeeba363f36580a}{PopBack}}();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00049}00049\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\ \mbox{\hyperlink{classcaoco_1_1_ast_a5bee2c126e7126c281b0ca9727e4e9bc}{PopFront}}();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00050}00050\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast_af472d3115cb8d4370c5e0fbe373f7649}{Front}}();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00051}00051\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast_a34e50d9fd784d3c6dcbbfa291b61b477}{Back}}();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00052}00052\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast_a70851d50210966386d88fe15c27bf1f7}{At}}(std::size\_t\ index);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00053}00053\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{std}}::\mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{list}}<\mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{Ast}}>\&\ \mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{Children}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00054}00054\ \ \ \textcolor{comment}{///\ Index\ operator\ accesses\ children.}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00055}00055\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{operator}}[](std::size\_t\ index)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00056}00056\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast_a9562aecf121645d9b0ad896c30b9a3dd}{operator}}[](std::size\_t\ index);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00058}00058\ \ \ \textcolor{comment}{//\ Fast\ type\ queries.}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00059}00059\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast_a4081fac748bfd983d2b1cf55f07031c0}{TypeIs}}(\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ type)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00060}00060\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast_ad8e57a57376b480573e3a98babbcccd5}{TypeIsnt}}(\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ type)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00061}00061\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast_a3272e983930c5e52c24c3e172c83835d}{IsLiteral}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00062}00062\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast_a996eaf66dce6e44ae92852b95424bf64}{IsArithmeticBinaryOp}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00063}00063\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast_ac95fb717a1e1283ce77393322a92a7c6}{IsPragmatic}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00065}00065\ \ \ \textcolor{comment}{//\ Source\ location}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00066}\mbox{\hyperlink{classcaoco_1_1_ast_a6651a1603017301b5ebd3f826d5ef3f1}{00066}}\ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{inline}\ size\_t\ \mbox{\hyperlink{classcaoco_1_1_ast_a6651a1603017301b5ebd3f826d5ef3f1}{SourceLine}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ source\_line\_;\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00067}\mbox{\hyperlink{classcaoco_1_1_ast_a8742edbd86055ecd006f4c1adb6b6887}{00067}}\ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{inline}\ size\_t\ \mbox{\hyperlink{classcaoco_1_1_ast_a8742edbd86055ecd006f4c1adb6b6887}{SourceColumn}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00068}00068\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcaoco_1_1_ast_a61e6329cf82d7dc4def48346bdf6ae77}{source\_column\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00069}00069\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00070}\mbox{\hyperlink{classcaoco_1_1_ast_a4c652df3704133bce2b135143edb05ea}{00070}}\ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{inline}\ size\_t\ \mbox{\hyperlink{classcaoco_1_1_ast_a4c652df3704133bce2b135143edb05ea}{SetSourceLine}}(size\_t\ line)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00071}00071\ \ \ \ \ \textcolor{keywordflow}{return}\ source\_line\_\ =\ line;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00072}00072\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00073}\mbox{\hyperlink{classcaoco_1_1_ast_a2756ff6862ebea61109842adfbf69cb6}{00073}}\ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{inline}\ size\_t\ \mbox{\hyperlink{classcaoco_1_1_ast_a2756ff6862ebea61109842adfbf69cb6}{SetSourceColumn}}(size\_t\ column)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00074}00074\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcaoco_1_1_ast_a61e6329cf82d7dc4def48346bdf6ae77}{source\_column\_}}\ =\ column;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00075}00075\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00077}00077\ \ \ \textcolor{comment}{///\ Special\ PushBack\ methods\ for\ \ parser\ results.}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00078}00078\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ AlwaysT>}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00079}\mbox{\hyperlink{classcaoco_1_1_ast_ad4b62d6ceb1276f1e634eba9bbd81bfb}{00079}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast_ad4b62d6ceb1276f1e634eba9bbd81bfb}{ExtractAndPush}}(\mbox{\hyperlink{namespacecxx}{cxx}}::\mbox{\hyperlink{classcxx_1_1_partial_expected}{PartialExpected}}<\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}},\ AlwaysT>\&\ nd)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00080}00080\ \ \ \ \ assert(\mbox{\hyperlink{classcaoco_1_1_ast}{nd}}\ \&\&\ \textcolor{stringliteral}{"{}Ast::ExtractAndPushBack()\ called\ with\ an\ empty\ node."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00081}00081\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{children\_}}.\mbox{\hyperlink{classcaoco_1_1_ast}{push\_back}}(\mbox{\hyperlink{classcaoco_1_1_ast}{std}}::\mbox{\hyperlink{classcaoco_1_1_ast}{forward}}<\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}>(\mbox{\hyperlink{classcaoco_1_1_ast}{nd}}.\mbox{\hyperlink{classcaoco_1_1_ast}{Extract}}()));}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00082}00082\ \ \ \ \ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{pushed}}\ =\ \mbox{\hyperlink{classcaoco_1_1_ast}{children\_}}.\mbox{\hyperlink{classcaoco_1_1_ast}{back}}();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00083}00083\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{pushed}}.\mbox{\hyperlink{classcaoco_1_1_ast}{SetParent}}(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00084}00084\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcaoco_1_1_ast}{pushed}};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00085}00085\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00086}00086\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00087}00087\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast_ace497f7b751e0b5b213ae573cfc765ce}{ExtractAndPush}}(\mbox{\hyperlink{namespacecxx}{cxx}}::\mbox{\hyperlink{classcxx_1_1_expected}{Expected}}<\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}>\&\ nd);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00089}00089\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00090}\mbox{\hyperlink{classcaoco_1_1_ast_aef52fc8f4cc21ce56fdcc31c954b2200}{00090}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast_aef52fc8f4cc21ce56fdcc31c954b2200}{Ast}}()\ :\ \mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}}(\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}::INVALID)\ \{\}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00091}00091\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast_a20ce0861bfe675a3ab9c9f8d9581c55d}{Ast}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}\&\ t);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00092}\mbox{\hyperlink{classcaoco_1_1_ast_aa06ede329c6acfc9c210b6b38633def9}{00092}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast_aa06ede329c6acfc9c210b6b38633def9}{Ast}}(\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ type)\ :\ \mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}}(type)\ \{\}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00093}\mbox{\hyperlink{classcaoco_1_1_ast_a5a9aae7f42f58fd5eb3a1abcf7956939}{00093}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast_a5a9aae7f42f58fd5eb3a1abcf7956939}{Ast}}(\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ type,\ \textcolor{keyword}{const}\ std::string\&\ literal)\ :\ \mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}}(type),\ \mbox{\hyperlink{classcaoco_1_1_ast_a5a9aae7f42f58fd5eb3a1abcf7956939}{literal\_}}(\mbox{\hyperlink{classcaoco_1_1_ast_a5a9aae7f42f58fd5eb3a1abcf7956939}{literal}})\ \{\}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00094}\mbox{\hyperlink{classcaoco_1_1_ast_a754c8af4073e2c5da61d2770816329a3}{00094}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast_a754c8af4073e2c5da61d2770816329a3}{Ast}}(\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ type,\ std::string\&\&\ literal)}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00095}00095\ \ \ \ \ \ \ :\ \mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}}(type),\ \mbox{\hyperlink{classcaoco_1_1_ast_a754c8af4073e2c5da61d2770816329a3}{literal\_}}(\mbox{\hyperlink{classcaoco_1_1_ast_a754c8af4073e2c5da61d2770816329a3}{std}}::\mbox{\hyperlink{classcaoco_1_1_ast_a754c8af4073e2c5da61d2770816329a3}{move}}(\mbox{\hyperlink{classcaoco_1_1_ast_a754c8af4073e2c5da61d2770816329a3}{literal}}))\ \{\}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00096}\mbox{\hyperlink{classcaoco_1_1_ast_ae17954297c398598658bd5e96ca9d120}{00096}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast_ae17954297c398598658bd5e96ca9d120}{Ast}}(\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ type,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ literal)\ :\ \mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}}(type),\ \mbox{\hyperlink{classcaoco_1_1_ast_ae17954297c398598658bd5e96ca9d120}{literal\_}}(\mbox{\hyperlink{classcaoco_1_1_ast_ae17954297c398598658bd5e96ca9d120}{literal}})\ \{\}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00097}00097\ \ \ Ast(\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ type,\ std::vector<Tk>::iterator\ beg,\ std::vector<Tk>::iterator\ end);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00099}00099\ \ \ \textcolor{keyword}{template}\ <std::size\_t\ LIT\_SIZE>}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00100}\mbox{\hyperlink{classcaoco_1_1_ast_af9028200dfc64737e61bef0c02f18a3b}{00100}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast_af9028200dfc64737e61bef0c02f18a3b}{Ast}}(\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ type,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ literal[LIT\_SIZE])}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00101}00101\ \ \ \ \ \ \ :\ \mbox{\hyperlink{classcaoco_1_1_ast}{type\_}}(\mbox{\hyperlink{classcaoco_1_1_ast}{type}}),\ \mbox{\hyperlink{classcaoco_1_1_ast}{literal\_}}(\mbox{\hyperlink{classcaoco_1_1_ast}{literal}})\ \{\}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00103}00103\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ ChildTs>}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00104}00104\ \ \ \ \ requires(std::is\_same\_v<Ast,\ std::decay\_t<ChildTs>>\ \&\&\ ...)}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00105}\mbox{\hyperlink{classcaoco_1_1_ast_a0e0ef16564c6c1cfa17e4ae12bf5997f}{00105}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}(\mbox{\hyperlink{classcaoco_1_1_ast}{eAst}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{type}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast}{std}}::\mbox{\hyperlink{classcaoco_1_1_ast}{string}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{literal}},\ \mbox{\hyperlink{classcaoco_1_1_ast}{ChildTs}}...\ \mbox{\hyperlink{classcaoco_1_1_ast}{children}})}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00106}00106\ \ \ \ \ \ \ :\ \mbox{\hyperlink{classcaoco_1_1_ast}{type\_}}(\mbox{\hyperlink{classcaoco_1_1_ast}{type}}),\ \mbox{\hyperlink{classcaoco_1_1_ast}{literal\_}}(\mbox{\hyperlink{classcaoco_1_1_ast}{literal}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00107}00107\ \ \ \ \ (\mbox{\hyperlink{classcaoco_1_1_ast}{PushBack}}(\mbox{\hyperlink{classcaoco_1_1_ast}{children}}),\ ...);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00108}00108\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00110}00110\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ \mbox{\hyperlink{classcaoco_1_1_ast}{ChildTs}}>}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00111}00111\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{requires}}(\mbox{\hyperlink{classcaoco_1_1_ast}{std}}::\mbox{\hyperlink{classcaoco_1_1_ast}{is\_same\_v}}<\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}},\ \mbox{\hyperlink{classcaoco_1_1_ast}{std}}::\mbox{\hyperlink{classcaoco_1_1_ast}{decay\_t}}<\mbox{\hyperlink{classcaoco_1_1_ast}{ChildTs}}>>\ \&\&\ ...)}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00112}\mbox{\hyperlink{classcaoco_1_1_ast_a6f3881c5da14ebd46b8f85c0757150a5}{00112}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}(\mbox{\hyperlink{classcaoco_1_1_ast}{eAst}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{type}},\ \mbox{\hyperlink{classcaoco_1_1_ast}{std}}::\mbox{\hyperlink{classcaoco_1_1_ast}{vector}}<\mbox{\hyperlink{classcaoco_1_1_ast}{Tk}}>::\mbox{\hyperlink{classcaoco_1_1_ast}{iterator}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{beg}},\ \mbox{\hyperlink{classcaoco_1_1_ast}{std}}::\mbox{\hyperlink{classcaoco_1_1_ast}{vector}}<\mbox{\hyperlink{classcaoco_1_1_ast}{Tk}}>::\mbox{\hyperlink{classcaoco_1_1_ast}{iterator}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{end}},}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00113}00113\ \ \ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{ChildTs}}...\ \mbox{\hyperlink{classcaoco_1_1_ast}{children}})}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00114}00114\ \ \ \ \ \ \ :\ \mbox{\hyperlink{classcaoco_1_1_ast}{type\_}}(\mbox{\hyperlink{classcaoco_1_1_ast}{type}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00115}00115\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{literal\_}}\ =\ u8"{}"{};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00116}00116\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classcaoco_1_1_ast}{std}}::\mbox{\hyperlink{classcaoco_1_1_ast}{vector}}<\mbox{\hyperlink{classcaoco_1_1_ast}{Tk}}>::\mbox{\hyperlink{classcaoco_1_1_ast}{iterator}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{it}}\ =\ \mbox{\hyperlink{classcaoco_1_1_ast}{beg}};\ \mbox{\hyperlink{classcaoco_1_1_ast}{it}}\ !=\ \mbox{\hyperlink{classcaoco_1_1_ast}{end}};\ \mbox{\hyperlink{classcaoco_1_1_ast}{it}}++)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00117}00117\ \ \ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{literal\_}}\ +=\ \mbox{\hyperlink{classcaoco_1_1_ast}{it}}-\/>\mbox{\hyperlink{classcaoco_1_1_ast}{Literal}}();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00118}00118\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00119}00119\ \ \ \ \ (\mbox{\hyperlink{classcaoco_1_1_ast}{PushBack}}(\mbox{\hyperlink{classcaoco_1_1_ast}{children}}),\ ...);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00120}00120\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00122}00122\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00123}\mbox{\hyperlink{classcaoco_1_1_ast_a6cb87b20e8204985e88f2008bbae7597}{00123}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{size\_t}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{source\_line\_}}\{0\};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00124}\mbox{\hyperlink{classcaoco_1_1_ast_a61e6329cf82d7dc4def48346bdf6ae77}{00124}}\ \ \ size\_t\ \mbox{\hyperlink{classcaoco_1_1_ast_a61e6329cf82d7dc4def48346bdf6ae77}{source\_column\_}}\{0\};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00125}\mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{00125}}\ \ \ \mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ \mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}}\{\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}::INVALID\};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00126}\mbox{\hyperlink{classcaoco_1_1_ast_aacd26ae188b8cb255d53e0223923e391}{00126}}\ \ \ std::string\ \mbox{\hyperlink{classcaoco_1_1_ast_aacd26ae188b8cb255d53e0223923e391}{literal\_}}\{\textcolor{stringliteral}{"{}"{}}\};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00127}\mbox{\hyperlink{classcaoco_1_1_ast_aa69765a8cb57740cab5457a5b5c89063}{00127}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}*\ \mbox{\hyperlink{classcaoco_1_1_ast_aa69765a8cb57740cab5457a5b5c89063}{parent\_}}\{\textcolor{keywordtype}{nullptr}\};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00128}\mbox{\hyperlink{classcaoco_1_1_ast_a63e2e84eefb95acd3772cd133103fbaa}{00128}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast_a63e2e84eefb95acd3772cd133103fbaa}{std}}::\mbox{\hyperlink{classcaoco_1_1_ast_a63e2e84eefb95acd3772cd133103fbaa}{list}}<\mbox{\hyperlink{classcaoco_1_1_ast_a63e2e84eefb95acd3772cd133103fbaa}{Ast}}>\ \mbox{\hyperlink{classcaoco_1_1_ast_a63e2e84eefb95acd3772cd133103fbaa}{children\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00129}00129\ \};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00131}\mbox{\hyperlink{classcaoco_1_1_ast_a20ce0861bfe675a3ab9c9f8d9581c55d}{00131}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a20ce0861bfe675a3ab9c9f8d9581c55d}{Ast}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}\&\ t)\ :\ \mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}}(\mbox{\hyperlink{group__cand__compiler__data__token__traits_gaf16a41b8c80415590ebcf2fcf40f5e45}{eTkToAstEnum}}\mbox{\hyperlink{group__cand__compiler__data__token__traits_gaf16a41b8c80415590ebcf2fcf40f5e45}{(}}t\mbox{\hyperlink{classcaoco_1_1_tk_a312d943bb367e21eee51f2d3b17533c7}{.}}\mbox{\hyperlink{classcaoco_1_1_tk_a312d943bb367e21eee51f2d3b17533c7}{Type}}\mbox{\hyperlink{classcaoco_1_1_tk_a312d943bb367e21eee51f2d3b17533c7}{(}}\mbox{\hyperlink{classcaoco_1_1_tk_a312d943bb367e21eee51f2d3b17533c7}{)}}\mbox{\hyperlink{group__cand__compiler__data__token__traits_gaf16a41b8c80415590ebcf2fcf40f5e45}{)}}),\ \mbox{\hyperlink{classcaoco_1_1_ast_a20ce0861bfe675a3ab9c9f8d9581c55d}{literal\_}}(\mbox{\hyperlink{classcaoco_1_1_ast_a20ce0861bfe675a3ab9c9f8d9581c55d}{t}}.\mbox{\hyperlink{classcaoco_1_1_ast_a20ce0861bfe675a3ab9c9f8d9581c55d}{Literal}}())\ \{\}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00132}00132\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00133}\mbox{\hyperlink{classcaoco_1_1_ast_a596b510a2d365539ae8c91c5238d22e4}{00133}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::Ast(\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ type,\ std::vector<Tk>::iterator\ beg,}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00134}00134\ \ \ \ \ \ \ \ \ \ std::vector<Tk>::iterator\ end)}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00135}00135\ \ \ \ \ :\ \mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}}(type)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00136}00136\ \ \ literal\_\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00137}00137\ \ \ \textcolor{keywordflow}{for}\ (std::vector<Tk>::iterator\ it\ =\ beg;\ it\ !=\ end;\ it++)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00138}00138\ \ \ \ \ literal\_\ +=\ it-\/>Literal();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00139}00139\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00140}00140\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00141}00141\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00142}\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{00142}}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_ad6a5ede2b0ccf706ba1d0072d1a04a58}{Type}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}};\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00144}\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{00144}}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a14715f68d53f06ff2798a1ee58b5e803}{Literal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ literal\_;\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00145}00145\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00146}\mbox{\hyperlink{classcaoco_1_1_ast_ab7f01380dc444b679eee0d05208cc9b9}{00146}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_ab7f01380dc444b679eee0d05208cc9b9}{Leaf}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ children\_.empty();\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00147}00147\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00148}\mbox{\hyperlink{classcaoco_1_1_ast_a6fff35d07cef587b83394fd7a2f31f80}{00148}}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a6fff35d07cef587b83394fd7a2f31f80}{Root}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcaoco_1_1_ast_aa69765a8cb57740cab5457a5b5c89063}{parent\_}}\ ==\ \textcolor{keywordtype}{nullptr};\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00149}00149\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00150}\mbox{\hyperlink{classcaoco_1_1_ast_a0672f242929c105014f3834ffb8bdfd3}{00150}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a0672f242929c105014f3834ffb8bdfd3}{Branch}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ !children\_.empty();\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00152}\mbox{\hyperlink{classcaoco_1_1_ast_a66e27b0e73ec105d6e53e677d63f31cc}{00152}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a66e27b0e73ec105d6e53e677d63f31cc}{Parent}}()\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00153}00153\ \ \ assert(\mbox{\hyperlink{classcaoco_1_1_ast_aa69765a8cb57740cab5457a5b5c89063}{parent\_}}\ !=\ \textcolor{keywordtype}{nullptr}\ \&\&}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00154}00154\ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}[Ast\&\ Ast::Parent()]\ Called\ on\ node\ with\ no\ parent.\ (this-\/>parent\_\ "{}}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00155}00155\ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}is\ nullptr)."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00156}00156\ \ \ \textcolor{keywordflow}{return}\ *\mbox{\hyperlink{classcaoco_1_1_ast_aa69765a8cb57740cab5457a5b5c89063}{parent\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00157}00157\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00158}00158\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00159}\mbox{\hyperlink{classcaoco_1_1_ast_ad1669c17c8562aad32dec842231b177e}{00159}}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_ad1669c17c8562aad32dec842231b177e}{SetParent}}(\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}*\ parent)\ \{\ \mbox{\hyperlink{classcaoco_1_1_ast_aa69765a8cb57740cab5457a5b5c89063}{parent\_}}\ =\ parent;\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00160}00160\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00161}\mbox{\hyperlink{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad}{00161}}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad}{PopParent}}()\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00162}00162\ \ \ assert(}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00163}00163\ \ \ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ast_aa69765a8cb57740cab5457a5b5c89063}{parent\_}}\ !=\ \textcolor{keywordtype}{nullptr}\ \&\&}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00164}00164\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}[Ast\&\ Ast::PopParent()]\ Called\ on\ node\ with\ no\ parent.\ (this-\/>parent\_\ "{}}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00165}00165\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}is\ nullptr)."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00166}00166\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast_aa69765a8cb57740cab5457a5b5c89063}{parent\_}}\ =\ \textcolor{keywordtype}{nullptr};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00167}00167\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00168}00168\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00169}\mbox{\hyperlink{classcaoco_1_1_ast_a8b1ba9cd7fd95dda3614640192c21a8f}{00169}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a8b1ba9cd7fd95dda3614640192c21a8f}{Empty}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ children\_.empty();\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00170}\mbox{\hyperlink{classcaoco_1_1_ast_a37a8537d75ea9a4694ad81be8c973298}{00170}}\ std::size\_t\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a37a8537d75ea9a4694ad81be8c973298}{Size}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ children\_.size();\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00172}\mbox{\hyperlink{classcaoco_1_1_ast_a87de9ffa1763fd4b5b4f5c16d7b99366}{00172}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a87de9ffa1763fd4b5b4f5c16d7b99366}{PushBack}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ nd)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00173}00173\ \ \ children\_.push\_back(nd);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00174}00174\ \ \ \textcolor{keyword}{auto}\&\ pushed\ =\ children\_.back();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00175}00175\ \ \ pushed.SetParent(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00176}00176\ \ \ \textcolor{keywordflow}{return}\ pushed;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00177}00177\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00178}00178\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00179}\mbox{\hyperlink{classcaoco_1_1_ast_a8775840994d6ea5ab5a29be155f4907b}{00179}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a8775840994d6ea5ab5a29be155f4907b}{PushFront}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ nd)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00180}00180\ \ \ children\_.push\_front(nd);}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00181}00181\ \ \ \textcolor{keyword}{auto}\&\ pushed\ =\ children\_.front();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00182}00182\ \ \ pushed.SetParent(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00183}00183\ \ \ \textcolor{keywordflow}{return}\ pushed;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00184}00184\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00185}00185\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00186}\mbox{\hyperlink{classcaoco_1_1_ast_a0331fbcda77290b4a0279fe81579cf97}{00186}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a0331fbcda77290b4a0279fe81579cf97}{PushBack}}(\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\&\ nd)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00187}00187\ \ \ children\_.push\_back(std::move(nd));}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00188}00188\ \ \ \textcolor{keyword}{auto}\&\ pushed\ =\ children\_.back();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00189}00189\ \ \ pushed.SetParent(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00190}00190\ \ \ \textcolor{keywordflow}{return}\ pushed;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00191}00191\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00192}00192\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00193}00193\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00194}\mbox{\hyperlink{classcaoco_1_1_ast_ace497f7b751e0b5b213ae573cfc765ce}{00194}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_ace497f7b751e0b5b213ae573cfc765ce}{ExtractAndPush}}(\mbox{\hyperlink{namespacecxx}{cxx}}::\mbox{\hyperlink{classcxx_1_1_expected}{Expected}}<\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}>\&\ nd)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00195}00195\ \ \ assert(nd\ \&\&\ \textcolor{stringliteral}{"{}Ast::ExtractAndPushBack()\ called\ with\ an\ empty\ node."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00196}00196\ \ \ children\_.push\_back(std::forward<Ast>(nd.Extract()));}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00197}00197\ \ \ \textcolor{keyword}{auto}\&\ pushed\ =\ children\_.back();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00198}00198\ \ \ pushed.SetParent(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00199}00199\ \ \ \textcolor{keywordflow}{return}\ pushed;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00200}00200\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00201}00201\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00202}\mbox{\hyperlink{classcaoco_1_1_ast_a0378fc8c0a32d4b1d2bb348dcc73c7c0}{00202}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a0378fc8c0a32d4b1d2bb348dcc73c7c0}{PushFront}}(\mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\&\ nd)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00203}00203\ \ \ children\_.push\_front(std::move(nd));}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00204}00204\ \ \ \textcolor{keyword}{auto}\&\ pushed\ =\ children\_.front();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00205}00205\ \ \ pushed.SetParent(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00206}00206\ \ \ \textcolor{keywordflow}{return}\ pushed;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00207}00207\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00208}00208\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00209}\mbox{\hyperlink{classcaoco_1_1_ast_a615d9659390d98bebdeeba363f36580a}{00209}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a615d9659390d98bebdeeba363f36580a}{PopBack}}()\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00210}00210\ \ \ \textcolor{keywordflow}{if}\ (!children\_.empty())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00211}00211\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\ popped\ =\ children\_.back();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00212}00212\ \ \ \ \ children\_.pop\_back();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00213}00213\ \ \ \ \ popped\mbox{\hyperlink{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad}{PopParent}}\mbox{\hyperlink{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00214}00214\ \ \ \ \ \textcolor{keywordflow}{return}\ popped;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00215}00215\ \ \ \}\ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00216}00216\ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00217}00217\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Ast\ node\ pop\_back()\ called\ on\ node\ with\ no\ children."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00218}00218\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00219}00219\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00220}\mbox{\hyperlink{classcaoco_1_1_ast_a5bee2c126e7126c281b0ca9727e4e9bc}{00220}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a5bee2c126e7126c281b0ca9727e4e9bc}{PopFront}}()\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00221}00221\ \ \ \textcolor{keywordflow}{if}\ (!children\_.empty())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00222}00222\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\ popped\ =\ children\_.front();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00223}00223\ \ \ \ \ children\_.pop\_front();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00224}00224\ \ \ \ \ popped\mbox{\hyperlink{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad}{.}}\mbox{\hyperlink{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad}{PopParent}}\mbox{\hyperlink{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_adb70b35d3c52dc7854c8c2d825f075ad}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00225}00225\ \ \ \ \ \textcolor{keywordflow}{return}\ popped;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00226}00226\ \ \ \}\ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00227}00227\ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00228}00228\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Ast\ node\ pop\_front()\ called\ on\ node\ with\ no\ children."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00229}00229\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00230}00230\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00231}\mbox{\hyperlink{classcaoco_1_1_ast_af472d3115cb8d4370c5e0fbe373f7649}{00231}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_af472d3115cb8d4370c5e0fbe373f7649}{Front}}()\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00232}00232\ \ \ \textcolor{keywordflow}{if}\ (!children\_.empty())}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00233}00233\ \ \ \ \ \textcolor{keywordflow}{return}\ children\_.front();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00234}00234\ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00235}00235\ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00236}00236\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Ast\ node\ front()\ called\ on\ node\ with\ no\ children."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00237}00237\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00238}00238\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00239}\mbox{\hyperlink{classcaoco_1_1_ast_a34e50d9fd784d3c6dcbbfa291b61b477}{00239}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a34e50d9fd784d3c6dcbbfa291b61b477}{Back}}()\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00240}00240\ \ \ \textcolor{keywordflow}{if}\ (!children\_.empty())}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00241}00241\ \ \ \ \ \textcolor{keywordflow}{return}\ children\_.back();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00242}00242\ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00243}00243\ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00244}00244\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Ast\ node\ front()\ called\ on\ node\ with\ no\ children."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00245}00245\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00246}00246\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00247}\mbox{\hyperlink{classcaoco_1_1_ast_a70851d50210966386d88fe15c27bf1f7}{00247}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a70851d50210966386d88fe15c27bf1f7}{At}}(std::size\_t\ index)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00248}00248\ \ \ \textcolor{keywordflow}{if}\ (index\ >=\ children\_.size())}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00249}00249\ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Ast\ node\ at()\ called\ with\ index\ out\ of\ range."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00250}00250\ \ \ \textcolor{keywordflow}{if}\ (index\ ==\ 0)\ \textcolor{keywordflow}{return}\ children\_.front();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00251}00251\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00252}00252\ \ \ \textcolor{keywordflow}{return}\ [\textcolor{keyword}{this},\ \&index]()\ -\/>\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00253}00253\ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ children\_.begin();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00254}00254\ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ i\ =\ 0;\ i\ <\ index;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00255}00255\ \ \ \ \ \ \ it++;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00256}00256\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00257}00257\ \ \ \ \ \textcolor{keywordflow}{return}\ *it;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00258}00258\ \ \ \}();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00259}00259\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00260}00260\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00261}\mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{00261}}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{std}}::\mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{list}}<\mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{Ast}}>\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a0a259809e4309211ff816f000db7084a}{Children}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ children\_;\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00262}00262\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00263}\mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{00263}}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_aa3e7f1f6382e38b39f76b5a936342778}{operator}}[](std::size\_t\ index)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00264}00264\ \ \ \textcolor{keywordflow}{if}\ (index\ >=\ children\_.size())}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00265}00265\ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00266}00266\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}ast\ node\ []\ index\ operator\ called\ with\ index\ out\ of\ range."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00267}00267\ \ \ \textcolor{keywordflow}{if}\ (index\ ==\ 0)\ \textcolor{keywordflow}{return}\ children\_.front();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00268}00268\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00269}00269\ \ \ \textcolor{keywordflow}{return}\ [\textcolor{keyword}{this},\ \&index]()\ -\/>\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00270}00270\ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ children\_.begin();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00271}00271\ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ i\ =\ 0;\ i\ <\ index;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00272}00272\ \ \ \ \ \ \ it++;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00273}00273\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00274}00274\ \ \ \ \ \textcolor{keywordflow}{return}\ *it;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00275}00275\ \ \ \}();}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00276}00276\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00277}00277\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00278}\mbox{\hyperlink{classcaoco_1_1_ast_a9562aecf121645d9b0ad896c30b9a3dd}{00278}}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\&\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a9562aecf121645d9b0ad896c30b9a3dd}{operator}}[](std::size\_t\ index)\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcaoco_1_1_ast_a70851d50210966386d88fe15c27bf1f7}{At}}\mbox{\hyperlink{classcaoco_1_1_ast_a70851d50210966386d88fe15c27bf1f7}{(}}index\mbox{\hyperlink{classcaoco_1_1_ast_a70851d50210966386d88fe15c27bf1f7}{)}};\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00279}00279\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00280}\mbox{\hyperlink{classcaoco_1_1_ast_a4081fac748bfd983d2b1cf55f07031c0}{00280}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a4081fac748bfd983d2b1cf55f07031c0}{TypeIs}}(\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ type)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}}\ ==\ type;\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00281}00281\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00282}\mbox{\hyperlink{classcaoco_1_1_ast_ad8e57a57376b480573e3a98babbcccd5}{00282}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_ad8e57a57376b480573e3a98babbcccd5}{TypeIsnt}}(\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{eAst}}\ type)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}}\ !=\ type;\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00283}00283\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00284}\mbox{\hyperlink{classcaoco_1_1_ast_a3272e983930c5e52c24c3e172c83835d}{00284}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a3272e983930c5e52c24c3e172c83835d}{IsLiteral}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00285}00285\ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00286}00286\ \ \ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{enum}\ eAst;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00287}00287\ \ \ \ \ \textcolor{keywordflow}{case}\ LitCstr:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00288}00288\ \ \ \ \ \textcolor{keywordflow}{case}\ LitInt:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00289}00289\ \ \ \ \ \textcolor{keywordflow}{case}\ LitUint:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00290}00290\ \ \ \ \ \textcolor{keywordflow}{case}\ LitBool:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00291}00291\ \ \ \ \ \textcolor{keywordflow}{case}\ LitReal:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00292}00292\ \ \ \ \ \textcolor{keywordflow}{case}\ LitChar:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00293}00293\ \ \ \ \ \textcolor{keywordflow}{case}\ LitByte:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00294}00294\ \ \ \ \ \textcolor{keywordflow}{case}\ KwNone:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00295}00295\ \ \ \ \ \textcolor{keywordflow}{case}\ KwTrue:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00296}00296\ \ \ \ \ \textcolor{keywordflow}{case}\ KwFalse:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00297}00297\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00298}00298\ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00299}00299\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00300}00300\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00301}00301\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00302}00302\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00303}\mbox{\hyperlink{classcaoco_1_1_ast_a996eaf66dce6e44ae92852b95424bf64}{00303}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_a996eaf66dce6e44ae92852b95424bf64}{IsArithmeticBinaryOp}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00304}00304\ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00305}00305\ \ \ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{enum}\ eAst;}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00306}00306\ \ \ \ \ \textcolor{keywordflow}{case}\ Add:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00307}00307\ \ \ \ \ \textcolor{keywordflow}{case}\ Sub:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00308}00308\ \ \ \ \ \textcolor{keywordflow}{case}\ Mul:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00309}00309\ \ \ \ \ \textcolor{keywordflow}{case}\ Div:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00310}00310\ \ \ \ \ \textcolor{keywordflow}{case}\ Mod:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00311}00311\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00312}00312\ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00313}00313\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00314}00314\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00315}00315\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00316}00316\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00317}\mbox{\hyperlink{classcaoco_1_1_ast_ac95fb717a1e1283ce77393322a92a7c6}{00317}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}::\mbox{\hyperlink{classcaoco_1_1_ast_ac95fb717a1e1283ce77393322a92a7c6}{IsPragmatic}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{group__cand__compiler__data__token__traits_gad896a181c35ae4b3646a2db7c656b2ad}{eAstIsPragmatic}}\mbox{\hyperlink{group__cand__compiler__data__token__traits_gad896a181c35ae4b3646a2db7c656b2ad}{(}}\mbox{\hyperlink{classcaoco_1_1_ast_ac206c99e0da4a499b2898f19feb2a710}{type\_}}\mbox{\hyperlink{group__cand__compiler__data__token__traits_gad896a181c35ae4b3646a2db7c656b2ad}{)}};\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00318}00318\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00319}00319\ \}\ \ \textcolor{comment}{//\ namespace\ caoco}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00320}00320\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00321}00321\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_AST\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00322}00322\ \textcolor{comment}{///\ @\}\ //\ end\ of\ cand\_compiler\_data}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00323}00323\ }
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00324}00324\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00325}00325\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00326}00326\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00327}00327\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00328}00328\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00329}00329\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00330}00330\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00331}00331\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00332}00332\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00333}00333\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00334}00334\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00335}00335\ \textcolor{comment}{//\ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00336}00336\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00337}00337\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00338}00338\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00339}00339\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00340}00340\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00341}00341\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{caoco__ast_8h_source_l00342}00342\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+
+\end{DoxyCode}
