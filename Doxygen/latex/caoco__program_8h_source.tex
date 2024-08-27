@@ -1,0 +1,83 @@
+\doxysection{caoco\+\_\+program.\+h}
+\hypertarget{caoco__program_8h_source}{}\label{caoco__program_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_program.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_program.h}}
+\mbox{\hyperlink{caoco__program_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00001}00001\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00002}00002\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00003}00003\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00004}00004\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00005}00005\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00006}00006\ \textcolor{comment}{//\ Author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00007}00007\ \textcolor{comment}{//\ Email:\ ntondev@gmail.com}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00008}00008\ \textcolor{comment}{//\ Website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00009}00009\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00010}00010\ \textcolor{comment}{//\ Project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00011}00011\ \textcolor{comment}{//\ Directory:\ cand-\/official-\/compiler}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00012}00012\ \textcolor{comment}{//\ File:\ caoco\_program.h}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00013}00013\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00014}00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_PROGRAM\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00015}00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_PROGRAM\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00016}00016\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00017}00017\ \textcolor{comment}{//\ Brief:\ An\ instance\ of\ a\ C\&\ program.}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00018}00018\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00019}00019\ \textcolor{comment}{//\ Includes:}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00020}00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cppsextended_8h}{"{}cppsextended.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00021}00021\ \textcolor{comment}{//\ Caoco}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00022}00022\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00023}00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__rtval_8h}{"{}caoco\_rtval.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00024}00024\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00025}00025\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__rtalloc_8h}{"{}caoco\_rtalloc.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00026}00026\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00028}00028\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecaoco}{caoco}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00030}00030\ \textcolor{comment}{//\ Executor\ will\ be\ passed\ an\ RtProgram\ reference}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00031}00031\ \textcolor{comment}{//\ and\ apply\ the\ given\ IrActionBlocks\ to\ the\ RtProgram.}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00032}00032\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcaoco_1_1_executor}{Executor}};}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00034}00034\ \textcolor{comment}{//\ Represents\ a\ C\&\ program\ instance.}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00035}00035\ \textcolor{comment}{//\ 1.\ Owns\ the\ program's\ memory.}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00036}00036\ \textcolor{comment}{//\ 2.\ Owns\ an\ instance\ of\ an\ Executor\ which\ refers\ to\ this\ program.}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00037}\mbox{\hyperlink{classcaoco_1_1_rt_program}{00037}}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcaoco_1_1_rt_program}{RtProgram}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00038}\mbox{\hyperlink{classcaoco_1_1_rt_program_a763b2f90bc53f92d680a635fe28e858e}{00038}}\ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcaoco_1_1_executor}{Executor}};\ \ \textcolor{comment}{//\ Executor\ needs\ access\ to\ the\ program's\ internals.}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00039}00039\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00040}\mbox{\hyperlink{classcaoco_1_1_rt_program_ad053da85e65541fad33ae0e79620f64b}{00040}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_rt_static_allocator}{RtStaticAllocator}}\ \mbox{\hyperlink{classcaoco_1_1_rt_program_ad053da85e65541fad33ae0e79620f64b}{static\_allocator\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00041}\mbox{\hyperlink{classcaoco_1_1_rt_program_a0299f7d76dcb1b35de91323670831430}{00041}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_rt_operational_allocator}{RtOperationalAllocator}}\ \mbox{\hyperlink{classcaoco_1_1_rt_program_a0299f7d76dcb1b35de91323670831430}{operational\_allocator\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00042}\mbox{\hyperlink{classcaoco_1_1_rt_program_aeb983f60a6f76189e5be829094ae01df}{00042}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_rt_dyn_namespace}{RtDynNamespace}}\ \mbox{\hyperlink{classcaoco_1_1_rt_program_aeb983f60a6f76189e5be829094ae01df}{global\_namespace\_}}\{\mbox{\hyperlink{classcaoco_1_1_rt_program}{kGlobalNamespaceName}}\};}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00043}\mbox{\hyperlink{classcaoco_1_1_rt_program_acf300f6538cf6b7f7745cdbcf6904a1c}{00043}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_rt_val}{RtVal}}\ \mbox{\hyperlink{classcaoco_1_1_rt_program_acf300f6538cf6b7f7745cdbcf6904a1c}{program\_return\_value\_}}\{\mbox{\hyperlink{classcaoco_1_1_rt_program}{RtVal}}::\mbox{\hyperlink{classcaoco_1_1_rt_program}{NewUndefined}}()\};}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00044}\mbox{\hyperlink{classcaoco_1_1_rt_program_adbdf75c4dfef3aa9b3be3102ab8b63ae}{00044}}\ \ \ \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index}{eNativeTypeIndex}}::\mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5c}{enum\_type}}\ \mbox{\hyperlink{classcaoco_1_1_rt_program_adbdf75c4dfef3aa9b3be3102ab8b63ae}{program\_return\_type\_}}\{}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00045}00045\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecaoco_1_1e_native_type_index}{eNativeTypeIndex}}\mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca875eaa5d7d1d802725395d749cb3bd06}{::}}\mbox{\hyperlink{namespacecaoco_1_1e_native_type_index_a601c72d2581d773363d933c03f7e4a5ca875eaa5d7d1d802725395d749cb3bd06}{kUndefined}}\};}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00046}\mbox{\hyperlink{classcaoco_1_1_rt_program_aa9c9d67c15f7842dc53922a8afb5a98a}{00046}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_executor}{Executor}}*\ \mbox{\hyperlink{classcaoco_1_1_rt_program_aa9c9d67c15f7842dc53922a8afb5a98a}{executor\_}};\ \textcolor{comment}{//\ Storing\ pointer\ allows\ executor\ to\ be\ destroyed\ }}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ before\ the\ program.}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00048}00048\ \};}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00050}00050\ \}\ \ \textcolor{comment}{//\ namespace\ caoco}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00052}00052\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00053}00053\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00054}00054\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00055}00055\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00056}00056\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00057}00057\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00058}00058\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00059}00059\ \textcolor{comment}{//\ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00060}00060\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00061}00061\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00062}00062\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00063}00063\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00064}00064\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00065}00065\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00066}00066\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00067}00067\ \textcolor{comment}{//\ Author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00068}00068\ \textcolor{comment}{//\ Email:\ ntondev@gmail.com}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00069}00069\ \textcolor{comment}{//\ Website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00070}00070\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00071}00071\ \textcolor{comment}{//\ Project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00072}00072\ \textcolor{comment}{//\ Directory:\ cand-\/official-\/compiler}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00073}00073\ \textcolor{comment}{//\ File:\ caoco\_program.h}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00074}00074\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00075}00075\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_PROGRAM\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00076}00076\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{\Hypertarget{caoco__program_8h_source_l00077}00077\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+
+\end{DoxyCode}

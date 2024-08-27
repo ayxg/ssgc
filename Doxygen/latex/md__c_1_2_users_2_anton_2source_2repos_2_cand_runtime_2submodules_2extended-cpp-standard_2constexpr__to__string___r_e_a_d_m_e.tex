@@ -1,0 +1,51 @@
+\chapter{constexpr-\/to-\/string}
+\hypertarget{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2submodules_2extended-cpp-standard_2constexpr__to__string___r_e_a_d_m_e}{}\label{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2submodules_2extended-cpp-standard_2constexpr__to__string___r_e_a_d_m_e}\index{constexpr-\/to-\/string@{constexpr-\/to-\/string}}
+\label{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2submodules_2extended-cpp-standard_2constexpr__to__string___r_e_a_d_m_e_autotoc_md12}%
+\Hypertarget{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2submodules_2extended-cpp-standard_2constexpr__to__string___r_e_a_d_m_e_autotoc_md12}%
+ Requires C++14 or later.
+
+{\bfseries{Features\+:}}
+
+
+\begin{DoxyItemize}
+\item Convert any integral type to a string at compile-\/time
+\item Supports converting to bases 2 through 36
+\item No external dependencies
+\item Supports custom character types, e.\+g. {\ttfamily to\+\_\+string\texorpdfstring{$<$}{<}123, 10, wchar\+\_\+t\texorpdfstring{$>$}{>}}
+\item C++20\+: Supports floating-\/point-\/to-\/string conversion with {\ttfamily f\+\_\+to\+\_\+string}
+\end{DoxyItemize}
+
+{\bfseries{How to use\+:}}
+
+The file {\ttfamily to\+\_\+string.\+hpp} provides a {\ttfamily to\+\_\+string} utility, which may be used as below\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *number\ =\ to\_string<2147483648999954564,\ 16>;\ \textcolor{comment}{//\ produces\ "{}1DCD65003B9A1884"{}}}
+\DoxyCodeLine{puts(number);}
+\DoxyCodeLine{puts(to\_string<-\/42>);\ \textcolor{comment}{//\ produces\ "{}-\/42"{}}}
+\DoxyCodeLine{puts(to\_string<30,\ 2>);\ \textcolor{comment}{//\ produces\ "{}11110"{}}}
+
+\end{DoxyCode}
+
+
+With {\ttfamily to\+\_\+string}, all that will be found in program disassembly are the resulting string literals, as if you wrote the strings yourself.
+
+Try it \href{https://godbolt.org/z/T-MFoh}{\texttt{ on Compiler Explorer}}.
+
+{\ttfamily f\+\_\+to\+\_\+string.\+hpp}, requiring C++20, provides an {\ttfamily f\+\_\+to\+\_\+string} utility for floating-\/point conversion\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{puts(f\_to\_string<3.1415926>);\ \textcolor{comment}{//\ Defaults\ to\ 5-\/point\ precision:\ "{}3.14159"{}}}
+\DoxyCodeLine{puts(f\_to\_string<\{3.1415926,\ 7\}>);\ \textcolor{comment}{//\ Specify\ precision:\ "{}3.1415926"{}}}
+
+\end{DoxyCode}
+\hypertarget{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2submodules_2extended-cpp-standard_2constexpr__to__string___r_e_a_d_m_e_autotoc_md13}{}\doxysection{\texorpdfstring{How it works}{How it works}}\label{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2submodules_2extended-cpp-standard_2constexpr__to__string___r_e_a_d_m_e_autotoc_md13}
+C++14 greatly expanded the capabilities of compile-\/time code execution through {\ttfamily constexpr}. In particular, it allows for non-\/trivial constructors to be {\ttfamily constexpr}.
+
+{\ttfamily to\+\_\+string} takes advantage of this by providing an object that converts a template-\/parameter integer to a string using a basic {\ttfamily itoa} implementation in the constructor. Through an additional {\ttfamily constexpr} member function, we can calculate the length of the resulting string; this can be used to size the object\textquotesingle{}s string buffer for a perfect fit.
+
+Beyond this, {\ttfamily to\+\_\+string} simply provides familiar member functions that allow for iteration and data access. The expansion of the capabilities of {\ttfamily auto} in C++14 help make these definitions concise.
+
+The floating-\/point implementation {\ttfamily f\+\_\+to\+\_\+string} takes a similar approach, but requires C++20 as it needs a {\ttfamily double\+\_\+wrapper} object to capture the {\ttfamily double} value. {\ttfamily double} and {\ttfamily float} cannot directly be template parameters as of C++20, and a non-\/type template parameter like the {\ttfamily double\+\_\+wrapper} structure was not allowed before C++20. 

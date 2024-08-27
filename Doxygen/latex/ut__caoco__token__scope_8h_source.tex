@@ -1,0 +1,189 @@
+\doxysection{ut\+\_\+caoco\+\_\+token\+\_\+scope.\+h}
+\hypertarget{ut__caoco__token__scope_8h_source}{}\label{ut__caoco__token__scope_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/unit-\/tests/ut-\/cand-\/compiler/ut\_caoco\_token\_scope.h@{C:/Users/Anton/source/repos/CandRuntime/unit-\/tests/ut-\/cand-\/compiler/ut\_caoco\_token\_scope.h}}
+\mbox{\hyperlink{ut__caoco__token__scope_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00001}00001\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00002}00002\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00003}00003\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00004}00004\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00005}00005\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00006}00006\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00007}00007\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00008}00008\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00009}00009\ \textcolor{comment}{///\ @file}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00010}00010\ \textcolor{comment}{///\ @ingroup\ unittest1\_cand\_compiler}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00011}00011\ \textcolor{comment}{///\ @brief\ UT\ C\&\ Token\ Scope\ Method}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00012}00012\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00014}00014\ \textcolor{comment}{///\ @addtogroup\ unittest1\_cand\_compiler}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00015}00015\ \textcolor{comment}{///\ @\{}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00016}00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_UT\_CAND\_OFFICIAL\_COMPILER\_UT\_TOKEN\_SCOPE\_H}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00017}00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_UT\_CAND\_OFFICIAL\_COMPILER\_UT\_TOKEN\_SCOPE\_H}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00019}00019\ \textcolor{comment}{//\ Includes:}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00020}00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cppsextended_8h}{"{}cppsextended.h"{}}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00021}00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{minitest_8h}{"{}minitest.h"{}}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00022}00022\ \textcolor{comment}{//\ Testing:}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00023}00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__lexer_8h}{"{}caoco\_lexer.h"{}}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00024}00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__token__scope_8h}{"{}caoco\_token\_scope.h"{}}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00026}\mbox{\hyperlink{group__unittest1__cand__compiler_ga948e91ecf953200cdb85f61c9e3f4674}{00026}}\ \mbox{\hyperlink{group__cppmodule1__minitest_ga16b6293f45f5812814524ad4a9c1f99a}{INLINE\_MINITEST}}(Test\_TkScope,\ TestCase\_ParenScopeFinder)\ \{}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00027}00027\ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ caoco;}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00028}00028\ \ \ \textcolor{comment}{//\ Assumes\ no\ Error\ with\ lexing\ can\ occur.}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00029}00029\ \ \ \textcolor{keyword}{auto}\ test\_source\ =\ Lexer::Lex(}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00030}00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}()\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00031}00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(1)\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00032}00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}((1))\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00033}00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(1\ +\ (a)\ -\/\ (a+(abc+(a+a+a))))\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00034}00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(1\ +\ (a)\ -\/\ (a+\{abc+(a+a+a)\}))\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00035}00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(1\ +\ (a)\ -\/\ [(a)+\{abc+(a+a+a)\}])\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(()\ //\ invalid\ scope\(\backslash\)n\(\backslash\)0"{}})}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00037}00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ .Extract();}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00039}00039\ \ \ TkScope\ empty\_scope\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00040}00040\ \ \ \ \ \ \ TkScope::FindParen(test\_source.cbegin(),\ test\_source.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00041}00041\ \ \ TkScope\ scope\_with\_1\_element\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00042}00042\ \ \ \ \ \ \ TkScope::FindParen(empty\_scope.End(),\ test\_source.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00043}00043\ \ \ TkScope\ double\_scope\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00044}00044\ \ \ \ \ \ \ TkScope::FindParen(scope\_with\_1\_element.End(),\ test\_source.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00045}00045\ \ \ TkScope\ complex\_scope\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00046}00046\ \ \ \ \ \ \ TkScope::FindParen(double\_scope.End(),\ test\_source.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00047}00047\ \ \ TkScope\ complex\_scope\_with\_lists\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00048}00048\ \ \ \ \ \ \ TkScope::FindParen(complex\_scope.End(),\ test\_source.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00049}00049\ \ \ TkScope\ complex\_scope\_with\_frames\_and\_lists\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00050}00050\ \ \ \ \ \ \ TkScope::FindParen(complex\_scope\_with\_lists.End(),\ test\_source.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00052}00052\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__lchecks_ga791472ccd50d78a6e045646e06f50434}{EXPECT\_TRUE\_LOG}}(complex\_scope\_with\_frames\_and\_lists.Valid(),}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Testing\ complex\ scope\ with\ frames\ and\ lists:"{}},}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Failed\ to\ find\ complex\ scope\ with\ frames\ and\ lists"{}});}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00055}00055\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__lchecks_ga791472ccd50d78a6e045646e06f50434}{EXPECT\_TRUE\_LOG}}(complex\_scope\_with\_lists.Valid(),}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00056}00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Testing\ complex\ scope\ with\ lists:"{}},}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Failed\ to\ find\ complex\ scope\ with\ lists"{}});}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00058}00058\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__lchecks_ga791472ccd50d78a6e045646e06f50434}{EXPECT\_TRUE\_LOG}}(complex\_scope.Valid(),}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Testing\ complex\ scope:"{}},\ \textcolor{stringliteral}{"{}Failed\ to\ find\ complex\ scope"{}});}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00060}00060\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__lchecks_ga791472ccd50d78a6e045646e06f50434}{EXPECT\_TRUE\_LOG}}(double\_scope.Valid(),}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Testing\ double\ scope:"{}},\ \textcolor{stringliteral}{"{}Failed\ to\ find\ double\ scope"{}});}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00062}00062\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__lchecks_ga791472ccd50d78a6e045646e06f50434}{EXPECT\_TRUE\_LOG}}(scope\_with\_1\_element.Valid(),\ \textcolor{stringliteral}{"{}Testing\ scope\ with\ 1\ element"{}},}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00063}00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Failed\ to\ find\ scope\ with\ 1\ element"{}});}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00064}00064\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__lchecks_ga791472ccd50d78a6e045646e06f50434}{EXPECT\_TRUE\_LOG}}(empty\_scope.Valid(),\ \textcolor{stringliteral}{"{}Testing\ empty\ scope"{}},}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00065}00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Failed\ to\ find\ empty\ scope\ "{}});}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00067}00067\ \ \ \textcolor{comment}{//\ Invalid\ scope\ should\ be\ invalid}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00068}00068\ \ \ \textcolor{keyword}{auto}\ test\_source2\ =\ Lexer::Lex(\textcolor{stringliteral}{"{}(()"{}}).Extract();}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00070}00070\ \ \ TkScope\ invalid\_list\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00071}00071\ \ \ \ \ \ \ TkScope::FindParen(test\_source2.cbegin(),\ test\_source2.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00072}00072\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__lchecks_gadd47e5568aa847389a8662cd5b725e90}{EXPECT\_FALSE\_LOG}}(invalid\_list.Valid(),}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00073}00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Testing\ invalid\ scope:"{}},\ \textcolor{stringliteral}{"{}Invalid\ scope\ was\ valid!"{}});}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00074}00074\ \}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00075}\mbox{\hyperlink{group__unittest1__cand__compiler_ga2e83d6e9b06a2c1bd80920564129f53c}{00075}}\ \mbox{\hyperlink{group__cppmodule1__minitest_gae37c9f962bfb51057579a751801e801b}{INLINE\_END\_MINITEST}};}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00076}\mbox{\hyperlink{group__unittest1__cand__compiler_gac53e686dc828d17528f67c43e0f72798}{00076}}\ \mbox{\hyperlink{group__cppmodule1__minitest_ga8db0f406d4ab1ca94afb507d9350374d}{MINITEST\_REGISTER\_CASE}}(Test\_TkScope,\ TestCase\_ParenScopeFinder);}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00078}\mbox{\hyperlink{group__unittest1__cand__compiler_gade5796b72273bb8cc20af2614e681e7b}{00078}}\ \mbox{\hyperlink{group__cppmodule1__minitest_ga16b6293f45f5812814524ad4a9c1f99a}{INLINE\_MINITEST}}(Test\_TkScope,\ TestCase\_ListScopeFinder)\ \{}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00079}00079\ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ caoco;}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00080}00080\ \ \ \textcolor{keyword}{auto}\ test\_source\ =\ Lexer::Lex(\textcolor{stringliteral}{"{}\{\}\{a\}\{\{\}\}\{(\{\})[\{\}]\{\}\}\{\{\}"{}});}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00081}00081\ \ \ \textcolor{keyword}{auto}\ result\ =\ test\_source.Extract();}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00082}00082\ \ \ \textcolor{comment}{//\ empty\ list}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00083}00083\ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Testing\ empty\ list:"{}};}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00084}00084\ \ \ TkScope\ empty\_list\ =\ TkScope::FindBrace(result.cbegin(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00085}00085\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(empty\_list.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00086}00086\ \ \ TkScope\ list\_with\_1\_element\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00087}00087\ \ \ \ \ \ \ TkScope::FindBrace(empty\_list.End(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00088}00088\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(list\_with\_1\_element.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00089}00089\ \ \ TkScope\ double\_list\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00090}00090\ \ \ \ \ \ \ TkScope::FindBrace(list\_with\_1\_element.End(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00091}00091\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(double\_list.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00092}00092\ \ \ TkScope\ complex\_list\ =\ TkScope::FindBrace(double\_list.End(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00093}00093\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(complex\_list.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00094}00094\ \ \ TkScope\ invalid\_list\ =\ TkScope::FindBrace(complex\_list.End(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00095}00095\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_gaa9df6446f66fb9a7b6784ca71bdf6837}{EXPECT\_FALSE}}(invalid\_list.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00096}00096\ \}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00097}00097\ \mbox{\hyperlink{group__cppmodule1__minitest_gae37c9f962bfb51057579a751801e801b}{INLINE\_END\_MINITEST}};}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00098}\mbox{\hyperlink{group__unittest1__cand__compiler_gaec39f7ca6ec4e9a2fbcafc9d1c2cdd71}{00098}}\ \mbox{\hyperlink{group__cppmodule1__minitest_ga8db0f406d4ab1ca94afb507d9350374d}{MINITEST\_REGISTER\_CASE}}(Test\_TkScope,\ TestCase\_ListScopeFinder);}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00100}\mbox{\hyperlink{group__unittest1__cand__compiler_ga6ef41f708b7360842f8bd1762465e5a3}{00100}}\ \mbox{\hyperlink{group__cppmodule1__minitest_ga16b6293f45f5812814524ad4a9c1f99a}{INLINE\_MINITEST}}(Test\_TkScope,\ TestCase\_FrameScopeFinder)\ \{}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00101}00101\ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ caoco;}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00102}00102\ \ \ \textcolor{keyword}{auto}\ test\_source\ =\ Lexer::Lex(\textcolor{stringliteral}{"{}[][a][[]][([])[[]][]][[]"{}});}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00103}00103\ \ \ \textcolor{keyword}{auto}\ result\ =\ test\_source.Extract();}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00105}00105\ \ \ TkScope\ empty\_frame\ =\ TkScope::FindBracket(result.cbegin(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00106}00106\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(empty\_frame.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00107}00107\ \ \ TkScope\ frame\_with\_1\_element\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00108}00108\ \ \ \ \ \ \ TkScope::FindBracket(empty\_frame.End(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00109}00109\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(frame\_with\_1\_element.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00110}00110\ \ \ TkScope\ double\_frame\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00111}00111\ \ \ \ \ \ \ TkScope::FindBracket(frame\_with\_1\_element.End(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00112}00112\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(double\_frame.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00113}00113\ \ \ TkScope\ complex\_frame\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00114}00114\ \ \ \ \ \ \ TkScope::FindBracket(double\_frame.End(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00115}00115\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(complex\_frame.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00116}00116\ \ \ TkScope\ invalid\_frame\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00117}00117\ \ \ \ \ \ \ TkScope::FindBracket(complex\_frame.End(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00118}00118\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_gaa9df6446f66fb9a7b6784ca71bdf6837}{EXPECT\_FALSE}}(invalid\_frame.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00119}00119\ \}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00120}00120\ \mbox{\hyperlink{group__cppmodule1__minitest_gae37c9f962bfb51057579a751801e801b}{INLINE\_END\_MINITEST}};}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00121}\mbox{\hyperlink{group__unittest1__cand__compiler_ga6ba7be34def57e8c66223b9806829981}{00121}}\ \mbox{\hyperlink{group__cppmodule1__minitest_ga8db0f406d4ab1ca94afb507d9350374d}{MINITEST\_REGISTER\_CASE}}(Test\_TkScope,\ TestCase\_FrameScopeFinder);}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00122}00122\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00123}\mbox{\hyperlink{group__unittest1__cand__compiler_ga48654da16781f334f26eadc01b5b5adf}{00123}}\ \mbox{\hyperlink{group__cppmodule1__minitest_ga16b6293f45f5812814524ad4a9c1f99a}{INLINE\_MINITEST}}(Test\_TkScope,\ TestCase\_StatementScopeFinder)\ \{}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00124}00124\ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ caoco;}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00125}00125\ \ \ \textcolor{keyword}{auto}\ source\_file\ =\ Lexer::Lex(}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00126}00126\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}1;\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00127}00127\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}a\ =\ 1;\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00128}00128\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}a\ =\ (1;2;3);\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00129}00129\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}a\ =\ 1\ +\ ([\ 2\ ;3\ +\ \{4;5;6\}]);\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00130}00130\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}a\ =\ a\ +\ a\ +\ ([\ a\ ;a\ +\ \{a;a;a\}]);\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00131}00131\ \ \ \textcolor{keyword}{auto}\ result\ =\ source\_file.Extract();}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00132}00132\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00133}00133\ \ \ \textcolor{comment}{//\ Single\ value\ statement\ :\ 1;}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00134}00134\ \ \ TkScope\ empty\_statement\ =\ TkScope::FindStatement(}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00135}00135\ \ \ \ \ \ \ eTk::LitInt,\ eTk::Semicolon,\ result.cbegin(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00136}00136\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(empty\_statement.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00137}00137\ \ \ \textcolor{comment}{//\ statement\ with\ multiple\ tokens:\ a\ =\ 1;}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00138}00138\ \ \ TkScope\ multiple\_token\_statement\ =\ TkScope::FindStatement(}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00139}00139\ \ \ \ \ \ \ eTk::Ident,\ eTk::Semicolon,\ empty\_statement.End(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00140}00140\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(multiple\_token\_statement.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00141}00141\ \ \ \textcolor{comment}{//\ statement\ with\ multiple\ tokens\ and\ scopes:\ a\ =\ (1;2;3);}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00142}00142\ \ \ TkScope\ multiple\_token\_scope\_statement\ =}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00143}00143\ \ \ \ \ \ \ TkScope::FindStatement(eTk::Ident,\ eTk::Semicolon,}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ multiple\_token\_statement.End(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00145}00145\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(multiple\_token\_scope\_statement.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00146}00146\ \ \ \textcolor{comment}{//\ statement\ with\ lists\ frames\ and\ scopes\ nested\ in\ diffrent\ ways\ containing}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00147}00147\ \ \ \textcolor{comment}{//\ end\ tokens.\ a\ =\ 1\ +\ ([\ 2\ ;3\ +\ \{4;5;6\}]);}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00148}00148\ \ \ TkScope\ complex\_statement\ =\ TkScope::FindStatement(}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00149}00149\ \ \ \ \ \ \ eTk::Ident,\ eTk::Semicolon,\ multiple\_token\_scope\_statement.End(),}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00150}00150\ \ \ \ \ \ \ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00151}00151\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(complex\_statement.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00152}00152\ \ \ \textcolor{comment}{//\ Test\ finding\ an\ "{}open"{}\ statement\ which\ allows\ for\ repeated\ open\ tokens.\ ex}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00153}00153\ \ \ \textcolor{comment}{//\ a\ =\ a\ +\ a\ +\ ([\ a\ ;a\ +\ \{a;a;a\}]);}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00154}00154\ \ \ TkScope\ open\_statement\ =\ TkScope::FindOpenStatement(}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00155}00155\ \ \ \ \ \ \ eTk::Ident,\ eTk::Semicolon,}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00156}00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ complex\_statement.End(),\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00157}00157\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(open\_statement.Valid());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00158}00158\ \ \ \mbox{\hyperlink{group__cppmodule1__minitest__tests__checks_ga024059adb7b52f5c641bc5d4173856ec}{EXPECT\_TRUE}}(open\_statement.End()\ ==\ result.cend());}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00159}00159\ \}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00160}00160\ \mbox{\hyperlink{group__cppmodule1__minitest_gae37c9f962bfb51057579a751801e801b}{INLINE\_END\_MINITEST}};}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00161}\mbox{\hyperlink{group__unittest1__cand__compiler_ga71a4558e4b06aa265b86f4b3ab60cc7d}{00161}}\ \mbox{\hyperlink{group__cppmodule1__minitest_ga8db0f406d4ab1ca94afb507d9350374d}{MINITEST\_REGISTER\_CASE}}(Test\_TkScope,\ TestCase\_StatementScopeFinder);}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00162}00162\ }
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00163}00163\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_UT\_CAND\_OFFICIAL\_COMPILER\_UT\_TOKEN\_SCOPE\_H}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00164}00164\ \textcolor{comment}{///\ @\}\ //\ end\ of\ unittest1\_cand\_compiler}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00165}00165\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00166}00166\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00167}00167\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00168}00168\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00169}00169\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00170}00170\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00171}00171\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00172}00172\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00173}00173\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00174}00174\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00175}00175\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00176}00176\ \textcolor{comment}{//\ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00177}00177\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00178}00178\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00179}00179\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00180}00180\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00181}00181\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00182}00182\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{ut__caoco__token__scope_8h_source_l00183}00183\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+
+\end{DoxyCode}

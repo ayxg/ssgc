@@ -1,29 +1,28 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the GNU Affero General Public License, Version 3.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: ut-cand-official-compiler
-// File: ut_caoco_parser_basic.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup unittest1_cand_compiler
+/// @brief UT C& Parser Basics
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup unittest1_cand_compiler
+/// @{
 #ifndef HEADER_GUARD_CALE_UT_CAND_OFFICIAL_COMPILER_UT_CAOCO_PARSER_BASIC_H
 #define HEADER_GUARD_CALE_UT_CAND_OFFICIAL_COMPILER_UT_CAOCO_PARSER_BASIC_H
-//---------------------------------------------------------------------------//
-// Brief: brief
-//---------------------------------------------------------------------------//
 // Includes:
 #include "cppsextended.h"
 #include "minitest.h"
 // Testing:
 #include "caoco_lexer.h"
 #include "caoco_parser.h"
-//---------------------------------------------------------------------------//
 
+/// @brief Utility methods for unit testing the parser.
 namespace unit_test_parser_basic {
 using namespace caoco;
 bool CompareAst(const Ast& node1, const Ast& node2) {
@@ -57,8 +56,8 @@ inline void TestAndComparePrimaryExprClosureParser(const std::string& test_name,
   auto expected_source = Lexer::Lex(code);
   ASSERT_TRUE(expected_source.Valid());
   auto source = expected_source.Extract();
-  auto parse_result = parser::PrimaryExprClosureParser::Perform(
-      {source.cbegin(), source.cend()});
+  auto parse_result =
+      parser::ExprParser::Perform({source.cbegin(), source.cend()});
 
   ASSERT_TRUE(parse_result.Valid());
   Ast ast = parse_result.Extract();
@@ -69,7 +68,7 @@ inline void TestAndComparePrimaryExprClosureParser(const std::string& test_name,
 }
 
 inline void TestInternalParserMethod(
-    const std::string& code, std::function<ParseResultWithOffset(TkCursor)> fn,
+    const std::string& code, std::function<OffsetParseResult(TkCursor)> fn,
     const std::string& test_name) {
   auto expected_source = Lexer::Lex(code);
   ASSERT_TRUE(expected_source.Valid());
@@ -89,15 +88,15 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_SingleOperand) {
   auto source = expected_source.Extract();
   // Operands.
   std::vector<Ast> expected_result = {
-      Ast(eAst::kNumberLiteral, "1"),
-      Ast(eAst::kDoubleLiteral, "1.1"),
-      Ast(eAst::kStringLiteral, "'string literal'"),
-      Ast(eAst::kStringLiteral, "'\\\''"),
-      Ast(eAst::kIdentifier, "alnumus"),
-      Ast(eAst::kByteLiteral, "1c"),
-      Ast(eAst::kBoolLiteral, "1b"),
-      Ast(eAst::kUnsignedLiteral, "1u"),
-      Ast(eAst::kNoneLiteral, "none"),
+      Ast(eAst::LitInt, "1"),
+      Ast(eAst::LitReal, "1.1"),
+      Ast(eAst::LitCstr, "'string literal'"),
+      Ast(eAst::LitCstr, "'\\\''"),
+      Ast(eAst::Ident, "alnumus"),
+      Ast(eAst::LitByte, "1c"),
+      Ast(eAst::LitBool, "1b"),
+      Ast(eAst::LitUint, "1u"),
+      Ast(eAst::KwNone, "none"),
   };
 
   auto num_lit = parser::ParseOperand({source.cbegin(), source.cend()});
@@ -153,160 +152,148 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ValueExpr) {
   using namespace unit_test_parser_basic;
 
   TestAndComparePrimaryExprClosureParser("Single Number",
-                                         Ast(eAst::kNumberLiteral, "1"), "1");
+                                         Ast(eAst::LitInt, "1"), "1");
+  TestAndComparePrimaryExprClosureParser("Single Real",
+                                         Ast(eAst::LitReal, "1.1"), "1.1");
+  TestAndComparePrimaryExprClosureParser("Single String",
+                                         Ast(eAst::LitCstr, "'string literal'"),
+                                         "'string literal'");
   TestAndComparePrimaryExprClosureParser(
-      "Single Real", Ast(eAst::kDoubleLiteral, "1.1"), "1.1");
+      "Single String Escaped", Ast(eAst::LitCstr, "'\\\''"), "'\\\''");
   TestAndComparePrimaryExprClosureParser(
-      "Single String", Ast(eAst::kStringLiteral, "'string literal'"),
-      "'string literal'");
-  TestAndComparePrimaryExprClosureParser(
-      "Single String Escaped", Ast(eAst::kStringLiteral, "'\\\''"), "'\\\''");
-  TestAndComparePrimaryExprClosureParser(
-      "Single Identifier", Ast(eAst::kIdentifier, "alnumus"), "alnumus");
+      "Single Identifier", Ast(eAst::Ident, "alnumus"), "alnumus");
   TestAndComparePrimaryExprClosureParser("Single Byte",
-                                         Ast(eAst::kByteLiteral, "1c"), "1c");
-  TestAndComparePrimaryExprClosureParser("Single Bit",
-                                         Ast(eAst::kBoolLiteral, "1b"), "1b");
-  TestAndComparePrimaryExprClosureParser(
-      "Single Unsigned", Ast(eAst::kUnsignedLiteral, "1u"), "1u");
-  TestAndComparePrimaryExprClosureParser(
-      "Single None Literal", Ast(eAst::kNoneLiteral, "none"), "none");
+                                         Ast(eAst::LitByte, "1c"), "1c");
+  TestAndComparePrimaryExprClosureParser("Single Bit", Ast(eAst::LitBool, "1b"),
+                                         "1b");
+  TestAndComparePrimaryExprClosureParser("Single Unsigned",
+                                         Ast(eAst::LitUint, "1u"), "1u");
+  TestAndComparePrimaryExprClosureParser("Single None Literal",
+                                         Ast(eAst::KwNone, "none"), "none");
 
   TestAndComparePrimaryExprClosureParser("Operand in Parenthesis",
-                                         Ast(eAst::kNumberLiteral, "1"), "(1)");
+                                         Ast(eAst::LitInt, "1"), "(1)");
 
   TestAndComparePrimaryExprClosureParser(
       "Binary Addition",
-      Ast(eAst::kAddition, "+", Ast(eAst::kNumberLiteral, "1"),
-          Ast(eAst::kNumberLiteral, "1")),
+      Ast(eAst::Add, "+", Ast(eAst::LitInt, "1"), Ast(eAst::LitInt, "1")),
       "1 + 1");
 
   TestAndComparePrimaryExprClosureParser(
       "Binary Diff Priority",
-      Ast(eAst::kAddition, "+", Ast(eAst::kNumberLiteral, "1"),
-          Ast(eAst::kMultiplication, "*", Ast(eAst::kNumberLiteral, "2"),
-              Ast(eAst::kNumberLiteral, "3"))),
+      Ast(eAst::Add, "+", Ast(eAst::LitInt, "1"),
+          Ast(eAst::Mul, "*", Ast(eAst::LitInt, "2"), Ast(eAst::LitInt, "3"))),
       "1 + 2 * 3");
 
   TestAndComparePrimaryExprClosureParser(
       "Binary Left Associative",
-      Ast(eAst::kSubtraction, "-",
-          Ast(eAst::kAddition, "+", Ast(eAst::kNumberLiteral, "1"),
-              Ast(eAst::kNumberLiteral, "2")),
-          Ast(eAst::kNumberLiteral, "3")),
+      Ast(eAst::Sub, "-",
+          Ast(eAst::Add, "+", Ast(eAst::LitInt, "1"), Ast(eAst::LitInt, "2")),
+          Ast(eAst::LitInt, "3")),
       "1 + 2 - 3");
 
   TestAndComparePrimaryExprClosureParser(
       "Binary Right Associative . member acces operator.",
-      Ast(eAst::kPeriod, ".",
-          Ast(eAst::kPeriod, ".",
-              Ast(eAst::kPeriod, ".", Ast(eAst::kIdentifier, "a"),
-                  Ast(eAst::kIdentifier, "b")),
-              Ast(eAst::kIdentifier, "c")),
-          Ast(eAst::kIdentifier, "d")),
+      Ast(eAst::Period, ".",
+          Ast(eAst::Period, ".",
+              Ast(eAst::Period, ".", Ast(eAst::Ident, "a"),
+                  Ast(eAst::Ident, "b")),
+              Ast(eAst::Ident, "c")),
+          Ast(eAst::Ident, "d")),
       "a.b.c.d");
 
   TestAndComparePrimaryExprClosureParser(
-      "Unary Postfix", Ast(eAst::kIncrement, "++", Ast(eAst::kIdentifier, "a")),
-      "a++");
+      "Unary Postfix", Ast(eAst::Inc, "++", Ast(eAst::Ident, "a")), "a++");
 
   TestAndComparePrimaryExprClosureParser(
       "Parenthesis is resolved first (1+2)*3",
-      Ast(eAst::kMultiplication, "*",
-          Ast(eAst::kAddition, "+", Ast(eAst::kNumberLiteral, "1"),
-              Ast(eAst::kNumberLiteral, "2")),
-          Ast(eAst::kNumberLiteral, "3")),
+      Ast(eAst::Mul, "*",
+          Ast(eAst::Add, "+", Ast(eAst::LitInt, "1"), Ast(eAst::LitInt, "2")),
+          Ast(eAst::LitInt, "3")),
       "(1+2)*3");
 
   TestAndComparePrimaryExprClosureParser(
-      "Unary Prefix", Ast(eAst::kNegation, "!", Ast(eAst::kIdentifier, "a")),
-      "!a");
+      "Unary Prefix", Ast(eAst::Not, "!", Ast(eAst::Ident, "a")), "!a");
 
   TestAndComparePrimaryExprClosureParser(
       "Unary Prefix Repeated",
-      Ast(eAst::kNegation, "!",
-          Ast(eAst::kNegation, "!", Ast(eAst::kIdentifier, "a"))),
-      "!!a");
+      Ast(eAst::Not, "!", Ast(eAst::Not, "!", Ast(eAst::Ident, "a"))), "!!a");
 
   TestAndComparePrimaryExprClosureParser(
       "Assingment is right associative",
-      Ast(eAst::kSimpleAssignment, "=", Ast(eAst::kIdentifier, "a"),
-          Ast(eAst::kSimpleAssignment, "=", Ast(eAst::kIdentifier, "b"),
-              Ast(eAst::kIdentifier, "c"))),
+      Ast(eAst::Assign, "=", Ast(eAst::Ident, "a"),
+          Ast(eAst::Assign, "=", Ast(eAst::Ident, "b"), Ast(eAst::Ident, "c"))),
       "a=b=c");
 
   TestAndComparePrimaryExprClosureParser(
       "Prefix Unary then Binary",
-      Ast(eAst::kAddition, "+",
-          Ast(eAst::kNegation, "!", Ast(eAst::kNumberLiteral, "1")),
-          Ast(eAst::kNumberLiteral, "2")),
+      Ast(eAst::Add, "+", Ast(eAst::Not, "!", Ast(eAst::LitInt, "1")),
+          Ast(eAst::LitInt, "2")),
       "!1+2");
 
   TestAndComparePrimaryExprClosureParser(
       "Prefix Unary then Higher Priority Member Access",
-      Ast(eAst::kNegation, "!",
-          Ast(eAst::kPeriod, ".", Ast(eAst::kIdentifier, "a"),
-              Ast(eAst::kIdentifier, "b"))),
+      Ast(eAst::Not, "!",
+          Ast(eAst::Period, ".", Ast(eAst::Ident, "a"), Ast(eAst::Ident, "b"))),
       "!a.b");
 
   TestAndComparePrimaryExprClosureParser(
       "Prefix Unary After Binary 1+!2",
-      Ast(eAst::kAddition, "+", Ast(eAst::kNumberLiteral, "1"),
-          Ast(eAst::kNegation, "!", Ast(eAst::kNumberLiteral, "2"))),
+      Ast(eAst::Add, "+", Ast(eAst::LitInt, "1"),
+          Ast(eAst::Not, "!", Ast(eAst::LitInt, "2"))),
       "1+!2");
 
   TestAndComparePrimaryExprClosureParser(
       "Empty Function Call",
-      Ast(eAst::kFunctionCall, "", Ast(eAst::kIdentifier, "a"),
-          Ast(eAst::kArguments, "")),
+      Ast(eAst::FunctionCall, "", Ast(eAst::Ident, "a"),
+          Ast(eAst::Arguments, "")),
       "a()");
 
   TestAndComparePrimaryExprClosureParser(
       "Prefix Unary then Function Call",
-      Ast(eAst::kNegation, "!",
-          Ast(eAst::kFunctionCall, "", Ast(eAst::kIdentifier, "a"),
-              Ast(eAst::kArguments, ""))),
+      Ast(eAst::Not, "!",
+          Ast(eAst::FunctionCall, "", Ast(eAst::Ident, "a"),
+              Ast(eAst::Arguments, ""))),
       "!a()");
 
   TestAndComparePrimaryExprClosureParser(
       "Repeated Prefix and Repeated Function Call",
-      Ast(eAst::kNegation, "!",
-          Ast(eAst::kNegation, "!",
-              Ast(eAst::kFunctionCall, "",
-                  Ast(eAst::kFunctionCall, "", Ast(eAst::kIdentifier, "a"),
-                      Ast(eAst::kArguments, "")),
-                  Ast(eAst::kArguments, "")))),
+      Ast(eAst::Not, "!",
+          Ast(eAst::Not, "!",
+              Ast(eAst::FunctionCall, "",
+                  Ast(eAst::FunctionCall, "", Ast(eAst::Ident, "a"),
+                      Ast(eAst::Arguments, "")),
+                  Ast(eAst::Arguments, "")))),
       "!!a()()");
 
   TestAndComparePrimaryExprClosureParser(
       "Function Call then Binary",
-      Ast(eAst::kAddition, "+",
-          Ast(eAst::kFunctionCall, "", Ast(eAst::kIdentifier, "a"),
-              Ast(eAst::kArguments, "")),
-          Ast(eAst::kNumberLiteral, "2")),
+      Ast(eAst::Add, "+",
+          Ast(eAst::FunctionCall, "", Ast(eAst::Ident, "a"),
+              Ast(eAst::Arguments, "")),
+          Ast(eAst::LitInt, "2")),
       "a()+2");
 
   TestAndComparePrimaryExprClosureParser(
       "Function Call then Member Access",
-      Ast(eAst::kPeriod, ".",
-          Ast(eAst::kFunctionCall, "", Ast(eAst::kIdentifier, "a"),
-              Ast(eAst::kArguments, "")),
-          Ast(eAst::kIdentifier, "b")),
+      Ast(eAst::Period, ".",
+          Ast(eAst::FunctionCall, "", Ast(eAst::Ident, "a"),
+              Ast(eAst::Arguments, "")),
+          Ast(eAst::Ident, "b")),
       "a().b");
 
   TestAndComparePrimaryExprClosureParser(
       "Member Access then Function Call",
-      Ast(eAst::kFunctionCall, "",
-          Ast(eAst::kPeriod, ".", Ast(eAst::kIdentifier, "a"),
-              Ast(eAst::kIdentifier, "b")),
-          Ast(eAst::kArguments, "")),
+      Ast(eAst::FunctionCall, "",
+          Ast(eAst::Period, ".", Ast(eAst::Ident, "a"), Ast(eAst::Ident, "b")),
+          Ast(eAst::Arguments, "")),
       "a.b()");
 
   TestAndComparePrimaryExprClosureParser(
       "Binary Then Function Call 1 + a()",
-      Ast(eAst::kAddition, "+", Ast(eAst::kNumberLiteral, "1"),
-          Ast(eAst::kFunctionCall, "", Ast(eAst::kIdentifier, "a"),
-              Ast(eAst::kArguments, ""))),
+      Ast(eAst::Add, "+", Ast(eAst::LitInt, "1"),
+          Ast(eAst::FunctionCall, "", Ast(eAst::Ident, "a"),
+              Ast(eAst::Arguments, ""))),
       "1+a()");
 
   // a.b().c is parsed as (a.b()).c and not as a.(b().c) because of
@@ -314,98 +301,94 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ValueExpr) {
   // associativity of member access. source: cppreference.com
   TestAndComparePrimaryExprClosureParser(
       "Repeated Member Access with internal Function Call",
-      Ast(eAst::kPeriod, ".",
-          Ast(eAst::kPeriod, ".",
-              Ast(eAst::kFunctionCall, "",
-                  Ast(eAst::kPeriod, ".", Ast(eAst::kIdentifier, "a"),
-                      Ast(eAst::kIdentifier, "b")),
-                  Ast(eAst::kArguments, "")),
-              Ast(eAst::kIdentifier, "c")),
-          Ast(eAst::kIdentifier, "d")),
+      Ast(eAst::Period, ".",
+          Ast(eAst::Period, ".",
+              Ast(eAst::FunctionCall, "",
+                  Ast(eAst::Period, ".", Ast(eAst::Ident, "a"),
+                      Ast(eAst::Ident, "b")),
+                  Ast(eAst::Arguments, "")),
+              Ast(eAst::Ident, "c")),
+          Ast(eAst::Ident, "d")),
       "a.b().c.d");
 
   TestAndComparePrimaryExprClosureParser(
       "Complex Expression: foo.bar()*1+1",
-      Ast(eAst::kAddition, "+",
-          Ast(eAst::kMultiplication, "*",
-              Ast(eAst::kFunctionCall, "",
-                  Ast(eAst::kPeriod, ".", Ast(eAst::kIdentifier, "foo"),
-                      Ast(eAst::kIdentifier, "bar")),
-                  Ast(eAst::kArguments, "")),
-              Ast(eAst::kNumberLiteral, "1")),
-          Ast(eAst::kNumberLiteral, "1")),
+      Ast(eAst::Add, "+",
+          Ast(eAst::Mul, "*",
+              Ast(eAst::FunctionCall, "",
+                  Ast(eAst::Period, ".", Ast(eAst::Ident, "foo"),
+                      Ast(eAst::Ident, "bar")),
+                  Ast(eAst::Arguments, "")),
+              Ast(eAst::LitInt, "1")),
+          Ast(eAst::LitInt, "1")),
       "foo.bar()*1+1");
 
   TestAndComparePrimaryExprClosureParser(
       "Complex Expression: (foo.bar() + 1) * 1",
-      Ast(eAst::kMultiplication, "*",
-          Ast(eAst::kAddition, "+",
-              Ast(eAst::kFunctionCall, "",
-                  Ast(eAst::kPeriod, ".", Ast(eAst::kIdentifier, "foo"),
-                      Ast(eAst::kIdentifier, "bar")),
-                  Ast(eAst::kArguments, "")),
-              Ast(eAst::kNumberLiteral, "1")),
-          Ast(eAst::kNumberLiteral, "1")),
+      Ast(eAst::Mul, "*",
+          Ast(eAst::Add, "+",
+              Ast(eAst::FunctionCall, "",
+                  Ast(eAst::Period, ".", Ast(eAst::Ident, "foo"),
+                      Ast(eAst::Ident, "bar")),
+                  Ast(eAst::Arguments, "")),
+              Ast(eAst::LitInt, "1")),
+          Ast(eAst::LitInt, "1")),
       "(foo.bar() + 1) * 1");
 
   TestAndComparePrimaryExprClosureParser(
       "Assingment Experssion : foo = 1 + 2",
-      Ast(eAst::kSimpleAssignment, "=", Ast(eAst::kIdentifier, "foo"),
-          Ast(eAst::kAddition, "+", Ast(eAst::kNumberLiteral, "1"),
-              Ast(eAst::kNumberLiteral, "2"))),
+      Ast(eAst::Assign, "=", Ast(eAst::Ident, "foo"),
+          Ast(eAst::Add, "+", Ast(eAst::LitInt, "1"), Ast(eAst::LitInt, "2"))),
       "foo = 1 + 2");
 
   TestAndComparePrimaryExprClosureParser(
       "Function Call After Binary Left Associative:  e + d + c + b()",
-      Ast(eAst::kAddition, "+",
-          Ast(eAst::kAddition, "+",
-              Ast(eAst::kAddition, "+", Ast(eAst::kIdentifier, "e"),
-                  Ast(eAst::kIdentifier, "d")),
-              Ast(eAst::kIdentifier, "c")),
-          Ast(eAst::kFunctionCall, "", Ast(eAst::kIdentifier, "b"),
-              Ast(eAst::kArguments, ""))),
+      Ast(eAst::Add, "+",
+          Ast(eAst::Add, "+",
+              Ast(eAst::Add, "+", Ast(eAst::Ident, "e"), Ast(eAst::Ident, "d")),
+              Ast(eAst::Ident, "c")),
+          Ast(eAst::FunctionCall, "", Ast(eAst::Ident, "b"),
+              Ast(eAst::Arguments, ""))),
       "e + d + c + b()");
 
   TestAndComparePrimaryExprClosureParser(
       "Function Call With Arguments",
-      Ast(eAst::kFunctionCall, "", Ast(eAst::kIdentifier, "foo"),
-          Ast(eAst::kArguments, "", Ast(eAst::kNumberLiteral, "1"),
-              Ast(eAst::kNumberLiteral, "2"), Ast(eAst::kNumberLiteral, "3"))),
+      Ast(eAst::FunctionCall, "", Ast(eAst::Ident, "foo"),
+          Ast(eAst::Arguments, "", Ast(eAst::LitInt, "1"),
+              Ast(eAst::LitInt, "2"), Ast(eAst::LitInt, "3"))),
       "foo(1, 2, 3)");
 
   TestAndComparePrimaryExprClosureParser(
       "Indexing",
-      Ast(eAst::kIndexOperator, "", Ast(eAst::kIdentifier, "foo"),
-          Ast(eAst::kArguments, "", Ast(eAst::kNumberLiteral, "1"),
-              Ast(eAst::kNumberLiteral, "2"), Ast(eAst::kNumberLiteral, "3"))),
+      Ast(eAst::IndexOperator, "", Ast(eAst::Ident, "foo"),
+          Ast(eAst::Arguments, "", Ast(eAst::LitInt, "1"),
+              Ast(eAst::LitInt, "2"), Ast(eAst::LitInt, "3"))),
       "foo[1, 2, 3]");
 
   TestAndComparePrimaryExprClosureParser(
       "Listing Operator foo{1,2,3}",
-      Ast(eAst::kListingOperator, "", Ast(eAst::kIdentifier, "foo"),
-          Ast(eAst::kArguments, "", Ast(eAst::kNumberLiteral, "1"),
-              Ast(eAst::kNumberLiteral, "2"), Ast(eAst::kNumberLiteral, "3"))),
+      Ast(eAst::ListingOperator, "", Ast(eAst::Ident, "foo"),
+          Ast(eAst::Arguments, "", Ast(eAst::LitInt, "1"),
+              Ast(eAst::LitInt, "2"), Ast(eAst::LitInt, "3"))),
       "foo{1,2,3}");
 
   TestAndComparePrimaryExprClosureParser(
       "Access Operator foo::bar",
-      Ast(eAst::kDoubleColon, "::", Ast(eAst::kIdentifier, "foo"),
-          Ast(eAst::kIdentifier, "bar")),
+      Ast(eAst::DoubleColon, "::", Ast(eAst::Ident, "foo"),
+          Ast(eAst::Ident, "bar")),
       "foo::bar");
 
-  TestAndComparePrimaryExprClosureParser("Unary Minus",
-                                         Ast(eAst::kNumberLiteral, "-1"), "-1");
+  TestAndComparePrimaryExprClosureParser("Unary Minus", Ast(eAst::LitInt, "-1"),
+                                         "-1");
 
   TestAndComparePrimaryExprClosureParser(
       "Unary Minus in expression",
-      Ast(eAst::kAddition, "+", Ast(eAst::kNumberLiteral, "-1"),
-          Ast(eAst::kNumberLiteral, "2")),
+      Ast(eAst::Add, "+", Ast(eAst::LitInt, "-1"), Ast(eAst::LitInt, "2")),
       "-1+2");
 
   TestAndComparePrimaryExprClosureParser(
       "Unary Minus in expression -1 - -1;",
-      Ast(eAst::kSubtraction, "-", Ast(eAst::kNumberLiteral, "-1"),
-          Ast(eAst::kNumberLiteral, "-1")),
+      Ast(eAst::Sub, "-", Ast(eAst::LitInt, "-1"), Ast(eAst::LitInt, "-1")),
       "-1 - -1");
 }
 INLINE_END_MINITEST;
@@ -420,6 +403,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_PrimaryStatement) {
 }
 INLINE_END_MINITEST;
 MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_PrimaryStatement);
+
 // Declarations
 
 INLINE_MINITEST(Test_ParserBasics,
@@ -431,7 +415,7 @@ INLINE_MINITEST(Test_ParserBasics,
 }
 INLINE_END_MINITEST;
 MINITEST_REGISTER_CASE(Test_ParserBasics,
-                          TestCase_VariableDeclarationNoTypeNoAssignNoMod);
+                       TestCase_VariableDeclarationNoTypeNoAssignNoMod);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_VariableDeclarationNoTypeNoAssign) {
   using namespace caoco;
@@ -441,7 +425,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_VariableDeclarationNoTypeNoAssign) {
 }
 INLINE_END_MINITEST;
 MINITEST_REGISTER_CASE(Test_ParserBasics,
-                          TestCase_VariableDeclarationNoTypeNoAssign);
+                       TestCase_VariableDeclarationNoTypeNoAssign);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_VariableDeclarationNoAssign) {
   using namespace caoco;
@@ -459,77 +443,69 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_VariableDefinition) {
                            "VariableDefinition");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_VariableDefinition);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_VariableDefinition);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_TypeAlias) {
   using namespace caoco::parser;
   using namespace unit_test_parser_basic;
-  TestInternalParserMethod("use @MyInteger: int;", ParseUsingDecl, "TypeAlias");
+  TestInternalParserMethod("using @MyInteger: int;", ParseUsingDecl, "TypeAlias");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_TypeAlias);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_TypeAlias);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_LibraryNamespaceInclusion) {
   using namespace caoco::parser;
   using namespace unit_test_parser_basic;
-  TestInternalParserMethod("use lib my_math_lib;", ParseUsingDecl,
+  TestInternalParserMethod("using lib my_math_lib;", ParseUsingDecl,
                            "LibraryNamespaceInclusion");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_LibraryNamespaceInclusion);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_LibraryNamespaceInclusion);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_NamespaceInclusion) {
   using namespace caoco::parser;
   using namespace unit_test_parser_basic;
-  TestInternalParserMethod("use namespace my_ns;", ParseUsingDecl,
+  TestInternalParserMethod("using namespace my_ns;", ParseUsingDecl,
                            "NamespaceInclusion");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_NamespaceInclusion);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_NamespaceInclusion);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_ObjectInclusion) {
   using namespace caoco::parser;
   using namespace unit_test_parser_basic;
-  TestInternalParserMethod("use my_ns::Foo;", ParseUsingDecl,
+  TestInternalParserMethod("using my_ns::Foo;", ParseUsingDecl,
                            "ObjectInclusion");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_ObjectInclusion);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ObjectInclusion);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_TypeInclusion) {
   using namespace caoco::parser;
   using namespace unit_test_parser_basic;
-  TestInternalParserMethod("use@MyFooType: my_ns::Foo;", ParseUsingDecl,
+  TestInternalParserMethod("using@MyFooType: my_ns::Foo;", ParseUsingDecl,
                            "TypeInclusion");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_TypeInclusion);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_TypeInclusion);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_ObjectInclusionFromLibrary) {
   using namespace caoco::parser;
   using namespace unit_test_parser_basic;
-  TestInternalParserMethod("use lib my_math_lib::add;", ParseUsingDecl,
+  TestInternalParserMethod("using lib my_math_lib::add;", ParseUsingDecl,
                            "ObjectInclusionFromLibrary");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_ObjectInclusionFromLibrary);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ObjectInclusionFromLibrary);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_TypeInclusionFromLibrary) {
   using namespace caoco::parser;
   using namespace unit_test_parser_basic;
-  TestInternalParserMethod("use @MyAddMethodImpl: lib my_math_lib::add;",
+  TestInternalParserMethod("using @MyAddMethodImpl: lib my_math_lib::add;",
                            ParseUsingDecl, "TypeInclusionFromLibrary");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_TypeInclusionFromLibrary);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_TypeInclusionFromLibrary);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_TypeImportDeclaration) {
   using namespace caoco::parser;
@@ -537,8 +513,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_TypeImportDeclaration) {
   TestInternalParserMethod("import foo;", ParseImportDecl, "ImportDeclaration");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_TypeImportDeclaration);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_TypeImportDeclaration);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet) {
   using namespace caoco::parser;
@@ -547,8 +522,8 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet) {
                            "MethodDeclImplicitVoidArgNoRet");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet);
+MINITEST_REGISTER_CASE(Test_ParserBasics,
+                       TestCase_MethodDeclImplicitVoidArgNoRet);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet2) {
   using namespace caoco::parser;
@@ -557,8 +532,8 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet2) {
                            "MethodDeclImplicitVoidArgNoRet");
 }
 INLINE_END_MINITEST;
-  MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet2);
+MINITEST_REGISTER_CASE(Test_ParserBasics,
+                       TestCase_MethodDeclImplicitVoidArgNoRet2);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet) {
   using namespace caoco::parser;
@@ -567,8 +542,8 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet) {
                            "TestCaseMethodDeclImplicitVoidArgAnyRet");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet);
+MINITEST_REGISTER_CASE(Test_ParserBasics,
+                       TestCase_MethodDeclImplicitVoidArgAnyRet);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet2) {
   using namespace caoco::parser;
@@ -577,8 +552,8 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet2) {
                            "TestCaseMethodDeclImplicitVoidArgAnyRet2");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet2);
+MINITEST_REGISTER_CASE(Test_ParserBasics,
+                       TestCase_MethodDeclImplicitVoidArgAnyRet2);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgNoRet) {
   using namespace caoco::parser;
@@ -587,8 +562,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgNoRet) {
                            "TestCaseMethodDeclArgNoRet");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_MethodDeclArgNoRet);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_MethodDeclArgNoRet);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgAnyRet) {
   using namespace caoco::parser;
@@ -597,8 +571,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgAnyRet) {
                            "TestCaseMethodDeclArgAnyRet");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_MethodDeclArgAnyRet);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_MethodDeclArgAnyRet);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgIdentifiedAnyRet) {
   using namespace caoco::parser;
@@ -607,8 +580,8 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgIdentifiedAnyRet) {
                            "TestCaseMethodDeclArgAnyRet");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_MethodDeclArgIdentifiedAnyRet);
+MINITEST_REGISTER_CASE(Test_ParserBasics,
+                       TestCase_MethodDeclArgIdentifiedAnyRet);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgsTypedRet) {
   using namespace caoco::parser;
@@ -617,8 +590,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclArgsTypedRet) {
                            "TestCaseMethodDeclArgsTypedRet");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_MethodDeclArgsTypedRet);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_MethodDeclArgsTypedRet);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRet) {
   using namespace caoco::parser;
@@ -627,8 +599,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRet) {
                            "TestCaseMethodDeclTypedArgsTypedRet");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRet);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRet);
 
 INLINE_MINITEST(Test_ParserBasics,
                 TestCase_MethodDeclTypedArgsTypedRetWithModifiers) {
@@ -639,8 +610,8 @@ INLINE_MINITEST(Test_ParserBasics,
                            "TestCaseMethodDeclTypedArgsTypedRet");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRetWithModifiers);
+MINITEST_REGISTER_CASE(Test_ParserBasics,
+                       TestCase_MethodDeclTypedArgsTypedRetWithModifiers);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_ClassDecl) {
   using namespace caoco::parser;
@@ -649,8 +620,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ClassDecl) {
                            "TestCaseMethodDeclTypedArgsTypedRet");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_ClassDecl);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ClassDecl);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_ClassDeclWithMod) {
   using namespace caoco::parser;
@@ -659,8 +629,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ClassDeclWithMod) {
                            "TestCaseClassDeclWithMod");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_ClassDeclWithMod);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ClassDeclWithMod);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_LibWithMod) {
   using namespace caoco::parser;
@@ -669,30 +638,27 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_LibWithMod) {
                            "TestCaseCLibDeclWithMod");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_LibWithMod);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_LibWithMod);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_LibWithModAndDefinition) {
   using namespace caoco::parser;
   using namespace unit_test_parser_basic;
   TestInternalParserMethod(
-      "const static lib@MathLib:{const def str@Foo: 42;use @MyInteger: int;};",
+      "const static lib@MathLib:{const def str@Foo: 42;using @MyInteger: int;};",
       ParseLibDecl, "TestCaseCLibDeclWithMod");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_LibWithModAndDefinition);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_LibWithModAndDefinition);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_ClassWithModAndDefinition) {
   using namespace caoco::parser;
   using namespace unit_test_parser_basic;
   TestInternalParserMethod(
-      "const static class@Husky:{const def str@Foo: 42;use @MyInteger: int;};",
+      "const static class@Husky:{const def str@Foo: 42;using @MyInteger: int;};",
       ParseClassDecl, "TestCaseClassDeclWithMod");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_ClassWithModAndDefinition);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ClassWithModAndDefinition);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDefinition) {
   using namespace caoco::parser;
@@ -702,8 +668,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MethodDefinition) {
       "TestCaseMethodDefinition");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_MethodDefinition);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_MethodDefinition);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_MainDefinition) {
   using namespace caoco::parser;
@@ -712,8 +677,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_MainDefinition) {
                            "TestCaseMainDefinition");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_MainDefinition);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_MainDefinition);
 
 // Pragmatic Statements: appears at top level, or in a library.
 INLINE_MINITEST(Test_ParserBasics, TestCase_PragmaticDeclarations) {
@@ -721,19 +685,19 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_PragmaticDeclarations) {
   using namespace unit_test_parser_basic;
   TestInternalParserMethod("const def str@Foo: 42;", ParsePragmaticStmt,
                            "VariableDefinition");
-  TestInternalParserMethod("use @MyInteger: int;", ParsePragmaticStmt,
+  TestInternalParserMethod("using @MyInteger: int;", ParsePragmaticStmt,
                            "TypeAlias");
-  TestInternalParserMethod("use lib my_math_lib;", ParsePragmaticStmt,
+  TestInternalParserMethod("using lib my_math_lib;", ParsePragmaticStmt,
                            "LibraryNamespaceInclusion");
-  TestInternalParserMethod("use namespace my_ns;", ParsePragmaticStmt,
+  TestInternalParserMethod("using namespace my_ns;", ParsePragmaticStmt,
                            "NamespaceInclusion");
-  TestInternalParserMethod("use my_ns::Foo;", ParsePragmaticStmt,
+  TestInternalParserMethod("using my_ns::Foo;", ParsePragmaticStmt,
                            "ObjectInclusion");
-  TestInternalParserMethod("use@MyFooType: my_ns::Foo;", ParsePragmaticStmt,
+  TestInternalParserMethod("using@MyFooType: my_ns::Foo;", ParsePragmaticStmt,
                            "TypeInclusion");
-  TestInternalParserMethod("use lib my_math_lib::add;", ParsePragmaticStmt,
+  TestInternalParserMethod("using lib my_math_lib::add;", ParsePragmaticStmt,
                            "ObjectInclusionFromLibrary");
-  TestInternalParserMethod("use @MyAddMethodImpl: lib my_math_lib::add;",
+  TestInternalParserMethod("using @MyAddMethodImpl: lib my_math_lib::add;",
                            ParsePragmaticStmt, "TypeInclusionFromLibrary");
 
   TestInternalParserMethod("const static lib@MathLib;", ParsePragmaticStmt,
@@ -774,15 +738,14 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_ParseProgramWithDeclrations) {
   TestInternalParserMethod(
       "import foo;"
       "const static lib@MathLib;"
-      "use @MyAddMethodImpl: lib MathLib::add;"
+      "using @MyAddMethodImpl: lib MathLib::add;"
       "const def str@Foo: 42;"
       "fn@add(const int @a,const int @b)>const int;"
       "const static class @Husky;",
       ParseProgram, "TestCaseParseProgramWithDeclrations");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(Test_ParserBasics,
-                          TestCase_ParseProgramWithDeclrations);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ParseProgramWithDeclrations);
 
 // Control Flow Statements
 INLINE_MINITEST(Test_ParserBasics, TestCase_ReturnStatement) {
@@ -810,8 +773,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_IfElseStatement) {
                            "TestCaseIfElseStatement");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_IfElseStatement);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_IfElseStatement);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_IfElifStatement) {
   using namespace caoco::parser;
@@ -820,8 +782,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_IfElifStatement) {
                            "TestCaseIfElifStatement");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_IfElifStatement);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_IfElifStatement);
 
 INLINE_MINITEST(Test_ParserBasics, TestCase_IfElifElseStatement) {
   using namespace caoco::parser;
@@ -830,8 +791,7 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_IfElifElseStatement) {
                            "TestCaseIfElifElseStatement");
 }
 INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(
-  Test_ParserBasics, TestCase_IfElifElseStatement);
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_IfElifElseStatement);
 
 // Loop Statements
 INLINE_MINITEST(Test_ParserBasics, TestCase_WhileStatement) {
@@ -874,7 +834,13 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_AnimalsExampleProgram) {
 INLINE_END_MINITEST;
 MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_AnimalsExampleProgram);
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_CALE_UT_CAND_OFFICIAL_COMPILER_UT_CAOCO_PARSER_BASIC_H
+/// @} // end of unittest1_cand_compiler
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the GNU Affero General Public License, Version 3.
@@ -888,15 +854,4 @@ MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_AnimalsExampleProgram);
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: ut-cand-official-compiler
-// File: ut_caoco_parser_basic.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_UT_CAND_OFFICIAL_COMPILER_UT_CAOCO_PARSER_BASIC_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

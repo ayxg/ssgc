@@ -1,0 +1,74 @@
+\doxysection{hetero\+\_\+method\+\_\+map.\+h}
+\hypertarget{hetero__method__map_8h_source}{}\label{hetero__method__map_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/submodules/extended-\/cpp-\/standard/hetero\_method\_map.h@{C:/Users/Anton/source/repos/CandRuntime/submodules/extended-\/cpp-\/standard/hetero\_method\_map.h}}
+\mbox{\hyperlink{hetero__method__map_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00001}00001\ \textcolor{comment}{//\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00002}00002\ \textcolor{comment}{//\#include\ <cassert>}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00003}00003\ \textcolor{comment}{//\#include\ <functional>}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00004}00004\ \textcolor{comment}{//\#include\ <iostream>}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00005}00005\ \textcolor{comment}{//\#include\ <map>}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00006}00006\ \textcolor{comment}{//\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00007}00007\ \textcolor{comment}{//\#include\ <typeindex>}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00008}00008\ \textcolor{comment}{//\#include\ <typeinfo>}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00009}00009\ \textcolor{comment}{//\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00010}00010\ \textcolor{comment}{//namespace\ cxx\ \{}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00011}00011\ \textcolor{comment}{//class\ MethodMap\ \{}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00012}00012\ \textcolor{comment}{//\ \ typedef\ void\ (*void\_func\_t)(void);}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00013}00013\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00014}00014\ \textcolor{comment}{//\ \ std::map<std::size\_t,\ std::pair<void\_func\_t,\ std::type\_index>>\ func\_map\_;}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00015}00015\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00016}00016\ \textcolor{comment}{//\ public:}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00017}00017\ \textcolor{comment}{//\ \ MethodMap()\ =\ default;}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00018}00018\ \textcolor{comment}{//\ \ //\ Initialize\ the\ map\ with\ a\ list\ of\ indexes\ and\ functions.}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00019}00019\ \textcolor{comment}{//\ \ MethodMap(}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00020}00020\ \textcolor{comment}{//\ \ \ \ \ \ std::initializer\_list<std::pair<std::size\_t,\ void\_func\_t>>\ init\_list)\ \{}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00021}00021\ \textcolor{comment}{//\ \ \ \ for\ (auto\&\ elem\ :\ init\_list)\ \{}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00022}00022\ \textcolor{comment}{//\ \ \ \ \ \ func\_map\_.insert(std::make\_pair(}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00023}00023\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ elem.first,}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00024}00024\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ std::make\_pair(elem.second,\ std::type\_index(typeid(elem.second)))));}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00025}00025\ \textcolor{comment}{//\ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00026}00026\ \textcolor{comment}{//\ \ \}}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00027}00027\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00028}00028\ \textcolor{comment}{//\ \ //\ copy\ is\ not\ allowed}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00029}00029\ \textcolor{comment}{//\ \ MethodMap(const\ MethodMap\&)\ =\ delete;}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00030}00030\ \textcolor{comment}{//\ \ MethodMap\&\ operator=(const\ MethodMap\&)\ =\ delete;}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00031}00031\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00032}00032\ \textcolor{comment}{//\ \ MethodMap(MethodMap\&\&)\ =\ default;}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00033}00033\ \textcolor{comment}{//\ \ MethodMap\&\ operator=(MethodMap\&\&)\ =\ default;}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00034}00034\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00035}00035\ \textcolor{comment}{//\ \ //\ Insert\ a\ function\ into\ the\ map\ at\ index.\ Overwrites\ if\ already\ exists.}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00036}00036\ \textcolor{comment}{//\ \ template\ <typename\ T>}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00037}00037\ \textcolor{comment}{//\ \ constexpr\ void\ insert(std::size\_t\ func\_index,\ T\ func)\ \{}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00038}00038\ \textcolor{comment}{//\ \ \ \ auto\ func\_type\_index\ =\ std::type\_index(typeid(func));}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00039}00039\ \textcolor{comment}{//\ \ \ \ func\_map\_.insert(std::make\_pair(}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00040}00040\ \textcolor{comment}{//\ \ \ \ \ \ \ \ func\_index,\ std::make\_pair((void\_func\_t)func,\ func\_type\_index)));}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00041}00041\ \textcolor{comment}{//\ \ \}}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00042}00042\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00043}00043\ \textcolor{comment}{//\ \ //\ Returns\ the\ std::type\_index\ of\ the\ function\ at\ index.}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00044}00044\ \textcolor{comment}{//\ \ //\ Returns\ void\ typeid\ if\ not\ found.}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00045}00045\ \textcolor{comment}{//\ \ std::type\_index\ getTypeIndex(std::size\_t\ func\_index)\ \{}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00046}00046\ \textcolor{comment}{//\ \ \ \ auto\ mapIter\ =\ func\_map\_.find(func\_index);}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00047}00047\ \textcolor{comment}{//\ \ \ \ if\ (mapIter\ ==\ func\_map\_.end())\ \{}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00048}00048\ \textcolor{comment}{//\ \ \ \ \ \ return\ std::type\_index(typeid(void));}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00049}00049\ \textcolor{comment}{//\ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00050}00050\ \textcolor{comment}{//\ \ \ \ return\ mapIter-\/>second.second;}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00051}00051\ \textcolor{comment}{//\ \ \}}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00052}00052\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00053}00053\ \textcolor{comment}{//\ \ //\ Search\ for\ a\ function\ in\ the\ map\ and\ call\ it.}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00054}00054\ \textcolor{comment}{//\ \ template\ <typename\ T,\ typename...\ Args>}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00055}00055\ \textcolor{comment}{//\ \ T\ searchAndCall(std::size\_t\ func\_index,\ Args\&\&...\ args)\ \{}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00056}00056\ \textcolor{comment}{//\ \ \ \ auto\ mapIter\ =\ func\_map\_.find(func\_index);}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00057}00057\ \textcolor{comment}{//\ \ \ \ /*chk\ if\ not\ end*/}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00058}00058\ \textcolor{comment}{//\ \ \ \ auto\ mapVal\ =\ mapIter-\/>second;}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00059}00059\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00060}00060\ \textcolor{comment}{//\ \ \ \ auto\ typeCastedFun\ =\ reinterpret\_cast<T\ (*)(Args...)>(mapVal.first);}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00061}00061\ \textcolor{comment}{//\ \ \ \ //\ auto\ typeCastedFun\ =\ (T(*)(Args\ ...))(mapVal.first);}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00062}00062\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00063}00063\ \textcolor{comment}{//\ \ \ \ //\ compare\ the\ types\ is\ equal\ or\ not}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00064}00064\ \textcolor{comment}{//\ \ \ \ assert(mapVal.second\ ==\ std::type\_index(typeid(typeCastedFun)));}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00065}00065\ \textcolor{comment}{//\ \ \ \ return\ typeCastedFun(std::forward<Args>(args)...);}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00066}00066\ \textcolor{comment}{//\ \ \}}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00067}00067\ \textcolor{comment}{//\};}}
+\DoxyCodeLine{\Hypertarget{hetero__method__map_8h_source_l00068}00068\ \textcolor{comment}{//\};\ \ //\ namespace\ cxx}}
+
+\end{DoxyCode}

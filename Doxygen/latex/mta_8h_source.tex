@@ -1,0 +1,502 @@
+\doxysection{mta.\+h}
+\hypertarget{mta_8h_source}{}\label{mta_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/submodules/meta-\/template-\/library/mta.h@{C:/Users/Anton/source/repos/CandRuntime/submodules/meta-\/template-\/library/mta.h}}
+\mbox{\hyperlink{mta_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00001}00001\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00002}00002\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00003}00003\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00004}00004\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00005}00005\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00006}00006\ \textcolor{comment}{///\ @file}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00007}00007\ \textcolor{comment}{///\ @ingroup\ cppmodule0\_mta}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00008}00008\ \textcolor{comment}{///\ @brief\ Meta\ Template\ Programming\ Archive}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00009}00009\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00011}00011\ \textcolor{comment}{///\ @addtogroup\ cppmodule0\_mta}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00012}00012\ \textcolor{comment}{///\ @\{}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00013}00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_META\_TEMPLATE\_ARCHIVE\_MTA\_H}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00014}00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_META\_TEMPLATE\_ARCHIVE\_MTA\_H}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00015}00015\ \textcolor{comment}{//\ Includes:}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00016}00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{concepts}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00017}00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{functional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00018}00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{tuple}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00019}00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00020}00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{variant}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00022}00022\ \textcolor{comment}{//\ C++\ Basic\ Type\ Concepts}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00023}00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{require_8h}{"{}require.h"{}}}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00025}00025\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00026}\mbox{\hyperlink{namespacemta}{00026}}\ \textcolor{comment}{///\ @namespace\ mta}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00027}00027\ \textcolor{comment}{///\ Meta\ Template\ Programming\ Archive}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00028}00028\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00029}00029\ \textcolor{keyword}{namespace}\ mta\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00031}00031\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00032}00032\ \textcolor{comment}{///\ @defgroup\ cppmodule0\_mta\_methods\ Meta\ Methods}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00033}00033\ \textcolor{comment}{///\ @ingroup\ cppmodule0\_mta}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00034}00034\ \textcolor{comment}{///\ These\ structs\ typedefs\ and\ methods\ are\ to\ be\ treated\ as\ meta\ methods.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00035}00035\ \textcolor{comment}{///\ @\{}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00036}00036\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00038}00038\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00039}00039\ \textcolor{comment}{///\ Checks\ if\ a\ type\ is\ a\ callable.\ iCallable\ is\ the\ concept\ equivalent.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00040}00040\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U\ =\ \textcolor{keywordtype}{void}>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00041}\mbox{\hyperlink{structmta_1_1is__callable}{00041}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00042}\mbox{\hyperlink{structmta_1_1is__callable_a1b93ca7a6b36645c4b02f22966ca44ce}{00042}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \textcolor{keyword}{const}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{structmta_1_1is__callable_a1b93ca7a6b36645c4b02f22966ca44ce}{value}}\ =}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00043}00043\ \ \ \ \ \ \ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{conditional\_t}}<\mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{is\_class}}<\mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{remove\_reference\_t}}<\mbox{\hyperlink{structmta_1_1is__callable}{T}}>>::\mbox{\hyperlink{structmta_1_1is__callable}{value}},}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<\mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{remove\_reference\_t}}<\mbox{\hyperlink{structmta_1_1is__callable}{T}}>,\ \textcolor{keywordtype}{int}>,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{false\_type}}>::\mbox{\hyperlink{structmta_1_1is__callable}{value}};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00046}00046\ \};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00048}00048\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00049}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_08_00_01_u_01_4}{00049}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args...),\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00050}00050\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00051}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_5_08_07_args_8_8_8_08_00_01_u_01_4}{00051}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T\ (*)(Args...),\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00052}00052\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00053}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_6_08_07_args_8_8_8_08_00_01_u_01_4}{00053}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T\ (\&)(Args...),\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00054}00054\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00055}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_8_8_8_08_00_01_u_01_4}{00055}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args......),\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00056}00056\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00057}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_5_08_07_args_8_8_8_8_8_8_08_00_01_u_01_4}{00057}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T\ (*)(Args......),\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00058}00058\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00059}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_6_08_07_args_8_8_8_8_8_8_08_00_01_u_01_4}{00059}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T\ (\&)(Args......),\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00060}00060\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00061}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_08_01const_00_01_u_01_4}{00061}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args...)\ \textcolor{keyword}{const},\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00062}00062\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00063}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_08_01volatile_00_01_u_01_4}{00063}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args...)\ \textcolor{keyword}{volatile},\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00064}00064\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00065}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_08_01const_01volatile_00_01_u_01_4}{00065}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args...)\ \textcolor{keyword}{const}\ \textcolor{keyword}{volatile},\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00066}00066\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00067}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_8_8_8_08_01const_00_01_u_01_4}{00067}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args......)\ \textcolor{keyword}{const},\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00068}00068\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00069}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_8_8_8_08_01volatile_00_01_u_01_4}{00069}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args......)\ \textcolor{keyword}{volatile},\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00070}00070\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00071}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_8_8_8_08_01const_01volatile_00_01_u_01_4}{00071}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args......)\ \textcolor{keyword}{const}\ \textcolor{keyword}{volatile},\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00072}00072\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00073}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_08_6_00_01_u_01_4}{00073}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args...)\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00074}00074\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00075}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_08_01const_01_6_00_01_u_01_4}{00075}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args...)\ \textcolor{keyword}{const}\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00076}00076\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00077}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_08_01volatile_01_6_00_01_u_01_4}{00077}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args...)\ \textcolor{keyword}{volatile}\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00078}00078\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00079}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_08_01const_01volatile_01_6_00_01_u_01_4}{00079}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args...)\ \textcolor{keyword}{const}\ \textcolor{keyword}{volatile}\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00080}00080\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00081}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_8_8_8_08_6_00_01_u_01_4}{00081}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args......)\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00082}00082\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00083}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_8_8_8_08_01const_01_6_00_01_u_01_4}{00083}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args......)\ \textcolor{keyword}{const}\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00084}00084\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00085}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_8_8_8_08_01volatile_01_6_00_01_u_01_4}{00085}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args......)\ \textcolor{keyword}{volatile}\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00086}00086\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00087}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_8_8_8_08_01const_01volatile_01_6_00_01_u_01_4}{00087}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args......)\ \textcolor{keyword}{const}\ \textcolor{keyword}{volatile}\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00088}00088\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00089}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_08_6_6_00_01_u_01_4}{00089}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args...)\&\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00090}00090\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00091}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_08_01const_01_6_6_00_01_u_01_4}{00091}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args...)\ \textcolor{keyword}{const}\&\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00092}00092\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00093}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_08_01volatile_01_6_6_00_01_u_01_4}{00093}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args...)\ \textcolor{keyword}{volatile}\&\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00094}00094\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00095}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_08_01const_01volatile_01_6_6_00_01_u_01_4}{00095}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args...)\ \textcolor{keyword}{const}\ \textcolor{keyword}{volatile}\&\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00096}00096\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00097}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_8_8_8_08_6_6_00_01_u_01_4}{00097}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args......)\&\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00098}00098\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00099}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_8_8_8_08_01const_01_6_6_00_01_u_01_4}{00099}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args......)\ \textcolor{keyword}{const}\&\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00100}00100\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00101}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_8_8_8_08_01volatile_01_6_6_00_01_u_01_4}{00101}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args......)\ \textcolor{keyword}{volatile}\&\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00102}00102\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00103}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_07_args_8_8_8_8_8_8_08_01const_01volatile_01_6_6_00_01_u_01_4}{00103}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T(Args......)\ \textcolor{keyword}{const}\ \textcolor{keyword}{volatile}\&\&,\ U>\ :\ \mbox{\hyperlink{structmta_1_1is__callable}{std}}::\mbox{\hyperlink{structmta_1_1is__callable}{true\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00105}00105\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00106}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4}{00106}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable}{is\_callable}}<T,\ \textcolor{keywordtype}{int}>\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00107}00107\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00108}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_a7804a2e686dccb3ffeb704c0dfc98a76}{00108}}\ \ \ \textcolor{keyword}{using}\ YesType\ =\ \textcolor{keywordtype}{char}\ (\&)[1];}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00109}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_aa3b2a3a92ab6acd0848f55d713622d66}{00109}}\ \ \ \textcolor{keyword}{using}\ NoType\ =\ \textcolor{keywordtype}{char}\ (\&)[2];}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00110}00110\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00111}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_1_1_fallback}{00111}}\ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_1_1_fallback}{Fallback}}\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00112}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_1_1_fallback_abe748458b13b42b4dc195790da289d83}{00112}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_1_1_fallback_abe748458b13b42b4dc195790da289d83}{operator}}()();}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00113}00113\ \ \ \};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00115}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_1_1_derived}{00115}}\ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_1_1_derived}{Derived}}\ :\ T,\ \mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_1_1_fallback}{Fallback}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00116}00116\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00117}00117\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ U,\ U>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00118}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_1_1_check}{00118}}\ \ \ \textcolor{keyword}{struct}\ Check;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00120}00120\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00121}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_a1a282c1a90d18815af13e2b1e72bba32}{00121}}\ \ \ \textcolor{keyword}{static}\ YesType\ \mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_a1a282c1a90d18815af13e2b1e72bba32}{Test}}(...);}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00122}00122\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00123}00123\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ C>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00124}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_a04c11aa51894b118b6583f0375844ec7}{00124}}\ \ \ \textcolor{keyword}{static}\ NoType\ \mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_a04c11aa51894b118b6583f0375844ec7}{Test}}(Check<\textcolor{keywordtype}{void}\ (Fallback::*)(),\ \&C::operator()>*);}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00125}00125\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00126}00126\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00127}\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_ac7cdb5960c2b0cfe838416162d4d1ebf}{00127}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \textcolor{keyword}{const}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_ac7cdb5960c2b0cfe838416162d4d1ebf}{value}}\ =}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00128}00128\ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(Test<\mbox{\hyperlink{structmta_1_1is__callable_3_01_t_00_01int_01_4_1_1_derived}{Derived}}>(0))\ ==\ \textcolor{keyword}{sizeof}(YesType);}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00129}00129\ \};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00131}00131\ \textcolor{comment}{///\ Checks\ if\ a\ type\ is\ a\ callable.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00132}00132\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00133}\mbox{\hyperlink{conceptmta_1_1i_callable}{00133}}\ concept\ iCallable\ =\ is\_callable<T>::value;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00134}00134\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00135}00135\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00136}00136\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00137}00137\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...>\ \textcolor{keyword}{typename}\ tmpl,\ \textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00138}\mbox{\hyperlink{structmta_1_1is__template__for__impl}{00138}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1is__template__for__impl}{is\_template\_for\_impl}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structmta_1_1is__template__for__impl}{std}}::\mbox{\hyperlink{structmta_1_1is__template__for__impl}{false\_type}}\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00140}00140\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...>\ \textcolor{keyword}{typename}\ tmpl,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00141}\mbox{\hyperlink{structmta_1_1is__template__for__impl_3_01tmpl_00_01tmpl_3_01_args_8_8_8_01_4_01_4}{00141}}\ \textcolor{keyword}{struct}\ is\_template\_for\_impl<tmpl,\ tmpl<Args...>>\ :\ \textcolor{keyword}{public}\ std::true\_type\ \{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00142}00142\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00143}00143\ \textcolor{comment}{///\ Checks\ if\ a\ type\ is\ a\ template\ instantiation\ of\ a\ given\ template.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00144}00144\ \textcolor{comment}{///\ @code}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00145}00145\ \textcolor{comment}{///\ is\_template\_for\_v<std::vector,\ std::vector<int>>\ ==\ true}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00146}00146\ \textcolor{comment}{///\ @endcode}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00147}00147\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...>\ \textcolor{keyword}{typename}\ tmpl,\ \textcolor{keyword}{typename}...\ Ts>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00148}\mbox{\hyperlink{group__cppmodule0__mta__methods_ga5e13c1de9730be6a0f42c5c5118b7774}{00148}}\ \textcolor{keyword}{using}\ is\_template\_for\ =}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00149}00149\ \ \ \ \ std::conjunction<is\_template\_for\_impl<tmpl,\ std::decay\_t<Ts>>...>;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00150}00150\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00151}00151\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...>\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga89cd593cb9e00d5b71181f017951cb97}{tmpl}},\ \textcolor{keyword}{typename}...\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga89cd593cb9e00d5b71181f017951cb97}{Ts}}>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00152}\mbox{\hyperlink{group__cppmodule0__mta__methods_ga89cd593cb9e00d5b71181f017951cb97}{00152}}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga89cd593cb9e00d5b71181f017951cb97}{is\_template\_for\_v}}\ =\ is\_template\_for<tmpl,\ Ts...>::value;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00153}00153\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00154}00154\ \textcolor{keyword}{static\_assert}(is\_template\_for\_v<std::tuple,\ std::tuple<\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{double}>>,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00155}00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}[is\_template\_for]\ Implementation\ Failure."{}});}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00156}00156\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00157}00157\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00158}00158\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00159}00159\ \textcolor{comment}{///\ @brief\ Checks\ all\ the\ types\ in\ a\ pack\ are\ unique.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00160}00160\ \textcolor{comment}{///\ @see\ index\_of\_type\_in\_tuple}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00161}00161\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00162}\mbox{\hyperlink{group__cppmodule0__mta__methods_ga3cf13ce6a1dd29f141141ac941c199d7}{00162}}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga3cf13ce6a1dd29f141141ac941c199d7}{is\_unique\_pack}}\ =\ std::true\_type\{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00163}00163\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00164}00164\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga5835b4d28594cbf4dab259f9ec721bf6}{T}},\ \textcolor{keyword}{typename}...\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga5835b4d28594cbf4dab259f9ec721bf6}{Rest}}>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00165}\mbox{\hyperlink{group__cppmodule0__mta__methods_ga5835b4d28594cbf4dab259f9ec721bf6}{00165}}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga5835b4d28594cbf4dab259f9ec721bf6}{is\_unique\_pack}}<T,\ Rest...>\ =}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00166}00166\ \ \ \ \ std::bool\_constant<(!std::is\_same\_v<T,\ Rest>\ \&\&\ ...)\ \&\&}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_unique\_pack<Rest...>>\{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00168}00168\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00169}00169\ \textcolor{keyword}{static\_assert}(is\_unique\_pack<\textcolor{keywordtype}{double},\ \textcolor{keywordtype}{int},\ \textcolor{keywordtype}{char}>,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00170}00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}[is\_unique\_pack]\ Implementation\ Failure."{}});}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00171}00171\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00172}00172\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00173}00173\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00174}00174\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Us>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00175}\mbox{\hyperlink{group__cppmodule0__mta__methods_gae4bbd7c29dccf812c3235b313be4d1b7}{00175}}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_gae4bbd7c29dccf812c3235b313be4d1b7}{index\_of\_type\_in\_tuple\_impl}}()\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00176}00176\ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_same<T,\ U>::value)\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00177}00177\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00178}00178\ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00179}00179\ \ \ \ \ \textcolor{keyword}{static\_assert}(}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00180}00180\ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}...(Us)\ >\ 0,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00181}00181\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}index\_of\_type\_in\_tuple:\ This\ tuple\ does\ not\ contain\ requested\ type"{}});}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00182}00182\ \ \ \ \ \textcolor{keywordflow}{return}\ 1\ +\ index\_of\_type\_in\_tuple\_impl<T,\ Us...>();}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00183}00183\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00184}00184\ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00185}00185\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00186}00186\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Us>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00187}\mbox{\hyperlink{group__cppmodule0__mta__methods_ga751e869c2bb9798fd58973a741f0911d}{00187}}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga751e869c2bb9798fd58973a741f0911d}{index\_of\_type\_in\_tuple}}(\textcolor{keyword}{const}\ std::tuple<U,\ Us...>\&)\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00188}00188\ \ \ \textcolor{keyword}{static\_assert}(is\_unique\_pack<U,\ Us...>,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00189}00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}[index\_of\_type\_in\_tuple]\ Should\ only\ be\ called\ on\ tuples\ with\ "{}}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00190}00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}unique\ types."{}});}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00191}00191\ \ \ \textcolor{keywordflow}{return}\ index\_of\_type\_in\_tuple\_impl<T,\ U,\ Us...>();}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00192}00192\ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00193}00193\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00194}00194\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}...\ Us>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00195}\mbox{\hyperlink{group__cppmodule0__mta__methods_gaf51ad94f0c548c81df89b3b069b83207}{00195}}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_gaf51ad94f0c548c81df89b3b069b83207}{index\_of\_type\_in\_tuple}}(std::tuple<U,\ Us...>\&\&)\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00196}00196\ \ \ \textcolor{keyword}{static\_assert}(is\_unique\_pack<U,\ Us...>,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}[index\_of\_type\_in\_tuple]\ Should\ only\ be\ called\ on\ tuples\ with\ "{}}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}unique\ types."{}});}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00199}00199\ \ \ \textcolor{keywordflow}{return}\ index\_of\_type\_in\_tuple\_impl<T,\ U,\ Us...>();}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00200}00200\ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00201}00201\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00202}00202\ \textcolor{keyword}{static\_assert}(index\_of\_type\_in\_tuple<\textcolor{keywordtype}{float}>(std::tuple<\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{float},\ \textcolor{keywordtype}{double}>())\ ==}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00203}00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00204}00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}[index\_of\_type\_in\_tuple]\ Implementation\ Failure."{}});}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00205}00205\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00206}00206\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00207}00207\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00208}00208\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00209}00209\ \textcolor{comment}{///\ Converts\ a\ tuple\ to\ a\ variant\ at\ compile\ time.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00210}00210\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ Ts>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00211}\mbox{\hyperlink{group__cppmodule0__mta__methods_gaeabc052101d70e12523baba0dd09f36b}{00211}}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_gaeabc052101d70e12523baba0dd09f36b}{std}}::\mbox{\hyperlink{group__cppmodule0__mta__methods_gaeabc052101d70e12523baba0dd09f36b}{variant}}<\mbox{\hyperlink{group__cppmodule0__mta__methods_gaeabc052101d70e12523baba0dd09f36b}{Ts}}...>\ \mbox{\hyperlink{group__cppmodule0__mta__methods_gaeabc052101d70e12523baba0dd09f36b}{tuple\_to\_variant}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_gaeabc052101d70e12523baba0dd09f36b}{std}}::\mbox{\hyperlink{group__cppmodule0__mta__methods_gaeabc052101d70e12523baba0dd09f36b}{tuple}}<\mbox{\hyperlink{group__cppmodule0__mta__methods_gaeabc052101d70e12523baba0dd09f36b}{Ts}}...>\&\ \mbox{\hyperlink{group__cppmodule0__mta__methods_gaeabc052101d70e12523baba0dd09f36b}{tuple}})\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00212}00212\ \ \ \textcolor{keywordflow}{return}\ std::get<0>(tuple);\ \ \textcolor{comment}{//\ Return\ the\ first\ element\ of\ the\ tuple}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00213}00213\ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00214}00214\ \textcolor{comment}{//\ Recursive\ case}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00215}00215\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}...\ Ts>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00216}\mbox{\hyperlink{group__cppmodule0__mta__methods_ga1219fd14af04f96c0ea7507a007ee543}{00216}}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga1219fd14af04f96c0ea7507a007ee543}{std}}::\mbox{\hyperlink{group__cppmodule0__mta__methods_ga1219fd14af04f96c0ea7507a007ee543}{variant}}<\mbox{\hyperlink{group__cppmodule0__mta__methods_ga1219fd14af04f96c0ea7507a007ee543}{T}},\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga1219fd14af04f96c0ea7507a007ee543}{Ts}}...>\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga1219fd14af04f96c0ea7507a007ee543}{tuple\_to\_variant}}(}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00217}00217\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga1219fd14af04f96c0ea7507a007ee543}{std}}::\mbox{\hyperlink{group__cppmodule0__mta__methods_ga1219fd14af04f96c0ea7507a007ee543}{tuple}}<\mbox{\hyperlink{group__cppmodule0__mta__methods_ga1219fd14af04f96c0ea7507a007ee543}{T}},\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga1219fd14af04f96c0ea7507a007ee543}{Ts}}...>\&\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga1219fd14af04f96c0ea7507a007ee543}{tuple}})\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00218}00218\ \ \ \textcolor{keywordflow}{return}\ std::variant<T,\ Ts...>(std::get<0>(tuple));}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00219}00219\ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00220}00220\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00221}00221\ \textcolor{keyword}{static\_assert}(std::is\_same\_v<}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00222}00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::variant<\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{float},\ \textcolor{keywordtype}{double}>,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00223}00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{decltype}(tuple\_to\_variant(std::tuple<\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{float},\ \textcolor{keywordtype}{double}>()))>,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00224}00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}[tuple\_to\_variant]\ Implementation\ Failure."{}});}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00225}00225\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00226}00226\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00227}00227\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00228}00228\ \textcolor{comment}{///\ Type\ trait\ to\ check\ if\ a\ type\ is\ a\ container.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00229}00229\ \textcolor{comment}{///}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00230}00230\ \textcolor{comment}{///\ A\ minimal\ container\ is\ a\ type\ with\ a\ cbegin\ and\ cend\ method.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00231}00231\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00232}\mbox{\hyperlink{group__cppmodule0__mta__methods_gad2daba368b95f07f29d1caad9e65a6c6}{00232}}\ \textcolor{keyword}{auto}\ is\_minimal\_container(\textcolor{keywordtype}{int})}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00233}00233\ \ \ \ \ -\/>\ \textcolor{keyword}{decltype}(cbegin(std::declval<T>())\ ==\ cend(std::declval<T>()),}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00234}00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::true\_type\{\});}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00235}00235\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00236}00236\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00237}\mbox{\hyperlink{group__cppmodule0__mta__methods_gaba4662431d2566000ebae54e2b1cd4e6}{00237}}\ std::false\_type\ is\_minimal\_container(...);}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00238}00238\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00239}00239\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_gafa393fd387a77c2d0df85b43d832d0ef}{T}}>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00240}\mbox{\hyperlink{group__cppmodule0__mta__methods_gafa393fd387a77c2d0df85b43d832d0ef}{00240}}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_gafa393fd387a77c2d0df85b43d832d0ef}{is\_minimal\_container\_v}}\ =}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00241}00241\ \ \ \ \ \textcolor{keyword}{decltype}(\mbox{\hyperlink{group__cppmodule0__mta__methods_gafa393fd387a77c2d0df85b43d832d0ef}{is\_minimal\_container}}<\mbox{\hyperlink{group__cppmodule0__mta__methods_gafa393fd387a77c2d0df85b43d832d0ef}{T}}>(0))::\mbox{\hyperlink{group__cppmodule0__mta__methods_gafa393fd387a77c2d0df85b43d832d0ef}{value}};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00242}00242\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00243}00243\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00244}00244\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00245}00245\ \textcolor{comment}{///\ @note\ This\ method\ assumes\ all\ args\ are\ of\ the\ same\ type.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00246}00246\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00247}\mbox{\hyperlink{group__cppmodule0__mta__methods_ga02a28be6707d801b92e71534c21863c6}{00247}}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga02a28be6707d801b92e71534c21863c6}{consteval}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga02a28be6707d801b92e71534c21863c6}{are\_unique}}(\mbox{\hyperlink{group__cppmodule0__mta__methods_ga02a28be6707d801b92e71534c21863c6}{Args}}\&\&...\ \mbox{\hyperlink{group__cppmodule0__mta__methods_ga02a28be6707d801b92e71534c21863c6}{args}})\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00248}00248\ \ \ std::array\ arr\{std::forward<Args>(args)...\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00249}00249\ \ \ std::sort(arr.begin(),\ arr.end());}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00250}00250\ \ \ \textcolor{keywordflow}{return}\ std::adjacent\_find(arr.begin(),\ arr.end())\ ==\ arr.end();}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00251}00251\ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00252}00252\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00253}00253\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00254}00254\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00255}00255\ \textcolor{comment}{///\ merge\ two\ arrays,\ constexpr.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00256}00256\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Type,\ std::size\_t...\ sizes>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00257}\mbox{\hyperlink{group__cppmodule0__mta__methods_gabab647984727725bec085f6fdd42cf52}{00257}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{group__cppmodule0__mta__methods_gabab647984727725bec085f6fdd42cf52}{merge\_arrays}}(}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00258}00258\ \ \ \ \ \textcolor{keyword}{const}\ std::array<Type,\ sizes>\&...\ arrays)\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00259}00259\ \ \ std::array<Type,\ (sizes\ +\ ...)>\ result;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00260}00260\ \ \ std::size\_t\ index\{\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00261}00261\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00262}00262\ \ \ ((std::copy\_n(arrays.begin(),\ sizes,\ result.begin()\ +\ index),\ index\ +=\ sizes),}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00263}00263\ \ \ \ ...);}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00264}00264\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00265}00265\ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00266}00266\ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00267}00267\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00268}00268\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00269}00269\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00270}00270\ \textcolor{comment}{///\ @\}\ //\ end\ of\ cppmodule0\_mta\_methods}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00271}00271\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00272}00272\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00273}00273\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00274}00274\ \textcolor{comment}{///\ @defgroup\ cppmodule0\_mta\_structs\ Meta\ Types}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00275}00275\ \textcolor{comment}{///\ @ingroup\ cppmodule0\_mta}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00276}00276\ \textcolor{comment}{///\ These\ structs\ typedefs\ and\ methods\ are\ to\ be\ treated\ as\ meta\ structures.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00277}00277\ \textcolor{comment}{///\ @\{}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00278}00278\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00279}00279\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00280}00280\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00281}00281\ \textcolor{comment}{///\ @brief\ Provides\ information\ about\ a\ function\ type.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00282}00282\ \textcolor{comment}{///\ @tparam\ T\ std::function\ specialization}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00283}00283\ \textcolor{comment}{///}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00284}00284\ \textcolor{comment}{///\ @code}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00285}00285\ \textcolor{comment}{///\ using\ fnT\ =\ function\_traits<function<int(float,\ double)>>;}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00286}00286\ \textcolor{comment}{///\ fnT::nargs\ ==\ 2}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00287}00287\ \textcolor{comment}{///\ fnT::result\_type\ ==\ int}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00288}00288\ \textcolor{comment}{///\ fnT::arg\_type<0>\ ==\ float}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00289}00289\ \textcolor{comment}{///\ fnT::arg\_type<1>\ ==\ double}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00290}00290\ \textcolor{comment}{///\ @endcode}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00291}00291\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00292}\mbox{\hyperlink{structmta_1_1function__traits}{00292}}\ \textcolor{keyword}{struct}\ function\_traits;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00293}00293\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00294}00294\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ R,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00295}\mbox{\hyperlink{structmta_1_1function__traits_3_01std_1_1function_3_01_r_07_args_8_8_8_08_4_01_4}{00295}}\ \textcolor{keyword}{struct}\ function\_traits<std::function<R(Args...)>>\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00296}\mbox{\hyperlink{structmta_1_1function__traits_3_01std_1_1function_3_01_r_07_args_8_8_8_08_4_01_4_abe7f44c5ffc0556d2e29fcd8281e1787}{00296}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{inline}\ size\_t\ \mbox{\hyperlink{structmta_1_1function__traits_3_01std_1_1function_3_01_r_07_args_8_8_8_08_4_01_4_abe7f44c5ffc0556d2e29fcd8281e1787}{nargs}}\ =\ \textcolor{keyword}{sizeof}...(Args);}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00297}\mbox{\hyperlink{structmta_1_1function__traits_3_01std_1_1function_3_01_r_07_args_8_8_8_08_4_01_4_af48313d1662a8ea6638180111bca6897}{00297}}\ \ \ \textcolor{keyword}{using}\ result\_type\ =\ R;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00298}\mbox{\hyperlink{structmta_1_1function__traits_3_01std_1_1function_3_01_r_07_args_8_8_8_08_4_01_4_a0975c5dc6ce649f52423da2b0f06b6f3}{00298}}\ \ \ \textcolor{keyword}{using}\ args\_tuple\_type\ =\ std::tuple<Args...>;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00299}00299\ \ \ \textcolor{keyword}{template}\ <std::size\_t\ N>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00300}\mbox{\hyperlink{structmta_1_1function__traits_3_01std_1_1function_3_01_r_07_args_8_8_8_08_4_01_4_ab338dee4f8e63ac744f45c231529abc1}{00300}}\ \ \ \textcolor{keyword}{using}\ arg\_type\ =\ \textcolor{keyword}{typename}\ std::tuple\_element<N,\ args\_tuple\_type>::type;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00301}00301\ \};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00302}00302\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00303}00303\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00304}00304\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00305}00305\ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}...\ TypeTs>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00306}\mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{00306}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{compile\_time\_type\_index\_list}}\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00307}\mbox{\hyperlink{structmta_1_1compile__time__type__index__list_aae2f561e4bee4bf67e6d8114d2a2b95f}{00307}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{inline}\ size\_t\ \mbox{\hyperlink{structmta_1_1compile__time__type__index__list_aae2f561e4bee4bf67e6d8114d2a2b95f}{kNumTypes}}\ =\ \textcolor{keyword}{sizeof}...(TypeTs);}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00308}\mbox{\hyperlink{structmta_1_1compile__time__type__index__list_a06934865bee5321985ed2ab7848ad801}{00308}}\ \ \ \textcolor{keyword}{using}\ types\_tuple\ =\ std::tuple<TypeTs...>;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00309}\mbox{\hyperlink{structmta_1_1compile__time__type__index__list_a627c9626b8b5c191cb250e263deb1609}{00309}}\ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{types\_variant}}\ =\ \mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{std}}::\mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{variant}}<\mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{TypeTs}}...>;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00310}00310\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00311}00311\ \ \ \textcolor{comment}{///\ Type\ of\ element\ at\ index.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00312}00312\ \ \ \textcolor{keyword}{template}\ <\mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{std}}::\mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{size\_t}}\ \mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{index}}>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00313}\mbox{\hyperlink{structmta_1_1compile__time__type__index__list_a67af50f3f5c5edc06e0f6a5c652561b3}{00313}}\ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{type\_of}}\ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{std}}::\mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{tuple\_element\_t}}<\mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{index}},\ \mbox{\hyperlink{structmta_1_1compile__time__type__index__list}{types\_tuple}}>;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00314}00314\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00315}00315\ \ \ \textcolor{comment}{///\ Helps\ when\ needing\ to\ pass\ a\ type\ as\ a\ template\ parameter.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00316}00316\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00317}\mbox{\hyperlink{structmta_1_1compile__time__type__index__list_1_1_index_of}{00317}}\ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1compile__time__type__index__list_1_1_index_of}{IndexOf}}\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00318}\mbox{\hyperlink{structmta_1_1compile__time__type__index__list_1_1_index_of_a0551927f08487d84232a5a4ea524be5c}{00318}}\ \ \ \ \ \textcolor{keyword}{using}\ type\ =\ T;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00319}\mbox{\hyperlink{structmta_1_1compile__time__type__index__list_1_1_index_of_a3c7aa8ad51209b923f937bede19bdf4e}{00319}}\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::size\_t\ \mbox{\hyperlink{structmta_1_1compile__time__type__index__list_1_1_index_of_a3c7aa8ad51209b923f937bede19bdf4e}{idx}}\ =\ index\_of\_type\_in\_tuple<T>(types\_tuple\{\});}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00320}00320\ \ \ \};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00321}00321\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00322}00322\ \ \ \textcolor{comment}{///\ Index\ of\ a\ type\ in\ the\ list.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00323}00323\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00324}\mbox{\hyperlink{structmta_1_1compile__time__type__index__list_a56463729b444411f05a09a08c64a8507}{00324}}\ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{static}\ std::size\_t\ \mbox{\hyperlink{structmta_1_1compile__time__type__index__list_a56463729b444411f05a09a08c64a8507}{index\_of}}()\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00325}00325\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structmta_1_1compile__time__type__index__list_1_1_index_of}{IndexOf}}<T>::idx;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00326}00326\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00327}00327\ \};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00328}00328\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00329}00329\ \textcolor{keyword}{static\_assert}(compile\_time\_type\_index\_list<\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{float},\ \textcolor{keywordtype}{double}>::kNumTypes\ ==\ 3,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00330}00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}[compile\_time\_type\_list]\ Implementation\ Failure."{}});}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00331}00331\ \textcolor{keyword}{static\_assert}(}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00332}00332\ \ \ \ \ compile\_time\_type\_index\_list<\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{float},\ \textcolor{keywordtype}{double}>::index\_of<\textcolor{keywordtype}{float}>()\ ==\ 1,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00333}00333\ \ \ \ \ \textcolor{stringliteral}{"{}[compile\_time\_type\_list]\ Implementation\ Failure."{}});}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00334}00334\ \textcolor{keyword}{static\_assert}(}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00335}00335\ \ \ \ \ std::is\_same\_v<compile\_time\_type\_index\_list<\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{float},\ \textcolor{keywordtype}{double}>::type\_of<2>,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00336}00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}>,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00337}00337\ \ \ \ \ \textcolor{stringliteral}{"{}[compile\_time\_type\_list]\ Implementation\ Failure."{}});}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00338}00338\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00339}00339\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00340}00340\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00341}00341\ \textcolor{comment}{///\ @class\ string\_constant}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00342}00342\ \textcolor{comment}{///\ @brief\ Constant\ evaluated\ string.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00343}00343\ \textcolor{comment}{///\ \ }}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00344}00344\ \textcolor{comment}{///\ Passable\ as\ template\ parameters.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00345}00345\ \textcolor{comment}{///\ Utilizes\ new\ C++20\ lambda\ features\ to\ allow\ passing\ a\ string\ as\ a}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00346}00346\ \textcolor{comment}{///\ template\ parameter\ to\ the\ string\_constant\ struct.\ constexpr\ const\ char}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00347}00347\ \textcolor{comment}{///\ *\ value\ is\ then\ used\ to\ access\ the\ string\ value.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00348}00348\ \textcolor{comment}{///\ }}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00349}00349\ \textcolor{comment}{///\ Example:\ }}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00350}00350\ \textcolor{comment}{///\ @code}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00351}00351\ \textcolor{comment}{///\ \ string\_constant<[]()\ consteval\ \{\ return\ "{}Hello,\ World!"{};\ \}>}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00352}00352\ \textcolor{comment}{///\ \ hello\_world;\ static\_assert(hello\_world.value\ ==\ "{}Hello,\ World!"{});}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00353}00353\ \textcolor{comment}{///\ @endcode}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00354}00354\ \textcolor{comment}{///\ }}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00355}00355\ \textcolor{comment}{///\ Define\ a\ STRING\_CONSTANT\ macro\ to\ make\ it\ easier\ to\ define.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00356}00356\ \textcolor{comment}{///\ \ \ -\/\ Always\ \#UNDEFINE\ AFTER!.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00357}00357\ \textcolor{comment}{///\ \ \ -\/\ Always\ provide\ description\ of\ the\ macro.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00358}00358\ \textcolor{comment}{///\ \ \ -\/\ Always\ use\ the\ macro\ in\ the\ following\ format:}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00359}00359\ \textcolor{comment}{///\ }}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00360}00360\ \textcolor{comment}{///\ @code}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00361}00361\ \textcolor{comment}{///\ //\ \ Creates\ a\ string\_constant\ from\ a\ string\ literal.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00362}00362\ \textcolor{comment}{///\ //}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00363}00363\ \textcolor{comment}{///\ //\ \ Access\ string\ value\ with\ string\_constant<>::value.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00364}00364\ \textcolor{comment}{///\ //\ \ Undef\ after\ use!}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00365}00365\ \textcolor{comment}{///\ //\ \ \ \ \ \ \#undef\ STRING\_CONSTANT}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00366}00366\ \textcolor{comment}{///\ \#define\ STRING\_CONSTANT(STR)\ mta::string\_constant<\ \(\backslash\)}}
+\DoxyCodeLine{00367\ \textcolor{comment}{///\ \ \ []()\ consteval\ \{\ return\ STR;\}>}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00368}00368\ \textcolor{comment}{///\ }}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00369}00369\ \textcolor{comment}{///\ STRING\_CONSTANT("{}Hello,\ World!"{})\ hello\_world;}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00370}00370\ \textcolor{comment}{///\ //\ Undef\ after!}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00371}00371\ \textcolor{comment}{///\ \#undef\ STRING\_CONSTANT}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00372}00372\ \textcolor{comment}{///\ @endcode}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00373}00373\ \textcolor{comment}{///\ }}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00374}00374\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00375}00375\ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{char}\ CHAR>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00376}\mbox{\hyperlink{group__cppmodule0__mta__structs_gab2b2caee537e29e5d917cff5050e7b3c}{00376}}\ \textcolor{keyword}{using}\ character\_constant\ =\ std::integral\_constant<\textcolor{keywordtype}{char},\ CHAR>;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00377}00377\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00378}00378\ \textcolor{keyword}{template}\ <\textcolor{keyword}{auto}\ STR>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00379}\mbox{\hyperlink{structmta_1_1string__constant}{00379}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1string__constant}{string\_constant}}\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00380}\mbox{\hyperlink{structmta_1_1string__constant_a7d048f44a0579d45e6c0df5b22a843d4}{00380}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{structmta_1_1string__constant_a7d048f44a0579d45e6c0df5b22a843d4}{data}}\ =\ STR();}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00381}\mbox{\hyperlink{structmta_1_1string__constant_a8407def98a30d1d2cd0598846b65206e}{00381}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{inline}\ size\_t\ \mbox{\hyperlink{structmta_1_1string__constant_a8407def98a30d1d2cd0598846b65206e}{uid}}\{0\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00382}00382\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00383}\mbox{\hyperlink{structmta_1_1string__constant_a0f1ad63f68217c7cfae1251dc2be6d25}{00383}}\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ size\_t\ \mbox{\hyperlink{structmta_1_1string__constant_a0f1ad63f68217c7cfae1251dc2be6d25}{hash}}\ =}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00384}00384\ \ \ \ \ \ \ size\_t\{\textcolor{keyword}{reinterpret\_cast}<std::uintptr\_t>(std::addressof(\mbox{\hyperlink{structmta_1_1string__constant_a8407def98a30d1d2cd0598846b65206e}{uid}}))\};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00385}00385\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00386}00386\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{auto}\ OTHER\_STR>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00387}\mbox{\hyperlink{structmta_1_1string__constant_ae2c0ee8ef3e6c6b959b04d7f773df6f3}{00387}}\ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structmta_1_1string__constant_ae2c0ee8ef3e6c6b959b04d7f773df6f3}{operator}}==(\textcolor{keyword}{const}\ \mbox{\hyperlink{structmta_1_1string__constant}{string\_constant}}<OTHER\_STR>\&\ other)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00388}00388\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structmta_1_1string__constant_a7d048f44a0579d45e6c0df5b22a843d4}{data}}\ ==\ other.data;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00389}00389\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00390}00390\ \};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00391}00391\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00392}\mbox{\hyperlink{group__cppmodule0__mta__structs_gabccad8bdbd6107fd0e6bd73cf290a24c}{00392}}\ \textcolor{keyword}{using}\ null\_string\_constant\ =\ string\_constant<[]()\ consteval\ \{\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}"{}};\ \}>;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00393}00393\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00394}00394\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00395}00395\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00396}\mbox{\hyperlink{namespacemta_1_1any__of__element__detail}{00396}}\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacemta_1_1any__of__element__detail}{any\_of\_element\_detail}}\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00397}00397\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00398}\mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1compile__time__any__of__impl}{00398}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1compile__time__any__of__impl}{compile\_time\_any\_of\_impl}}\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00399}\mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1compile__time__any__of__impl_abd908f4f8acf492c82f16c09b09a8589}{00399}}\ \ \ std::tuple<Args...>\ \mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1compile__time__any__of__impl_abd908f4f8acf492c82f16c09b09a8589}{values}};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00400}00400\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00401}\mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1compile__time__any__of__impl_ad3e86b98ceba6d69df9748279a5676ae}{00401}}\ \ \ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1compile__time__any__of__impl_ad3e86b98ceba6d69df9748279a5676ae}{compile\_time\_any\_of\_impl}}(Args\&\&...\ values)}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00402}00402\ \ \ \ \ \ \ :\ \mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1compile__time__any__of__impl_abd908f4f8acf492c82f16c09b09a8589}{values}}(std::forward<Args>(values)...)\ \{\}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00403}00403\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00404}00404\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00405}\mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1compile__time__any__of__impl_a9b034e032af53e3b1cb114bbce8fa28b}{00405}}\ \ \ [[nodiscard]]\ \textcolor{keyword}{friend}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1compile__time__any__of__impl_a9b034e032af53e3b1cb114bbce8fa28b}{operator}}==(}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00406}00406\ \ \ \ \ \ \ T\ lhs,\ \mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1compile__time__any__of__impl}{compile\_time\_any\_of\_impl}}\ \textcolor{keyword}{const}\&\ rhs)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00407}00407\ \ \ \ \ \textcolor{keywordtype}{bool}\ found\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00408}00408\ \ \ \ \ \textcolor{keywordflow}{return}\ std::apply([\&](\textcolor{keyword}{auto}\&\&...\ vals)\ \{\ \textcolor{keywordflow}{return}\ ((lhs\ ==\ vals)\ ||\ ...);\ \},}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00409}00409\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rhs.values);}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00410}00410\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00411}00411\ \};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00412}00412\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00413}00413\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Container>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00414}\mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1runtime__any__of__impl}{00414}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1runtime__any__of__impl}{runtime\_any\_of\_impl}}\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00415}\mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1runtime__any__of__impl_a423912f3e3e7f7cd9e96fa86a5afbc1d}{00415}}\ \ \ Container\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1runtime__any__of__impl_a423912f3e3e7f7cd9e96fa86a5afbc1d}{values}};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00416}00416\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00417}\mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1runtime__any__of__impl_ae32e67310e57b59b8facb2286e112dc0}{00417}}\ \ \ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1runtime__any__of__impl_ae32e67310e57b59b8facb2286e112dc0}{runtime\_any\_of\_impl}}(Container\ \textcolor{keyword}{const}\&\ values)\ :\ \mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1runtime__any__of__impl_a423912f3e3e7f7cd9e96fa86a5afbc1d}{values}}(values)\ \{\}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00418}00418\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00419}00419\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00420}\mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1runtime__any__of__impl_aaa2fa3f435d1179312fb7ff896b23763}{00420}}\ \ \ [[nodiscard]]\ \textcolor{keyword}{friend}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1runtime__any__of__impl_aaa2fa3f435d1179312fb7ff896b23763}{operator}}==(}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00421}00421\ \ \ \ \ \ \ T\&\&\ lhs,\ \mbox{\hyperlink{structmta_1_1any__of__element__detail_1_1runtime__any__of__impl}{runtime\_any\_of\_impl}}\&\&\ rhs)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00422}00422\ \ \ \ \ \textcolor{keywordflow}{return}\ std::any\_of(cbegin(rhs.values),\ cend(rhs.values),}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00423}00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [\&](\textcolor{keyword}{auto}\ val)\ \{\ \textcolor{keywordflow}{return}\ lhs\ ==\ val;\ \});}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00424}00424\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00425}00425\ \};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00426}00426\ \}\ \ \textcolor{comment}{//\ namespace\ any\_of\_element\_detail}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00427}00427\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00428}00428\ \textcolor{comment}{///\ Returns\ a\ result\ which\ is\ equal\ to\ all\ elements\ within\ a}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00429}00429\ \textcolor{comment}{///\ \ container.\ }}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00430}00430\ \textcolor{comment}{///\ }}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00431}00431\ \textcolor{comment}{///\ A\ compile\ time\ any\_of\ that\ works\ like\ so:}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00432}00432\ \textcolor{comment}{///\ any\_of\_element(container\_or\_element\_pack)\ ==\ the\_value;}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00433}00433\ \textcolor{comment}{///\ }}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00434}00434\ \textcolor{comment}{///\ @code}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00435}00435\ \textcolor{comment}{///\ any\_of\_element(1,\ 2,\ 3)\ ==\ 2}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00436}00436\ \textcolor{comment}{///\ any\_of\_element(std::vector\{1,\ 2,\ 3\})\ !=\ 5}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00437}00437\ \textcolor{comment}{///\ @endcode}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00438}00438\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00439}\mbox{\hyperlink{group__cppmodule0__mta__structs_gaf88efab7e800c6324ccca70a2c4ee526}{00439}}\ [[nodiscard]]\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{group__cppmodule0__mta__structs_gaf88efab7e800c6324ccca70a2c4ee526}{any\_of\_element}}(Args\&\&...\ values)\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00440}00440\ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacemta_1_1any__of__element__detail}{any\_of\_element\_detail}};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00441}00441\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00442}00442\ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}...(Args)\ ==\ 1\ \&\&}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00443}00443\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_minimal\_container\_v<}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00444}00444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::tuple\_element\_t<0,\ std::tuple<Args...>>>)}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00445}00445\ \ \ \ \ \textcolor{keywordflow}{return}\ runtime\_any\_of\_impl(std::forward<Args>(values)...);}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00446}00446\ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00447}00447\ \ \ \ \ \textcolor{keywordflow}{return}\ compile\_time\_any\_of\_impl(std::forward<Args>(values)...);}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00448}00448\ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00449}00449\ \textcolor{comment}{/////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00450}00450\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00451}00451\ \textcolor{comment}{///\ helper\ constant\ for\ a\ variant\ visitor.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00452}00452\ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00453}\mbox{\hyperlink{group__cppmodule0__mta__structs_ga97e130cc5947aa7769e851779368f738}{00453}}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group__cppmodule0__mta__structs_ga97e130cc5947aa7769e851779368f738}{always\_false\_v}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00454}00454\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00455}00455\ \textcolor{comment}{///\ helper\ type\ for\ for\ a\ variant\ visitor.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00456}00456\ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}...\ Ts>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00457}\mbox{\hyperlink{structmta_1_1overloaded}{00457}}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structmta_1_1overloaded}{overloaded}}\ :\ Ts...\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00458}00458\ \ \ \textcolor{keyword}{using}\ Ts::operator()...;}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00459}00459\ \};}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00460}00460\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00461}00461\ \textcolor{comment}{///\ Overloaded\ visitor\ pattern.\ Used\ as\ an\ argument\ to\ a\ variant\ visitor.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00462}00462\ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ HostT,\ \textcolor{keyword}{class}...\ CallableTs>}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00463}\mbox{\hyperlink{group__cppmodule0__mta__structs_gac4ca6cac6152af2cac734c2c96ce796b}{00463}}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{decltype}(\textcolor{keyword}{auto})\ \mbox{\hyperlink{group__cppmodule0__mta__structs_gac4ca6cac6152af2cac734c2c96ce796b}{visit\_overloaded}}(HostT\&\&\ host,}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00464}00464\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CallableTs\&\&...\ callables)\ \{}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00465}00465\ \ \ \textcolor{keywordflow}{return}\ std::visit(overloaded\{std::forward<CallableTs>(callables)...\},}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00466}00466\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::forward<HostT>(host));}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00467}00467\ \}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00468}00468\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00469}00469\ \textcolor{comment}{///\ @\}\ //\ end\ of\ cppmodule0\_mta\_structs}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00470}00470\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00471}00471\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00472}00472\ \};\ \ \textcolor{comment}{//\ namespace\ mta}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00473}00473\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00474}00474\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_META\_TEMPLATE\_ARCHIVE\_MTA\_H}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00475}00475\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00476}00476\ \textcolor{comment}{///\ @\}\ //\ end\ of\ cppmodule0\_mta}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00477}00477\ }
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00478}00478\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00479}00479\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00480}00480\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00481}00481\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00482}00482\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00483}00483\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00484}00484\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00485}00485\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00486}00486\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00487}00487\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00488}00488\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00489}00489\ \textcolor{comment}{//\ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00490}00490\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00491}00491\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00492}00492\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00493}00493\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00494}00494\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00495}00495\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{mta_8h_source_l00496}00496\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+
+\end{DoxyCode}

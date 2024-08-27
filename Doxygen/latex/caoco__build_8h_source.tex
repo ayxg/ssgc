@@ -1,0 +1,391 @@
+\doxysection{caoco\+\_\+build.\+h}
+\hypertarget{caoco__build_8h_source}{}\label{caoco__build_8h_source}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_build.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_build.h}}
+\mbox{\hyperlink{caoco__build_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00001}00001\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00002}00002\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00003}00003\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00004}00004\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00005}00005\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00006}00006\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00007}00007\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00008}00008\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00009}00009\ \textcolor{comment}{///\ @file}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00010}00010\ \textcolor{comment}{///\ @ingroup\ cand\_compiler\_data}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00011}00011\ \textcolor{comment}{///\ @brief\ Builder\ for\ the\ C\&\ Official\ Compiler}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00012}00012\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00013}00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_BUILD\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00014}00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_BUILD\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00015}00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{filesystem}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00016}00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{cppsextended_8h}{"{}cppsextended.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00017}00017\ \textcolor{comment}{//\ Includes:}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00018}00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__grammar_8h}{"{}caoco\_grammar.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00019}00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__lexer_8h}{"{}caoco\_lexer.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00020}00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{caoco__parser_8h}{"{}caoco\_parser.h"{}}}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00022}00022\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecaoco}{caoco}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00024}00024\ \textcolor{comment}{///\ @addtogroup\ cand\_compiler\_builder}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00025}00025\ \textcolor{comment}{///\ @\{}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00027}00027\ \textcolor{comment}{///\ @brief\ Builder\ for\ the\ C\&\ Official\ Compiler}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00028}00028\ \textcolor{comment}{///}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00029}00029\ \textcolor{comment}{///\ \ \ \ -\/\ Handles\ the\ build\ pre-\/processing\ includes\ the\ lexing,\ parsing,\ macro}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00030}00030\ \textcolor{comment}{///\ \ \ \ \ \ expansion,\ constevaluator\ and\ code\ generation\ phases.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00031}00031\ \textcolor{comment}{///\ \ \ \ -\/\ Responsible\ for\ managing\ the\ source\ files\ and\ temporary\ files.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00032}00032\ \textcolor{comment}{///\ \ \ \ -\/\ Provides\ the\ interface\ for\ the\ user\ to\ build\ an\ executable\ of\ library.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00033}00033\ \textcolor{comment}{///\ \ \ \ -\/\ Provides\ an\ interface\ to\ set\ the\ build\ options.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00034}00034\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecaoco}{stdfs}}\ =\ \mbox{\hyperlink{namespacecaoco}{std}}::\mbox{\hyperlink{namespacecaoco}{filesystem}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00035}\mbox{\hyperlink{classcaoco_1_1_builder}{00035}}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcaoco_1_1_builder}{Builder}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00036}00036\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00037}\mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file}{00037}}\ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file}{IncludedFile}}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00038}\mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_a90f1722a6890d27ccd8e605168cf36d9}{00038}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_a90f1722a6890d27ccd8e605168cf36d9}{was\_tokenized}}\{\textcolor{keyword}{false}\};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00040}00040\ \ \ \ \ \textcolor{comment}{//\ Full\ absolute\ path\ to\ this\ file.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00041}\mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_ad96bc764212ae974d214e19f3cf5010c}{00041}}\ \ \ \ \ \mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_ad96bc764212ae974d214e19f3cf5010c}{stdfs}}::\mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_ad96bc764212ae974d214e19f3cf5010c}{path}}\ \mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_ad96bc764212ae974d214e19f3cf5010c}{file\_path}}\{\textcolor{stringliteral}{"{}"{}}\};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00043}00043\ \ \ \ \ \textcolor{comment}{//\ Files\ which\ should\ be\ included\ before\ this\ file.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00044}00044\ \ \ \ \ \textcolor{comment}{//\ Dependencies\ should\ be\ stored\ as\ their\ absolute\ path.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00045}\mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_ab008db30c86ab44a6baa0269131e7040}{00045}}\ \ \ \ \ \mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_ab008db30c86ab44a6baa0269131e7040}{std}}::\mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_ab008db30c86ab44a6baa0269131e7040}{vector}}<\mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_ab008db30c86ab44a6baa0269131e7040}{stdfs}}::\mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_ab008db30c86ab44a6baa0269131e7040}{path}}>\ \mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_ab008db30c86ab44a6baa0269131e7040}{depencencies}}\{\};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00047}00047\ \ \ \ \ \textcolor{comment}{//\ Root\ directory\ which\ all\ includes\ in\ this\ file\ are\ relative\ to.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00048}\mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_abde783f7cd9790da03740330ba674c2c}{00048}}\ \ \ \ \ \mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_abde783f7cd9790da03740330ba674c2c}{stdfs}}::\mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_abde783f7cd9790da03740330ba674c2c}{path}}\ \mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_abde783f7cd9790da03740330ba674c2c}{IncludeDir}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ file\_path.parent\_path();\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00050}\mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_a4dfdab9802111b15c42e3010bc48d803}{00050}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file_a4dfdab9802111b15c42e3010bc48d803}{DependsOn}}(\textcolor{keyword}{const}\ stdfs::path\ p)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00051}00051\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::find\_if(depencencies.cbegin(),\ depencencies.cend(),}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00052}00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [\&p](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ v)\ \{\ \textcolor{keywordflow}{return}\ v\ ==\ p;\ \})\ !=}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ depencencies.cend();}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00054}00054\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00055}00055\ \ \ \};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00057}00057\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00058}\mbox{\hyperlink{classcaoco_1_1_builder_a2872cf2893573dbd6b58e4f821422a32}{00058}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_builder_a2872cf2893573dbd6b58e4f821422a32}{SetRootFile}}(string\_view\ p)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00059}00059\ \ \ \ \ ValidateSourceFile(p);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00060}00060\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{ErrorOccured}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{(}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{)}})\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00061}00061\ \ \ \ \ root\_file\_.file\_path\ =\ p;}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00062}00062\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00063}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{00063}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{ErrorOccured}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{not}\ build\_error\_;\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00064}\mbox{\hyperlink{classcaoco_1_1_builder_acf4619f261d6c8c1aa3b020360189dd5}{00064}}\ \ \ cstring\ \mbox{\hyperlink{classcaoco_1_1_builder_acf4619f261d6c8c1aa3b020360189dd5}{ErrorMessage}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ build\_error\_.Error().c\_str();\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00065}\mbox{\hyperlink{classcaoco_1_1_builder_a4dbc00d2716631ab5c2e7e0c06889fa7}{00065}}\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcaoco_1_1_builder_a4dbc00d2716631ab5c2e7e0c06889fa7}{vector}}<\mbox{\hyperlink{classcaoco_1_1_builder_a4dbc00d2716631ab5c2e7e0c06889fa7}{Tk}}>\&\ \mbox{\hyperlink{classcaoco_1_1_builder_a4dbc00d2716631ab5c2e7e0c06889fa7}{GetLexedSource}}()\ \{\ \textcolor{keywordflow}{return}\ full\_lexed\_source\_;\ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00066}\mbox{\hyperlink{classcaoco_1_1_builder_a844fcac73963ecf0fc239b2efc160d44}{00066}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_builder_a844fcac73963ecf0fc239b2efc160d44}{Build}}()\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00067}00067\ \ \ \ \ \textcolor{comment}{//\ 1.\ Load\ and\ lex\ the\ root\ file\ into\ temp\ buffer.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00068}00068\ \ \ \ \ LoadSourceFileToTempBuffer(root\_file\_.file\_path);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00069}00069\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{ErrorOccured}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{(}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{)}})\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00070}00070\ \ \ \ \ LexFileIntoTempBuffer(temp\_file\_buffer\_);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00071}00071\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{ErrorOccured}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{(}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{)}})\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00072}00072\ \ \ \ \ ScanFileDependencies(temp\_token\_buffer\_,\ root\_file\_.file\_path);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00073}00073\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{ErrorOccured}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{(}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{)}})\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00075}00075\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ f\ :\ included\_files\_)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00076}00076\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{not}\ f.was\_tokenized)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00077}00077\ \ \ \ \ \ \ \ \ LoadSourceFileToTempBuffer(f.file\_path);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00078}00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ErrorOccured())\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00079}00079\ \ \ \ \ \ \ \ \ LexFileIntoTempBuffer(temp\_file\_buffer\_);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00080}00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ErrorOccured())\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00081}00081\ \ \ \ \ \ \ \ \ ScanFileDependencies(temp\_token\_buffer\_,\ f.file\_path);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00082}00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ErrorOccured())\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00083}00083\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00084}00084\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00085}00085\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00086}00086\ \ \ \ \ \textcolor{comment}{//\ 2.\ Lex\ all\ included\ files\ into\ the\ buffer\ in\ the\ correct\ order}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00087}00087\ \ \ \ \ \textcolor{comment}{//\ starting\ from\ the\ last\ included\ to\ the\ root\ file}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00088}00088\ \ \ \ \ \textcolor{comment}{//\ based\ on\ dependencies.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00089}00089\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ included\_files\_.rbegin();\ it\ !=\ included\_files\_.rend();}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00090}00090\ \ \ \ \ \ \ \ \ \ it++)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00091}00091\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it-\/>was\_tokenized)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00092}00092\ \ \ \ \ \ \ \ \ LoadSourceFileToTempBuffer(it-\/>file\_path);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00093}00093\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ErrorOccured())\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00094}00094\ \ \ \ \ \ \ \ \ LexFileIntoTempBuffer(temp\_file\_buffer\_);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00095}00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ErrorOccured())\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00096}00096\ \ \ \ \ \ \ \ \ RemoveIncludeDirectivesFromSource(temp\_token\_buffer\_);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00097}00097\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00098}00098\ \ \ \ \ \ \ \ \ full\_lexed\_source\_.insert(full\_lexed\_source\_.end(),}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00099}00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ temp\_token\_buffer\_.begin(),}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00100}00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ temp\_token\_buffer\_.end());}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00102}00102\ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00103}00103\ \ \ \ \ \ \ \ \ build\_error\_\ =}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00104}00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Programmer\ Logic\ Error,\ not\ all\ included\ files\ were\ fully\ scanned\ "{}}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00105}00105\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}for\ dependencies\ before\ initiaitng\ final\ build."{}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00106}00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00107}00107\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00108}00108\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00110}00110\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ root\ file\ last.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00111}00111\ \ \ \ \ LoadSourceFileToTempBuffer(root\_file\_.file\_path);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00112}00112\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{ErrorOccured}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{(}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{)}})\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00113}00113\ \ \ \ \ LexFileIntoTempBuffer(temp\_file\_buffer\_);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00114}00114\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{ErrorOccured}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{(}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{)}})\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00115}00115\ \ \ \ \ RemoveIncludeDirectivesFromSource(temp\_token\_buffer\_);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00116}00116\ \ \ \ \ full\_lexed\_source\_.insert(full\_lexed\_source\_.end(),}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00117}00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ temp\_token\_buffer\_.begin(),}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00118}00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ temp\_token\_buffer\_.end());}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00120}00120\ \ \ \ \ \textcolor{comment}{//\ 3.\ Parse\ entire\ lexed\ source.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00121}00121\ \ \ \ \ \textcolor{keyword}{auto}\ parse\_result\ =\ ParseTokens(full\_lexed\_source\_);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00122}00122\ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{not}\ parse\_result)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00123}00123\ \ \ \ \ \ \ build\_error\_\ =\ parse\_result.Error();}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00124}00124\ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00125}00125\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00126}00126\ \ \ \ \ ast\_buffer\_\ =\ parse\_result.Extract();}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00128}00128\ \ \ \ \ \textcolor{comment}{//\ 4.\ IRAST\ Generation}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00129}00129\ \ \ \ \ \textcolor{comment}{//\ generate\ an\ IR-\/Ast\ out\ of\ the\ Ast.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00130}00130\ \ \ \ \ \textcolor{comment}{//\ -\/\ Generates\ Symbol,\ Type,\ Constant\ tables.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00131}00131\ \ \ \ \ \textcolor{comment}{//\ -\/\ Performs\ literal\ reduction.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00132}00132\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00134}00134\ \ \ \ \ \textcolor{comment}{//\ 6.\ Transpile\ collected\ program\ data\ to\ C++(cail)}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00135}00135\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00136}00136\ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00137}00137\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00139}00139\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00140}\mbox{\hyperlink{classcaoco_1_1_builder_a576f0e1c76ede7f1bc43095e335e8e5c}{00140}}\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_builder_a576f0e1c76ede7f1bc43095e335e8e5c}{IsRootFile}}(\textcolor{keyword}{const}\ stdfs::path\&\ p)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00141}00141\ \ \ \ \ \textcolor{keywordflow}{return}\ p\ ==\ root\_file\_.file\_path;}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00142}00142\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00144}\mbox{\hyperlink{classcaoco_1_1_builder_a79453d89db8720b8e6c9cec986a7f01a}{00144}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_builder_a79453d89db8720b8e6c9cec986a7f01a}{ValidateSourceFile}}(\textcolor{keyword}{const}\ stdfs::path\&\ source\_file\_path)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00145}00145\ \ \ \ \ \textcolor{keywordflow}{if}\ (!stdfs::exists(source\_file\_path))\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00146}00146\ \ \ \ \ \ \ build\_error\_\ =}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00147}00147\ \ \ \ \ \ \ \ \ \ \ GenerateFileErrorMessage(source\_file\_path,\ \textcolor{stringliteral}{"{}Does\ not\ exist"{}});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00148}00148\ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00149}00149\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00150}00150\ \ \ \ \ \textcolor{keywordflow}{if}\ (!stdfs::is\_regular\_file(source\_file\_path))\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00151}00151\ \ \ \ \ \ \ build\_error\_\ =}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00152}00152\ \ \ \ \ \ \ \ \ \ \ GenerateFileErrorMessage(source\_file\_path,\ \textcolor{stringliteral}{"{}Not\ a\ regular\ file."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00153}00153\ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00154}00154\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00155}00155\ \ \ \ \ \textcolor{keywordflow}{if}\ (source\_file\_path.extension()\ !=\ \textcolor{stringliteral}{"{}.cand"{}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00156}00156\ \ \ \ \ \ \ build\_error\_\ =}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00157}00157\ \ \ \ \ \ \ \ \ \ \ GenerateFileErrorMessage(source\_file\_path,\ \textcolor{stringliteral}{"{}Not\ a\ .cand\ file."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00158}00158\ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00159}00159\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00160}00160\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00161}00161\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00162}\mbox{\hyperlink{classcaoco_1_1_builder_a88c51bb81f24762c6d64f65eb4456a2d}{00162}}\ \ \ \textcolor{keyword}{inline}\ string\ \mbox{\hyperlink{classcaoco_1_1_builder_a88c51bb81f24762c6d64f65eb4456a2d}{GenerateFileErrorMessage}}(\textcolor{keyword}{const}\ stdfs::path\&\ source\_file,}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ string\&\ error)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00164}00164\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ in\ file\ '"{}}\ +\ source\_file.string()\ +\ \textcolor{stringliteral}{"{}':"{}}\ +\ error\ +\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00165}00165\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00166}00166\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00167}\mbox{\hyperlink{classcaoco_1_1_builder_a996d5111bd9bda4ce25b84666e4906a3}{00167}}\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcaoco_1_1_builder_a996d5111bd9bda4ce25b84666e4906a3}{LoadSourceFileToTempBuffer}}(\textcolor{keyword}{const}\ stdfs::path\&\ source\_file\_path)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00168}00168\ \ \ \ \ ValidateSourceFile(source\_file\_path);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00169}00169\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{ErrorOccured}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{(}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00170}00170\ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00171}00171\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00172}00172\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00173}00173\ \ \ \ \ std::ifstream\ source\_file\_stream(source\_file\_path);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00174}00174\ \ \ \ \ \textcolor{keywordflow}{if}\ (!source\_file\_stream.is\_open())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00175}00175\ \ \ \ \ \ \ build\_error\_\ =}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00176}00176\ \ \ \ \ \ \ \ \ \ \ GenerateFileErrorMessage(source\_file\_path,\ \textcolor{stringliteral}{"{}Could\ not\ open\ file."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00177}00177\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00178}00178\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00179}00179\ \ \ \ \ temp\_file\_buffer\_\ =}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00180}00180\ \ \ \ \ \ \ \ \ vector<\textcolor{keywordtype}{char}>((std::istreambuf\_iterator<\textcolor{keywordtype}{char}>(source\_file\_stream)),}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00181}00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::istreambuf\_iterator<\textcolor{keywordtype}{char}>());}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00182}00182\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00183}00183\ \ \ \ \ source\_file\_stream.close();}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00184}00184\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00185}00185\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00186}\mbox{\hyperlink{classcaoco_1_1_builder_aadcd65b7286781bef0c1d082b0c035ff}{00186}}\ \ \ \textcolor{keywordtype}{void}\ LexFileIntoTempBuffer(\textcolor{keyword}{const}\ vector<\textcolor{keywordtype}{char}>\&\ source\_file\_buffer)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00187}00187\ \ \ \ \ \textcolor{keyword}{auto}\ lex\_result\ =\ Lexer::Lex(source\_file\_buffer);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00188}00188\ \ \ \ \ \textcolor{keywordflow}{if}\ (lex\_result)}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00189}00189\ \ \ \ \ \ \ temp\_token\_buffer\_\ =\ lex\_result.Extract();}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00190}00190\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00191}00191\ \ \ \ \ \ \ build\_error\_\ =\ lex\_result.Error();}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00192}00192\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00193}00193\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00194}\mbox{\hyperlink{classcaoco_1_1_builder_a61068b7aee06f629074401e230108320}{00194}}\ \ \ \textcolor{keywordtype}{void}\ ScanFileDependencies(\textcolor{keyword}{const}\ vector<Tk>\&\ lexed\_source,}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00195}00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ stdfs::path\&\ lexed\_file\_path)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00196}00196\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{TkCursor}}\ c\ =\ \{lexed\_source.begin(),\ lexed\_source.end()\};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00197}00197\ \ \ \ \ string\ lexed\_file\_name\ =\ lexed\_file\_path.filename().string();}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00198}00198\ \ \ \ \ stdfs::path\ lexed\_file\_dir\_path\ =\ lexed\_file\_path.parent\_path();}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00199}00199\ \ \ \ \ vector<IncludedFile>\ scanned\_included\_files;}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00200}00200\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00201}00201\ \ \ \ \ \textcolor{comment}{//\ Scan\ for\ include\ directives}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00202}00202\ \ \ \ \ \textcolor{keywordflow}{while}\ (!c.AtEnd())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00203}00203\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\mbox{\hyperlink{group__cand__compiler__parser__cursor_ga7f17c2d5f3a57515b36286dcbfcfc03e}{.}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_ga7f17c2d5f3a57515b36286dcbfcfc03e}{TypeIsnt}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_ga7f17c2d5f3a57515b36286dcbfcfc03e}{(}}\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{eTk}}::DirectiveInclude\mbox{\hyperlink{group__cand__compiler__parser__cursor_ga7f17c2d5f3a57515b36286dcbfcfc03e}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00204}00204\ \ \ \ \ \ \ \ \ c\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{.}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{Advance}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{(}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00205}00205\ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00206}00206\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Include\ directive\ must\ be\ followed\ by\ string\ literal\ file\ name.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00207}00207\ \ \ \ \ \ \ \ \ c\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{.}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{Advance}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{(}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00208}00208\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\mbox{\hyperlink{group__cand__compiler__parser__cursor_ga7f17c2d5f3a57515b36286dcbfcfc03e}{.}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_ga7f17c2d5f3a57515b36286dcbfcfc03e}{TypeIsnt}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_ga7f17c2d5f3a57515b36286dcbfcfc03e}{(}}\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{eTk}}::LitCstr\mbox{\hyperlink{group__cand__compiler__parser__cursor_ga7f17c2d5f3a57515b36286dcbfcfc03e}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00209}00209\ \ \ \ \ \ \ \ \ \ \ build\_error\_\ =\ GenerateFileErrorMessage(}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00210}00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lexed\_file\_path,}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00211}00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\#include\ directive\ not\ followed\ by\ a\ string\ literal\ ."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00212}00212\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00213}00213\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00214}00214\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remove\ quotes\ from\ string\ literal.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00215}00215\ \ \ \ \ \ \ \ \ stdfs::path\ included\_file\_path\ =}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00216}00216\ \ \ \ \ \ \ \ \ \ \ \ \ c.Literal().substr(1,\ c.Literal().size()\ -\/\ 2);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00217}00217\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00218}00218\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ File\ cannot\ include\ itself.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00219}00219\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (included\_file\_path\ ==\ lexed\_file\_name\ ||}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00220}00220\ \ \ \ \ \ \ \ \ \ \ \ \ included\_file\_path\ ==\ lexed\_file\_path)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00221}00221\ \ \ \ \ \ \ \ \ \ \ build\_error\_\ =\ GenerateFileErrorMessage(}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00222}00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lexed\_file\_path,\ \textcolor{stringliteral}{"{}File\ cannot\ recursiveley\ include\ self."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00223}00223\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00224}00224\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00225}00225\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00226}00226\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ path\ is\ relative.\ Its\ relative\ to\ the\ lexed\_file\_dir\_path.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00227}00227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (included\_file\_path.is\_relative())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00228}00228\ \ \ \ \ \ \ \ \ \ \ included\_file\_path\ =\ lexed\_file\_dir\_path.native()\ +\ L"{}\(\backslash\)\(\backslash\)"{}\ +}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00229}00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ included\_file\_path.native();}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00230}00230\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00231}00231\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00232}00232\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ resulting\ absolute\ path\ is\ the\ root\ path,\ error.\ Cannot}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00233}00233\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ include\ the\ root\ path.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00234}00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (included\_file\_path\ ==\ lexed\_file\_path)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00235}00235\ \ \ \ \ \ \ \ \ \ \ build\_error\_\ =\ GenerateFileErrorMessage(}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00236}00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lexed\_file\_path,\ \textcolor{stringliteral}{"{}Cannot\ include\ the\ root\ build\ file."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00237}00237\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00238}00238\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00239}00239\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00240}00240\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ file\ and\ add\ to\ the\ scanned\_included\_files\ if\ not\ duplicate.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00241}00241\ \ \ \ \ \ \ \ \ ValidateSourceFile(included\_file\_path);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00242}00242\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{ErrorOccured}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{(}}\mbox{\hyperlink{classcaoco_1_1_builder_a983ad9794611c9c026268f732dd23553}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00243}00243\ \ \ \ \ \ \ \ \ \ \ build\_error\_\ =\ GenerateFileErrorMessage(}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00244}00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lexed\_file\_path.filename(),}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00245}00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Invalid\ inclusion:\(\backslash\)n"{}}\ +\ build\_error\_.Error());}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00246}00246\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00247}00247\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00248}00248\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ is\_duplicate\_found\ =\ std::find\_if(}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00249}00249\ \ \ \ \ \ \ \ \ \ \ \ \ scanned\_included\_files.cbegin(),\ scanned\_included\_files.cend(),}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00250}00250\ \ \ \ \ \ \ \ \ \ \ \ \ [\&included\_file\_path](\textcolor{keyword}{const}\ IncludedFile\&\ v)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00251}00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ v.file\_path\ ==\ included\_file\_path;}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00253}00253\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00254}00254\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Duplicate\ found.\ Log\ warning.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00255}00255\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (is\_duplicate\_found\ !=\ scanned\_included\_files.cend())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00256}00256\ \ \ \ \ \ \ \ \ \ \ warning\_log\_\ <<\ GenerateFileErrorMessage(}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00257}00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ included\_file\_path,}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00258}00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}[Warning]\ Duplicate\ file\ inclusion\ will\ be\ implicitly\ "{}}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00259}00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}ignored."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00260}00260\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00261}00261\ \ \ \ \ \ \ \ \ \ \ scanned\_included\_files.push\_back(}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00262}00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IncludedFile\{.file\_path\ =\ included\_file\_path\});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00263}00263\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00264}00264\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00265}00265\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ file\ is\ included\ in\ the\ overall\ build\ already}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00266}00266\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Extract\ it\ from\ the\ build\ files\ and\ replace\ this\ included}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00267}00267\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ file\ metadata.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00268}00268\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ found\_in\_included\ =}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00269}00269\ \ \ \ \ \ \ \ \ \ \ \ \ std::find\_if(included\_files\_.cbegin(),\ included\_files\_.cend(),}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00270}00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [\&included\_file\_path](\textcolor{keyword}{const}\ IncludedFile\&\ v)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00271}00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ v.file\_path\ ==\ included\_file\_path;}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00272}00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00273}00273\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00274}00274\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (found\_in\_included\ !=\ included\_files\_.cend())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00275}00275\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ all\ dependencies\ of\ file,\ make\ sure\ it\ does\ not}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00276}00276\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ depend\ on\ this\ file.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00277}00277\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (DetectCircularDependency(lexed\_file\_path,\ included\_file\_path))\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00278}00278\ \ \ \ \ \ \ \ \ \ \ \ \ build\_error\_\ =\ GenerateFileErrorMessage(}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00279}00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lexed\_file\_path,\ \textcolor{stringliteral}{"{}\(\backslash\)nCircular\ dependency\ detected\ with\ file:\ "{}}\ +}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00280}00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ included\_file\_path.string());}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00281}00281\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00282}00282\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00283}00283\ \ \ \ \ \ \ \ \ \ \ scanned\_included\_files.back()\ =\ *found\_in\_included;}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00284}00284\ \ \ \ \ \ \ \ \ \ \ included\_files\_.erase(found\_in\_included);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00285}00285\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00286}00286\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00287}00287\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00288}00288\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00289}00289\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ scanned\ files\ to\ the\ included\ files.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00290}00290\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ f\ :\ scanned\_included\_files)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00291}00291\ \ \ \ \ \ \ included\_files\_.push\_back(f);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00292}00292\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00293}00293\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00294}00294\ \ \ \ \ \textcolor{comment}{//\ Find\ this\ file\ in\ the\ included\ files\ and\ mark\ it\ as\ lexed.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00295}00295\ \ \ \ \ \textcolor{keywordflow}{if}\ (IsRootFile(lexed\_file\_path))\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00296}00296\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ f\ :\ scanned\_included\_files)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00297}00297\ \ \ \ \ \ \ \ \ root\_file\_.depencencies.push\_back(f.file\_path);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00298}00298\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00299}00299\ \ \ \ \ \ \ root\_file\_.was\_tokenized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00300}00300\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00301}00301\ \ \ \ \ \ \ \textcolor{keyword}{auto}\ in\_included\ =}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00302}00302\ \ \ \ \ \ \ \ \ \ \ std::find\_if(included\_files\_.begin(),\ included\_files\_.end(),}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00303}00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [\&lexed\_file\_path](\textcolor{keyword}{const}\ IncludedFile\&\ v)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00304}00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ v.file\_path\ ==\ lexed\_file\_path;}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00305}00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00306}00306\ \ \ \ \ \ \ assert(in\_included\ !=\ included\_files\_.end()\ \&\&}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00307}00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Programmer\ Logic\ Error:\ File\ was\ not\ added\ to\ build\ files\ before\ "{}}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00308}00308\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}attempting\ to\ scan\ for\ dependencies."{}});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00309}00309\ \ \ \ \ \ \ in\_included-\/>was\_tokenized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00310}00310\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ f\ :\ scanned\_included\_files)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00311}00311\ \ \ \ \ \ \ \ \ in\_included-\/>depencencies.push\_back(f.file\_path);}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00312}00312\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00313}00313\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00314}00314\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00315}00315\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00316}\mbox{\hyperlink{classcaoco_1_1_builder_ad4be4d4205c4a0dab42dd6f9db3e703f}{00316}}\ \ \ \textcolor{keywordtype}{void}\ RemoveIncludeDirectivesFromSource(vector<Tk>\&\ lexed\_source)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00317}00317\ \ \ \ \ vector<Tk>\ cleaned\_source;}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00318}00318\ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{TkCursor}}\ c\ =\ \{lexed\_source.begin(),\ lexed\_source.end()\};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00319}00319\ \ \ \ \ \textcolor{keywordflow}{while}\ (!c.AtEnd())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00320}00320\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\mbox{\hyperlink{group__cand__compiler__parser__cursor_gad3a65e2a4654a812c5725925fe0209f2}{.}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gad3a65e2a4654a812c5725925fe0209f2}{TypeIs}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gad3a65e2a4654a812c5725925fe0209f2}{(}}\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{eTk}}::DirectiveInclude\mbox{\hyperlink{group__cand__compiler__parser__cursor_gad3a65e2a4654a812c5725925fe0209f2}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00321}00321\ \ \ \ \ \ \ \ \ c\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{.}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{Advance}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{(}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00322}00322\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\mbox{\hyperlink{group__cand__compiler__parser__cursor_gad3a65e2a4654a812c5725925fe0209f2}{.}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gad3a65e2a4654a812c5725925fe0209f2}{TypeIs}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gad3a65e2a4654a812c5725925fe0209f2}{(}}\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{eTk}}::LitCstr\mbox{\hyperlink{group__cand__compiler__parser__cursor_gad3a65e2a4654a812c5725925fe0209f2}{)}})\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00323}00323\ \ \ \ \ \ \ \ \ \ \ c\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{.}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{Advance}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{(}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00324}00324\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00325}00325\ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00326}00326\ \ \ \ \ \ \ \ \ cleaned\_source.push\_back(c.Get());}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00327}00327\ \ \ \ \ \ \ \ \ c\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{.}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{Advance}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{(}}\mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{)}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00328}00328\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00329}00329\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00330}00330\ \ \ \ \ lexed\_source\ =\ cleaned\_source;}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00331}00331\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00332}00332\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00333}\mbox{\hyperlink{classcaoco_1_1_builder_a381b7106d0d8d6d2c7eb0ceda5dd5c0c}{00333}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcaoco_1_1_builder_a381b7106d0d8d6d2c7eb0ceda5dd5c0c}{DetectCircularDependency}}(\textcolor{keyword}{const}\ stdfs::path\&\ dependant,}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00334}00334\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ stdfs::path\&\ dependency)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00335}00335\ \ \ \ \ \textcolor{keyword}{auto}\ in\_included\ =}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00336}00336\ \ \ \ \ \ \ \ \ std::find\_if(included\_files\_.begin(),\ included\_files\_.end(),}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00337}00337\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [\&dependency](\textcolor{keyword}{const}\ IncludedFile\&\ v)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00338}00338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ v.file\_path\ ==\ dependency;}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00339}00339\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00340}00340\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00341}00341\ \ \ \ \ \textcolor{keywordflow}{if}\ (in\_included\ ==\ included\_files\_.end())\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00342}00342\ \ \ \ \ \textcolor{keywordflow}{if}\ (in\_included-\/>DependsOn(dependant))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00343}00343\ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{not}\ in\_included-\/>depencencies.empty())\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00344}00344\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ d\ :\ in\_included-\/>depencencies)\ \{}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00345}00345\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (DetectCircularDependency(dependant,\ d))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00346}00346\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00347}00347\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00348}00348\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00349}00349\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00350}00350\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00351}00351\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00352}\mbox{\hyperlink{classcaoco_1_1_builder_ae374c1bd1d8b3b341a2bf4127be049aa}{00352}}\ \ \ std::stringstream\ \mbox{\hyperlink{classcaoco_1_1_builder_ae374c1bd1d8b3b341a2bf4127be049aa}{warning\_log\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00353}\mbox{\hyperlink{classcaoco_1_1_builder_a08b02fa4afda15ea0f63835088cc25cd}{00353}}\ \ \ \mbox{\hyperlink{namespacecxx}{cxx}}::\mbox{\hyperlink{classcxx_1_1_bool_error}{BoolError}}\ \mbox{\hyperlink{classcaoco_1_1_builder_a08b02fa4afda15ea0f63835088cc25cd}{build\_error\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00354}\mbox{\hyperlink{classcaoco_1_1_builder_a0eb0a4ae0f6c6f0654286727265ac6d8}{00354}}\ \ \ \mbox{\hyperlink{structcaoco_1_1_builder_1_1_included_file}{IncludedFile}}\ \mbox{\hyperlink{classcaoco_1_1_builder_a0eb0a4ae0f6c6f0654286727265ac6d8}{root\_file\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00355}\mbox{\hyperlink{classcaoco_1_1_builder_a49a620f3020471a014c297c48b018c49}{00355}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_builder_a49a620f3020471a014c297c48b018c49}{vector}}<\textcolor{keywordtype}{char}>\ \mbox{\hyperlink{classcaoco_1_1_builder_a49a620f3020471a014c297c48b018c49}{temp\_file\_buffer\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00356}\mbox{\hyperlink{classcaoco_1_1_builder_a029da8b76f3b855827f921807771b507}{00356}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_builder_a029da8b76f3b855827f921807771b507}{vector}}<\mbox{\hyperlink{classcaoco_1_1_builder_a029da8b76f3b855827f921807771b507}{Tk}}>\ \mbox{\hyperlink{classcaoco_1_1_builder_a029da8b76f3b855827f921807771b507}{temp\_token\_buffer\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00357}\mbox{\hyperlink{classcaoco_1_1_builder_acd8c2470b5ae94d7f5d3dbbb3f75e8e2}{00357}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_builder_acd8c2470b5ae94d7f5d3dbbb3f75e8e2}{std}}::\mbox{\hyperlink{classcaoco_1_1_builder_acd8c2470b5ae94d7f5d3dbbb3f75e8e2}{list}}<\mbox{\hyperlink{classcaoco_1_1_builder_acd8c2470b5ae94d7f5d3dbbb3f75e8e2}{IncludedFile}}>\ \mbox{\hyperlink{classcaoco_1_1_builder_acd8c2470b5ae94d7f5d3dbbb3f75e8e2}{included\_files\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00358}\mbox{\hyperlink{classcaoco_1_1_builder_aff245a2c75fab17f4408d2983ac12306}{00358}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_builder_aff245a2c75fab17f4408d2983ac12306}{vector}}<\mbox{\hyperlink{classcaoco_1_1_builder_aff245a2c75fab17f4408d2983ac12306}{Tk}}>\ \mbox{\hyperlink{classcaoco_1_1_builder_aff245a2c75fab17f4408d2983ac12306}{full\_lexed\_source\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00359}\mbox{\hyperlink{classcaoco_1_1_builder_a1bac1f66f854e0f0c09a59c82ed26c86}{00359}}\ \ \ \mbox{\hyperlink{classcaoco_1_1_ast}{Ast}}\ \mbox{\hyperlink{classcaoco_1_1_builder_a1bac1f66f854e0f0c09a59c82ed26c86}{ast\_buffer\_}};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00360}00360\ \};}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00361}00361\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00362}00362\ \textcolor{comment}{///\ @\}\ //\ end\ of\ cand\_compiler\_builder}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00363}00363\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00364}00364\ \}\ \ \textcolor{comment}{//\ namespace\ caoco}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00365}00365\ }
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00366}00366\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{preprocessor}{HEADER\_GUARD\_CALE\_CAND\_OFFICIAL\_COMPILER\_CAOCO\_BUILD\_H}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00367}00367\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00368}00368\ \textcolor{comment}{//\ @project:\ C\&\ Programming\ Language\ Environment}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00369}00369\ \textcolor{comment}{//\ @author(s):\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00370}00370\ \textcolor{comment}{//\ @website:\ https://www.acpp.dev}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00371}00371\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00372}00372\ \textcolor{comment}{//\ Copyright\ 2024\ Anton\ Yashchenko}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00373}00373\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00374}00374\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0(the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00375}00375\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00376}00376\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00377}00377\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00378}00378\ \textcolor{comment}{//\ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00379}00379\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00380}00380\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00381}00381\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00382}00382\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00383}00383\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00384}00384\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{caoco__build_8h_source_l00385}00385\ \textcolor{comment}{///////////////////////////////////////////////////////////////////////////////}}
+
+\end{DoxyCode}

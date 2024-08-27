@@ -1,0 +1,115 @@
+\doxysubsubsection{Internal Methods}
+\hypertarget{group__cppmodule1__minitest__internal}{}\label{group__cppmodule1__minitest__internal}\index{Internal Methods@{Internal Methods}}
+\doxysubsubsubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{group__cppmodule1__minitest__internal_ga9c1650db31c407aa418eb1be7cdc5dc5}{minitest\+::\+Expect\+True}} (bool b)
+\begin{DoxyCompactList}\small\item\em DO NOT USE. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{group__cppmodule1__minitest__internal_ga312d6e0117e8a8a6165eb605214853b6}{minitest\+::\+Expect\+False}} (bool b)
+\begin{DoxyCompactList}\small\item\em DO NOT USE. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename LT , typename RT $>$ \newline
+requires std\+::equality\+\_\+comparable\+\_\+with$<$LT, RT$>$}\\static bool \mbox{\hyperlink{group__cppmodule1__minitest__internal_gaa666f55a9d412f1f797d3f14b7f24b63}{minitest\+::\+Expect\+Eq}} (LT lhs, RT rhs)
+\begin{DoxyCompactList}\small\item\em DO NOT USE. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename LT , typename RT $>$ \newline
+requires std\+::equality\+\_\+comparable\+\_\+with$<$LT, RT$>$}\\static bool \mbox{\hyperlink{group__cppmodule1__minitest__internal_ga45625ea82e44227cb373aaa45d4c7995}{minitest\+::\+Expect\+Ne}} (LT lhs, RT rhs)
+\begin{DoxyCompactList}\small\item\em DO NOT USE. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{group__cppmodule1__minitest__internal_gafdc83ddc2e8e3c4f0e48fb99971e75bf}{minitest\+::\+Expect\+Any\+Throw}} (auto \&\&f)
+\begin{DoxyCompactList}\small\item\em DO NOT USE. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{group__cppmodule1__minitest__internal_ga5b338333137f466cf11f44dd5184ffcf}{minitest\+::\+Expect\+No\+Throw}} (auto \&\&f)
+\begin{DoxyCompactList}\small\item\em DO NOT USE. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsubsection{Detailed Description}
+
+
+!! DO NOT use the methods below directly in test cases. Internal implementations of check and assert static methods. 
+
+\doxysubsubsubsection{Function Documentation}
+\Hypertarget{group__cppmodule1__minitest__internal_gafdc83ddc2e8e3c4f0e48fb99971e75bf}\index{Internal Methods@{Internal Methods}!ExpectAnyThrow@{ExpectAnyThrow}}
+\index{ExpectAnyThrow@{ExpectAnyThrow}!Internal Methods@{Internal Methods}}
+\doxysubsubsubsubsection{\texorpdfstring{ExpectAnyThrow()}{ExpectAnyThrow()}}
+{\footnotesize\ttfamily \label{group__cppmodule1__minitest__internal_gafdc83ddc2e8e3c4f0e48fb99971e75bf} 
+static bool minitest\+::\+Expect\+Any\+Throw (\begin{DoxyParamCaption}\item[{auto \&\&}]{f}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+DO NOT USE. 
+
+
+
+Definition at line \mbox{\hyperlink{minitest_8h_source_l00164}{164}} of file \mbox{\hyperlink{minitest_8h_source}{minitest.\+h}}.
+
+\Hypertarget{group__cppmodule1__minitest__internal_gaa666f55a9d412f1f797d3f14b7f24b63}\index{Internal Methods@{Internal Methods}!ExpectEq@{ExpectEq}}
+\index{ExpectEq@{ExpectEq}!Internal Methods@{Internal Methods}}
+\doxysubsubsubsubsection{\texorpdfstring{ExpectEq()}{ExpectEq()}}
+{\footnotesize\ttfamily \label{group__cppmodule1__minitest__internal_gaa666f55a9d412f1f797d3f14b7f24b63} 
+template$<$typename LT , typename RT $>$ \newline
+requires std\+::equality\+\_\+comparable\+\_\+with$<$LT, RT$>$\\
+static bool minitest\+::\+Expect\+Eq (\begin{DoxyParamCaption}\item[{LT}]{lhs}{, }\item[{RT}]{rhs}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+DO NOT USE. 
+
+
+
+Definition at line \mbox{\hyperlink{minitest_8h_source_l00130}{130}} of file \mbox{\hyperlink{minitest_8h_source}{minitest.\+h}}.
+
+\Hypertarget{group__cppmodule1__minitest__internal_ga312d6e0117e8a8a6165eb605214853b6}\index{Internal Methods@{Internal Methods}!ExpectFalse@{ExpectFalse}}
+\index{ExpectFalse@{ExpectFalse}!Internal Methods@{Internal Methods}}
+\doxysubsubsubsubsection{\texorpdfstring{ExpectFalse()}{ExpectFalse()}}
+{\footnotesize\ttfamily \label{group__cppmodule1__minitest__internal_ga312d6e0117e8a8a6165eb605214853b6} 
+static bool minitest\+::\+Expect\+False (\begin{DoxyParamCaption}\item[{bool}]{b}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+DO NOT USE. 
+
+
+
+Definition at line \mbox{\hyperlink{minitest_8h_source_l00117}{117}} of file \mbox{\hyperlink{minitest_8h_source}{minitest.\+h}}.
+
+\Hypertarget{group__cppmodule1__minitest__internal_ga45625ea82e44227cb373aaa45d4c7995}\index{Internal Methods@{Internal Methods}!ExpectNe@{ExpectNe}}
+\index{ExpectNe@{ExpectNe}!Internal Methods@{Internal Methods}}
+\doxysubsubsubsubsection{\texorpdfstring{ExpectNe()}{ExpectNe()}}
+{\footnotesize\ttfamily \label{group__cppmodule1__minitest__internal_ga45625ea82e44227cb373aaa45d4c7995} 
+template$<$typename LT , typename RT $>$ \newline
+requires std\+::equality\+\_\+comparable\+\_\+with$<$LT, RT$>$\\
+static bool minitest\+::\+Expect\+Ne (\begin{DoxyParamCaption}\item[{LT}]{lhs}{, }\item[{RT}]{rhs}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+DO NOT USE. 
+
+
+
+Definition at line \mbox{\hyperlink{minitest_8h_source_l00148}{148}} of file \mbox{\hyperlink{minitest_8h_source}{minitest.\+h}}.
+
+\Hypertarget{group__cppmodule1__minitest__internal_ga5b338333137f466cf11f44dd5184ffcf}\index{Internal Methods@{Internal Methods}!ExpectNoThrow@{ExpectNoThrow}}
+\index{ExpectNoThrow@{ExpectNoThrow}!Internal Methods@{Internal Methods}}
+\doxysubsubsubsubsection{\texorpdfstring{ExpectNoThrow()}{ExpectNoThrow()}}
+{\footnotesize\ttfamily \label{group__cppmodule1__minitest__internal_ga5b338333137f466cf11f44dd5184ffcf} 
+static bool minitest\+::\+Expect\+No\+Throw (\begin{DoxyParamCaption}\item[{auto \&\&}]{f}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+DO NOT USE. 
+
+
+
+Definition at line \mbox{\hyperlink{minitest_8h_source_l00177}{177}} of file \mbox{\hyperlink{minitest_8h_source}{minitest.\+h}}.
+
+\Hypertarget{group__cppmodule1__minitest__internal_ga9c1650db31c407aa418eb1be7cdc5dc5}\index{Internal Methods@{Internal Methods}!ExpectTrue@{ExpectTrue}}
+\index{ExpectTrue@{ExpectTrue}!Internal Methods@{Internal Methods}}
+\doxysubsubsubsubsection{\texorpdfstring{ExpectTrue()}{ExpectTrue()}}
+{\footnotesize\ttfamily \label{group__cppmodule1__minitest__internal_ga9c1650db31c407aa418eb1be7cdc5dc5} 
+static bool minitest\+::\+Expect\+True (\begin{DoxyParamCaption}\item[{bool}]{b}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+DO NOT USE. 
+
+
+
+Definition at line \mbox{\hyperlink{minitest_8h_source_l00106}{106}} of file \mbox{\hyperlink{minitest_8h_source}{minitest.\+h}}.
+

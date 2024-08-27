@@ -1,0 +1,49 @@
+\doxysection{minitest\+::Test\texorpdfstring{$<$}{<} Test\+Name, Test\+Case\+Name, Test\+Impl \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{structminitest_1_1_test}{}\label{structminitest_1_1_test}\index{minitest::Test$<$ TestName, TestCaseName, TestImpl $>$@{minitest::Test$<$ TestName, TestCaseName, TestImpl $>$}}
+
+
+A template for a test case, the main \textquotesingle{}testing\textquotesingle{} structure.  
+
+
+
+
+{\ttfamily \#include $<$minitest.\+h$>$}
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{group__cppmodule1__minitest_gab8ffa8a485f39e49f4bb81b0ac07705c}{Run}} ()
+\begin{DoxyCompactList}\small\item\em Runs this test and logs result to console(if enabled). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{group__cppmodule1__minitest_gadec01a1796ea9c4ddcbbaeb978ec3939}{is\+\_\+test\+\_\+passed}} = true
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr auto \mbox{\hyperlink{group__cppmodule1__minitest_ga97ed91f1b480db6c4d343b6247695a87}{test\+\_\+name}} = Test\+Name()
+\item 
+static constexpr auto \mbox{\hyperlink{group__cppmodule1__minitest_ga384c6a1bb80f89ff18422c08673ceb42}{test\+\_\+case\+\_\+name}} = Test\+Case\+Name()
+\item 
+static const Test\+Impl \mbox{\hyperlink{group__cppmodule1__minitest_ga6e14576efcf9a4d083fa5956eeb0aa88}{test\+\_\+impl}} \{\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$auto Test\+Name, auto Test\+Case\+Name, typename Test\+Impl$>$\newline
+struct minitest\+::\+Test$<$ Test\+Name, Test\+Case\+Name, Test\+Impl $>$}
+A template for a test case, the main \textquotesingle{}testing\textquotesingle{} structure. 
+
+\begin{DoxyWarning}{Warning}
+\+: DO NOT directly create an instance of this template. Always use MINITEST macro. 
+\end{DoxyWarning}
+
+
+Definition at line \mbox{\hyperlink{minitest_8h_source_l00062}{62}} of file \mbox{\hyperlink{minitest_8h_source}{minitest.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/submodules/mini-\/test/\mbox{\hyperlink{minitest_8h}{minitest.\+h}}\end{DoxyCompactItemize}

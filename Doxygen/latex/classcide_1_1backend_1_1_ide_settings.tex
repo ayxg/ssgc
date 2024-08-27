@@ -1,0 +1,251 @@
+\doxysection{cide\+::backend\+::Ide\+Settings Class Reference}
+\hypertarget{classcide_1_1backend_1_1_ide_settings}{}\label{classcide_1_1backend_1_1_ide_settings}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+
+
+{\ttfamily \#include $<$cide\+\_\+backend.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const stdfs\+::path \& \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a2d4fe8ddc4a866e6b249c36e2db2b9c0}{View\+Repo\+Path}} () const
+\item 
+const stdfs\+::path \& \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a58c4e6fda4f6932221f6aa12d87d9592}{View\+Binary\+Path}} () const
+\item 
+bool \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_aa023e556fbb0a904fa7dd54ec643caf7}{Load}} ()
+\item 
+bool \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a3672b0ca29f05d184f7f665b5c42cd95}{Save}} ()
+\item 
+bool \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a0ed5866dc03f1e17fcf849e015f00291}{Cache\+Solution}} (const stdfs\+::path \&sln\+\_\+folder)
+\item 
+\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a9ac74dcc401a04add18a81072240c359}{Ide\+Settings}} ()=default
+\item 
+\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a5f42bbdc22bc8a0d5c9344509c860b39}{Ide\+Settings}} (const stdfs\+::path \&bin\+\_\+path)
+\item 
+\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a8897b26dd7a9432c681ddbc999e1a79a}{Ide\+Settings}} (const stdfs\+::path \&bin\+\_\+path, const stdfs\+::path \&repo\+\_\+path)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static stdfs\+::path \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a7123d7b81438ffe06044ff2e03dde9ab}{Get\+Default\+Binary\+Path}} ()
+\item 
+static stdfs\+::path \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a54b6b36ae4e61ae74de3d9de7ab2e033}{Get\+Default\+Repo\+Path}} ()
+\item 
+static stdfs\+::path \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a96948f9001e66b404ccfc84d44ff5c63}{Get\+Default\+Settings\+File\+Path}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{Cache\+File}} \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a4661fdc5d5adce2ff2a1fe527565da85}{settings\+\_\+cache\+\_\+file}} \{\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a96948f9001e66b404ccfc84d44ff5c63}{Get\+Default\+Settings\+File\+Path}}()\}
+\item 
+stdfs\+::path \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_aa90461cb05632d1cf44f88a0b8da3e7d}{binary\+\_\+path}}
+\item 
+stdfs\+::path \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_ac2db5f7f574c8f4b8a334ca0077228ea}{repository\+\_\+path}}
+\item 
+std\+::vector$<$ stdfs\+::path $>$ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_acbeaabc2562f4a969432dc12ffbaaed2}{cached\+\_\+solutions}} \{\}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr const wchar\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a5a6a846cb35393c01dc827fcf47bc30d}{k\+Solution\+Cache\+Setting\+Tag}} = L"{}\#\textbackslash{}n"{}
+\item 
+static constexpr auto \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a58946bbdc06714b8090dbcca1a54661e}{k\+Default\+Repo\+Path}} = L"{}\+C\+:\textbackslash{}\textbackslash{}candide\textbackslash{}\textbackslash{}repository\textbackslash{}\textbackslash{}"{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00261}{261}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_a9ac74dcc401a04add18a81072240c359}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!IdeSettings@{IdeSettings}}
+\index{IdeSettings@{IdeSettings}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{IdeSettings()}{IdeSettings()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_a9ac74dcc401a04add18a81072240c359} 
+cide\+::backend\+::\+Ide\+Settings\+::\+Ide\+Settings (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_a5f42bbdc22bc8a0d5c9344509c860b39}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!IdeSettings@{IdeSettings}}
+\index{IdeSettings@{IdeSettings}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{IdeSettings()}{IdeSettings()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_a5f42bbdc22bc8a0d5c9344509c860b39} 
+cide\+::backend\+::\+Ide\+Settings\+::\+Ide\+Settings (\begin{DoxyParamCaption}\item[{const stdfs\+::path \&}]{bin\+\_\+path}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00403}{403}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_a8897b26dd7a9432c681ddbc999e1a79a}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!IdeSettings@{IdeSettings}}
+\index{IdeSettings@{IdeSettings}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{IdeSettings()}{IdeSettings()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_a8897b26dd7a9432c681ddbc999e1a79a} 
+cide\+::backend\+::\+Ide\+Settings\+::\+Ide\+Settings (\begin{DoxyParamCaption}\item[{const stdfs\+::path \&}]{bin\+\_\+path}{, }\item[{const stdfs\+::path \&}]{repo\+\_\+path}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00404}{404}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_a0ed5866dc03f1e17fcf849e015f00291}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!CacheSolution@{CacheSolution}}
+\index{CacheSolution@{CacheSolution}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{CacheSolution()}{CacheSolution()}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_a0ed5866dc03f1e17fcf849e015f00291} 
+bool cide\+::backend\+::\+Ide\+Settings\+::\+Cache\+Solution (\begin{DoxyParamCaption}\item[{const stdfs\+::path \&}]{sln\+\_\+folder}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00391}{391}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_a7123d7b81438ffe06044ff2e03dde9ab}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!GetDefaultBinaryPath@{GetDefaultBinaryPath}}
+\index{GetDefaultBinaryPath@{GetDefaultBinaryPath}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{GetDefaultBinaryPath()}{GetDefaultBinaryPath()}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_a7123d7b81438ffe06044ff2e03dde9ab} 
+static stdfs\+::path cide\+::backend\+::\+Ide\+Settings\+::\+Get\+Default\+Binary\+Path (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00264}{264}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_a54b6b36ae4e61ae74de3d9de7ab2e033}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!GetDefaultRepoPath@{GetDefaultRepoPath}}
+\index{GetDefaultRepoPath@{GetDefaultRepoPath}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{GetDefaultRepoPath()}{GetDefaultRepoPath()}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_a54b6b36ae4e61ae74de3d9de7ab2e033} 
+static stdfs\+::path cide\+::backend\+::\+Ide\+Settings\+::\+Get\+Default\+Repo\+Path (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00267}{267}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_a96948f9001e66b404ccfc84d44ff5c63}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!GetDefaultSettingsFilePath@{GetDefaultSettingsFilePath}}
+\index{GetDefaultSettingsFilePath@{GetDefaultSettingsFilePath}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{GetDefaultSettingsFilePath()}{GetDefaultSettingsFilePath()}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_a96948f9001e66b404ccfc84d44ff5c63} 
+static stdfs\+::path cide\+::backend\+::\+Ide\+Settings\+::\+Get\+Default\+Settings\+File\+Path (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00270}{270}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_aa023e556fbb0a904fa7dd54ec643caf7}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!Load@{Load}}
+\index{Load@{Load}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{Load()}{Load()}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_aa023e556fbb0a904fa7dd54ec643caf7} 
+bool cide\+::backend\+::\+Ide\+Settings\+::\+Load (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00279}{279}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_a3672b0ca29f05d184f7f665b5c42cd95}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!Save@{Save}}
+\index{Save@{Save}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{Save()}{Save()}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_a3672b0ca29f05d184f7f665b5c42cd95} 
+bool cide\+::backend\+::\+Ide\+Settings\+::\+Save (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00356}{356}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_a58c4e6fda4f6932221f6aa12d87d9592}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!ViewBinaryPath@{ViewBinaryPath}}
+\index{ViewBinaryPath@{ViewBinaryPath}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{ViewBinaryPath()}{ViewBinaryPath()}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_a58c4e6fda4f6932221f6aa12d87d9592} 
+const stdfs\+::path \& cide\+::backend\+::\+Ide\+Settings\+::\+View\+Binary\+Path (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00276}{276}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_a2d4fe8ddc4a866e6b249c36e2db2b9c0}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!ViewRepoPath@{ViewRepoPath}}
+\index{ViewRepoPath@{ViewRepoPath}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{ViewRepoPath()}{ViewRepoPath()}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_a2d4fe8ddc4a866e6b249c36e2db2b9c0} 
+const stdfs\+::path \& cide\+::backend\+::\+Ide\+Settings\+::\+View\+Repo\+Path (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00275}{275}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_aa90461cb05632d1cf44f88a0b8da3e7d}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!binary\_path@{binary\_path}}
+\index{binary\_path@{binary\_path}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{binary\_path}{binary\_path}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_aa90461cb05632d1cf44f88a0b8da3e7d} 
+stdfs\+::path cide\+::backend\+::\+Ide\+Settings\+::binary\+\_\+path\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \ \ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a7123d7b81438ffe06044ff2e03dde9ab}{GetDefaultBinaryPath}}()\}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00414}{414}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_acbeaabc2562f4a969432dc12ffbaaed2}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!cached\_solutions@{cached\_solutions}}
+\index{cached\_solutions@{cached\_solutions}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{cached\_solutions}{cached\_solutions}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_acbeaabc2562f4a969432dc12ffbaaed2} 
+std\+::vector$<$stdfs\+::path$>$ cide\+::backend\+::\+Ide\+Settings\+::cached\+\_\+solutions \{\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00427}{427}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_a58946bbdc06714b8090dbcca1a54661e}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!kDefaultRepoPath@{kDefaultRepoPath}}
+\index{kDefaultRepoPath@{kDefaultRepoPath}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{kDefaultRepoPath}{kDefaultRepoPath}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_a58946bbdc06714b8090dbcca1a54661e} 
+auto cide\+::backend\+::\+Ide\+Settings\+::k\+Default\+Repo\+Path = L"{}\+C\+:\textbackslash{}\textbackslash{}candide\textbackslash{}\textbackslash{}repository\textbackslash{}\textbackslash{}"{}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [constexpr]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00263}{263}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_a5a6a846cb35393c01dc827fcf47bc30d}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!kSolutionCacheSettingTag@{kSolutionCacheSettingTag}}
+\index{kSolutionCacheSettingTag@{kSolutionCacheSettingTag}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{kSolutionCacheSettingTag}{kSolutionCacheSettingTag}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_a5a6a846cb35393c01dc827fcf47bc30d} 
+const wchar\+\_\+t\texorpdfstring{$\ast$}{*} cide\+::backend\+::\+Ide\+Settings\+::k\+Solution\+Cache\+Setting\+Tag = L"{}\#\textbackslash{}n"{}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00262}{262}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_ac2db5f7f574c8f4b8a334ca0077228ea}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!repository\_path@{repository\_path}}
+\index{repository\_path@{repository\_path}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{repository\_path}{repository\_path}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_ac2db5f7f574c8f4b8a334ca0077228ea} 
+stdfs\+::path cide\+::backend\+::\+Ide\+Settings\+::repository\+\_\+path\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \ \ \mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a54b6b36ae4e61ae74de3d9de7ab2e033}{GetDefaultRepoPath}}()\}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00419}{419}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{classcide_1_1backend_1_1_ide_settings_a4661fdc5d5adce2ff2a1fe527565da85}\index{cide::backend::IdeSettings@{cide::backend::IdeSettings}!settings\_cache\_file@{settings\_cache\_file}}
+\index{settings\_cache\_file@{settings\_cache\_file}!cide::backend::IdeSettings@{cide::backend::IdeSettings}}
+\doxysubsubsection{\texorpdfstring{settings\_cache\_file}{settings\_cache\_file}}
+{\footnotesize\ttfamily \label{classcide_1_1backend_1_1_ide_settings_a4661fdc5d5adce2ff2a1fe527565da85} 
+\mbox{\hyperlink{structcide_1_1backend_1_1_cache_file}{Cache\+File}} cide\+::backend\+::\+Ide\+Settings\+::settings\+\_\+cache\+\_\+file \{\mbox{\hyperlink{classcide_1_1backend_1_1_ide_settings_a96948f9001e66b404ccfc84d44ff5c63}{Get\+Default\+Settings\+File\+Path}}()\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00408}{408}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/ide/\mbox{\hyperlink{cide__backend_8h}{cide\+\_\+backend.\+h}}\end{DoxyCompactItemize}

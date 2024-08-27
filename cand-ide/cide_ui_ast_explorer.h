@@ -1,3 +1,16 @@
+///////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+// Licensed under the GNU Affero General Public License, Version 3.
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_cide
+/// @brief CIDE AST Explorer Widget.
+///////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 // CIDE Common Defs
 #include "cide_common.h"
@@ -10,8 +23,11 @@
 #include "caoco_parser.h"
 
 namespace cide::ui {
+/// @addtogroup cand_cide_frontend
+/// @{
 
 class AstExplorerInterface {
+  // Functionality is built into the interface for now.
   inline void ParseInputBuffer() {
     try {
       auto lex_result = caoco::Lexer::Lex(input_text_buffer_);
@@ -42,7 +58,7 @@ class AstExplorerInterface {
     // 1. Node Type as Text
     // 2. Node Literal as Text
     // 3. Children As a TreeNode
-    bool is_node_open = ImGui::TreeNode(caoco::ToCStr(node.Type()));
+    bool is_node_open = ImGui::TreeNode(caoco::eAstEnumStr(node.Type()).data());
     if (is_node_open) {
       if (node.Literal() != "") {
         bool is_data_node_open = ImGui::TreeNode("data:");
@@ -119,5 +135,26 @@ class AstExplorerInterface {
                                       cgui::kExpandWidgetToRemainingSpaceXY)};
   CguiSubcontext ast_view_context{CguiSubcontext::Delayed({640.f, 600.f})};
 };
+/// @} // end of cand_cide_frontend
 
 }  // namespace cide::ui
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+//
+// Licensed under the GNU Affero General Public License, Version 3.
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+///////////////////////////////////////////////////////////////////////////////

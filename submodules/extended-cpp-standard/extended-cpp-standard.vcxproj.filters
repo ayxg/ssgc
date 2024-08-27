@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{67a92ff4-885c-4c27-9aea-ce4e2bce1aea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\maybe_unused">
+      <UniqueIdentifier>{1f256c1c-2773-4f6e-8e99-5e0f904b8087}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="expected.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="macrodef.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerated_flags.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="import_std.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="cppsextended.h" />
+    <ClInclude Include="cx_ftos.h">
+      <Filter>src\maybe_unused</Filter>
+    </ClInclude>
+    <ClInclude Include="cx_itos.h">
+      <Filter>src\maybe_unused</Filter>
+    </ClInclude>
+    <ClInclude Include="hetero_method_map.h">
+      <Filter>src\maybe_unused</Filter>
+    </ClInclude>
+    <ClInclude Include="unique_void_ptr.h">
+      <Filter>src\maybe_unused</Filter>
+    </ClInclude>
+    <ClInclude Include="sysio.h">
+      <Filter>src\maybe_unused</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\cand-compiler\cxx_main.cpp" />
+  </ItemGroup>
+</Project>

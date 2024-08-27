@@ -1,0 +1,589 @@
+\doxysection{C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/caoco\+\_\+grammar.h File Reference}
+\hypertarget{caoco__grammar_8h}{}\label{caoco__grammar_8h}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_grammar.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/compiler/caoco\_grammar.h}}
+
+
+Describes the grammar of the C\& programming language. Punctuation, keywords, operators, errors and other syntax elements.  
+
+
+{\ttfamily \#include "{}cppsextended.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcaoco_1_1_tk_trait}{caoco\+::\+Tk\+Trait$<$ Tk\+Type $>$}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecaoco}{caoco}}
+\item 
+namespace \mbox{\hyperlink{namespacecaoco_1_1grammar}{caoco\+::grammar}}
+\begin{DoxyCompactList}\small\item\em Constant building blocks of the C\& language syntax. \end{DoxyCompactList}\item 
+namespace \mbox{\hyperlink{namespacecaoco_1_1tk__traits}{caoco\+::tk\+\_\+traits}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga18b617575f9e309b22fda61613e8ed3e}{DEF\+\_\+\+GRAMMAR\+\_\+\+CHAR\+\_\+\+ELEMENT}}(n,  v)~  static constexpr inline auto k\#\#n\#\#Char = v;
+\item 
+\#define \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gaa7caf7e63e75dcb1cc82b430c176d967}{\+\_\+\+GGCE}}(n)~k\#\#n\#\#Char
+\item 
+\#define \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga97902d130b9268012fa87f65413c355f}{CAOCO\+\_\+\+GRAMMAR\+\_\+\+CHAR\+\_\+\+ELEMENTS}}
+\item 
+\#define \mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga743127701ae9fb12ec9ee0da1f6536f7}{DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}}(n,  v)
+\item 
+\#define \mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaaf7c1aa6f86a499c796c32f50042a607}{COMPILER\+\_\+\+UTIL\+\_\+\+GRAMMAR\+\_\+\+ELEMENTS}}~NONE, INVALID
+\item 
+\#define \mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga6f25d426dbdbb89ce04af76b0fd4bb86}{DIRECTIVE\+\_\+\+GRAMMAR\+\_\+\+ELEMENTS}}
+\item 
+\#define \mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga4fb9924d4466d9aaf428ae034d7d4f1a}{KEYWORD\+\_\+\+GRAMMAR\+\_\+\+ELEMENTS}}
+\item 
+\#define \mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga4ea08f707ccb01ae74f95fca9eb90668}{OPERATOR\+\_\+\+GRAMMAR\+\_\+\+ELEMENTS}}
+\item 
+\#define \mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga01c32340838d13dfe853848eb0b9a858}{LITERAL\+\_\+\+GRAMMAR\+\_\+\+ELEMENTS}}~  Lit\+Int, Lit\+Uint, Lit\+Real, Lit\+Bool, Lit\+Char, Lit\+Byte, Lit\+Cstr, Ident
+\item 
+\#define \mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gac972944d4f320a80b997b343e2076d55}{INVISIBLE\+\_\+\+GRAMMAR\+\_\+\+ELEMENTS}}~  Eofile, Whitespace, Newline, Block\+Comment, Line\+Comment
+\item 
+\#define \mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gab6d3417cee3363ae64ee79c1eebb7851}{ALL\+\_\+\+GRAMMAR\+\_\+\+ELEMENTS}}
+\item 
+\#define \mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gab092fdfbfab041aa768036396c821c54}{INTERMERDIATE\+\_\+\+GRAMMAR\+\_\+\+ELEMENTS}}
+\item 
+\#define \mbox{\hyperlink{caoco__grammar_8h_adf75756c809e4e546203442c7b43660f}{ETK\+\_\+\+TO\+\_\+\+AST}}(n)
+\item 
+\#define \mbox{\hyperlink{caoco__grammar_8h_abf87a60e186990cc1016ce9264449af1}{ETK\+\_\+\+LITERAL\+\_\+\+CASE}}(n)
+\item 
+\#define \mbox{\hyperlink{caoco__grammar_8h_abf87a60e186990cc1016ce9264449af1}{ETK\+\_\+\+LITERAL\+\_\+\+CASE}}(n)
+\item 
+\#define \mbox{\hyperlink{caoco__grammar_8h_abf87a60e186990cc1016ce9264449af1}{ETK\+\_\+\+LITERAL\+\_\+\+CASE}}(n)
+\item 
+\#define \mbox{\hyperlink{caoco__grammar_8h_abf87a60e186990cc1016ce9264449af1}{ETK\+\_\+\+LITERAL\+\_\+\+CASE}}(n)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$e\+Tk... Tk\+Type$>$ }\\using \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga554d9594f8f0058c321908dfa2720a54}{caoco\+::\+Traits\+Of}} = tuple$<$\mbox{\hyperlink{structcaoco_1_1_tk_trait}{Tk\+Trait}}$<$Tk\+Type$>$...$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{caoco\+::e\+Tk}} \{ \mbox{\hyperlink{group__cand__compiler__data__enums_ggafc0e3e1aafac0e5bc460bf114cdc2d22a29f030836eaea0994860db58ca597347}{caoco\+::e\+Tk\+::\+ALL\+\_\+\+GRAMMAR\+\_\+\+ELEMENTS}}
+ \}
+\item 
+enum class \mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{caoco\+::e\+Ast}} \{ \mbox{\hyperlink{group__cand__compiler__data__enums_gga6248454c1307c90df82df2b991817f58a29f030836eaea0994860db58ca597347}{caoco\+::e\+Ast\+::\+ALL\+\_\+\+GRAMMAR\+\_\+\+ELEMENTS}}
+, \mbox{\hyperlink{group__cand__compiler__data__enums_gga6248454c1307c90df82df2b991817f58a069537de6a31372f1214df70505ae59c}{caoco\+::e\+Ast\+::\+INTERMERDIATE\+\_\+\+GRAMMAR\+\_\+\+ELEMENTS}}
+ \}
+\item 
+enum class \mbox{\hyperlink{group__cand__compiler__data__enums_gafd75ad634f57c34cbd68d308c97df3e2}{caoco\+::e\+Assoc}} \+: int \{ \mbox{\hyperlink{group__cand__compiler__data__enums_ggafd75ad634f57c34cbd68d308c97df3e2a4bbb8f967da6d1a610596d7257179c2b}{caoco\+::e\+Assoc\+::\+Invalid}} = -\/1
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggafd75ad634f57c34cbd68d308c97df3e2a6adf97f83acf6453d4a6a4b1070f3754}{caoco\+::e\+Assoc\+::\+None}} = 0
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggafd75ad634f57c34cbd68d308c97df3e2a945d5e233cf7d6240f6b783b36a374ff}{caoco\+::e\+Assoc\+::\+Left}}
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggafd75ad634f57c34cbd68d308c97df3e2a92b09c7c48c520c3c55e497875da437c}{caoco\+::e\+Assoc\+::\+Right}}
+ \}
+\item 
+enum class \mbox{\hyperlink{group__cand__compiler__data__enums_gaeb4e062a441166ab5c693ea608b63b3f}{caoco\+::e\+Operation}} \+: int \{ \newline
+\mbox{\hyperlink{group__cand__compiler__data__enums_ggaeb4e062a441166ab5c693ea608b63b3fa4bbb8f967da6d1a610596d7257179c2b}{caoco\+::e\+Operation\+::\+Invalid}} = -\/1
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaeb4e062a441166ab5c693ea608b63b3fa6adf97f83acf6453d4a6a4b1070f3754}{caoco\+::e\+Operation\+::\+None}} = 0
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaeb4e062a441166ab5c693ea608b63b3fa6ce976e8f061b2b5cfe4d0c50c3405dd}{caoco\+::e\+Operation\+::\+Binary}}
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaeb4e062a441166ab5c693ea608b63b3fa716de874a0d74f25c0aa8c444c3a7539}{caoco\+::e\+Operation\+::\+Prefix}}
+, \newline
+\mbox{\hyperlink{group__cand__compiler__data__enums_ggaeb4e062a441166ab5c693ea608b63b3fae5cc2a8a065c6272466ee0277ccc417f}{caoco\+::e\+Operation\+::\+Postfix}}
+ \}
+\item 
+enum class \mbox{\hyperlink{group__cand__compiler__data__enums_gaa35814be433c3f8998dabf2429e90817}{caoco\+::e\+Priority}} \+: int \{ \newline
+\mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817a4bbb8f967da6d1a610596d7257179c2b}{caoco\+::e\+Priority\+::\+Invalid}} = -\/1
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817a6adf97f83acf6453d4a6a4b1070f3754}{caoco\+::e\+Priority\+::\+None}} = 0
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817af3b92fc0f97f128818cfb44321376bca}{caoco\+::e\+Priority\+::\+Assignment}} = 20000
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817a74ce78827b02c650a20b149765388247}{caoco\+::e\+Priority\+::\+Logical\+Or}} = 60000
+, \newline
+\mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817a103aa83df42877d5f9baeafdbf620b55}{caoco\+::e\+Priority\+::\+Logical\+And}} = 70000
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817a8041b508037c30ae59fe353b74918a1b}{caoco\+::e\+Priority\+::\+Bitwise\+Or}} = 80000
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817acc79304f89691dd71d71d9aab6fe3565}{caoco\+::e\+Priority\+::\+Bitwise\+Xor}} = 85000
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817a50c15b40bc46de3e3528e17fe119209e}{caoco\+::e\+Priority\+::\+Bitwise\+And}} = 90000
+, \newline
+\mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817a890ebf2ce6beb154deb673b3af2d03d4}{caoco\+::e\+Priority\+::\+Equality}} = 100000
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817a8cecea0b8a9ed764ae5a2166175021eb}{caoco\+::e\+Priority\+::\+Three\+Way\+Equality}} = 110000
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817af6c0e3a1c3cfabd32ae8d3ae741fcf0a}{caoco\+::e\+Priority\+::\+Comparison}} = 120000
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817a3907d2946b2117adeae17daeffc1e6d6}{caoco\+::e\+Priority\+::\+Bitshift}} = 130000
+, \newline
+\mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817acf5f3091e30dee6597885d8c0e0c357f}{caoco\+::e\+Priority\+::\+Term}} = 140000
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817a3c3ba615798db7340cd94c6e2d59e74e}{caoco\+::e\+Priority\+::\+Factor}} = 150000
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817a716de874a0d74f25c0aa8c444c3a7539}{caoco\+::e\+Priority\+::\+Prefix}} = 160000
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817ae5cc2a8a065c6272466ee0277ccc417f}{caoco\+::e\+Priority\+::\+Postfix}} = 170000
+, \newline
+\mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817add339507f8d1fd6487e492cec7398942}{caoco\+::e\+Priority\+::\+Functional}} = 180000
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817abf733d8a933c1601697f364223fc7ecb}{caoco\+::e\+Priority\+::\+Access}} = 190000
+, \mbox{\hyperlink{group__cand__compiler__data__enums_ggaa35814be433c3f8998dabf2429e90817a6a061313d22e51e0f25b7cd4dc065233}{caoco\+::e\+Priority\+::\+Max}} = INT\+\_\+\+MAX
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gad09dbb518d1e79e527183dc2a0ac2321}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (NONE, "{}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga0e4cf0e1d684eaf63de8cec339170fe5}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (INVALID, "{}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gac617d781e16cb658df925ad5748c8751}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Def, "{}def"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga2e0a24fcd5f7153aaa01662206cf3c7c}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Fn, "{}fn"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga5d454cff2b8e8f08d1f87b8f62d9e776}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Class, "{}class"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaed367e75489c776e88a4890cc247b546}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Main, "{}main"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga6dd0fbd15355751632b3bebca3c1a1e8}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Import, "{}import"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga75df888b24f3e37006d6355a7c2ceaf1}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Namespace, "{}namespace"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga7d60393700f922ae6ffdf9f3a4d631ca}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Use, "{}using"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga9e4e5f98d6602d24862ec2ff4125c45f}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Lib, "{}lib"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga1a10fd466a792c64bfe33226d4971728}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Dll, "{}dll"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gafe77ee9ebb3032c7c36dac00343524ea}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+If, "{}if"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga587c1883097d67f9b3a02f428da214ae}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Elif, "{}elif"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga99bd8bbe00c2f8752e8c28e0f9ae2569}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Else, "{}else"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaff16eb277dc4487a5b251f60d7c49c93}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Cxif, "{}cxif"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga8ff220c5c1c41edee29a61f31a3350a3}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Cxelif, "{}cxelif"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gac9498782b3eb7f02e7ed35717a64fdef}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Cxelse, "{}cxelse"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gafed2ca745537fad5f2bce01dd6cc6290}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Switch, "{}switch"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaf565be48af1b49231f7f9e119d671f79}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Case, "{}case"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga51754ca8071ff0bf078aa057a731da75}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Default, "{}default"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga8bdbb792e6b97a3533793ac6b76f97bc}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+While, "{}while"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga6af3e920b3ba2b6e0505ac3eb0ce7336}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+For, "{}for"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga2abbc323f2b6625fcbb32c22fc3975b0}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Return, "{}return"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga56c2aa48f3aa3f648c9445284bb055bf}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Break, "{}break"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gabf71e3e534afd114139903fe4144edc4}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Continue, "{}continue"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga1ef8ce4dc765f03a419d40035722788b}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Int, "{}int"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga04637a5002f7bea0008476df94b1ac31}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Uint, "{}uint"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga1b901e0e778e98f2d31679b41abee203}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Real, "{}real"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga6cb7308775f526a56e76f96b32d771b0}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Bool, "{}bool"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gab9d4d5c39452afe4e30fb84739dffd8f}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Char, "{}char"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga460995673a59c1ca202ae238637ecacf}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Byte, "{}byte"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga213366c9597922cc0385b0999f726ba8}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Cstr, "{}cstr"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga88f816ad407ec49c678e04b38f561fa5}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Str, "{}str"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga6802b8d42590d803c1bf9b64873f109c}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Ptr, "{}ptr"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga99466249c0949b10eca6e1e764b6964d}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+List, "{}list"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga6b53adda3146fcf5b59831cc43148a40}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Array, "{}array"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga7cb0141d86d1a4c457bd806f35e935dc}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+True, "{}true"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga402c318b403569fed6f5898e6605a6d2}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+False, "{}false"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga5ae79921dc273509a1a7611c6658fd92}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+None, "{}none"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gacc0c5efa694823e771f5339fdbb4bc65}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Void, "{}void"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga576f5bd3c6f37587cb86c4cf37efda80}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+In, "{}in"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga2d09f9c66838a9d416eef787f6555290}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+As, "{}as"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga54175d0319fea65649f9144b6cac9d7a}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Cin, "{}cin"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga0a2befac5883c4d1f92e8ad8538b541f}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Cout, "{}cout"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga303b52aa3b47c899b997c88a74592b4b}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Native, "{}native"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga4fc2cab23f3bc6ef6d72e8bd64817903}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Const, "{}const"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gafe952d1a00d22ba9b945299d27690b46}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Ref, "{}ref"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga04adf1cf86de1a9bb04b381d6939b121}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Private, "{}private"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga346808092a5812198d1a9313f388b42e}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Public, "{}public"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gadb94089e6e67d551f49e7fdbc41f510b}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Static, "{}static"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga7464a11a989cc1948321b224c31970ac}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Any, "{}any"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaadcb7b756251b613e443b5e16f736169}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Auto, "{}auto"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga35f88d2abc77fa4423f715c2f9534e72}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Type, "{}type"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga50cbadef1604cdcce5a909ec856b421a}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Value, "{}value"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gafff76d8eb2ca9c3d5b1dfa4c656f3a10}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Kw\+Template, "{}template"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaea45fa090afbf516bfce49f9abb39759}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Directive\+Include, "{}\#include"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gac643a263e7ab7e8246963742c6862d00}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Directive\+Def\+Macro, "{}\#defmacro"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga08a25cbd8574fd982fba986292267e8d}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Directive\+Endmacro, "{}\#endmacro"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gafeacf36f6d069650e830383df86a0bcb}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Directive\+If, "{}\#if"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga67123b48ca623a08750f493af5bd943d}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Directive\+Else, "{}\#else"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga04a271838c0a25d1161cd9c726e30150}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Directive\+Elif, "{}\#elif"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gae74194fad15aaf98e77670692232a809}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Directive\+Endif, "{}\#endif"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaead49989c818caafbfa014d4e5635a42}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Directive\+Ifdef, "{}\#ifdef"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga49821ec48a95a9fd649f8ebf3d8f2308}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Directive\+Ifndef, "{}\#ifndef"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga617485903964aeac3fff44a0c236a1e0}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Directive\+Undef, "{}\#undef"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga2cf91a0d1e6a1e6c02d75eeb1a8e33a9}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Hash, "{}\#"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaae494ebe6b88ff1c9626ae3ae4694861}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Add, "{}+"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga932dd0c3fc3530a78744948a0c09d3a7}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Sub, "{}-\/"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga74b3076aac9bee079a65054f36191afc}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Mul, "{}\texorpdfstring{$\ast$}{*}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gacbe25be9bcb75cb67c4767dd653a923d}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Div, "{}/"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga36dbd399e0a3ccf97df5053b3496dfae}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Mod, "{}\%"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga6593b85c12acf6aa3edef25bfc101be2}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (And, "{}\&"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga913caf9f76aeec0e43726bd67f86243a}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Or, "{}\texorpdfstring{$\vert$}{|}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga2e6aaf6910731ad3f248f3e79d28b5e2}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Xor, "{}\texorpdfstring{$^\wedge$}{\string^}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gacd65dfbfbfdf6c06314d88daa6139138}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Not, "{}!"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga2086467a1b6ce5785aefd13d8bcf3a78}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Lsh, "{}$<$$<$"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaf60a2630315d833f7273a8256ff827b3}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Rsh, "{}$>$$>$"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga0310db236d7aaa6c896541073452866b}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Eq, "{}=="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaece3f81e7271870e2038834976ad4dc6}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Neq, "{}!="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga9dff4bb94069e062f062e6f72ae40c8e}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Lt, "{}$<$"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga25021e2cc77b8e2fab9891cde589b37e}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Gt, "{}$>$"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gabf51e5495ada022888974deaf0b3a965}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Lte, "{}$<$="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga240112e6072f7ac63815436722b48647}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Gte, "{}$>$="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gabfcdf93e100576dc34d441c44d30e420}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Assign, "{}="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga80776c8397cd5bc937a29a82f350d4e2}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (New\+Assign, "{} \+: ="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga87020ae2a32928e03b5b96560b640166}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Add\+Assign, "{}+="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga100318fbb54491e3b8844c1729535e68}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Sub\+Assign, "{}-\/="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga5507d0e674aefae649727aadb4e1ac4e}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Mul\+Assign, "{}\texorpdfstring{$\ast$}{*}="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga33e36b4ae72f3e8356612550356a2384}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Div\+Assign, "{}/="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga28279f693a6d1f43571f122c48afae51}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Mod\+Assign, "{}\%="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaf88e3a7ee2d5c75952d85111ba4042ae}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (And\+Assign, "{}\&="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga72d091a2e5c4066cee2e14f7c55261a6}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Or\+Assign, "{}\texorpdfstring{$\vert$}{|}="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga988e3f4344c65f3515e6babcb943798b}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Xor\+Assign, "{}\texorpdfstring{$^\wedge$}{\string^}="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaa3095befd360dd9b7e6b09678ecf0a9b}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Lsh\+Assign, "{}$<$$<$="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gac71530d01c34c9b7417d72f157cb2c63}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Rsh\+Assign, "{}$>$$>$="{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gad44bc8dfbf35cfdb1d21d728f329e27f}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Inc, "{}++"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gac06b4efaafe0c689304a6bad0e4250a1}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Dec, "{}-\/-\/"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga0acbe34447692381c77bee5246685c3a}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Dot, "{}."{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga14f37a302d9ef83c3233fa6205f28a87}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Bnot, "{}\texorpdfstring{$\sim$}{\string~}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga1a6c7fdbfc575e66d57987b036f4a601}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Band, "{}\&\&"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga4fb8471ebe6f7fb71261a7783e2471e9}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Bor, "{}\texorpdfstring{$\vert$}{|}\texorpdfstring{$\vert$}{|}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga03d4aa19673bc4931329c4d241b1941a}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Spaceship, "{}$<$=$>$"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga1b77e9cfad94a23ca1eb5b0da3a428cc}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (LParen, "{}("{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga3927dca26161b6e61b87ea67f81f533e}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (RParen, "{})"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gabd24105bff2bc48b1d4c5f6215882ca1}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (LBrace, "{}\{"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaa33eb52de03ed15926f48dbac69af56f}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (RBrace, "{}\}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga0156c00f6d4db773b1fa3a286a6e4d4b}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (LBracket, "{}\mbox{[}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gac3c26187f01556f085e86f31af926711}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (RBracket, "{}\mbox{]}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaaf5587d0256ec6d27023b9c56b9640d1}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Semicolon, "{};"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gad18636f2a4cfc2bea7350a6fc4a14963}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Colon, "{}\+:"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga4d5d4150948696eb087488d7c846b2b4}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Comma, "{},"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga240c8372daaa3dd6838c1d0eb9b0c14d}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Period, "{}."{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gacb1f39de9982350f1a1862b51be92864}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Double\+Colon, "{}\+::"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga7beaa229cd6756bce7a093cc8312094d}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Ellipsis, "{}..."{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga483e70b5554f02a283cc3bee82e89c03}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Commercial\+At, "{}@"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga25d03b21aa046c568d3fcc380a2320e4}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Eofile, "{}\textbackslash{}0"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga451a5e84af813360e2db73b7ca6f10b4}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Whitespace, "{} "{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gacd55e205c9eacdd0ef1791c1db1e2cd1}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Newline, "{}\textbackslash{}n"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga0236b050130832c6477cdd3efe2deabe}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Block\+Comment, "{}///"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga62761ff394f7216a3b73d99e9569d1d3}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Line\+Comment, "{}//"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga22e1a415d73d8efaa19899944156bd0b}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Lit\+Int, "{}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga4ebfa90702a3601e7e3ea9f917303bfa}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Lit\+Uint, "{}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga1ee42f53ed081270c55dbee6c3272fc7}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Lit\+Real, "{}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gae524d5b80a10540be43d701178b9a1a8}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Lit\+Bool, "{}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gad0cce1da6b29a54342b192eebe0a13e8}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Lit\+Char, "{}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga13c394409e4cdcb3cdc02eeb0e68a6e2}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Lit\+Byte, "{}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaeb936805cdd4dc0c4000f0bbf9df8a9f}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Lit\+Cstr, "{}"{})
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga70f7893f22f4afde15cdf37b34c2e16d}{caoco\+::grammar\+::\+DEF\+\_\+\+GRAMMAR\+\_\+\+ELEMENT}} (Ident, "{}"{})
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_gaf16a41b8c80415590ebcf2fcf40f5e45}{caoco\+::e\+Tk\+To\+Ast\+Enum}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_gafd75ad634f57c34cbd68d308c97df3e2}{e\+Assoc}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga608a4c222cef288eb4173084b582fd5b}{caoco\+::e\+Tk\+Assoc}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_gaeb4e062a441166ab5c693ea608b63b3f}{e\+Operation}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga4200233a31a3488b1acb301b17e76920}{caoco\+::e\+Tk\+Operation}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_gaa35814be433c3f8998dabf2429e90817}{e\+Priority}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga1bf555bd0ee07089013235da49d93f0a}{caoco\+::e\+Tk\+Priority}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr std\+::string\+\_\+view \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga7d693bc88c4fda7b19982f98769c656e}{caoco\+::e\+Tk\+Literal}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gaa413fc60635739d657b08eeecc35505e}{caoco\+::e\+Tk\+Is\+Keyword}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gacccaa5fe487fc278f8450df7b61b6596}{caoco\+::e\+Tk\+Is\+LScope}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gaa4fec31ec74cb63bbe84c645bf395a47}{caoco\+::e\+Tk\+Is\+RScope}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gaf38fbe12f257dcc30cd6d167c15547a0}{caoco\+::e\+Tk\+Is\+RScope\+Of}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} topen, \mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} tclose)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga91dec043fb5e299ccc5b8bcd39fde003}{caoco\+::e\+Tk\+Is\+Modifier}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gac1d2f9d11fa83135b1d8082dd7ae57dd}{caoco\+::e\+Tk\+Is\+Declarative}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga055a13fddcea604f8ee6c00a6c8dcb2c}{caoco\+::e\+Tk\+Is\+An\+Operand}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gab274fd17e5c51d6a2bcb5532d72938ec}{caoco\+::e\+Tk\+Is\+APrefix\+Operator}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr std\+::string\+\_\+view \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga6d71746c75ea78972b72a29284e9a2a6}{caoco\+::e\+Tk\+Enum\+Str}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr string\+\_\+view \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga3b1018af3843123fc0c614fe129b05da}{caoco\+::e\+Ast\+Enum\+Str}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga85ccc0c530aa2046798cc16e419ad876}{caoco\+::e\+Tk\+Is\+Primary}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_gafd75ad634f57c34cbd68d308c97df3e2}{e\+Assoc}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_gaa7bf5885d5d84f747a861cc895e7327c}{caoco\+::e\+Ast\+Assoc}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_gaeb4e062a441166ab5c693ea608b63b3f}{e\+Operation}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga0aa97567859ef1557e75283fe0335171}{caoco\+::e\+Ast\+Operation}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr \mbox{\hyperlink{group__cand__compiler__data__enums_gaa35814be433c3f8998dabf2429e90817}{e\+Priority}} \mbox{\hyperlink{group__cand__compiler__data__token__traits_gae5735a5293126936cee6dc388d1220d9}{caoco\+::e\+Ast\+Priority}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr std\+::string\+\_\+view \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga49450481cbd8f0e74dd7bdcb8217bf47}{caoco\+::e\+Ast\+Literal}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gace698af8fc6e1bdaef649315160602a9}{caoco\+::e\+Ast\+Is\+Keyword}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gab54f06e289d20d04542db28a1586f312}{caoco\+::e\+Ast\+Is\+LScope}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga046cc6692fb047f551ae527ff0145bed}{caoco\+::e\+Ast\+Is\+RScope}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gae9b660bb72f631406674b0645a69a83a}{caoco\+::e\+Ast\+Is\+RScope\+Of}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} topen, \mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} tclose)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga9fdd8a0b2a3fede9ccd51d85bb5b6959}{caoco\+::e\+Ast\+Is\+Modifier}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gabd18023821b2c1d40bcf00c6dd5623b2}{caoco\+::e\+Ast\+Is\+Declarative}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga8d8469c2e00badc28463e5924876aa36}{caoco\+::e\+Ast\+Is\+An\+Operand}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga5b7af52f6da6d28f16f97a3969f23fdd}{caoco\+::e\+Ast\+Is\+APrefix\+Operator}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga5708134c325533050e0cac2bc08a1dc8}{caoco\+::e\+Ast\+Is\+Primary}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga1916dc3bb4fb6ed449e8a7b1fcdc9216}{caoco\+::e\+Tk\+Is\+Pragmatic}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} t)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__data__token__traits_gad896a181c35ae4b3646a2db7c656b2ad}{caoco\+::e\+Ast\+Is\+Pragmatic}} (\mbox{\hyperlink{group__cand__compiler__data__enums_ga6248454c1307c90df82df2b991817f58}{e\+Ast}} t)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gaa5eb515db4ce0ce1b388be37b3522f2a}{caoco\+::grammar\+::k\+Eof\+Char}} = \textquotesingle{}\textbackslash{}0\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gafedd313b8a91fc689ef4c3e7e170c69e}{caoco\+::grammar\+::k\+Whitespace\+Char}} = \textquotesingle{} \textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gaf9826def2e42bad07c7699b4921aebee}{caoco\+::grammar\+::k\+Newline\+Char}} = \textquotesingle{}\textbackslash{}n\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga0cf18bf6a23afa2417abee530a286250}{caoco\+::grammar\+::k\+Hash\+Char}} = \textquotesingle{}\#\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga02e3834a936b64ccd5341ec82daa710b}{caoco\+::grammar\+::k\+Commercial\+At\+Char}} = \textquotesingle{}@\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga8e9288206e95aa80fc9205746378b2e0}{caoco\+::grammar\+::k\+Add\+Char}} = \textquotesingle{}+\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga1b4378928e8bc2cd5caa61ee46e0e9b7}{caoco\+::grammar\+::k\+Sub\+Char}} = \textquotesingle{}-\/\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga1f7674b42cbc71ab3ab64c9b959ba421}{caoco\+::grammar\+::k\+Mul\+Char}} = \textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga380d432462a846b4b9a3063669165c25}{caoco\+::grammar\+::k\+Div\+Char}} = \textquotesingle{}/\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga9fb553b51f8509f11b7167ca891d077b}{caoco\+::grammar\+::k\+Mod\+Char}} = \textquotesingle{}\%\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga9b5c57b7046c22bdcb9c55043799d055}{caoco\+::grammar\+::k\+And\+Char}} = \textquotesingle{}\&\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga671ffa7560ec2c2626f0cbf2494023cf}{caoco\+::grammar\+::k\+Or\+Char}} = \textquotesingle{}\texorpdfstring{$\vert$}{|}\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gaa62600f5b567b81094aa0b441b7645ee}{caoco\+::grammar\+::k\+Xor\+Char}} = \textquotesingle{}\texorpdfstring{$^\wedge$}{\string^}\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga969629ef9a13bc862869353af0bf1cd8}{caoco\+::grammar\+::k\+Not\+Char}} = \textquotesingle{}!\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gac620cbe35efdadefada010ad42484109}{caoco\+::grammar\+::k\+Lt\+Char}} = \textquotesingle{}$<$\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga74e11ded45218fad067df7709b9826b3}{caoco\+::grammar\+::k\+Gt\+Char}} = \textquotesingle{}$>$\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gaf621b333758c730e1f494a7a554302af}{caoco\+::grammar\+::k\+Eq\+Char}} = \textquotesingle{}=\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga2ccc86e17e872590c434d872c260daac}{caoco\+::grammar\+::k\+LParen\+Char}} = \textquotesingle{}(\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gadc401c7904949c3aaa0d97c280d38298}{caoco\+::grammar\+::k\+RParen\+Char}} = \textquotesingle{})\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gadb4ceb3f5b7ddae63e8dac9e27fb5a03}{caoco\+::grammar\+::k\+LBrace\+Char}} = \textquotesingle{}\{\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gaf9bbde113f86dd80e2bad10eda52b1ae}{caoco\+::grammar\+::k\+RBrace\+Char}} = \textquotesingle{}\}\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga1e80ec67c44865795289d4a80e27b10e}{caoco\+::grammar\+::k\+LBracket\+Char}} = \textquotesingle{}\mbox{[}\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gafef12dedfbfe331a14a8dc8dc0d3b633}{caoco\+::grammar\+::k\+RBracket\+Char}} = \textquotesingle{}\mbox{]}\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gaad7333a9c060b84dd7f517e45344409b}{caoco\+::grammar\+::k\+Semicolon\+Char}} = \textquotesingle{};\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gaa076f32f3d8f499916e71f400b2e2095}{caoco\+::grammar\+::k\+Colon\+Char}} = \textquotesingle{}\+:\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gaee0783f8ebc92007bf4fbcc906334552}{caoco\+::grammar\+::k\+Comma\+Char}} = \textquotesingle{},\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gac07b7995989760e628b53138723fa708}{caoco\+::grammar\+::k\+Period\+Char}} = \textquotesingle{}.\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga9f23337a1d295e097b4fb48717766456}{caoco\+::grammar\+::k\+Backlash\+Char}} = \textquotesingle{}\textbackslash{}\textbackslash{}\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gaf798ab4cc18a48848dc4341f4173e597}{caoco\+::grammar\+::k\+Apostrophe\+Char}} = \textquotesingle{}\textbackslash{}\textquotesingle{}\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gae77401c15c6a6d29f21907cade068ffe}{caoco\+::grammar\+::k\+Tilde\+Char}} = \textquotesingle{}\texorpdfstring{$\sim$}{\string~}\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga52702dd808aba2e1faeb18a34f05b8fe}{caoco\+::grammar\+::k\+Double\+Quote\+Char}} = \textquotesingle{}"{}\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gabed75ac89d19ac13ea6378bc5ab20a9d}{caoco\+::grammar\+::k\+Backtick\+Char}} = \textquotesingle{}\`{}\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_gae14515323a9ad62d4654f6221d61aa91}{caoco\+::grammar\+::k\+Underscore\+Char}} = \textquotesingle{}\+\_\+\textquotesingle{}
+\item 
+static constexpr char \mbox{\hyperlink{group__cand__compiler__data__valid__chars_ga9153cfe90d7b339e059f36542c63af15}{caoco\+::grammar\+::k\+Single\+Quote\+Char}} = \textquotesingle{}\textbackslash{}\textquotesingle{}\textquotesingle{}
+\item 
+static constexpr auto \mbox{\hyperlink{group__cand__compiler__data__grammar__elements_gaa3312c54aa7905a217582a4c6fcb0433}{caoco\+::grammar\+::k\+All\+Keywords}}
+\item 
+static constexpr auto \mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga66d6a1a6a467fba1c7cd3f7a4b9758a6}{caoco\+::grammar\+::k\+All\+Directives}}
+\item 
+static constexpr auto \mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga422dfba06a412f83dbdedeae7902dddc}{caoco\+::grammar\+::k\+All}}
+\item 
+static constexpr auto \mbox{\hyperlink{namespacecaoco_1_1tk__traits_a597eae99a737d4a96954bf23659cc2fc}{caoco\+::tk\+\_\+traits\+::k\+Keyword\+Traits}} = \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga554d9594f8f0058c321908dfa2720a54}{Traits\+Of}}$<$\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga4fb9924d4466d9aaf428ae034d7d4f1a}{KEYWORD\+\_\+\+GRAMMAR\+\_\+\+ELEMENTS}}$>$\{\}
+\item 
+static constexpr auto \mbox{\hyperlink{namespacecaoco_1_1tk__traits_ae74a9c16c5da765853906b373655e3ee}{caoco\+::tk\+\_\+traits\+::k\+Directive\+Traits}} = \mbox{\hyperlink{group__cand__compiler__data__token__traits_ga554d9594f8f0058c321908dfa2720a54}{Traits\+Of}}$<$\mbox{\hyperlink{group__cand__compiler__data__grammar__elements_ga6f25d426dbdbb89ce04af76b0fd4bb86}{DIRECTIVE\+\_\+\+GRAMMAR\+\_\+\+ELEMENTS}}$>$\{\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Describes the grammar of the C\& programming language. Punctuation, keywords, operators, errors and other syntax elements. 
+
+See compiler reference manual for details. 
+
+Definition in file \mbox{\hyperlink{caoco__grammar_8h_source}{caoco\+\_\+grammar.\+h}}.
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{caoco__grammar_8h_abf87a60e186990cc1016ce9264449af1}\index{caoco\_grammar.h@{caoco\_grammar.h}!ETK\_LITERAL\_CASE@{ETK\_LITERAL\_CASE}}
+\index{ETK\_LITERAL\_CASE@{ETK\_LITERAL\_CASE}!caoco\_grammar.h@{caoco\_grammar.h}}
+\doxysubsubsection{\texorpdfstring{ETK\_LITERAL\_CASE}{ETK\_LITERAL\_CASE}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{caoco__grammar_8h_abf87a60e186990cc1016ce9264449af1} 
+\#define ETK\+\_\+\+LITERAL\+\_\+\+CASE(\begin{DoxyParamCaption}\item[{}]{n}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \textcolor{keywordflow}{case}\ eTk::n:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ grammar::k\#\#n}
+
+\end{DoxyCode}
+\Hypertarget{caoco__grammar_8h_abf87a60e186990cc1016ce9264449af1}\index{caoco\_grammar.h@{caoco\_grammar.h}!ETK\_LITERAL\_CASE@{ETK\_LITERAL\_CASE}}
+\index{ETK\_LITERAL\_CASE@{ETK\_LITERAL\_CASE}!caoco\_grammar.h@{caoco\_grammar.h}}
+\doxysubsubsection{\texorpdfstring{ETK\_LITERAL\_CASE}{ETK\_LITERAL\_CASE}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{caoco__grammar_8h_abf87a60e186990cc1016ce9264449af1} 
+\#define ETK\+\_\+\+LITERAL\+\_\+\+CASE(\begin{DoxyParamCaption}\item[{}]{n}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \textcolor{keywordflow}{case}\ eTk::n:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ \#n}
+
+\end{DoxyCode}
+\Hypertarget{caoco__grammar_8h_abf87a60e186990cc1016ce9264449af1}\index{caoco\_grammar.h@{caoco\_grammar.h}!ETK\_LITERAL\_CASE@{ETK\_LITERAL\_CASE}}
+\index{ETK\_LITERAL\_CASE@{ETK\_LITERAL\_CASE}!caoco\_grammar.h@{caoco\_grammar.h}}
+\doxysubsubsection{\texorpdfstring{ETK\_LITERAL\_CASE}{ETK\_LITERAL\_CASE}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{caoco__grammar_8h_abf87a60e186990cc1016ce9264449af1} 
+\#define ETK\+\_\+\+LITERAL\+\_\+\+CASE(\begin{DoxyParamCaption}\item[{}]{n}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \textcolor{keywordflow}{case}\ eAst::n:\ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ \#n}
+
+\end{DoxyCode}
+\Hypertarget{caoco__grammar_8h_abf87a60e186990cc1016ce9264449af1}\index{caoco\_grammar.h@{caoco\_grammar.h}!ETK\_LITERAL\_CASE@{ETK\_LITERAL\_CASE}}
+\index{ETK\_LITERAL\_CASE@{ETK\_LITERAL\_CASE}!caoco\_grammar.h@{caoco\_grammar.h}}
+\doxysubsubsection{\texorpdfstring{ETK\_LITERAL\_CASE}{ETK\_LITERAL\_CASE}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{caoco__grammar_8h_abf87a60e186990cc1016ce9264449af1} 
+\#define ETK\+\_\+\+LITERAL\+\_\+\+CASE(\begin{DoxyParamCaption}\item[{}]{n}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \textcolor{keywordflow}{case}\ eAst::n:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ grammar::k\#\#n}
+
+\end{DoxyCode}
+\Hypertarget{caoco__grammar_8h_adf75756c809e4e546203442c7b43660f}\index{caoco\_grammar.h@{caoco\_grammar.h}!ETK\_TO\_AST@{ETK\_TO\_AST}}
+\index{ETK\_TO\_AST@{ETK\_TO\_AST}!caoco\_grammar.h@{caoco\_grammar.h}}
+\doxysubsubsection{\texorpdfstring{ETK\_TO\_AST}{ETK\_TO\_AST}}
+{\footnotesize\ttfamily \label{caoco__grammar_8h_adf75756c809e4e546203442c7b43660f} 
+\#define ETK\+\_\+\+TO\+\_\+\+AST(\begin{DoxyParamCaption}\item[{}]{n}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \textcolor{keywordflow}{case}\ eTk::n:\ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ eAst::n}
+
+\end{DoxyCode}

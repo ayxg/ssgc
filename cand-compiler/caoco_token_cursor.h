@@ -1,30 +1,34 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the GNU Affero General Public License, Version 3.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_token_closure.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_compiler_parser
+/// @brief Iterator-like class with special methods for tokens/ast nodes.
+/// 
+/// TkCursor is an iterator over a vector of tokens. It has utility
+/// methods which can inspect a token's properties. Furthermore, when out of
+/// bounds, TkCursor will return kEof token instead of throwing.
+///////////////////////////////////////////////////////////////////////////////
+
+
 #ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_CURSOR_H
 #define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_CURSOR_H
-//---------------------------------------------------------------------------//
-// Brief: Iterator-like class with special methods for tokens/ast nodes.
-//---------------------------------------------------------------------------//
 #include "cppsextended.h"
 // Includes:
-#include "caoco_ast.h"
-#include "caoco_enum.h"
+#include "caoco_grammar.h"
 #include "caoco_token.h"
-//---------------------------------------------------------------------------//
+#include "caoco_ast.h"
 
 namespace caoco {
-
+/// @defgroup cand_compiler_parser_cursor Token Cursor
+/// @ingroup cand_compiler_parser
+/// Iterator-like class with special methods for tokens/ast nodes.
+/// @{
 class TkCursor {
  public:
   // Properties
@@ -51,14 +55,17 @@ class TkCursor {
   constexpr inline bool IsKeyword() const noexcept { return Get().IsKeyword(); }
   constexpr inline bool IsModifierKeyword() const noexcept;
   constexpr inline bool IsDeclarativeKeyword() const noexcept;
-  constexpr inline bool IsSingularOperand() const noexcept;
+  constexpr inline bool IsAnOperand() const noexcept;
   constexpr bool IsSingularPrefixOperator() const noexcept;
   constexpr inline bool IsOpeningScope() const noexcept;
   constexpr inline bool IsClosingScope() const noexcept;
   constexpr inline bool IsClosingScopeOf(eTk open) const noexcept;
-  constexpr inline bool IsPrimaryExpressionOpening() const noexcept;
-
-    constexpr inline eAst NodeType() const noexcept { return Get().NodeType(); }
+  constexpr inline bool IsPrimary() const noexcept;
+  constexpr inline bool IsPragmatic() const noexcept {
+    auto& c = Get();
+    return c.IsModifier() || c.IsDeclarative();
+  }
+  constexpr inline eAst NodeType() const noexcept { return Get().NodeType(); }
 
   // Iteration
   // advances the cursor by n.
@@ -68,12 +75,14 @@ class TkCursor {
   // cursor is within beg and end.
   constexpr TkCursor& Advance(TkVectorConstIter new_it);
 
-  // Specialized Advance for use in the lark_parser.h.
+// Specialized Advance for use in the lark_parser.h.
   // Shortcut for accessing .Always().Iter() from an InternalParseResult.
   // before. c.Advance(result.Always().Iter());
   // use. c.Advance(result);
   constexpr TkCursor& Advance(
-      const cxx::PartialExpected<Ast, TkCursor>& result);
+      const cxx::PartialExpected<Ast, TkCursor>& result) {
+    return Advance(result.Always().Iter());
+  }
 
   // returns cursor advanced by N. N may be negative.
   TkCursor Next(int n = 1) const;
@@ -110,7 +119,7 @@ class TkCursor {
   TkVectorConstIter end_;
   TkVectorConstIter it_;
 };
-const Tk TkCursor::kSentinelEndToken = Tk(eTk::kEof);
+const Tk TkCursor::kSentinelEndToken = Tk(eTk::Eofile);
 
 constexpr const Tk& TkCursor::Get() const {
   if (it_ >= end_) {
@@ -120,7 +129,7 @@ constexpr const Tk& TkCursor::Get() const {
 }
 
 constexpr bool TkCursor::AtEnd() const {
-  return (it_ == end_) || (it_->TypeIs(eTk::kEof));
+  return (it_ == end_) || (it_->TypeIs(eTk::Eofile));
 }
 
 // Iteration
@@ -150,14 +159,7 @@ constexpr TkCursor& TkCursor::Advance(TkVectorConstIter new_it) {
   return *this;
 }
 
-// Specialized Advance for use in the lark_parser.h.
-// Shortcut for accessing .Always().Iter() from an InternalParseResult.
-// before. c.Advance(result.Always().Iter());
-// use. c.Advance(result);
-constexpr TkCursor& TkCursor::Advance(
-    const cxx::PartialExpected<Ast, TkCursor>& result) {
-  return Advance(result.Always().Iter());
-}
+
 
 // returns cursor advanced by N. N may be negative.
 TkCursor TkCursor::Next(int n) const {
@@ -218,36 +220,42 @@ constexpr inline bool TkCursor::TypeAndLitIs(eTk kind, const std::string& litera
 }
 
 constexpr inline bool TkCursor::IsModifierKeyword() const noexcept {
-  return Get().IsModifierKeyword();
+  return Get().IsModifier();
 }
 constexpr inline bool TkCursor::IsDeclarativeKeyword() const noexcept {
-  return Get().IsDeclarativeKeyword();
+  return Get().IsDeclarative();
 }
-constexpr inline bool TkCursor::IsSingularOperand() const noexcept {
-  return Get().IsSingularOperand();
+constexpr inline bool TkCursor::IsAnOperand() const noexcept {
+  return Get().IsAnOperand();
 }
 constexpr bool TkCursor::IsSingularPrefixOperator() const noexcept {
-  return Get().IsSingularPrefixOperator();
+  return Get().IsAPrefixOperator();
 }
 constexpr inline bool TkCursor::IsOpeningScope() const noexcept {
-  return Get().IsOpeningScope();
+  return Get().IsLScope();
 }
 constexpr inline bool TkCursor::IsClosingScope() const noexcept {
-  return Get().IsClosingScope();
+  return Get().IsRScope();
 }
 constexpr inline bool TkCursor::IsClosingScopeOf(eTk open) const noexcept {
-  return Get().IsClosingScopeOf(open);
+  return Get().IsRScopeOf(open);
 }
 
-constexpr inline bool TkCursor::IsPrimaryExpressionOpening() const noexcept {
-  const Tk& c = Get();
-  return c.IsSingularOperand() || c.IsSingularPrefixOperator() ||
-         c.TypeIs(eTk::kOpenParen);
+constexpr inline bool TkCursor::IsPrimary() const noexcept {
+  return Get().IsPrimary();
 }
+
+/// @} // end of cand_compiler_parser_cursor
 
 }  // namespace caoco
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_CURSOR_H
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the GNU Affero General Public License, Version 3.
@@ -261,15 +269,4 @@ constexpr inline bool TkCursor::IsPrimaryExpressionOpening() const noexcept {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_token_cursor.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_CURSOR_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

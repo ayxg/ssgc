@@ -1,0 +1,52 @@
+\doxysection{mta\+::is\+\_\+callable\texorpdfstring{$<$}{<} T, U \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{structmta_1_1is__callable}{}\label{structmta_1_1is__callable}\index{mta::is\_callable$<$ T, U $>$@{mta::is\_callable$<$ T, U $>$}}
+
+
+Checks if a type is a callable. \doxylink{conceptmta_1_1i_callable}{i\+Callable} is the concept equivalent.  
+
+
+
+
+{\ttfamily \#include $<$mta.\+h$>$}
+
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static bool const constexpr \mbox{\hyperlink{structmta_1_1is__callable_a1b93ca7a6b36645c4b02f22966ca44ce}{value}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T, typename U = void$>$\newline
+struct mta\+::is\+\_\+callable$<$ T, U $>$}
+Checks if a type is a callable. \doxylink{conceptmta_1_1i_callable}{i\+Callable} is the concept equivalent. 
+
+Definition at line \mbox{\hyperlink{mta_8h_source_l00041}{41}} of file \mbox{\hyperlink{mta_8h_source}{mta.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structmta_1_1is__callable_a1b93ca7a6b36645c4b02f22966ca44ce}\index{mta::is\_callable$<$ T, U $>$@{mta::is\_callable$<$ T, U $>$}!value@{value}}
+\index{value@{value}!mta::is\_callable$<$ T, U $>$@{mta::is\_callable$<$ T, U $>$}}
+\doxysubsubsection{\texorpdfstring{value}{value}}
+{\footnotesize\ttfamily \label{structmta_1_1is__callable_a1b93ca7a6b36645c4b02f22966ca44ce} 
+template$<$typename T , typename U  = void$>$ \\
+bool const constexpr \mbox{\hyperlink{structmta_1_1is__callable}{mta\+::is\+\_\+callable}}$<$ T, U $>$\+::value\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\ \ \ \ \ \ std::conditional\_t<std::is\_class<std::remove\_reference\_t<T>>\mbox{\hyperlink{structmta_1_1is__callable_a1b93ca7a6b36645c4b02f22966ca44ce}{::value}},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_callable<std::remove\_reference\_t<T>,\ \textcolor{keywordtype}{int}>,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::false\_type>\mbox{\hyperlink{structmta_1_1is__callable_a1b93ca7a6b36645c4b02f22966ca44ce}{::value}}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{mta_8h_source_l00042}{42}} of file \mbox{\hyperlink{mta_8h_source}{mta.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/submodules/meta-\/template-\/library/\mbox{\hyperlink{mta_8h}{mta.\+h}}\end{DoxyCompactItemize}

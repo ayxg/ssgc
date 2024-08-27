@@ -1,0 +1,264 @@
+\doxysection{cide\+::ui\+::Cide\+Solution\+Toolbar\+Interface Struct Reference}
+\hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface}{}\label{structcide_1_1ui_1_1_cide_solution_toolbar_interface}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+
+
+{\ttfamily \#include $<$cide\+\_\+ui.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{CallbackT}} = function$<$void(const stdfs\+::path\&)$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a095efc101b2f6ab22eadd7e63a7843b5}{Begin\+Right\+Click\+Context\+Menu}} (const stdfs\+::path \&p) const
+\item 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}{Cide\+Solution\+Toolbar\+Interface}} (const \mbox{\hyperlink{group__cand__cide__cgui_gadbb52ed78c57df3c9bd2290700de3786}{Cgui\+Vec2}} \&\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a1c739b8241f555800dbc40bb31c45cc2}{requested\+\_\+size}}=\{\})
+\item 
+void \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a5f0dbe65e5683387c1311a7138c1a709}{Display}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{CallbackT}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a3af5287e9177f342657587d901d9b610}{select\+\_\+file\+\_\+callback}} \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{x\+Null\+Callback}}\}
+\item 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{CallbackT}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a35db12caf1235038c43ac3430e1a835a}{callback\+\_\+edit\+\_\+open}} \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{x\+Null\+Callback}}\}
+\item 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{CallbackT}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a0a010312d0eec3d0a098491a6b5efeac}{callback\+\_\+edit\+\_\+delete}} \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{x\+Null\+Callback}}\}
+\item 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{CallbackT}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a238310ba8778a51c1412cb52f5781b00}{callback\+\_\+edit\+\_\+cut}} \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{x\+Null\+Callback}}\}
+\item 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{CallbackT}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ae38ec783cb54cf383ac33f5ee66ab765}{callback\+\_\+edit\+\_\+copy}} \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{x\+Null\+Callback}}\}
+\item 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{CallbackT}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_add6f36eb30879aeba5642bf32056eb18}{callback\+\_\+edit\+\_\+paste}} \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{x\+Null\+Callback}}\}
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_gadbb52ed78c57df3c9bd2290700de3786}{Cgui\+Vec2}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a1c739b8241f555800dbc40bb31c45cc2}{requested\+\_\+size}}
+\item 
+stdfs\+::path \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6d0741658e834b9c911d098a24fafd79}{root\+\_\+dir}}
+\item 
+std\+::string \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a2a9ae22b39c1abf03ccf43fefb4b320e}{temp\+\_\+file\+\_\+buffer}}
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_ga2ca689f132dc04bb1cd3c2f54e5afe4d}{Cgui\+Named\+Subcontext}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a0a110c7af30a5c7d8fe359c46bfc4b00}{solution\+\_\+toolbar\+\_\+context}}
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_gaafb387908d4a268f8989dc88ce31e13b}{Cgui\+Tab\+Bar}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a82a8201eec61fa6a484377965b1efc9c}{solution\+\_\+toolbar\+\_\+tab\+\_\+bar}}
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_ga28f50663038bed7ca332a424ac449abd}{Cgui\+Tab\+Item}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab4b1877a5be6d298541304496f6fba86}{solution\+\_\+explorer\+\_\+tab\+\_\+item}} \{\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_item_ac3e93e9fc5d369ecc5b2f9dfcf0b69c4}{Cgui\+Tab\+Item\+::\+Delayed}}("{}Solution View"{})\}
+\item 
+\mbox{\hyperlink{group__cand__cide__cgui_ga80e8056ba6717a74ba6597ee4f6cec29}{Cgui\+Directory\+View}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a00660349280acd20e4cf0ef99ccba20e}{dir\+\_\+tree\+\_\+view}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr \mbox{\hyperlink{group__cppmodule2__cppextended_ga738607799d6938e1b15f463688029cd5}{LAMBDA}} \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{x\+Null\+Callback}} = \mbox{[}$\,$\mbox{]}(const stdfs\+::path\&) \{\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00183}{183}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+
+
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!CallbackT@{CallbackT}}
+\index{CallbackT@{CallbackT}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{CallbackT}{CallbackT}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025} 
+using \mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::\+CallbackT}} = function$<$void(const stdfs\+::path\&)$>$}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00185}{185}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!CideSolutionToolbarInterface@{CideSolutionToolbarInterface}}
+\index{CideSolutionToolbarInterface@{CideSolutionToolbarInterface}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{CideSolutionToolbarInterface()}{CideSolutionToolbarInterface()}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a12eba7ec4e938e5b51ff032ffccc5e81} 
+cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::\+Cide\+Solution\+Toolbar\+Interface (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{group__cand__cide__cgui_gadbb52ed78c57df3c9bd2290700de3786}{Cgui\+Vec2}} \&}]{requested\+\_\+size}{ = {\ttfamily \{\}}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00230}{230}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a095efc101b2f6ab22eadd7e63a7843b5}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!BeginRightClickContextMenu@{BeginRightClickContextMenu}}
+\index{BeginRightClickContextMenu@{BeginRightClickContextMenu}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{BeginRightClickContextMenu()}{BeginRightClickContextMenu()}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a095efc101b2f6ab22eadd7e63a7843b5} 
+void cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::\+Begin\+Right\+Click\+Context\+Menu (\begin{DoxyParamCaption}\item[{const stdfs\+::path \&}]{p}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00210}{210}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a5f0dbe65e5683387c1311a7138c1a709}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!Display@{Display}}
+\index{Display@{Display}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{Display()}{Display()}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a5f0dbe65e5683387c1311a7138c1a709} 
+void cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::\+Display (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00249}{249}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ae38ec783cb54cf383ac33f5ee66ab765}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!callback\_edit\_copy@{callback\_edit\_copy}}
+\index{callback\_edit\_copy@{callback\_edit\_copy}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{callback\_edit\_copy}{callback\_edit\_copy}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ae38ec783cb54cf383ac33f5ee66ab765} 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{CallbackT}} cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::callback\+\_\+edit\+\_\+copy \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{x\+Null\+Callback}}\}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00195}{195}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a238310ba8778a51c1412cb52f5781b00}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!callback\_edit\_cut@{callback\_edit\_cut}}
+\index{callback\_edit\_cut@{callback\_edit\_cut}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{callback\_edit\_cut}{callback\_edit\_cut}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a238310ba8778a51c1412cb52f5781b00} 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{CallbackT}} cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::callback\+\_\+edit\+\_\+cut \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{x\+Null\+Callback}}\}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00194}{194}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a0a010312d0eec3d0a098491a6b5efeac}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!callback\_edit\_delete@{callback\_edit\_delete}}
+\index{callback\_edit\_delete@{callback\_edit\_delete}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{callback\_edit\_delete}{callback\_edit\_delete}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a0a010312d0eec3d0a098491a6b5efeac} 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{CallbackT}} cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::callback\+\_\+edit\+\_\+delete \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{x\+Null\+Callback}}\}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00193}{193}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a35db12caf1235038c43ac3430e1a835a}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!callback\_edit\_open@{callback\_edit\_open}}
+\index{callback\_edit\_open@{callback\_edit\_open}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{callback\_edit\_open}{callback\_edit\_open}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a35db12caf1235038c43ac3430e1a835a} 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{CallbackT}} cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::callback\+\_\+edit\+\_\+open \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{x\+Null\+Callback}}\}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00192}{192}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_add6f36eb30879aeba5642bf32056eb18}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!callback\_edit\_paste@{callback\_edit\_paste}}
+\index{callback\_edit\_paste@{callback\_edit\_paste}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{callback\_edit\_paste}{callback\_edit\_paste}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_add6f36eb30879aeba5642bf32056eb18} 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{CallbackT}} cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::callback\+\_\+edit\+\_\+paste \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{x\+Null\+Callback}}\}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00196}{196}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a00660349280acd20e4cf0ef99ccba20e}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!dir\_tree\_view@{dir\_tree\_view}}
+\index{dir\_tree\_view@{dir\_tree\_view}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{dir\_tree\_view}{dir\_tree\_view}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a00660349280acd20e4cf0ef99ccba20e} 
+\mbox{\hyperlink{group__cand__cide__cgui_ga80e8056ba6717a74ba6597ee4f6cec29}{Cgui\+Directory\+View}} cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::dir\+\_\+tree\+\_\+view}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00208}{208}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a1c739b8241f555800dbc40bb31c45cc2}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!requested\_size@{requested\_size}}
+\index{requested\_size@{requested\_size}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{requested\_size}{requested\_size}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a1c739b8241f555800dbc40bb31c45cc2} 
+\mbox{\hyperlink{group__cand__cide__cgui_gadbb52ed78c57df3c9bd2290700de3786}{Cgui\+Vec2}} cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::requested\+\_\+size}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00198}{198}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6d0741658e834b9c911d098a24fafd79}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!root\_dir@{root\_dir}}
+\index{root\_dir@{root\_dir}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{root\_dir}{root\_dir}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6d0741658e834b9c911d098a24fafd79} 
+stdfs\+::path cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::root\+\_\+dir}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00200}{200}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a3af5287e9177f342657587d901d9b610}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!select\_file\_callback@{select\_file\_callback}}
+\index{select\_file\_callback@{select\_file\_callback}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{select\_file\_callback}{select\_file\_callback}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a3af5287e9177f342657587d901d9b610} 
+\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a6fe9e4150bf1b588f09d2588fd379025}{CallbackT}} cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::select\+\_\+file\+\_\+callback \{\mbox{\hyperlink{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}{x\+Null\+Callback}}\}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00189}{189}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab4b1877a5be6d298541304496f6fba86}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!solution\_explorer\_tab\_item@{solution\_explorer\_tab\_item}}
+\index{solution\_explorer\_tab\_item@{solution\_explorer\_tab\_item}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{solution\_explorer\_tab\_item}{solution\_explorer\_tab\_item}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab4b1877a5be6d298541304496f6fba86} 
+\mbox{\hyperlink{group__cand__cide__cgui_ga28f50663038bed7ca332a424ac449abd}{Cgui\+Tab\+Item}} cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::solution\+\_\+explorer\+\_\+tab\+\_\+item \{\mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_item_ac3e93e9fc5d369ecc5b2f9dfcf0b69c4}{Cgui\+Tab\+Item\+::\+Delayed}}("{}Solution View"{})\}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00207}{207}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a0a110c7af30a5c7d8fe359c46bfc4b00}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!solution\_toolbar\_context@{solution\_toolbar\_context}}
+\index{solution\_toolbar\_context@{solution\_toolbar\_context}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{solution\_toolbar\_context}{solution\_toolbar\_context}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a0a110c7af30a5c7d8fe359c46bfc4b00} 
+\mbox{\hyperlink{group__cand__cide__cgui_ga2ca689f132dc04bb1cd3c2f54e5afe4d}{Cgui\+Named\+Subcontext}} cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::solution\+\_\+toolbar\+\_\+context}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00204}{204}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a82a8201eec61fa6a484377965b1efc9c}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!solution\_toolbar\_tab\_bar@{solution\_toolbar\_tab\_bar}}
+\index{solution\_toolbar\_tab\_bar@{solution\_toolbar\_tab\_bar}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{solution\_toolbar\_tab\_bar}{solution\_toolbar\_tab\_bar}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a82a8201eec61fa6a484377965b1efc9c} 
+\mbox{\hyperlink{group__cand__cide__cgui_gaafb387908d4a268f8989dc88ce31e13b}{Cgui\+Tab\+Bar}} cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::solution\+\_\+toolbar\+\_\+tab\+\_\+bar}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \ \ \mbox{\hyperlink{classcgui_1_1scoped__widget_1_1_tab_bar_a2404e52d09424b936e235b9faed217c9}{CguiTabBar::Delayed}}(\textcolor{stringliteral}{"{}solution\_toolbar\_tab\_bar"{}})\}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00205}{205}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a2a9ae22b39c1abf03ccf43fefb4b320e}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!temp\_file\_buffer@{temp\_file\_buffer}}
+\index{temp\_file\_buffer@{temp\_file\_buffer}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{temp\_file\_buffer}{temp\_file\_buffer}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_a2a9ae22b39c1abf03ccf43fefb4b320e} 
+std\+::string cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::temp\+\_\+file\+\_\+buffer}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00201}{201}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+\Hypertarget{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea}\index{cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}!xNullCallback@{xNullCallback}}
+\index{xNullCallback@{xNullCallback}!cide::ui::CideSolutionToolbarInterface@{cide::ui::CideSolutionToolbarInterface}}
+\doxysubsubsection{\texorpdfstring{xNullCallback}{xNullCallback}}
+{\footnotesize\ttfamily \label{structcide_1_1ui_1_1_cide_solution_toolbar_interface_ab53f0b0daff04a9d0c451b64595a8dea} 
+\mbox{\hyperlink{group__cppmodule2__cppextended_ga738607799d6938e1b15f463688029cd5}{LAMBDA}} cide\+::ui\+::\+Cide\+Solution\+Toolbar\+Interface\+::x\+Null\+Callback = \mbox{[}$\,$\mbox{]}(const stdfs\+::path\&) \{\}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__ui_8h_source_l00184}{184}} of file \mbox{\hyperlink{cide__ui_8h_source}{cide\+\_\+ui.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/ide/\mbox{\hyperlink{cide__ui_8h}{cide\+\_\+ui.\+h}}\end{DoxyCompactItemize}

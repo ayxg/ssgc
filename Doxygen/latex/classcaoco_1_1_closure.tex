@@ -1,0 +1,160 @@
+\doxysection{caoco\+::Closure Class Reference}
+\hypertarget{classcaoco_1_1_closure}{}\label{classcaoco_1_1_closure}\index{caoco::Closure@{caoco::Closure}}
+
+
+A closure is a range of tokens representing a singular ast node.  
+
+
+
+
+{\ttfamily \#include $<$caoco\+\_\+token\+\_\+closure.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} \mbox{\hyperlink{classcaoco_1_1_closure_ac4eeeae08847e0f46c4f1b2457a94253}{Front}} () const
+\item 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} \mbox{\hyperlink{classcaoco_1_1_closure_abed3ea0adc84045086cc3130f6ae99f3}{Back}} () const
+\item 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gaeb4e062a441166ab5c693ea608b63b3f}{e\+Operation}} \mbox{\hyperlink{classcaoco_1_1_closure_a66a9602aef76f0c4cb2e150cc054342e}{Operation}} () const
+\begin{DoxyCompactList}\small\item\em Operation of the front token. ( \mbox{[} \{ are postfix operators. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gaa35814be433c3f8998dabf2429e90817}{e\+Priority}} \mbox{\hyperlink{classcaoco_1_1_closure_ae4c6df257c40cf4d70149905ad636863}{Priority}} () const
+\begin{DoxyCompactList}\small\item\em Priority of the front token. ( \mbox{[} \{ are postfix priority. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gafd75ad634f57c34cbd68d308c97df3e2}{e\+Assoc}} \mbox{\hyperlink{classcaoco_1_1_closure_a68500bbcfe053e4e96896475f86e641e}{Assoc}} () const
+\begin{DoxyCompactList}\small\item\em Associativity of the front token. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcaoco_1_1_closure_a27dfb6e2d719ef77834fd0d21dd0f796}{Closure}} (\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} front)
+\item 
+\mbox{\hyperlink{classcaoco_1_1_closure_af4bd90d9c168cb87f6a8f800e450d832}{Closure}} (\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} front, \mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} back)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} \mbox{\hyperlink{classcaoco_1_1_closure_a8c162f14b4a869217a9e8cd2ffbabbf8}{front\+\_\+}}
+\item 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} \mbox{\hyperlink{classcaoco_1_1_closure_a88dd90e155d92d08a9d91a31dea2a39e}{back\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A closure is a range of tokens representing a singular ast node. 
+
+All tokens from front to back are a single ast node with no children. When a closure is a single token, the front and back are the same. Example\+: 1 + 2 -\/\texorpdfstring{$>$}{>} \doxylink{classcaoco_1_1_closure}{Closure} \#2 is +, •+ is the front and +• is the back. Example\+: 1(abcd) + 2 -\/\texorpdfstring{$>$}{>} \doxylink{classcaoco_1_1_closure}{Closure} \#2 is (abcd), •(abcd) is the front and (abcd)• is the back. 
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00042}{42}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcaoco_1_1_closure_a27dfb6e2d719ef77834fd0d21dd0f796}\index{caoco::Closure@{caoco::Closure}!Closure@{Closure}}
+\index{Closure@{Closure}!caoco::Closure@{caoco::Closure}}
+\doxysubsubsection{\texorpdfstring{Closure()}{Closure()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_a27dfb6e2d719ef77834fd0d21dd0f796} 
+caoco\+::\+Closure\+::\+Closure (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}}}]{front}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00073}{73}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_af4bd90d9c168cb87f6a8f800e450d832}\index{caoco::Closure@{caoco::Closure}!Closure@{Closure}}
+\index{Closure@{Closure}!caoco::Closure@{caoco::Closure}}
+\doxysubsubsection{\texorpdfstring{Closure()}{Closure()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_af4bd90d9c168cb87f6a8f800e450d832} 
+caoco\+::\+Closure\+::\+Closure (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}}}]{front}{, }\item[{\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}}}]{back}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00074}{74}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcaoco_1_1_closure_a68500bbcfe053e4e96896475f86e641e}\index{caoco::Closure@{caoco::Closure}!Assoc@{Assoc}}
+\index{Assoc@{Assoc}!caoco::Closure@{caoco::Closure}}
+\doxysubsubsection{\texorpdfstring{Assoc()}{Assoc()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_a68500bbcfe053e4e96896475f86e641e} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gafd75ad634f57c34cbd68d308c97df3e2}{e\+Assoc}} caoco\+::\+Closure\+::\+Assoc (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Associativity of the front token. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00070}{70}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_abed3ea0adc84045086cc3130f6ae99f3}\index{caoco::Closure@{caoco::Closure}!Back@{Back}}
+\index{Back@{Back}!caoco::Closure@{caoco::Closure}}
+\doxysubsubsection{\texorpdfstring{Back()}{Back()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_abed3ea0adc84045086cc3130f6ae99f3} 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} caoco\+::\+Closure\+::\+Back (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00045}{45}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_ac4eeeae08847e0f46c4f1b2457a94253}\index{caoco::Closure@{caoco::Closure}!Front@{Front}}
+\index{Front@{Front}!caoco::Closure@{caoco::Closure}}
+\doxysubsubsection{\texorpdfstring{Front()}{Front()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_ac4eeeae08847e0f46c4f1b2457a94253} 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} caoco\+::\+Closure\+::\+Front (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00044}{44}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_a66a9602aef76f0c4cb2e150cc054342e}\index{caoco::Closure@{caoco::Closure}!Operation@{Operation}}
+\index{Operation@{Operation}!caoco::Closure@{caoco::Closure}}
+\doxysubsubsection{\texorpdfstring{Operation()}{Operation()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_a66a9602aef76f0c4cb2e150cc054342e} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gaeb4e062a441166ab5c693ea608b63b3f}{e\+Operation}} caoco\+::\+Closure\+::\+Operation (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Operation of the front token. ( \mbox{[} \{ are postfix operators. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00048}{48}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_ae4c6df257c40cf4d70149905ad636863}\index{caoco::Closure@{caoco::Closure}!Priority@{Priority}}
+\index{Priority@{Priority}!caoco::Closure@{caoco::Closure}}
+\doxysubsubsection{\texorpdfstring{Priority()}{Priority()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_ae4c6df257c40cf4d70149905ad636863} 
+\mbox{\hyperlink{group__cand__compiler__data__enums_gaa35814be433c3f8998dabf2429e90817}{e\+Priority}} caoco\+::\+Closure\+::\+Priority (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Priority of the front token. ( \mbox{[} \{ are postfix priority. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00059}{59}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcaoco_1_1_closure_a88dd90e155d92d08a9d91a31dea2a39e}\index{caoco::Closure@{caoco::Closure}!back\_@{back\_}}
+\index{back\_@{back\_}!caoco::Closure@{caoco::Closure}}
+\doxysubsubsection{\texorpdfstring{back\_}{back\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_a88dd90e155d92d08a9d91a31dea2a39e} 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} caoco\+::\+Closure\+::back\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00078}{78}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+\Hypertarget{classcaoco_1_1_closure_a8c162f14b4a869217a9e8cd2ffbabbf8}\index{caoco::Closure@{caoco::Closure}!front\_@{front\_}}
+\index{front\_@{front\_}!caoco::Closure@{caoco::Closure}}
+\doxysubsubsection{\texorpdfstring{front\_}{front\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1_closure_a8c162f14b4a869217a9e8cd2ffbabbf8} 
+\mbox{\hyperlink{group__cand__compiler__parser__closure_gac47a697b1bf9a7d6a9d2ccd571db2806}{Tk\+List\+Iter}} caoco\+::\+Closure\+::front\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__closure_8h_source_l00077}{77}} of file \mbox{\hyperlink{caoco__token__closure_8h_source}{caoco\+\_\+token\+\_\+closure.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/\mbox{\hyperlink{caoco__token__closure_8h}{caoco\+\_\+token\+\_\+closure.\+h}}\end{DoxyCompactItemize}

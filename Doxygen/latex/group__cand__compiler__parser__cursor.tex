@@ -1,0 +1,281 @@
+\doxysubsubsection{Token Cursor}
+\hypertarget{group__cand__compiler__parser__cursor}{}\label{group__cand__compiler__parser__cursor}\index{Token Cursor@{Token Cursor}}
+
+
+Iterator-\/like class with special methods for tokens/ast nodes.  
+
+
+\doxysubsubsubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{caoco\+::\+Tk\+Cursor}}
+\end{DoxyCompactItemize}
+\doxysubsubsubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+constexpr const \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} \& \mbox{\hyperlink{group__cand__compiler__parser__cursor_ga9dc058a39a3afac5384a846760045459}{caoco\+::\+Tk\+Cursor\+::\+Get}} () const
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_ga66633a0fef6ac1547d892badae97ece0}{caoco\+::\+Tk\+Cursor\+::\+At\+End}} () const
+\item 
+constexpr \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \& \mbox{\hyperlink{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}{caoco\+::\+Tk\+Cursor\+::\+Advance}} (int n=1)
+\item 
+constexpr \mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \& \mbox{\hyperlink{group__cand__compiler__parser__cursor_ga2e81270c0f2e39e0f87b85e0ea9303e3}{caoco\+::\+Tk\+Cursor\+::\+Advance}} (\mbox{\hyperlink{namespacecaoco_aec824b3a24d220a772b2c336b48a322f}{Tk\+Vector\+Const\+Iter}} new\+\_\+it)
+\item 
+\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \mbox{\hyperlink{group__cand__compiler__parser__cursor_ga8b7c7134772984d29f812c8b7dd5942a}{caoco\+::\+Tk\+Cursor\+::\+Next}} (int n=1) const
+\item 
+\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \mbox{\hyperlink{group__cand__compiler__parser__cursor_ga91eccfdc812e0fdddf55336fc7ffed7a}{caoco\+::\+Tk\+Cursor\+::\+Next}} (\mbox{\hyperlink{namespacecaoco_aec824b3a24d220a772b2c336b48a322f}{Tk\+Vector\+Const\+Iter}} new\+\_\+it) const
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_ga97d55dc3cc8af4aca1fa83203f7c8132}{caoco\+::\+Tk\+Cursor\+::\+Find\+Forward}} (\mbox{\hyperlink{namespacecaoco_ac7aba1688b4d2fd41f7896171c3c75b2}{Tk\+Vector}} match)
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_ga88a10d4fd6a36c31a4b9bed4017fa7a9}{caoco\+::\+Tk\+Cursor\+::\+Find\+Forward\+Exact}} (\mbox{\hyperlink{namespacecaoco_aec824b3a24d220a772b2c336b48a322f}{Tk\+Vector\+Const\+Iter}} cursor, \mbox{\hyperlink{namespacecaoco_ac7aba1688b4d2fd41f7896171c3c75b2}{Tk\+Vector}} match)
+\item 
+constexpr const std\+::string \& \mbox{\hyperlink{group__cand__compiler__parser__cursor_ga3f6a3e5b52a5cb7c559ffefe668abaea}{caoco\+::\+Tk\+Cursor\+::\+Literal}} () const
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_gad3a65e2a4654a812c5725925fe0209f2}{caoco\+::\+Tk\+Cursor\+::\+Type\+Is}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} type) const noexcept
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_ga7f17c2d5f3a57515b36286dcbfcfc03e}{caoco\+::\+Tk\+Cursor\+::\+Type\+Isnt}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} type) const noexcept
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_gaeaebab3f510499295ac2887bc815ee4c}{caoco\+::\+Tk\+Cursor\+::\+Type\+And\+Lit\+Is}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} kind, const std\+::string \&literal) const noexcept
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_gaf64e30ca7ec6f54b3d6274ce101ddef1}{caoco\+::\+Tk\+Cursor\+::\+Is\+Modifier\+Keyword}} () const noexcept
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_ga9820e5a41372e36cdb92c42ed9a13f42}{caoco\+::\+Tk\+Cursor\+::\+Is\+Declarative\+Keyword}} () const noexcept
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_ga693862916666c8f5fb087f3d4161ec80}{caoco\+::\+Tk\+Cursor\+::\+Is\+An\+Operand}} () const noexcept
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_gad495eb6b9c778b5a17df6b3ad3b026e5}{caoco\+::\+Tk\+Cursor\+::\+Is\+Singular\+Prefix\+Operator}} () const noexcept
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_gacce2ed918eff7597f7e2d2bcd6d4b351}{caoco\+::\+Tk\+Cursor\+::\+Is\+Opening\+Scope}} () const noexcept
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_ga0f170bfa1b2dbe2979a47c3910402ca1}{caoco\+::\+Tk\+Cursor\+::\+Is\+Closing\+Scope}} () const noexcept
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_gadace1d81bd2e9c520f841ee02af6a2d5}{caoco\+::\+Tk\+Cursor\+::\+Is\+Closing\+Scope\+Of}} (\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}} open) const noexcept
+\item 
+constexpr bool \mbox{\hyperlink{group__cand__compiler__parser__cursor_gab731945d8c0dfdc92415cd7520fd28c6}{caoco\+::\+Tk\+Cursor\+::\+Is\+Primary}} () const noexcept
+\end{DoxyCompactItemize}
+\doxysubsubsubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} \mbox{\hyperlink{group__cand__compiler__parser__cursor_gaf6e3ee06647f1612b9900d52db66913e}{caoco\+::\+Tk\+Cursor\+::k\+Sentinel\+End\+Token}} = \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}(e\+Tk\+::\+Eofile)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsubsection{Detailed Description}
+Iterator-\/like class with special methods for tokens/ast nodes. 
+
+
+
+\doxysubsubsubsection{Function Documentation}
+\Hypertarget{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104}\index{Token Cursor@{Token Cursor}!Advance@{Advance}}
+\index{Advance@{Advance}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{Advance()}{Advance()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_gace0ed3305af970a5d1753c8f7074a104} 
+\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \& caoco\+::\+Tk\+Cursor\+::\+Advance (\begin{DoxyParamCaption}\item[{int}]{n}{ = {\ttfamily 1}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00137}{137}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_ga2e81270c0f2e39e0f87b85e0ea9303e3}\index{Token Cursor@{Token Cursor}!Advance@{Advance}}
+\index{Advance@{Advance}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{Advance()}{Advance()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_ga2e81270c0f2e39e0f87b85e0ea9303e3} 
+\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \& caoco\+::\+Tk\+Cursor\+::\+Advance (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacecaoco_aec824b3a24d220a772b2c336b48a322f}{Tk\+Vector\+Const\+Iter}}}]{new\+\_\+it}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00152}{152}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_ga66633a0fef6ac1547d892badae97ece0}\index{Token Cursor@{Token Cursor}!AtEnd@{AtEnd}}
+\index{AtEnd@{AtEnd}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{AtEnd()}{AtEnd()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_ga66633a0fef6ac1547d892badae97ece0} 
+bool caoco\+::\+Tk\+Cursor\+::\+At\+End (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00131}{131}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_ga97d55dc3cc8af4aca1fa83203f7c8132}\index{Token Cursor@{Token Cursor}!FindForward@{FindForward}}
+\index{FindForward@{FindForward}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{FindForward()}{FindForward()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_ga97d55dc3cc8af4aca1fa83203f7c8132} 
+bool caoco\+::\+Tk\+Cursor\+::\+Find\+Forward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacecaoco_ac7aba1688b4d2fd41f7896171c3c75b2}{Tk\+Vector}}}]{match}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00185}{185}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_ga88a10d4fd6a36c31a4b9bed4017fa7a9}\index{Token Cursor@{Token Cursor}!FindForwardExact@{FindForwardExact}}
+\index{FindForwardExact@{FindForwardExact}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{FindForwardExact()}{FindForwardExact()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_ga88a10d4fd6a36c31a4b9bed4017fa7a9} 
+bool caoco\+::\+Tk\+Cursor\+::\+Find\+Forward\+Exact (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacecaoco_aec824b3a24d220a772b2c336b48a322f}{Tk\+Vector\+Const\+Iter}}}]{cursor}{, }\item[{\mbox{\hyperlink{namespacecaoco_ac7aba1688b4d2fd41f7896171c3c75b2}{Tk\+Vector}}}]{match}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00199}{199}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_ga9dc058a39a3afac5384a846760045459}\index{Token Cursor@{Token Cursor}!Get@{Get}}
+\index{Get@{Get}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{Get()}{Get()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_ga9dc058a39a3afac5384a846760045459} 
+const \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} \& caoco\+::\+Tk\+Cursor\+::\+Get (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00124}{124}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_ga693862916666c8f5fb087f3d4161ec80}\index{Token Cursor@{Token Cursor}!IsAnOperand@{IsAnOperand}}
+\index{IsAnOperand@{IsAnOperand}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{IsAnOperand()}{IsAnOperand()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_ga693862916666c8f5fb087f3d4161ec80} 
+bool caoco\+::\+Tk\+Cursor\+::\+Is\+An\+Operand (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00228}{228}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_ga0f170bfa1b2dbe2979a47c3910402ca1}\index{Token Cursor@{Token Cursor}!IsClosingScope@{IsClosingScope}}
+\index{IsClosingScope@{IsClosingScope}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{IsClosingScope()}{IsClosingScope()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_ga0f170bfa1b2dbe2979a47c3910402ca1} 
+bool caoco\+::\+Tk\+Cursor\+::\+Is\+Closing\+Scope (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00237}{237}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_gadace1d81bd2e9c520f841ee02af6a2d5}\index{Token Cursor@{Token Cursor}!IsClosingScopeOf@{IsClosingScopeOf}}
+\index{IsClosingScopeOf@{IsClosingScopeOf}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{IsClosingScopeOf()}{IsClosingScopeOf()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_gadace1d81bd2e9c520f841ee02af6a2d5} 
+bool caoco\+::\+Tk\+Cursor\+::\+Is\+Closing\+Scope\+Of (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{open}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00240}{240}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_ga9820e5a41372e36cdb92c42ed9a13f42}\index{Token Cursor@{Token Cursor}!IsDeclarativeKeyword@{IsDeclarativeKeyword}}
+\index{IsDeclarativeKeyword@{IsDeclarativeKeyword}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{IsDeclarativeKeyword()}{IsDeclarativeKeyword()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_ga9820e5a41372e36cdb92c42ed9a13f42} 
+bool caoco\+::\+Tk\+Cursor\+::\+Is\+Declarative\+Keyword (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00225}{225}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_gaf64e30ca7ec6f54b3d6274ce101ddef1}\index{Token Cursor@{Token Cursor}!IsModifierKeyword@{IsModifierKeyword}}
+\index{IsModifierKeyword@{IsModifierKeyword}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{IsModifierKeyword()}{IsModifierKeyword()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_gaf64e30ca7ec6f54b3d6274ce101ddef1} 
+bool caoco\+::\+Tk\+Cursor\+::\+Is\+Modifier\+Keyword (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00222}{222}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_gacce2ed918eff7597f7e2d2bcd6d4b351}\index{Token Cursor@{Token Cursor}!IsOpeningScope@{IsOpeningScope}}
+\index{IsOpeningScope@{IsOpeningScope}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{IsOpeningScope()}{IsOpeningScope()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_gacce2ed918eff7597f7e2d2bcd6d4b351} 
+bool caoco\+::\+Tk\+Cursor\+::\+Is\+Opening\+Scope (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00234}{234}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_gab731945d8c0dfdc92415cd7520fd28c6}\index{Token Cursor@{Token Cursor}!IsPrimary@{IsPrimary}}
+\index{IsPrimary@{IsPrimary}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{IsPrimary()}{IsPrimary()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_gab731945d8c0dfdc92415cd7520fd28c6} 
+bool caoco\+::\+Tk\+Cursor\+::\+Is\+Primary (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00244}{244}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_gad495eb6b9c778b5a17df6b3ad3b026e5}\index{Token Cursor@{Token Cursor}!IsSingularPrefixOperator@{IsSingularPrefixOperator}}
+\index{IsSingularPrefixOperator@{IsSingularPrefixOperator}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{IsSingularPrefixOperator()}{IsSingularPrefixOperator()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_gad495eb6b9c778b5a17df6b3ad3b026e5} 
+bool caoco\+::\+Tk\+Cursor\+::\+Is\+Singular\+Prefix\+Operator (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00231}{231}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_ga3f6a3e5b52a5cb7c559ffefe668abaea}\index{Token Cursor@{Token Cursor}!Literal@{Literal}}
+\index{Literal@{Literal}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{Literal()}{Literal()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_ga3f6a3e5b52a5cb7c559ffefe668abaea} 
+const std\+::string \& caoco\+::\+Tk\+Cursor\+::\+Literal (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00209}{209}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_ga8b7c7134772984d29f812c8b7dd5942a}\index{Token Cursor@{Token Cursor}!Next@{Next}}
+\index{Next@{Next}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{Next()}{Next()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_ga8b7c7134772984d29f812c8b7dd5942a} 
+\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} caoco\+::\+Tk\+Cursor\+::\+Next (\begin{DoxyParamCaption}\item[{int}]{n}{ = {\ttfamily 1}}\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00165}{165}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_ga91eccfdc812e0fdddf55336fc7ffed7a}\index{Token Cursor@{Token Cursor}!Next@{Next}}
+\index{Next@{Next}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{Next()}{Next()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_ga91eccfdc812e0fdddf55336fc7ffed7a} 
+\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} caoco\+::\+Tk\+Cursor\+::\+Next (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacecaoco_aec824b3a24d220a772b2c336b48a322f}{Tk\+Vector\+Const\+Iter}}}]{new\+\_\+it}{}\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00171}{171}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_gaeaebab3f510499295ac2887bc815ee4c}\index{Token Cursor@{Token Cursor}!TypeAndLitIs@{TypeAndLitIs}}
+\index{TypeAndLitIs@{TypeAndLitIs}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{TypeAndLitIs()}{TypeAndLitIs()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_gaeaebab3f510499295ac2887bc815ee4c} 
+bool caoco\+::\+Tk\+Cursor\+::\+Type\+And\+Lit\+Is (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{kind}{, }\item[{const std\+::string \&}]{literal}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00218}{218}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_gad3a65e2a4654a812c5725925fe0209f2}\index{Token Cursor@{Token Cursor}!TypeIs@{TypeIs}}
+\index{TypeIs@{TypeIs}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{TypeIs()}{TypeIs()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_gad3a65e2a4654a812c5725925fe0209f2} 
+bool caoco\+::\+Tk\+Cursor\+::\+Type\+Is (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{type}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00212}{212}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+\Hypertarget{group__cand__compiler__parser__cursor_ga7f17c2d5f3a57515b36286dcbfcfc03e}\index{Token Cursor@{Token Cursor}!TypeIsnt@{TypeIsnt}}
+\index{TypeIsnt@{TypeIsnt}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{TypeIsnt()}{TypeIsnt()}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_ga7f17c2d5f3a57515b36286dcbfcfc03e} 
+bool caoco\+::\+Tk\+Cursor\+::\+Type\+Isnt (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__cand__compiler__data__enums_gafc0e3e1aafac0e5bc460bf114cdc2d22}{e\+Tk}}}]{type}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00215}{215}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+
+
+
+\doxysubsubsubsection{Variable Documentation}
+\Hypertarget{group__cand__compiler__parser__cursor_gaf6e3ee06647f1612b9900d52db66913e}\index{Token Cursor@{Token Cursor}!kSentinelEndToken@{kSentinelEndToken}}
+\index{kSentinelEndToken@{kSentinelEndToken}!Token Cursor@{Token Cursor}}
+\doxysubsubsubsubsection{\texorpdfstring{kSentinelEndToken}{kSentinelEndToken}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser__cursor_gaf6e3ee06647f1612b9900d52db66913e} 
+const \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} caoco\+::\+Tk\+Cursor\+::k\+Sentinel\+End\+Token = \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}(e\+Tk\+::\+Eofile)\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__token__cursor_8h_source_l00117}{117}} of file \mbox{\hyperlink{caoco__token__cursor_8h_source}{caoco\+\_\+token\+\_\+cursor.\+h}}.
+

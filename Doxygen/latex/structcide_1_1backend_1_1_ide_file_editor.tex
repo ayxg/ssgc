@@ -1,0 +1,168 @@
+\doxysection{cide\+::backend\+::Ide\+File\+Editor Struct Reference}
+\hypertarget{structcide_1_1backend_1_1_ide_file_editor}{}\label{structcide_1_1backend_1_1_ide_file_editor}\index{cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}}
+
+
+{\ttfamily \#include $<$cide\+\_\+backend.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a75b09fb2e537c89610e084811285cb4d}{File\+Tab}} = \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab}{Ide\+File\+Tab}}
+\item 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a8794a471f7bc4bfbcfb27bc74bf8075c}{Expected\+File\+Tab\+Ref}} = \mbox{\hyperlink{classcxx_1_1_expected}{cxx\+::\+Expected}}$<$std\+::reference\+\_\+wrapper$<$\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab}{Ide\+File\+Tab}}$>$$>$
+\item 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a34bbdada374bfa608356abc53ffe91bd}{File\+Tab\+Vec}} = vector$<$\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab}{Ide\+File\+Tab}}$>$
+\item 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a50d6a0f3ed7ca3dd87f0d00baf27fef0}{File\+Tab\+Vec\+Iter}} = vector$<$\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab}{Ide\+File\+Tab}}$>$\+::iterator
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a75b09fb2e537c89610e084811285cb4d}{File\+Tab}} \& \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a2c5e8c8cd0bedca270d9edbd5eb70dcf}{Add\+File\+Tab}} (const stdfs\+::path \&file\+\_\+path)
+\item 
+\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a75b09fb2e537c89610e084811285cb4d}{File\+Tab}} \& \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_ae0756fa670445ab8d58369834fe58444}{Set\+File\+Tab\+Active}} (const stdfs\+::path \&file\+\_\+path)
+\item 
+\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a8794a471f7bc4bfbcfb27bc74bf8075c}{Expected\+File\+Tab\+Ref}} \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a4c49450156359fa16ea34b9241b7ccc8}{Set\+File\+Tab\+Active}} (std\+::size\+\_\+t index)
+\item 
+\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a75b09fb2e537c89610e084811285cb4d}{File\+Tab}} \& \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a2cf0f3dbebfc8c74072ab9a2316f5dfd}{Set\+File\+Tab\+Active\+Unchecked}} (std\+::size\+\_\+t index)
+\item 
+string \&const \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_adc3988927ebe11b7ac0b5c2961b11e1e}{Get\+Active\+Text\+Buffer}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a34bbdada374bfa608356abc53ffe91bd}{File\+Tab\+Vec}} \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a96d955b82a60318e716846f19cfa5556}{file\+\_\+tabs}} \{\}
+\item 
+\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a50d6a0f3ed7ca3dd87f0d00baf27fef0}{File\+Tab\+Vec\+Iter}} \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_afa791428018924215e6510362404e03a}{active\+\_\+tab\+\_\+}} \{\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00502}{502}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+
+
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{structcide_1_1backend_1_1_ide_file_editor_a8794a471f7bc4bfbcfb27bc74bf8075c}\index{cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}!ExpectedFileTabRef@{ExpectedFileTabRef}}
+\index{ExpectedFileTabRef@{ExpectedFileTabRef}!cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}}
+\doxysubsubsection{\texorpdfstring{ExpectedFileTabRef}{ExpectedFileTabRef}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_ide_file_editor_a8794a471f7bc4bfbcfb27bc74bf8075c} 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a8794a471f7bc4bfbcfb27bc74bf8075c}{cide\+::backend\+::\+Ide\+File\+Editor\+::\+Expected\+File\+Tab\+Ref}} = \mbox{\hyperlink{classcxx_1_1_expected}{cxx\+::\+Expected}}$<$std\+::reference\+\_\+wrapper$<$\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab}{Ide\+File\+Tab}}$>$$>$}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00505}{505}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_ide_file_editor_a75b09fb2e537c89610e084811285cb4d}\index{cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}!FileTab@{FileTab}}
+\index{FileTab@{FileTab}!cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}}
+\doxysubsubsection{\texorpdfstring{FileTab}{FileTab}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_ide_file_editor_a75b09fb2e537c89610e084811285cb4d} 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a75b09fb2e537c89610e084811285cb4d}{cide\+::backend\+::\+Ide\+File\+Editor\+::\+File\+Tab}} = \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab}{Ide\+File\+Tab}}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00504}{504}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_ide_file_editor_a34bbdada374bfa608356abc53ffe91bd}\index{cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}!FileTabVec@{FileTabVec}}
+\index{FileTabVec@{FileTabVec}!cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}}
+\doxysubsubsection{\texorpdfstring{FileTabVec}{FileTabVec}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_ide_file_editor_a34bbdada374bfa608356abc53ffe91bd} 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a34bbdada374bfa608356abc53ffe91bd}{cide\+::backend\+::\+Ide\+File\+Editor\+::\+File\+Tab\+Vec}} = vector$<$\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab}{Ide\+File\+Tab}}$>$}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00506}{506}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_ide_file_editor_a50d6a0f3ed7ca3dd87f0d00baf27fef0}\index{cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}!FileTabVecIter@{FileTabVecIter}}
+\index{FileTabVecIter@{FileTabVecIter}!cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}}
+\doxysubsubsection{\texorpdfstring{FileTabVecIter}{FileTabVecIter}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_ide_file_editor_a50d6a0f3ed7ca3dd87f0d00baf27fef0} 
+using \mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a50d6a0f3ed7ca3dd87f0d00baf27fef0}{cide\+::backend\+::\+Ide\+File\+Editor\+::\+File\+Tab\+Vec\+Iter}} = vector$<$\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_tab}{Ide\+File\+Tab}}$>$\+::iterator}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00507}{507}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structcide_1_1backend_1_1_ide_file_editor_a2c5e8c8cd0bedca270d9edbd5eb70dcf}\index{cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}!AddFileTab@{AddFileTab}}
+\index{AddFileTab@{AddFileTab}!cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}}
+\doxysubsubsection{\texorpdfstring{AddFileTab()}{AddFileTab()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_ide_file_editor_a2c5e8c8cd0bedca270d9edbd5eb70dcf} 
+\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a75b09fb2e537c89610e084811285cb4d}{File\+Tab}} \& cide\+::backend\+::\+Ide\+File\+Editor\+::\+Add\+File\+Tab (\begin{DoxyParamCaption}\item[{const stdfs\+::path \&}]{file\+\_\+path}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00511}{511}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_ide_file_editor_adc3988927ebe11b7ac0b5c2961b11e1e}\index{cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}!GetActiveTextBuffer@{GetActiveTextBuffer}}
+\index{GetActiveTextBuffer@{GetActiveTextBuffer}!cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}}
+\doxysubsubsection{\texorpdfstring{GetActiveTextBuffer()}{GetActiveTextBuffer()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_ide_file_editor_adc3988927ebe11b7ac0b5c2961b11e1e} 
+string \&const cide\+::backend\+::\+Ide\+File\+Editor\+::\+Get\+Active\+Text\+Buffer (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00572}{572}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_ide_file_editor_ae0756fa670445ab8d58369834fe58444}\index{cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}!SetFileTabActive@{SetFileTabActive}}
+\index{SetFileTabActive@{SetFileTabActive}!cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}}
+\doxysubsubsection{\texorpdfstring{SetFileTabActive()}{SetFileTabActive()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_ide_file_editor_ae0756fa670445ab8d58369834fe58444} 
+\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a75b09fb2e537c89610e084811285cb4d}{File\+Tab}} \& cide\+::backend\+::\+Ide\+File\+Editor\+::\+Set\+File\+Tab\+Active (\begin{DoxyParamCaption}\item[{const stdfs\+::path \&}]{file\+\_\+path}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00523}{523}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_ide_file_editor_a4c49450156359fa16ea34b9241b7ccc8}\index{cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}!SetFileTabActive@{SetFileTabActive}}
+\index{SetFileTabActive@{SetFileTabActive}!cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}}
+\doxysubsubsection{\texorpdfstring{SetFileTabActive()}{SetFileTabActive()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_ide_file_editor_a4c49450156359fa16ea34b9241b7ccc8} 
+\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a8794a471f7bc4bfbcfb27bc74bf8075c}{Expected\+File\+Tab\+Ref}} cide\+::backend\+::\+Ide\+File\+Editor\+::\+Set\+File\+Tab\+Active (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{index}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00547}{547}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_ide_file_editor_a2cf0f3dbebfc8c74072ab9a2316f5dfd}\index{cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}!SetFileTabActiveUnchecked@{SetFileTabActiveUnchecked}}
+\index{SetFileTabActiveUnchecked@{SetFileTabActiveUnchecked}!cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}}
+\doxysubsubsection{\texorpdfstring{SetFileTabActiveUnchecked()}{SetFileTabActiveUnchecked()}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_ide_file_editor_a2cf0f3dbebfc8c74072ab9a2316f5dfd} 
+\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a75b09fb2e537c89610e084811285cb4d}{File\+Tab}} \& cide\+::backend\+::\+Ide\+File\+Editor\+::\+Set\+File\+Tab\+Active\+Unchecked (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{index}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00565}{565}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structcide_1_1backend_1_1_ide_file_editor_afa791428018924215e6510362404e03a}\index{cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}!active\_tab\_@{active\_tab\_}}
+\index{active\_tab\_@{active\_tab\_}!cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}}
+\doxysubsubsection{\texorpdfstring{active\_tab\_}{active\_tab\_}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_ide_file_editor_afa791428018924215e6510362404e03a} 
+\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a50d6a0f3ed7ca3dd87f0d00baf27fef0}{File\+Tab\+Vec\+Iter}} cide\+::backend\+::\+Ide\+File\+Editor\+::active\+\_\+tab\+\_\+ \{\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00578}{578}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+\Hypertarget{structcide_1_1backend_1_1_ide_file_editor_a96d955b82a60318e716846f19cfa5556}\index{cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}!file\_tabs@{file\_tabs}}
+\index{file\_tabs@{file\_tabs}!cide::backend::IdeFileEditor@{cide::backend::IdeFileEditor}}
+\doxysubsubsection{\texorpdfstring{file\_tabs}{file\_tabs}}
+{\footnotesize\ttfamily \label{structcide_1_1backend_1_1_ide_file_editor_a96d955b82a60318e716846f19cfa5556} 
+\mbox{\hyperlink{structcide_1_1backend_1_1_ide_file_editor_a34bbdada374bfa608356abc53ffe91bd}{File\+Tab\+Vec}} cide\+::backend\+::\+Ide\+File\+Editor\+::file\+\_\+tabs \{\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{cide__backend_8h_source_l00577}{577}} of file \mbox{\hyperlink{cide__backend_8h_source}{cide\+\_\+backend.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/ide/\mbox{\hyperlink{cide__backend_8h}{cide\+\_\+backend.\+h}}\end{DoxyCompactItemize}

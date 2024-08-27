@@ -1,0 +1,61 @@
+\doxysection{C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/submodules/extended-\/cpp-\/standard/macrodef.h File Reference}
+\hypertarget{macrodef_8h}{}\label{macrodef_8h}\index{C:/Users/Anton/source/repos/CandRuntime/submodules/extended-\/cpp-\/standard/macrodef.h@{C:/Users/Anton/source/repos/CandRuntime/submodules/extended-\/cpp-\/standard/macrodef.h}}
+
+
+Project Wide Macro Definitions.  
+
+
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga738607799d6938e1b15f463688029cd5}{LAMBDA}}~auto
+\begin{DoxyCompactList}\small\item\em Convention\+: \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga46ef3287f122e564d1d8296eeccf9450}{LAMBDA\+\_\+\+STRING}}(x)~\mbox{[}$\,$\mbox{]}() consteval -\/$>$ auto \{ return x; \}
+\begin{DoxyCompactList}\small\item\em helper macro to create a lambda that returns a string at compile time. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_gaf2374f58b1986207bc85a415a0abfa3b}{PARENS\+\_\+256}}~()
+\begin{DoxyCompactList}\small\item\em Used for functional macro expansion. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_gaefd2f4dcab9d82c3eb6334aaca464d2f}{EXPAND\+\_\+256}}(arg)~\mbox{\hyperlink{group__cppmodule2__cppextended_ga7a8f4e01d6f91680bdabcbe4b63a53dc}{EXPAND1\+\_\+256}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga7a8f4e01d6f91680bdabcbe4b63a53dc}{EXPAND1\+\_\+256}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga7a8f4e01d6f91680bdabcbe4b63a53dc}{EXPAND1\+\_\+256}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga7a8f4e01d6f91680bdabcbe4b63a53dc}{EXPAND1\+\_\+256}}(arg))))
+\begin{DoxyCompactList}\small\item\em Rescan macro tokens 256 times. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga7a8f4e01d6f91680bdabcbe4b63a53dc}{EXPAND1\+\_\+256}}(arg)~\mbox{\hyperlink{group__cppmodule2__cppextended_gae50099ea9d73bb5c4f2b38cd63034b05}{EXPAND2\+\_\+256}}(\mbox{\hyperlink{group__cppmodule2__cppextended_gae50099ea9d73bb5c4f2b38cd63034b05}{EXPAND2\+\_\+256}}(\mbox{\hyperlink{group__cppmodule2__cppextended_gae50099ea9d73bb5c4f2b38cd63034b05}{EXPAND2\+\_\+256}}(\mbox{\hyperlink{group__cppmodule2__cppextended_gae50099ea9d73bb5c4f2b38cd63034b05}{EXPAND2\+\_\+256}}(arg))))
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_gae50099ea9d73bb5c4f2b38cd63034b05}{EXPAND2\+\_\+256}}(arg)~\mbox{\hyperlink{group__cppmodule2__cppextended_gab47444a298f69a94afe3db40731fd467}{EXPAND3\+\_\+256}}(\mbox{\hyperlink{group__cppmodule2__cppextended_gab47444a298f69a94afe3db40731fd467}{EXPAND3\+\_\+256}}(\mbox{\hyperlink{group__cppmodule2__cppextended_gab47444a298f69a94afe3db40731fd467}{EXPAND3\+\_\+256}}(\mbox{\hyperlink{group__cppmodule2__cppextended_gab47444a298f69a94afe3db40731fd467}{EXPAND3\+\_\+256}}(arg))))
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_gab47444a298f69a94afe3db40731fd467}{EXPAND3\+\_\+256}}(arg)~\mbox{\hyperlink{group__cppmodule2__cppextended_ga1212f78228dea72d1786e2cf1c4ff689}{EXPAND4\+\_\+256}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga1212f78228dea72d1786e2cf1c4ff689}{EXPAND4\+\_\+256}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga1212f78228dea72d1786e2cf1c4ff689}{EXPAND4\+\_\+256}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga1212f78228dea72d1786e2cf1c4ff689}{EXPAND4\+\_\+256}}(arg))))
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga1212f78228dea72d1786e2cf1c4ff689}{EXPAND4\+\_\+256}}(arg)~arg
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga1e351b1ddba9802277b7e05bb86ea88d}{FOR\+\_\+\+EACH\+\_\+256}}(macro, ...)~  \+\_\+\+\_\+\+VA\+\_\+\+OPT\+\_\+\+\_\+(\mbox{\hyperlink{group__cppmodule2__cppextended_gaefd2f4dcab9d82c3eb6334aaca464d2f}{EXPAND\+\_\+256}}(\mbox{\hyperlink{group__cppmodule2__cppextended_gac025142d9c4e929c84327c750b5e7b7b}{FOR\+\_\+\+EACH\+\_\+\+HELPER\+\_\+256}}(macro, \+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+)))
+\begin{DoxyCompactList}\small\item\em Expands {\bfseries{VA\+\_\+\+ARGS}} into a functional macro with a limit of 342 times. (EXPAND4 gets called 256 times, but the intermediary macros cause rescan as well) Source\+: Recursive macros with C++20 {\bfseries{VA\+\_\+\+OPT}} by David Mazières \href{https://www.scs.stanford.edu/~dm/blog/va-opt.html}{\texttt{ https\+://www.\+scs.\+stanford.\+edu/\texorpdfstring{$\sim$}{\string~}dm/blog/va-\/opt.\+html}}. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_gac025142d9c4e929c84327c750b5e7b7b}{FOR\+\_\+\+EACH\+\_\+\+HELPER\+\_\+256}}(macro,  a1, ...)~  macro(a1) \+\_\+\+\_\+\+VA\+\_\+\+OPT\+\_\+\+\_\+(\mbox{\hyperlink{group__cppmodule2__cppextended_ga8a1cddafcee313b1b52041ceb02aa119}{FOR\+\_\+\+EACH\+\_\+\+AGAIN\+\_\+256}} \mbox{\hyperlink{group__cppmodule2__cppextended_gaf2374f58b1986207bc85a415a0abfa3b}{PARENS\+\_\+256}}(macro, \+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+))
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga8a1cddafcee313b1b52041ceb02aa119}{FOR\+\_\+\+EACH\+\_\+\+AGAIN\+\_\+256}}()~\mbox{\hyperlink{group__cppmodule2__cppextended_gac025142d9c4e929c84327c750b5e7b7b}{FOR\+\_\+\+EACH\+\_\+\+HELPER\+\_\+256}}
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga435bbba1bb9d056278824abff4eedf1a}{PARENS\+\_\+1024}}~()
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga051de26f4a8f54fa7d0e89e4620dbf07}{EXPAND\+\_\+1024}}(arg)~  \mbox{\hyperlink{group__cppmodule2__cppextended_ga22abaeca7e1a2e0f53e15b6c59054530}{EXPAND1\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga22abaeca7e1a2e0f53e15b6c59054530}{EXPAND1\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga22abaeca7e1a2e0f53e15b6c59054530}{EXPAND1\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga22abaeca7e1a2e0f53e15b6c59054530}{EXPAND1\+\_\+1024}}(arg))))
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga22abaeca7e1a2e0f53e15b6c59054530}{EXPAND1\+\_\+1024}}(arg)~  \mbox{\hyperlink{group__cppmodule2__cppextended_gac132f33529f28f025b114f4e6dade96b}{EXPAND2\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_gac132f33529f28f025b114f4e6dade96b}{EXPAND2\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_gac132f33529f28f025b114f4e6dade96b}{EXPAND2\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_gac132f33529f28f025b114f4e6dade96b}{EXPAND2\+\_\+1024}}(arg))))
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_gac132f33529f28f025b114f4e6dade96b}{EXPAND2\+\_\+1024}}(arg)~  \mbox{\hyperlink{group__cppmodule2__cppextended_ga294ddcf54ccabf55eed9b2da19bb8ed2}{EXPAND3\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga294ddcf54ccabf55eed9b2da19bb8ed2}{EXPAND3\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga294ddcf54ccabf55eed9b2da19bb8ed2}{EXPAND3\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga294ddcf54ccabf55eed9b2da19bb8ed2}{EXPAND3\+\_\+1024}}(arg))))
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga294ddcf54ccabf55eed9b2da19bb8ed2}{EXPAND3\+\_\+1024}}(arg)~  \mbox{\hyperlink{group__cppmodule2__cppextended_ga7236127580e93235c6f1f75fd779d46f}{EXPAND4\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga7236127580e93235c6f1f75fd779d46f}{EXPAND4\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga7236127580e93235c6f1f75fd779d46f}{EXPAND4\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga7236127580e93235c6f1f75fd779d46f}{EXPAND4\+\_\+1024}}(arg))))
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga7236127580e93235c6f1f75fd779d46f}{EXPAND4\+\_\+1024}}(arg)~  \mbox{\hyperlink{group__cppmodule2__cppextended_ga36b8eec3675efa2c95c1534769f628cd}{EXPAND5\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga36b8eec3675efa2c95c1534769f628cd}{EXPAND5\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga36b8eec3675efa2c95c1534769f628cd}{EXPAND5\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga36b8eec3675efa2c95c1534769f628cd}{EXPAND5\+\_\+1024}}(arg))))
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga36b8eec3675efa2c95c1534769f628cd}{EXPAND5\+\_\+1024}}(arg)~arg
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga452793c867d5f0034e107f8eb81dcc43}{FOR\+\_\+\+EACH\+\_\+1024}}(macro, ...)~  \+\_\+\+\_\+\+VA\+\_\+\+OPT\+\_\+\+\_\+(\mbox{\hyperlink{group__cppmodule2__cppextended_ga051de26f4a8f54fa7d0e89e4620dbf07}{EXPAND\+\_\+1024}}(\mbox{\hyperlink{group__cppmodule2__cppextended_ga435e980d2458f7f47b06e33d926c910c}{FOR\+\_\+\+EACH\+\_\+\+HELPER\+\_\+1024}}(macro, \+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+)))
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_ga435e980d2458f7f47b06e33d926c910c}{FOR\+\_\+\+EACH\+\_\+\+HELPER\+\_\+1024}}(macro,  a1, ...)~  macro(a1) \+\_\+\+\_\+\+VA\+\_\+\+OPT\+\_\+\+\_\+(\mbox{\hyperlink{group__cppmodule2__cppextended_gab6abe4477c74e8ef6c473234be118bed}{FOR\+\_\+\+EACH\+\_\+\+AGAIN\+\_\+1024}} \mbox{\hyperlink{group__cppmodule2__cppextended_ga435bbba1bb9d056278824abff4eedf1a}{PARENS\+\_\+1024}}(macro, \+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+))
+\item 
+\#define \mbox{\hyperlink{group__cppmodule2__cppextended_gab6abe4477c74e8ef6c473234be118bed}{FOR\+\_\+\+EACH\+\_\+\+AGAIN\+\_\+1024}}()~\mbox{\hyperlink{group__cppmodule2__cppextended_ga435e980d2458f7f47b06e33d926c910c}{FOR\+\_\+\+EACH\+\_\+\+HELPER\+\_\+1024}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Project Wide Macro Definitions. 
+
+This file contains all the macro definitions for cxx. All other cxx headers should include this file. 
+
+Definition in file \mbox{\hyperlink{macrodef_8h_source}{macrodef.\+h}}.
+
