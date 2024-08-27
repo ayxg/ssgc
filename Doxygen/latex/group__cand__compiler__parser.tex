@@ -1,0 +1,61 @@
+\doxysubsection{Parser}
+\hypertarget{group__cand__compiler__parser}{}\label{group__cand__compiler__parser}\index{Parser@{Parser}}
+
+
+Performs a syntatical analysis. Turns an array of tokens into an abstract syntax tree.  
+
+
+\doxysubsubsubsection*{Topics}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group__cand__compiler__parser__parse}{Internal parsing methods}}
+\begin{DoxyCompactList}\small\item\em LL Recursive Parsing Methods. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group__cand__compiler__parser__closure}{Token Closure}}
+\begin{DoxyCompactList}\small\item\em \doxylink{classcaoco_1_1_closure}{Closure} and \doxylink{classcaoco_1_1_closure_buffer}{Closure\+Buffer} classes for shift reduction parsing. Used in primary expression parsing method. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group__cand__compiler__parser__cursor}{Token Cursor}}
+\begin{DoxyCompactList}\small\item\em Iterator-\/like class with special methods for tokens/ast nodes. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group__cand__compiler__parser__scope}{Token Scope}}
+\begin{DoxyCompactList}\small\item\em \doxylink{classcaoco_1_1_tk_scope}{Tk\+Scope} is a utility object used to determine the start and end of a scope. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Files}
+\begin{DoxyCompactItemize}
+\item 
+file \mbox{\hyperlink{caoco__parser_8h}{caoco\+\_\+parser.\+h}}
+\begin{DoxyCompactList}\small\item\em C\& Parser. \end{DoxyCompactList}\item 
+file \mbox{\hyperlink{caoco__token__closure_8h}{caoco\+\_\+token\+\_\+closure.\+h}}
+\begin{DoxyCompactList}\small\item\em Closure and Closure\+Buffer classes for shift reduction parsing. \end{DoxyCompactList}\item 
+file \mbox{\hyperlink{caoco__token__cursor_8h}{caoco\+\_\+token\+\_\+cursor.\+h}}
+\begin{DoxyCompactList}\small\item\em Iterator-\/like class with special methods for tokens/ast nodes. \end{DoxyCompactList}\item 
+file \mbox{\hyperlink{caoco__token__scope_8h}{caoco\+\_\+token\+\_\+scope.\+h}}
+\begin{DoxyCompactList}\small\item\em Tk\+Scope is a utility object used to determine the start and end of a scope. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecaoco}{caoco}}
+\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group__cand__compiler__parser_ga58fdd4e02a584cd46d70613da1b60cf0}{CPP\+\_\+\+LOC}}~std\+::source\+\_\+location\+::current()
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Performs a syntatical analysis. Turns an array of tokens into an abstract syntax tree. 
+
+
+
+\doxysubsubsection{Macro Definition Documentation}
+\Hypertarget{group__cand__compiler__parser_ga58fdd4e02a584cd46d70613da1b60cf0}\index{Parser@{Parser}!CPP\_LOC@{CPP\_LOC}}
+\index{CPP\_LOC@{CPP\_LOC}!Parser@{Parser}}
+\doxysubsubsubsection{\texorpdfstring{CPP\_LOC}{CPP\_LOC}}
+{\footnotesize\ttfamily \label{group__cand__compiler__parser_ga58fdd4e02a584cd46d70613da1b60cf0} 
+\#define CPP\+\_\+\+LOC~std\+::source\+\_\+location\+::current()}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00027}{27}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\input{group__cand__compiler__parser__parse}
+\input{group__cand__compiler__parser__closure}
+\input{group__cand__compiler__parser__cursor}
+\input{group__cand__compiler__parser__scope}

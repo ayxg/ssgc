@@ -1,50 +1,50 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the GNU Affero General Public License, Version 3.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_token_closure.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_compiler_parser
+/// @brief Closure and ClosureBuffer classes for shift reduction parsing.
+/// @see caoco::parser::ExprParser
+///////////////////////////////////////////////////////////////////////////////
+
 #ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_CLOSURE_H
 #define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_CLOSURE_H
-//---------------------------------------------------------------------------//
-// Brief: Closure and ClosureBuffer classes for shift reduction parsing.
-//---------------------------------------------------------------------------//
 #include "cppsextended.h"
 // Includes:
 #include "caoco_grammar.h"
-//---------------------------------------------------------------------------//
 
 namespace caoco {
+/// @defgroup cand_compiler_parser_closure Token Closure
+/// @ingroup cand_compiler_parser
+/// Closure and ClosureBuffer classes for shift reduction parsing. Used in
+/// primary expression parsing method.
+/// @see caoco::parser::ExprParser
+/// @{
+
 class Closure;
 using TkList = std::list<Tk>;
 using TkListIter = TkList::iterator;
 using CosureList = std::list<Closure>;
 using ClosureListIter = CosureList::iterator;
 
-//---------------------------------------------------------//
-// Class:{Closure}
-// Brief:{
-//  A closure is a range of tokens representing a singular ast node.
-//  All tokens from front to back are a single ast node with no children.
-//  When a closure is a single token, the front and back are the same.
-//  Example: 1 + 2 -> Closure #2 is +, •+ is the front and +• is the back.
-//  Example: 1(abcd) + 2 -> Closure #2 is (abcd), •(abcd) is the front
-//  and (abcd)• is the back.
-// }
-//---------------------------------------------------------//
+///  A closure is a range of tokens representing a singular ast node.
+/// 
+///  All tokens from front to back are a single ast node with no children.
+///  When a closure is a single token, the front and back are the same.
+///  Example: 1 + 2 -> Closure #2 is +, •+ is the front and +• is the back.
+///  Example: 1(abcd) + 2 -> Closure #2 is (abcd), •(abcd) is the front
+///  and (abcd)• is the back.
 class Closure {
  public:
   TkListIter Front() const { return front_; }
   TkListIter Back() const { return back_; }
 
-  // Operation of the front token. ( [ { are postfix operators.
+  /// Operation of the front token. ( [ { are postfix operators.
   eOperation Operation() const {
     // Special case for (, [, {, and postfix operators.
     if (front_->TypeIs(eTk::LParen) || front_->TypeIs(eTk::LBrace) ||
@@ -55,7 +55,7 @@ class Closure {
     }
   }
 
-  // Priority of the front token. ( [ { are postfix priority.
+  /// Priority of the front token. ( [ { are postfix priority.
   ePriority Priority() const {
     // Special case for (, [, {, are postfix priority.
     if (front_->TypeIs(eTk::LParen) || front_->TypeIs(eTk::LBrace) ||
@@ -66,7 +66,7 @@ class Closure {
     }
   }
 
-  // Associativity of the front token.
+  /// Associativity of the front token.
   eAssoc Assoc() const { return front_->Assoc(); }
 
  public:
@@ -77,16 +77,9 @@ class Closure {
   TkListIter front_;
   TkListIter back_;
 };
-//---------------------------------------------------------//
-// EndClass:{Closure}
-//---------------------------------------------------------//
 
-//---------------------------------------------------------//
-// Class:{ClosureBuffer}
-// Brief:{
-//  Container for a list of closures referencing a token stream.
-// }
-//---------------------------------------------------------//
+
+/// Container for a list of closures referencing a token stream.
 class ClosureBuffer {
  public:  // Closure Operations
   void PushFrontClosure(TkListIter front) {
@@ -107,41 +100,41 @@ class ClosureBuffer {
     closures_.remove_if(std::move(condition));
   }
 
-  // Returns the size of the internal closure list minus the sentinel begin.
+  /// Returns the size of the internal closure list minus the sentinel begin.
   std::size_t ClosureCount() const { return closures_.size() - 1; }
 
-  // Returns iter to the last closure.(One before the end).
+  /// Returns iter to the last closure.(One before the end).
   ClosureListIter LastClosure() { return std::prev(closures_.end()); }
 
-  // Returns the token iterator at the front of the last closure.
+  /// Returns the token iterator at the front of the last closure.
   TkListIter LastClosureFront() { return closures_.back().Front(); }
 
-  // Returns the token iterator at the back of the last closure.
+  /// Returns the token iterator at the back of the last closure.
   TkListIter LastClosureBack() { return closures_.back().Back(); }
 
-  // Search from the end of the closure list until first occurence.
+  /// Search from the end of the closure list until first occurence.
   ClosureListIter FindClosureReverse(std::function<bool(Closure&)>&& condition);
 
-  // Search from the end of the closure list for repeated occurences.
+  /// Search from the end of the closure list for repeated occurences.
   std::vector<ClosureListIter> FindClosureReverseConsecutive(
       std::function<bool(ClosureListIter, ClosureListIter)>&& condition);
 
-  // Search from the end of the closure list for repeated occurences
-  // ignoring certain elements based on ignore_condition.
+  /// Search from the end of the closure list for repeated occurences
+  /// ignoring certain elements based on ignore_condition.
   std::vector<ClosureListIter> FindClosureReverseConsecutiveAndIgnore(
       std::function<bool(ClosureListIter, ClosureListIter)>&& condition,
       std::function<bool(ClosureListIter)>&& ignore_condition);
 
  public:  // Token stream operations
-  // Insert token before the front of the specified closure in the token stream.
-  // Closure must be retrieved from this ClosureBuffer instance.
+  /// Insert token before the front of the specified closure in the token stream.
+  /// Closure must be retrieved from this ClosureBuffer instance.
   void StreamInsertBeforeClosure(ClosureListIter closure_it, Tk token);
 
-  // Insert token after the back of the specified closure in the token stream.
-  // Closure must be retrieved from this ClosureBuffer instance.
+  /// Insert token after the back of the specified closure in the token stream.
+  /// Closure must be retrieved from this ClosureBuffer instance.
   void StreamInsertAfterClosure(ClosureListIter closure_it, Tk token);
 
-  // Get the last pushed token in the token stream.
+  /// Get the last pushed token in the token stream.
   TkListIter LastStreamed() { return std::prev(token_stream_.end()); }
 
   void StreamPushBack(Tk token) { token_stream_.push_back(token); }
@@ -163,14 +156,13 @@ class ClosureBuffer {
   CosureList closures_;
   ClosureListIter sentinel_begin_closure_;
 };
-//---------------------------------------------------------//
-// EndClass:{ClosureBuffer}
-//---------------------------------------------------------//
 
+/// Sentinel beginning of closure buffer.
+/// HAS to be set or else begin is the end before and after first insertion.
 const Tk ClosureBuffer::kSentinelBegin = {eTk::NONE,
                                           "ClosureBuffer sentinel begin."};
 
-// Search from the end of the closure list until first occurence.
+/// Search from the end of the closure list until first occurrence.
 ClosureListIter ClosureBuffer::FindClosureReverse(
     std::function<bool(Closure&)>&& condition) {
   return std::find_if(closures_.rbegin(), closures_.rend(), condition).base();
@@ -252,10 +244,17 @@ TkVector ClosureBuffer::StreamToVector() {
   token_stream_.push_front(kSentinelBegin);
   return vec;
 }
+/// @} // end of cand_compiler_parser_closure
 
 }  // namespace caoco
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_CLOSURE_H
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the GNU Affero General Public License, Version 3.
@@ -269,15 +268,4 @@ TkVector ClosureBuffer::StreamToVector() {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_token_closure.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_CLOSURE_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

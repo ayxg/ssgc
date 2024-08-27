@@ -29,7 +29,7 @@ vector<T> MergeVectors(const vector<T>& lhs,
 
 namespace caoco {
 
-namespace ast_view {
+namespace irast {
 
 using cxx::Expected;
 static constexpr inline string_view kGlobalNamespaceName = "__global__";
@@ -139,6 +139,7 @@ struct OpIndex;    // [] operator.
 struct OpListing;  // {...} listing operator.
 
 // Language Operators
+struct LangFnAs;
 struct LangFnIn;
 struct LangFnAs;
 struct LangFnCin;
@@ -488,7 +489,7 @@ struct VarDecl {
   //    of the class in which it appears.
   // 3. At the local function level.
   // 4 .Inside a loop which is part of a function or a sub-loop of another loop.
-  enum eVarDeclCategory { kProgramVar, kClassMember, kFunctional, kIterative };
+  enum eVarDeclCategory { kProgramVar, kClassMember, kFunctional, kIterative } VarDeclCategory;
 
   size_t eval_order;
   eDeclVisibility visibility;
@@ -553,6 +554,7 @@ struct TypeList {};
 struct Program {
   NamespaceDecl global_ns;
   FnDecl main_fn;
+  std::vector<ClassDecl*> defined_types;
   static Program Create();
   static Expected<Program> FromAst(const Ast& ast);
 };
@@ -1224,7 +1226,7 @@ Expected<ClassDecl*> ClassDecl::FromAst(const Ast& ast, Program& program,
   for (const auto& stmt : ast.Children()) {
     if (not stmt.IsPragmatic()) {
       return Expected<ClassDecl*>::Failure(
-          "All statements must be pragmatic at the class level.");
+          "All statements must be declarative at the class level.");
     }
     if (stmt.TypeIs(eAst::VariableDeclaration) ||
         stmt.TypeIs(eAst::VariableDefinition)) {

@@ -1,24 +1,22 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the GNU Affero General Public License, Version 3.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_char_traits.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_compiler_data
+/// @brief ASCII Character Traits in the context of the C& compiler.
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cand_compiler_data
+/// @{
 #ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_CHAR_TRAITS_H
 #define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_CHAR_TRAITS_H
-//---------------------------------------------------------------------------//
-// Brief: brief
-//---------------------------------------------------------------------------//
 // Includes:
 #include "cppsextended.h"
-//---------------------------------------------------------------------------//
 
 namespace caoco {
 namespace cand_char {
@@ -255,9 +253,14 @@ static constexpr inline bool IsCoreControl(char c) {
       break;
   }
 }
+static constexpr inline bool IsValid(char c) {
+  // One of the 128 ASCII characters
+  if ((c >= 0) && c <= 127) return true;
+  return false;
+}
 
 // Overloads for iterators (use with caution, bounds checking is not performed)
-// - used in the lexer
+
 static constexpr inline bool IsAlpha(std::vector<char>::const_iterator c) {
   return IsAlpha(*c);
 }
@@ -313,9 +316,18 @@ static constexpr inline bool IsCoreControl(
     std::vector<char>::const_iterator c) {
   return IsCoreControl(*c);
 }
+
 }  // namespace cand_char
 }  // namespace caoco
-//---------------------------------------------------------------------------//
+
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_CHAR_TRAITS_H
+/// @} // end of cand_compiler_data
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the GNU Affero General Public License, Version 3.
@@ -329,15 +341,4 @@ static constexpr inline bool IsCoreControl(
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_char_traits.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_CHAR_TRAITS_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

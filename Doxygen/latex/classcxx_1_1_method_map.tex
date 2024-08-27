@@ -1,0 +1,153 @@
+\doxysection{cxx\+::Method\+Map Class Reference}
+\hypertarget{classcxx_1_1_method_map}{}\label{classcxx_1_1_method_map}\index{cxx::MethodMap@{cxx::MethodMap}}
+
+
+{\ttfamily \#include $<$hetero\+\_\+method\+\_\+map.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcxx_1_1_method_map_a93e4938195b961e362da2c2bc444a90b}{Method\+Map}} ()=default
+\item 
+\mbox{\hyperlink{classcxx_1_1_method_map_a1dcf255ac082270f3d0b303050b89efe}{Method\+Map}} (std\+::initializer\+\_\+list$<$ std\+::pair$<$ std\+::size\+\_\+t, \mbox{\hyperlink{classcxx_1_1_method_map_a2b249bd8bf7c6aaac9c118e817bab032}{void\+\_\+func\+\_\+t}} $>$ $>$ init\+\_\+list)
+\item 
+\mbox{\hyperlink{classcxx_1_1_method_map_af14dce1a6da9d873e0ed11272e94c2c5}{Method\+Map}} (const \mbox{\hyperlink{classcxx_1_1_method_map}{Method\+Map}} \&)=delete
+\item 
+\mbox{\hyperlink{classcxx_1_1_method_map}{Method\+Map}} \& \mbox{\hyperlink{classcxx_1_1_method_map_a863ab0fb5221e2f63e3f9fed1d327f56}{operator=}} (const \mbox{\hyperlink{classcxx_1_1_method_map}{Method\+Map}} \&)=delete
+\item 
+\mbox{\hyperlink{classcxx_1_1_method_map_a9b4f3c8d2caaacb61d8ee6b1e3f7921d}{Method\+Map}} (\mbox{\hyperlink{classcxx_1_1_method_map}{Method\+Map}} \&\&)=default
+\item 
+\mbox{\hyperlink{classcxx_1_1_method_map}{Method\+Map}} \& \mbox{\hyperlink{classcxx_1_1_method_map_ab7029f582c77ba84c07467b6a84dce6c}{operator=}} (\mbox{\hyperlink{classcxx_1_1_method_map}{Method\+Map}} \&\&)=default
+\item 
+{\footnotesize template$<$typename T $>$ }\\constexpr void \mbox{\hyperlink{classcxx_1_1_method_map_aaf44d2856d961a8848292d65752d7fbc}{insert}} (std\+::size\+\_\+t func\+\_\+index, T func)
+\item 
+std\+::type\+\_\+index \mbox{\hyperlink{classcxx_1_1_method_map_a7399940cb502135f8663b20ef4d8e941}{get\+Type\+Index}} (std\+::size\+\_\+t func\+\_\+index)
+\item 
+{\footnotesize template$<$typename T , typename... Args$>$ }\\T \mbox{\hyperlink{classcxx_1_1_method_map_ac1010aa142f5c2e147b5a948e6b228b3}{search\+And\+Call}} (std\+::size\+\_\+t func\+\_\+index, Args \&\&... args)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef void(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcxx_1_1_method_map_a2b249bd8bf7c6aaac9c118e817bab032}{void\+\_\+func\+\_\+t}}) (void)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::size\+\_\+t, std\+::pair$<$ \mbox{\hyperlink{classcxx_1_1_method_map_a2b249bd8bf7c6aaac9c118e817bab032}{void\+\_\+func\+\_\+t}}, std\+::type\+\_\+index $>$ $>$ \mbox{\hyperlink{classcxx_1_1_method_map_a8b5a36f99f68a5f4f8c96bd5cfa4153f}{func\+\_\+map\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{hetero__method__map_8h_source_l00011}{11}} of file \mbox{\hyperlink{hetero__method__map_8h_source}{hetero\+\_\+method\+\_\+map.\+h}}.
+
+
+
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{classcxx_1_1_method_map_a2b249bd8bf7c6aaac9c118e817bab032}\index{cxx::MethodMap@{cxx::MethodMap}!void\_func\_t@{void\_func\_t}}
+\index{void\_func\_t@{void\_func\_t}!cxx::MethodMap@{cxx::MethodMap}}
+\doxysubsubsection{\texorpdfstring{void\_func\_t}{void\_func\_t}}
+{\footnotesize\ttfamily \label{classcxx_1_1_method_map_a2b249bd8bf7c6aaac9c118e817bab032} 
+typedef void(\texorpdfstring{$\ast$}{*} cxx\+::\+Method\+Map\+::void\+\_\+func\+\_\+t) (void)\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{hetero__method__map_8h_source_l00012}{12}} of file \mbox{\hyperlink{hetero__method__map_8h_source}{hetero\+\_\+method\+\_\+map.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcxx_1_1_method_map_a93e4938195b961e362da2c2bc444a90b}\index{cxx::MethodMap@{cxx::MethodMap}!MethodMap@{MethodMap}}
+\index{MethodMap@{MethodMap}!cxx::MethodMap@{cxx::MethodMap}}
+\doxysubsubsection{\texorpdfstring{MethodMap()}{MethodMap()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{classcxx_1_1_method_map_a93e4938195b961e362da2c2bc444a90b} 
+cxx\+::\+Method\+Map\+::\+Method\+Map (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{classcxx_1_1_method_map_a1dcf255ac082270f3d0b303050b89efe}\index{cxx::MethodMap@{cxx::MethodMap}!MethodMap@{MethodMap}}
+\index{MethodMap@{MethodMap}!cxx::MethodMap@{cxx::MethodMap}}
+\doxysubsubsection{\texorpdfstring{MethodMap()}{MethodMap()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{classcxx_1_1_method_map_a1dcf255ac082270f3d0b303050b89efe} 
+cxx\+::\+Method\+Map\+::\+Method\+Map (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ std\+::pair$<$ std\+::size\+\_\+t, \mbox{\hyperlink{classcxx_1_1_method_map_a2b249bd8bf7c6aaac9c118e817bab032}{void\+\_\+func\+\_\+t}} $>$ $>$}]{init\+\_\+list}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{hetero__method__map_8h_source_l00019}{19}} of file \mbox{\hyperlink{hetero__method__map_8h_source}{hetero\+\_\+method\+\_\+map.\+h}}.
+
+\Hypertarget{classcxx_1_1_method_map_af14dce1a6da9d873e0ed11272e94c2c5}\index{cxx::MethodMap@{cxx::MethodMap}!MethodMap@{MethodMap}}
+\index{MethodMap@{MethodMap}!cxx::MethodMap@{cxx::MethodMap}}
+\doxysubsubsection{\texorpdfstring{MethodMap()}{MethodMap()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{classcxx_1_1_method_map_af14dce1a6da9d873e0ed11272e94c2c5} 
+cxx\+::\+Method\+Map\+::\+Method\+Map (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcxx_1_1_method_map}{Method\+Map}} \&}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+\Hypertarget{classcxx_1_1_method_map_a9b4f3c8d2caaacb61d8ee6b1e3f7921d}\index{cxx::MethodMap@{cxx::MethodMap}!MethodMap@{MethodMap}}
+\index{MethodMap@{MethodMap}!cxx::MethodMap@{cxx::MethodMap}}
+\doxysubsubsection{\texorpdfstring{MethodMap()}{MethodMap()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{classcxx_1_1_method_map_a9b4f3c8d2caaacb61d8ee6b1e3f7921d} 
+cxx\+::\+Method\+Map\+::\+Method\+Map (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcxx_1_1_method_map}{Method\+Map}} \&\&}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcxx_1_1_method_map_a7399940cb502135f8663b20ef4d8e941}\index{cxx::MethodMap@{cxx::MethodMap}!getTypeIndex@{getTypeIndex}}
+\index{getTypeIndex@{getTypeIndex}!cxx::MethodMap@{cxx::MethodMap}}
+\doxysubsubsection{\texorpdfstring{getTypeIndex()}{getTypeIndex()}}
+{\footnotesize\ttfamily \label{classcxx_1_1_method_map_a7399940cb502135f8663b20ef4d8e941} 
+std\+::type\+\_\+index cxx\+::\+Method\+Map\+::get\+Type\+Index (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{func\+\_\+index}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{hetero__method__map_8h_source_l00045}{45}} of file \mbox{\hyperlink{hetero__method__map_8h_source}{hetero\+\_\+method\+\_\+map.\+h}}.
+
+\Hypertarget{classcxx_1_1_method_map_aaf44d2856d961a8848292d65752d7fbc}\index{cxx::MethodMap@{cxx::MethodMap}!insert@{insert}}
+\index{insert@{insert}!cxx::MethodMap@{cxx::MethodMap}}
+\doxysubsubsection{\texorpdfstring{insert()}{insert()}}
+{\footnotesize\ttfamily \label{classcxx_1_1_method_map_aaf44d2856d961a8848292d65752d7fbc} 
+template$<$typename T $>$ \\
+void cxx\+::\+Method\+Map\+::insert (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{func\+\_\+index}{, }\item[{T}]{func}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{hetero__method__map_8h_source_l00037}{37}} of file \mbox{\hyperlink{hetero__method__map_8h_source}{hetero\+\_\+method\+\_\+map.\+h}}.
+
+\Hypertarget{classcxx_1_1_method_map_a863ab0fb5221e2f63e3f9fed1d327f56}\index{cxx::MethodMap@{cxx::MethodMap}!operator=@{operator=}}
+\index{operator=@{operator=}!cxx::MethodMap@{cxx::MethodMap}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1_method_map_a863ab0fb5221e2f63e3f9fed1d327f56} 
+\mbox{\hyperlink{classcxx_1_1_method_map}{Method\+Map}} \& cxx\+::\+Method\+Map\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcxx_1_1_method_map}{Method\+Map}} \&}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+\Hypertarget{classcxx_1_1_method_map_ab7029f582c77ba84c07467b6a84dce6c}\index{cxx::MethodMap@{cxx::MethodMap}!operator=@{operator=}}
+\index{operator=@{operator=}!cxx::MethodMap@{cxx::MethodMap}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcxx_1_1_method_map_ab7029f582c77ba84c07467b6a84dce6c} 
+\mbox{\hyperlink{classcxx_1_1_method_map}{Method\+Map}} \& cxx\+::\+Method\+Map\+::operator= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcxx_1_1_method_map}{Method\+Map}} \&\&}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{classcxx_1_1_method_map_ac1010aa142f5c2e147b5a948e6b228b3}\index{cxx::MethodMap@{cxx::MethodMap}!searchAndCall@{searchAndCall}}
+\index{searchAndCall@{searchAndCall}!cxx::MethodMap@{cxx::MethodMap}}
+\doxysubsubsection{\texorpdfstring{searchAndCall()}{searchAndCall()}}
+{\footnotesize\ttfamily \label{classcxx_1_1_method_map_ac1010aa142f5c2e147b5a948e6b228b3} 
+template$<$typename T , typename... Args$>$ \\
+T cxx\+::\+Method\+Map\+::search\+And\+Call (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{func\+\_\+index}{, }\item[{Args \&\&...}]{args}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{hetero__method__map_8h_source_l00055}{55}} of file \mbox{\hyperlink{hetero__method__map_8h_source}{hetero\+\_\+method\+\_\+map.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcxx_1_1_method_map_a8b5a36f99f68a5f4f8c96bd5cfa4153f}\index{cxx::MethodMap@{cxx::MethodMap}!func\_map\_@{func\_map\_}}
+\index{func\_map\_@{func\_map\_}!cxx::MethodMap@{cxx::MethodMap}}
+\doxysubsubsection{\texorpdfstring{func\_map\_}{func\_map\_}}
+{\footnotesize\ttfamily \label{classcxx_1_1_method_map_a8b5a36f99f68a5f4f8c96bd5cfa4153f} 
+std\+::map$<$std\+::size\+\_\+t, std\+::pair$<$\mbox{\hyperlink{classcxx_1_1_method_map_a2b249bd8bf7c6aaac9c118e817bab032}{void\+\_\+func\+\_\+t}}, std\+::type\+\_\+index$>$ $>$ cxx\+::\+Method\+Map\+::func\+\_\+map\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{hetero__method__map_8h_source_l00014}{14}} of file \mbox{\hyperlink{hetero__method__map_8h_source}{hetero\+\_\+method\+\_\+map.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/submodules/extended-\/cpp-\/standard/\mbox{\hyperlink{hetero__method__map_8h}{hetero\+\_\+method\+\_\+map.\+h}}\end{DoxyCompactItemize}

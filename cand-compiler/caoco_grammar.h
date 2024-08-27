@@ -1,43 +1,40 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the GNU Affero General Public License, Version 3.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_grammar.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_compiler_data
+/// @brief Describes the grammar of the C& programming language.
+///        Punctuation, keywords, operators, errors and other syntax elements.
+/// 
+/// See compiler reference manual for details.
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cand_compiler_data
+/// @{
 #ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_GRAMMAR_H
 #define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_GRAMMAR_H
-//---------------------------------------------------------------------------//
-// Brief: Describes the grammar of the C& programming language.
-//        Punctuation, keywords, operators, errors and other syntax elements.
-// Details: See compiler reference manual for details.
-//---------------------------------------------------------------------------//
 // Includes:
 #include "cppsextended.h"
-//---------------------------------------------------------------------------//
 
-//---------------------------------------------------------------------------//
-// Namespace:{caoco}
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @namespace caoco
+///////////////////////////////////////////////////////////////////////////////
 namespace caoco {
-//---------------------------------------------------------------------------//
 
-//-----------------------------------------------------------------------//
-// Namespace:{grammar}
-// Brief:{ Constant core building blocks of the C& language syntax. }
-//-----------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////
+/// Constant building blocks of the C& language syntax. 
+///////////////////////////////////////////////////////////////////////////
 namespace grammar {
-//-----------------------------------------------------------------------//
 
-//-------------------------------------------------------------------//
-// Section:{C& Valid Source Symbol Characters}
-//-------------------------------------------------------------------//
+/// @defgroup cand_compiler_data_valid_chars C& Valid Source Symbol Characters
+/// @ingroup cand_compiler_data
+/// @{
+
 #define DEF_GRAMMAR_CHAR_ELEMENT(n, v) \
   static constexpr inline auto k##n##Char = v;
 
@@ -92,13 +89,13 @@ static constexpr inline char kSingleQuoteChar = '\'';
 
 #undef _GGCE
 #undef DEF_GRAMMAR_CHAR_ELEMENT
-//-------------------------------------------------------------------//
-// EndSection:{C& Valid Source Symbol Characters}
-//-------------------------------------------------------------------//
+/// @} // end of cand_compiler_data_valid_chars
 
-//-------------------------------------------------------------------//
-// Section:{C& Grammar Elements}
-//-------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////
+/// @defgroup cand_compiler_data_grammar_elements Grammar Elements
+/// @ingroup cand_compiler_data
+/// @{
+///////////////////////////////////////////////////////////////////////////
 #define DEF_GRAMMAR_ELEMENT(n, v)                               \
   using n = mta::string_constant<[]() consteval { return v; }>; \
   static constexpr inline auto k##n = n::data;                  \
@@ -245,9 +242,8 @@ DEF_GRAMMAR_ELEMENT(LitCstr, "");
 DEF_GRAMMAR_ELEMENT(Ident, "");  // Identifier
 
 #undef DEF_GRAMMAR_ELEMENT
-//-------------------------------------------------------------------//
-// Section:{C& Grammar Elements}
-//-------------------------------------------------------------------//
+
+
 #define COMPILER_UTIL_GRAMMAR_ELEMENTS NONE, INVALID
 
 #define DIRECTIVE_GRAMMAR_ELEMENTS                                     \
@@ -330,14 +326,19 @@ static constexpr inline auto kAll = mta::merge_arrays(
         kLitInt,    kLitUint,    kLitReal,     kLitBool,      kLitChar,
         kLitByte,   kLitCstr,    kIdent});
 
-//-----------------------------------------------------------------------//
-}  // namespace grammar
-//-----------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////
+/// @} // end of cand_compiler_data_grammar_elements
+///////////////////////////////////////////////////////////////////////////
 
-//-----------------------------------------------------------------------//
-// Section:{Compiler Enums}
-// Brief:{Enums used in the lexing and parsing phases of the compiler.}
-//-----------------------------------------------------------------------//
+}  // namespace grammar
+
+///////////////////////////////////////////////////////////////////////////
+/// @defgroup cand_compiler_data_enums Compiler Enums
+/// @ingroup cand_compiler_data
+/// 
+/// Enums used in the lexing and parsing phases of the compiler.
+/// @{
+///////////////////////////////////////////////////////////////////////////
 
 enum class eTk { ALL_GRAMMAR_ELEMENTS };
 
@@ -380,14 +381,19 @@ enum class ePriority : int {
   Max = INT_MAX,
 };
 
-//-----------------------------------------------------------------------//
-// EndSection:{Compiler Enums}
-//-----------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////
+/// @} // end of cand_compiler_data_enums
+///////////////////////////////////////////////////////////////////////////
 
-//-----------------------------------------------------------------------//
-// Section:{Token Traits}
-// Brief:{Various properties of the 'eTk' token type enum.}
-//-----------------------------------------------------------------------//
+
+///////////////////////////////////////////////////////////////////////////
+/// @defgroup cand_compiler_data_token_traits Token Traits
+/// @ingroup cand_compiler_data
+///
+/// Various properties of the 'eTk' token type enum.
+/// @{
+///////////////////////////////////////////////////////////////////////////
+
 constexpr eAst eTkToAstEnum(eTk t);
 
 constexpr eAssoc eTkAssoc(eTk t);
@@ -458,9 +464,9 @@ constexpr bool eAstIsPragmatic(eAst t) {
   return eAstIsModifier(t) || eAstIsDeclarative(t);
 }
 
-//-----------------------------------------------------------------------//
-// Section:{Token Traits Implementation}
-//-----------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////
+// @section Token Traits Implementation
+///////////////////////////////////////////////////////////////////////////
 constexpr eAst eTkToAstEnum(eTk t) {
 #define ETK_TO_AST(n) \
   case eTk::n:        \
@@ -2078,10 +2084,6 @@ constexpr bool eAstIsAPrefixOperator(eAst t) {
   }
 }
 
-//-----------------------------------------------------------------------//
-// EndSection:{Token Traits Implementation}
-//-----------------------------------------------------------------------//
-
 template <eTk TkType>
 struct TkTrait {
   static constexpr eTk type = TkType;
@@ -2113,16 +2115,23 @@ namespace tk_traits {
 using enum eTk;
 static constexpr auto kKeywordTraits = TraitsOf<KEYWORD_GRAMMAR_ELEMENTS>{};
 static constexpr auto kDirectiveTraits = TraitsOf<DIRECTIVE_GRAMMAR_ELEMENTS>{};
+
 }  // namespace tk_traits
-//-----------------------------------------------------------------------//
-// EndSection:{Token Traits}
-//-----------------------------------------------------------------------//
 
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////
+/// @} // end of cand_compiler_data_token_traits
+///////////////////////////////////////////////////////////////////////////
+
 }  // namespace caoco
-//---------------------------------------------------------------------------//
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_GRAMMAR_H
+/// @} // end of cand_compiler_data
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the GNU Affero General Public License, Version 3.
@@ -2136,15 +2145,4 @@ static constexpr auto kDirectiveTraits = TraitsOf<DIRECTIVE_GRAMMAR_ELEMENTS>{};
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_grammar.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_GRAMMAR_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

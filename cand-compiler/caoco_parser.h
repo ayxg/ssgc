@@ -1,21 +1,20 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the GNU Affero General Public License, Version 3.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_parser.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_compiler_parser
+/// @brief C& Parser
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cand_compiler_parser
+/// @{
 #ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_PARSER_H
 #define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_PARSER_H
-//---------------------------------------------------------------------------//
-// Brief:
-//---------------------------------------------------------------------------//
 #include "cppsextended.h"
 // Includes:
 #include "caoco_compiler_error.h"
@@ -24,7 +23,6 @@
 #include "caoco_token_closure.h"
 #include "caoco_token_cursor.h"
 #include "caoco_token_scope.h"
-//---------------------------------------------------------------------------//
 
 #define CPP_LOC std::source_location::current()
 
@@ -54,94 +52,86 @@ static constexpr inline OffsetParseResult Fail(const TkCursor& c,
 //   return ExpectedAst::Failure(error);
 // }
 
-// Shift reduce parser for primary expressions.
+/// Shift reduce parser for primary expressions.
 class ExprParser;
 
-//---------------------------------------------------------------------------//
-// Section:{Internal parsing methods}
-// Brief:{
-// Ordered from the most to least specific. Except ParseTokens which is
-// the main method to call when parsing. The rest are for internal use.
-// Each method is responsible for parsing a specific type of statement or
-// declaration.
-// Each method returns an OffsetParseResult.
-// The result contains the parsed AST node, and the location of the last token
-// parsed. Begin parsing the next statement from this location.
-// The result also contains an error message if the parsing failed.
-// In this case parsing should stop and the error message should be reported.
-// }
-//---------------------------------------------------------------------------//
+/// @defgroup cand_compiler_parser_parse Internal parsing methods
+/// @ingroup cand_compiler_parser
+/// @brief LL Recursive Parsing Methods.
+/// 
+/// Ordered from the most to least specific. Except ParseTokens which is
+/// the main method to call when parsing. The rest are for internal use.
+/// Each method is responsible for parsing a specific type of statement or
+/// declaration.
+/// Each method returns an OffsetParseResult.
+/// The result contains the parsed AST node, and the location of the last token
+/// parsed. Begin parsing the next statement from this location.
+/// The result also contains an error message if the parsing failed.
+/// In this case parsing should stop and the error message should be reported.
+/// @{
 
-//------------------------------------/
-// - Singular operands only, not subexpressions.
-//------------------------------------//
+/// Singular operands only, not subexpressions.
 static OffsetParseResult ParseOperand(TkCursor current);
 
-//------------------------------------//
-// Parse Arguments
-// (<primary_expr?*>,)
-// - Arguments for method calls. Recieves a cursor to the beginning open paren
-// of the arguments.
-//------------------------------------//
+
+/// Parse Arguments (<primary_expr?*>,)
+/// 
+/// - Arguments for method calls. Receives a cursor to the beginning open paren
+/// of the arguments.
 static OffsetParseResult ParseArguments(TkCursor current);
 
-//------------------------------------//
-// Parse Indexing Arguments
-// [<primary_expr?*>,]
-// - Arguments for indexing operator.
-//------------------------------------//
+
+/// Parse Indexing Arguments [<primary_expr?*>,]
+/// 
+/// - Arguments for indexing operator.
 static OffsetParseResult ParseIndexingArguments(TkCursor current);
 
-//------------------------------------//
-// Parse Listing Arguments
-// {<primary_expr?*>,}
-// - Arguments for listing operator.
-//------------------------------------//
+
+/// Parse Listing Arguments {<primary_expr?*>,}
+/// 
+/// - Arguments for listing operator.
 static OffsetParseResult ParseListingArguments(TkCursor current);
 
-//------------------------------------//
-// Parse Primary Statement
-// <primary_expr>;
-// - A single primary expression ending with a semicolon.
-// Primary statement will begin with:
-// - A singular token operand.
-// - A prefix operator.
-// - An open paren which is a subexpression.
-//------------------------------------//
+
+/// Parse Primary Statement <primary_expr>;
+/// 
+/// - A single primary expression ending with a semicolon.
+/// Primary statement will begin with:
+/// - A singular token operand.
+/// - A prefix operator.
+/// - An open paren which is a subexpression.
 static OffsetParseResult ParsePrimaryStatement(TkCursor current);
 
-//------------------------------------//
-// ParseConditionalSubExpression (<primary_expr?*>,)
-// - Handles parsing of conditional arguments to For and While loops.
-// - Format will account for a maximum of 3 arguments.
-// - Format will account for a minimum of 1 argument.
-// - Format will account for (i in collection) syntax.
-//------------------------------------//
+/// ParseConditionalSubExpression (<primary_expr?*>,)
+/// 
+/// - Handles parsing of conditional arguments to For and While loops.
+/// - Format will account for a maximum of 3 arguments.
+/// - Format will account for a minimum of 1 argument.
+/// - Format will account for (i in collection) syntax.
 static OffsetParseResult ParseConditionalSubExpression(TkCursor c);
 
-//------------------------------------//
-// ParsePrimaryPreIdentifier <primary_expr>@
-// - Handles parsing of primary expressions that are followed by an
-// identifier.
-// - Used in declarations
-//------------------------------------//
+
+/// ParsePrimaryPreIdentifier <primary_expr>@
+/// 
+/// - Handles parsing of primary expressions that are followed by an
+/// identifier.
+/// - Used in declarations
 static OffsetParseResult ParsePrimaryPreIdentifier(TkCursor current);
 
-//------------------------------------//
-// ParsePrimaryPostIdentifier <primary_expr>: or <primary_expr>;
-// - Handles parsing of primary expressions that are followed by a colon or
-// semicolon.
-// - Used in declarations, method signatures.
-//------------------------------------//
+/// ParsePrimaryPostIdentifier <primary_expr>: or <primary_expr>;
+/// 
+/// - Handles parsing of primary expressions that are followed by a colon or
+/// semicolon.
+/// - Used in declarations, method signatures.
 static OffsetParseResult ParsePrimaryPostIdentifier(TkCursor current);
 
-//------------------------------------//
-// Parse Modifiers <modifier?*>
-// - Parses a list of keyword modifiers.
-//------------------------------------//
+
+/// Parse Modifiers <modifier?*>
+/// 
+/// - Parses a list of keyword modifiers.
 static OffsetParseResult ParseModifiers(TkCursor current);
 
-// <KwReturn> <ValueExpr?> <Semicolon>
+/// <KwReturn> <ValueExpr?> <Semicolon>
 static OffsetParseResult ParseReturnStmt(TkCursor current);
 static OffsetParseResult ParseMethodParameters(TkCursor current);
 static OffsetParseResult ParseMethodReturnParameters(TkCursor current);
@@ -165,75 +155,70 @@ static OffsetParseResult ParseMethodDecl(TkCursor current);
 static OffsetParseResult ParseClassDecl(TkCursor current);
 static OffsetParseResult ParseProgram(TkCursor current);
 
-//---------------------------------------------------------------------------//
-// EndSection:{sectionspace}
-//---------------------------------------------------------------------------//
+/// @} // end of cand_compiler_parser_parse
 
-//---------------------------------------------------------//
-// Class:{ExprParser}
-// Brief:{
-// Cursor begin and end must be the start and end of the expression.
-// Note this parser does not take the entire source as an argument.
-// Only pass the current scope to be parser.
-// The end of TkCursor may or may not be end of source.
-// This parser does not advance the cursor or return a new start point.
-// }
-//---------------------------------------------------------//
+/// Primary Expression Shift-Reduction Parser
+/// 
+/// Cursor begin and end must be the start and end of the expression.
+/// Note this parser does not take the entire source as an argument.
+/// Only pass the current scope to be parser.
+/// The end of TkCursor may or may not be end of source.
+/// This parser does not advance the cursor or return a new start point.
 class ExprParser {
  public:
   static ExpectedAst Perform(TkCursor c) { return ExprParser().Parse(c); }
   ExpectedAst Parse(TkCursor c);
 
  private:
-  // Set is_first_operator_ to false if currently true, else do nothing.
+  /// Set is_first_operator_ to false if currently true, else do nothing.
   void FirstOperatorSwitch();
   inline void ResolvePrefix();
   inline void ResolvePostfix();
   inline void ResolveBinaryLeftAssoc();
   inline void ResolveBinaryRightAssoc();
   inline void ResolveBinary();
-  // Resolves the last closure based on type,unchecked.
+  /// Resolves the last closure based on type,unchecked.
   inline void ResolveLast();
 
-  // [Action Skip] Push OPERAND to closure output,
-  //    advance head by the number of tokens consumed.
+  /// [Action Skip] Push OPERAND to closure output,
+  ///    advance head by the number of tokens consumed.
   inline cxx::BoolError ActionSkip(TkCursor& c);
 
-  // [Action Store] Push OPERATOR to closure output,
-  //                Push back a new closure from OPERATOR,
-  //                advance head by the number of tokens consumed.
+  /// [Action Store] Push OPERATOR to closure output,
+  ///                Push back a new closure from OPERATOR,
+  ///                advance head by the number of tokens consumed.
   inline cxx::BoolError ActionStore(TkCursor& c);
 
-  // [Action Check] Compares priority of head and last closure.
-  //    If head >= last closure, store head.
-  //    If head < last closure,
-  //        -> resolve all consecutive closures of lower priority.
-  //           Then store.
-  //    If head is at end, resolve all closures. Return.
+  /// [Action Check] Compares priority of head and last closure.
+  ///    If head >= last closure, store head.
+  ///    If head < last closure,
+  ///        -> resolve all consecutive closures of lower priority.
+  ///           Then store.
+  ///    If head is at end, resolve all closures. Return.
   inline cxx::BoolError ActionCheck(TkCursor& c);
 
-  // [Choose Action] Decides which action to take.
-  //                 Main loop of the closure resolver.
-  // Action will be skip , store, or check.
-  // - On first occurence of an operator- a store will be performed.
-  //    All following operators will be checks.
-  // - A skip is performed when an operand is encountered.
-  //    Multi-token operands trigger repeated skips.
-  // - A check is performed when an operator is encountered.
-  // - At the end, always do a check.
+  /// [Choose Action] Decides which action to take.
+  ///                 Main loop of the closure resolver.
+  /// Action will be skip , store, or check.
+  /// - On first occurence of an operator- a store will be performed.
+  ///    All following operators will be checks.
+  /// - A skip is performed when an operand is encountered.
+  ///    Multi-token operands trigger repeated skips.
+  /// - A check is performed when an operator is encountered.
+  /// - At the end, always do a check.
   inline cxx::BoolError ChooseAction(TkCursor& c);
 
   cxx::Expected<std::vector<Tk>> CreateAndResolveClosures(TkCursor c);
 
-  // After the closures are resolved, perform an LL recursive descent parse.
-  // Expect the expression to be fully parenthesized.
+  /// After the closures are resolved, perform an LL recursive descent parse.
+  /// Expect the expression to be fully parenthesized.
   ExpectedAst ParseImpl(TkCursor c);
 
  private:
   enum class eNextExpectedHeadToken { kOperative, kOperator, kNone };
   static const Tk kOpenParenTk;
   static const Tk kCloseParenTk;
-  //   Expected token type on next iteration.
+  /// Expected token type on next iteration.
   eNextExpectedHeadToken next_expected_head_token_ = {
       eNextExpectedHeadToken::kOperative};
   ClosureBuffer closure_buffer_;
@@ -244,9 +229,7 @@ class ExprParser {
 static inline ExpectedAst ParseExpr(const TkCursor& c) {
   return ExprParser::Perform(c);
 }
-//---------------------------------------------------------//
-// EndClass:{ExprParser}
-//---------------------------------------------------------//
+
 }  // namespace parser
 
 namespace parser {
@@ -1045,9 +1028,9 @@ ExpectedAst ExprParser::ParseImpl(TkCursor c) {
   return ExpectedAst::Success(move(out_node));
 }
 
-//---------------------------------------------------------------------------//
-// Section:{Internal parsing methods impl}
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// Internal parsing methods impl
+///////////////////////////////////////////////////////////////////////////////
 
 OffsetParseResult parser::ParseOperand(TkCursor c) {
   using namespace caerr;
@@ -2199,16 +2182,16 @@ OffsetParseResult parser::ParseMethodSignature(TkCursor c) {
     return Ast(MethodSignature, "", param_list_ast, ret_type_ast);
   };
 
-  //----------------------------------------------------------------------------//
+  ///////////////////////////////////////////////////////////////////////////////
   // Colon after identifier -> Implicit void arg, no return.
-  //----------------------------------------------------------------------------//
+  ///////////////////////////////////////////////////////////////////////////////
   if (c.TypeIs(eTk::Colon)) {
     return Success(c, xMake1ParamSigAst(MethodVoid, MethodVoid));
   }
 
-  //----------------------------------------------------------------------------//
+  ///////////////////////////////////////////////////////////////////////////////
   // GreaterThan after identifier -> Some sort of void arg with a return.
-  //----------------------------------------------------------------------------//
+  ///////////////////////////////////////////////////////////////////////////////
   else if (c.TypeIs(eTk::Gt)) {
     c.Advance();
     if (c.TypeIs(eTk::Colon)) {  // Implicit any return void method.
@@ -2234,9 +2217,9 @@ OffsetParseResult parser::ParseMethodSignature(TkCursor c) {
                                    Ast{MethodParameter, "", Ast{MethodVoid}}}));
   }
 
-  //----------------------------------------------------------------------------//
+  ///////////////////////////////////////////////////////////////////////////////
   // Open Paren After Identifier -> Method with arguments.
-  //----------------------------------------------------------------------------//
+  ///////////////////////////////////////////////////////////////////////////////
   else if (c.TypeIs(eTk::LParen)) {
     auto method_params_result = ParseMethodParameters(c);
     if (not method_params_result) {
@@ -2441,11 +2424,12 @@ OffsetParseResult parser::ParseProgram(TkCursor c) {
   return Success(c, move(program_node));
 }
 
-//---------------------------------------------------------------------------//
-// EndSection:{Internal parsing methods impl}
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// end Internal parsing methods impl
+///////////////////////////////////////////////////////////////////////////////
 }  // namespace parser
 
+/// Main parsing method.
 static ExpectedAst ParseTokens(const TkVector& c) {
   auto parsed = parser::ParseProgram({c.cbegin(), c.cend()});
   if (parsed) {
@@ -2457,7 +2441,14 @@ static ExpectedAst ParseTokens(const TkVector& c) {
 
 }  // namespace caoco
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_SCOPE_H
+/// @} // end of cand_compiler_parser
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the GNU Affero General Public License, Version 3.
@@ -2471,15 +2462,4 @@ static ExpectedAst ParseTokens(const TkVector& c) {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_token_scope.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_SCOPE_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

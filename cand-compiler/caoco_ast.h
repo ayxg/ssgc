@@ -1,40 +1,29 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the GNU Affero General Public License, Version 3.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_ast.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_compiler_data
+/// @brief C& abstract syntax tree object.
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cand_compiler_data
+/// @{
 #ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_AST_H
 #define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_AST_H
-//---------------------------------------------------------------------------//
-// Brief: brief
-//---------------------------------------------------------------------------//
+
 #include "cppsextended.h"
 // Includes:
 #include "caoco_grammar.h"
 #include "caoco_token.h"
-//#include "caoco_token_cursor.h"
-//---------------------------------------------------------------------------//
 
-//---------------------------------------------------------------------------//
-// Namespace:{caoco}
-//---------------------------------------------------------------------------//
 namespace caoco {
-//---------------------------------------------------------------------------//
 
-//---------------------------------------------------------//
-// Class:{Ast}
-// Brief:{
-//  C& abstract syntax tree node structure.
-// }
-//---------------------------------------------------------//
+// C& abstract syntax tree node structure.
 class Ast {
  public:
   // Properties
@@ -62,11 +51,11 @@ class Ast {
   Ast& Back();
   Ast& At(std::size_t index);
   const std::list<Ast>& Children() const;
-  // Index operator accesses children.
+  /// Index operator accesses children.
   const Ast& operator[](std::size_t index) const;
   Ast& operator[](std::size_t index);
 
-  //// Fast type queries.
+  // Fast type queries.
   bool TypeIs(eAst type) const noexcept;
   bool TypeIsnt(eAst type) const noexcept;
   bool IsLiteral() const noexcept;
@@ -85,7 +74,7 @@ class Ast {
     return source_column_ = column;
   }
 
-  // Special PushBack methods for  parser results.
+  /// Special PushBack methods for  parser results.
   template <typename AlwaysT>
   Ast& ExtractAndPush(cxx::PartialExpected<Ast, AlwaysT>& nd) {
     assert(nd && "Ast::ExtractAndPushBack() called with an empty node.");
@@ -138,9 +127,6 @@ class Ast {
   Ast* parent_{nullptr};
   std::list<Ast> children_;
 };
-//---------------------------------------------------------//
-// EndClass:{Ast}
-//---------------------------------------------------------//
 
 Ast::Ast(const Tk& t) : type_(eTkToAstEnum(t.Type())), literal_(t.Literal()) {}
 
@@ -330,11 +316,16 @@ bool Ast::IsArithmeticBinaryOp() const noexcept {
 
 bool Ast::IsPragmatic() const noexcept { return eAstIsPragmatic(type_); }
 
-//---------------------------------------------------------------------------//
 }  // namespace caoco
-//---------------------------------------------------------------------------//
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_AST_H
+/// @} // end of cand_compiler_data
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the GNU Affero General Public License, Version 3.
@@ -348,15 +339,4 @@ bool Ast::IsPragmatic() const noexcept { return eAstIsPragmatic(type_); }
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: cand_ast.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_AST_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

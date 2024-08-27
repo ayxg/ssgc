@@ -1,0 +1,333 @@
+\doxysection{cgui Namespace Reference}
+\hypertarget{namespacecgui}{}\label{namespacecgui}\index{cgui@{cgui}}
+
+
+A simple unified interface for the underlying graphics and windowing libraries. Only provides bare minimum functionality required for this project. Designed to potentially use other libraries in the future.  
+
+
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecgui_1_1combo__widget}{combo\+\_\+widget}}
+\item 
+namespace \mbox{\hyperlink{namespacecgui_1_1example}{example}}
+\item 
+namespace \mbox{\hyperlink{namespacecgui_1_1scoped__widget}{scoped\+\_\+widget}}
+\item 
+namespace \mbox{\hyperlink{namespacecgui_1_1single__widget}{single\+\_\+widget}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcgui_1_1_graphics_context}{Graphics\+Context}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1_scoped_widget_base}{Scoped\+Widget\+Base}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1_singular_widget_base}{Singular\+Widget\+Base}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1_u_i_d_gen}{UIDGen}}
+\item 
+class \mbox{\hyperlink{classcgui_1_1_unique_name_map}{Unique\+Name\+Map}}
+\begin{DoxyCompactList}\small\item\em Simple map which maintains unique names. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{namespacecgui_accfa27c175381ca955fd8cc989fe25d2}{Cgui\+Vec2}} = std\+::pair$<$float, float$>$
+\begin{DoxyCompactList}\small\item\em Internal vec2 representation, for now its a pair of floats to keep it simple. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}} = int
+\begin{DoxyCompactList}\small\item\em Underlying type of widget gui flags (int). \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespacecgui_a5865c494765aebe5686926a5939f4e6a}{e\+Window\+Flags}} = Im\+Gui\+Window\+Flags\+\_\+
+\item 
+using \mbox{\hyperlink{namespacecgui_abdd6ff50d7f278bb409de413071690a9}{e\+Subcontext\+Flags}} = Im\+Gui\+Child\+Flags\+\_\+
+\item 
+using \mbox{\hyperlink{namespacecgui_a29631cb1c8eb36a194e3cf9a68b8ee30}{e\+Tab\+Bar\+Flags}} = Im\+Gui\+Tab\+Bar\+Flags\+\_\+
+\item 
+using \mbox{\hyperlink{namespacecgui_a43bca1e0acc719cc03352edd0556339b}{e\+Tab\+Item\+Flags}} = Im\+Gui\+Tab\+Item\+Flags\+\_\+
+\item 
+using \mbox{\hyperlink{namespacecgui_afe47e64b4fbdd23309fafffafe0bdf88}{e\+Input\+Text\+Flags}} = Im\+Gui\+Input\+Text\+Flags\+\_\+
+\item 
+using \mbox{\hyperlink{namespacecgui_ae335cd7e1f998458e813bfe62942eb2d}{Window\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_a5865c494765aebe5686926a5939f4e6a}{e\+Window\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$
+\item 
+using \mbox{\hyperlink{namespacecgui_a7b249f1f35bad60706b57b67146b25d8}{Subcontext\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_abdd6ff50d7f278bb409de413071690a9}{e\+Subcontext\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$
+\item 
+using \mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{Tab\+Bar\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_a29631cb1c8eb36a194e3cf9a68b8ee30}{e\+Tab\+Bar\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$
+\item 
+using \mbox{\hyperlink{namespacecgui_aa2788b139f5b12284aeec459926ae443}{Tab\+Item\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_a43bca1e0acc719cc03352edd0556339b}{e\+Tab\+Item\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$
+\item 
+using \mbox{\hyperlink{namespacecgui_a14cde9d0a4b6d0c32cd3e760ec9ebd2c}{Input\+Text\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_afe47e64b4fbdd23309fafffafe0bdf88}{e\+Input\+Text\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{namespacecgui_a79f511149d5c2e46e93904c5c462ba1b}{e\+Widget\+Init}} \{ \mbox{\hyperlink{namespacecgui_a79f511149d5c2e46e93904c5c462ba1baeaf1b571da7747037056255592479bb9}{k\+Widget\+Init\+Delayed}} = true
+, \mbox{\hyperlink{namespacecgui_a79f511149d5c2e46e93904c5c462ba1bab736956b863d2c0f986fc1837c86e88f}{k\+Widget\+Init\+Immediate}} = false
+ \}
+\begin{DoxyCompactList}\small\item\em Specifies if a widget should be initialized immediately or delayed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+constexpr float \mbox{\hyperlink{namespacecgui_a365384d0f4df323cacbe311f9bd7fefa}{k\+Expand\+Widget\+To\+Remaining\+Space}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+constexpr float \mbox{\hyperlink{namespacecgui_a209c6fc57941cdeeac593bb793a4e399}{k\+Expand}} = -\/FLT\+\_\+\+MIN
+\item 
+constexpr \mbox{\hyperlink{namespacecgui_accfa27c175381ca955fd8cc989fe25d2}{Cgui\+Vec2}} \mbox{\hyperlink{namespacecgui_aee909040d7dbed78e15df6fd3153f013}{k\+Expand\+XY}} = \{\mbox{\hyperlink{namespacecgui_a209c6fc57941cdeeac593bb793a4e399}{k\+Expand}}, \mbox{\hyperlink{namespacecgui_a209c6fc57941cdeeac593bb793a4e399}{k\+Expand}}\}
+\item 
+const \mbox{\hyperlink{namespacecgui_accfa27c175381ca955fd8cc989fe25d2}{Cgui\+Vec2}} \mbox{\hyperlink{namespacecgui_a25b15a077e506a2db297ec5dcba2e259}{k\+Expand\+Widget\+To\+Remaining\+Space\+XY}}
+\item 
+static \mbox{\hyperlink{classcgui_1_1_u_i_d_gen}{UIDGen}} \mbox{\hyperlink{namespacecgui_aa7ac59429289e4a1321f622ffbf48371}{g\+Cgui\+Default\+UIDGenerator}} \{\}
+\begin{DoxyCompactList}\small\item\em Implicit global unique id generator for cgui widget classes. !! Do not use/access directly, called by \doxylink{classcgui_1_1_scoped_widget_base}{Scoped\+Widget\+Base} on default construction. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{classcgui_1_1_unique_name_map}{Unique\+Name\+Map}} \mbox{\hyperlink{namespacecgui_a2601831d3052aa0ad6987e2e8f49f684}{g\+Cgui\+Default\+Unique\+Name\+Map}} \{\}
+\begin{DoxyCompactList}\small\item\em Implicit global unique name map for cgui widget classes. !! Do not use/access directly, called by \doxylink{classcgui_1_1_scoped_widget_base}{Scoped\+Widget\+Base} on default construction. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A simple unified interface for the underlying graphics and windowing libraries. Only provides bare minimum functionality required for this project. Designed to potentially use other libraries in the future. 
+
+Current Features Related to \doxylink{namespace_im_gui}{Im\+Gui}\+:
+\begin{DoxyEnumerate}
+\item No need to call Im\+Gui\+::\+Begin and Im\+Gui\+::\+End for each window/widget.
+\item No raw pointers.
+\item Unified use of std\+::string.
+\item Names of windows must be unique. Handles possible errors from occurrence.
+\item Widget IDs must be unique, are automatically generated. 
+\end{DoxyEnumerate}
+
+\doxysubsection{Typedef Documentation}
+\Hypertarget{namespacecgui_accfa27c175381ca955fd8cc989fe25d2}\index{cgui@{cgui}!CguiVec2@{CguiVec2}}
+\index{CguiVec2@{CguiVec2}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{CguiVec2}{CguiVec2}}
+{\footnotesize\ttfamily \label{namespacecgui_accfa27c175381ca955fd8cc989fe25d2} 
+using \mbox{\hyperlink{namespacecgui_accfa27c175381ca955fd8cc989fe25d2}{cgui\+::\+Cgui\+Vec2}} = std\+::pair$<$float, float$>$}
+
+
+
+Internal vec2 representation, for now its a pair of floats to keep it simple. 
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00055}{55}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_afe47e64b4fbdd23309fafffafe0bdf88}\index{cgui@{cgui}!eInputTextFlags@{eInputTextFlags}}
+\index{eInputTextFlags@{eInputTextFlags}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{eInputTextFlags}{eInputTextFlags}}
+{\footnotesize\ttfamily \label{namespacecgui_afe47e64b4fbdd23309fafffafe0bdf88} 
+using \mbox{\hyperlink{namespacecgui_afe47e64b4fbdd23309fafffafe0bdf88}{cgui\+::e\+Input\+Text\+Flags}} = Im\+Gui\+Input\+Text\+Flags\+\_\+}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00063}{63}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_abdd6ff50d7f278bb409de413071690a9}\index{cgui@{cgui}!eSubcontextFlags@{eSubcontextFlags}}
+\index{eSubcontextFlags@{eSubcontextFlags}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{eSubcontextFlags}{eSubcontextFlags}}
+{\footnotesize\ttfamily \label{namespacecgui_abdd6ff50d7f278bb409de413071690a9} 
+using \mbox{\hyperlink{namespacecgui_abdd6ff50d7f278bb409de413071690a9}{cgui\+::e\+Subcontext\+Flags}} = Im\+Gui\+Child\+Flags\+\_\+}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00060}{60}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_a29631cb1c8eb36a194e3cf9a68b8ee30}\index{cgui@{cgui}!eTabBarFlags@{eTabBarFlags}}
+\index{eTabBarFlags@{eTabBarFlags}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{eTabBarFlags}{eTabBarFlags}}
+{\footnotesize\ttfamily \label{namespacecgui_a29631cb1c8eb36a194e3cf9a68b8ee30} 
+using \mbox{\hyperlink{namespacecgui_a29631cb1c8eb36a194e3cf9a68b8ee30}{cgui\+::e\+Tab\+Bar\+Flags}} = Im\+Gui\+Tab\+Bar\+Flags\+\_\+}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00061}{61}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_a43bca1e0acc719cc03352edd0556339b}\index{cgui@{cgui}!eTabItemFlags@{eTabItemFlags}}
+\index{eTabItemFlags@{eTabItemFlags}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{eTabItemFlags}{eTabItemFlags}}
+{\footnotesize\ttfamily \label{namespacecgui_a43bca1e0acc719cc03352edd0556339b} 
+using \mbox{\hyperlink{namespacecgui_a43bca1e0acc719cc03352edd0556339b}{cgui\+::e\+Tab\+Item\+Flags}} = Im\+Gui\+Tab\+Item\+Flags\+\_\+}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00062}{62}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_a5865c494765aebe5686926a5939f4e6a}\index{cgui@{cgui}!eWindowFlags@{eWindowFlags}}
+\index{eWindowFlags@{eWindowFlags}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{eWindowFlags}{eWindowFlags}}
+{\footnotesize\ttfamily \label{namespacecgui_a5865c494765aebe5686926a5939f4e6a} 
+using \mbox{\hyperlink{namespacecgui_a5865c494765aebe5686926a5939f4e6a}{cgui\+::e\+Window\+Flags}} = Im\+Gui\+Window\+Flags\+\_\+}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00059}{59}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}\index{cgui@{cgui}!GuiFlags@{GuiFlags}}
+\index{GuiFlags@{GuiFlags}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{GuiFlags}{GuiFlags}}
+{\footnotesize\ttfamily \label{namespacecgui_a6d1181265407ee2e485cf3671b8144e3} 
+using \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{cgui\+::\+Gui\+Flags}} = int}
+
+
+
+Underlying type of widget gui flags (int). 
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00058}{58}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_a14cde9d0a4b6d0c32cd3e760ec9ebd2c}\index{cgui@{cgui}!InputTextFlags@{InputTextFlags}}
+\index{InputTextFlags@{InputTextFlags}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{InputTextFlags}{InputTextFlags}}
+{\footnotesize\ttfamily \label{namespacecgui_a14cde9d0a4b6d0c32cd3e760ec9ebd2c} 
+using \mbox{\hyperlink{namespacecgui_a14cde9d0a4b6d0c32cd3e760ec9ebd2c}{cgui\+::\+Input\+Text\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_afe47e64b4fbdd23309fafffafe0bdf88}{e\+Input\+Text\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00070}{70}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_a7b249f1f35bad60706b57b67146b25d8}\index{cgui@{cgui}!SubcontextFlags@{SubcontextFlags}}
+\index{SubcontextFlags@{SubcontextFlags}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{SubcontextFlags}{SubcontextFlags}}
+{\footnotesize\ttfamily \label{namespacecgui_a7b249f1f35bad60706b57b67146b25d8} 
+using \mbox{\hyperlink{namespacecgui_a7b249f1f35bad60706b57b67146b25d8}{cgui\+::\+Subcontext\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_abdd6ff50d7f278bb409de413071690a9}{e\+Subcontext\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00067}{67}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}\index{cgui@{cgui}!TabBarFlags@{TabBarFlags}}
+\index{TabBarFlags@{TabBarFlags}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{TabBarFlags}{TabBarFlags}}
+{\footnotesize\ttfamily \label{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3} 
+using \mbox{\hyperlink{namespacecgui_aa2e18b4135ea96151e3493da6d3e6af3}{cgui\+::\+Tab\+Bar\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_a29631cb1c8eb36a194e3cf9a68b8ee30}{e\+Tab\+Bar\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00068}{68}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_aa2788b139f5b12284aeec459926ae443}\index{cgui@{cgui}!TabItemFlags@{TabItemFlags}}
+\index{TabItemFlags@{TabItemFlags}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{TabItemFlags}{TabItemFlags}}
+{\footnotesize\ttfamily \label{namespacecgui_aa2788b139f5b12284aeec459926ae443} 
+using \mbox{\hyperlink{namespacecgui_aa2788b139f5b12284aeec459926ae443}{cgui\+::\+Tab\+Item\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_a43bca1e0acc719cc03352edd0556339b}{e\+Tab\+Item\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00069}{69}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_ae335cd7e1f998458e813bfe62942eb2d}\index{cgui@{cgui}!WindowFlags@{WindowFlags}}
+\index{WindowFlags@{WindowFlags}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{WindowFlags}{WindowFlags}}
+{\footnotesize\ttfamily \label{namespacecgui_ae335cd7e1f998458e813bfe62942eb2d} 
+using \mbox{\hyperlink{namespacecgui_ae335cd7e1f998458e813bfe62942eb2d}{cgui\+::\+Window\+Flags}} = \mbox{\hyperlink{classcxx_1_1_enumerated_flags}{cxx\+::\+Enumerated\+Flags}}$<$\mbox{\hyperlink{namespacecgui_a5865c494765aebe5686926a5939f4e6a}{e\+Window\+Flags}}, \mbox{\hyperlink{namespacecgui_a6d1181265407ee2e485cf3671b8144e3}{Gui\+Flags}}$>$}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00066}{66}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{namespacecgui_a79f511149d5c2e46e93904c5c462ba1b}\index{cgui@{cgui}!eWidgetInit@{eWidgetInit}}
+\index{eWidgetInit@{eWidgetInit}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{eWidgetInit}{eWidgetInit}}
+{\footnotesize\ttfamily \label{namespacecgui_a79f511149d5c2e46e93904c5c462ba1b} 
+enum \mbox{\hyperlink{namespacecgui_a79f511149d5c2e46e93904c5c462ba1b}{cgui\+::e\+Widget\+Init}}}
+
+
+
+Specifies if a widget should be initialized immediately or delayed. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kWidgetInitDelayed@{kWidgetInitDelayed}!cgui@{cgui}}\index{cgui@{cgui}!kWidgetInitDelayed@{kWidgetInitDelayed}}}\Hypertarget{namespacecgui_a79f511149d5c2e46e93904c5c462ba1baeaf1b571da7747037056255592479bb9}\label{namespacecgui_a79f511149d5c2e46e93904c5c462ba1b} 
+k\+Widget\+Init\+Delayed&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kWidgetInitImmediate@{kWidgetInitImmediate}!cgui@{cgui}}\index{cgui@{cgui}!kWidgetInitImmediate@{kWidgetInitImmediate}}}\Hypertarget{namespacecgui_a79f511149d5c2e46e93904c5c462ba1bab736956b863d2c0f986fc1837c86e88f}\label{namespacecgui_a79f511149d5c2e46e93904c5c462ba1b} 
+k\+Widget\+Init\+Immediate&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00073}{73}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{namespacecgui_a365384d0f4df323cacbe311f9bd7fefa}\index{cgui@{cgui}!kExpandWidgetToRemainingSpace@{kExpandWidgetToRemainingSpace}}
+\index{kExpandWidgetToRemainingSpace@{kExpandWidgetToRemainingSpace}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{kExpandWidgetToRemainingSpace()}{kExpandWidgetToRemainingSpace()}}
+{\footnotesize\ttfamily \label{namespacecgui_a365384d0f4df323cacbe311f9bd7fefa} 
+float cgui\+::k\+Expand\+Widget\+To\+Remaining\+Space (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00127}{127}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{namespacecgui_aa7ac59429289e4a1321f622ffbf48371}\index{cgui@{cgui}!gCguiDefaultUIDGenerator@{gCguiDefaultUIDGenerator}}
+\index{gCguiDefaultUIDGenerator@{gCguiDefaultUIDGenerator}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{gCguiDefaultUIDGenerator}{gCguiDefaultUIDGenerator}}
+{\footnotesize\ttfamily \label{namespacecgui_aa7ac59429289e4a1321f622ffbf48371} 
+\mbox{\hyperlink{classcgui_1_1_u_i_d_gen}{UIDGen}} cgui\+::g\+Cgui\+Default\+UIDGenerator \{\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Implicit global unique id generator for cgui widget classes. !! Do not use/access directly, called by \doxylink{classcgui_1_1_scoped_widget_base}{Scoped\+Widget\+Base} on default construction. 
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00245}{245}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_a2601831d3052aa0ad6987e2e8f49f684}\index{cgui@{cgui}!gCguiDefaultUniqueNameMap@{gCguiDefaultUniqueNameMap}}
+\index{gCguiDefaultUniqueNameMap@{gCguiDefaultUniqueNameMap}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{gCguiDefaultUniqueNameMap}{gCguiDefaultUniqueNameMap}}
+{\footnotesize\ttfamily \label{namespacecgui_a2601831d3052aa0ad6987e2e8f49f684} 
+\mbox{\hyperlink{classcgui_1_1_unique_name_map}{Unique\+Name\+Map}} cgui\+::g\+Cgui\+Default\+Unique\+Name\+Map \{\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Implicit global unique name map for cgui widget classes. !! Do not use/access directly, called by \doxylink{classcgui_1_1_scoped_widget_base}{Scoped\+Widget\+Base} on default construction. 
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00249}{249}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_a209c6fc57941cdeeac593bb793a4e399}\index{cgui@{cgui}!kExpand@{kExpand}}
+\index{kExpand@{kExpand}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{kExpand}{kExpand}}
+{\footnotesize\ttfamily \label{namespacecgui_a209c6fc57941cdeeac593bb793a4e399} 
+float cgui\+::k\+Expand = -\/FLT\+\_\+\+MIN\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00124}{124}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_a25b15a077e506a2db297ec5dcba2e259}\index{cgui@{cgui}!kExpandWidgetToRemainingSpaceXY@{kExpandWidgetToRemainingSpaceXY}}
+\index{kExpandWidgetToRemainingSpaceXY@{kExpandWidgetToRemainingSpaceXY}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{kExpandWidgetToRemainingSpaceXY}{kExpandWidgetToRemainingSpaceXY}}
+{\footnotesize\ttfamily \label{namespacecgui_a25b15a077e506a2db297ec5dcba2e259} 
+const \mbox{\hyperlink{namespacecgui_accfa27c175381ca955fd8cc989fe25d2}{Cgui\+Vec2}} cgui\+::k\+Expand\+Widget\+To\+Remaining\+Space\+XY}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{namespacecgui_a365384d0f4df323cacbe311f9bd7fefa}{kExpandWidgetToRemainingSpace}}(),\ \mbox{\hyperlink{namespacecgui_a365384d0f4df323cacbe311f9bd7fefa}{kExpandWidgetToRemainingSpace}}()\}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00128}{128}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+
+\Hypertarget{namespacecgui_aee909040d7dbed78e15df6fd3153f013}\index{cgui@{cgui}!kExpandXY@{kExpandXY}}
+\index{kExpandXY@{kExpandXY}!cgui@{cgui}}
+\doxysubsubsection{\texorpdfstring{kExpandXY}{kExpandXY}}
+{\footnotesize\ttfamily \label{namespacecgui_aee909040d7dbed78e15df6fd3153f013} 
+\mbox{\hyperlink{namespacecgui_accfa27c175381ca955fd8cc989fe25d2}{Cgui\+Vec2}} cgui\+::k\+Expand\+XY = \{\mbox{\hyperlink{namespacecgui_a209c6fc57941cdeeac593bb793a4e399}{k\+Expand}}, \mbox{\hyperlink{namespacecgui_a209c6fc57941cdeeac593bb793a4e399}{k\+Expand}}\}\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{imgui__interface_8h_source_l00125}{125}} of file \mbox{\hyperlink{imgui__interface_8h_source}{imgui\+\_\+interface.\+h}}.
+

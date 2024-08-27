@@ -1,0 +1,40 @@
+\chapter{C\& Core Project Guidelines}
+\hypertarget{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2code-style-guide}{}\label{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2code-style-guide}\index{C\& Core Project Guidelines@{C\& Core Project Guidelines}}
+\label{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2code-style-guide_autotoc_md1}%
+\Hypertarget{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2code-style-guide_autotoc_md1}%
+The code committed to this project must follow the Google C++ Style Guidelines unless the guideline conflicts with a C\& Core Project Guideline described below. In this case, the C\& Core Project Guideline will override the Google C++ Style Guideline. In case of any other conflicts, prefer to choose the easy-\/to-\/understand and clear solution which maintains functionality.
+
+Reference\+: \href{https://google.github.io/styleguide/cppguide.html}{\texttt{ Google C++ Style Guide}}\hypertarget{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2code-style-guide_autotoc_md2}{}\doxysection{\texorpdfstring{Naming Conventions}{Naming Conventions}}\label{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2code-style-guide_autotoc_md2}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Object   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Example   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Object   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Example   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-3}
+\endhead
+{\bfseries{variable/member}}   &my\+\_\+var   &Lower case underscore.    \\\cline{1-3}
+{\bfseries{private member}}   &my\+\_\+var\+\_\+   &Lower case underscore followed by 1 underscore.    \\\cline{1-3}
+{\bfseries{const variable}}   &k\+My\+Const\+Var   &Camel case preceded by a \textquotesingle{}k\textquotesingle{}.    \\\cline{1-3}
+{\bfseries{global variable}}   &g\+My\+Global\+Var   &Camel case preceded by a \textquotesingle{}k\textquotesingle{}. Prefer to encapsulate global variables in classes or static const accessor methods.    \\\cline{1-3}
+{\bfseries{lambda variable}}   &x\+My\+Foo\+Lambda   &Camel case preceded by an \textquotesingle{}x\textquotesingle{}    \\\cline{1-3}
+{\bfseries{namespace}}   &my\+\_\+namespace   &Lower case underscore.    \\\cline{1-3}
+{\bfseries{method}}   &My\+Method()   &Camel case    \\\cline{1-3}
+{\bfseries{consteval/full constexpr method}}   &k\+My\+Cval\+Method()   &Camel case preceded by a \textquotesingle{}k\textquotesingle{}.    \\\cline{1-3}
+{\bfseries{class}}   &My\+Method()   &Camel case    \\\cline{1-3}
+{\bfseries{template class/method}}   &My\+Template   &Camel case.    \\\cline{1-3}
+{\bfseries{concept}}   &i\+My\+Concept   &Camel case preceded by an \textquotesingle{}i\textquotesingle{}.   \\\cline{1-3}
+\end{longtabu}
+\hypertarget{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2code-style-guide_autotoc_md3}{}\doxysection{\texorpdfstring{Class Definitions}{Class Definitions}}\label{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2code-style-guide_autotoc_md3}
+
+\begin{DoxyItemize}
+\item Place the most common public interface methods and members at the top of the class definition.
+\item Prefer to order methods and variables separately into logical groups closest to call site.
+\item Place all private members and methods at the bottom of the class definition.
+\item Define methods out-\/of-\/line if the class interface spans over a screen\textquotesingle{}s height, otherwise prefer to define methods inline.
+\item Use \textquotesingle{}private\+:\textquotesingle{} and \textquotesingle{}public\+:\textquotesingle{} to separate methods into of classes with large interfaces into logical groups.
+\item Postfix virtual base classes\textquotesingle{} name with \textquotesingle{}Base\textquotesingle{} 
+\end{DoxyItemize}\hypertarget{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2code-style-guide_autotoc_md4}{}\doxysection{\texorpdfstring{Using the standard template library}{Using the standard template library}}\label{md__c_1_2_users_2_anton_2source_2repos_2_cand_runtime_2code-style-guide_autotoc_md4}
+When any std library is required include "{}cppsextended.\+h"{} which includes all the standard library headers which this project uses. The specific includes can be found in "{}import\+\_\+stl.\+h"{}. If a required include is not present add it to "{}import\+\_\+stl.\+h"{}. Once C++23 is fully supported by the major compilers, will use "{}import std;"{} instead. 

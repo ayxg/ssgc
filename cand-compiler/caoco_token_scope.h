@@ -1,28 +1,29 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the GNU Affero General Public License, Version 3.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_token_scope.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_compiler_parser
+/// @brief TkScope is a utility object used to determine the start and end of 
+/// a scope. 
+///////////////////////////////////////////////////////////////////////////////
+
 #ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_SCOPE_H
 #define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_SCOPE_H
-//---------------------------------------------------------------------------//
-// Brief:
-//---------------------------------------------------------------------------//
 #include "cppsextended.h"
 // Includes:
 #include "caoco_token.h"
 #include "caoco_token_cursor.h"
-//---------------------------------------------------------------------------//
 
 namespace caoco {
+/// @defgroup cand_compiler_parser_scope Token Scope
+/// @ingroup cand_compiler_parser
+/// TkScope is a utility object used to determine the start and end of a scope.
+/// @{
 
 class TkScope {
  public:
@@ -34,43 +35,44 @@ class TkScope {
   static TkScope FindBrace(TkCursor crsr);
   static TkScope FindBracket(TkVectorConstIter begin, TkVectorConstIter end);
   static TkScope FindBracket(TkCursor crsr);
-  // Method for extracting a seperated parentheses scope. (<separator>)
+  /// Method for extracting a seperated parentheses scope. (<separator>)
   static vector<TkScope> FindSeperatedParen(TkVectorConstIter begin,
                                             TkVectorConstIter end,
                                             eTk separator);
   static vector<TkScope> FindSeperatedParen(TkCursor crsr, eTk separator);
   static vector<TkScope> FindSeperatedParen(TkScope ls, eTk separator);
 
-  // Method for extracting a seperated list scope. {<separator>}
+  /// Method for extracting a seperated list scope. {<separator>}
   static vector<TkScope> FindSeperatedBrace(TkVectorConstIter begin,
                                             TkVectorConstIter end,
                                             eTk separator);
   static vector<TkScope> FindSeperatedBrace(TkCursor crsr, eTk separator);
   static vector<TkScope> FindSeperatedBrace(TkScope ls, eTk separator);
 
-  // Method for extracting a seperated frame scope. [<separator>]
+  /// Method for extracting a seperated frame scope. [<separator>]
   static vector<TkScope> FindSeperatedBracket(TkVectorConstIter begin,
                                               TkVectorConstIter end,
                                               eTk separator);
   static vector<TkScope> FindSeperatedBracket(TkCursor crsr, eTk separator);
   static vector<TkScope> FindSeperatedBracket(const TkScope& ls, eTk separator);
 
-  // Open token may NOT be repeated.
-  // TODO: refactor to use TkCursor instead of TkVectorConstIter next time you
-  // use this. Also make sure it does not throw.
+  /// Open token may NOT be repeated.
+  /// 
+  /// TODO: refactor to use TkCursor instead of TkVectorConstIter next time you
+  /// use this. Also make sure it does not throw.
   static TkScope FindStatement(eTk open, eTk close, TkVectorConstIter begin,
                                TkVectorConstIter end);
 
-  // Open token may be repeated.
+  /// Open token may be repeated.
   static TkScope FindOpenStatement(eTk open, eTk close, TkVectorConstIter begin,
                                    TkVectorConstIter end);
-  // Open token may be repeated.
+  /// Open token may be repeated.
   static TkScope FindOpenStatement(eTk open, vector<eTk> close,
                                    TkVectorConstIter begin,
                                    TkVectorConstIter end);
 
-  // Starts with the begin token which may be repeated, ends with a semicolon_
-  // ';'
+  /// Starts with the begin token which may be repeated, ends with a semicolon_
+  /// ';'
   static TkScope FindProgramStatement(TkVectorConstIter begin,
                                       TkVectorConstIter end);
 
@@ -81,23 +83,19 @@ class TkScope {
 
   bool Valid() const { return valid_; }
 
-  // <@method:ContainedEnd> Returns the end of the scope, not including the
-  // close token.
+  /// Returns the end of the scope, not including the close token.
   auto ContainedEnd() const { return end_ - 1; }
 
-  // <@method:ContainedBegin> Returns the beginning of the scope, not including
-  // the open token.
+  /// Returns the beginning of the scope, not including the open token.
   auto ContainedBegin() const { return begin_ + 1; }
 
-  // <@method:is_empty> Returns true if the scope is empty.
+  /// Returns true if the scope is empty.
   auto IsEmpty() const { return ContainedBegin() == ContainedEnd(); }
 
-  // <@method:scope_end> Returns the end of the scope, including the close
-  // token.
+  /// Returns the end of the scope, including the close token.
   auto End() const { return end_; }
 
-  // <@method:scope_begin> Returns the beginning of the scope, including the
-  // open token.
+  /// Returns the beginning of the scope, including the open token.
   auto Begin() const { return begin_; }
 
   TkCursor Contained() const {
@@ -754,9 +752,9 @@ TkScope TkScope::FindStatement(eTk open, eTk close, TkVectorConstIter begin,
 
 }  // end find_scope
 
-// Open token may be repeated.
-// TODO: refactor to use TkCursor instead of TkVectorConstIter next time you
-// use this.
+/// Open token may be repeated.
+/// TODO: refactor to use TkCursor instead of TkVectorConstIter next time you
+/// use this.
 TkScope TkScope::FindOpenStatement(eTk open, eTk close, TkVectorConstIter begin,
                                    TkVectorConstIter end) {
   auto paren_scope_depth = 0;
@@ -880,9 +878,9 @@ TkScope TkScope::FindOpenStatement(eTk open, eTk close, TkVectorConstIter begin,
 
 }  // end find_scope
 
-// Open token may be repeated.
-// TODO: refactor to use TkCursor instead of TkVectorConstIter next time you
-// use this.
+/// Open token may be repeated.
+/// TODO: refactor to use TkCursor instead of TkVectorConstIter next time you
+/// use this.
 TkScope TkScope::FindOpenStatement(eTk open, vector<eTk> close,
                                    TkVectorConstIter begin,
                                    TkVectorConstIter end) {
@@ -1012,8 +1010,8 @@ TkScope TkScope::FindOpenStatement(eTk open, vector<eTk> close,
 
 }  // end find_scope
 
-// Starts with the begin token which may be repeated, ends with a semicolon_
-// ';'
+/// Starts with the begin token which may be repeated, ends with a semicolon_
+/// ';'
 TkScope TkScope::FindProgramStatement(TkVectorConstIter begin,
                                       TkVectorConstIter end) {
   return FindOpenStatement(begin->Type(), eTk::Semicolon, begin, end);
@@ -1024,9 +1022,17 @@ TkScope TkScope::FindProgramStatement(TkCursor cursor) {
                            cursor.End());
 }
 
+/// @} // end of cand_compiler_parser_scope
+
 }  // namespace caoco
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_SCOPE_H
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the GNU Affero General Public License, Version 3.
@@ -1040,15 +1046,4 @@ TkScope TkScope::FindProgramStatement(TkCursor cursor) {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_token_scope.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_SCOPE_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

@@ -1,30 +1,34 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the GNU Affero General Public License, Version 3.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_token_closure.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_compiler_parser
+/// @brief Iterator-like class with special methods for tokens/ast nodes.
+/// 
+/// TkCursor is an iterator over a vector of tokens. It has utility
+/// methods which can inspect a token's properties. Furthermore, when out of
+/// bounds, TkCursor will return kEof token instead of throwing.
+///////////////////////////////////////////////////////////////////////////////
+
+
 #ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_CURSOR_H
 #define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_CURSOR_H
-//---------------------------------------------------------------------------//
-// Brief: Iterator-like class with special methods for tokens/ast nodes.
-//---------------------------------------------------------------------------//
 #include "cppsextended.h"
 // Includes:
 #include "caoco_grammar.h"
 #include "caoco_token.h"
 #include "caoco_ast.h"
-//---------------------------------------------------------------------------//
 
 namespace caoco {
-
+/// @defgroup cand_compiler_parser_cursor Token Cursor
+/// @ingroup cand_compiler_parser
+/// Iterator-like class with special methods for tokens/ast nodes.
+/// @{
 class TkCursor {
  public:
   // Properties
@@ -241,11 +245,17 @@ constexpr inline bool TkCursor::IsPrimary() const noexcept {
   return Get().IsPrimary();
 }
 
-
+/// @} // end of cand_compiler_parser_cursor
 
 }  // namespace caoco
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_CURSOR_H
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the GNU Affero General Public License, Version 3.
@@ -259,15 +269,4 @@ constexpr inline bool TkCursor::IsPrimary() const noexcept {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: cand-official-compiler
-// File: caoco_token_cursor.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_CURSOR_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

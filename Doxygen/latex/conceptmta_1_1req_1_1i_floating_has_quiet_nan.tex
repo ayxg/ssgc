@@ -1,0 +1,21 @@
+\doxysection{mta\+::req\+::i\+Floating\+Has\+Quiet\+Nan Concept Reference}
+\hypertarget{conceptmta_1_1req_1_1i_floating_has_quiet_nan}{}\label{conceptmta_1_1req_1_1i_floating_has_quiet_nan}\index{mta::req::iFloatingHasQuietNan@{mta::req::iFloatingHasQuietNan}}
+
+
+{\ttfamily \#include $<$require.\+h$>$}
+
+\doxysubsection{Concept definition}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptmta_1_1req_1_1i_floating_has_quiet_nan}{mta::req::iFloatingHasQuietNan}}\ =\ }
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{conceptmta_1_1req_1_1i_floating_point}{iFloatingPoint<T>}}\ \&\&\ std::numeric\_limits<T>::has\_quiet\_NaN}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{require_8h_source_l00385}{385}} of file \mbox{\hyperlink{require_8h_source}{require.\+h}}.
+

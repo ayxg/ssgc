@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 // Licensed under the GNU Affero General Public License, Version 3.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: extended-cpp-standard
-// File: import_std.h
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cppmodule2_cppextended
+/// @brief Project-Wide C++ Standard Library Includes
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cppmodule2_cppextended
+/// @{
 #ifndef HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_IMPORT_STD_H
 #define HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_IMPORT_STD_H
-//---------------------------------------------------------------------------//
-// Brief: Project-Wide C++ Standard Library Includes
-//---------------------------------------------------------------------------//
-// Includes:
-// Basic Types
+
+// Project-Wide C++ Standard Library Includes
+
+// Basics
 #include <cstddef>  // std::size_t
 #include <string>   // std::string
 
@@ -33,7 +34,7 @@
 #include <tuple>
 #include <unordered_map>  // std::unordered_map
 #include <unordered_set>
-#include <vector>         // std::vector
+#include <vector>  // std::vector
 
 // Utils
 #include <cstdlib>     // numeric string conversions
@@ -43,6 +44,7 @@
 #include <memory>      // std::unique_ptr , std::shared_ptr
 #include <optional>
 #include <variant>
+
 // Algorithms
 #include <algorithm>  // std::move, std::forward, std::get, std::ref, std::cref, std::any_of
 
@@ -61,7 +63,13 @@
 #include <sstream>
 #include <stdexcept>
 
-//---------------------------------------------------------------------------//
+#endif HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_IMPORT_STD_H
+/// @} // end of cppmodule2_cppextended
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
 // Copyright 2024 Anton Yashchenko
 //
 // Licensed under the GNU Affero General Public License, Version 3.
@@ -75,15 +83,4 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//---------------------------------------------------------------------------//
-// Author(s): Anton Yashchenko
-// Email: ntondev@gmail.com
-// Website: https://www.acpp.dev
-//---------------------------------------------------------------------------//
-// Project: C& Programming Language Environment
-// Directory: extended-cpp-standard
-// File: import_std.h
-//---------------------------------------------------------------------------//
-#endif HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_IMPORT_STD_H
-//---------------------------------------------------------------------------//
-//---------------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////

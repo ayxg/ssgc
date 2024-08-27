@@ -1,0 +1,90 @@
+\doxysection{C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/ide/cide\+\_\+common.h File Reference}
+\hypertarget{cide__common_8h}{}\label{cide__common_8h}\index{C:/Users/Anton/source/repos/CandRuntime/cand-\/ide/cide\_common.h@{C:/Users/Anton/source/repos/CandRuntime/cand-\/ide/cide\_common.h}}
+
+
+Common typedefs and constants used in CIDE.  
+
+
+{\ttfamily \#include $<$filesystem$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include $<$string\+\_\+view$>$}\newline
+{\ttfamily \#include "{}cppsextended.\+h"{}}\newline
+{\ttfamily \#include "{}minitest.\+h"{}}\newline
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecide}{cide}}
+\item 
+namespace \mbox{\hyperlink{namespacecide_1_1file__extension}{cide\+::file\+\_\+extension}}
+\item 
+namespace \mbox{\hyperlink{namespacecide_1_1file__extension_1_1wide}{cide\+::file\+\_\+extension\+::wide}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{group__cand__cide__common_ga9dbc9186bc3fa2f97a31169b6580d4cf}{cide\+::cstring}} = const char\texorpdfstring{$\ast$}{*}
+\item 
+using \mbox{\hyperlink{group__cand__cide__common_ga4cae5e7de0525bd6c633f1058c78d522}{cide\+::wcstring}} = const wchar\+\_\+t\texorpdfstring{$\ast$}{*}
+\item 
+using \mbox{\hyperlink{group__cand__cide__common_ga442333ce2083cd8f004943dab247c28b}{cide\+::\+Void\+CallbackT}} = function$<$void(void)$>$
+\item 
+using \mbox{\hyperlink{group__cand__cide__common_ga260628e6d9e0bf938db1ea2e2d435531}{cide\+::\+Bool\+CallbackT}} = function$<$bool(void)$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr \mbox{\hyperlink{group__cppmodule2__cppextended_ga738607799d6938e1b15f463688029cd5}{LAMBDA}} \mbox{\hyperlink{group__cand__cide__common_gac204e07cb383934239c152924fba04e7}{cide\+::x\+Null\+Void\+Callback}} = \mbox{[}$\,$\mbox{]}() \{\}
+\item 
+static constexpr \mbox{\hyperlink{group__cppmodule2__cppextended_ga738607799d6938e1b15f463688029cd5}{LAMBDA}} \mbox{\hyperlink{group__cand__cide__common_gadf42ea2f940d6ca86a5e5037a3160716}{cide\+::x\+Null\+Bool\+Callback}} = \mbox{[}$\,$\mbox{]}() \{ return false; \}
+\item 
+constexpr string\+\_\+view \mbox{\hyperlink{namespacecide_1_1file__extension_a127a175418ae5cc63ecc6307e8e2bf79}{cide\+::file\+\_\+extension\+::k\+Ca\+Ide\+Settings}} = "{}.caide"{}
+\item 
+constexpr string\+\_\+view \mbox{\hyperlink{namespacecide_1_1file__extension_a085d1a5922a06d93c24c2c3378984efc}{cide\+::file\+\_\+extension\+::k\+Ca\+Solution}} = "{}.casln"{}
+\item 
+constexpr string\+\_\+view \mbox{\hyperlink{namespacecide_1_1file__extension_a1b38f3542d44f81dc4cdb16e8973ac5b}{cide\+::file\+\_\+extension\+::k\+Ca\+Build}} = "{}.camake"{}
+\item 
+constexpr string\+\_\+view \mbox{\hyperlink{namespacecide_1_1file__extension_ad133c6d207b8b8bcc3824ba61aaad339}{cide\+::file\+\_\+extension\+::k\+Ca\+Source}} = "{}.cand"{}
+\item 
+constexpr string\+\_\+view \mbox{\hyperlink{namespacecide_1_1file__extension_a1699d330d8208db144475f3331dfdc80}{cide\+::file\+\_\+extension\+::k\+Ca\+Header}} = "{}.candi"{}
+\item 
+constexpr string\+\_\+view \mbox{\hyperlink{namespacecide_1_1file__extension_acac55a8943879ed00a6b04201ca7a5b2}{cide\+::file\+\_\+extension\+::k\+Cail\+Code}} = "{}.cail"{}
+\item 
+constexpr string\+\_\+view \mbox{\hyperlink{namespacecide_1_1file__extension_a9924ab0786fb6899eaca9732dd3520b6}{cide\+::file\+\_\+extension\+::k\+Cpp\+Source}} = "{}.cpp"{}
+\item 
+constexpr string\+\_\+view \mbox{\hyperlink{namespacecide_1_1file__extension_a7ce94cb1157fec00b369a0ee935b2fa5}{cide\+::file\+\_\+extension\+::k\+Cpp\+Header}} = "{}.hpp"{}
+\item 
+constexpr string\+\_\+view \mbox{\hyperlink{namespacecide_1_1file__extension_a32f10a93920605ae856124b1ef4eef44}{cide\+::file\+\_\+extension\+::k\+CSource}} = "{}.c"{}
+\item 
+constexpr string\+\_\+view \mbox{\hyperlink{namespacecide_1_1file__extension_a4d2e7255e2f32d40bb83b877a2eee629}{cide\+::file\+\_\+extension\+::k\+CHeader}} = "{}.h"{}
+\item 
+constexpr \mbox{\hyperlink{group__cand__cide__common_ga4cae5e7de0525bd6c633f1058c78d522}{wcstring}} \mbox{\hyperlink{namespacecide_1_1file__extension_1_1wide_a922c3993248dabc82e79eb1117b064b6}{cide\+::file\+\_\+extension\+::wide\+::k\+Ca\+Ide\+Settings}} = L"{}.\+caide"{}
+\item 
+constexpr \mbox{\hyperlink{group__cand__cide__common_ga4cae5e7de0525bd6c633f1058c78d522}{wcstring}} \mbox{\hyperlink{namespacecide_1_1file__extension_1_1wide_aef853394a3c8dac870ffedafdd478c5f}{cide\+::file\+\_\+extension\+::wide\+::k\+Ca\+Solution}} = L"{}.\+casln"{}
+\item 
+constexpr \mbox{\hyperlink{group__cand__cide__common_ga4cae5e7de0525bd6c633f1058c78d522}{wcstring}} \mbox{\hyperlink{namespacecide_1_1file__extension_1_1wide_a349b28064c872de26f4eee7568e5dfd0}{cide\+::file\+\_\+extension\+::wide\+::k\+Ca\+Build}} = L"{}.\+camake"{}
+\item 
+constexpr \mbox{\hyperlink{group__cand__cide__common_ga4cae5e7de0525bd6c633f1058c78d522}{wcstring}} \mbox{\hyperlink{namespacecide_1_1file__extension_1_1wide_afc895e58bea4e162c43ba51b44f0194a}{cide\+::file\+\_\+extension\+::wide\+::k\+Ca\+Source}} = L"{}.\+cand"{}
+\item 
+constexpr \mbox{\hyperlink{group__cand__cide__common_ga4cae5e7de0525bd6c633f1058c78d522}{wcstring}} \mbox{\hyperlink{namespacecide_1_1file__extension_1_1wide_aedafb11cfa5420bceb52461c677a2eeb}{cide\+::file\+\_\+extension\+::wide\+::k\+Ca\+Header}} = L"{}.\+candi"{}
+\item 
+constexpr \mbox{\hyperlink{group__cand__cide__common_ga4cae5e7de0525bd6c633f1058c78d522}{wcstring}} \mbox{\hyperlink{namespacecide_1_1file__extension_1_1wide_a97377676b7ee060666a56fec5fda02d1}{cide\+::file\+\_\+extension\+::wide\+::k\+Cail\+Code}} = L"{}.\+cail"{}
+\item 
+constexpr \mbox{\hyperlink{group__cand__cide__common_ga4cae5e7de0525bd6c633f1058c78d522}{wcstring}} \mbox{\hyperlink{namespacecide_1_1file__extension_1_1wide_a291f348630a24b3ae81844405f726e09}{cide\+::file\+\_\+extension\+::wide\+::k\+Cpp\+Source}} = L"{}.\+cpp"{}
+\item 
+constexpr \mbox{\hyperlink{group__cand__cide__common_ga4cae5e7de0525bd6c633f1058c78d522}{wcstring}} \mbox{\hyperlink{namespacecide_1_1file__extension_1_1wide_a46a5867b42890c86492b55390d82ab78}{cide\+::file\+\_\+extension\+::wide\+::k\+Cpp\+Header}} = L"{}.\+hpp"{}
+\item 
+constexpr \mbox{\hyperlink{group__cand__cide__common_ga4cae5e7de0525bd6c633f1058c78d522}{wcstring}} \mbox{\hyperlink{namespacecide_1_1file__extension_1_1wide_add7b7e5d962baa23dd764ce439a3e9b7}{cide\+::file\+\_\+extension\+::wide\+::k\+CSource}} = L"{}.\+c"{}
+\item 
+constexpr \mbox{\hyperlink{group__cand__cide__common_ga4cae5e7de0525bd6c633f1058c78d522}{wcstring}} \mbox{\hyperlink{namespacecide_1_1file__extension_1_1wide_aedf1d7585a940e56ae81356e6807ac06}{cide\+::file\+\_\+extension\+::wide\+::k\+CHeader}} = L"{}.\+h"{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Common typedefs and constants used in CIDE. 
+
+
+
+Definition in file \mbox{\hyperlink{cide__common_8h_source}{cide\+\_\+common.\+h}}.
+

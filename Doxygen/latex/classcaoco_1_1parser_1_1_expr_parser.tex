@@ -1,0 +1,377 @@
+\doxysection{caoco\+::parser\+::Expr\+Parser Class Reference}
+\hypertarget{classcaoco_1_1parser_1_1_expr_parser}{}\label{classcaoco_1_1parser_1_1_expr_parser}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+
+
+Primary Expression Shift-\/\+Reduction Parser.  
+
+
+
+
+{\ttfamily \#include $<$caoco\+\_\+parser.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacecaoco_a49023dd0304e9e8d4bfcdab14fba90aa}{Expected\+Ast}} \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_acd31b450eb0f6df91a780736ac00120e}{Parse}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} c)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{namespacecaoco_a49023dd0304e9e8d4bfcdab14fba90aa}{Expected\+Ast}} \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_adfb59649a55673e3d1deaf3c58e825e0}{Perform}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} c)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376}{e\+Next\+Expected\+Head\+Token}} \{ \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376a9875e66256eede4f465b00a7e301a754}{k\+Operative}}
+, \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376a3f3cddac17da4ede2986d9186d66b308}{k\+Operator}}
+, \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376a35c3ace1970663a16e5c65baa5941b13}{k\+None}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a53dbe0a61f006b56803fd1e9b784abc3}{First\+Operator\+Switch}} ()
+\begin{DoxyCompactList}\small\item\em Set is\+\_\+first\+\_\+operator\+\_\+ to false if currently true, else do nothing. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a4a116e578acac8688f7ad8adda5c68c3}{Resolve\+Prefix}} ()
+\item 
+void \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_ab3e449f6fa89e504ecca5a4ad8cde32c}{Resolve\+Postfix}} ()
+\item 
+void \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a23730cce04d6f699802b229e0793ccba}{Resolve\+Binary\+Left\+Assoc}} ()
+\item 
+void \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_ac66d757c29a57e452acaa28998e34285}{Resolve\+Binary\+Right\+Assoc}} ()
+\item 
+void \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a8bfec16ebc1bae4994ed998e94efe606}{Resolve\+Binary}} ()
+\item 
+void \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a465b6064cdef1d4bfb43e1fa2caeecda}{Resolve\+Last}} ()
+\begin{DoxyCompactList}\small\item\em Resolves the last closure based on type,unchecked. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcxx_1_1_bool_error}{cxx\+::\+Bool\+Error}} \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a59592d19892fa0263e5f96cdacd035f1}{Action\+Skip}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&c)
+\begin{DoxyCompactList}\small\item\em \mbox{[}Action Skip\mbox{]} Push OPERAND to closure output, advance head by the number of tokens consumed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcxx_1_1_bool_error}{cxx\+::\+Bool\+Error}} \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a52e7eb2080cea014b997342527f1659b}{Action\+Store}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&c)
+\begin{DoxyCompactList}\small\item\em \mbox{[}Action Store\mbox{]} Push OPERATOR to closure output, Push back a new closure from OPERATOR, advance head by the number of tokens consumed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcxx_1_1_bool_error}{cxx\+::\+Bool\+Error}} \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a7bbb9b4fa4abc8c7c70480e63b5e13ad}{Action\+Check}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&c)
+\begin{DoxyCompactList}\small\item\em \mbox{[}Action Check\mbox{]} Compares priority of head and last closure. If head \texorpdfstring{$>$}{>}= last closure, store head. If head \texorpdfstring{$<$}{<} last closure, -\/\texorpdfstring{$>$}{>} resolve all consecutive closures of lower priority. Then store. If head is at end, resolve all closures. Return. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcxx_1_1_bool_error}{cxx\+::\+Bool\+Error}} \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_ab6868b2f8c8a7d4c9bc5b6593e46e31e}{Choose\+Action}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&c)
+\begin{DoxyCompactList}\small\item\em \mbox{[}Choose Action\mbox{]} Decides which action to take. Main loop of the closure resolver. Action will be skip , store, or check. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcxx_1_1_expected}{cxx\+::\+Expected}}$<$ std\+::vector$<$ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} $>$ $>$ \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_aeac04333a243e394fcf204afde475abf}{Create\+And\+Resolve\+Closures}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} c)
+\item 
+\mbox{\hyperlink{namespacecaoco_a49023dd0304e9e8d4bfcdab14fba90aa}{Expected\+Ast}} \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a74313c425efda2f6b6a96282de5361d5}{Parse\+Impl}} (\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} c)
+\begin{DoxyCompactList}\small\item\em After the closures are resolved, perform an LL recursive descent parse. Expect the expression to be fully parenthesized. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376}{e\+Next\+Expected\+Head\+Token}} \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_aa4e6f0123f276140813d02dd9feddf6f}{next\+\_\+expected\+\_\+head\+\_\+token\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Expected token type on next iteration. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcaoco_1_1_closure_buffer}{Closure\+Buffer}} \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a671f32d87ba5f8522d802d0d6054fcf3}{closure\+\_\+buffer\+\_\+}}
+\item 
+bool \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_addeba611f4518a026c732ed476589ca4}{is\+\_\+first\+\_\+operator\+\_\+}} = \{true\}
+\item 
+bool \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a5c64d2cc0942cdc89917b9cc7ae4ad42}{is\+\_\+resolved\+\_\+}} = \{false\}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a9a8030c4ed632d21d03de121ae7d7ade}{k\+Open\+Paren\+Tk}} = \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}\{e\+Tk\+::\+LParen, "{}("{}\}
+\item 
+static const \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a47f345bf9b127d5b349b3b4c51d3339f}{k\+Close\+Paren\+Tk}} = \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}\{e\+Tk\+::\+RParen, "{})"{}\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Primary Expression Shift-\/\+Reduction Parser. 
+
+Cursor begin and end must be the start and end of the expression. Note this parser does not take the entire source as an argument. Only pass the current scope to be parser. The end of \doxylink{classcaoco_1_1_tk_cursor}{Tk\+Cursor} may or may not be end of source. This parser does not advance the cursor or return a new start point. 
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00167}{167}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+
+
+\doxysubsection{Member Enumeration Documentation}
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!eNextExpectedHeadToken@{eNextExpectedHeadToken}}
+\index{eNextExpectedHeadToken@{eNextExpectedHeadToken}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{eNextExpectedHeadToken}{eNextExpectedHeadToken}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376} 
+enum class \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376}{caoco\+::parser\+::\+Expr\+Parser\+::e\+Next\+Expected\+Head\+Token}}\hspace{0.3cm}{\ttfamily [strong]}, {\ttfamily [private]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kOperative@{kOperative}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!kOperative@{kOperative}}}\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376a9875e66256eede4f465b00a7e301a754}\label{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376} 
+k\+Operative&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kOperator@{kOperator}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!kOperator@{kOperator}}}\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376a3f3cddac17da4ede2986d9186d66b308}\label{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376} 
+k\+Operator&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kNone@{kNone}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!kNone@{kNone}}}\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376a35c3ace1970663a16e5c65baa5941b13}\label{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376} 
+k\+None&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00218}{218}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a7bbb9b4fa4abc8c7c70480e63b5e13ad}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!ActionCheck@{ActionCheck}}
+\index{ActionCheck@{ActionCheck}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{ActionCheck()}{ActionCheck()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a7bbb9b4fa4abc8c7c70480e63b5e13ad} 
+\mbox{\hyperlink{classcxx_1_1_bool_error}{cxx\+::\+Bool\+Error}} caoco\+::parser\+::\+Expr\+Parser\+::\+Action\+Check (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&}]{c}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+\mbox{[}Action Check\mbox{]} Compares priority of head and last closure. If head \texorpdfstring{$>$}{>}= last closure, store head. If head \texorpdfstring{$<$}{<} last closure, -\/\texorpdfstring{$>$}{>} resolve all consecutive closures of lower priority. Then store. If head is at end, resolve all closures. Return. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00590}{590}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a59592d19892fa0263e5f96cdacd035f1}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!ActionSkip@{ActionSkip}}
+\index{ActionSkip@{ActionSkip}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{ActionSkip()}{ActionSkip()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a59592d19892fa0263e5f96cdacd035f1} 
+\mbox{\hyperlink{classcxx_1_1_bool_error}{cxx\+::\+Bool\+Error}} caoco\+::parser\+::\+Expr\+Parser\+::\+Action\+Skip (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&}]{c}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+\mbox{[}Action Skip\mbox{]} Push OPERAND to closure output, advance head by the number of tokens consumed. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00461}{461}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a52e7eb2080cea014b997342527f1659b}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!ActionStore@{ActionStore}}
+\index{ActionStore@{ActionStore}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{ActionStore()}{ActionStore()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a52e7eb2080cea014b997342527f1659b} 
+\mbox{\hyperlink{classcxx_1_1_bool_error}{cxx\+::\+Bool\+Error}} caoco\+::parser\+::\+Expr\+Parser\+::\+Action\+Store (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&}]{c}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+\mbox{[}Action Store\mbox{]} Push OPERATOR to closure output, Push back a new closure from OPERATOR, advance head by the number of tokens consumed. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00516}{516}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_ab6868b2f8c8a7d4c9bc5b6593e46e31e}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!ChooseAction@{ChooseAction}}
+\index{ChooseAction@{ChooseAction}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{ChooseAction()}{ChooseAction()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_ab6868b2f8c8a7d4c9bc5b6593e46e31e} 
+\mbox{\hyperlink{classcxx_1_1_bool_error}{cxx\+::\+Bool\+Error}} caoco\+::parser\+::\+Expr\+Parser\+::\+Choose\+Action (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}} \&}]{c}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+\mbox{[}Choose Action\mbox{]} Decides which action to take. Main loop of the closure resolver. Action will be skip , store, or check. 
+
+
+\begin{DoxyItemize}
+\item On first occurence of an operator-\/ a store will be performed. All following operators will be checks.
+\item A skip is performed when an operand is encountered. Multi-\/token operands trigger repeated skips.
+\item A check is performed when an operator is encountered.
+\item At the end, always do a check. 
+\end{DoxyItemize}
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00611}{611}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_aeac04333a243e394fcf204afde475abf}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!CreateAndResolveClosures@{CreateAndResolveClosures}}
+\index{CreateAndResolveClosures@{CreateAndResolveClosures}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{CreateAndResolveClosures()}{CreateAndResolveClosures()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_aeac04333a243e394fcf204afde475abf} 
+\mbox{\hyperlink{classcxx_1_1_expected}{cxx\+::\+Expected}}$<$ std\+::vector$<$ \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} $>$ $>$ caoco\+::parser\+::\+Expr\+Parser\+::\+Create\+And\+Resolve\+Closures (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}}}]{c}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00736}{736}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a53dbe0a61f006b56803fd1e9b784abc3}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!FirstOperatorSwitch@{FirstOperatorSwitch}}
+\index{FirstOperatorSwitch@{FirstOperatorSwitch}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{FirstOperatorSwitch()}{FirstOperatorSwitch()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a53dbe0a61f006b56803fd1e9b784abc3} 
+void caoco\+::parser\+::\+Expr\+Parser\+::\+First\+Operator\+Switch (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Set is\+\_\+first\+\_\+operator\+\_\+ to false if currently true, else do nothing. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00260}{260}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_acd31b450eb0f6df91a780736ac00120e}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!Parse@{Parse}}
+\index{Parse@{Parse}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{Parse()}{Parse()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_acd31b450eb0f6df91a780736ac00120e} 
+\mbox{\hyperlink{namespacecaoco_a49023dd0304e9e8d4bfcdab14fba90aa}{Expected\+Ast}} caoco\+::parser\+::\+Expr\+Parser\+::\+Parse (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}}}]{c}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00241}{241}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a74313c425efda2f6b6a96282de5361d5}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!ParseImpl@{ParseImpl}}
+\index{ParseImpl@{ParseImpl}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{ParseImpl()}{ParseImpl()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a74313c425efda2f6b6a96282de5361d5} 
+\mbox{\hyperlink{namespacecaoco_a49023dd0304e9e8d4bfcdab14fba90aa}{Expected\+Ast}} caoco\+::parser\+::\+Expr\+Parser\+::\+Parse\+Impl (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}}}]{c}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+After the closures are resolved, perform an LL recursive descent parse. Expect the expression to be fully parenthesized. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00748}{748}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_adfb59649a55673e3d1deaf3c58e825e0}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!Perform@{Perform}}
+\index{Perform@{Perform}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{Perform()}{Perform()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_adfb59649a55673e3d1deaf3c58e825e0} 
+static \mbox{\hyperlink{namespacecaoco_a49023dd0304e9e8d4bfcdab14fba90aa}{Expected\+Ast}} caoco\+::parser\+::\+Expr\+Parser\+::\+Perform (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcaoco_1_1_tk_cursor}{Tk\+Cursor}}}]{c}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00169}{169}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a8bfec16ebc1bae4994ed998e94efe606}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!ResolveBinary@{ResolveBinary}}
+\index{ResolveBinary@{ResolveBinary}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{ResolveBinary()}{ResolveBinary()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a8bfec16ebc1bae4994ed998e94efe606} 
+void caoco\+::parser\+::\+Expr\+Parser\+::\+Resolve\+Binary (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00389}{389}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a23730cce04d6f699802b229e0793ccba}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!ResolveBinaryLeftAssoc@{ResolveBinaryLeftAssoc}}
+\index{ResolveBinaryLeftAssoc@{ResolveBinaryLeftAssoc}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{ResolveBinaryLeftAssoc()}{ResolveBinaryLeftAssoc()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a23730cce04d6f699802b229e0793ccba} 
+void caoco\+::parser\+::\+Expr\+Parser\+::\+Resolve\+Binary\+Left\+Assoc (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00314}{314}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_ac66d757c29a57e452acaa28998e34285}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!ResolveBinaryRightAssoc@{ResolveBinaryRightAssoc}}
+\index{ResolveBinaryRightAssoc@{ResolveBinaryRightAssoc}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{ResolveBinaryRightAssoc()}{ResolveBinaryRightAssoc()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_ac66d757c29a57e452acaa28998e34285} 
+void caoco\+::parser\+::\+Expr\+Parser\+::\+Resolve\+Binary\+Right\+Assoc (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00357}{357}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a465b6064cdef1d4bfb43e1fa2caeecda}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!ResolveLast@{ResolveLast}}
+\index{ResolveLast@{ResolveLast}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{ResolveLast()}{ResolveLast()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a465b6064cdef1d4bfb43e1fa2caeecda} 
+void caoco\+::parser\+::\+Expr\+Parser\+::\+Resolve\+Last (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Resolves the last closure based on type,unchecked. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00447}{447}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_ab3e449f6fa89e504ecca5a4ad8cde32c}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!ResolvePostfix@{ResolvePostfix}}
+\index{ResolvePostfix@{ResolvePostfix}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{ResolvePostfix()}{ResolvePostfix()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_ab3e449f6fa89e504ecca5a4ad8cde32c} 
+void caoco\+::parser\+::\+Expr\+Parser\+::\+Resolve\+Postfix (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00288}{288}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a4a116e578acac8688f7ad8adda5c68c3}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!ResolvePrefix@{ResolvePrefix}}
+\index{ResolvePrefix@{ResolvePrefix}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{ResolvePrefix()}{ResolvePrefix()}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a4a116e578acac8688f7ad8adda5c68c3} 
+void caoco\+::parser\+::\+Expr\+Parser\+::\+Resolve\+Prefix (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00266}{266}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a671f32d87ba5f8522d802d0d6054fcf3}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!closure\_buffer\_@{closure\_buffer\_}}
+\index{closure\_buffer\_@{closure\_buffer\_}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{closure\_buffer\_}{closure\_buffer\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a671f32d87ba5f8522d802d0d6054fcf3} 
+\mbox{\hyperlink{classcaoco_1_1_closure_buffer}{Closure\+Buffer}} caoco\+::parser\+::\+Expr\+Parser\+::closure\+\_\+buffer\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00224}{224}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_addeba611f4518a026c732ed476589ca4}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!is\_first\_operator\_@{is\_first\_operator\_}}
+\index{is\_first\_operator\_@{is\_first\_operator\_}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{is\_first\_operator\_}{is\_first\_operator\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_addeba611f4518a026c732ed476589ca4} 
+bool caoco\+::parser\+::\+Expr\+Parser\+::is\+\_\+first\+\_\+operator\+\_\+ = \{true\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00225}{225}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a5c64d2cc0942cdc89917b9cc7ae4ad42}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!is\_resolved\_@{is\_resolved\_}}
+\index{is\_resolved\_@{is\_resolved\_}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{is\_resolved\_}{is\_resolved\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a5c64d2cc0942cdc89917b9cc7ae4ad42} 
+bool caoco\+::parser\+::\+Expr\+Parser\+::is\+\_\+resolved\+\_\+ = \{false\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00226}{226}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a47f345bf9b127d5b349b3b4c51d3339f}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!kCloseParenTk@{kCloseParenTk}}
+\index{kCloseParenTk@{kCloseParenTk}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{kCloseParenTk}{kCloseParenTk}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a47f345bf9b127d5b349b3b4c51d3339f} 
+const \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} caoco\+::parser\+::\+Expr\+Parser\+::k\+Close\+Paren\+Tk = \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}\{e\+Tk\+::\+RParen, "{})"{}\}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00220}{220}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_a9a8030c4ed632d21d03de121ae7d7ade}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!kOpenParenTk@{kOpenParenTk}}
+\index{kOpenParenTk@{kOpenParenTk}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{kOpenParenTk}{kOpenParenTk}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_a9a8030c4ed632d21d03de121ae7d7ade} 
+const \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}} caoco\+::parser\+::parser\+::\+Expr\+Parser\+::k\+Open\+Paren\+Tk = \mbox{\hyperlink{classcaoco_1_1_tk}{Tk}}\{e\+Tk\+::\+LParen, "{}("{}\}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00219}{219}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+\Hypertarget{classcaoco_1_1parser_1_1_expr_parser_aa4e6f0123f276140813d02dd9feddf6f}\index{caoco::parser::ExprParser@{caoco::parser::ExprParser}!next\_expected\_head\_token\_@{next\_expected\_head\_token\_}}
+\index{next\_expected\_head\_token\_@{next\_expected\_head\_token\_}!caoco::parser::ExprParser@{caoco::parser::ExprParser}}
+\doxysubsubsection{\texorpdfstring{next\_expected\_head\_token\_}{next\_expected\_head\_token\_}}
+{\footnotesize\ttfamily \label{classcaoco_1_1parser_1_1_expr_parser_aa4e6f0123f276140813d02dd9feddf6f} 
+\mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376}{e\+Next\+Expected\+Head\+Token}} caoco\+::parser\+::\+Expr\+Parser\+::next\+\_\+expected\+\_\+head\+\_\+token\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \mbox{\hyperlink{classcaoco_1_1parser_1_1_expr_parser_a432f79129c8826b9a2c93b88bfd17376a9875e66256eede4f465b00a7e301a754}{eNextExpectedHeadToken::kOperative}}\}}
+
+\end{DoxyCode}
+
+
+Expected token type on next iteration. 
+
+
+
+Definition at line \mbox{\hyperlink{caoco__parser_8h_source_l00222}{222}} of file \mbox{\hyperlink{caoco__parser_8h_source}{caoco\+\_\+parser.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Anton/source/repos/\+Cand\+Runtime/cand-\/compiler/\mbox{\hyperlink{caoco__parser_8h}{caoco\+\_\+parser.\+h}}\end{DoxyCompactItemize}

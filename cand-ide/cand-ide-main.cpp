@@ -4,27 +4,33 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 
-// CppExtended
+// CppExtended -
+// C++ Standard Library Extensions also includes MPA Meta Programming Archive
 #include "cppsextended.h"
 
-// Unit Testing
+// Unit Testing Framework
 // Makes mini-test record all test results, even if they pass.
 // For the ui test explorer to work.
 #define MINITEST_CONFIG_RECORD_ALL
 #include "minitest.h"
-#include "ut_cand_compiler.h"
-#include "ut_expected.h"
 
-// CIDE 
-#include "cide_backend.h"
-#include "cide_ui.h"
+// ImGui
 #include "imgui-SFML.h"
 #include "imgui.h"
 #include "imgui_interface.h"
 #include "imgui_stdlib.h"
-#include "import_unit_tests.h"
 
-/// Weird Glitch with ImGui.
+// CIDE - C& Integrated Developer Environment
+#include "cide_backend.h"
+#include "cide_ui.h"
+
+// Unit Tests
+#include "import_unit_tests.h"
+#include "ut_cand_compiler.h"
+#include "ut_expected.h"
+
+// !TEMPORARY FIX!
+// Weird Glitch with ImGui.
 // When moving around the window, the updated imgui.ini will cause a crash
 // For now im clearing the imgui.ini file on startup.
 // This is a temporary fix. Cannot find the root cause.
@@ -77,7 +83,6 @@ int main() {
 
       if (event.type == sf::Event::KeyReleased) {
         if (event.key.code == sf::Keyboard::T) {
-
         }
       }
       if (event.type == sf::Event::Closed) {
