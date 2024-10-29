@@ -1,4 +1,0 @@
-#include 'circular.cand'
-
-def int @INTMIN:2147483648;
-def int @INTMAX:2147483647;
