@@ -1,4 +1,3 @@
-=======
 # C& Programming Language Full Environment Package
 A complete package with minimal external dependencies for creating and deploying C& programs and libraries.
 
