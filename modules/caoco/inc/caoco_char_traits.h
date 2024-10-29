@@ -1,0 +1,344 @@
+///////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+// Licensed under the Apache License, Version 2.0(the "License");
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_compiler_data
+/// @brief ASCII Character Traits in the context of the C& compiler.
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cand_compiler_data
+/// @{
+#ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_CHAR_TRAITS_H
+#define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_CHAR_TRAITS_H
+// Includes:
+#include "cxxx.hpp"
+
+namespace caoco {
+namespace cand_char {
+using ConstCharInitializerList = std::initializer_list<char>;
+using CharLimits = std::numeric_limits<unsigned char>;
+
+static constexpr inline ConstCharInitializerList kAlphaChars = {
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+
+static constexpr inline ConstCharInitializerList kAlnumusChars = {
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    '_', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+static constexpr inline ConstCharInitializerList kNumericChars = {
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+static constexpr inline ConstCharInitializerList kSymbolChars = {
+    '!', '@', '#', '$', '%', '^',  '&', '*', '-',  '+',  '=',
+    '{', '}', '[', ']', '|', '\\', ';', ':', '\'', '\"', '<',
+    '>', '?', '/', '~', '`', '.',  ',', '(', ')',  '_'};
+
+static constexpr inline ConstCharInitializerList kWhiteSpaceChars = {
+    ' ', '\n', '\r', '\v', '\f'};
+
+static constexpr inline ConstCharInitializerList kNewLineChars = {'\n', '\r',
+                                                                  '\v', '\f'};
+
+static constexpr inline ConstCharInitializerList kCoreControlChars = {
+    '\0', '\a', '\b', '\t', '\n', '\v', '\f', '\r', '\x1b'};
+
+static constexpr inline bool IsAlpha(char c) {
+  switch (c) {
+    case 'a':
+    case 'b':
+    case 'c':
+    case 'd':
+    case 'e':
+    case 'f':
+    case 'g':
+    case 'h':
+    case 'i':
+    case 'j':
+    case 'k':
+    case 'l':
+    case 'm':
+    case 'n':
+    case 'o':
+    case 'p':
+    case 'q':
+    case 'r':
+    case 's':
+    case 't':
+    case 'u':
+    case 'v':
+    case 'w':
+    case 'x':
+    case 'y':
+    case 'z':
+    case 'A':
+    case 'B':
+    case 'C':
+    case 'D':
+    case 'E':
+    case 'F':
+    case 'G':
+    case 'H':
+    case 'I':
+    case 'J':
+    case 'K':
+    case 'L':
+    case 'M':
+    case 'N':
+    case 'O':
+    case 'P':
+    case 'Q':
+    case 'R':
+    case 'S':
+    case 'T':
+    case 'U':
+    case 'V':
+    case 'W':
+    case 'X':
+    case 'Y':
+    case 'Z':
+      return true;
+    default:
+      return false;
+      break;
+  }
+}
+
+static constexpr inline bool IsNumeric(char c) {
+  switch (c) {
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+      return true;
+    default:
+      return false;
+      break;
+  }
+}
+
+static constexpr inline bool IsUnderscore(char c) { return c == '_'; }
+
+static constexpr inline bool IsAlphanumeric(char c) {
+  return IsAlpha(c) || IsNumeric(c);
+}
+
+static constexpr inline bool IsAlphaUnderscore(char c) {
+  return IsAlpha(c) || IsUnderscore(c);
+}
+
+static constexpr inline bool IsAlnumus(char c) {
+  return IsAlpha(c) || IsNumeric(c) || IsUnderscore(c);
+}
+
+static constexpr inline bool IsSymbol(char c) {
+  switch (c) {
+      //'!', '@', '#', '$', '%', '^', '&', '*', '-', '+', '=', '{', '}', '[',
+      //']',
+      //    '|', '\\', ';', ':', '\'', '\"', '<', '>', '?', '/', '~', '`', '.',
+      //    ',',
+      //    '(', ')', '_'
+    case '!':
+    case '@':
+    case '#':
+    case '$':
+    case '%':
+    case '^':
+    case '&':
+    case '*':
+    case '-':
+    case '+':
+    case '=':
+    case '{':
+    case '}':
+    case '[':
+    case ']':
+    case '|':
+    case '\\':
+    case ';':
+    case ':':
+    case '\'':
+    case '\"':
+    case '<':
+    case '>':
+    case '?':
+    case '/':
+    case '~':
+    case '`':
+    case '.':
+    case ',':
+    case '(':
+    case ')':
+    case '_':
+      return true;
+    default:
+      return false;
+      break;
+  }
+}
+
+static constexpr inline bool IsCoreSymbol(char c) {
+  return IsSymbol(c);  // temp same as symbols
+}
+
+static constexpr inline bool IsPrintableSpace(char c) {
+  return c == ' ' || c == '\t';
+}
+
+static constexpr inline bool IsPrintable(char c) {
+  return IsAlpha(c) || IsNumeric(c) || IsCoreSymbol(c) || IsPrintableSpace(c);
+}
+
+static constexpr inline bool IsWhitespace(char c) {
+  // ' ', '\n', '\r', '\v', '\f'
+  switch (c) {
+    case ' ':
+    case '\n':
+    case '\r':
+    case '\v':
+    case '\f':
+    case '\t':
+      return true;
+    default:
+      return false;
+      break;
+  }
+}
+
+static constexpr inline bool IsNewline(char c) {
+  //  '\n', '\r', '\v', '\f'
+  switch (c) {
+    case '\n':
+    case '\r':
+    case '\v':
+    case '\f':
+      return true;
+    default:
+      return false;
+      break;
+  }
+}
+
+static constexpr inline bool IsCoreControl(char c) {
+  // '\0', '\a', '\b', '\t', '\n', '\v', '\f', '\r', '\x1b'
+  switch (c) {
+    case '\0':
+    case '\a':
+    case '\b':
+    case '\t':
+    case '\n':
+    case '\v':
+    case '\f':
+    case '\r':
+    case '\x1b':
+      return true;
+    default:
+      return false;
+      break;
+  }
+}
+static constexpr inline bool IsValid(char c) {
+  // One of the 128 ASCII characters
+  if ((c >= 0) && c <= 127) return true;
+  return false;
+}
+
+// Overloads for iterators (use with caution, bounds checking is not performed)
+
+static constexpr inline bool IsAlpha(std::vector<char>::const_iterator c) {
+  return IsAlpha(*c);
+}
+
+static constexpr inline bool IsNumeric(std::vector<char>::const_iterator c) {
+  return IsNumeric(*c);
+}
+
+static constexpr inline bool IsUnderscore(std::vector<char>::const_iterator c) {
+  return IsUnderscore(*c);
+}
+
+static constexpr inline bool IsAlphanumeric(
+    std::vector<char>::const_iterator c) {
+  return IsAlphanumeric(*c);
+}
+
+static constexpr inline bool IsAlphaUnderscore(
+    std::vector<char>::const_iterator c) {
+  return IsAlphaUnderscore(*c);
+}
+
+static constexpr inline bool IsAlnumus(std::vector<char>::const_iterator c) {
+  return IsAlnumus(*c);
+}
+
+static constexpr inline bool IsSymbol(std::vector<char>::const_iterator c) {
+  return IsSymbol(*c);
+}
+
+static constexpr inline bool IsCoreSymbol(std::vector<char>::const_iterator c) {
+  return IsCoreSymbol(*c);
+}
+
+static constexpr inline bool IsPrintableSpace(
+    std::vector<char>::const_iterator c) {
+  return IsPrintableSpace(*c);
+}
+
+static constexpr inline bool IsPrintable(std::vector<char>::const_iterator c) {
+  return IsPrintable(*c);
+}
+
+static constexpr inline bool IsWhitespace(std::vector<char>::const_iterator c) {
+  return IsWhitespace(*c);
+}
+
+static constexpr inline bool IsNewline(std::vector<char>::const_iterator c) {
+  return IsNewline(*c);
+}
+
+static constexpr inline bool IsCoreControl(
+    std::vector<char>::const_iterator c) {
+  return IsCoreControl(*c);
+}
+
+}  // namespace cand_char
+}  // namespace caoco
+
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_CHAR_TRAITS_H
+/// @} // end of cand_compiler_data
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+//
+// Licensed under the Apache License, Version 2.0(the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+///////////////////////////////////////////////////////////////////////////////

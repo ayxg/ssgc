@@ -1,0 +1,1049 @@
+///////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+// Licensed under the Apache License, Version 2.0(the "License");
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cand_compiler_parser
+/// @brief TkScope is a utility object used to determine the start and end of 
+/// a scope. 
+///////////////////////////////////////////////////////////////////////////////
+
+#ifndef HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_SCOPE_H
+#define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_SCOPE_H
+#include "cxxx.hpp"
+// Includes:
+#include "caoco_token.h"
+#include "caoco_token_cursor.h"
+
+namespace caoco {
+/// @defgroup cand_compiler_parser_scope Token Scope
+/// @ingroup cand_compiler_parser
+/// TkScope is a utility object used to determine the start and end of a scope.
+/// @{
+
+class TkScope {
+ public:
+  using Vector = vector<TkScope>;
+  // Methods for determining the start and end of a scope.
+  static TkScope FindParen(TkVectorConstIter begin, TkVectorConstIter end);
+  static TkScope FindParen(TkCursor crsr);
+  static TkScope FindBrace(TkVectorConstIter begin, TkVectorConstIter end);
+  static TkScope FindBrace(TkCursor crsr);
+  static TkScope FindBracket(TkVectorConstIter begin, TkVectorConstIter end);
+  static TkScope FindBracket(TkCursor crsr);
+  /// Method for extracting a seperated parentheses scope. (<separator>)
+  static vector<TkScope> FindSeperatedParen(TkVectorConstIter begin,
+                                            TkVectorConstIter end,
+                                            eTk separator);
+  static vector<TkScope> FindSeperatedParen(TkCursor crsr, eTk separator);
+  static vector<TkScope> FindSeperatedParen(TkScope ls, eTk separator);
+
+  /// Method for extracting a seperated list scope. {<separator>}
+  static vector<TkScope> FindSeperatedBrace(TkVectorConstIter begin,
+                                            TkVectorConstIter end,
+                                            eTk separator);
+  static vector<TkScope> FindSeperatedBrace(TkCursor crsr, eTk separator);
+  static vector<TkScope> FindSeperatedBrace(TkScope ls, eTk separator);
+
+  /// Method for extracting a seperated frame scope. [<separator>]
+  static vector<TkScope> FindSeperatedBracket(TkVectorConstIter begin,
+                                              TkVectorConstIter end,
+                                              eTk separator);
+  static vector<TkScope> FindSeperatedBracket(TkCursor crsr, eTk separator);
+  static vector<TkScope> FindSeperatedBracket(const TkScope& ls, eTk separator);
+
+  /// Open token may NOT be repeated.
+  /// 
+  /// TODO: refactor to use TkCursor instead of TkVectorConstIter next time you
+  /// use this. Also make sure it does not throw.
+  static TkScope FindStatement(eTk open, eTk close, TkVectorConstIter begin,
+                               TkVectorConstIter end);
+
+  /// Open token may be repeated.
+  static TkScope FindOpenStatement(eTk open, eTk close, TkVectorConstIter begin,
+                                   TkVectorConstIter end);
+  /// Open token may be repeated.
+  static TkScope FindOpenStatement(eTk open, vector<eTk> close,
+                                   TkVectorConstIter begin,
+                                   TkVectorConstIter end);
+
+  /// Starts with the begin token which may be repeated, ends with a semicolon_
+  /// ';'
+  static TkScope FindProgramStatement(TkVectorConstIter begin,
+                                      TkVectorConstIter end);
+
+  static TkScope FindProgramStatement(TkCursor cursor);
+
+ public:
+  const std::string& Error() const { return error_message_; }
+
+  bool Valid() const { return valid_; }
+
+  /// Returns the end of the scope, not including the close token.
+  auto ContainedEnd() const { return end_ - 1; }
+
+  /// Returns the beginning of the scope, not including the open token.
+  auto ContainedBegin() const { return begin_ + 1; }
+
+  /// Returns true if the scope is empty.
+  auto IsEmpty() const { return ContainedBegin() == ContainedEnd(); }
+
+  /// Returns the end of the scope, including the close token.
+  auto End() const { return end_; }
+
+  /// Returns the beginning of the scope, including the open token.
+  auto Begin() const { return begin_; }
+
+  TkCursor Contained() const {
+    return TkCursor{ContainedBegin(), ContainedEnd()};
+  }
+
+  constexpr operator bool() const { return valid_; }
+
+  TkScope() = default;
+
+  TkScope(bool valid, TkVectorConstIter begin, TkVectorConstIter end)
+      : valid_(valid), begin_(begin), end_(end) {}
+
+ private:
+  bool valid_{false};
+  TkVectorConstIter begin_;
+  TkVectorConstIter end_;
+  std::string error_message_;
+};
+
+TkScope TkScope::FindParen(TkVectorConstIter begin, TkVectorConstIter end) {
+  auto paren_scope_depth = 0;
+  auto frame_scope_depth = 0;
+  auto list_scope_depth = 0;
+  std::stack<eTk> scope_type_history;
+  TkCursor last_open = {begin, end};
+  TkVectorConstIter last_closed = begin;
+  TkVectorConstIter error_last_closed = begin;
+
+  if (last_open.AtEnd()) {  // Open is at end therefore cannot be closed.
+    auto failure = TkScope{false, begin, end};
+    failure.error_message_ =
+        "find_paren: Open token is at end of token vector.";
+    return failure;
+  }
+
+  if (!last_open.TypeIs(eTk::LParen)) {  // No open list token to start with.
+    auto failure = TkScope{false, begin, end};
+    failure.error_message_ =
+        "find_paren: Open token is not an open scope token.";
+    return failure;
+  }
+
+  if (last_open.Next().AtEnd()) {  // End right after open, cannot be closed.
+    auto failure = TkScope{false, begin, end};
+    failure.error_message_ =
+        "find_paren: Open token is at end of token vector.";
+    return failure;
+  }
+
+  if (last_open.Next().TypeIs(eTk::RParen)) {  // Empty list
+    return TkScope{true, begin, last_open.Next(2).Iter()};
+  }
+
+  // find the last matching close token that is not within a () [] or {}
+  // scope, if there is no matching close token, return false
+  for (auto tk_it = (begin + 1); tk_it != end; tk_it++) {
+    if (tk_it->TypeIs(eTk::LParen)) {
+      paren_scope_depth++;
+      scope_type_history.push(eTk::LParen);
+    } else if (tk_it->TypeIs(eTk::RParen)) {
+      if (scope_type_history.empty()) {
+        // This is the end of the scope
+        last_closed = tk_it;
+        break;
+      }
+
+      if (scope_type_history.top() != eTk::LParen) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_paren: Close token ')' without open token '('.";
+        return failure;
+      }
+      scope_type_history.pop();
+      paren_scope_depth--;
+    } else if (tk_it->TypeIs(eTk::LBracket)) {
+      frame_scope_depth++;
+      scope_type_history.push(eTk::LBracket);
+    } else if (tk_it->TypeIs(eTk::RBracket)) {
+      if (scope_type_history.empty()) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_paren: Close token ']' without open token '['.";
+        return failure;
+      }
+
+      if (scope_type_history.top() != eTk::LBracket) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_paren: Close token ']' without open token '['.";
+        return failure;
+      }
+      scope_type_history.pop();
+      frame_scope_depth--;
+    } else if (tk_it->TypeIs(eTk::LBrace)) {
+      list_scope_depth++;
+      scope_type_history.push(eTk::LBrace);
+    } else if (tk_it->TypeIs(eTk::RBrace)) {
+      if (scope_type_history.empty()) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_paren: Close token '}' without open token '{'.";
+        return failure;
+      }
+
+      if (scope_type_history.top() != eTk::LBrace) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_paren: Close token '}' without open token '{'.";
+        return failure;
+      }
+      scope_type_history.pop();
+      list_scope_depth--;
+    }  // end if
+    error_last_closed = tk_it;
+  }  // end for
+
+  if (paren_scope_depth != 0) {
+    auto failure = TkScope{false, begin, last_closed + 1};
+    failure.error_message_ =
+        "find_paren: Parentheses scope contains mismatched parentheses.";
+    return failure;
+  }
+  if (frame_scope_depth != 0) {
+    auto failure = TkScope{false, begin, last_closed + 1};
+    failure.error_message_ =
+        "find_paren: Parentheses scope contains mismatched frames.";
+    return failure;
+  }
+  if (list_scope_depth != 0) {
+    auto failure = TkScope{false, begin, last_closed + 1};
+    failure.error_message_ =
+        "find_paren: Parentheses scope contains mismatched list scopes.";
+    return failure;
+  }
+  if (last_closed == begin) {
+    auto failure = TkScope{false, begin, end};
+    failure.error_message_ =
+        "find_paren: Parentheses scope at Line:" +
+        std::to_string(last_open.Line()) +
+        " column:" + std::to_string(last_open.Col()) + " was never closed.\n" +
+        "Expected a close token ')' at Line:" +
+        std::to_string(error_last_closed->Line()) +
+        " column:" + std::to_string(error_last_closed->Col());
+    return failure;
+  }
+
+  return TkScope{true, begin, last_closed + 1};
+}  // end find_paren
+
+TkScope TkScope::FindParen(TkCursor crsr) {
+  return FindParen(crsr.Iter(), crsr.End());
+}
+
+TkScope TkScope::FindBrace(TkVectorConstIter begin, TkVectorConstIter end) {
+  auto paren_scope_depth = 0;
+  auto frame_scope_depth = 0;
+  auto list_scope_depth = 0;
+  std::stack<eTk> scope_type_history;
+  TkCursor last_open = {begin, end};
+  TkVectorConstIter last_closed = begin;
+  TkVectorConstIter error_last_closed = begin;
+  if (last_open.AtEnd()) {  // Open is at end therefore cannot be closed.
+    auto failure = TkScope{false, begin, end};
+    failure.error_message_ =
+        "find_brace: Open token is at end of token vector.";
+    return failure;
+  }
+
+  if (!last_open.TypeIs(eTk::LBrace)) {  // No open list token to start with.
+    auto failure = TkScope{false, begin, end};
+    failure.error_message_ =
+        "find_brace: Open token is not an open list token.";
+    return failure;
+  }
+
+  if (last_open.Next().AtEnd()) {  // End right after open, cannot be closed.
+    auto failure = TkScope{false, begin, end};
+    failure.error_message_ =
+        "find_brace: Open token is at end of token vector.";
+    return failure;
+  }
+
+  if (last_open.Next().TypeIs(eTk::RBrace)) {  // Empty list
+    return TkScope{true, begin, last_open.Next(2).Iter()};
+  }
+
+  // find the last matching close token that is not within a () [] or {}
+  // scope, if there is no matching close token, return false
+  for (auto tk_it = (begin + 1); tk_it < end; tk_it++) {
+    if (tk_it->TypeIs(eTk::LParen)) {
+      paren_scope_depth++;
+      scope_type_history.push(eTk::LParen);
+    } else if (tk_it->TypeIs(eTk::RParen)) {
+      if (scope_type_history.empty()) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_brace: Close token ')' without open token '('.";
+        return failure;
+      }
+
+      if (scope_type_history.top() != eTk::LParen) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_brace: Close token ')' without open token '('.";
+        return failure;
+      }
+      scope_type_history.pop();
+      paren_scope_depth--;
+    } else if (tk_it->TypeIs(eTk::LBracket)) {
+      frame_scope_depth++;
+      scope_type_history.push(eTk::LBracket);
+    } else if (tk_it->TypeIs(eTk::RBracket)) {
+      if (scope_type_history.empty()) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_brace: Close token ']' without open token '['.";
+        return failure;
+      }
+
+      if (scope_type_history.top() != eTk::LBracket) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_brace: Close token ']' without open token '['.";
+        return failure;
+      }
+      scope_type_history.pop();
+      frame_scope_depth--;
+    } else if (tk_it->TypeIs(eTk::LBrace)) {
+      list_scope_depth++;
+      scope_type_history.push(eTk::LBrace);
+    } else if (tk_it->TypeIs(eTk::RBrace)) {
+      if (scope_type_history.empty()) {
+        last_closed = tk_it;
+        break;  // This is the end of the scope
+      }
+
+      if (scope_type_history.top() != eTk::LBrace) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_brace: Close token '}' without open token '{'.";
+        return failure;
+      }
+      scope_type_history.pop();
+      list_scope_depth--;
+    }
+
+    error_last_closed = tk_it;
+  }
+
+  if (paren_scope_depth != 0) {
+    auto failure = TkScope{false, begin, last_closed + 1};
+    failure.error_message_ =
+        "find_brace: List scope contains mismatched parentheses.";
+    return failure;
+  }
+  if (frame_scope_depth != 0) {
+    auto failure = TkScope{false, begin, last_closed + 1};
+    failure.error_message_ =
+        "find_brace: List scope contains mismatched frames.";
+    return failure;
+  }
+  if (list_scope_depth != 0) {
+    auto failure = TkScope{false, begin, last_closed + 1};
+    failure.error_message_ =
+        "find_brace: List scope contains mismatched list scopes.";
+    return failure;
+  }
+  if (last_closed == begin) {
+    auto failure = TkScope{false, begin, end};
+    failure.error_message_ =
+        "find_brace: List scope at Line:" + std::to_string(last_open.Line()) +
+        " column:" + std::to_string(last_open.Col()) + " was never closed.\n" +
+        "Expected a close token ']' at Line:" +
+        std::to_string(error_last_closed->Line()) +
+        " column:" + std::to_string(error_last_closed->Col());
+    return failure;
+  }
+
+  return TkScope{true, begin, last_closed + 1};
+}
+
+TkScope TkScope::FindBrace(TkCursor crsr) {
+  return FindBrace(crsr.Iter(), crsr.End());
+}
+
+TkScope TkScope::FindBracket(TkVectorConstIter begin, TkVectorConstIter end) {
+  auto paren_scope_depth = 0;
+  auto frame_scope_depth = 0;
+  auto list_scope_depth = 0;
+  std::stack<eTk> scope_type_history;
+  TkCursor last_open = {begin, end};
+  TkVectorConstIter last_closed = begin;
+  TkVectorConstIter error_last_closed = begin;
+
+  if (last_open.AtEnd()) {  // Open is at end therefore cannot be closed.
+    auto failure = TkScope{false, begin, end};
+    failure.error_message_ =
+        "find_bracket: Open token is at end of token vector.";
+  }
+
+  if (!last_open.TypeIs(eTk::LBracket)) {  // No open list token to start with.
+    auto failure = TkScope{false, begin, end};
+    failure.error_message_ =
+        "find_bracket: Open token is not an open frame token.";
+    return failure;
+  }
+
+  if (last_open.Next().AtEnd()) {  // End right after open, cannot be closed.
+    auto failure = TkScope{false, begin, end};
+    failure.error_message_ =
+        "find_bracket: Open token is at end of token vector.";
+    return failure;
+  }
+
+  if (last_open.Next().TypeIs(eTk::RBracket)) {  // Empty list
+    return TkScope{true, begin, last_open.Next(2).Iter()};
+  }
+
+  // find the last matching close token that is not within a () [] or {}
+  // scope, if there is no matching close token, return false find the last
+  // matching close token that is not within a () [] or {} scope, if there is
+  // no matching close token, return false
+  for (auto tk_it = (begin + 1); tk_it != end; tk_it++) {
+    if (tk_it->TypeIs(eTk::LBracket)) {
+      frame_scope_depth++;
+      scope_type_history.push(eTk::LBracket);
+    } else if (tk_it->TypeIs(eTk::RBracket)) {
+      if (scope_type_history.empty()) {
+        // This is the end of the scope
+        last_closed = tk_it;
+        break;
+      }
+
+      if (scope_type_history.top() != eTk::LBracket) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_bracket: Close token ']' without open token '['.";
+        return failure;
+      }
+      scope_type_history.pop();
+      frame_scope_depth--;
+    } else if (tk_it->TypeIs(eTk::LParen)) {
+      paren_scope_depth++;
+      scope_type_history.push(eTk::LParen);
+    } else if (tk_it->TypeIs(eTk::RParen)) {
+      if (scope_type_history.empty()) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_bracket: Close token ')' without open token '('.";
+        return failure;
+      }
+
+      if (scope_type_history.top() != eTk::LParen) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_bracket: Close token ')' without open token '('.";
+        return failure;
+      }
+      scope_type_history.pop();
+      paren_scope_depth--;
+    } else if (tk_it->TypeIs(eTk::LBrace)) {
+      list_scope_depth++;
+      scope_type_history.push(eTk::LBrace);
+    } else if (tk_it->TypeIs(eTk::RBrace)) {
+      if (scope_type_history.empty()) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_bracket: Close token '}' without open token '{'.";
+        return failure;
+      }
+
+      if (scope_type_history.top() != eTk::LBrace) {
+        auto failure = TkScope{false, begin, end};
+        failure.error_message_ =
+            "find_bracket: Close token '}' without open token '{'.";
+        return failure;
+      }
+      scope_type_history.pop();
+      list_scope_depth--;
+    }  // end switch
+
+    error_last_closed = tk_it;
+  }
+
+  if (paren_scope_depth != 0) {
+    auto failure = TkScope{false, begin, last_closed + 1};
+    failure.error_message_ =
+        "find_bracket: Frame scope contains mismatched parentheses.";
+    return failure;
+  }
+  if (frame_scope_depth != 0) {
+    auto failure = TkScope{false, begin, last_closed + 1};
+    failure.error_message_ =
+        "find_bracket: Frame scope contains mismatched frames.";
+    return failure;
+  }
+  if (list_scope_depth != 0) {
+    auto failure = TkScope{false, begin, last_closed + 1};
+    failure.error_message_ =
+        "find_bracket: Frame scope contains mismatched list scopes.";
+    return failure;
+  }
+  if (last_closed == begin) {
+    auto failure = TkScope{false, begin, end};
+    failure.error_message_ =
+        "find_bracket: Frame scope at Line:" +
+        std::to_string(last_open.Line()) +
+        " column:" + std::to_string(last_open.Col()) + " was never closed.\n" +
+        "Expected a close token ']' at Line:" +
+        std::to_string(error_last_closed->Line()) +
+        " column:" + std::to_string(error_last_closed->Col());
+    return failure;
+  }
+
+  return TkScope{true, begin, last_closed + 1};
+}
+
+TkScope TkScope::FindBracket(TkCursor crsr) {
+  return FindBracket(crsr.Iter(), crsr.End());
+}
+
+vector<TkScope> TkScope::FindSeperatedParen(TkVectorConstIter begin,
+                                            TkVectorConstIter end,
+                                            eTk separator) {
+  vector<TkScope> scopes;
+  if (begin->Type() != eTk::LParen) {
+    scopes.push_back(TkScope{false, begin, end});
+    return scopes;
+  }
+  std::stack<eTk> scope_type_history;
+  TkVectorConstIter last_closed = begin;
+  begin++;  // Skip the open list token
+  for (TkVectorConstIter i = begin; i < end;) {
+    if (i->TypeIs(separator) && scope_type_history.empty()) {
+      scopes.push_back(TkScope{true, last_closed, i + 1});
+      last_closed = i;
+    } else if (i->IsLScope()) {
+      scope_type_history.push(i->Type());
+    } else if (i->IsRScope() && !scope_type_history.empty()) {
+      if (i->IsRScopeOf(scope_type_history.top())) {
+        scope_type_history.pop();
+      } else {
+        scopes.push_back(TkScope{false, i, end});  // Wrong closing scope
+        return scopes;
+      }
+    } else if (i->TypeIs(eTk::RParen) && scope_type_history.empty()) {
+      // end of list
+      scopes.push_back(TkScope{true, last_closed, i + 1});
+      return scopes;
+    } else if (i->TypeIs(eTk::Eofile)) {
+      scopes.push_back(TkScope{false, i, end});  // End of file
+      return scopes;
+    }
+    std::advance(i, 1);
+  }
+}
+vector<TkScope> TkScope::FindSeperatedParen(TkCursor crsr, eTk separator) {
+  return FindSeperatedParen(crsr.Iter(), crsr.End(), separator);
+}
+vector<TkScope> TkScope::FindSeperatedParen(TkScope ls, eTk separator) {
+  return FindSeperatedParen(ls.Begin(), ls.End(), separator);
+}
+
+vector<TkScope> TkScope::FindSeperatedBrace(TkVectorConstIter begin,
+                                            TkVectorConstIter end,
+                                            eTk separator) {
+  vector<TkScope> scopes;
+  if (begin->Type() != eTk::LBrace) {
+    scopes.push_back(TkScope{false, begin, end});
+    return scopes;
+  }
+  std::stack<eTk> scope_type_history;
+  TkVectorConstIter last_closed = begin;
+  begin++;  // Skip the open list token
+  for (TkVectorConstIter i = begin; i < end;) {
+    if (i->TypeIs(separator) && scope_type_history.empty()) {
+      scopes.push_back(TkScope{true, last_closed, i + 1});
+      last_closed = i;
+    } else if (i->IsLScope()) {
+      scope_type_history.push(i->Type());
+    } else if (i->IsRScope() && !scope_type_history.empty()) {
+      if (i->IsRScopeOf(scope_type_history.top())) {
+        scope_type_history.pop();
+      } else {
+        scopes.push_back(TkScope{false, i, end});  // Wrong closing scope
+        return scopes;
+      }
+    } else if (i->TypeIs(eTk::RBrace) && scope_type_history.empty()) {
+      // end of list
+      scopes.push_back(TkScope{true, last_closed, i + 1});
+      return scopes;
+    } else if (i->TypeIs(eTk::Eofile)) {
+      scopes.push_back(TkScope{false, i, end});  // End of file
+      return scopes;
+    }
+    std::advance(i, 1);
+  }
+}
+vector<TkScope> TkScope::FindSeperatedBrace(TkCursor crsr, eTk separator) {
+  return FindSeperatedBrace(crsr.Iter(), crsr.End(), separator);
+}
+vector<TkScope> TkScope::FindSeperatedBrace(TkScope ls, eTk separator) {
+  return FindSeperatedBrace(ls.Begin(), ls.End(), separator);
+}
+
+vector<TkScope> TkScope::FindSeperatedBracket(TkVectorConstIter begin,
+                                              TkVectorConstIter end,
+                                              eTk separator) {
+  vector<TkScope> scopes;
+  if (begin->Type() != eTk::LBracket) {
+    scopes.push_back(TkScope{false, begin, end});
+    return scopes;
+  }
+  std::stack<eTk> scope_type_history;
+  TkVectorConstIter last_closed = begin;
+  begin++;  // Skip the open list token
+  for (TkVectorConstIter i = begin; i < end;) {
+    if (i->TypeIs(separator) && scope_type_history.empty()) {
+      scopes.push_back(TkScope{true, last_closed, i + 1});
+      last_closed = i;
+    } else if (i->IsLScope()) {
+      scope_type_history.push(i->Type());
+    } else if (i->IsRScope() && !scope_type_history.empty()) {
+      if (i->IsRScopeOf(scope_type_history.top())) {
+        scope_type_history.pop();
+      } else {
+        scopes.push_back(TkScope{false, i, end});  // Wrong closing scope
+        return scopes;
+      }
+    } else if (i->TypeIs(eTk::RBracket) && scope_type_history.empty()) {
+      // end of list
+      scopes.push_back(TkScope{true, last_closed, i + 1});
+      return scopes;
+    } else if (i->TypeIs(eTk::Eofile)) {
+      scopes.push_back(TkScope{false, i, end});  // End of file
+      return scopes;
+    }
+    std::advance(i, 1);
+  }
+}
+vector<TkScope> TkScope::FindSeperatedBracket(TkCursor crsr, eTk separator) {
+  return FindSeperatedBracket(crsr.Iter(), crsr.End(), separator);
+}
+vector<TkScope> TkScope::FindSeperatedBracket(const TkScope& ls,
+                                              eTk separator) {
+  return FindSeperatedBracket(ls.Begin(), ls.End(), separator);
+}
+
+TkScope TkScope::FindStatement(eTk open, eTk close, TkVectorConstIter begin,
+                               TkVectorConstIter end) {
+  auto paren_scope_depth = 0;
+  auto frame_scope_depth = 0;
+  auto list_scope_depth = 0;
+  std::stack<eTk> scope_type_history;
+  TkVectorConstIter last_open = begin;
+  TkVectorConstIter last_closed = begin;
+
+  if (begin->Type() != open) {
+    throw std::runtime_error(
+        "find_statement: begin iterator not on an open token.");
+  }
+  if (std::next(begin)->Type() == close)
+    return TkScope{true, begin, begin + 2};  // Empty statement
+
+  // find the last matching close token that is not within a () [] or {}
+  // scope, if there is no matching close token, return false
+  for (auto it = begin + 1; it < end; it++) {
+    if (it->Type() == eTk::LParen) {
+      paren_scope_depth++;
+      scope_type_history.push(eTk::LParen);
+      // currrent_scope_type = eTk::LParen;
+    } else if (it->Type() == eTk::RParen) {
+      if (scope_type_history.empty() ||
+          scope_type_history.top() != eTk::LParen) {
+        // Has to be a close or error
+        if (it->Type() == close) {
+          last_closed = it;
+          break;
+        } else
+          throw std::runtime_error(
+              "find_statement: Found a close_scope before an open_scope.");
+      }
+      scope_type_history.pop();
+      paren_scope_depth--;
+    } else if (it->Type() == eTk::LBracket) {
+      frame_scope_depth++;
+      // currrent_scope_type = eTk::LBracket;
+      scope_type_history.push(eTk::LBracket);
+    } else if (it->Type() == eTk::RBracket) {
+      if (scope_type_history.empty() ||
+          scope_type_history.top() != eTk::LBracket) {
+        // Has to be a close or error
+        if (it->Type() == close) {
+          last_closed = it;
+          break;
+        } else
+          throw std::runtime_error(
+              "find_statement: Found a close frame token before an open "
+              "frame token.");
+      }
+      scope_type_history.pop();
+      frame_scope_depth--;
+    } else if (it->Type() == eTk::LBrace) {
+      list_scope_depth++;
+      // currrent_scope_type = eTk::LBrace;
+      scope_type_history.push(eTk::LBrace);
+    } else if (it->Type() == eTk::RBrace) {
+      if (scope_type_history.empty() ||
+          scope_type_history.top() != eTk::LBrace) {
+        // Has to be a close or error
+        if (it->Type() == close) {
+          last_closed = it;
+          break;
+        } else
+          throw std::runtime_error(
+              "find_statement: Found a close list token before an open list "
+              "token.");
+      }
+      scope_type_history.pop();
+      list_scope_depth--;
+    }
+
+    if (paren_scope_depth == 0 && frame_scope_depth == 0 &&
+        list_scope_depth == 0) {
+      if (it->Type() == close) {
+        last_closed = it;
+        break;
+      } else if (it->Type() == open)
+        throw std::runtime_error(
+            "find_statement: Found a repeated open token before a close "
+            "token.");
+    }
+  }
+
+  // if(last_closed == end)
+  //	return TkScope{ false, begin, last_closed + 1 }; // No matching close
+  // token
+
+  // NOTE: We are adding 1 to last closed because the end is 1 past the last
+  // token.
+  if (paren_scope_depth != 0) {
+    return TkScope{false, begin,
+                   last_closed + 1};  // No matching close token for parenthesis
+  } else if (frame_scope_depth != 0) {
+    return TkScope{false, begin,
+                   last_closed + 1};  // No matching close token for frame
+  } else if (list_scope_depth != 0) {
+    return TkScope{false, begin,
+                   last_closed + 1};  // No matching close token for list
+  } else {
+    return TkScope{true, begin, last_closed + 1};
+  }
+
+}  // end find_scope
+
+/// Open token may be repeated.
+/// TODO: refactor to use TkCursor instead of TkVectorConstIter next time you
+/// use this.
+TkScope TkScope::FindOpenStatement(eTk open, eTk close, TkVectorConstIter begin,
+                                   TkVectorConstIter end) {
+  auto paren_scope_depth = 0;
+  auto frame_scope_depth = 0;
+  auto list_scope_depth = 0;
+  // eTk currrent_scope_type = eTk::none_;
+  std::stack<eTk> scope_type_history;
+  TkVectorConstIter last_open = begin;
+  TkVectorConstIter last_closed = begin;
+
+  if (begin + 1 == end)
+    return TkScope{false, begin, end + 1};  // Empty statement
+
+  if (begin->Type() != open) {
+    throw std::runtime_error(
+        "find_statement: begin iterator not on an open token.");
+  }
+
+  if (std::next(begin)->Type() == close)
+    return TkScope{true, begin, begin + 2};  // Empty statement
+
+  // SPECIAL CASE: if the open token is a list,paren or frame-> set
+  // scope_type_history and scope depth of the list,paren or frame.
+  if (begin->Type() == eTk::LParen) {
+    paren_scope_depth++;
+    scope_type_history.push(eTk::LParen);
+  } else if (begin->Type() == eTk::LBracket) {
+    frame_scope_depth++;
+    scope_type_history.push(eTk::LBracket);
+  } else if (begin->Type() == eTk::LBrace) {
+    list_scope_depth++;
+    scope_type_history.push(eTk::LBrace);
+  }
+
+  // find the last matching close token that is not within a () [] or {}
+  // scope, if there is no matching close token, return false
+  for (auto it = begin + 1; it < end; it++) {
+    if (it->Type() == eTk::LParen) {
+      paren_scope_depth++;
+      scope_type_history.push(eTk::LParen);
+      // currrent_scope_type = eTk::LParen;
+    } else if (it->Type() == eTk::RParen) {
+      if (scope_type_history.empty()) {
+        return TkScope{false, begin, end};  // Close token without open token
+      }
+
+      if (scope_type_history.top() != eTk::LParen) {
+        // Has to be a close or error
+        if (it->Type() == close) {
+          last_closed = it;
+          break;
+        } else
+          throw std::runtime_error(
+              "find_statement: Found a close_scope before an open_scope.");
+      }
+      scope_type_history.pop();
+      paren_scope_depth--;
+    } else if (it->Type() == eTk::LBracket) {
+      frame_scope_depth++;
+      // currrent_scope_type = eTk::LBracket;
+      scope_type_history.push(eTk::LBracket);
+    } else if (it->Type() == eTk::RBracket) {
+      if (scope_type_history.top() != eTk::LBracket) {
+        // Has to be a close or error
+        if (it->Type() == close) {
+          last_closed = it;
+          break;
+        } else
+          throw std::runtime_error(
+              "find_statement: Found a close frame token before an open "
+              "frame token.");
+      }
+      scope_type_history.pop();
+      frame_scope_depth--;
+    } else if (it->Type() == eTk::LBrace) {
+      list_scope_depth++;
+      // currrent_scope_type = eTk::LBrace;
+      scope_type_history.push(eTk::LBrace);
+    } else if (it->Type() == eTk::RBrace) {
+      if (scope_type_history.top() != eTk::LBrace) {
+        // Has to be a close or error
+        if (it->Type() == close) {
+          last_closed = it;
+          break;
+        } else
+          throw std::runtime_error(
+              "find_statement: Found a close list token before an open list "
+              "token.");
+      }
+      scope_type_history.pop();
+      list_scope_depth--;
+    }
+
+    if (paren_scope_depth == 0 && frame_scope_depth == 0 &&
+        list_scope_depth == 0) {
+      if (it->Type() == close) {
+        last_closed = it;
+        break;
+      }
+    }
+  }
+
+  // if(last_closed == end)
+  //	return TkScope{ false, begin, last_closed + 1 }; // No matching close
+  // token
+
+  // NOTE: We are adding 1 to last closed because the end is 1 past the last
+  // token.
+  if (paren_scope_depth != 0) {
+    return TkScope{false, begin, last_closed + 1};
+  } else if (frame_scope_depth != 0) {
+    return TkScope{false, begin, last_closed + 1};
+  } else if (list_scope_depth != 0) {
+    return TkScope{false, begin, last_closed + 1};
+  } else {
+    if (last_closed == begin)  // Expression was never closed
+      return TkScope{false, begin, last_closed + 1};
+    else
+      return TkScope{true, begin, last_closed + 1};
+  }
+
+}  // end find_scope
+
+/// Open token may be repeated.
+/// TODO: refactor to use TkCursor instead of TkVectorConstIter next time you
+/// use this.
+TkScope TkScope::FindOpenStatement(eTk open, vector<eTk> close,
+                                   TkVectorConstIter begin,
+                                   TkVectorConstIter end) {
+  auto paren_scope_depth = 0;
+  auto frame_scope_depth = 0;
+  auto list_scope_depth = 0;
+  // eTk currrent_scope_type = eTk::none_;
+  std::stack<eTk> scope_type_history;
+  TkVectorConstIter last_open = begin;
+  TkVectorConstIter last_closed = begin;
+
+  if (begin + 1 == end)
+    return TkScope{false, begin, end + 1};  // Empty statement
+
+  if (begin->Type() != open) {
+    throw std::runtime_error(
+        "find_statement: begin iterator not on an open token.");
+  }
+
+  if (std::any_of(close.begin(), close.end(),
+                  [begin](eTk tk) { return std::next(begin)->Type() == tk; }))
+    return TkScope{true, begin, begin + 2};  // Empty statement
+
+  // SPECIAL CASE: if the open token is a list,paren or frame-> set
+  // scope_type_history and scope depth of the list,paren or frame.
+  if (begin->Type() == eTk::LParen) {
+    paren_scope_depth++;
+    scope_type_history.push(eTk::LParen);
+  } else if (begin->Type() == eTk::LBracket) {
+    frame_scope_depth++;
+    scope_type_history.push(eTk::LBracket);
+  } else if (begin->Type() == eTk::LBrace) {
+    list_scope_depth++;
+    scope_type_history.push(eTk::LBrace);
+  }
+
+  // find the last matching close token that is not within a () [] or {}
+  // scope, if there is no matching close token, return false
+  for (auto it = begin + 1; it < end; it++) {
+    if (it->Type() == eTk::LParen) {
+      paren_scope_depth++;
+      scope_type_history.push(eTk::LParen);
+      // currrent_scope_type = eTk::LParen;
+    } else if (it->Type() == eTk::RParen) {
+      if (scope_type_history.empty()) {
+        return TkScope{false, begin, end};  // Close token without open token
+      }
+
+      if (scope_type_history.top() != eTk::LParen) {
+        // Has to be a close or error
+        if (std::any_of(close.begin(), close.end(),
+                        [it](eTk tk) { return it->Type() == tk; })) {
+          last_closed = it;
+          break;
+        } else
+          throw std::runtime_error(
+              "find_statement: Found a close_scope before an open_scope.");
+      }
+      scope_type_history.pop();
+      paren_scope_depth--;
+    } else if (it->Type() == eTk::LBracket) {
+      frame_scope_depth++;
+      // currrent_scope_type = eTk::LBracket;
+      scope_type_history.push(eTk::LBracket);
+    } else if (it->Type() == eTk::RBracket) {
+      if (scope_type_history.top() != eTk::LBracket) {
+        // Has to be a close or error
+        if (std::any_of(close.begin(), close.end(),
+                        [it](eTk tk) { return it->Type() == tk; })) {
+          last_closed = it;
+          break;
+        } else
+          throw std::runtime_error(
+              "find_statement: Found a close frame token before an open "
+              "frame token.");
+      }
+      scope_type_history.pop();
+      frame_scope_depth--;
+    } else if (it->Type() == eTk::LBrace) {
+      list_scope_depth++;
+      // currrent_scope_type = eTk::LBrace;
+      scope_type_history.push(eTk::LBrace);
+    } else if (it->Type() == eTk::RBrace) {
+      if (scope_type_history.top() != eTk::LBrace) {
+        // Has to be a close or error
+        if (std::any_of(close.begin(), close.end(),
+                        [it](eTk tk) { return it->Type() == tk; })) {
+          last_closed = it;
+          break;
+        } else
+          throw std::runtime_error(
+              "find_statement: Found a close list token before an open list "
+              "token.");
+      }
+      scope_type_history.pop();
+      list_scope_depth--;
+    }
+
+    if (paren_scope_depth == 0 && frame_scope_depth == 0 &&
+        list_scope_depth == 0) {
+      if (std::any_of(close.begin(), close.end(),
+                      [it](eTk tk) { return it->Type() == tk; })) {
+        last_closed = it;
+        break;
+      }
+    }
+  }
+
+  // if(last_closed == end)
+  //	return TkScope{ false, begin, last_closed + 1 }; // No matching close
+  // token
+
+  // NOTE: We are adding 1 to last closed because the end is 1 past the last
+  // token.
+  if (paren_scope_depth != 0) {
+    return TkScope{false, begin, last_closed + 1};
+  } else if (frame_scope_depth != 0) {
+    return TkScope{false, begin, last_closed + 1};
+  } else if (list_scope_depth != 0) {
+    return TkScope{false, begin, last_closed + 1};
+  } else {
+    if (last_closed == begin)  // Expression was never closed
+      return TkScope{false, begin, last_closed + 1};
+    else
+      return TkScope{true, begin, last_closed + 1};
+  }
+
+}  // end find_scope
+
+/// Starts with the begin token which may be repeated, ends with a semicolon_
+/// ';'
+TkScope TkScope::FindProgramStatement(TkVectorConstIter begin,
+                                      TkVectorConstIter end) {
+  return FindOpenStatement(begin->Type(), eTk::Semicolon, begin, end);
+}
+
+TkScope TkScope::FindProgramStatement(TkCursor cursor) {
+  return FindOpenStatement(cursor.Get().Type(), eTk::Semicolon, cursor.Iter(),
+                           cursor.End());
+}
+
+/// @} // end of cand_compiler_parser_scope
+
+}  // namespace caoco
+
+#endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_TOKEN_SCOPE_H
+
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+//
+// Licensed under the Apache License, Version 2.0(the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+///////////////////////////////////////////////////////////////////////////////
