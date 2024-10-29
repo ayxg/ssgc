@@ -23,10 +23,16 @@
     <ClCompile Include="imgui_stdlib.cpp">
       <Filter>ext_gfx_lib</Filter>
     </ClCompile>
+    <ClCompile Include="TextEditor.cpp">
+      <Filter>ext_gfx_lib\imgui_widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ext_gfx_lib">
       <UniqueIdentifier>{5c736cf1-267c-4468-b424-d8d615e7ba89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ext_gfx_lib\imgui_widgets">
+      <UniqueIdentifier>{0d602225-b5f3-4573-8133-ec5cb6df9b5e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -41,5 +47,11 @@
     <ClInclude Include="cide_common.h" />
     <ClInclude Include="cide_ui_cpp_test_explorer.h" />
     <ClInclude Include="cide_ui_ast_explorer.h" />
+    <ClInclude Include="TextEditor.h">
+      <Filter>ext_gfx_lib\imgui_widgets</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MaterialDesign.inl" />
   </ItemGroup>
 </Project>

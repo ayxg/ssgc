@@ -15,6 +15,7 @@
 #include "minitest.h"
 
 // ImGui
+#include "TextEditor.h"
 #include "imgui-SFML.h"
 #include "imgui.h"
 #include "imgui_interface.h"
@@ -25,6 +26,8 @@
 #include "cide_ui.h"
 
 // Unit Tests
+#include "MaterialDesign.inl"
+#include "ForkAwesome.inl"
 #include "import_unit_tests.h"
 #include "ut_cand_compiler.h"
 #include "ut_expected.h"
@@ -46,8 +49,25 @@ static int gFlushImGuiIniFile = []() {
 int main() {
   sf::RenderWindow window(sf::VideoMode(800, 800), "ImGui + SFML = <3");
   window.setFramerateLimit(60);
+  bool default_font = false;
+  ImGui::SFML::Init(window, default_font);
 
-  ImGui::SFML::Init(window);
+  // Setup Imgui Fonts
+#define FONT_MATERIALDESIGN_ICON_MIN 0xe000
+#define FONT_MATERIALDESIGN_ICON_MAX 0xf8ff
+  static const ImWchar glyph_ranges[] = {FONT_MATERIALDESIGN_ICON_MIN,
+                                         FONT_MATERIALDESIGN_ICON_MAX, 0};
+  ImFontConfig config;
+  // config.MergeMode = true;
+  ImGuiIO& io = ImGui::GetIO();
+  io.Fonts->Clear();  // clear fonts if you loaded some before (even if only
+                      // default one was loaded)
+  // io.Fonts->AddFontDefault();  // this will load default font as well
+  io.Fonts->AddFontFromFileTTF("font/Cascadia.ttf", 16.f); // Direct from TTF
+
+  ImGui::SFML::UpdateFontTexture();  // important call: updates font texture
+
+  // Setup CIDE backend.
   // cide::backend::IdeSettings ide_settings;
   // ide_settings.Load();
   // std::cout << ide_settings.ViewBinaryPath() << std::endl;
@@ -75,6 +95,11 @@ int main() {
   cide_test_explorer.RegisterTestCase(MINITEST_FUNCTOR_RUN_INLINE(Test_Build),
                                       "UT_BUILD_H");
 
+  // Setup text editor.
+  TextEditor editor;
+  editor.SetLanguageDefinition(TextEditor::LanguageDefinition::CPlusPlus());
+
+  // Main Loop
   sf::Clock deltaClock;
   while (window.isOpen()) {
     sf::Event event;
@@ -91,7 +116,8 @@ int main() {
     }
 
     ImGui::SFML::Update(window, deltaClock.restart());
-    // ImGui::ShowDemoWindow();
+    editor.Render("Testing");
+    ImGui::ShowDemoWindow();
     cide_ui.Display();
     ast_explorer.Display();
     cide_test_explorer.Display();
