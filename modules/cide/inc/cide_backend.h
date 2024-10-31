@@ -9,6 +9,8 @@
 /// @file
 /// @ingroup cand_cide
 /// @brief CIDE Backend Implementation.
+///
+///
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -124,22 +126,24 @@ class ToolchainParams {
       "Studio\\Installer\\vswhere.exe";
 
  public:
-  using DataT =
-      std::array<string, static_cast<size_t>(eToolchainParam::kCount)>;
+  using DataT = std::array<std::vector<string>,
+                           static_cast<size_t>(eToolchainParam::kCount)>;
   static JsonObj ToJson(const ToolchainParams& obj);
   static ToolchainParams FromJson(const JsonObj& obj);
   constexpr size_t Size() const;
   constexpr const DataT& ViewData() const;
-  constexpr const string& ViewParam(eToolchainParam pr) const;
+  constexpr const vector<string>& ViewParam(eToolchainParam pr) const;
+  constexpr const string& GetFront(eToolchainParam pr) const;
+  constexpr string& GetFrontParam(eToolchainParam pr);
   ApiRes<void> Load();
   ApiRes<void> LoadCached(const string& from);
   ApiRes<void> Save(const string& to);
   ApiRes<void> SaveToDefault();
 
  private:
-  constexpr string& GetParam(eToolchainParam pr);
+  constexpr vector<string>& GetParam(eToolchainParam pr);
   constexpr void SetParam(eToolchainParam pr, std::string_view val);
-  string GetOsTempPath();
+  constexpr void SetParam(eToolchainParam pr, const vector<string>& val);
   ApiRes<string> FindVswhere(const string& program_files_dir);
   ApiRes<void> DownloadVswhere();
 
@@ -153,7 +157,12 @@ enum class eIdeParam : std::size_t {
   kBinaryDir,
   kCacheDir,
   kRepoDir,
-  kRecentSolutionDirs,
+  kRecentRepoDirs,
+};
+
+enum class eRepoBuildSystemType : std::size_t {
+  kManual,
+  kCmake,
 };
 
 static constexpr cstring kIdeParamToStr(eIdeParam value) {
@@ -166,12 +175,13 @@ static constexpr cstring kIdeParamToStr(eIdeParam value) {
       return "kCacheDir";
     case eIdeParam::kRepoDir:
       return "kRepoDir";
-    case eIdeParam::kRecentSolutionDirs:
+    case eIdeParam::kRecentRepoDirs:
       return "kRecentSolutionDirs";
     default:
       return "";
   }
 }
+
 static constexpr cstring kIdeParamToSysStr(eIdeParam value) {
   switch (value) {
     case eIdeParam::kAppdataDir:
@@ -182,12 +192,13 @@ static constexpr cstring kIdeParamToSysStr(eIdeParam value) {
       return "CIDE_CACHE_DIR";
     case eIdeParam::kRepoDir:
       return "CIDE_REPO_DIR";
-    case eIdeParam::kRecentSolutionDirs:
+    case eIdeParam::kRecentRepoDirs:
       return "CIDE_RECENT_SOLUTION_DIRS";
     default:
       return "";
   }
 }
+
 static constexpr cstring kIdeParamToOptStr(eIdeParam value) {
   switch (value) {
     case eIdeParam::kAppdataDir:
@@ -198,12 +209,13 @@ static constexpr cstring kIdeParamToOptStr(eIdeParam value) {
       return "IDE Cache Directory";
     case eIdeParam::kRepoDir:
       return "IDE Repository Directory";
-    case eIdeParam::kRecentSolutionDirs:
+    case eIdeParam::kRecentRepoDirs:
       return "IDE Recent Solution Directories";
     default:
       return "";
   }
 }
+
 static constexpr eParamInterpType kIdeParamInterpType(eIdeParam value) {
   switch (value) {
     case eIdeParam::kAppdataDir:
@@ -211,7 +223,7 @@ static constexpr eParamInterpType kIdeParamInterpType(eIdeParam value) {
     case eIdeParam::kCacheDir:
     case eIdeParam::kRepoDir:
       return eParamInterpType::Line;
-    case eIdeParam::kRecentSolutionDirs:
+    case eIdeParam::kRecentRepoDirs:
       return eParamInterpType::List;
     default:
       throw cxx::UnknownEnumEntry<eIdeParam>{};
@@ -219,8 +231,8 @@ static constexpr eParamInterpType kIdeParamInterpType(eIdeParam value) {
 }
 
 using IdeParamContigEnum =
-    mta::contig_enum<eIdeParam, eIdeParam::kBinaryDir,
-                     eIdeParam::kRecentSolutionDirs, kIdeParamToStr,
+    mta::contig_enum<eIdeParam, eIdeParam::kAppdataDir,
+                     eIdeParam::kRecentRepoDirs, kIdeParamToStr,
                      kIdeParamToSysStr, kIdeParamToOptStr, kIdeParamInterpType>;
 
 struct IdeParam : public IdeParamContigEnum {
@@ -239,19 +251,24 @@ struct IdeParamList {
 
  public:
   static JsonObj ToJson(const IdeParamList& params) {
+    using enum eIdeParam;
     JsonObj obj;
-    obj["bin_dir"] = params.bin_dir;
-    obj["repo_dir"] = params.repo_dir;
-    obj["cache_dir"] = params.cache_dir;
-    obj["recent_repo_dirs"] = params.recent_repo_dirs;
+    obj[kIdeParamToSysStr(kAppdataDir)] = params.appdata_dir;
+    obj[kIdeParamToSysStr(kBinaryDir)] = params.bin_dir;
+    obj[kIdeParamToSysStr(kCacheDir)] = params.repo_dir;
+    obj[kIdeParamToSysStr(kRepoDir)] = params.cache_dir;
+    obj[kIdeParamToSysStr(kRecentRepoDirs)] = params.recent_repo_dirs;
     return obj;
   }
+
   static IdeParamList FromJson(const JsonObj& obj) {
+    using enum eIdeParam;
     IdeParamList params;
-    params.bin_dir = obj.at("bin_dir");
-    params.repo_dir = obj.at("repo_dir");
-    params.cache_dir = obj.at("cache_dir");
-    for (auto& dir : obj.at("recent_repo_dirs")) {
+    params.appdata_dir = obj.at(kIdeParamToSysStr(kAppdataDir));
+    params.bin_dir = obj.at(kIdeParamToSysStr(kBinaryDir));
+    params.repo_dir = obj.at(kIdeParamToSysStr(kRepoDir));
+    params.cache_dir = obj.at(kIdeParamToSysStr(kCacheDir));
+    for (auto& dir : obj.at(kIdeParamToSysStr(kRecentRepoDirs))) {
       params.recent_repo_dirs.push_back(dir);
     }
     return params;
@@ -280,6 +297,7 @@ struct RepoParams {
   ApiRes<void> Load();
   ApiRes<void> Save(const string& to);
   ApiRes<void> SaveToDefault();
+  eRepoBuildSystemType build_system_type{eRepoBuildSystemType::kManual};
 
   // Directory of the solution.[RELATIVE: Relative to the repository path.]
   // This is the working directory of the Solution's filesystem.
@@ -292,113 +310,8 @@ struct RepoParams {
   // It is auto-inferred to be the file named '.casln' inside the solution path.
   stdfs::path solution_file;
 
-  // .camake files describing a build process of this solution.Autogenerated,
-  // user-editable. unnamed file '.camake' is automatically included as the
-  // first and default build file.
-  std::vector<stdfs::path> build_files;
-
-  // Working files which belong to the solution. Not including .casln / .camake
-  // files.
-  std::vector<stdfs::path> working_files;
-};
-
-// IDE startup settings
-// Represent a .caide file
-class IdeSettings {
- public:
-  static constexpr inline const wchar_t* kSolutionCacheSettingTag = L"#\n";
-  static constexpr inline auto kDefaultRepoPath = L"C:\\candide\\repository\\";
-  static stdfs::path GetDefaultBinaryPath();
-  static stdfs::path GetDefaultRepoPath();
-  static stdfs::path GetDefaultSettingsFilePath();
-
-  const stdfs::path& ViewRepoPath() const;
-  const stdfs::path& ViewBinaryPath() const;
-  // Load the settings from a file. Return false if the file is invalid.
-  bool Load();
-  // Save the settings to a file in the current binary path.
-  bool Save();
-  // Cache a solution folder, if already chached, returns false.
-  bool CacheSolution(const stdfs::path& sln_folder);
-
-  IdeSettings() = default;
-  IdeSettings(const stdfs::path& bin_path);
-  IdeSettings(const stdfs::path& bin_path, const stdfs::path& repo_path);
-
- private:
-  caf::CacheFile ide_cache_{GetDefaultSettingsFilePath()};
-
-  // Get the binary path of the IDE. Current working directory of the C++
-  // context. NOTE: this a copy not reference. current_path() is a dangerous
-  // global.
-  // In the context of development it will be the cand-ide project folder.
-  stdfs::path binary_path{
-      GetDefaultBinaryPath()};  // fs::path to the IDE executable/binaries.
-                                // This is the current working path of
-                                // the C++ backend. fs::path to the
-                                // cand-ide.exe folder.
-  stdfs::path repository_path{
-      GetDefaultRepoPath()};  // fs::path to the folder containing all solutions
-                              // Which belong to this IDE. Only these will be
-                              // Scanned and populated in the solution list.
-                              // Each folder which ccontains a '.casln' file
-  // is a solution. Only one .casln is loaded per folder.
-  // The rest are ignored.
-
-  std::vector<stdfs::path> cached_solutions{};
-
-  // inline void GenerateSettingsFile() const {
-  //   std::ofstream(GetSettingsFilePath())
-  //       // 1. Binary fs::path
-  //       << binary_path.string()
-  //       << '\n'
-  //       // 2. Repository fs::path
-  //       << repository_path.string()
-  //       << '\n'
-  //       // 3. Cached Solutions
-  //       << [this]() -> string {
-  //     std::wstring sln_folders = kSolutionCacheSettingTag;
-  //     for (auto& cached_sln : this->cached_solutions) {
-  //       sln_folders += cached_sln.native() + L'\n';
-  //     }
-  //     sln_folders += kSolutionCacheSettingTag;
-  //     return string(sln_folders.cbegin(), sln_folders.cend());
-  //   }();
-  // }
-
-  //// Create folder default repository path of C://candide/repository/
-  //// If folder does not exist. Adds repo path.
-  //// Generate a default settings file and save it in the current binary path.
-  // bool Default() {
-  //   repository_path = "C:\\candide\\repository\\";
-  //   try {
-  //     std::filesystem::create_directories(repository_path);
-  //     GenerateSettingsFile();
-  //   } catch (...) {
-  //     // Failed to load/create file.
-  //     return false;
-  //   }
-  //   return true;
-  // };
-};
-
-// Represent a .casln file which holds metadata about a solution.
-// Can be saved and reloaded.
-struct SolutionSettings {
-  stdfs::path GetSettingsFilePath() const;
-  bool Default();
-  bool Save();
-  bool Load();
-  // Directory of the solution.[RELATIVE: Relative to the repository path.]
-  // This is the working directory of the Solution's filesystem.
-  // If you load a file from IDE code. This is the root directory.
-  // For this solution's executable.
-  stdfs::path solution_path;
-
-  // Solution file [RELATIVE: Relative to the repository path]
-  // .cansln file where solution metadata is stored. Only 1 per solution.
-  // It is auto-inferred to be the file named '.casln' inside the solution path.
-  stdfs::path solution_file;
+  // Build dir relative to the solution path.
+  stdfs::path build_dir{"out"};
 
   // .camake files describing a build process of this solution.Autogenerated,
   // user-editable. unnamed file '.camake' is automatically included as the
@@ -409,6 +322,117 @@ struct SolutionSettings {
   // files.
   std::vector<stdfs::path> working_files;
 };
+
+//// IDE startup settings
+//// Represent a .caide file
+// class IdeSettings {
+//  public:
+//   static constexpr inline const wchar_t* kSolutionCacheSettingTag = L"#\n";
+//   static constexpr inline auto kDefaultRepoPath =
+//   L"C:\\candide\\repository\\"; static stdfs::path GetDefaultBinaryPath();
+//   static stdfs::path GetDefaultRepoPath();
+//   static stdfs::path GetDefaultSettingsFilePath();
+//
+//   const stdfs::path& ViewRepoPath() const;
+//   const stdfs::path& ViewBinaryPath() const;
+//   // Load the settings from a file. Return false if the file is invalid.
+//   bool Load();
+//   // Save the settings to a file in the current binary path.
+//   bool Save();
+//   // Cache a solution folder, if already chached, returns false.
+//   bool CacheSolution(const stdfs::path& sln_folder);
+//
+//   IdeSettings() = default;
+//   IdeSettings(const stdfs::path& bin_path);
+//   IdeSettings(const stdfs::path& bin_path, const stdfs::path& repo_path);
+//
+//  private:
+//   caf::CacheFile ide_cache_{GetDefaultSettingsFilePath()};
+//
+//   // Get the binary path of the IDE. Current working directory of the C++
+//   // context. NOTE: this a copy not reference. current_path() is a dangerous
+//   // global.
+//   // In the context of development it will be the cand-ide project folder.
+//   stdfs::path binary_path{
+//       GetDefaultBinaryPath()};  // fs::path to the IDE executable/binaries.
+//                                 // This is the current working path of
+//                                 // the C++ backend. fs::path to the
+//                                 // cand-ide.exe folder.
+//   stdfs::path repository_path{
+//       GetDefaultRepoPath()};  // fs::path to the folder containing all
+//       solutions
+//                               // Which belong to this IDE. Only these will be
+//                               // Scanned and populated in the solution list.
+//                               // Each folder which ccontains a '.casln' file
+//   // is a solution. Only one .casln is loaded per folder.
+//   // The rest are ignored.
+//
+//   std::vector<stdfs::path> cached_solutions{};
+//
+//   // inline void GenerateSettingsFile() const {
+//   //   std::ofstream(GetSettingsFilePath())
+//   //       // 1. Binary fs::path
+//   //       << binary_path.string()
+//   //       << '\n'
+//   //       // 2. Repository fs::path
+//   //       << repository_path.string()
+//   //       << '\n'
+//   //       // 3. Cached Solutions
+//   //       << [this]() -> string {
+//   //     std::wstring sln_folders = kSolutionCacheSettingTag;
+//   //     for (auto& cached_sln : this->cached_solutions) {
+//   //       sln_folders += cached_sln.native() + L'\n';
+//   //     }
+//   //     sln_folders += kSolutionCacheSettingTag;
+//   //     return string(sln_folders.cbegin(), sln_folders.cend());
+//   //   }();
+//   // }
+//
+//   //// Create folder default repository path of C://candide/repository/
+//   //// If folder does not exist. Adds repo path.
+//   //// Generate a default settings file and save it in the current binary
+//   path.
+//   // bool Default() {
+//   //   repository_path = "C:\\candide\\repository\\";
+//   //   try {
+//   //     std::filesystem::create_directories(repository_path);
+//   //     GenerateSettingsFile();
+//   //   } catch (...) {
+//   //     // Failed to load/create file.
+//   //     return false;
+//   //   }
+//   //   return true;
+//   // };
+// };
+//
+//// Represent a .casln file which holds metadata about a solution.
+//// Can be saved and reloaded.
+// struct SolutionSettings {
+//   stdfs::path GetSettingsFilePath() const;
+//   bool Default();
+//   bool Save();
+//   bool Load();
+//   // Directory of the solution.[RELATIVE: Relative to the repository path.]
+//   // This is the working directory of the Solution's filesystem.
+//   // If you load a file from IDE code. This is the root directory.
+//   // For this solution's executable.
+//   stdfs::path solution_path;
+//
+//   // Solution file [RELATIVE: Relative to the repository path]
+//   // .cansln file where solution metadata is stored. Only 1 per solution.
+//   // It is auto-inferred to be the file named '.casln' inside the solution
+//   path. stdfs::path solution_file;
+//
+//   // .camake files describing a build process of this solution.Autogenerated,
+//   // user-editable. unnamed file '.camake' is automatically included as the
+//   // first and default build file.
+//   std::vector<stdfs::path> build_files;
+//
+//   // Working files which belong to the solution. Not including .casln /
+//   .camake
+//   // files.
+//   std::vector<stdfs::path> working_files;
+// };
 
 // Model of an instance of a file tab in the editor.
 struct IdeFileTab {
@@ -501,7 +525,96 @@ struct IdeFileEditor {
 
 struct IdeModel {
   IdeParamList ide_params_{};
-  RepoParams active_repo_params_{};
+  RepoParams active_repo_{};
+  ApiErr last_error_{};
+  bool is_gen_step_complete{false};
+  bool is_build_step_complete{false};
+  bool is_run_step_complete{false};
+
+  string GetCMakeGenerationStepCommand() const {
+    using enum eToolchainParam;
+    return " . -B" + active_repo_.build_dir.string();
+  }
+  string GetCMakeBuildStepCommand() const {
+    using enum eToolchainParam;
+    return " --build " + active_repo_.build_dir.string();
+  }
+
+  ApiRes<void> CallGenerationStep() {
+    using enum eToolchainParam;
+    std::cout << "Running CMake Generation Step\n"
+              << "Working Dir: " << active_repo_.solution_path.string()
+              << "Command: " << ide_params_.host_params_.GetFront(kCmakePath)
+              << " " << GetCMakeGenerationStepCommand() << std::endl;
+    auto gen_res = wpl::RunExe(ide_params_.host_params_.GetFront(kCmakePath),
+                               GetCMakeGenerationStepCommand(),
+                               active_repo_.solution_path.string());
+    if (!gen_res) return ApiFail{{eApiErr::kSubprocessCannotRun, ""}};
+    if (gen_res.value().exit_code != EXIT_SUCCESS)
+      return ApiFail{{eApiErr::kSubprocessFailedExit,
+                      gen_res.value().out.value_or("").c_str()}};
+    return ApiRes<void>{};
+  }
+
+  ApiRes<void> CallBuildStep() {
+    using enum eToolchainParam;
+    auto build_res = wpl::RunExe(ide_params_.host_params_.GetFront(kCmakePath),
+                                 GetCMakeBuildStepCommand(),
+                                 active_repo_.solution_path.string());
+    if (!build_res) return ApiFail{{eApiErr::kSubprocessCannotRun, ""}};
+    if (build_res.value().exit_code != EXIT_SUCCESS)
+      return ApiFail{{eApiErr::kSubprocessFailedExit,
+                      build_res.value().out.value_or("").c_str()}};
+    return ApiRes<void>{};
+  }
+
+  ApiRes<void> CallRunStep() {
+    // We can run a built target by checking CMakeFiles/TargetDirectories.txt in
+    // the cmake generated output. Given a target name extract by finding stem
+    // named [target].dir in the list of directories.
+
+    // Open CMakeFiles/TargetDirectories.txt in the bin dir.
+
+    // Find the line with the target name.
+
+    // Extract the directory name.
+
+    // Run the executable in the directory with the target name.
+
+    return ApiRes<void>{};
+  }
+
+  void ExtCallGenerationStep() {
+    auto gen_res = CallGenerationStep();
+    if (!gen_res) {
+      last_error_ = gen_res.error();
+      is_gen_step_complete = false;
+    } else {
+      is_gen_step_complete = true;
+    }
+  }
+
+  void ExtCallBuildStep() {
+    if (!is_gen_step_complete) ExtCallGenerationStep();
+
+    auto build_res = CallBuildStep();
+    if (!build_res) {
+      last_error_ = build_res.error();
+      is_build_step_complete = false;
+    } else {
+      is_build_step_complete = true;
+    }
+  }
+
+  void ExtCallRunStep() {
+    auto run_res = CallRunStep();
+    if (!run_res) {
+      last_error_ = run_res.error();
+      is_run_step_complete = false;
+    } else {
+      is_run_step_complete = true;
+    }
+  }
 
   ApiRes<void> Init() {
     // 1. Load settings from the IDE settings file. If the settings file does
@@ -510,6 +623,17 @@ struct IdeModel {
     if (!ide_param_load) return ide_param_load;
     auto ide_param_save = ide_params_.SaveToDefault();
     if (!ide_param_save) return ide_param_save;
+    ide_params_.host_params_.SaveToDefault();
+
+    // 2. Create a temporary empty repo in the temp folder.
+    active_repo_.solution_path =
+        ide_params_.host_params_.GetFront(eToolchainParam::kOsTempPath) +
+        "cide\\temp_repo\\";
+    if (!stdfs::exists(active_repo_.solution_path)) {
+      stdfs::create_directories(active_repo_.solution_path);
+    }
+    active_repo_.solution_file = active_repo_.solution_path;
+    active_repo_.solution_file.append("temp_repo.cidr");
 
     return ApiRes<void>{};
   }
@@ -536,13 +660,14 @@ struct IdeModel {
 
     // Create the solution settings file.
     // Arg to constructor is the root solution dir.
-    RepoParams sln_settings{sln_folder_path};
+    RepoParams sln_settings{};
+    sln_settings.solution_path = sln_folder_path;
 
     // Generate default solution settings.
     sln_settings.Save(name + ".cidr");
 
     // Set as current active solution.
-    active_repo_params_ = sln_settings;
+    active_repo_ = sln_settings;
 
     return true;
   }
@@ -564,14 +689,15 @@ struct IdeModel {
     }
 
     // Load the solution settings file.
-    RepoParams sln_settings{sln_folder_path};
+    RepoParams sln_settings{};
+    sln_settings.solution_path = sln_folder_path;
     if (!sln_settings.Load()) {
       return "Could not open solution: .casln' solution settings file possibly "
              "corrupted.";
     }
 
     // Load the solution settings into the active solution.
-    active_repo_params_ = sln_settings;
+    active_repo_ = sln_settings;
 
     //// Load all the cached working files from the .casln settings into the
     /// file / editor.
@@ -586,9 +712,6 @@ struct IdeModel {
 /// @} // end of cand_cide_backend
 
 }  // namespace cide::backend
-
-// Implementation
-namespace cide::backend {}
 
 ///////////////////////////////////////////////////////////////////////////////
 // @project: C& Programming Language Environment

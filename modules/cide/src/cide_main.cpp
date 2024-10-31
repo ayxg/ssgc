@@ -43,12 +43,23 @@ int main() {
   caf::Context context;
   auto& window = context.MakeWindow("CIDE", hints);
 
-  cide::backend::IdeParams ide_params;
-  auto ide_param_load = ide_params.Load();
-  if (!ide_param_load) {
+  cide::backend::IdeModel ide_model;
+  auto ide_model_init = ide_model.Init();
+  if (!ide_model_init) {
     std::cout << "Failed to load ide params." << std::endl;
     return EXIT_FAILURE;
   }
+  cide::ui::HUD hud;
+  // Link backend to HUD
+  hud.repo_explorer.root_dir = ide_model.active_repo_.solution_path;
+  
+  hud.main_menu.callback_action_generate = [&ide_model] {
+    ide_model.ExtCallGenerationStep();
+  };
+  hud.main_menu.callback_action_build = [&ide_model] { ide_model.ExtCallBuildStep(); };
+  hud.main_menu.callback_action_run = [&ide_model] {
+    ide_model.ExtCallRunStep();
+  };
 
   //// Add another window
   //auto& launcher_window = context.MakeWindow("CIDE Launcher", hints);
@@ -91,9 +102,8 @@ int main() {
   // ide_settings.CacheSolution("testingcache");
   // ide_settings.Save();
 
-  cide::ui::CideUserInterface cide_ui;
   cide::ui::CideTestExplorerInterface cide_test_explorer;
-  cide::ui::AstExplorerInterface ast_explorer;
+  //cide::ui::AstExplorerInterface ast_explorer;
   // cide::ui::Launcher cide_launcher_ui;
 
   // Register Test Modules
@@ -151,14 +161,15 @@ int main() {
     if (window.isOpen()) {
       context.UpdateFrame(
           window, deltaClock.restart(),
-          [&editor, &cide_ui, &ast_explorer, &cide_test_explorer](
+          [&editor, &hud, &cide_test_explorer](
               sf::RenderWindow& window, const sf::Time& delta) {
             // Do stuff...
-            editor.Render("Testing");
-            ImGui::ShowDemoWindow();
-            cide_ui.Display();
-            ast_explorer.Display();
-            cide_test_explorer.Display();
+            //editor.Render("Testing");
+            //ImGui::ShowDemoWindow();
+            auto win_size = window.getSize();
+            hud.Display(win_size.x, win_size.y);
+            //ast_explorer.Display();
+            //cide_test_explorer.Display();
             window.clear();
             ImGui::SFML::Render(window);
             window.display();
