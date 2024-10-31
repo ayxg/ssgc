@@ -21,6 +21,7 @@
 #include "cgui.hpp"
 #include "cide_ui_ast_explorer.h"
 #include "cide_ui_cpp_test_explorer.h"
+#include "cide_ui_text_editor.hpp"
 
 namespace cide::ui {
 /// @addtogroup cand_cide_frontend
@@ -55,12 +56,22 @@ struct CideTopMenuBarInterface {
   CallbackT callback_project_solutionproperties{xNullCallback};
   CallbackT callback_project_clonesolution{xNullCallback};
 
+  // Action Menu
+  CallbackT callback_action_generate{xNullCallback};
+  CallbackT callback_action_build{xNullCallback};
+  CallbackT callback_action_run{xNullCallback};
+
+  // Tools Menu
+  CallbackT callback_tools_astexplorer{xNullCallback};
+
   // Widgets
   CguiMenuBar main_menu_bar{cgui::kWidgetInitDelayed};
   CguiMenu file_menu{CguiMenu::Delayed("File")};
   CguiMenu edit_menu{CguiMenu::Delayed("Edit")};
   CguiMenu project_menu{CguiMenu::Delayed("Project")};
+  CguiMenu action_menu{CguiMenu::Delayed("Action")};
   CguiMenu file_new_submenu{CguiMenu::Delayed("New")};
+  CguiMenu tools_menu{CguiMenu::Delayed("Tools")};
 
   CguiMenuItem file_new_solution_item{"Solution", "", true,
                                       cgui::kWidgetInitDelayed};
@@ -113,6 +124,19 @@ struct CideTopMenuBarInterface {
       }
       edit_menu.EndEarly();
 
+      if (action_menu.BeginLate()) {
+        if (CguiMenuItem("Generate")) {
+          callback_action_generate();
+        }
+        if (CguiMenuItem("Build")) {
+          callback_action_build();
+        }
+        if (CguiMenuItem("Run")) {
+          callback_action_run();
+        }
+      }
+      action_menu.EndEarly();
+
       if (project_menu.BeginLate()) {
         if (project_addfile_item.BeginLate()) {
           callback_project_addfile();
@@ -133,6 +157,13 @@ struct CideTopMenuBarInterface {
         };
       }
       project_menu.EndEarly();
+
+      if (tools_menu.BeginLate()) {
+        if (CguiMenuItem("C& AST Explorer")) {
+          callback_tools_astexplorer();
+        }
+      }
+      tools_menu.EndEarly();
     }
     main_menu_bar.EndEarly();
   }
@@ -144,8 +175,8 @@ struct CideFileEditorInterface {
   CguiNamedSubcontext editor_context;
   CguiTabBar editor_tab_bar;
   vector<CguiTabItem> open_file_tabs;
-  vector<CguiMultilineTextInput> open_file_tab_text_inputs;
-
+  vector<TextEditor> open_file_tab_text_inputs;
+  vector<string> open_file_tab_text_buffers;
   CideFileEditorInterface(const std::string& name, CguiVec2 context_size)
       : context_size(context_size),
         editor_context(CguiNamedSubcontext::Delayed(name, context_size)),
@@ -154,11 +185,14 @@ struct CideFileEditorInterface {
             cgui::kWidgetInitDelayed)) {}
 
   void Display() {  // Editor Subcontext
+    editor_context.RequestSize(context_size);
     if (editor_context.BeginLate()) {
       if (editor_tab_bar.BeginLate()) {
         for (size_t idx = 0; auto& file_tab : open_file_tabs) {
           if (file_tab.BeginLate()) {
-            open_file_tab_text_inputs[idx].BeginLate();
+            open_file_tab_text_inputs[idx].Render(
+                file_tab.Name().c_str(),
+                {context_size.first, context_size.second});
           }
           file_tab.EndEarly();
           idx++;
@@ -170,11 +204,20 @@ struct CideFileEditorInterface {
   }
 
   void AddTab(const string& tab_name, string& text_buffer) {
+    if (std::find_if(open_file_tabs.begin(), open_file_tabs.end(),
+                     [&tab_name](auto tab) {
+                       return tab.Name() == tab_name;
+                     }) != open_file_tabs.end()) {
+      return;  // Tab already exists.
+    }
     open_file_tabs.push_back(
         CguiTabItem(tab_name, CguiTabItemFlags(), cgui::kWidgetInitDelayed));
-    open_file_tab_text_inputs.push_back(
-        CguiMultilineTextInput::Delayed(tab_name + "###textbox", text_buffer,
-                                        cgui::kExpandWidgetToRemainingSpaceXY));
+    open_file_tab_text_inputs.push_back(TextEditor{});
+    open_file_tab_text_buffers.push_back(text_buffer);
+    open_file_tab_text_inputs.back().SetText(text_buffer);
+    // open_file_tab_text_inputs.push_back(
+    //     CguiMultilineTextInput::Delayed(tab_name + "###textbox", text_buffer,
+    //                                     cgui::kExpandWidgetToRemainingSpaceXY));
   }
 
   void PopTab() { open_file_tabs.pop_back(); }
@@ -247,6 +290,7 @@ struct CideSolutionToolbarInterface {
             cgui::kWidgetInitDelayed) {}
 
   void Display() {
+    solution_toolbar_context.RequestSize(requested_size);
     if (solution_toolbar_context.BeginLate()) {
       if (solution_toolbar_tab_bar.BeginLate()) {
         if (solution_explorer_tab_item.BeginLate()) {
@@ -260,28 +304,45 @@ struct CideSolutionToolbarInterface {
   }
 };
 
-struct CideUserInterface {
-  CideTopMenuBarInterface top_menu_bar_interface{};
+struct HUD {
+  CideTopMenuBarInterface main_menu{};
   CideFileEditorInterface file_editor_interface{
       "Editor", {kWindowWidth * 0.75f, kWindowHeight * 0.75f}};
-  ;
-  CideSolutionToolbarInterface solution_toolbar_interface{
-      {0, kWindowHeight * 0.75f}};
 
+  CideSolutionToolbarInterface repo_explorer{{0, kWindowHeight * 0.75f}};
+  std::pair<AstExplorerInterface, bool> ast_explorer;
   CguiWindow main_ide_context{
       "C&-IDE", false,
       cgui::WindowFlags{ImGuiWindowFlags_MenuBar, ImGuiWindowFlags_NoTitleBar},
       cgui::kWidgetInitDelayed};
 
-  void Display() {
-    cgui::SetNextWindowSize({kWindowWidth, kWindowHeight});
+  void Display(float xsize, float ysize) {
+    cgui::SetNextWindowSize({xsize, ysize});
     cgui::SetNextWindowPos({0, 0});
     main_ide_context.BeginLate();
-    top_menu_bar_interface.Display();
+    main_menu.Display();
+    file_editor_interface.context_size = {xsize * 0.75f, ysize * 0.75f};
     file_editor_interface.Display();
     cgui::SameLine();
-    solution_toolbar_interface.Display();
+    repo_explorer.solution_toolbar_context.RequestSize(
+        {xsize * 0.25f, ysize * 0.75f});
+    repo_explorer.Display();
     main_ide_context.EndEarly();
+    if (ast_explorer.second) {
+      ast_explorer.first.Display();
+    }
+  }
+
+  HUD() {
+    main_menu.callback_tools_astexplorer = [this]() {
+      // Open the AST Explorer
+      ast_explorer.second = !ast_explorer.second;
+    };
+
+    // Link the file explorer to the file editor.
+    repo_explorer.select_file_callback = [this](const stdfs::path& p) {
+      file_editor_interface.AddTab(p.string(), repo_explorer.temp_file_buffer);
+    };
   }
 };
 

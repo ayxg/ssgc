@@ -92,11 +92,17 @@ static constexpr string_view eToolchainParamToOptStr(eToolchainParam v) {
 constexpr const char* IdeParam::ToStr() const {
   return IdeParamContigEnum::assoc<0>(val);
 }
+
 constexpr const char* IdeParam::ToSysStr() const {
   return IdeParamContigEnum::assoc<1>(val);
 }
+
 constexpr const char* IdeParam::ToOptStr() const {
   return IdeParamContigEnum::assoc<2>(val);
+}
+
+constexpr eParamInterpType IdeParam::InterpType() const {
+  return IdeParamContigEnum::assoc<3>(val);
 }
 
 JsonObj ToolchainParams::ToJson(const ToolchainParams& obj) {
@@ -111,9 +117,13 @@ JsonObj ToolchainParams::ToJson(const ToolchainParams& obj) {
 ToolchainParams ToolchainParams::FromJson(const JsonObj& obj) {
   ToolchainParams hp;
   for (size_t i = 0; i < hp.Size(); i++) {
-    hp.SetParam(
-        static_cast<eToolchainParam>(i),
-        obj.at(eToolchainParamToSysStr(static_cast<eToolchainParam>(i))));
+    vector<string> loaded_params;
+    const auto& json_arr =
+        obj.at(eToolchainParamToSysStr(static_cast<eToolchainParam>(i)));
+    for (const auto& el : json_arr) {
+      loaded_params.push_back(el.get<string>());
+    }
+    hp.SetParam(static_cast<eToolchainParam>(i), loaded_params);
   }
   return hp;
 };
@@ -126,7 +136,8 @@ constexpr const ToolchainParams::DataT& ToolchainParams::ViewData() const {
   return data;
 }
 
-constexpr const string& ToolchainParams::ViewParam(eToolchainParam pr) const {
+constexpr const vector<string>& ToolchainParams::ViewParam(
+    eToolchainParam pr) const {
   return data.at(static_cast<size_t>(pr));
 }
 
@@ -159,9 +170,10 @@ ApiRes<void> ToolchainParams::Load() {
            os_program_data_path.value().c_str());
 
   // Check for a cached file in local appdata
-  stdfs::path cache_file_path =
-      os_program_data_path.value() + kOsAppdataToolchainCacheFilePath;
-  if (LoadCached(cache_file_path.string())) return ApiRes<void>{};
+  string cache_file_path = os_program_data_path.value().c_str();
+  cache_file_path += "\\";
+  cache_file_path += +kOsAppdataToolchainCacheFilePath;
+  if (LoadCached(cache_file_path)) return ApiRes<void>{};
 
   wpl::ApiRes<wpl::RunExeResult> cmd_res = wpl::RunExe("where", "cmd");
   if (!cmd_res) return MakeApiFail(kSubprocessCannotRun, "where");
@@ -201,7 +213,7 @@ ApiRes<void> ToolchainParams::Load() {
   // Find location of !latest! visual studio install folder
   // Details: https://github.com/microsoft/vswhere/wiki/Find-VC
   wpl::ApiRes<wpl::RunExeResult> msvs_res =
-      wpl::RunExe(GetParam(eToolchainParam::kWin32VswherePath),
+      wpl::RunExe(GetFrontParam(eToolchainParam::kWin32VswherePath),
                   "-latest -nocolor -utf8 -property installationPath");
 
   if (!msvs_res) return MakeApiFail(kSubprocessCannotRun, "vswhere");
@@ -210,15 +222,16 @@ ApiRes<void> ToolchainParams::Load() {
   wpl::PopCmdEndline(msvs_res.value().out.value());
   SetParam(eToolchainParam::kWin32MsvsPath, msvs_res.value().out.value());
 
-  string expected_vsdevcmd_path = GetParam(eToolchainParam::kWin32MsvsPath) +
-                                  "\\Common7\\Tools\\VsDevCmd.bat";
+  string expected_vsdevcmd_path =
+      GetFrontParam(eToolchainParam::kWin32MsvsPath) +
+      "\\Common7\\Tools\\VsDevCmd.bat";
   if (!stdfs::exists(expected_vsdevcmd_path))
     return MakeApiFail(kExeDepNotFound, "VsDevCmd.bat");
   SetParam(eToolchainParam::kWin32VsdevcmdPath, expected_vsdevcmd_path);
 
   // Get win32 dirs from vsdevcmd session
   wpl::CmdShell shell{};
-  shell.SetInitDir(GetParam(eToolchainParam::kWin32MsvsPath));
+  shell.SetInitDir(GetFrontParam(eToolchainParam::kWin32MsvsPath));
   if (!shell.Create()) return MakeApiFail(kSubprocessCannotRun, "cmd");
 
   if (!shell.SendMsg("\"" + expected_vsdevcmd_path + "\""))
@@ -255,17 +268,31 @@ ApiRes<void> ToolchainParams::Save(const string& to) {
 
 ApiRes<void> ToolchainParams::SaveToDefault() {
   if (!GetParam(eToolchainParam::kOsProgramDataPath).empty())
-    return Save(GetParam(eToolchainParam::kOsProgramDataPath) + "\\" +
+    return Save(GetParam(eToolchainParam::kOsProgramDataPath).front() + "\\" +
                 kOsAppdataToolchainCacheFilePath);
   return Save(kDefaultToolchainCacheFilePath);
 }
 
-constexpr string& ToolchainParams::GetParam(eToolchainParam pr) {
+constexpr vector<string>& ToolchainParams::GetParam(eToolchainParam pr) {
   return data.at(static_cast<size_t>(pr));
+}
+
+constexpr string& ToolchainParams::GetFrontParam(eToolchainParam pr) {
+  return data.at(static_cast<size_t>(pr)).front();
+}
+
+constexpr const string& ToolchainParams::GetFront(
+    eToolchainParam pr) const {
+  return data.at(static_cast<size_t>(pr)).front();
 }
 
 constexpr void ToolchainParams::SetParam(eToolchainParam pr,
                                          std::string_view val) {
+  data.at(static_cast<size_t>(pr)) = wpl::GetCmdLines(val.data());
+}
+
+constexpr void ToolchainParams::SetParam(eToolchainParam pr,
+                                         const vector<string>& val) {
   data.at(static_cast<size_t>(pr)) = val;
 }
 
@@ -318,7 +345,13 @@ ApiRes<void> IdeParamList::LoadCached(const string& from) {
   if (!cache_file.is_open())
     return MakeApiFail(eApiErr::kFileNotFound, from.c_str());
   try {
-    *this = FromJson(jsonlib::json::parse(cache_file));
+    auto jsonrepr = FromJson(jsonlib::json::parse(cache_file));
+    appdata_dir = jsonrepr.appdata_dir;
+    bin_dir = jsonrepr.bin_dir;
+    repo_dir = jsonrepr.repo_dir;
+    cache_dir = jsonrepr.cache_dir;
+    recent_repo_dirs = jsonrepr.recent_repo_dirs;
+   
   } catch (jsonlib::json::parse_error& e) {
     return MakeApiFail(eApiErr::kJsonParseError, e.what());
   }
@@ -343,14 +376,14 @@ ApiRes<void> IdeParamList::Load() {
     if (!stdfs::exists(cache_dir)) stdfs::create_directory(cache_dir);
     return ApiRes<void>{};
   }
+  const auto& win32_appdata_dir =
+      host_params_.GetFront(eToolchainParam::kOsProgramDataPath);
+  appdata_dir = win32_appdata_dir + "\\cide";
 
-  if (stdfs::exists(appdata_dir + "\\" + kOsAppdataCacheFilePath)) {
-    return LoadCached(appdata_dir + "\\" + kOsAppdataCacheFilePath);
+  if (stdfs::exists(win32_appdata_dir + "\\" + kOsAppdataCacheFilePath)) {
+    return LoadCached(win32_appdata_dir + "\\" + kOsAppdataCacheFilePath);
   }
 
-  appdata_dir =
-      string{host_params_.ViewParam(eToolchainParam::kOsProgramDataPath)} +
-      "\\cide";
   if (!stdfs::exists(appdata_dir)) stdfs::create_directory(appdata_dir);
   bin_dir = appdata_dir + "\\bin";
   if (!stdfs::exists(bin_dir)) stdfs::create_directory(bin_dir);
@@ -382,109 +415,111 @@ ApiRes<void> IdeParamList::Save(const string& to) {
 
 ApiRes<void> IdeParamList::SaveToDefault() {
   if (!host_params_.ViewParam(eToolchainParam::kOsProgramDataPath).empty())
-    return Save(host_params_.ViewParam(eToolchainParam::kOsProgramDataPath) +
-                "\\" + kOsAppdataCacheFilePath);
+    return Save(
+        host_params_.GetFront(eToolchainParam::kOsProgramDataPath) +
+        "\\" + kOsAppdataCacheFilePath);
   return Save(kDefaultCacheFilePath);
   return ApiRes<void>();
 }
 
 /// @} // end of cand_cide_backend
 
-inline stdfs::path IdeSettings::GetDefaultBinaryPath() {
-  return stdfs::path{std::filesystem::current_path().native() + L"\\"};
-}
-
-inline stdfs::path IdeSettings::GetDefaultRepoPath() {
-  return stdfs::path(L"C:\\candide\\repository\\");
-}
-
-inline stdfs::path IdeSettings::GetDefaultSettingsFilePath() {
-  return GetDefaultBinaryPath().append(file_extension::wide::kCaIdeSettings);
-}
-
-inline const stdfs::path& IdeSettings::ViewRepoPath() const {
-  return repository_path;
-}
-
-inline const stdfs::path& IdeSettings::ViewBinaryPath() const {
-  return binary_path;
-}
-
-// Load the settings from a file. Return false if the file is invalid.
-inline bool IdeSettings::Load() {
-  // If file does not exist create a new default settings file.
-  if (not ide_cache_.DoesFileExist()) {
-    ide_cache_.RefreshCacheFile();
-    ide_cache_.PushLinesToLiveCache("binary_path",
-                                    {GetDefaultBinaryPath().string()});
-    ide_cache_.PushLinesToLiveCache("repository_path",
-                                    {GetDefaultRepoPath().string()});
-    ide_cache_.SaveLiveCacheToFile();
-  }
-
-  ide_cache_.LoadLinesToLiveCache();
-
-  if (ide_cache_.ContainsTag("binary_path")) {
-    binary_path = ide_cache_.GetLineByTagAndIndex("binary_path", 0);
-  }
-
-  if (ide_cache_.ContainsTag("repository_path")) {
-    repository_path = ide_cache_.GetLineByTagAndIndex("repository_path", 0);
-  }
-
-  if (ide_cache_.ContainsTag("cached_solutions")) {
-    cached_solutions = ide_cache_.GetLinesByTagAsPath("cached_solutions");
-  }
-
-  ide_cache_.ClearLiveCache();
-
-  return true;
-}
-
-// Save the settings to a file in the current binary path.
-inline bool IdeSettings::Save() {
-  ide_cache_.RefreshCacheFile();
-  ide_cache_.PushLinesToLiveCache("binary_path", {binary_path.string()});
-  ide_cache_.PushLinesToLiveCache("repository_path",
-                                  {repository_path.string()});
-  vector<std::string> cached_sln_lines;
-  for (auto& sln : cached_solutions) {
-    cached_sln_lines.push_back(sln.string());
-  }
-  ide_cache_.PushLinesToLiveCache("cached_solutions", cached_sln_lines);
-  ide_cache_.SaveLiveCacheToFile();
-  return true;
-  //// Overwrite previous file. Delete it.
-  // stdfs::path file = GetSettingsFilePath();
-  // if (std::filesystem::exists(file)) {
-  //   // If its empty dont have to clear.
-  //   if (!file.empty()) {
-  //     std::filesystem::remove(file);
-  //   }
-  //   // Generate the new file.
-  //   GenerateSettingsFile();
-
-  //} else {
-  //  GenerateSettingsFile();
-  //}
-}
-
-// Cache a solution folder, if already chached, returns false.
-inline bool IdeSettings::CacheSolution(const stdfs::path& sln_folder) {
-  if (cached_solutions.end() !=
-      std::find(cached_solutions.begin(), cached_solutions.end(), sln_folder)) {
-    return false;  // Solution is already cached...
-  }
-  cached_solutions.push_back(sln_folder);
-  return true;
-}
-
-inline IdeSettings::IdeSettings(const stdfs::path& bin_path)
-    : binary_path(bin_path) {}
-
-inline IdeSettings::IdeSettings(const stdfs::path& bin_path,
-                                const stdfs::path& repo_path)
-    : binary_path(bin_path), repository_path(repo_path) {}
+// inline stdfs::path IdeSettings::GetDefaultBinaryPath() {
+//   return stdfs::path{std::filesystem::current_path().native() + L"\\"};
+// }
+//
+// inline stdfs::path IdeSettings::GetDefaultRepoPath() {
+//   return stdfs::path(L"C:\\candide\\repository\\");
+// }
+//
+// inline stdfs::path IdeSettings::GetDefaultSettingsFilePath() {
+//   return GetDefaultBinaryPath().append(file_extension::wide::kCaIdeSettings);
+// }
+//
+// inline const stdfs::path& IdeSettings::ViewRepoPath() const {
+//   return repository_path;
+// }
+//
+// inline const stdfs::path& IdeSettings::ViewBinaryPath() const {
+//   return binary_path;
+// }
+//
+//// Load the settings from a file. Return false if the file is invalid.
+// inline bool IdeSettings::Load() {
+//   // If file does not exist create a new default settings file.
+//   if (not ide_cache_.DoesFileExist()) {
+//     ide_cache_.RefreshCacheFile();
+//     ide_cache_.PushLinesToLiveCache("binary_path",
+//                                     {GetDefaultBinaryPath().string()});
+//     ide_cache_.PushLinesToLiveCache("repository_path",
+//                                     {GetDefaultRepoPath().string()});
+//     ide_cache_.SaveLiveCacheToFile();
+//   }
+//
+//   ide_cache_.LoadLinesToLiveCache();
+//
+//   if (ide_cache_.ContainsTag("binary_path")) {
+//     binary_path = ide_cache_.GetLineByTagAndIndex("binary_path", 0);
+//   }
+//
+//   if (ide_cache_.ContainsTag("repository_path")) {
+//     repository_path = ide_cache_.GetLineByTagAndIndex("repository_path", 0);
+//   }
+//
+//   if (ide_cache_.ContainsTag("cached_solutions")) {
+//     cached_solutions = ide_cache_.GetLinesByTagAsPath("cached_solutions");
+//   }
+//
+//   ide_cache_.ClearLiveCache();
+//
+//   return true;
+// }
+//
+//// Save the settings to a file in the current binary path.
+// inline bool IdeSettings::Save() {
+//   ide_cache_.RefreshCacheFile();
+//   ide_cache_.PushLinesToLiveCache("binary_path", {binary_path.string()});
+//   ide_cache_.PushLinesToLiveCache("repository_path",
+//                                   {repository_path.string()});
+//   vector<std::string> cached_sln_lines;
+//   for (auto& sln : cached_solutions) {
+//     cached_sln_lines.push_back(sln.string());
+//   }
+//   ide_cache_.PushLinesToLiveCache("cached_solutions", cached_sln_lines);
+//   ide_cache_.SaveLiveCacheToFile();
+//   return true;
+//   //// Overwrite previous file. Delete it.
+//   // stdfs::path file = GetSettingsFilePath();
+//   // if (std::filesystem::exists(file)) {
+//   //   // If its empty dont have to clear.
+//   //   if (!file.empty()) {
+//   //     std::filesystem::remove(file);
+//   //   }
+//   //   // Generate the new file.
+//   //   GenerateSettingsFile();
+//
+//   //} else {
+//   //  GenerateSettingsFile();
+//   //}
+// }
+//
+//// Cache a solution folder, if already chached, returns false.
+// inline bool IdeSettings::CacheSolution(const stdfs::path& sln_folder) {
+//   if (cached_solutions.end() !=
+//       std::find(cached_solutions.begin(), cached_solutions.end(),
+//       sln_folder)) {
+//     return false;  // Solution is already cached...
+//   }
+//   cached_solutions.push_back(sln_folder);
+//   return true;
+// }
+//
+// inline IdeSettings::IdeSettings(const stdfs::path& bin_path)
+//     : binary_path(bin_path) {}
+//
+// inline IdeSettings::IdeSettings(const stdfs::path& bin_path,
+//                                 const stdfs::path& repo_path)
+//     : binary_path(bin_path), repository_path(repo_path) {}
 
 }  // namespace cide::backend
 
