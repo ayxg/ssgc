@@ -26,7 +26,25 @@
 /// C:\\Users\\Anton\\source\\repos\\CandRuntime\\cand-examples\\HelloWorld\\main.cand
 INLINE_MINITEST(Test_Build, TestCase_BasicBuild) {
   using namespace caoco;
+  // ccc [mode] [command] [args...]
+  // ccc cnd build . : Locates a root.cnd file which must contain a fn@root.
+  // ccc cmake build . : Locates CMakeLists.txt to build the project.
+  // ccc cpp build . : Transpiles to C++ Uses native C++ compiler to build the project.
+    // Args: When not provided a default is generated. Usually native to native compilation. 
+    // -CxxCompilerPath=: Path to the C++ compiler.
+    //  -AddCxxCompilerArgs=: Additional Compiler arguments.
+  // ccc c build . : Transpiles to C++/C. Uses native C compiler to build the project.
 
+  // ccc cnd build .
+  // May generate some cmake or cpp with end result of a .dlls or .exes or .libs
+  // Uses the root.cnd file to define the build process.
+  // cmake build .
+  // calls cmake, passing some arguments.
+  // Note that you must include the CndLanguage.cmake file in your cmake
+  // project to use this mode.
+  // 
+  // cpp build . uses the native C++ compiler directly.
+  // 
   //builder.SetRootFile("..\\cand-examples\\ut0_empty_main\\main.cand");
 }
 INLINE_END_MINITEST;

@@ -834,6 +834,59 @@ INLINE_MINITEST(Test_ParserBasics, TestCase_AnimalsExampleProgram) {
 INLINE_END_MINITEST;
 MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_AnimalsExampleProgram);
 
+INLINE_MINITEST(Test_ParserBasics, TestCase_BasicEnumDefinition) {
+  using namespace caoco::parser;
+  using namespace unit_test_parser_basic;
+  TestInternalParserMethod("enum @eResult:{@Good;@Bad;}", ParseEnumDecl,
+                           "TestCaseEnumDecl");
+}
+INLINE_END_MINITEST;
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ForStatement);
+
+INLINE_MINITEST(Test_ParserBasics, TestCase_EnumDefinitionWithValues) {
+  using namespace caoco::parser;
+  using namespace unit_test_parser_basic;
+  TestInternalParserMethod("enum @eResult:{@Good:0;@Bad:1;}", ParseEnumDecl,
+                           "TestCaseEnumDecl");
+}
+INLINE_END_MINITEST;
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ForStatement);
+
+
+INLINE_MINITEST(Test_ParserBasics, TestCase_EnumDefinitionWithPositionalAssociatedValue) {
+  using namespace caoco::parser;
+  using namespace unit_test_parser_basic;
+  TestInternalParserMethod("enum @eResult:str:{@Good:1:\"Good\":;@Bad:\"Bad\";}", ParseEnumDecl,
+                           "TestCaseEnumDecl");
+}
+INLINE_END_MINITEST;
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ForStatement);
+
+INLINE_MINITEST(Test_ParserBasics,
+                TestCase_EnumDefinitionWithNamedAssociatedValue) {
+  using namespace caoco::parser;
+  using namespace unit_test_parser_basic;
+  TestInternalParserMethod(
+      "enum @eResult:str @EnumStr:{@Good:1:\"Good\":;@Bad:\"Bad\";}",
+      ParseEnumDecl, "TestCaseEnumDecl");
+}
+INLINE_END_MINITEST;
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ForStatement);
+
+
+INLINE_MINITEST(Test_ParserBasics,
+                TestCase_EnumDefinitionWithTaggedEntries) {
+  using namespace caoco::parser;
+  using namespace unit_test_parser_basic;
+  TestInternalParserMethod(
+      "enum @eResult:str @EnumStr:{@Good:1:\"Good\";tag@ErrorState:@Bad:1:\"Bad\";}",
+      ParseEnumDecl, "TestCaseEnumDecl");
+}
+INLINE_END_MINITEST;
+MINITEST_REGISTER_CASE(Test_ParserBasics, TestCase_ForStatement);
+
+
+
 #endif HEADER_GUARD_CALE_UT_CAND_OFFICIAL_COMPILER_UT_CAOCO_PARSER_BASIC_H
 /// @} // end of unittest1_cand_compiler
 ///////////////////////////////////////////////////////////////////////////////

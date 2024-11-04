@@ -51,6 +51,7 @@ class Ast {
   Ast& Back();
   Ast& At(std::size_t index);
   const std::list<Ast>& Children() const;
+  std::list<Ast>& ChildrenUnsafe();
   /// Index operator accesses children.
   const Ast& operator[](std::size_t index) const;
   Ast& operator[](std::size_t index);
@@ -259,6 +260,7 @@ Ast& Ast::At(std::size_t index) {
 }
 
 const std::list<Ast>& Ast::Children() const { return children_; }
+std::list<Ast>& Ast::ChildrenUnsafe() { return children_; }
 
 const Ast& Ast::operator[](std::size_t index) const {
   if (index >= children_.size())
