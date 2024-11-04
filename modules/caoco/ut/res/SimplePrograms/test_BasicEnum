@@ -1,0 +1,48 @@
+3 types of enums
+` C enum
+cpp enum @eName{ @e1; @e2; @e3; }
+` C++ enum class
+cpp enum class @eName{ @e1; @e2; @e3; }
+` C& enum object
+enum @eName{ @e1; @e2; @e3; }
+
+
+
+enum @Associativity:{
+  @None;
+  @Left;
+  @Right;
+}
+
+Associativity::size() == 3;
+Associativity:::None::name() == "None";
+Associativity:::Left::idx() == 1;
+Associativity:::Right::value() == 1;
+
+enum @Operation:{
+  @None;
+  @Binary;
+  @Prefix;
+  @Postfix;
+}
+
+enum @Priority:{
+  @None:0;
+  @Assignment:20000;
+  @LogicalOr:60000;
+  @LogicalAnd:70000;
+  @BitwiseOr:80000;
+  @BitwiseXor:85000;
+  @BitwiseAnd:90000;
+  @Equality:100000;
+  @ThreeWayEquality:110000;
+  @Comparison:120000;
+  @Bitshift:130000;
+  @Term:140000;
+  @Factor:150000;
+  @Prefix:160000;
+  @Postfix:170000;
+  @Functional:180000;
+  @Access:190000;
+  @Max:_;
+}

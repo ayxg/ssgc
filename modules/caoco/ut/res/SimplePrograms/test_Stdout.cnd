@@ -1,0 +1,49 @@
+.ifndef __cnd__OPERATING_SYSTEM_WIN32
+  .error["This file is for Windows only"]
+.endif
+
+.link .dyn Kernel32.dll
+.link .dyn User32.dll
+.link .dyn msvcrt.dll
+.link .dyn Ntdll.dll
+
+.extern["C"] .callconv["__stdcall"] 
+fn@WriteFile(
+    void ptr        hFile,
+    const void ptr  lpBuffer,
+    uint            nNumberOfBytesToWrite,
+    uint ptr        lpNumberOfBytesWritten,
+    void ptr        lpOverlapped
+)>int;
+
+.extern["C"] .callconv["__stdcall"] 
+fn@GetStdHandle(uint nStdHandle)>void ptr;
+
+.extern["C"] .callconv["__stdcall"]
+fn@GetLastError()>uint;
+
+.macrodef STD_INPUT_HANDLE (-10 as uint)
+.macrodef EXIT_FAILURE (1 as uint)
+.macrodef EXIT_SUCCESS (0 as uint)
+
+` lets define a more idiomatic interface for the WriteFile function
+namespace csl {
+  .extern["C"] .callconv["__cdecl"] strlen(const char ptr @in)>uint;
+
+  fn@cout(const char ptr @in)>void:{
+    
+  }
+}
+
+main : {
+  def const char ptr @in : "Hello, World!\n";
+  def const uint @len : 14;
+  def uint @written;
+  def void ptr @overlapped : nullptr;
+  def @hStdOut:GetStdHandle(win32::STD_INPUT_HANDLE);
+  def @result:WriteFile(hStdOut, in, len, &written, overlapped);
+  if(!result) {
+    return GetLastError();
+  }
+  return EXIT_SUCCESS;
+}

@@ -25,6 +25,8 @@
 #include "caoco_token_scope.h"
 
 #define CPP_LOC std::source_location::current()
+#define COMPILER_ERROR(e, ...) \
+  caoco::caerr::CaErr::ErrDetail<caoco::caerr::CaErr::e>(__VA_ARGS__)
 
 namespace caoco {
 using OffsetParseResult = cxx::PartialExpected<Ast, TkCursor>;
@@ -58,7 +60,7 @@ class ExprParser;
 /// @defgroup cand_compiler_parser_parse Internal parsing methods
 /// @ingroup cand_compiler_parser
 /// @brief LL Recursive Parsing Methods.
-/// 
+///
 /// Ordered from the most to least specific. Except ParseTokens which is
 /// the main method to call when parsing. The rest are for internal use.
 /// Each method is responsible for parsing a specific type of statement or
@@ -73,28 +75,24 @@ class ExprParser;
 /// Singular operands only, not subexpressions.
 static OffsetParseResult ParseOperand(TkCursor current);
 
-
 /// Parse Arguments (<primary_expr?*>,)
-/// 
+///
 /// - Arguments for method calls. Receives a cursor to the beginning open paren
 /// of the arguments.
 static OffsetParseResult ParseArguments(TkCursor current);
 
-
 /// Parse Indexing Arguments [<primary_expr?*>,]
-/// 
+///
 /// - Arguments for indexing operator.
 static OffsetParseResult ParseIndexingArguments(TkCursor current);
 
-
 /// Parse Listing Arguments {<primary_expr?*>,}
-/// 
+///
 /// - Arguments for listing operator.
 static OffsetParseResult ParseListingArguments(TkCursor current);
 
-
 /// Parse Primary Statement <primary_expr>;
-/// 
+///
 /// - A single primary expression ending with a semicolon.
 /// Primary statement will begin with:
 /// - A singular token operand.
@@ -103,31 +101,29 @@ static OffsetParseResult ParseListingArguments(TkCursor current);
 static OffsetParseResult ParsePrimaryStatement(TkCursor current);
 
 /// ParseConditionalSubExpression (<primary_expr?*>,)
-/// 
+///
 /// - Handles parsing of conditional arguments to For and While loops.
 /// - Format will account for a maximum of 3 arguments.
 /// - Format will account for a minimum of 1 argument.
 /// - Format will account for (i in collection) syntax.
 static OffsetParseResult ParseConditionalSubExpression(TkCursor c);
 
-
 /// ParsePrimaryPreIdentifier <primary_expr>@
-/// 
+///
 /// - Handles parsing of primary expressions that are followed by an
 /// identifier.
 /// - Used in declarations
 static OffsetParseResult ParsePrimaryPreIdentifier(TkCursor current);
 
 /// ParsePrimaryPostIdentifier <primary_expr>: or <primary_expr>;
-/// 
+///
 /// - Handles parsing of primary expressions that are followed by a colon or
 /// semicolon.
 /// - Used in declarations, method signatures.
 static OffsetParseResult ParsePrimaryPostIdentifier(TkCursor current);
 
-
 /// Parse Modifiers <modifier?*>
-/// 
+///
 /// - Parses a list of keyword modifiers.
 static OffsetParseResult ParseModifiers(TkCursor current);
 
@@ -153,12 +149,15 @@ static OffsetParseResult ParseUsingDecl(TkCursor current);
 static OffsetParseResult ParseVariableDecl(TkCursor current);
 static OffsetParseResult ParseMethodDecl(TkCursor current);
 static OffsetParseResult ParseClassDecl(TkCursor current);
+static OffsetParseResult ParseEnumDecl(TkCursor current);
+static OffsetParseResult ParseEnumDef(TkCursor current);
+static OffsetParseResult ParseEnumBlock(TkCursor current);
 static OffsetParseResult ParseProgram(TkCursor current);
 
 /// @} // end of cand_compiler_parser_parse
 
 /// Primary Expression Shift-Reduction Parser
-/// 
+///
 /// Cursor begin and end must be the start and end of the expression.
 /// Note this parser does not take the entire source as an argument.
 /// Only pass the current scope to be parser.
@@ -2423,6 +2422,215 @@ OffsetParseResult parser::ParseProgram(TkCursor c) {
   }
   return Success(c, move(program_node));
 }
+
+OffsetParseResult parser::ParseEnumDecl(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+  // Format:
+  // <modifiers?> <enum> <commercial_at?><name?><colon?>
+  // <<association_typename><<commercial_at><association_identifier>?><semicolon>?>
+  // <<commercial_at><enum_entry_name?><semicolon>
+  Ast mod_node;
+  if (c.IsModifierKeyword()) {
+    auto mod_result = ParseModifiers(c);
+    if (not mod_result) {
+      return mod_result;
+    }
+    mod_node = mod_result.Extract();
+    c.Advance(mod_result);
+  } else {
+    // No modifiers found.
+    mod_node = Ast(eAst::Modifiers);
+  }
+
+  if (c.TypeIs(KwEnum)) {
+    c.Advance();
+    if (c.TypeIsnt(CommercialAt)) {
+      return Fail(
+          c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(CommercialAt, c));
+    }
+    c.Advance();
+    if (c.TypeIsnt(Ident)) {
+      return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Ident, c));
+    }
+    Ast ident_node = Ast(c.Get());
+    c.Advance();
+
+    // If there is a colon, this is a Definition.
+    // If there is a semicolon, this is a Declaration.
+    if (c.TypeIs(Colon)) {
+      c.Advance();
+      auto def_result = ParseEnumDef(c);
+      if (not def_result) {
+        return def_result;
+      }
+      Ast def_node = def_result.Extract();
+      c.Advance(def_result);
+      return Success(
+          c, Ast(eAst::EnumDeclaration, "", mod_node, ident_node, def_node));
+    } else if (c.TypeIs(Semicolon)) {
+      c.Advance();
+      return Success(c, Ast(eAst::EnumDeclaration, "", mod_node, ident_node));
+    } else {
+      return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(
+                         Colon, c, "Expected colon or semicolon."));
+    }
+  } else {
+    return Fail(c, CaErr::ErrDetail<CaErr::ImplExpectedToken>(c, CPP_LOC));
+  }
+};
+
+OffsetParseResult parser::ParseEnumDef(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+
+  // If followed by an open brace, positional_enum.
+  // If followed by anything else,associative_enum
+  // associative_enum -> <type_expr><commercial_at><enum_entry_name?><colon>
+  // After each named association, may be an open brace or another association.
+  bool is_positional = c.TypeIs(LBrace);
+  Ast node{eAst::EnumHeader};
+  while (c.TypeIsnt(LBrace)) {
+    Ast association_node{eAst::EnumAssociation};
+    // associative_enum
+    auto type_expr_result = ParsePrimaryPreIdentifier(c);
+    if (not type_expr_result) {
+      return type_expr_result;
+    }
+    c.Advance(type_expr_result);
+    association_node.ExtractAndPush(type_expr_result);
+
+    if (c.TypeIs(CommercialAt)) {
+      c.Advance();
+      if (c.TypeIs(Ident)) {
+        association_node.PushBack(c.Get());
+        c.Advance();
+        if (c.TypeIs(Colon)) {
+          c.Advance();
+        } else {
+          return Fail(c,
+                      CaErr::ErrDetail<CaErr::ParserExpectedToken>(Colon, c));
+        }
+      } else {
+        return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Ident, c));
+      }
+    } else {
+      return Fail(
+          c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(CommercialAt, c));
+    }
+  }
+
+  auto block_result = ParseEnumBlock(c);
+  if (not block_result) {
+    return block_result;
+  }
+  node.ExtractAndPush(block_result);
+  c.Advance(block_result);
+
+  return Success(c, move(node));
+};
+
+// Parse inside an enum definition block.
+// Cursor should begin at the open brace of the block.
+OffsetParseResult parser::ParseEnumBlock(TkCursor c) {
+  using namespace caerr;
+  using enum eTk;
+  Ast node{eAst::EnumBlock};
+
+  if (c.TypeIsnt(LBrace)) {
+    return Fail(c, COMPILER_ERROR(ParserExpectedToken, LBrace, c));
+  }
+  c.Advance();
+
+  while (c.TypeIsnt(RBrace)) {
+    // EnumEntry
+    if (c.TypeIs(CommercialAt)) {
+      c.Advance();
+      if (c.TypeIsnt(Ident))
+        return Fail(c, COMPILER_ERROR(ParserExpectedToken, Ident, c));
+      node.PushBack(eAst::EnumEntry, c.Literal());
+      auto& this_entry = node.Back();
+      c.Advance();
+      // Check for association initializers. Expect a colon or semicolon.
+      while (c.TypeIsnt(Semicolon)) {
+        if (c.TypeIsnt(Colon))
+          return Fail(c, COMPILER_ERROR(ParserExpectedToken, Ident, c));
+        c.Advance();
+        auto next_assoc_res = ParsePrimaryPostIdentifier(c);
+        if (!next_assoc_res) return next_assoc_res;
+        c.Advance(next_assoc_res);
+        this_entry.ExtractAndPush(next_assoc_res);
+      }
+      c.Advance();
+    }
+    // EnumCategory
+    else if (c.TypeIs(KwUse)) {
+      c.Advance();
+      TkVector this_category{};
+      // Consume identifiers until a semicolon is reached.
+      while (c.TypeIsnt(Colon)) {
+        if (c.TypeIsnt(CommercialAt))
+          return Fail(c, COMPILER_ERROR(ParserExpectedToken, CommercialAt, c));
+        c.Advance();
+        if (c.TypeIsnt(Ident)) {
+          return Fail(c, COMPILER_ERROR(ParserExpectedToken, Ident, c));      
+        }
+        this_category.push_back(c.Get());
+        c.Advance();
+      }
+      c.Advance(); // pass colon
+      
+      // expect the enum entry for a singular entry or a block for multi entry.
+      if (c.TypeIs(CommercialAt)) {
+        c.Advance();
+        if (c.TypeIsnt(Ident))
+          return Fail(c, COMPILER_ERROR(ParserExpectedToken, Ident, c));
+        node.PushBack(eAst::EnumEntry, c.Literal());
+        auto& this_entry = node.Back();
+        
+        // Attribute this category to this entry.
+        this_entry.PushBack(eAst::EnumCategory);
+        auto& added_category = this_entry.Back();
+        for (auto& tk : this_category) added_category.PushBack(tk);
+
+        // Check for association initializers. Expect a colon or semicolon.
+        while (c.TypeIsnt(Semicolon)) {
+          if (c.TypeIsnt(Colon))
+            return Fail(c, COMPILER_ERROR(ParserExpectedToken, Ident, c));
+          c.Advance();
+          auto next_assoc_res = ParsePrimaryPostIdentifier(c);
+          if (!next_assoc_res) return next_assoc_res;
+          c.Advance(next_assoc_res);
+          this_entry.ExtractAndPush(next_assoc_res);
+        }
+        c.Advance();
+      } 
+      // a block
+      else if (c.TypeIs(LBrace)) {
+        auto recursed_block_res = ParseEnumBlock(c);
+        if (!recursed_block_res) return recursed_block_res;
+        
+        // Add this category to all categories of the subblock
+        // as a parent (push to the front), then add the entry
+        // to this block.
+        auto recursed_block = recursed_block_res.Extract();
+        for (auto& entry : recursed_block.ChildrenUnsafe()) {
+          for (auto& entry_data : entry.ChildrenUnsafe()) {
+            if (entry_data.TypeIs(eAst::EnumCategory))
+              for (auto& category_name_fragment : this_category)
+                entry_data.PushFront(category_name_fragment);
+          }
+          node.PushBack(entry);
+        }
+      } else
+        return Fail(c, COMPILER_ERROR(MismatchedScope, c, CPP_LOC));
+    } else
+      return Fail(c, COMPILER_ERROR(MismatchedScope, c, CPP_LOC));
+  }
+  c.Advance();
+
+  return Success(c, move(node));
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 // end Internal parsing methods impl
