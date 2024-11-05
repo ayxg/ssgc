@@ -293,7 +293,8 @@ DEF_GRAMMAR_ELEMENT(Ident, "");  // Identifier
       ConditionalBlock, IterativeBlock, TypeConstraints, CaptureList,          \
       Subexpression, TypeList, GenericList, FunctionCall, Arguments, TypeCall, \
       TypeArguments, IndexOperator, ListingOperator, IndexArguments,           \
-      Modifiers, UnaryMinus, Dereference, AddressOf
+      Modifiers, UnaryMinus, Dereference, AddressOf,EnumDeclaration,\
+      EnumDefinition, EnumAssociation, EnumBlock, EnumCategory,EnumEntry
 
 static constexpr inline auto kAllKeywords = std::array{
     kKwDef,    kKwFn,     kKwClass,  kKwMain,    kKwImport,   kKwNamespace,
@@ -1325,6 +1326,12 @@ constexpr std::string_view eAstEnumStr(eAst t) {
     ETK_LITERAL_CASE(UnaryMinus);
     ETK_LITERAL_CASE(Dereference);
     ETK_LITERAL_CASE(AddressOf);
+    ETK_LITERAL_CASE(EnumDeclaration);
+    ETK_LITERAL_CASE(EnumDefinition);
+    ETK_LITERAL_CASE(EnumCategory);
+    ETK_LITERAL_CASE(EnumEntry);
+    ETK_LITERAL_CASE(EnumAssociation);
+    ETK_LITERAL_CASE(EnumBlock);
     default:
       return "INVALID";
   }
