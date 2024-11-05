@@ -665,6 +665,8 @@ add_minitest_module(
     TestCase_WhileStatement
     TestCase_ForStatement
     TestCase_AnimalsExampleProgram
+    TestCase_BasicEnumDefinition
+    TestCase_EnumDefinitionWithValues
 )
 
 add_minitest_module(

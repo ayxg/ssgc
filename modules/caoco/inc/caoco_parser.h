@@ -1284,6 +1284,8 @@ OffsetParseResult parser::ParsePragmaticStmt(TkCursor c) {
         return ParseMainDecl(c);
       case KwImport:
         return ParseImportDecl(c);
+      case KwEnum:
+        return ParseEnumDecl(c);
       default:
         break;
     }
@@ -2481,87 +2483,75 @@ OffsetParseResult parser::ParseEnumDecl(TkCursor c) {
 };
 
 OffsetParseResult parser::ParseEnumDef(TkCursor c) {
-  using namespace caerr;
-  using enum eTk;
-
   // If followed by an open brace, positional_enum.
-  // If followed by anything else,associative_enum
+  // If followed by anything else,associative_enum.
   // associative_enum -> <type_expr><commercial_at><enum_entry_name?><colon>
   // After each named association, may be an open brace or another association.
-  bool is_positional = c.TypeIs(LBrace);
-  Ast node{eAst::EnumHeader};
+  using namespace caerr;
+  using enum eTk;
+  Ast node{eAst::EnumDefinition};
+  // Parse enum header.
   while (c.TypeIsnt(LBrace)) {
     Ast association_node{eAst::EnumAssociation};
-    // associative_enum
     auto type_expr_result = ParsePrimaryPreIdentifier(c);
-    if (not type_expr_result) {
+    if (!type_expr_result) {
       return type_expr_result;
     }
     c.Advance(type_expr_result);
     association_node.ExtractAndPush(type_expr_result);
-
-    if (c.TypeIs(CommercialAt)) {
-      c.Advance();
-      if (c.TypeIs(Ident)) {
-        association_node.PushBack(c.Get());
-        c.Advance();
-        if (c.TypeIs(Colon)) {
-          c.Advance();
-        } else {
-          return Fail(c,
-                      CaErr::ErrDetail<CaErr::ParserExpectedToken>(Colon, c));
-        }
-      } else {
-        return Fail(c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(Ident, c));
-      }
-    } else {
-      return Fail(
-          c, CaErr::ErrDetail<CaErr::ParserExpectedToken>(CommercialAt, c));
-    }
+    if (c.TypeIsnt(Ident))
+      return Fail(c, COMPILER_ERROR(ParserExpectedToken, Ident, c));
+    association_node.PushBack(c.Get());
+    c.Advance();
+    if (c.TypeIs(Colon))
+      return Fail(c, COMPILER_ERROR(ParserExpectedToken, Colon, c));
+    c.Advance();
   }
 
+  // Parse enum definition block.
   auto block_result = ParseEnumBlock(c);
-  if (not block_result) {
+  if (!block_result)
     return block_result;
-  }
   node.ExtractAndPush(block_result);
   c.Advance(block_result);
 
   return Success(c, move(node));
 };
 
-// Parse inside an enum definition block.
-// Cursor should begin at the open brace of the block.
 OffsetParseResult parser::ParseEnumBlock(TkCursor c) {
+  // Parse inside an enum definition block.
+  // Cursor should begin at the open brace of the block.
   using namespace caerr;
   using enum eTk;
+  static constexpr LAMBDA xParseAssociationInitializers =
+      [](TkCursor& crsr,caoco::Ast& entry) {
+        while (crsr.TypeIsnt(Semicolon)) {
+          if (crsr.TypeIsnt(Colon))
+            return Fail(crsr, COMPILER_ERROR(ParserExpectedToken, Ident, crsr));
+          crsr.Advance();
+          auto next_assoc_res = ParsePrimaryPostIdentifier(crsr);
+          if (!next_assoc_res) return next_assoc_res;
+          crsr.Advance(next_assoc_res);
+          entry.ExtractAndPush(next_assoc_res);
+        }
+        crsr.Advance();
+  };
+
   Ast node{eAst::EnumBlock};
-
-  if (c.TypeIsnt(LBrace)) {
+  if (c.TypeIsnt(LBrace)) // Require opening brace.
     return Fail(c, COMPILER_ERROR(ParserExpectedToken, LBrace, c));
-  }
   c.Advance();
-
   while (c.TypeIsnt(RBrace)) {
     // EnumEntry
     if (c.TypeIs(CommercialAt)) {
       c.Advance();
       if (c.TypeIsnt(Ident))
         return Fail(c, COMPILER_ERROR(ParserExpectedToken, Ident, c));
-      node.PushBack(eAst::EnumEntry, c.Literal());
+      node.PushBack({eAst::EnumEntry, c.Literal()});
       auto& this_entry = node.Back();
       c.Advance();
       // Check for association initializers. Expect a colon or semicolon.
-      while (c.TypeIsnt(Semicolon)) {
-        if (c.TypeIsnt(Colon))
-          return Fail(c, COMPILER_ERROR(ParserExpectedToken, Ident, c));
-        c.Advance();
-        auto next_assoc_res = ParsePrimaryPostIdentifier(c);
-        if (!next_assoc_res) return next_assoc_res;
-        c.Advance(next_assoc_res);
-        this_entry.ExtractAndPush(next_assoc_res);
-      }
-      c.Advance();
+      xParseAssociationInitializers(c,this_entry);
     }
     // EnumCategory
     else if (c.TypeIs(KwUse)) {
@@ -2572,9 +2562,8 @@ OffsetParseResult parser::ParseEnumBlock(TkCursor c) {
         if (c.TypeIsnt(CommercialAt))
           return Fail(c, COMPILER_ERROR(ParserExpectedToken, CommercialAt, c));
         c.Advance();
-        if (c.TypeIsnt(Ident)) {
+        if (c.TypeIsnt(Ident)) 
           return Fail(c, COMPILER_ERROR(ParserExpectedToken, Ident, c));      
-        }
         this_category.push_back(c.Get());
         c.Advance();
       }
@@ -2585,7 +2574,7 @@ OffsetParseResult parser::ParseEnumBlock(TkCursor c) {
         c.Advance();
         if (c.TypeIsnt(Ident))
           return Fail(c, COMPILER_ERROR(ParserExpectedToken, Ident, c));
-        node.PushBack(eAst::EnumEntry, c.Literal());
+        node.PushBack({eAst::EnumEntry, c.Literal()});
         auto& this_entry = node.Back();
         
         // Attribute this category to this entry.
@@ -2594,23 +2583,14 @@ OffsetParseResult parser::ParseEnumBlock(TkCursor c) {
         for (auto& tk : this_category) added_category.PushBack(tk);
 
         // Check for association initializers. Expect a colon or semicolon.
-        while (c.TypeIsnt(Semicolon)) {
-          if (c.TypeIsnt(Colon))
-            return Fail(c, COMPILER_ERROR(ParserExpectedToken, Ident, c));
-          c.Advance();
-          auto next_assoc_res = ParsePrimaryPostIdentifier(c);
-          if (!next_assoc_res) return next_assoc_res;
-          c.Advance(next_assoc_res);
-          this_entry.ExtractAndPush(next_assoc_res);
-        }
-        c.Advance();
+        xParseAssociationInitializers(c, this_entry);
       } 
       // a block
       else if (c.TypeIs(LBrace)) {
         auto recursed_block_res = ParseEnumBlock(c);
         if (!recursed_block_res) return recursed_block_res;
         
-        // Add this category to all categories of the subblock
+        // Add this category to all categories of the sub-block
         // as a parent (push to the front), then add the entry
         // to this block.
         auto recursed_block = recursed_block_res.Extract();
@@ -2624,10 +2604,13 @@ OffsetParseResult parser::ParseEnumBlock(TkCursor c) {
         }
       } else
         return Fail(c, COMPILER_ERROR(MismatchedScope, c, CPP_LOC));
-    } else
+    } 
+    // Invalid enum description format.
+    else
       return Fail(c, COMPILER_ERROR(MismatchedScope, c, CPP_LOC));
   }
   c.Advance();
+
 
   return Success(c, move(node));
 };
