@@ -1,175 +1,11 @@
-cmake_minimum_required(VERSION 3.29.5)
+cmake_minimum_required(VERSION 3.29.5) # 3.29.5
 include(FetchContent)
+
 #------------------------------------------------------------------------------
 # SSG_ROOT Project-Specific Utilities  
 #------------------------------------------------------------------------------
-
-# Prevent in-source builds
-function(SSG_ASSERT_OUT_OF_SOURCE_BUILDS)
-  # make sure the user doesn't play dirty with symlinks
-  get_filename_component(SRCDIR "${CMAKE_SOURCE_DIR}" REALPATH)
-  get_filename_component(BINDIR "${CMAKE_BINARY_DIR}" REALPATH)
-
-  # disallow in-source builds
-  if("${SRCDIR}" STREQUAL "${BINDIR}")
-    message(FATAL_ERROR 
-        "[SSG][FATAL] In-source builds are disabled.\n")
-  endif()
-endfunction()
-
-# Check if the project is top-level
-macro(SSG_ASSERT_TOP_LEVEL_PROJECT)
-  if(NOT PROJECT_IS_TOP_LEVEL)
-	  message(FATAL_ERROR 
-          "[SSG][FATAL] Project is not top-level CMakeLists file.")
-  endif()
-endmacro()
-
-# Install sfml-imgui package for this project.
-macro(SSG_GITPKG_IMGUI_SFML)
-  # SFML
-  # Note: SFML builds as shared by default.
-  add_compile_definitions(_HAS_AUTO_PTR_ETC=1) # Allows SFML deprecated std::auto_ptr in C++17
-  FetchContent_Declare(
-    SFML
-    GIT_REPOSITORY https://github.com/SFML/SFML
-    GIT_TAG 69ea0cd863aed1d4092b970b676924a716ff718b # 2.6.1
-  )
-  FetchContent_MakeAvailable(SFML)
-
-  # ImGui
-  FetchContent_Declare(
-    imgui
-    GIT_REPOSITORY https://github.com/ocornut/imgui
-    GIT_TAG 8199457a7d9e453f8d3d9cadc14683fb54a858b5 # 1.91
-  )
-  FetchContent_MakeAvailable(imgui)
-
-  # ImGui-SFML
-  FetchContent_Declare(
-    imgui-sfml
-    GIT_REPOSITORY https://github.com/SFML/imgui-sfml
-    GIT_TAG de565ac8f2b795dedc0307b60830cb006afd2ecd # 2.6
-  )
-
-  set(IMGUI_DIR ${imgui_SOURCE_DIR}) # pass our imgui source dir to imgui-sfml (mandatory)
-  set(IMGUI_SFML_FIND_SFML OFF) # turns off FindSFML impl inside imGui-SFML CMakeLists
-  set(IMGUI_SFML_IMGUI_DEMO ON) # enables imgui-sfml demo
-
-  FetchContent_MakeAvailable(imgui-sfml)
-endmacro()
-
-macro(SSG_GITPKG_NLOHMANJSON)
-  FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
-  FetchContent_MakeAvailable(json) # nlohmann_json::nlohmann_json
-endmacro()
-
-macro(SSG_GITPKG_GOOGLE_TEST)
-# gitbash $ git ls-remote --tags https://github.com/google/googletest.git
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest
-  GIT_TAG b514bdc898e2951020cbdca1304b75f5950d1f59 # refs/tags/v1.15.2
-)
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-endmacro()
-
-# check undefined behavior/address sanitizer support
-# OUT: SUPPORTS_UBSAN, SUPPORTS_ASAN
-macro(SSG_CHECK_SANITIZER_SUPPORT)
-  if((CMAKE_CXX_COMPILER_ID MATCHES ".*Clang.*" OR CMAKE_CXX_COMPILER_ID MATCHES ".*GNU.*") 
-      AND NOT WIN32)
-      set(SUPPORTS_UBSAN ON)
-  else()
-      set(SUPPORTS_UBSAN OFF)
-  endif()
-
-  if((CMAKE_CXX_COMPILER_ID MATCHES ".*Clang.*" OR CMAKE_CXX_COMPILER_ID MATCHES ".*GNU.*") 
-      AND WIN32)
-      set(SUPPORTS_ASAN OFF)
-  else()
-      set(SUPPORTS_ASAN ON)
-  endif()
-endmacro()
-
-# Configure standard C++ compiler warnings.
-# OUT: PROJECT_WARNINGS_CXX, PROJECT_WARNINGS_C
-macro(SSG_ROOT_CXX_APPLY_STD_COMPILER_FLAGS)
-  set(MSVC_WARNINGS
-      /W4 # Baseline reasonable warnings
-      /w14242 # 'identifier': conversion from 'type1' to 'type2', possible loss of data
-      /w14254 # 'operator': conversion from 'type1:field_bits' to 'type2:field_bits', possible loss of data
-      /w14263 # 'function': member function does not override any base class virtual member function
-      /w14265 # 'classname': class has virtual functions, but destructor is not virtual instances of this class may not
-              # be destructed correctly
-      /w14287 # 'operator': unsigned/negative constant mismatch
-      /we4289 # nonstandard extension used: 'variable': loop control variable declared in the for-loop is used outside
-              # the for-loop scope
-      /w14296 # 'operator': expression is always 'boolean_value'
-      /w14311 # 'variable': pointer truncation from 'type1' to 'type2'
-      /w14545 # expression before comma evaluates to a function which is missing an argument list
-      /w14546 # function call before comma missing argument list
-      /w14547 # 'operator': operator before comma has no effect; expected operator with side-effect
-      /w14549 # 'operator': operator before comma has no effect; did you intend 'operator'?
-      /w14555 # expression has no effect; expected expression with side- effect
-      /w14619 # pragma warning: there is no warning number 'number'
-      /w14640 # Enable warning on thread un-safe static member initialization
-      /w14826 # Conversion from 'type1' to 'type2' is sign-extended. This may cause unexpected runtime behavior.
-      /w14905 # wide string literal cast to 'LPSTR'
-      /w14906 # string literal cast to 'LPWSTR'
-      /w14928 # illegal copy-initialization; more than one user-defined conversion has been implicitly applied
-      /permissive- # standards conformance mode for MSVC compiler.
-  )
-
-  set(CLANG_WARNINGS
-      -Wall
-      -Wextra # reasonable and standard
-      -Wshadow # warn the user if a variable declaration shadows one from a parent context
-      -Wnon-virtual-dtor # warn the user if a class with virtual functions has a non-virtual destructor. This helps
-      # catch hard to track down memory errors
-      -Wold-style-cast # warn for c-style casts
-      -Wcast-align # warn for potential performance problem casts
-      -Wunused # warn on anything being unused
-      -Woverloaded-virtual # warn if you overload (not override) a virtual function
-      -Wpedantic # warn if non-standard C++ is used
-      -Wconversion # warn on type conversions that may lose data
-      -Wsign-conversion # warn on sign conversions
-      -Wnull-dereference # warn if a null dereference is detected
-      -Wdouble-promotion # warn if float is implicit promoted to double
-      -Wformat=2 # warn on security issues around functions that format output (ie printf)
-      -Wimplicit-fallthrough # warn on statements that fallthrough without an explicit annotation
-  )
-
-  set(GCC_WARNINGS
-      ${CLANG_WARNINGS}
-      -Wmisleading-indentation # warn if indentation implies blocks where blocks do not exist
-      -Wduplicated-cond # warn if if / else chain has duplicated conditions
-      -Wduplicated-branches # warn if if / else branches have duplicated code
-      -Wlogical-op # warn about logical operations being used where bitwise were probably wanted
-      -Wuseless-cast # warn if you perform a cast to the same type
-      -Wsuggest-override # warn if an overridden member function is not marked 'override' or 'final'
-  )
-
-  list(APPEND CLANG_WARNINGS -Werror)
-  list(APPEND GCC_WARNINGS -Werror)
-  # list(APPEND MSVC_WARNINGS /WX)
-
-  if(MSVC)
-  set(PROJECT_WARNINGS_CXX ${MSVC_WARNINGS})
-  message("[SSG] MSVC default compiler warnings set.")
-  elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-  set(PROJECT_WARNINGS_CXX ${CLANG_WARNINGS})
-  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  set(PROJECT_WARNINGS_CXX ${GCC_WARNINGS})
-  else()
-  message(AUTHOR_WARNING "No compiler warnings set for CXX compiler: '${CMAKE_CXX_COMPILER_ID}'")
-  # TODO support Intel compiler
-  endif()
-  # use the same warning flags for C
-  set(PROJECT_WARNINGS_C "${PROJECT_WARNINGS_CXX}")
-endmacro()
+include(bsys/ssg/ssg.cmake)
+include(bsys/ssg/gitpkg.cmake)
 
 # Setup project options for internal executables and libraries.
 macro(SSG_ROOT_SETUP_PROJECT_OPTIONS)
@@ -187,7 +23,7 @@ macro(SSG_ROOT_SETUP_PROJECT_OPTIONS)
       OFF)
 
   # check undefined behavior/address sanitizer support
-  SSG_CHECK_SANITIZER_SUPPORT()
+  ssg_check_cxx_sanitizer_support()
 
   if(NOT PROJECT_IS_TOP_LEVEL OR SSG_ROOT_CXX_PACKAGING_MAINTAINER_MODE)
       option(SSG_ROOT_CXX_ENABLE_IPO "Enable IPO/LTO" OFF)
@@ -207,9 +43,9 @@ macro(SSG_ROOT_SETUP_PROJECT_OPTIONS)
       option(SSG_ROOT_CXX_ENABLE_IPO "Enable IPO/LTO" ON)
       option(SSG_ROOT_CXX_WARNINGS_AS_ERRORS "Treat Warnings As Errors" ON)
       option(SSG_ROOT_CXX_ENABLE_USER_LINKER "Enable user-selected linker" OFF)
-      option(SSG_ROOT_CXX_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" ${SUPPORTS_ASAN})
+      option(SSG_ROOT_CXX_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" ${SSG_CXX_COMPILER_HAS_ASAN})
       option(SSG_ROOT_CXX_ENABLE_SANITIZER_LEAK "Enable leak sanitizer" OFF)
-      option(SSG_ROOT_CXX_ENABLE_SANITIZER_UNDEFINED "Enable undefined sanitizer" ${SUPPORTS_UBSAN})
+      option(SSG_ROOT_CXX_ENABLE_SANITIZER_UNDEFINED "Enable undefined sanitizer" ${SSG_CXX_COMPILER_HAS_UBSAN})
       option(SSG_ROOT_CXX_ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
       option(SSG_ROOT_CXX_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
       option(SSG_ROOT_CXX_ENABLE_UNITY_BUILD "Enable unity builds" OFF)
@@ -237,7 +73,7 @@ macro(SSG_ROOT_SETUP_PROJECT_OPTIONS)
           SSG_ROOT_CXX_ENABLE_CACHE)
   endif()
 
-  SSG_ROOT_CXX_check_libfuzzer_support(LIBFUZZER_SUPPORTED)
+  ssg_check_cxx_libfuzzer_support(LIBFUZZER_SUPPORTED)
   if(LIBFUZZER_SUPPORTED AND (SSG_ROOT_CXX_ENABLE_SANITIZER_ADDRESS 
       OR SSG_ROOT_CXX_ENABLE_SANITIZER_THREAD 
       OR SSG_ROOT_CXX_ENABLE_SANITIZER_UNDEFINED))
@@ -262,11 +98,11 @@ macro(SSG_ROOT_HANDLE_PROJECT_OPTIONS)
   endif()
 
   # check undefined behavior/address sanitizer support
-  SSG_CHECK_SANITIZER_SUPPORT()
+  ssg_check_cxx_sanitizer_support()
 
   if(SSG_ROOT_CXX_ENABLE_HARDENING AND SSG_ROOT_CXX_ENABLE_GLOBAL_HARDENING)
     include(bsys/cmake/Hardening.cmake)
-    if(NOT SUPPORTS_UBSAN 
+    if(NOT SSG_CXX_COMPILER_HAS_UBSAN 
         OR SSG_ROOT_CXX_ENABLE_SANITIZER_UNDEFINED
         OR SSG_ROOT_CXX_ENABLE_SANITIZER_ADDRESS
         OR SSG_ROOT_CXX_ENABLE_SANITIZER_THREAD
@@ -302,7 +138,7 @@ project(SSG_ROOT
 )
 
 SSG_ASSERT_TOP_LEVEL_PROJECT()
-SSG_ASSERT_OUT_OF_SOURCE_BUILDS()
+SSG_ASSERT_OUT_OF_SOURCE_BUILD()
 
 # Create root project options.
 option(SSG_ROOT_CXX_BUILD_SHARED_DEPS "Build dependencies as shared or static by default." OFF)
@@ -347,7 +183,56 @@ SSG_ROOT_SETUP_PROJECT_OPTIONS()
 # SSG_ROOT Handle and apply internal project options.
 #------------------------------------------------------------------------------
 SSG_ROOT_HANDLE_PROJECT_OPTIONS()
-SSG_ROOT_CXX_APPLY_STD_COMPILER_FLAGS()
+ssg_generate_cxx_strict_warning_flags()
+
+include(bsys/cmake/UseCandLang.cmake)
+
+#cand_configure()
+
+# cnd compiler target config
+add_executable(cnd_compiler
+  modules/cnd/src/cnd_main.cpp
+  modules/cnd/src/cli_main.cpp
+  modules/cnd/src/driver.cpp
+  #modules/cnd/src/cnd_cst.cpp
+  #modules/cnd/src/cnd_lexer.cpp
+  #modules/cnd/src/cnd_scanner.cpp
+  #modules/cnd/src/cnd_parser.cpp
+  #modules/cnd/src/cnd_tk_closure.cpp
+  #modules/cnd/src/cnd_tk_cursor.cpp
+)
+
+# Add static unit tests.
+target_sources(cnd_compiler PRIVATE
+  modules/cnd/ut/sut_LexerBasics.cpp
+  modules/cnd/ut/sut_LexerLexEscapedCharSequence.cpp
+  modules/cnd/ut/sut_LexerLexIdentifier.cpp
+  modules/cnd/ut/sut_LexerLexNumber.cpp
+  modules/cnd/ut/sut_LexerLexPunctuator.cpp
+)
+
+target_include_directories(cnd_compiler PUBLIC 
+    #modules/cnd/imp
+    modules/cnd/inc
+    #modules/cnd/inc/ccapi
+    #modules/cnd/inc/cldata
+    #modules/cnd/inc/cldev
+    #modules/cnd/inc/corevals
+    #modules/cnd/inc/trtools
+)
+
+target_link_libraries(cnd_compiler
+  PRIVATE
+    nlohmann_json::nlohmann_json
+    # SSG Modules
+    ssgmod::mta::mta_interface
+    ssgmod::cxxx::cxxx_interface
+    ssgmod::wpl::wpl_interface
+)
+
+# Add C& source files to the C++ impl of the C& compiler recursiveley.
+#cand_cxx_target_sources(TARGET cnd_compiler SOURCES csl/test.cnd)
+#cand_precompile(TARGET cnd_compiler)
 #------------------------------------------------------------------------------
 # CIDR_EXE Target Config
 #------------------------------------------------------------------------------
@@ -384,7 +269,7 @@ target_include_directories(CIDR_EXE PUBLIC
 # Apply standard SSG warnings to the target
 target_compile_options(
 CIDR_EXE
-PRIVATE ${PROJECT_WARNINGS_CXX})
+PRIVATE ${SSG_PROJECT_WARNINGS_CXX})
 
 # Copy DLLs needed for runtime on Windows for imgui-sfml
 if(WIN32)
@@ -480,37 +365,94 @@ add_test(
    # ssgmod::mta::mta_interface
    # ssgmod::cxxx::cxxx_interface
    # ssgmod::caoco::caoco_interface
-# @brief Creates a unit test executable linked to the required libraries
-#        of the C& Compiler module.
-# @param ARGV0 [PROJECT_NAME]_MINITEST_TARGET_NAME
-# @param ARGV1 [PROJECT_NAME]_MINITEST_TARGET_SOURCE
-# @out   arg_add_cnd_minitest_executable_NAME
-# @out   arg_add_cnd_minitest_executable_INCLUDE_DIRECTORIES
-# @out   arg_add_cnd_minitest_executable_SOURCES
-# @out   arg_add_cnd_minitest_executable_LINK_LIBS
+
+set(MINITEST_LIBRARY ssgmod::minitest::minitest_interface)
+
+# @brief Creates an executable target with a generated main source file given a header which includes unit tests.
+# @param NAME Created target name.
+# @param TEST_HEADER The header containing unit tests.
+# @param SOURCES Sources to add to the executable. Do not include a main method.
+# @param INCLUDE_DIRECTORIES Target include directories. The include dir containing the test header must be included.
+# @param LINK_LIBS Libraries to link to the executable.
 macro(add_minitest_executable)
   set(options)
-  set(oneValueArgs NAME)
+  set(oneValueArgs NAME TEST_HEADER)
   set(multiValueArgs SOURCES INCLUDE_DIRECTORIES LINK_LIBS)
   cmake_parse_arguments(arg_add_minitest_executable
       "${options}" "${oneValueArgs}" "${multiValueArgs}"
       ${ARGN}
   )
+  # arg_add_minitest_executable_NAME
+  # arg_add_minitest_executable_SOURCES
+  # arg_add_minitest_executable_LINK_LIBS
+  # arg_add_minitest_executable_INCLUDE_DIRECTORIES
+  # arg_add_minitest_executable_TEST_HEADER
+  
+  # Generate a main source file for this unit test using the name of the target.
+  file(CONFIGURE 
+    OUTPUT minitest/${arg_add_minitest_executable_NAME}.cpp 
+    CONTENT "\
+  #include \"minitest.hpp\"\n\
+  #include \"@arg_add_minitest_executable_TEST_HEADER@\"\n\
+  int main(int argc, char* argv[]) { return minitest::CmakeMain(argc, argv); }\
+  "   @ONLY)
+
+
   add_executable(
     ${arg_add_minitest_executable_NAME}
-    ${arg_add_minitest_executable_SOURCES}
+    ${CMAKE_CURRENT_BINARY_DIR}/minitest/${arg_add_minitest_executable_NAME}.cpp ${arg_add_minitest_executable_SOURCES}
   )
 
   target_link_libraries(
     ${arg_add_minitest_executable_NAME} 
+    ${MINITEST_LIBRARY}
     ${arg_add_minitest_executable_LINK_LIBS}
   )
 
   target_include_directories(
     ${arg_add_minitest_executable_NAME} 
-    INTERFACE ${arg_add_minitest_executable_INCLUDE_DIRECTORIES}
+    PUBLIC ${arg_add_minitest_executable_INCLUDE_DIRECTORIES}
   )
 endmacro()
+
+
+function(minitest_find_header_tests)
+  # Read the content of the file into a variable
+  file(READ "${ARGV0}" file_content)
+
+  # Define the regex patterns for opening and closing
+  # TEST\\(([A-Za-z0-9]+),([A-Za-z0-9]+)\\)
+  # "INLINE_MINITEST\\(([^,]+),([^,]+)\\) \{"
+  set(opening_regex "INLINE_MINITEST\\(([^,]+),([^)]+)\\)")
+  set(closing_regex "INLINE_END_MINITEST_AND_REGISTER\\(([^,]+),([^,]+)\\)")
+
+  # Initialize an empty list to store the pairs
+  set(test_case_pairs "")
+
+  # Find all opening TEST_CASE patterns
+  string(REGEX MATCHALL "${opening_regex}" opening_matches "${file_content}")
+
+  # Iterate through each opening match
+  foreach(opening_match IN LISTS opening_matches)
+      # Extract Name and CaseName from the opening match
+      string(REGEX REPLACE "${opening_regex}" "\\1" name "${opening_match}")
+      string(REGEX REPLACE "${opening_regex}" "\\2" case_name "${opening_match}")
+
+      # Trim any leading/trailing whitespace
+      string(STRIP "${name}" name)
+      string(STRIP "${case_name}" case_name)
+
+
+          list(APPEND test_case_pairs "${name}")
+                    list(APPEND test_case_pairs "${case_name}")
+
+  endforeach()
+
+  # Output the list of test case pairs
+  set(${ARGV1} ${test_case_pairs} PARENT_SCOPE)
+endfunction()
+
+
 
 macro(add_minitest)
   set(options)
@@ -548,13 +490,44 @@ macro(add_minitest_module)
   endforeach()
 endmacro()
 
-# Minitest CMake Support
-#add_minitest(
-#  TARGET ut_cnd_Lexer
-#  MODULE_NAME Test_Lexer
-# CASE_NAME TestCase_Keywords
-# WORKING_DIRECTORY ${SSG_UT_CND_WORKING_DIR}
-#)
+macro(add_minitest_header)
+  set(options)
+  set(oneValueArgs TARGET WORKING_DIRECTORY HEADER PREFIX)
+  set(multiValueArgs)
+  cmake_parse_arguments(arg_add_minitest_header
+      "${options}" "${oneValueArgs}" "${multiValueArgs}"
+      ${ARGN}
+  )
+
+  set(test_case_pairs "")
+  minitest_find_header_tests("${arg_add_minitest_header_HEADER}" test_case_pairs)
+
+    # Loop through the list in steps of 2 (Name and CaseName)
+  list(LENGTH test_case_pairs num_elements)
+  math(EXPR num_pairs "${num_elements} / 2")  # Calculate the number of pairs
+
+  foreach(i RANGE 0 ${num_pairs} 2)
+      # Get Name and CaseName from the list
+      list(GET test_case_pairs ${i} name)
+      math(EXPR next_index "${i} + 1")
+      list(GET test_case_pairs ${next_index} case_name)
+
+      # Create a unique test name
+      set(test_name "${name}:${case_name}")
+
+      # Use add_test to create the test
+        add_test(
+    NAME ${arg_add_minitest_header_PREFIX}${test_name}
+    COMMAND $<TARGET_FILE:${arg_add_minitest_header_TARGET}> 
+            ${name} 
+            ${case_name}
+    WORKING_DIRECTORY ${arg_add_minitest_header_WORKING_DIRECTORY}
+  )
+
+      # Optionally, print the test name for debugging
+      message(STATUS "Added test: ${test_name}")
+endforeach()
+endmacro()
 
 #--------------------------------------------------------------
 # Unit Tests : C& Compiler Module
@@ -569,114 +542,127 @@ set(SSG_UT_CND_LIBS_TO_LINK
 )
 
 # Executables
+if(0)
+  add_minitest_executable(
+    NAME ut_cnd_Lexer
+    SOURCES ${SSG_UT_CND_INCLUDE_DIRS}ut_cnd_Lexer.cpp
+    INCLUDE_DIRECTORIES ${SSG_UT_CND_INCLUDE_DIRS}
+    LINK_LIBS ${SSG_UT_CND_LIBS_TO_LINK}
+  )
 
-add_minitest_executable(
-  NAME ut_cnd_Lexer
-  SOURCES ${SSG_UT_CND_INCLUDE_DIRS}ut_cnd_Lexer.cpp
-  INCLUDE_DIRECTORIES ${SSG_UT_CND_INCLUDE_DIRS}
-  LINK_LIBS ${SSG_UT_CND_LIBS_TO_LINK}
-)
+  add_minitest_executable(
+    NAME ut_cnd_TokenScope
+    SOURCES ${SSG_UT_CND_INCLUDE_DIRS}ut_cnd_TokenScope.cpp
+    INCLUDE_DIRECTORIES ${SSG_UT_CND_INCLUDE_DIRS}
+    LINK_LIBS ${SSG_UT_CND_LIBS_TO_LINK}
+  )
 
-add_minitest_executable(
-  NAME ut_cnd_TokenScope
-  SOURCES ${SSG_UT_CND_INCLUDE_DIRS}ut_cnd_TokenScope.cpp
-  INCLUDE_DIRECTORIES ${SSG_UT_CND_INCLUDE_DIRS}
-  LINK_LIBS ${SSG_UT_CND_LIBS_TO_LINK}
-)
+  add_minitest_executable(
+    NAME ut_cnd_ParserBasics
+    SOURCES ${SSG_UT_CND_INCLUDE_DIRS}ut_cnd_ParserBasics.cpp
+    INCLUDE_DIRECTORIES ${SSG_UT_CND_INCLUDE_DIRS}
+    LINK_LIBS ${SSG_UT_CND_LIBS_TO_LINK}
+  )
 
-add_minitest_executable(
-  NAME ut_cnd_ParserBasics
-  SOURCES ${SSG_UT_CND_INCLUDE_DIRS}ut_cnd_ParserBasics.cpp
-  INCLUDE_DIRECTORIES ${SSG_UT_CND_INCLUDE_DIRS}
-  LINK_LIBS ${SSG_UT_CND_LIBS_TO_LINK}
-)
+  add_minitest_executable(
+    NAME ut_cnd_Build
+    SOURCES ${SSG_UT_CND_INCLUDE_DIRS}ut_cnd_Build.cpp
+    INCLUDE_DIRECTORIES ${SSG_UT_CND_INCLUDE_DIRS}
+    LINK_LIBS ${SSG_UT_CND_LIBS_TO_LINK}
+  )
 
-add_minitest_executable(
-  NAME ut_cnd_Build
-  SOURCES ${SSG_UT_CND_INCLUDE_DIRS}ut_cnd_Build.cpp
-  INCLUDE_DIRECTORIES ${SSG_UT_CND_INCLUDE_DIRS}
-  LINK_LIBS ${SSG_UT_CND_LIBS_TO_LINK}
-)
+  # Modules
 
-# Modules
+  add_minitest_module(
+    TARGET ut_cnd_Lexer
+    MODULE_NAME Test_Lexer
+    WORKING_DIRECTORY ${SSG_UT_CND_WORKING_DIR}
+    CASE_NAMES TestCase_Keywords
+  )
 
-add_minitest_module(
-  TARGET ut_cnd_Lexer
-  MODULE_NAME Test_Lexer
-  WORKING_DIRECTORY ${SSG_UT_CND_WORKING_DIR}
-  CASE_NAMES TestCase_Keywords
-)
+  add_minitest_module(
+    TARGET ut_cnd_TokenScope
+    MODULE_NAME Test_TokenScope
+    WORKING_DIRECTORY ${SSG_UT_CND_WORKING_DIR}
+    CASE_NAMES 
+    TestCase_ParenScopeFinder
+    TestCase_ListScopeFinder
+    TestCase_FrameScopeFinder
+    TestCase_StatementScopeFinder
+  )
 
-add_minitest_module(
-  TARGET ut_cnd_TokenScope
-  MODULE_NAME Test_TokenScope
-  WORKING_DIRECTORY ${SSG_UT_CND_WORKING_DIR}
-  CASE_NAMES 
-  TestCase_ParenScopeFinder
-  TestCase_ListScopeFinder
-  TestCase_FrameScopeFinder
-  TestCase_StatementScopeFinder
-)
+  add_minitest_module(
+    TARGET ut_cnd_ParserBasics
+    MODULE_NAME Test_ParserBasics
+    WORKING_DIRECTORY ${SSG_UT_CND_WORKING_DIR}
+    CASE_NAMES 
+      TestCase_SingleOperand
+      TestCase_ValueExpr
+      TestCase_PrimaryStatement
+      TestCase_VariableDeclarationNoTypeNoAssignNoMod
+      TestCase_VariableDeclarationNoTypeNoAssign
+      TestCase_VariableDeclarationNoAssign
+      TestCase_VariableDefinition
+      TestCase_TypeAlias
+      TestCase_LibraryNamespaceInclusion
+      TestCase_NamespaceInclusion
+      TestCase_ObjectInclusion
+      TestCase_TypeInclusion
+      TestCase_ObjectInclusionFromLibrary
+      TestCase_TypeInclusionFromLibrary
+      TestCase_TypeImportDeclaration
+      TestCase_MethodDeclImplicitVoidArgNoRet
+      TestCase_MethodDeclImplicitVoidArgNoRet2
+      TestCase_MethodDeclImplicitVoidArgAnyRet
+      TestCase_MethodDeclImplicitVoidArgAnyRet2
+      TestCase_MethodDeclArgNoRet
+      TestCase_MethodDeclArgAnyRet
+      TestCase_MethodDeclArgIdentifiedAnyRet
+      TestCase_MethodDeclArgsTypedRet
+      TestCase_MethodDeclTypedArgsTypedRet
+      TestCase_MethodDeclTypedArgsTypedRetWithModifiers
+      TestCase_ClassDecl
+      TestCase_ClassDeclWithMod
+      TestCase_LibWithMod
+      TestCase_LibWithModAndDefinition
+      TestCase_ClassWithModAndDefinition
+      TestCase_MethodDefinition
+      TestCase_MainDefinition
+      TestCase_PragmaticDeclarations
+      TestCase_ParseProgramWithDeclrations
+      TestCase_ReturnStatement
+      TestCase_IfStatement
+      TestCase_IfElseStatement
+      TestCase_IfElifStatement
+      TestCase_IfElifElseStatement
+      TestCase_WhileStatement
+      TestCase_ForStatement
+      TestCase_AnimalsExampleProgram
+      TestCase_BasicEnumDefinition
+      TestCase_EnumDefinitionWithValues
+  )
 
-add_minitest_module(
-  TARGET ut_cnd_ParserBasics
-  MODULE_NAME Test_ParserBasics
-  WORKING_DIRECTORY ${SSG_UT_CND_WORKING_DIR}
-  CASE_NAMES 
-    TestCase_SingleOperand
-    TestCase_ValueExpr
-    TestCase_PrimaryStatement
-    TestCase_VariableDeclarationNoTypeNoAssignNoMod
-    TestCase_VariableDeclarationNoTypeNoAssign
-    TestCase_VariableDeclarationNoAssign
-    TestCase_VariableDefinition
-    TestCase_TypeAlias
-    TestCase_LibraryNamespaceInclusion
-    TestCase_NamespaceInclusion
-    TestCase_ObjectInclusion
-    TestCase_TypeInclusion
-    TestCase_ObjectInclusionFromLibrary
-    TestCase_TypeInclusionFromLibrary
-    TestCase_TypeImportDeclaration
-    TestCase_MethodDeclImplicitVoidArgNoRet
-    TestCase_MethodDeclImplicitVoidArgNoRet2
-    TestCase_MethodDeclImplicitVoidArgAnyRet
-    TestCase_MethodDeclImplicitVoidArgAnyRet2
-    TestCase_MethodDeclArgNoRet
-    TestCase_MethodDeclArgAnyRet
-    TestCase_MethodDeclArgIdentifiedAnyRet
-    TestCase_MethodDeclArgsTypedRet
-    TestCase_MethodDeclTypedArgsTypedRet
-    TestCase_MethodDeclTypedArgsTypedRetWithModifiers
-    TestCase_ClassDecl
-    TestCase_ClassDeclWithMod
-    TestCase_LibWithMod
-    TestCase_LibWithModAndDefinition
-    TestCase_ClassWithModAndDefinition
-    TestCase_MethodDefinition
-    TestCase_MainDefinition
-    TestCase_PragmaticDeclarations
-    TestCase_ParseProgramWithDeclrations
-    TestCase_ReturnStatement
-    TestCase_IfStatement
-    TestCase_IfElseStatement
-    TestCase_IfElifStatement
-    TestCase_IfElifElseStatement
-    TestCase_WhileStatement
-    TestCase_ForStatement
-    TestCase_AnimalsExampleProgram
-    TestCase_BasicEnumDefinition
-    TestCase_EnumDefinitionWithValues
-)
-
-add_minitest_module(
-  TARGET ut_cnd_Build
-  MODULE_NAME Test_Build
-  WORKING_DIRECTORY ${SSG_UT_CND_WORKING_DIR}
-  CASE_NAMES TestCase_BasicBuild
-)
-
+  add_minitest_module(
+    TARGET ut_cnd_Build
+    MODULE_NAME Test_Build
+    WORKING_DIRECTORY ${SSG_UT_CND_WORKING_DIR}
+    CASE_NAMES TestCase_BasicBuild
+  )
+endif()
 
 #--------------------------------------------------------------
 # @end Unit Tests : C& Compiler Module
 #--------------------------------------------------------------
+set(SSG_UT_CCC_INCLUDE_DIRS modules/cnd/inc;modules/cnd/ut/)
+set(SSG_UT_CCC_WORKING_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/cnd/ut/res/)
+set(SSG_UT_CCC_LIBS_TO_LINK 
+  ssgmod::mta::mta_interface
+  ssgmod::cxxx::cxxx_interface 
+)
+
+add_minitest_executable(
+  NAME test_trtools_parser
+  TEST_HEADER test_trtools_parser.hpp
+  INCLUDE_DIRECTORIES ${SSG_UT_CCC_INCLUDE_DIRS}
+  LINK_LIBS ${SSG_UT_CCC_LIBS_TO_LINK}
+)

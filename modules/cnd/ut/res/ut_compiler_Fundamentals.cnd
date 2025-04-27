@@ -1,0 +1,34 @@
+\`
+  A basic example of multi process programming using C&.
+`\
+
+stdout("Hello World!\n");
+
+proc @A:{
+  main(int @argc, ^^char @argv)>int:{
+    stdout("Hello, World!\n");
+    return 0;
+  }
+}
+
+proc @B:{
+  main(int @argc, ^^char @argv)>int:{
+    stdout("Hello, World!\n");
+    return 0;
+  }
+}
+
+|>A:;
+|>B:;
+
+\`
+  Upon compiling this file named "root.cnd" given the command line arguments:
+      cnd build root.cnd \target:all 
+
+  The following files will be generated:
+    - A.exe
+    - B.exe
+    - "Hello World!\n" is written to compiler stdout at compile time.
+    - "Hello, World!\n" is written to compiler stdout when A.exe is executed.
+    - "Hello, World!\n" is written to compiler stdout when B.exe is executed.
+`\

@@ -1,0 +1,668 @@
+#---------------------------------------------------------------------------------------------------------------------#
+# @license Copyright 2025 Anton Yashchenko *)
+# @project C& Programming Language
+# @author(s) Anton Yashchenko
+# @website https://www.acpp.dev
+# @file C& EBNF Grammar
+# @ingroup cnd_docs
+# @brief EBNF Grammar for the C& Programming Language
+#
+# Note that some syntax choices have been made based on the limitations of the BNF playground application.
+# Check "ebnf_playground_guide.md" in this directory for more information.
+# https://bnfplayground.pauliankline.com/
+# https://github.com/paul-kline/bnf-playground
+#
+# Otther sites:
+# https://mdkrajnak.github.io/ebnftest/
+#
+# C++/C& Translation Character Set
+# [ISO/IEC][N4928][cppstd.lex.charset.1] The translation character set consists of the following elements:
+#  — each character named by ISO/IEC 10646, as identified by its unique UCS scalar value, and (1.2)
+#  — a distinct character for each UCS scalar value where no named character is assigned.
+#
+# C& supports the ASCII 7 Standard-conforming input characters as terminals. [ref.2] 32 control characters
+# (ranging from 0-31) used for text formatting management, and 96 printable characters (ranging from 32-127).
+# The latter includes the English alphabet, digits, and common punctuation marks. The C& grammar ignores
+# control** characters and only accepts printable ASCII characters. All other characters are invalid and will
+# result in a syntax error at the earliest possible stage.
+# ** Some specific control characters are accepted: "\0" | "\t" | "\n" | "\r"
+#
+# All the following grammar rules use a similar name as C++ [ISO/IEC][N4928][tab:lex.charset.basic].
+# Characters which are not part of the standard C++ character set are given the standardd ASCII name.
+# @see https://www.unicode.org/charts/PDF/U0000.pdf
+#
+#---------------------------------------------------------------------------------------------------------------------#
+
+#---------------------------------------------------------------------------------------------------------------------#
+# ASCII Accepted Non-Printable Characters
+# DECIMAL[0]
+#---------------------------------------------------------------------------------------------------------------------#
+<END_OF_FILE> ::= "\0"
+<LINE_FEED> ::= "\n"
+<CARRIAGE_RETURN> ::= "\r"
+<HORIZONTAL_TAB> ::= "\t"
+
+#---------------------------------------------------------------------------------------------------------------------#
+# ASCII Lower Alpha Characters
+# DECIMAL[97..122]
+#---------------------------------------------------------------------------------------------------------------------#
+<SMALL_LETTER_A> ::= "a"
+<SMALL_LETTER_B> ::= "b"
+<SMALL_LETTER_C> ::= "c"
+<SMALL_LETTER_D> ::= "d"
+<SMALL_LETTER_E> ::= "e"
+<SMALL_LETTER_F> ::= "f"
+<SMALL_LETTER_G> ::= "g"
+<SMALL_LETTER_H> ::= "h"
+<SMALL_LETTER_I> ::= "i"
+<SMALL_LETTER_J> ::= "j"
+<SMALL_LETTER_K> ::= "k"
+<SMALL_LETTER_L> ::= "l"
+<SMALL_LETTER_M> ::= "m"
+<SMALL_LETTER_N> ::= "n"
+<SMALL_LETTER_O> ::= "o"
+<SMALL_LETTER_P> ::= "p"
+<SMALL_LETTER_Q> ::= "q"
+<SMALL_LETTER_R> ::= "r"
+<SMALL_LETTER_S> ::= "s"
+<SMALL_LETTER_T> ::= "t"
+<SMALL_LETTER_U> ::= "u"
+<SMALL_LETTER_V> ::= "v"
+<SMALL_LETTER_W> ::= "w"
+<SMALL_LETTER_X> ::= "x"
+<SMALL_LETTER_Y> ::= "y"
+<SMALL_LETTER_Z> ::= "z"
+
+#---------------------------------------------------------------------------------------------------------------------#
+#  ASCII Upper Alpha Characters
+#	DECIMAL[65..90]
+#---------------------------------------------------------------------------------------------------------------------#
+<CAPITAL_LETTER_A> ::= "A"
+<CAPITAL_LETTER_B> ::= "B"
+<CAPITAL_LETTER_C> ::= "C"
+<CAPITAL_LETTER_D> ::= "D"
+<CAPITAL_LETTER_E> ::= "E"
+<CAPITAL_LETTER_F> ::= "F"
+<CAPITAL_LETTER_G> ::= "G"
+<CAPITAL_LETTER_H> ::= "H"
+<CAPITAL_LETTER_I> ::= "I"
+<CAPITAL_LETTER_J> ::= "J"
+<CAPITAL_LETTER_K> ::= "K"
+<CAPITAL_LETTER_L> ::= "L"
+<CAPITAL_LETTER_M> ::= "M"
+<CAPITAL_LETTER_N> ::= "N"
+<CAPITAL_LETTER_O> ::= "O"
+<CAPITAL_LETTER_P> ::= "P"
+<CAPITAL_LETTER_Q> ::= "Q"
+<CAPITAL_LETTER_R> ::= "R"
+<CAPITAL_LETTER_S> ::= "S"
+<CAPITAL_LETTER_T> ::= "T"
+<CAPITAL_LETTER_U> ::= "U"
+<CAPITAL_LETTER_V> ::= "V"
+<CAPITAL_LETTER_W> ::= "W"
+<CAPITAL_LETTER_X> ::= "X"
+<CAPITAL_LETTER_Y> ::= "Y"
+<CAPITAL_LETTER_Z> ::= "Z"
+
+#---------------------------------------------------------------------------------------------------------------------#
+#  ASCII Numeric Characters
+#	DECIMAL[48..57]
+#---------------------------------------------------------------------------------------------------------------------#
+<DIGIT_ZERO> ::= "0"
+<DIGIT_ONE> ::= "1"
+<DIGIT_TWO> ::= "2"
+<DIGIT_THREE> ::= "3"
+<DIGIT_FOUR> ::= "4"
+<DIGIT_FIVE> ::= "5"
+<DIGIT_SIX> ::= "6"
+<DIGIT_SEVEN> ::= "7"
+<DIGIT_EIGHT> ::= "8"
+<DIGIT_NINE> ::= "9"
+
+#---------------------------------------------------------------------------------------------------------------------#
+# ASCII All Other Printable Characters
+# DECIMAL[32...47] | DECIMAL[58...64] | DECIMAL[91...96] | DECIMAL[123...126]
+#---------------------------------------------------------------------------------------------------------------------#
+<SPACE> ::= " "
+<EXCLAMATION_MARK> ::= "!"
+<QUOTATION_MARK> ::= "\""
+<NUMBER_SIGN> ::= "#"
+<DOLLAR_SIGN> ::= "$"
+<PERCENT_SIGN> ::= "%"
+<AMPERSAND> ::= "&"
+<APOSTROPHE> ::= "'"
+<LEFT_PARENTHESIS> ::= "("
+<RIGHT_PARENTHESIS> ::= ")"
+<ASTERISK> ::= "*"
+<PLUS_SIGN> ::= "+"
+<COMMA> ::= ","
+<HYPHEN_MINUS> ::= "-"
+<FULL_STOP> ::= "."
+<SOLIDUS> ::= "/"
+
+<COLON> ::= ":"
+<SEMICOLON> ::= ";"
+<LESS_THAN_SIGN> ::= "<"
+<EQUALS_SIGN> ::= "="
+<GREATER_THAN_SIGN> ::= ">"
+<QUESTION_MARK> ::= "?"
+<AT_SIGN> ::= "@"
+
+<LEFT_SQUARE_BRACKET> ::= "["
+<REVERSE_SOLIDUS> ::= "\\"
+<RIGHT_SQUARE_BRACKET> ::= "]"
+<CIRCUMFLEX_ACCENT> ::= "^"
+<LOW_LINE> ::= "_"
+<BACKTICK> ::= "`"
+
+<LEFT_CURLY_BRACKET> ::= "{"
+<VERTICAL_LINE> ::= "|"
+<RIGHT_CURLY_BRACKET> ::= "}"
+<TILDE> ::= "~"
+
+#---------------------------------------------------------------------------------------------------------------------#
+(* Input Terminal Categories *)
+#---------------------------------------------------------------------------------------------------------------------#
+
+<PUNCTUATOR> ::= <EXCLAMATION_MARK> | <QUOTATION_MARK> | <NUMBER_SIGN> | <DOLLAR_SIGN> | <PERCENT_SIGN> | <AMPERSAND>
+			   | <APOSTROPHE> | <LEFT_PARENTHESIS> | <RIGHT_PARENTHESIS> | <ASTERISK> | <PLUS_SIGN> | <COMMA>
+			   | <HYPHEN_MINUS> | <FULL_STOP> | <SOLIDUS> | <COLON> | <SEMICOLON> | <LESS_THAN_SIGN> | <EQUALS_SIGN>
+			   | <GREATER_THAN_SIGN> | <QUESTION_MARK> | <AT_SIGN> | <LEFT_SQUARE_BRACKET> | <REVERSE_SOLIDUS>
+			   | <RIGHT_SQUARE_BRACKET> | <CIRCUMFLEX_ACCENT> | <LOW_LINE> | <BACKTICK> | <LEFT_CURLY_BRACKET>
+			   | <VERTICAL_LINE> | <RIGHT_CURLY_BRACKET> | <TILDE>
+
+<ALPHA> ::= <SMALL_LETTER_A> | <SMALL_LETTER_B> | <SMALL_LETTER_C> | <SMALL_LETTER_D> | <SMALL_LETTER_E>
+		  | <SMALL_LETTER_F> | <SMALL_LETTER_G>| <SMALL_LETTER_H> | <SMALL_LETTER_I> | <SMALL_LETTER_J>
+		  | <SMALL_LETTER_K> | <SMALL_LETTER_L> | <SMALL_LETTER_M> | <SMALL_LETTER_N>| <SMALL_LETTER_O>
+		  | <SMALL_LETTER_P> | <SMALL_LETTER_Q> | <SMALL_LETTER_R> | <SMALL_LETTER_S> | <SMALL_LETTER_T>
+		  | <SMALL_LETTER_U>| <SMALL_LETTER_V> | <SMALL_LETTER_W> | <SMALL_LETTER_X> | <SMALL_LETTER_Y>
+		  | <SMALL_LETTER_Z> | <CAPITAL_LETTER_A> | <CAPITAL_LETTER_B>| <CAPITAL_LETTER_C> | <CAPITAL_LETTER_D>
+		  | <CAPITAL_LETTER_E> | <CAPITAL_LETTER_F> | <CAPITAL_LETTER_G> | <CAPITAL_LETTER_H>| <CAPITAL_LETTER_I>
+		  | <CAPITAL_LETTER_J> | <CAPITAL_LETTER_K> | <CAPITAL_LETTER_L> | <CAPITAL_LETTER_M> | <CAPITAL_LETTER_N>
+		  | <CAPITAL_LETTER_O> | <CAPITAL_LETTER_P> | <CAPITAL_LETTER_Q> | <CAPITAL_LETTER_R> | <CAPITAL_LETTER_S>
+		  | <CAPITAL_LETTER_T>| <CAPITAL_LETTER_U> | <CAPITAL_LETTER_V> | <CAPITAL_LETTER_W> | <CAPITAL_LETTER_X>
+		  | <CAPITAL_LETTER_Y> | <CAPITAL_LETTER_Z>
+
+<DIGIT> ::= <DIGIT_ZERO> | <DIGIT_ONE> | <DIGIT_TWO> | <DIGIT_THREE> | <DIGIT_FOUR> | <DIGIT_FIVE> | <DIGIT_SIX>
+		  | <DIGIT_SEVEN> | <DIGIT_EIGHT> | <DIGIT_NINE>
+
+<DIGIT_NO_ZERO> ::= <DIGIT_ONE> | <DIGIT_TWO> | <DIGIT_THREE> | <DIGIT_FOUR> | <DIGIT_FIVE> | <DIGIT_SIX>
+				  | <DIGIT_SEVEN> | <DIGIT_EIGHT> | <DIGIT_NINE>
+
+<WHITESPACE> ::= <SPACE> | <HORIZONTAL_TAB>
+<NEWLINE> ::= <LINE_FEED> | <CARRIAGE_RETURN>
+<IGNORED> ::= <WHITESPACE>* | <NEWLINE>*
+<PRINTABLE> ::= <ALPHA> | <DIGIT> | <PUNCTUATOR> | <WHITESPACE> | <NEWLINE>
+<ALPHA_DIGIT> ::= <ALPHA> | <DIGIT>
+<ALPHA_LOW_LINE> ::= <ALPHA> | <LOW_LINE>
+<ALPHA_DIGIT_LOW_LINE> ::= <ALPHA_DIGIT> | <LOW_LINE>
+
+#---------------------------------------------------------------------------------------------------------------------#
+# Compound Terminals
+#---------------------------------------------------------------------------------------------------------------------#
+<LOGICAL_AND_OPERATOR> ::= <AMPERSAND> <AMPERSAND>
+<LOGICAL_OR_OPERATOR> ::= <VERTICAL_LINE> <VERTICAL_LINE>
+<BITWISE_LEFT_SHIFT> ::= <LESS_THAN_SIGN> <LESS_THAN_SIGN>
+<BITWISE_RIGHT_SHIFT> ::= <GREATER_THAN_SIGN> <GREATER_THAN_SIGN>
+<LESS_THAN_EQUAL_SIGN> ::= <LESS_THAN_SIGN> <EQUALS_SIGN>
+<GREATER_THAN_EQUAL_SIGN> ::= <GREATER_THAN_SIGN> <EQUALS_SIGN>
+<SPACESHIP_OPERATOR> ::= <LESS_THAN_EQUAL_SIGN> <GREATER_THAN_SIGN>
+<COLON_ASSIGN> ::= <COLON> <EQUALS_SIGN>
+<PLUS_ASSIGN> ::= <PLUS_SIGN> <EQUALS_SIGN>
+<MINUS_ASSIGN> ::= <HYPHEN_MINUS> <EQUALS_SIGN>
+<ASTERISK_ASSIGN> ::= <ASTERISK> <EQUALS_SIGN>
+<SOLIDUS_ASSIGN> ::= <SOLIDUS> <EQUALS_SIGN>
+<PERCENT_ASSIGN> ::= <PERCENT_SIGN> <EQUALS_SIGN>
+<AMPERSAND_ASSIGN> ::= <AMPERSAND> <EQUALS_SIGN>
+<VERTICAL_LINE_ASSIGN> ::= <VERTICAL_LINE> <EQUALS_SIGN>
+<CIRCUMFLEX_ACCENT_ASSIGN> ::= <CIRCUMFLEX_ACCENT> <EQUALS_SIGN>
+<BITWISE_LEFT_SHIFT_ASSIGN> ::= <BITWISE_LEFT_SHIFT> <EQUALS_SIGN>
+<BITWISE_RIGHT_SHIFT_ASSIGN> ::= <BITWISE_RIGHT_SHIFT> <EQUALS_SIGN>
+<INCREMENT_SIGN> ::= <PLUS_SIGN> <PLUS_SIGN>
+<DECREMENT_SIGN> ::= <HYPHEN_MINUS> <HYPHEN_MINUS>
+<DOUBLE_COLON> ::= <COLON> <COLON>
+<ELLIPSIS> ::= <FULL_STOP> <FULL_STOP> <FULL_STOP>
+<RIGHT_ARROW> ::= <HYPHEN_MINUS> <GREATER_THAN_SIGN>
+<EXTERNAL_PULL_OPERATOR> ::= <VERTICAL_LINE> <HYPHEN_MINUS> <GREATER_THAN_SIGN>
+
+#---------------------------------------------------------------------------------------------------------------------#
+# Keywords and Fundamental Typenames
+#---------------------------------------------------------------------------------------------------------------------#
+
+# Directive Context
+<KW_PRAGMA> ::= "pragma"
+<KW_PROC> ::= "proc"
+<KW_LIB> ::= "lib"
+<KW_INCLUDE> ::= "include"
+# Executive Context
+<KW_IMPORT> ::= "import"
+<KW_MAIN> ::= "main"
+# General Context
+<KW_DEF> ::= "def"
+<KW_FN> ::= "fn"
+<KW_USE> ::= "use"
+<KW_NAMESPACE> ::= "namespace"
+<KW_STRUCT> ::= "struct"
+# Control Flow
+<KW_IF> ::= "if"
+<KW_ELIF> ::= "elif"
+<KW_ELSE> ::= "else"
+<KW_SWITCH> ::= "switch"
+<KW_CASE> ::= "case"
+<KW_DEFAULT> ::= "default"
+<KW_WHILE> ::= "while"
+<KW_FOR> ::= "for"
+<KW_RETURN> ::= "return"
+<KW_BREAK> ::= "break"
+<KW_CONTINUE> ::= "continue"
+# Value
+<KW_TRUE> ::= "true"
+<KW_FALSE> ::= "false"
+<KW_NONE> ::= "none"
+
+#---------------------------------------------------------------------------------------------------------------------#
+# Context dependant character sequences.
+#---------------------------------------------------------------------------------------------------------------------#
+
+# string literal character sequence
+# cross-ref : <STRING_LITERAL>
+<escaped_sl_char> ::= <REVERSE_SOLIDUS> (<SMALL_LETTER_N> | <SMALL_LETTER_T> | <SMALL_LETTER_R> | <DIGIT_ZERO> | <REVERSE_SOLIDUS> | <QUOTATION_MARK>)
+<sl_char_sequence> ::= (<escaped_sl_char> | <ALPHA> | <DIGIT> | <WHITESPACE>
+		   | <EXCLAMATION_MARK> | <NUMBER_SIGN> | <DOLLAR_SIGN> | <PERCENT_SIGN> | <AMPERSAND> | <APOSTROPHE>
+		   | <LEFT_PARENTHESIS> | <RIGHT_PARENTHESIS> | <ASTERISK> | <PLUS_SIGN> | <COMMA> | <HYPHEN_MINUS> | <FULL_STOP>
+		   | <COLON> | <SEMICOLON> | <LESS_THAN_SIGN> | <EQUALS_SIGN> | <GREATER_THAN_SIGN> | <QUESTION_MARK> | <AT_SIGN> | <LEFT_SQUARE_BRACKET>
+		   | <RIGHT_SQUARE_BRACKET> | <CIRCUMFLEX_ACCENT> | <LOW_LINE> | <BACKTICK> | <LEFT_CURLY_BRACKET> | <VERTICAL_LINE>
+		   | <RIGHT_CURLY_BRACKET> | <TILDE>)*
+
+# character literal character
+<escaped_cl_char> ::= <REVERSE_SOLIDUS> (<SMALL_LETTER_N> | <SMALL_LETTER_T> | <SMALL_LETTER_R> | <DIGIT_ZERO> | <REVERSE_SOLIDUS> | <APOSTROPHE> )
+<cl_char> ::= (<escaped_cl_char> | <ALPHA> | <DIGIT> | <WHITESPACE>
+		   | <EXCLAMATION_MARK> | <NUMBER_SIGN> | <DOLLAR_SIGN> | <PERCENT_SIGN> | <AMPERSAND> | <QUOTATION_MARK>
+		   | <LEFT_PARENTHESIS> | <RIGHT_PARENTHESIS> | <ASTERISK> | <PLUS_SIGN> | <COMMA> | <HYPHEN_MINUS> | <FULL_STOP>
+		   | <COLON> | <SEMICOLON> | <LESS_THAN_SIGN> | <EQUALS_SIGN> | <GREATER_THAN_SIGN> | <QUESTION_MARK> | <AT_SIGN> | <LEFT_SQUARE_BRACKET>
+		   | <RIGHT_SQUARE_BRACKET> | <CIRCUMFLEX_ACCENT> | <LOW_LINE> | <BACKTICK> | <LEFT_CURLY_BRACKET> | <VERTICAL_LINE>
+		   | <RIGHT_CURLY_BRACKET> | <TILDE>)
+
+
+# raw string literal character sequence
+# note: raw string literal is not a CFG, we can't lookahead for a '')"' sequence.
+# The parser must handle this case at the lex stage or as a special case parser rule.
+<rl_char_sequence> ::= (<ALPHA> | <DIGIT> | <WHITESPACE> | <PUNCTUATOR> | <NEWLINE>)*
+
+# line comment character sequence
+<lc_char_sequence> ::= (<ALPHA> | <DIGIT> | <WHITESPACE> | <PUNCTUATOR>)*
+
+# block comment character sequence
+<bc_char_sequence> ::= (<ALPHA> | <DIGIT> | <WHITESPACE> | <PUNCTUATOR>)*
+
+# include-angled-char-sequence
+<ia_char_sequence> ::=
+
+# include-quoted-char-sequence
+<iq_char_sequence> ::=
+
+# pragma-paren-char-sequence
+<pp_char_sequence> ::=
+
+#---------------------------------------------------------------------------------------------------------------------#
+# Literals and Operands
+#---------------------------------------------------------------------------------------------------------------------#
+<IDENTIFIER> ::= <ALPHA> <ALPHA_DIGIT_LOW_LINE>*
+<NUMBER> ::= <DIGIT>+
+<REAL> ::= <NUMBER> <FULL_STOP> <NUMBER>
+<UNSIGNED_LITERAL> ::= <NUMBER> <SMALL_LETTER_U>
+<BIT_LITERAL> ::= <DIGIT_ZERO> <CAPITAL_LETTER_B> | <DIGIT_ONE> <CAPITAL_LETTER_B>
+<BYTE_LITERAL> ::= <NUMBER> <SMALL_LETTER_B> | <NUMBER> <SMALL_LETTER_B>
+<BOOL_LITERAL> ::= <KW_TRUE> | <KW_FALSE>
+<STRING_LITERAL> ::= <QUOTATION_MARK> <sl_char_sequence> <QUOTATION_MARK>
+<CHAR_LITERAL> ::= <APOSTROPHE> <cl_char> <APOSTROPHE>
+<RAW_STRING_LITERAL> ::= <CAPITAL_LETTER_R> <QUOTATION_MARK> <LEFT_PARENTHESIS> <rl_char_sequence> <RIGHT_PARENTHESIS> <QUOTATION_MARK>
+
+#---------------------------------------------------------------------------------------------------------------------#
+# Comments & Documentation
+#---------------------------------------------------------------------------------------------------------------------#
+<LINE_COMMENT> ::= <BACKTICK> <lc_char_sequence>
+<BLOCK_COMMENT> ::= <REVERSE_SOLIDUS> <BACKTICK> <bc_char_sequence> <BACKTICK> <REVERSE_SOLIDUS>
+
+#---------------------------------------------------------------------------------------------------------------------#
+# Top-Level Syntax
+# The top level syntax is a sequence of directive statements and recursive of blocks directive statements, also
+# called a 'pragmatic description' in this grammar.
+#
+# Object Descriptions:
+# Short Name = 'desc'
+# A block of statements or a single stament is named a 'description' of the given grammar type.
+# eg. fn() { ... } or fn()...; are both a description of a function.
+#---------------------------------------------------------------------------------------------------------------------#
+<syntax> ::= <directive_desc>
+
+<directive_desc> ::= <directive_stmt>* | <directive_block>
+<directive_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <directive_stmt_list> <IGNORED> <RIGHT_CURLY_BRACKET>
+<directive_stmt_list> ::= <directive_stmt>*
+<directive_stmt> ::= <primary_stmt>
+				   | <include>
+				   | <pragma>
+				   | <process>
+				   | <library>
+				   | <variable>
+				   | <function>
+				   | <struct>
+				   | <using>
+				   | <enum>
+				   | <directive_namespace>
+				   | <directive_if>
+				   | <directive_switch>
+				   | <directive_while>
+				   | <directive_for>
+				   | <directive_return>
+
+#---------------------------------------------------------------------------------------------------------------------#
+# Primary Statement
+#---------------------------------------------------------------------------------------------------------------------#
+<primary_stmt> ::= <primary_expr> <SEMICOLON>
+
+<primary_expr> ::= <LEFT_PARENTHESIS> <primary_expr> <RIGHT_PARENTHESIS> | <list_fold>
+
+[L->R] <list_fold> ::= <assignment> (<COMMA> <assignment>)*
+
+[R->L] <assignment> ::= (<logical_or> <EQUALS_SIGN>)* <logical_or>
+
+[L->R] <logical_or> ::= <logical_and> (<LOGICAL_OR_OPERATOR> <logical_and>)*
+
+[L->R] <logical_and> ::= <bitwise_or> (<LOGICAL_AND_OPERATOR> <bitwise_or>)*
+
+[L->R] <bitwise_or> ::= <bitwise_xor> (<VERTICAL_LINE> <bitwise_xor>)*
+
+[L->R] <bitwise_xor> ::= <bitwise_and> (<CIRCUMFLEX_ACCENT> <bitwise_and>)*
+
+[L->R] <bitwise_and> ::= <equality> (<AMPERSAND> <equality>)*
+
+[L->R] <equality> ::= <relational> (<EQUALITY_OPERATOR> <relational>)*
+			  | <relational> (<NOT_EQUAL_OPERATOR> <relational>)*
+
+[L->R] <relational> ::= <three_way_equality> (<GREATER_THAN_SIGN> <three_way_equality>)*
+			  | <three_way_equality> (<LESS_THAN_SIGN> <three_way_equality>)*
+			  | <three_way_equality> (<GREATER_THAN_EQUAL_SIGN> <three_way_equality>)*
+			  | <three_way_equality> (<LESS_THAN_EQUAL_SIGN> <three_way_equality>)*
+
+[L->R] <three_way_equality> ::= <bitwise_shift> (<SPACESHIP_OPERATOR> <bitwise_shift>)*
+
+[L->R] <bitwise_shift> ::= <summation> (<BITWISE_RIGHT_SHIFT> <summation>)*
+			  	  | <summation> (<BITWISE_LEFT_SHIFT> <summation>)*
+
+[L->R] <summation> ::= <production> (<PLUS_SIGN> <production>)*
+			  | <production> (<HYPHEN_MINUS> <production>)*
+
+[L->R] <production> ::= <prefix> (<ASTERISK> <prefix>)*
+				| <prefix> (<SOLIDUS> <prefix>)*
+				| <prefix> (<PERCENT_SIGN> <prefix>)*
+
+[R->L] <prefix> ::= <INCREMENT_SIGN>* <access>
+			| <DECREMENT_SIGN>* <access>
+            | <EXCLAMATION_MARK>* <access>
+
+[L->R] <access> ::= <postfix> (<FULL_STOP> <postfix>)*
+
+[L->R] <postfix> ::= <resolution> <INCREMENT_SIGN>*
+			 | <resolution> <DECREMENT_SIGN>*
+
+[L->R] <resolution> ::= <primary_operand> (<DOUBLE_COLON> <primary_operand>)*
+				| <DOUBLE_COLON> <primary_operand> (<DOUBLE_COLON> <primary_operand>)*
+
+# Primary expr valid initial terms,  aka. the 'First Set'.
+<primary_specifier> ::= <IDENTIFIER> 											# -> <identity_operand>
+					| <NUMBER> | <REAL> | <UNSIGNED_LITERAL>
+					| <BIT_LITERAL> | <BYTE_LITERAL> | <BOOL_LITERAL>			# -> <value_operand>
+					| <STRING_LITERAL> | <CHAR_LITERAL> | <RAW_STRING_LITERAL>
+					| <KW_NONE> | <KW_TRUE> | <KW_FALSE>
+					| <LEFT_PARENTHESIS> 										# -> <paren_subexpr>
+					| <LEFT_SQUARE_BRACKET> 									# -> <square_subexpr>
+					| <LEFT_CURLY_BRACKET> 										# -> <curly_subexpr>
+					| <INCREMENT_SIGN> | <DECREMENT_SIGN> | <EXCLAMATION_MARK> 	# -> <prefix>
+					| <DOUBLE_COLON> 											# -> <resolution>
+
+<primary_operand> ::= <identity_operand> | <value_operand> | <operand_set>
+<operand_set> ::= <paren_subexpr> | <square_subexpr> | <curly_subexpr>
+<identity_operand> ::= <IDENTIFIER>
+<value_operand> ::= <NUMBER> | <REAL> | <UNSIGNED_LITERAL> | <BIT_LITERAL> | <BYTE_LITERAL> | <BOOL_LITERAL>
+			| <STRING_LITERAL> | <CHAR_LITERAL> | <RAW_STRING_LITERAL>
+
+<paren_subexpr> ::= <LEFT_PARENTHESIS> <primary_expr> <RIGHT_PARENTHESIS>
+<square_subexpr> ::= <LEFT_SQUARE_BRACKET> <primary_expr> <RIGHT_SQUARE_BRACKET>
+<curly_subexpr> ::= <LEFT_CURLY_BRACKET> <primary_expr> <RIGHT_CURLY_BRACKET>
+
+
+#---------------------------------------------------------------------------------------------------------------------#
+# Directive statements
+#---------------------------------------------------------------------------------------------------------------------#
+<include> ::= <include_quoted> | <include_angled>
+<pragma> ::= <pragma_escaped> | <pragma_raw> | <pragma_functional> | <pragma_named>
+
+# include : valid_context: pragmatic
+<include_quoted> ::= <KW_INCLUDE> <WHITESPACE>+ <QUOTATION_MARK> <iq_char_sequence> <QUOTATION_MARK> <IGNORED> <SEMICOLON>
+<include_angled> ::= <KW_INCLUDE> <WHITESPACE>+ <LEFT_PARENTHESIS> <ia_char_sequence> <RIGHT_PARENTHESIS> <IGNORED> <SEMICOLON>
+
+# pragma : valid_context: pragmatic, executive, structural, functional, iterative
+<pragma_escaped> ::= <KW_PRAGMA> <STRING_LITERAL> <SEMICOLON>
+<pragma_raw> ::= <KW_PRAGMA> <RAW_STRING_LITERAL> <SEMICOLON>
+<pragma_functional> ::= <KW_PRAGMA> <LEFT_PARENTHESIS> <pp_char_sequence> <RIGHT_PARENTHESIS> <SEMICOLON>
+<pragma_named> ::= <KW_PRAGMA> <IDENTIFIER> <SEMICOLON>
+
+#---------------------------------------------------------------------------------------------------------------------#
+# Declarative statements
+#---------------------------------------------------------------------------------------------------------------------#
+
+# namespace contents depend on the context it is defined in:
+# valid_context: pragmatic , executive, structural
+<pragmatic_namespace> ::= <KW_NAMESPACE> <LEFT_CURLY_BRACKET> <pragmatic_stmt_list> <RIGHT_CURLY_BRACKET>
+<executive_namespace> ::= <KW_NAMESPACE> <IDENTIFIER> <LEFT_CURLY_BRACKET> <executive_stmt_list> <RIGHT_CURLY_BRACKET>
+<structural_namespace> ::= <KW_NAMESPACE> <IDENTIFIER> <LEFT_CURLY_BRACKET> <structural_stmt_list> <RIGHT_CURLY_BRACKET>
+
+# using :
+# valid_context: pragmatic
+<using> ::= <using_type_alias>
+		  | <using_library_alias>
+		  | <using_namespace_alias>
+		  | <using_function_alias>
+		  | <using_variable_alias>
+		  | <using_process_alias>
+		  | <using_enum_alias>
+		  | <using_library_unscope>
+		  | <using_namespace_unscope>
+		  | <using_function_unscope>
+		  | <using_def_unscope>
+		  | <using_proc_unscope>
+		  | <using_type_unscope>
+		  | <using_enum_unscope>
+
+<using_type_alias> ::= <KW_USE> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN>  <type_expr>  <SEMICOLON>
+<using_library_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+<using_namespace_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+<using_function_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+<using_variable_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+<using_process_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+<using_enum_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+
+<using_library_unscope> ::= <KW_USE> <KW_LIB> <id_expr> <SEMICOLON>
+<using_namespace_unscope> ::= <KW_USE> <KW_NAMESPACE> <id_expr> <SEMICOLON>
+<using_function_unscope> ::= <KW_USE> <KW_FN> <id_expr> <SEMICOLON>
+<using_def_unscope> ::= <KW_USE> <KW_DEF> <id_expr> <SEMICOLON>
+<using_proc_unscope> ::= <KW_USE> <KW_PROC> <id_expr> <SEMICOLON>
+<using_type_unscope> ::= <KW_USE> <id_expr> <SEMICOLON>
+<using_enum_unscope> ::= <KW_USE> <KW_ENUM> <id_expr> <SEMICOLON>
+
+# process :
+# valid_context: pragmatic
+<process> ::= <process_decl> | <process_def>
+<process_decl> ::= <KW_PROC> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <SEMICOLON>
+<process_def> ::= <KW_PROC> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> <process_block>
+<process_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <process_stmt_list> <IGNORED> <RIGHT_CURLY_BRACKET>
+<process_stmt_list> ::= <process_stmt>*
+<process_stmt> ::= <import> | <main> | <pragma> | <primary> | <variable> | <function> | <struct>
+				 | <namespace> | <using> | <enum>
+
+#-------------------------------------------------------------------------------------------------#
+# library :
+# valid_context: pragmatic
+#-------------------------------------------------------------------------------------------------#
+<library> ::= <library_decl> | <library_def>
+<library_decl> ::= <KW_LIB> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <SEMICOLON>
+<library_def> ::= <KW_LIB> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> <library_block>
+<library_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <library_stmt_list> <IGNORED> <RIGHT_CURLY_BRACKET>
+<library_stmt_list> ::= <library_stmt>*
+<library_stmt> ::= <import> | <pragma> | <primary> | <variable> | <function> | <struct> | <namespace>
+				 | <using> | <import> | <enum> | <if> | <switch> | <while> | <for> | <return>
+
+#-------------------------------------------------------------------------------------------------#
+# struct :
+# valid_context: pragmatic, executive, structural, functional, iterative
+#-------------------------------------------------------------------------------------------------#
+<struct> ::= <struct_decl> | <struct_def>
+<struct_decl> ::= <KW_STRUCT> <IGNORED> <IDENTIFIER> <IGNORED> <SEMICOLON>
+<struct_def> ::= <KW_STRUCT> <IGNORED> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> <struct_block>
+<struct_block> ::= <LEFT_CURLY_BRACKET> <struct_stmt_list> <RIGHT_CURLY_BRACKET>
+<struct_stmt_list> ::= <struct_stmt>*
+<struct_stmt> ::= <variable> | <function> | <pragma> | <using> | <struct>
+
+#-------------------------------------------------------------------------------------------------#
+# variable :
+# valid_context: pragmatic, executive, structural, functional, iterative
+#-------------------------------------------------------------------------------------------------#
+<variable> ::= <variable_decl> | <variable_def>
+<variable_decl> :: <variable_decl_untyped> | <variable_decl_typed>
+<variable_def> :: <variable_def_untyped> | <variable_def_typed> | <variable_def_untyped_lambda> | <variable_def_typed_lambda>
+
+<variable_decl_untyped> ::= <KW_DEF> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <SEMICOLON>
+<variable_decl_typed> ::= <KW_DEF> <IGNORED> <type_expr> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <SEMICOLON>
+<variable_def_untyped> ::= <KW_DEF> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <EQUALS_SIGN> <IGNORED> <value_expr> <IGNORED> <SEMICOLON>
+<variable_def_typed> ::= <KW_DEF> <IGNORED> <type_expr> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <EQUALS_SIGN> <IGNORED> <value_expr> <IGNORED> <SEMICOLON>
+<variable_def_untyped_lambda> ::= <KW_DEF> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <lambda_block> <IGNORED> <SEMICOLON>
+<variable_def_typed_lambda> ::= <KW_DEF> <IGNORED> <type_expr> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> <lambda_block> <IGNORED> <SEMICOLON>
+
+# implicit variable def, does not require a 'def' keyword. Appears in for/if/while statement headers
+# to declare scoped variables.
+<implicit_variable> ::= <implicit_variable_decl> | <implicit_variable_def>
+<implicit_variable_decl> ::= <implicit_variable_decl_untyped> | <implicit_variable_decl_typed>
+<implicit_variable_def> ::= <implicit_variable_def_untyped> | <implicit_variable_def_typed> | <implicit_variable_def_untyped_lambda> | <implicit_variable_def_typed_lambda>
+<implicit_variable_decl_untyped> ::= <AT_SIGN> <IDENTIFIER>
+<implicit_variable_decl_typed> ::= <type_expr> <AT_SIGN> <IDENTIFIER>
+<implicit_variable_def_untyped> ::= <AT_SIGN> <IDENTIFIER> <IGNORED> <EQUALS_SIGN> <IGNORED> <value_expr>
+<implicit_variable_def_typed> ::= <type_expr> <AT_SIGN> <IDENTIFIER> <IGNORED> <EQUALS_SIGN> <IGNORED> <value_expr>
+<implicit_variable_def_untyped_lambda> ::= <AT_SIGN> <IDENTIFIER> <IGNORED> <lambda_block>
+<implicit_variable_def_typed_lambda> ::= <type_expr> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> <lambda_block>
+
+
+#-------------------------------------------------------------------------------------------------#
+# function :
+# valid_context: pragmatic, executive, structural, functional, iterative
+#-------------------------------------------------------------------------------------------------#
+
+# function parts
+<function_signature_specifier> ::= <KW_fn> <ignored> <AT_SIGN> <identifier>
+<function_description> ::= <functional_stmt> | <functional_block>
+<functional_block> ::= <LEFT_CURLY_BRACKET> <functional_stmt>* <RIGHT_CURLY_BRACKET>
+<functional_stmt> ::= <variable> | <function> | <using> | <struct> | <pragma> | <return> | <if> | <switch> | <while> | <for>
+
+# function_signature
+<function_signature_no_params> ::= <function_signature_specifier> <ignored>
+<function_signature_empty_params> ::= <function_signature_specifier> <ignored> <LEFT_PARENTHESIS> <RIGHT_PARENTHESIS>
+<function_signature_with_params> ::= <function_signature_specifier> <ignored> <LEFT_PARENTHESIS> <function_param_list> <RIGHT_PARENTHESIS>
+<function_signature_no_params_with_return_constraint> ::= <function_signature_specifier> <ignored> <GREATER_THAN_SIGN> <function_return_constraint>
+<function_signature_empty_params_with_return_constraint>
+	::= <function_signature_specifier> <ignored> <LEFT_PARENTHESIS> <RIGHT_PARENTHESIS> <GREATER_THAN_SIGN> <function_return_constraint>
+<function_signature_with_params_and_return_constraint>
+	::= <function_signature_specifier> <ignored> <LEFT_PARENTHESIS> <function_param_list> <RIGHT_PARENTHESIS> <GREATER_THAN_SIGN> <function_return_constraint>
+
+# function_decl
+<function_decl_no_params> ::= <function_signature_no_params> <ignored> <SEMICOLON>
+<function_decl_empty_params> ::= <function_signature_empty_params> <ignored> <SEMICOLON>
+<function_decl_with_params> ::= <function_signature_with_params> <ignored> <SEMICOLON>
+<function_decl_no_params_with_return_constraint> ::= <function_signature_no_params_with_return_constraint> <ignored>  <SEMICOLON>
+<function_decl_empty_params_with_return_constraint> ::= <function_signature_empty_params_with_return_constraint> <ignored> <SEMICOLON>
+<function_decl_with_params_and_return_constraint> ::= <function_signature_with_params_and_return_constraint> <ignored> <SEMICOLON>
+
+# function_def
+<function_def_no_params> ::= <function_signature_no_params> <COLON> <function_description>
+<function_def_empty_params> ::= <function_signature_empty_params> <COLON> <function_description>
+<function_def_with_params> ::= <function_signature_with_params> <COLON> <function_description>
+<function_def_no_params_with_return_constraint> ::= <function_signature_no_params_with_return_constraint> <COLON> <function_description>
+<function_def_empty_params_with_return_constraint> ::= <function_signature_empty_params_with_return_constraint> <COLON> <function_description>
+<function_def_with_params_and_return_constraint> ::= <function_signature_with_params_and_return_constraint> <COLON> <function_description>
+
+#---------------------------------------------------------------------------------------------------------------------#
+# Control Flow
+#---------------------------------------------------------------------------------------------------------------------#
+
+#-------------------------------------------------------------------------------------------------#
+# return_statement :
+# valid_context: pragmatic, functional , iterative
+#-------------------------------------------------------------------------------------------------#
+<return> ::= <KW_RETURN> <ignored> <value_expr> <ignored> <SEMICOLON>
+
+#-------------------------------------------------------------------------------------------------#
+# if_statement :
+# valid_context: pragmatic, functional , iterative
+#-------------------------------------------------------------------------------------------------#
+<if> ::= <if_stmt> | <if_else_stmt> | <if_elif_stmt> | <if_elif_else_stmt>
+<if_stmt> ::= <KW_IF> <ignored> <LEFT_PARENTHESIS> <value_expr> <RIGHT_PARENTHESIS> <ignored> <conditional_description>
+<if_else_stmt> ::= <if_statement> <ignored> <KW_ELSE> <ignored> <conditional_description>
+<if_elif_stmt> ::= <if_statement> <ignored> (<KW_ELIF> <ignored> <conditional_description>)+
+<if_elif_else_stmt> ::= <if_elif_stmt> <ignored> <KW_ELSE> <ignored> <conditional_description>
+<conditional_description> ::= <functional_stmt> | <functional_block>
+
+#-------------------------------------------------------------------------------------------------#
+# while_statement :
+# valid_context: pragmatic, functional , iterative
+#-------------------------------------------------------------------------------------------------#
+<while> ::= <KW_WHILE> <ignored> <LEFT_PARENTHESIS> <value_expr> <RIGHT_PARENTHESIS> <ignored> <iterative_description>
+
+
+#-------------------------------------------------------------------------------------------------#
+# for_statement :
+# valid_context: pragmatic, functional , iterative
+#-------------------------------------------------------------------------------------------------#
+<for> ::= <KW_FOR> <ignored> <LEFT_PARENTHESIS> <for_init> <SEMICOLON> <for_condition> <SEMICOLON> <for_update> <RIGHT_PARENTHESIS> <ignored> <iterative_description>
+<for_init> ::= <implicit_variable> (<COMMA> <implicit_variable>*)
+<for_condition> ::= <value_expr>
+<for_update> ::= <value_expr>
+
+#-------------------------------------------------------------------------------------------------#
+# foreach_statement :
+# valid_context: pragmatic, functional , iterative
+#-------------------------------------------------------------------------------------------------#
+<pragmatic_foreach> ::= <KW_FOREACH> <LEFT_PARENTHESIS> <IDENTIFIER> <COLON> <value_expr> <RIGHT_PARENTHESIS> <iterative_description>
+<functional_foreach> ::= <KW_FOREACH> <LEFT_PARENTHESIS> <IDENTIFIER> <COLON> <value_expr> <RIGHT_PARENTHESIS> <iterative_description>
+<iterative_foreach> ::= <KW_FOREACH> <LEFT_PARENTHESIS> <IDENTIFIER> <COLON> <value_expr> <RIGHT_PARENTHESIS> <iterative_description>
+
+#-------------------------------------------------------------------------------------------------#
+# switch_statement :
+# valid_context: pragmatic, functional , iterative
+#-------------------------------------------------------------------------------------------------#
+<pragmatic_switch> ::= <KW_SWITCH> <value_expr> <COLON> <pragmatic_switch_case>*
+<functional_switch> ::= <KW_SWITCH> <value_expr> <COLON> <functional_switch_case>*
+<iterative_switch> ::= <KW_SWITCH> <value_expr> <COLON> <iterative_switch_case>*
+
+<pragmatic_switch_case> ::= <KW_CASE> <value_expr> <COLON> <pragmatic_description>* | <KW_DEFAULT> <COLON> <pragmatic_description>
+<functional_switch_case> ::= <KW_CASE> <value_expr> <COLON> <functional_description> | <KW_DEFAULT> <COLON> <functional_description>
+<iterative_switch_case> ::= <KW_CASE> <value_expr> <COLON> <iterative_description> | <KW_DEFAULT> <COLON> <iterative_description>
+
+<break> ::= <KW_BREAK> <SEMICOLON>
+<continue> ::= <KW_CONTINUE> <SEMICOLON>
+
+
+#---------------------------------------------------------------------------------------------------------------------#
+# References:
+#---------------------------------------------------------------------------------------------------------------------#
+# [ref.0] C++ Operator Precedence - cppreference.com
+# https://en.cppreference.com/w/cpp/language/operator_precedence
+#
+# [ref.1] ASCII Chart - cppreference.com
+# https://en.cppreference.com/w/cpp/language/ascii
+#
+# [ref.2] ASCII Table - ascii-code.com
+# https://www.ascii-code.com/ASCII
+#
+#
+#---------------------------------------------------------------------------------------------------------------------#
+# @license Copyright 2025 Anton Yashchenko
+#---------------------------------------------------------------------------------------------------------------------#
