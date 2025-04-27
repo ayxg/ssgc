@@ -18,7 +18,7 @@
 // win32
 #include <Windows.h>
 #include <process.h>
-#include <shlobj_core.h>
+#include <shlobj_core.h> // SHGetFolderPath
 // stl
 #include <array>
 #include <cassert>
@@ -91,11 +91,15 @@ using ResultHandle = HRESULT;
 
 // Use wide string for Windows Unicode support.
 #ifdef UNICODE
+#define WPL_SYSSTR(x) L##x
+static constexpr inline DWord kIsUnicode = true;
 using CStr = const wchar_t *;
 using Str = std::wstring;
 using StrView = std::wstring_view;
 using StrStream = std::wstringstream;
-#else   // ANSI
+#else  // ANSI
+#define WPL_SYSSTR(x) x
+static constexpr inline DWord kIsUnicode = false;
 using CStr = const char *;
 using Str = std::string;
 using StrView = std::string_view;
@@ -169,13 +173,9 @@ static constexpr win32::DWord kDefaultIoPollFreq = 10;
 // https://learn.microsoft.com/en-us/archive/msdn-magazine/2015/july/c-using-stl-strings-at-win32-api-boundaries
 // https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/wcsrtombs-s?view=msvc-170
 // https://learn.microsoft.com/en-us/cpp/text/how-to-convert-between-various-string-types?view=msvc-170
-
-expected<unique_ptr<char[]>, eCastErr> WideToMByte(const wchar_t *ws);
-
-expected<unique_ptr<wchar_t[]>, eCastErr> MByteToWide(const char *ws);
-
+expected<string, eCastErr> WideToMByte(const wchar_t *ws);
+expected<wstring, eCastErr> MByteToWide(const char *ws);
 expected<string, eCastErr> WideToMByte(const wstring_view &ws);
-
 expected<wstring, eCastErr> MByteToWide(const string_view &mbs);
 
 /// @brief Removes "\r\n" from the end of passed string until it does not end
@@ -184,9 +184,13 @@ constexpr void PopCmdEndline(string &s) {
   while (s.ends_with("\r\n")) s.erase(s.size() - 2, 2);
 }
 vector<string> GetCmdLines(const string &lines);
+
 ApiRes<string> GetOsTempPath();
 ApiRes<string> GetOsProgramDataPath();
-
+win32::Str OpenFileDlg();
+win32::Str OpenFolderDlg();
+win32::Str SaveFileDlg();
+win32::Str SaveFileDlg(win32::CStr init_dir);
     /// Get windows error as a string message.
 string WinErrMsg(win32::DWord err_num);
 
@@ -207,7 +211,8 @@ ApiRes<RunExeResult> RunExe(win32::Str target, win32::Str command = "",
                             win32::Str init_dir = "",
                             win32::DWord timeout = win32::kInfinite);
 
-//ApiRes<std::pair<bool, optional<vector<string>>>> WinWhere(wstring_view what);
+// ApiRes<std::pair<bool, optional<vector<string>>>> WinWhere(wstring_view
+// what);
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Decls
@@ -310,7 +315,8 @@ class CmdShell {
   }
 
   /// Initialize a cmd shell process.
-  ApiRes<void> Create(win32::DWord init_delay=10, bool wait_for_prompt = true);
+  ApiRes<void> Create(win32::DWord init_delay = 10,
+                      bool wait_for_prompt = true);
 
   /// Wait for up to timeout for process to exit, then force terminate.
   /// @return Stored in this->exit_code_ ,returned by cmd process.

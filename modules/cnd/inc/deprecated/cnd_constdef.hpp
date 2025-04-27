@@ -1,0 +1,107 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+// Licensed under the Apache License, Version 2.0(the "License");
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup
+/// @brief C& Compiler enumerated constants and their associated compile-time properties.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cnd_compiler_data
+/// @{
+#pragma once
+#include "cnd_ccapi_core.hpp"
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// decl
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace cnd {
+// Toolset 
+enum class eOpSys;
+enum class eProcArch;
+enum class eToolchain;
+enum class eCharEncoding;
+enum class eProgLang;
+
+// Command Line Interface
+enum class eClCliParam;
+enum class eVerbosityLevel;
+enum class eClCliPredefValType;
+
+// Source Code
+enum class eSrcChar;
+enum class eTk;
+enum class eCst;
+enum class eAssoc;
+enum class eOperation;
+enum class ePriority;
+
+enum class eClErr;
+enum class eClErrType;
+enum class eClErrCat;
+
+enum class eClWarning;
+
+CND_CX CStr eOpSysToCStr(eSrcChar e);
+CND_CX CStr eProcArchToCStr(eSrcChar e);
+CND_CX CStr eToolchainToCStr(eSrcChar e);
+CND_CX CStr eCharEncodingToCStr(eSrcChar e);
+CND_CX CStr eProgLangToCStr(eSrcChar e);
+
+CND_CX CStr eSrcCharToCStr(eSrcChar e);
+CND_CX CStr eTkToCStr(eTk e);
+CND_CX CStr eAstToCStr(eCst e);
+CND_CX eCst eTkToCstEnum(eTk t);
+
+CND_CX CStr eClErrToCStr(eClErr e);
+CND_CX CStr eClErrCatToCStr(eClErrCat e);
+CND_CX CStr eClErrTypeToCStr(eClErrType e);
+CND_CX eClErrCat eClErrToCat(eClErr e);
+
+}  // namespace cnd
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// impl
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "cnd_constdef.tpp"
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// constant globals
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace cnd {
+namespace globals {
+constexpr eOpSys kHostOpSys = [] {
+#ifdef WIN32
+  return eOpSys::kWindows;
+#else
+  return eOpSys::kNONE;
+#endif
+}();
+}  // namespace globals
+}  // namespace cnd
+
+/// @} // end of cnd_compiler_data
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+//
+// Licensed under the Apache License, Version 2.0(the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

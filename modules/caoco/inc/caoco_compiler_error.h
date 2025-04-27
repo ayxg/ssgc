@@ -72,6 +72,8 @@ CXIN string PrettyTokenStr(const Tk& token) {
 macro(ImplExpectedToken) \
 /* Build Errors */ 
 #define APPLY_MACRO_TO_BUILD_ERRORS(macro) \
+macro(FailedToReadFile)\
+macro(InvalidCliArg)\
 macro(InclusionFailure)\
 macro(ForbiddenSourceChar)
 /* Lexer Errors */  
@@ -255,6 +257,7 @@ APPLY_MACRO_TO_ALL_ERRORS(DECL_STRUCT, DECL_STRUCT);
 
 /// Custom error, last error in error list.
 struct CustomError : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   CustomError(const string& message = "", size_t file = 0, size_t line = 0,
               size_t col = 0)
       : CompilerErrorBASE(eCaErr::CustomError, args_list{message}) {}
@@ -262,11 +265,14 @@ struct CustomError : public CompilerErrorBASE {
     return FormattedHeader() + "[" + std::get<string>(args[0]) + "]";
   };
 };
-static_assert(std::same_as<decltype(MakeError(CustomError("Hi"))), CaErrUptr&&>);
+static_assert(
+    std::same_as<decltype(MakeError(CustomError("Hi"))), CaErrUptr&&>);
 
 struct ImplExpectedToken : public CompilerErrorBASE {
+  using CompilerErrorBASE::CompilerErrorBASE;
   string expected;
   string got;
+
   ImplExpectedToken(string expected, string got, size_t file, size_t line,
                     size_t col)
       : CompilerErrorBASE(eCaErr::LexerUnknownChar, args_list{expected, got},
@@ -278,16 +284,40 @@ struct ImplExpectedToken : public CompilerErrorBASE {
   };
 };
 
+struct InvalidCliArg : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
+  InvalidCliArg(string arg, string detail)
+      : CompilerErrorBASE(eCaErr::LexerUnknownChar, args_list{arg, detail}) {}
+  string Format() const {
+    return "[Invalid cli argument detected '" + std::get<string>(args[0]) +
+           "':" + std::get<string>(args[1]) + "]";
+  };
+};
+
+struct FailedToReadFile : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
+  FailedToReadFile(string filename, string detail)
+      : CompilerErrorBASE(eCaErr::LexerUnknownChar,
+                          args_list{filename, detail}) {}
+  string Format() const {
+    return "[Could not read file '" + std::get<string>(args[0]) +
+           "':" + std::get<string>(args[1]) + "]";
+  };
+};
 struct InclusionFailure : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   InclusionFailure(string filename, string detail)
-      : CompilerErrorBASE(eCaErr::LexerUnknownChar, args_list{filename, detail}) {}
+      : CompilerErrorBASE(eCaErr::LexerUnknownChar,
+                          args_list{filename, detail}) {}
   string Format() const {
     return "[Error including file '" + std::get<string>(args[0]) +
            "':" + std::get<string>(args[1]) + "]";
   };
 };
 struct ForbiddenSourceChar : public CompilerErrorBASE {
-  ForbiddenSourceChar(string filename, string character,size_t line, size_t col)
+    using CompilerErrorBASE::CompilerErrorBASE;
+  ForbiddenSourceChar(string filename, string character, size_t line,
+                      size_t col)
       : CompilerErrorBASE(eCaErr::LexerUnknownChar,
                           args_list{filename, character}, 0, line, col) {}
   string Format() const {
@@ -297,6 +327,7 @@ struct ForbiddenSourceChar : public CompilerErrorBASE {
 };
 
 struct LexerUnknownChar : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   LexerUnknownChar(char invalid_char, size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::LexerUnknownChar,
                           args_list{string{1, invalid_char}}, file, line, col) {
@@ -308,18 +339,21 @@ struct LexerUnknownChar : public CompilerErrorBASE {
 };
 
 struct MismatchedScope : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   MismatchedScope(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::MismatchedScope, args_list{}, file, line,
                           col) {}
   string Format() const { return FormattedHeader(); };
 };
 struct ExpectedPragmaticDeclaration : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   ExpectedPragmaticDeclaration(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::ExpectedPragmaticDeclaration, args_list{},
                           file, line, col) {}
   string Format() const { return FormattedHeader(); };
 };
 struct ExpectedPrimaryExpression : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   ExpectedPrimaryExpression(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::ExpectedPrimaryExpression, args_list{}, file,
                           line, col) {}
@@ -327,30 +361,35 @@ struct ExpectedPrimaryExpression : public CompilerErrorBASE {
 };
 
 struct NotImplemented : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   NotImplemented(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::NotImplemented, args_list{}, file, line,
                           col) {}
   string Format() const { return FormattedHeader(); };
 };
 struct InvalidForLoopSyntax : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   InvalidForLoopSyntax(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::InvalidForLoopSyntax, args_list{}, file, line,
                           col) {}
   string Format() const { return FormattedHeader(); };
 };
 struct UserSyntaxError : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   UserSyntaxError(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::UserSyntaxError, args_list{}, file, line,
                           col) {}
   string Format() const { return FormattedHeader(); };
 };
 struct InvalidSingularOperand : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   InvalidSingularOperand(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::InvalidSingularOperand, args_list{}, file,
                           line, col) {}
   string Format() const { return FormattedHeader(); };
 };
 struct ParserExpectedToken : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   ParserExpectedToken(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::ParserExpectedToken, args_list{}, file, line,
                           col) {}
@@ -358,48 +397,56 @@ struct ParserExpectedToken : public CompilerErrorBASE {
 };
 
 struct CevalIntegerOverflow : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   CevalIntegerOverflow(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::CevalIntegerOverflow, args_list{}, file, line,
                           col) {}
   string Format() const { return FormattedHeader(); };
 };
 struct CevalUnsignedOverflow : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   CevalUnsignedOverflow(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::CevalUnsignedOverflow, args_list{}, file,
                           line, col) {}
   string Format() const { return FormattedHeader(); };
 };
 struct CevalRealOverflow : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   CevalRealOverflow(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::CevalRealOverflow, args_list{}, file, line,
                           col) {}
   string Format() const { return FormattedHeader(); };
 };
 struct CevalInvalidBoolLiteral : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   CevalInvalidBoolLiteral(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::CevalInvalidBoolLiteral, args_list{}, file,
                           line, col) {}
   string Format() const { return FormattedHeader(); };
 };
 struct CevalInvalidCharLiteral : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   CevalInvalidCharLiteral(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::CevalInvalidCharLiteral, args_list{}, file,
                           line, col) {}
   string Format() const { return FormattedHeader(); };
 };
 struct CevalInvalidByteLiteral : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   CevalInvalidByteLiteral(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::CevalInvalidByteLiteral, args_list{}, file,
                           line, col) {}
   string Format() const { return FormattedHeader(); };
 };
 struct CevalInvalidStringLiteral : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   CevalInvalidStringLiteral(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::CevalInvalidStringLiteral, args_list{}, file,
                           line, col) {}
   string Format() const { return FormattedHeader(); };
 };
 struct InvalidEscapeSequence : public CompilerErrorBASE {
+    using CompilerErrorBASE::CompilerErrorBASE;
   InvalidEscapeSequence(size_t file, size_t line, size_t col)
       : CompilerErrorBASE(eCaErr::InvalidEscapeSequence, args_list{}, file,
                           line, col) {}
@@ -411,6 +458,9 @@ struct InvalidEscapeSequence : public CompilerErrorBASE {
 ///////////////////////////////////////////////////////////////////////////////
 
 using CaErrUptrVec = vector<CaErrUptr>;
+
+template <class T>
+concept iCompilerErrorData = std::is_base_of<CompilerErrorBASE, T>::value;
 
 template <class T>
 concept iNotCompilerError =
@@ -443,6 +493,7 @@ class BooleanCompilerProcessResult {
     errors_.reset();
     return val;
   }
+
  private:
   /// Is this object in a valid state?
   bool valid_;
@@ -464,6 +515,8 @@ class CompilerProcessResult {
   constexpr const T& Value() const { return expected_.value(); }
   constexpr const auto& Errors() const { return errors_; }
   constexpr const auto& LastError() const { return errors_.back(); }
+  constexpr auto& Errors() { return errors_; }
+  constexpr auto& LastError() { return errors_.back(); }
   constexpr operator bool() const { return expected_.has_value(); }
 
   constexpr CompilerProcessResult(T&& expected)
@@ -471,6 +524,8 @@ class CompilerProcessResult {
   constexpr CompilerProcessResult(const T& expected) : expected_(expected) {}
   constexpr CompilerProcessResult(CaErrUptrVec&& errors)
       : expected_(std::nullopt), errors_(std::forward<CaErrUptrVec>(errors)) {}
+  constexpr CompilerProcessResult(CaErrUptrVec& errors)
+      : expected_(std::nullopt), errors_(errors) {}
   constexpr CompilerProcessResult(CaErrUptr&& error)
       : expected_(std::nullopt), errors_(CaErrUptrVec{}) {
     errors_.push_back(std::forward<CaErrUptr>(error));
@@ -505,8 +560,7 @@ class PartialCompilerProcessResult {
 
   constexpr PartialCompilerProcessResult(const AlwaysT& always,
                                          CaErrUptr&& error)
-      : always_(always),
-        value_(std::nullopt), errors_(CaErrUptrVec()) {
+      : always_(always), value_(std::nullopt), errors_(CaErrUptrVec()) {
     errors_.value().push_back(std::forward<CaErrUptr>(error));
   }
 
@@ -729,11 +783,11 @@ struct CaErr {
 }  // namespace caerr
 
 using CaErr = caerr::CaErr;
-template<class T>
+template <class T>
 using CompResult = caerr::CompilerProcessResult<T>;
 using CompResultBool = caerr::BooleanCompilerProcessResult;
 template <class T, class AlwaysT>
-using CompResultPartial = caerr::PartialCompilerProcessResult<T,AlwaysT>;
+using CompResultPartial = caerr::PartialCompilerProcessResult<T, AlwaysT>;
 }  // namespace caoco
 
 #endif HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_COMPILER_ERROR_H

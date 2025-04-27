@@ -1,0 +1,235 @@
+` What is implicitly provided by the C& language core?
+` Hardware Abstract Processor Intrinsics. aka Hardware Api 'HAPI'
+` .i32
+` .i64
+` .i16
+` .i8
+` .i1
+` .add
+` .sub
+` .mul
+` .cast
+` .addressof
+` .store
+` .sizeof
+` .struct
+
+use i32 = .i32;
+
+exception SkipTemplateImpl;
+
+use... FundamentalTypes = {
+  i32,i64
+};
+
+template[type @RhsT,type @LhsT] requires (RhsT is... FundamentalTypes)
+compexpr operator@+(RhsT @rhs,LhsT @lhs):{
+cx if(RhsT is... FundamentalTypes)
+  choose[RhsT,LhsT]:{
+    case [i32,i32]:
+      return .add.i32.i32(rhs,lhs);
+    case [i32,ui32]:
+      return .add
+  }
+  if(RhsT is i32 && LhsT is i32)
+    return .add.i32.i32(rhs,lhs);
+  else
+    return rhs + lhs;
+};
+
+compexpr operator@+(A a,B b):{
+  return a.data + b.data;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+` 0. Transpile to C, C++, ASM or anything!
+` 1. Hardware Abstract Processor Intrinsics. aka Hardware Api 'HAPI'
+` 2. Ability to compile and link to C++ libraries.
+
+` A basic example 'root.cnd':
+` proc @MyExe:{
+`   main:return 0;
+` }
+` 
+` command line:
+` cnd pure build root.cnd -out_dir=out -target=MyExe
+`
+` output:
+` out/MyExe.exe
+
+` .lib @MyLib:{
+`   fn@GetAnswer:return 0;
+` }
+` 
+`
+` .proc @MyExe:{
+`   .include.lib.static.public @MyLibIncluded: ::MyLib;
+`   .main: return GetAnswer();
+` }
+
+` output:
+` out/MyLib.dll
+` out/MyExe.exe
+
+
+` A C& compiler is only required to accept a single host operating system.
+` A C& compiler is compiled for a specific host operating system.
+` A C& compiler is cross-compilation capable. Only the host operating system is
+` required to be accepted as a target operating system. This requirement is due
+` to C& compiler recursiveley calling and compiling intermediate files
+` in the compilation process.
+
+
+` C& compiles to C&IL(CAIL). 
+
+` Procedures occuring at C& compile time are interpreted by the cail virtual machine.
+
+` C&IL will compile to a triplet-specific code which may output to ASM, C or C++ or LLVMIR.
+
+` C& Transpiles to CAIL.
+
+` cail is then further compiled to
+
+compeval def lit @ssg_definition_label:""__SophiaSiliconGold__"";
+compeval fn@ssg(x): return $[ssg_definition_label]+$+${x};
+
+
+.req.pre.type: ssg(frti_bool); 
+.req.pre.type: ssg(frti_i8);
+.req.pre.type: ssg(frti_i16);
+.req.pre.type: ssg(frti_i32);
+.req.pre.type: ssg(frti_i64);
+
+.req.pre.type: ${ssg}frti_candlang_token;
+.req.pre.type: ${ssg}frti_candlang_ast;
+.req.pre.type: ${ssg}frti_candlang_ir;
+
+compeval .operator.binary.left=$=(str @lhs, str@ rhs)>bool:{
+  
+}
+
+# idof
+# ast
+
+
+obj @predef: {
+  def int @line;
+  def int @col;
+  def str @id;
+  def str @code;
+  fn@__init__(ast @md):{
+    this @line: md.line;
+    this @col: md.col;
+    this @id: md.literal;
+    this @code: md[0].literal;
+  }
+}
+
+compeval operator$[](predef @macro_definition)>str:
+  return macro_definition.id;
+
+compeval operator${}(predef @macro_definition)>str:
+  return macro_definition.code;
+
+#define Foo 1
+
+static_assert(${Foo} =$= idof(1).literal);
+
+
+
+
+
+namespace @cnd:{
+
+enum eTk;
+obj @ident :{
+  eTk type;
+  str literal;
+}
+
+obj @type is ident:{
+  
+  vec[str] members; 
+
+}
+
+use ident = ::_cci_meta_ident;
+use type = ::_cci_meta_type;
+use lit = ::_cci_meta_lit;
+use predef = ::_cci_meta_predef;
+
+compeval fn@CndStdPredef(predef @id):>ident{
+  return ""::__cand__"" +$+ id;
+}
+
+enum @eOperatingSystem {
+  @kWin32;
+  @kUnix;
+  @kMacOs;
+}
+
+enum @eProcessorArch:{
+  @kAMD64;
+  @kARM64;
+  @kI86;
+}
+
+enum @eCxxToolchain {
+  @kMSVC;
+  @kGCC;
+  @kClang;
+}
+
+
+
+} ` end namespace cnd
+
+` Handle minimal compiler arguments
+
+.req.pre.def(
+  __cndHOST_OPERATING_SYSTEM,
+  "Host operating system could not be determined implicitly."
+  "Pass -Dcnd::HOST_OPERATING_SYSTEM=\"os-name\" as a compiler parameter."
+);
+
+cx def auto @kHostOperatingSystem: 
+  eOperatingSystem::idof(.pre.valof(__candi__macrodef__host_op_sys));
+
+}
+
+.req.pre.def(
+  __cndHOST_OPERATING_SYSTEM,
+  "Host operating system could not be determined implicitly."
+  "Pass -Dcnd::HOST_OPERATING_SYSTEM=\"os-name\" as a compiler parameter."
+);
+
+.req.pre.def(
+  __cndHOST_PROCESSOR_ARCH,
+  "Host processor architechture could not be determined implicitly."
+  "Pass -Dcnd::HOST_PROCESSOR_ARCH=\"arch-name\" as a compiler parameter."
+);
+
+
+.if.is __cndHOST_OPERATING_SYSTEM WIN32
+  ` Load windows implicitly linked dlls.
+  .link .c "Kernel32.dll" 
+
+  ` Include windows C headers.
+  .include .c "Windows.h"
+
+  ` Expose function prototypes for required OS API methods.
+  callconv[__stdcall] extern[c] fn@WriteFile;
+  callconv[__stdcall] extern[c] fn@ReadFile;
+.endif
+
