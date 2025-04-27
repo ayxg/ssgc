@@ -49,34 +49,48 @@ int main() {
     std::cout << "Failed to load ide params." << std::endl;
     return EXIT_FAILURE;
   }
-  cide::ui::HUD hud;
-  // Link backend to HUD
+
+  // The HUD is tightly linked to the GFX context. And may control multiple
+  // windows.
+  cide::ui::HUD hud{context};
+
+  // The IDE model is loosely linked to the ui callback methods.
+  // Link backend to HUD:
   hud.repo_explorer.root_dir = ide_model.active_repo_.solution_path;
-  
-  hud.main_menu.callback_action_generate = [&ide_model] {
+
+  hud.main_menu.cb_action_generate = [&ide_model] {
     ide_model.ExtCallGenerationStep();
   };
-  hud.main_menu.callback_action_build = [&ide_model] { ide_model.ExtCallBuildStep(); };
-  hud.main_menu.callback_action_run = [&ide_model] {
-    ide_model.ExtCallRunStep();
+  hud.main_menu.cb_action_build = [&ide_model] {
+    ide_model.ExtCallBuildStep();
+  };
+  hud.main_menu.cb_action_run = [&ide_model] { ide_model.ExtCallRunStep(); };
+
+  hud.repo_explorer.cb_update_root_dir =
+      [&ide_model](std::filesystem::path& path) {
+        ide_model.RefreshCurrentRepoRootDir(path);
+      };
+
+  hud.main_menu.cb_file_new_solution = [&ide_model](const std::string& dir,
+                                                    const std::string& name) {
+    return ide_model.NewRepo(dir,name);
   };
 
   //// Add another window
-  //auto& launcher_window = context.MakeWindow("CIDE Launcher", hints);
+  // auto& launcher_window = context.MakeWindow("CIDE Launcher", hints);
 
-
-  //host_params.Load();
-  //cide::ui::Launcher cide_launcher_ui;
-  //cide::ui::Launcher::SettingsTableData host_table_data;
-  //for (auto i = 0; i < host_params.ParamCount(); i++) {
-  //  host_table_data.push_back(
-  //      {cide::backend::HostParams::eHostVarToOptStr(
-  //           static_cast<cide::backend::eHostVar>(i)),
-  //       host_params.ViewParam(static_cast<cide::backend::eHostVar>(i))});
-  //}
-  //cide_launcher_ui.callback_get_general_settings = [&host_table_data] {
-  //  return host_table_data;
-  //};
+  // host_params.Load();
+  // cide::ui::Launcher cide_launcher_ui;
+  // cide::ui::Launcher::SettingsTableData host_table_data;
+  // for (auto i = 0; i < host_params.ParamCount(); i++) {
+  //   host_table_data.push_back(
+  //       {cide::backend::HostParams::eHostVarToOptStr(
+  //            static_cast<cide::backend::eHostVar>(i)),
+  //        host_params.ViewParam(static_cast<cide::backend::eHostVar>(i))});
+  // }
+  // cide_launcher_ui.callback_get_general_settings = [&host_table_data] {
+  //   return host_table_data;
+  // };
 
   //  // Setup Imgui Fonts
   // #define FONT_MATERIALDESIGN_ICON_MIN 0xe000
@@ -103,8 +117,8 @@ int main() {
   // ide_settings.Save();
 
   cide::ui::CideTestExplorerInterface cide_test_explorer;
-  //cide::ui::AstExplorerInterface ast_explorer;
-  // cide::ui::Launcher cide_launcher_ui;
+  // cide::ui::AstExplorerInterface ast_explorer;
+  //  cide::ui::Launcher cide_launcher_ui;
 
   // Register Test Modules
   // cppstandard extended
@@ -143,13 +157,13 @@ int main() {
       }
     });
 
-    //context.ProcessEvents(launcher_window,
-    //                      [&launcher_window](const sf::Event& e) {
-    //                        if (e.type == sf::Event::KeyReleased) {
-    //                          if (e.key.code == sf::Keyboard::T) {
-    //                            // Do stuff...
-    //                          }
-    //                        }
+    // context.ProcessEvents(launcher_window,
+    //                       [&launcher_window](const sf::Event& e) {
+    //                         if (e.type == sf::Event::KeyReleased) {
+    //                           if (e.key.code == sf::Keyboard::T) {
+    //                             // Do stuff...
+    //                           }
+    //                         }
 
     //                        if (e.type == sf::Event::Closed) {
     //                          launcher_window.close();
@@ -159,36 +173,36 @@ int main() {
 
     // We must check in-case the main window was closed above.
     if (window.isOpen()) {
-      context.UpdateFrame(
-          window, deltaClock.restart(),
-          [&editor, &hud, &cide_test_explorer](
-              sf::RenderWindow& window, const sf::Time& delta) {
-            // Do stuff...
-            //editor.Render("Testing");
-            //ImGui::ShowDemoWindow();
-            auto win_size = window.getSize();
-            hud.Display(win_size.x, win_size.y);
-            //ast_explorer.Display();
-            //cide_test_explorer.Display();
-            window.clear();
-            ImGui::SFML::Render(window);
-            window.display();
-            return caf::eAPIError::kNone;
-          });
+      context.UpdateFrame(window, deltaClock.restart(),
+                          [&editor, &hud, &cide_test_explorer](
+                              sf::RenderWindow& window, const sf::Time& delta) {
+                            // Do stuff...
+                            // editor.Render("Testing");
+                            // ImGui::ShowDemoWindow();
+                            auto win_size = window.getSize();
+                            hud.Display(win_size.x, win_size.y);
+                            // ast_explorer.Display();
+                            // cide_test_explorer.Display();
+                            window.clear();
+                            ImGui::SFML::Render(window);
+                            window.display();
+                            return caf::eAPIError::kNone;
+                          });
     }
 
-    //if (launcher_window.isOpen()) {
-    //  context.UpdateFrame(launcher_window, deltaClock.restart(),
-    //                      [&](sf::RenderWindow& window, const sf::Time& delta) {
-    //                        // Do stuff...
-    //                        ImGui::ShowDemoWindow();
-    //                        cide_launcher_ui.Display(launcher_window);
-    //                        window.clear();
-    //                        ImGui::SFML::Render(window);
-    //                        window.display();
-    //                        return caf::eAPIError::kNone;
-    //                      });
-    //}
+    // if (launcher_window.isOpen()) {
+    //   context.UpdateFrame(launcher_window, deltaClock.restart(),
+    //                       [&](sf::RenderWindow& window, const sf::Time&
+    //                       delta) {
+    //                         // Do stuff...
+    //                         ImGui::ShowDemoWindow();
+    //                         cide_launcher_ui.Display(launcher_window);
+    //                         window.clear();
+    //                         ImGui::SFML::Render(window);
+    //                         window.display();
+    //                         return caf::eAPIError::kNone;
+    //                       });
+    // }
 
     context.CleanupContextFrame();
   }

@@ -74,16 +74,15 @@ struct Test {
   /// disable printing to console when running tests.
   static inline bool Run() {
 #ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
-    std::cout << kSeparator << "[Begin Mini Test] " << test_name << " [Case]"
-              << test_case_name << "\n"
-              << kSeparator;
+    std::cout << kSeparator << "[Test] " << test_name << " [Case]"
+              << test_case_name << "\n";
 #endif  // !MINITEST_CONFIG_NO_CONSOLE_PRINT
     test_impl();
-#ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
-    std::cout << kSeparator << "[End Mini Test] " << test_name << " [Case]"
-              << test_case_name << "\n"
-              << kSeparator;
-#endif  // !MINITEST_CONFIG_NO_CONSOLE_PRINT
+//#ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
+//    std::cout << kSeparator << "[End Mini Test] " << test_name << " [Case]"
+//              << test_case_name << "\n"
+//              << kSeparator;
+//#endif  // !MINITEST_CONFIG_NO_CONSOLE_PRINT
     return true;
   }
 };
@@ -106,13 +105,16 @@ struct Fixture {
 
 /// DO NOT USE
 static inline bool ExpectTrue(bool b) {
-  if (!b) {
-#ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
+  if (b) {
+      return true;
+  }
+  else
+  {
+  #ifndef MINITEST_CONFIG_NO_CONSOLE_PRINT
     std::cout << "[FAIL] Expected TRUE." << std::endl;
 #endif  // !MINITEST_CONFIG_NO_CONSOLE_PRINT
     return false;
   }
-  return true;
 }
 
 /// DO NOT USE
@@ -233,9 +235,26 @@ static inline void RegisterTest(const std::string_view & test_name,const std::st
 /// @param test_name Name of test or test module.
 /// @param test Function pointer to the test.
 static inline bool RunRegisteredTest(const std::string_view & test_name,const std::string_view & test_case_name) {
-  return gRegisteredTests[test_name][test_case_name]();
+  gRegisteredTests[test_name][test_case_name]();
+  if(!gFailedTestLogs.empty()){
+    for(auto& lg : gFailedTestLogs)
+      std::cout << lg << std::endl;
+    return false;
+  }
+  return true;
 }
-
+static inline bool RunRegisteredTest(const std::string_view & test_name,std::vector<std::string>::const_iterator case_names_begin
+  ,std::vector<std::string>::const_iterator case_names_end) {
+  for(const auto& t : std::ranges::subrange(case_names_begin,case_names_end)){
+    gRegisteredTests[test_name][t]();
+  }
+  if(!gFailedTestLogs.empty()){
+    for(auto& lg : gFailedTestLogs)
+      std::cout << lg << std::endl;
+    return false;
+  }
+  return true;
+}
 /// @brief Runs all the tests associated with a given test name or module name.
 /// @param test_name Name of the module to run, must be registered.
 /// @return True, unless a test failed - then false.
@@ -245,6 +264,11 @@ static inline bool RunRegisteredTestModule(const std::string_view & test_name) {
     if(not test.second()){
       passed = false;    
     }
+      if(!gFailedTestLogs.empty()){
+    for(auto& lg : gFailedTestLogs)
+      std::cout << lg << std::endl;
+    gFailedTestLogs.clear();
+  }
   }
   return passed;
 };
@@ -271,9 +295,9 @@ static inline void AddFailedTestLog(
     const std::source_location location = std::source_location::current()) {
   std::stringstream ss;
   ss << "[FAILURE DETECTED] Test: " << std::string(test)
-     << " Case: " << std::string(tcase) << " On Check:" << log
-     << "\nfile: " << location.file_name() << '(' << location.line() << ':'
-     << location.column() << ") `" << location.function_name() << "`: " << '\n';
+     << " Case: " << std::string(tcase) << " On Check:\n" << log
+     << "\nFile: " << location.file_name() << '(' << location.line() << ':'
+     << location.column() << ") \n`" << location.function_name() << "`: " << '\n';
   gFailedTestLogs.push_back(ss.str());
 }
 
@@ -353,7 +377,7 @@ constexpr int CmakeMain(int argc, char* argv[])
     case 3:
       return !RunRegisteredTest(args[1], args[2]);
     default:
-      return 1;
+      return !RunRegisteredTest(args[1], args.cbegin()+2,args.cend());
   }
 } 
 }
@@ -452,6 +476,16 @@ constexpr int CmakeMain(int argc, char* argv[])
          minitest::gLastFailedTestName = #TestName;\
          minitest::gLastFailedTestCaseName = #TestCaseName;
 
+#define MTEST(TestName, TestCaseName) \
+  std::function<bool(void)> INLINE_MINITEST_##TestName##TestCaseName = []() -> bool {\
+  return minitest::Test < []() consteval -> const char* { return #TestName; },\
+       []() consteval -> const char* { return #TestCaseName; },\
+       decltype([]() -> void {\
+         minitest::gLastFailedTestName = #TestName;\
+         minitest::gLastFailedTestCaseName = #TestCaseName;
+
+
+
 /// @def INLINE_END_MINITEST
 #define INLINE_END_MINITEST \
   }                         \
@@ -466,6 +500,25 @@ constexpr int CmakeMain(int argc, char* argv[])
 #define MINITEST_REGISTER_CASE(TestName, TestCaseName) \
   const bool REGISTER_INLINE_MINITEST_##TestName##TestCaseName \
   = []{minitest::RegisterTest(#TestName,#TestCaseName,INLINE_MINITEST_##TestName##TestCaseName);return true;}()
+
+
+/// @def INLINE_END_MINITEST
+#define END_MTEST(TestName, TestCaseName) \
+  }                         \
+  )                         \
+  >                         \
+  ::Run();                  \
+  }                         \
+  ;MINITEST_REGISTER_CASE(TestName, TestCaseName)
+
+/// @def INLINE_END_MINITEST
+#define INLINE_END_MINITEST_AND_REGISTER(TestName, TestCaseName) \
+  }                         \
+  )                         \
+  >                         \
+  ::Run();                  \
+  }                         \
+  ;MINITEST_REGISTER_CASE(TestName, TestCaseName)
 
 /// @def MINITEST_RUN_REGISTERED_MODULE
 /// @see RunRegisteredTestModule

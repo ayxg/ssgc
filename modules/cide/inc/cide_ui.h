@@ -28,41 +28,16 @@ namespace cide::ui {
 /// @{
 
 // Main CIDE Interface
-class CideTopMenuBarInterface;
-class CideFileEditorInterface;
-class CideSolutionToolbarInterface;
+class TopMenuBar;
+class FileEditor;
+class SolutionExplorer;
 class CideUserInterface;
 
-const float kWindowWidth = 800.f;
-const float kWindowHeight = 800.f;
-
-struct CideTopMenuBarInterface {
-  static constexpr LAMBDA xNullCallback = []() {};
-  using CallbackT = std::function<void(void)>;
-  // File Menu
-  CallbackT callback_file_new_solution{xNullCallback};
-
-  // Edit menu
-  CallbackT callback_edit_undo{xNullCallback};
-  CallbackT callback_edit_redo{xNullCallback};
-  CallbackT callback_edit_cut{xNullCallback};
-  CallbackT callback_edit_copy{xNullCallback};
-  CallbackT callback_edit_paste{xNullCallback};
-
-  // Project Menu
-  CallbackT callback_project_addfile{xNullCallback};
-  CallbackT callback_project_addactivefile{xNullCallback};
-  CallbackT callback_project_addexistingfile{xNullCallback};
-  CallbackT callback_project_solutionproperties{xNullCallback};
-  CallbackT callback_project_clonesolution{xNullCallback};
-
-  // Action Menu
-  CallbackT callback_action_generate{xNullCallback};
-  CallbackT callback_action_build{xNullCallback};
-  CallbackT callback_action_run{xNullCallback};
-
-  // Tools Menu
-  CallbackT callback_tools_astexplorer{xNullCallback};
+struct TopMenuBar {
+  bool open_new_project_modal = false;
+  bool show_open_repository_modal = false;
+  std::unique_ptr<string> new_repo_name_buffer_ = nullptr;
+  std::unique_ptr<string> new_repo_path_buffer_ = nullptr;
 
   // Widgets
   CguiMenuBar main_menu_bar{cgui::kWidgetInitDelayed};
@@ -71,16 +46,10 @@ struct CideTopMenuBarInterface {
   CguiMenu project_menu{CguiMenu::Delayed("Project")};
   CguiMenu action_menu{CguiMenu::Delayed("Action")};
   CguiMenu file_new_submenu{CguiMenu::Delayed("New")};
+  CguiMenu file_open_submenu{CguiMenu::Delayed("Open")};
   CguiMenu tools_menu{CguiMenu::Delayed("Tools")};
-
   CguiMenuItem file_new_solution_item{"Solution", "", true,
                                       cgui::kWidgetInitDelayed};
-  CguiMenuItem edit_undo_item{"Undo", "CTRL+Z", true, cgui::kWidgetInitDelayed};
-  CguiMenuItem edit_redo_item{"Redo", "CTRL+Y", true, cgui::kWidgetInitDelayed};
-  CguiMenuItem edit_cut_item{"Cut", "CTRL+X", true, cgui::kWidgetInitDelayed};
-  CguiMenuItem edit_copy_item{"Copy", "CTRL+C", true, cgui::kWidgetInitDelayed};
-  CguiMenuItem edit_paste_item{"Paste", "CTRL+V", true,
-                               cgui::kWidgetInitDelayed};
 
   CguiMenuItem project_addfile_item{"Add File", "", true,
                                     cgui::kWidgetInitDelayed};
@@ -93,83 +62,182 @@ struct CideTopMenuBarInterface {
   CguiMenuItem project_clonesolution_item{"Clone Solution", "", true,
                                           cgui::kWidgetInitDelayed};
 
+  function<std::expected<void, string>(const string&, const string&)>
+      cb_file_new_solution{};
+  function<std::expected<void, string>(const string&)> cb_file_open_solution{};
+
+  function<void(void)> cb_edit_undo{xNullCallback};
+  function<void(void)> cb_edit_redo{xNullCallback};
+  function<void(void)> cb_edit_cut{xNullCallback};
+  function<void(void)> cb_edit_copy{xNullCallback};
+  function<void(void)> cb_edit_paste{xNullCallback};
+
+  function<void(void)> cb_project_addfile{xNullCallback};
+  function<void(void)> cb_project_addactivefile{xNullCallback};
+  function<void(void)> cb_project_addexistingfile{xNullCallback};
+  function<void(void)> cb_project_solutionproperties{xNullCallback};
+  function<void(void)> cb_project_clonesolution{xNullCallback};
+
+  function<void(void)> cb_action_generate{xNullCallback};
+  function<void(void)> cb_action_build{xNullCallback};
+  function<void(void)> cb_action_run{xNullCallback};
+
+  function<void(void)> cb_tools_astexplorer{xNullCallback};
+
   void Display() {
     if (main_menu_bar.BeginLate()) {
       if (file_menu.BeginLate()) {
-        if (file_new_submenu.BeginLate()) {
-          if (file_new_solution_item.BeginLate()) {
-            callback_file_new_solution();
-          }
-        }
+        if (file_new_submenu.BeginLate())
+          if (file_new_solution_item.BeginLate())
+            if (file_new_solution_item.IsOn()) open_new_project_modal = true;
         file_new_submenu.EndEarly();
+
+        if (file_open_submenu.BeginLate())
+          if (CguiMenuItem("Repository...")) show_open_repository_modal = true;
+        file_open_submenu.EndEarly();
       }
       file_menu.EndEarly();
 
       if (edit_menu.BeginLate()) {
-        if (edit_undo_item.BeginLate()) {
-          callback_edit_undo();
-        }
-        if (edit_redo_item.BeginLate()) {
-          callback_edit_redo();
-        }
-        if (edit_cut_item.BeginLate()) {
-          callback_edit_cut();
-        }
-        if (edit_copy_item.BeginLate()) {
-          callback_edit_copy();
-        }
-        if (edit_paste_item.BeginLate()) {
-          callback_edit_paste();
-        }
+        if (CguiMenuItem("Undo", "CTRL+Z")) cb_edit_undo();
+        if (CguiMenuItem("Redo", "CTRL+Y")) cb_edit_redo();
+        cgui::Separator();
+        if (CguiMenuItem("Cut", "CTRL+X")) cb_edit_cut();
+        if (CguiMenuItem("Copy", "CTRL+C")) cb_edit_copy();
+        if (CguiMenuItem("Paste", "CTRL+V")) cb_edit_paste();
       }
       edit_menu.EndEarly();
 
       if (action_menu.BeginLate()) {
-        if (CguiMenuItem("Generate")) {
-          callback_action_generate();
-        }
-        if (CguiMenuItem("Build")) {
-          callback_action_build();
-        }
-        if (CguiMenuItem("Run")) {
-          callback_action_run();
-        }
+        if (CguiMenuItem("Generate")) cb_action_generate();
+        if (CguiMenuItem("Build")) cb_action_build();
+        if (CguiMenuItem("Run")) cb_action_run();
       }
       action_menu.EndEarly();
 
       if (project_menu.BeginLate()) {
-        if (project_addfile_item.BeginLate()) {
-          callback_project_addfile();
-        }
-        if (project_addactivefile_item.BeginLate()) {
-          callback_project_addactivefile();
-        }
-        if (project_addexistingfile_item.BeginLate()) {
-          callback_project_addexistingfile();
-        }
+        if (project_addfile_item.BeginLate()) cb_project_addfile();
+        if (project_addactivefile_item.BeginLate()) cb_project_addactivefile();
+        if (project_addexistingfile_item.BeginLate())
+          cb_project_addexistingfile();
         cgui::Separator();
-        if (project_solutionproperties_item.BeginLate()) {
-          callback_project_solutionproperties();
-        };
+        if (project_solutionproperties_item.BeginLate())
+          cb_project_solutionproperties();
         cgui::Separator();
-        if (project_clonesolution_item.BeginLate()) {
-          callback_project_clonesolution();
-        };
+        if (project_clonesolution_item.BeginLate()) cb_project_clonesolution();
       }
       project_menu.EndEarly();
 
-      if (tools_menu.BeginLate()) {
-        if (CguiMenuItem("C& AST Explorer")) {
-          callback_tools_astexplorer();
-        }
-      }
+      if (tools_menu.BeginLate())
+        if (CguiMenuItem("C& AST Explorer")) cb_tools_astexplorer();
       tools_menu.EndEarly();
     }
     main_menu_bar.EndEarly();
+
+    // This must be called here, in "global" scope or else modal wont appear.
+    DisplayNewRepoModal(open_new_project_modal);
+    DisplayOpenRepoModal(show_open_repository_modal);
+  }
+
+  void DisplayNewRepoModal(bool& is_on) {
+    if (is_on) {
+      ImGui::OpenPopup("Create New Project...");
+
+      // Always center this window when appearing
+      ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(),
+                              ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    }
+
+    if (ImGui::BeginPopupModal("Create New Project...", NULL,
+                               ImGuiWindowFlags_AlwaysAutoResize)) {
+      if (!new_repo_name_buffer_)
+        new_repo_name_buffer_ = std::make_unique<string>("NewRepo");
+      if (!new_repo_path_buffer_)
+        new_repo_path_buffer_ = std::move(std::make_unique<string>("C:/"));
+
+      ImGui::Text("Repository Name:");
+      cgui::SameLine();
+      ImGui::InputText("##repo_name", new_repo_name_buffer_.get());
+      ImGui::Text("Repository Path:");
+      cgui::SameLine();
+      ImGui::InputText("##repo_path", new_repo_path_buffer_.get());
+
+      if (CguiButton("Browse...")) {
+        auto opendir = wpl::OpenFolderDlg();
+        if (!opendir.empty())
+          *new_repo_path_buffer_ = opendir + "\\" + *new_repo_name_buffer_;
+      }
+
+      static expected<void, string> create_repo_res{
+          std::unexpected<string>("Choose a project name and repo dir.")};
+      if (CguiButton("OK", {100, 0})) {
+        create_repo_res = cb_file_new_solution(*new_repo_path_buffer_,
+                                               *new_repo_name_buffer_);
+        if (create_repo_res) {
+          ImGui::CloseCurrentPopup();
+          is_on = false;
+        }
+      }
+      if (!create_repo_res)
+        ImGui::Text("Error: %s", create_repo_res.error().c_str());
+
+      cgui::SameLine();
+
+      if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+        ImGui::CloseCurrentPopup();
+        is_on = false;
+      }
+      ImGui::EndPopup();
+    }
+  }
+
+  void DisplayOpenRepoModal(bool& is_on) {
+    if (is_on) {
+      ImGui::OpenPopup("Open a repository...");
+      ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(),
+                              ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    }
+
+    if (ImGui::BeginPopupModal("Open a repository...", NULL,
+                               ImGuiWindowFlags_AlwaysAutoResize)) {
+      if (!new_repo_path_buffer_)
+        new_repo_path_buffer_ = std::make_unique<string>("C:/");
+      CguiTextLabel("Repository Path:");
+      cgui::SameLine();
+      CguiTextInput("##repo_path", *new_repo_path_buffer_);
+      // ImGui::InputText("##repo_path", new_repo_path_buffer_.get());
+
+      if (CguiButton("Browse...")) {
+        auto opendir = wpl::OpenFolderDlg();
+        if (!opendir.empty()) *new_repo_path_buffer_ = opendir;
+      }
+
+      static expected<void, string> open_repo_res{
+          std::unexpected<string>("Choose a project name and repo dir.")};
+
+      if (CguiButton("OK", {100, 0})) {
+        open_repo_res = cb_file_open_solution(*new_repo_path_buffer_);
+        if (open_repo_res) {
+          ImGui::CloseCurrentPopup();
+          is_on = false;
+        }
+      }
+
+      if (!open_repo_res)
+        ImGui::Text("Error: %s", open_repo_res.error().c_str());
+
+      cgui::SameLine();
+
+      if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+        ImGui::CloseCurrentPopup();
+        is_on = false;
+      }
+      ImGui::EndPopup();
+    }
   }
 };
 
-struct CideFileEditorInterface {
+struct FileEditor {
   // Properties
   CguiVec2 context_size;
   CguiNamedSubcontext editor_context;
@@ -177,7 +245,7 @@ struct CideFileEditorInterface {
   vector<CguiTabItem> open_file_tabs;
   vector<TextEditor> open_file_tab_text_inputs;
   vector<string> open_file_tab_text_buffers;
-  CideFileEditorInterface(const std::string& name, CguiVec2 context_size)
+  FileEditor(const std::string& name, CguiVec2 context_size)
       : context_size(context_size),
         editor_context(CguiNamedSubcontext::Delayed(name, context_size)),
         editor_tab_bar(CguiTabBar(
@@ -223,20 +291,21 @@ struct CideFileEditorInterface {
   void PopTab() { open_file_tabs.pop_back(); }
 };
 
-struct CideSolutionToolbarInterface {
+struct SolutionExplorer {
   static constexpr LAMBDA xNullCallback = [](const stdfs::path&) {};
   using CallbackT = function<void(const stdfs::path&)>;
 
   // By default select file callback will store the selected file in
   // the local temp_file_buffer.
-  CallbackT select_file_callback{xNullCallback};
+  function<void(const stdfs::path&)> select_file_callback{xNullCallback};
+  function<void(stdfs::path&)> cb_update_root_dir{xNullCallback};
 
   // Edit menu
-  CallbackT callback_edit_open{xNullCallback};
-  CallbackT callback_edit_delete{xNullCallback};
-  CallbackT callback_edit_cut{xNullCallback};
-  CallbackT callback_edit_copy{xNullCallback};
-  CallbackT callback_edit_paste{xNullCallback};
+  function<void(const stdfs::path&)> cb_edit_open{xNullCallback};
+  function<void(const stdfs::path&)> cb_edit_delete{xNullCallback};
+  function<void(const stdfs::path&)> cb_edit_cut{xNullCallback};
+  function<void(const stdfs::path&)> cb_edit_copy{xNullCallback};
+  function<void(const stdfs::path&)> cb_edit_paste{xNullCallback};
 
   CguiVec2 requested_size;
 
@@ -253,24 +322,24 @@ struct CideSolutionToolbarInterface {
   inline void BeginRightClickContextMenu(const stdfs::path& p) const {
     // New Menu:
     if (CguiMenuItem("Open")) {
-      callback_edit_open(p);
+      cb_edit_open(p);
     }
     if (CguiMenuItem("Copy")) {
-      callback_edit_copy(p);
+      cb_edit_copy(p);
     }
     if (CguiMenuItem("Paste")) {
-      callback_edit_paste(p);
+      cb_edit_paste(p);
     }
     if (CguiMenuItem("Cut")) {
-      callback_edit_cut(p);
+      cb_edit_cut(p);
     }
     if (CguiMenuItem("Delete")) {
-      callback_edit_delete(p);
+      cb_edit_delete(p);
     }
   };
 
  public:
-  CideSolutionToolbarInterface(const CguiVec2& requested_size = {})
+  SolutionExplorer(const CguiVec2& requested_size = {})
       : requested_size(requested_size),
         solution_toolbar_context(
             CguiNamedSubcontext::Delayed("Solution Toolbar", requested_size)),
@@ -294,6 +363,24 @@ struct CideSolutionToolbarInterface {
     if (solution_toolbar_context.BeginLate()) {
       if (solution_toolbar_tab_bar.BeginLate()) {
         if (solution_explorer_tab_item.BeginLate()) {
+          if (ImGui::BeginPopupContextWindow()) {
+            if (ImGui::MenuItem("Add File")) {
+              auto file_dir =
+                  wpl::SaveFileDlg(wpl::WideToMByte(dir_tree_view.root.c_str())
+                                       .value_or("")
+                                       .c_str());
+              if (!file_dir.empty())  // error in save dialog if empty
+              {
+                if (!stdfs::exists(file_dir)) {
+                  std::ofstream ofs(file_dir);
+                  ofs.close();
+                }
+              }
+            }
+
+            ImGui::EndPopup();
+          }
+          cb_update_root_dir(dir_tree_view.root);
           dir_tree_view.BeginLate();
         }
         solution_explorer_tab_item.EndEarly();
@@ -305,11 +392,11 @@ struct CideSolutionToolbarInterface {
 };
 
 struct HUD {
-  CideTopMenuBarInterface main_menu{};
-  CideFileEditorInterface file_editor_interface{
-      "Editor", {kWindowWidth * 0.75f, kWindowHeight * 0.75f}};
+  caf::Context& gfx_context_;
+  TopMenuBar main_menu{};
+  FileEditor file_editor_interface{"Editor", {0, 0}};
 
-  CideSolutionToolbarInterface repo_explorer{{0, kWindowHeight * 0.75f}};
+  SolutionExplorer repo_explorer{{0, 0}};
   std::pair<AstExplorerInterface, bool> ast_explorer;
   CguiWindow main_ide_context{
       "C&-IDE", false,
@@ -333,8 +420,8 @@ struct HUD {
     }
   }
 
-  HUD() {
-    main_menu.callback_tools_astexplorer = [this]() {
+  HUD(caf::Context& gfx_context) : gfx_context_(gfx_context) {
+    main_menu.cb_tools_astexplorer = [this]() {
       // Open the AST Explorer
       ast_explorer.second = !ast_explorer.second;
     };
@@ -372,7 +459,7 @@ class Launcher {
         ImGui::TableSetupColumn("Type");
         ImGui::TableHeadersRow();
 
-        for (const auto& recent_proj : callback_get_recent_solutions()) {
+        for (const auto& recent_proj : cb_get_recent_solutions()) {
           ImGui::TableNextRow();
           ImGui::TableNextColumn();
           ImGui::Text(get<0>(recent_proj).data());
@@ -415,7 +502,7 @@ class Launcher {
           ImGui::TableSetupColumn("Value");
           ImGui::TableHeadersRow();
 
-          for (const auto& recent_proj : callback_get_general_settings()) {
+          for (const auto& recent_proj : cb_get_general_settings()) {
             ImGui::TableNextRow();
             ImGui::TableNextColumn();
             ImGui::Text(get<0>(recent_proj).data());
@@ -495,10 +582,10 @@ class Launcher {
                         cgui::kWidgetInitDelayed};
 
  public:
-  function<RecentSolutionInfo(void)> callback_get_recent_solutions{
+  function<RecentSolutionInfo(void)> cb_get_recent_solutions{
       []() { return RecentSolutionInfo{}; }};
 
-  function<SettingsTableData(void)> callback_get_general_settings{};
+  function<SettingsTableData(void)> cb_get_general_settings{};
 };
 
 /// @} // end of cand_cide_frontend

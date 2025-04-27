@@ -1,0 +1,61 @@
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/
+
+/`/`
+@project: C& Official Compiler
+@file: ut_compiler_Return0.cnd
+@brief Demonstrates use of an intermediate process which will not be availiable 
+	   at target runtime, and executes on the host at compile time.
+
+Two MODIFIER keywords are introduced:
+	- compeval
+	- compexpr
+
+The modifier compeval designates that the following declaration(in this case 'proc')
+is to be evaluated on the host system during compile time.
+
+A compexpr modifier designates that the following declaration may be evaluated on 
+the host system during compile time AND on the target system at runtime.
+In this case it will have no effect, but demonstrate that an executable is
+produced for compexpr processes.
+
+The global scope access operator("|->") is used to access proccess A from process B.
+To run a process, apply a function call "()" or pass "(int @argc,^^char @argv)". 
+The latter is demonstrated in a different example. 
+@see ut_compiler_PassArgvArgcToInternalProcess.cnd
+
+`/`/
+
+compeval proc @A:{
+  main:
+    return 0;
+}
+
+compexpr proc @B:{
+  main:
+    return |->A();
+}
+	
+/`
+Copyright 2024 Anton Yashchenko
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of 
+this software and associated documentation files (the “Software”), to deal in 
+the Software without restriction, including without limitation the rights to 
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies 
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+THE SOFTWARE.
+`/

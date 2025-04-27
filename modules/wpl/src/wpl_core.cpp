@@ -4,11 +4,11 @@
 
 namespace WPLNS {
 
-expected<unique_ptr<char[]>, eCastErr> WideToMByte(const wchar_t* ws) {
+expected<string, eCastErr> WideToMByte(const wchar_t* ws) {
   if (ws == nullptr) return unexpected<eCastErr>(eCastErr::kNullArg);
 
   auto in_size = std::wcslen(ws);
-  if (in_size == 0) return std::make_unique<char[]>(1);
+  if (in_size == 0) return "";
 
   std::mbstate_t state;
   std::memset((void*)&state, 0, sizeof state);
@@ -21,14 +21,14 @@ expected<unique_ptr<char[]>, eCastErr> WideToMByte(const wchar_t* ws) {
   if (error != 0)
     return unexpected<eCastErr>(static_cast<eCastErr>(error));
   else
-    return std::move(mb_str);
+    return string(mb_str.get());
 }
 
-expected<unique_ptr<wchar_t[]>, eCastErr> MByteToWide(const char* ws) {
+expected<wstring, eCastErr> MByteToWide(const char* ws) {
   if (ws == nullptr) return unexpected<eCastErr>(eCastErr::kNullArg);
 
   auto in_size = std::strlen(ws);
-  if (in_size == 0) return std::make_unique<wchar_t[]>(1);
+  if (in_size == 0) return L"";
 
   std::mbstate_t state;
   std::memset((void*)&state, 0, sizeof state);
@@ -40,27 +40,18 @@ expected<unique_ptr<wchar_t[]>, eCastErr> MByteToWide(const char* ws) {
   if (error != 0)
     return unexpected<eCastErr>(static_cast<eCastErr>(error));
   else
-    return std::move(wide_str);
+    return wstring(wide_str.get());
 }
 
 expected<string, eCastErr> WideToMByte(const wstring_view& ws) {
-  auto mbyte_str = WideToMByte(ws.data());
-  if (mbyte_str.has_value())
-    return string(mbyte_str.value().get());
-  else
-    return unexpected<eCastErr>(mbyte_str.error());
+  return WideToMByte(ws.data());
 }
 
 expected<wstring, eCastErr> MByteToWide(const string_view& mbs) {
-  auto wide_str = MByteToWide(mbs.data());
-  if (wide_str.has_value())
-    return wstring(wide_str.value().get());
-  else
-    return unexpected<eCastErr>(wide_str.error());
+  return MByteToWide(mbs.data());
 }
 
-
-/// @brief Given a string seperates it into a vector of string
+/// @brief Given a string seperates it into a vector of strings
 /// by command line "\r\n", ommiting the "\r\n" from the result.
 vector<string> GetCmdLines(const string& lines) {
   if (lines.empty()) return vector<string>{string{""}};  // empty string
@@ -97,6 +88,108 @@ ApiRes<string> GetOsProgramDataPath() {
       S_OK)
     return ApiFail{eApiErr::kUnknown};
   return buff;
+}
+
+win32::Str OpenFileDlg() {
+  OPENFILENAME ofn;     // common dialog box structure
+  char szFile[260];  // buffer for file name
+  HWND hwnd{};          // owner window
+  HANDLE hf{};          // file handle
+
+  // Initialize OPENFILENAME
+  ZeroMemory(&ofn, sizeof(ofn));
+  ofn.lStructSize = sizeof(ofn);
+  ofn.hwndOwner = hwnd;
+  ofn.lpstrFile = szFile;
+  // Set lpstrFile[0] to '\0' so that GetOpenFileName does not
+  // use the contents of szFile to initialize itself.
+  ofn.lpstrFile[0] = WPL_SYSSTR('\0');
+  ofn.nMaxFile = sizeof(szFile);
+  ofn.lpstrFilter = WPL_SYSSTR("All\0*.*\0Text\0*.TXT\0");
+  ofn.nFilterIndex = 1;
+  ofn.lpstrFileTitle = NULL;
+  ofn.nMaxFileTitle = 0;
+  ofn.lpstrInitialDir = NULL;
+  ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+  // Display the Open dialog box.
+
+  if (GetOpenFileName(&ofn) == TRUE)
+    return win32::Str(ofn.lpstrFile);
+  else
+    return {};
+  // hf = CreateFile(ofn.lpstrFile, GENERIC_READ, 0,
+  // (LPSECURITY_ATTRIBUTES)NULL,
+  //                 OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
+}
+
+win32::Str OpenFolderDlg() {
+  BROWSEINFO bi = {0};
+
+  bi.lpszTitle = WPL_SYSSTR("Browse for Folder");
+  TCHAR tszPath[MAX_PATH] = WPL_SYSSTR("\0");
+  LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
+
+  if (pidl != NULL) {
+    if (SHGetPathFromIDList(pidl, tszPath) == TRUE) {
+      // AfxMessageBox(tszPath);  else error...
+    }
+
+    // — Free pidl
+    CoTaskMemFree(pidl);
+  }
+
+  return win32::Str(tszPath);
+}
+
+win32::Str SaveFileDlg() {
+  OPENFILENAME ofn;
+  char szFile[260];
+  HWND hwnd{};
+  HANDLE hf{};
+
+  ZeroMemory(&ofn, sizeof(ofn));
+  ofn.lStructSize = sizeof(ofn);
+  ofn.hwndOwner = hwnd;
+  ofn.lpstrFile = szFile;
+  ofn.lpstrFile[0] = WPL_SYSSTR('\0');
+  ofn.nMaxFile = sizeof(szFile);
+  ofn.lpstrFilter = WPL_SYSSTR("All\0*.*\0Text\0*.TXT\0");
+  ofn.nFilterIndex = 1;
+  ofn.lpstrFileTitle = NULL;
+  ofn.nMaxFileTitle = 0;
+  ofn.lpstrInitialDir = NULL;
+  ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+  if (GetSaveFileName(&ofn) == TRUE)
+    return win32::Str(ofn.lpstrFile);
+  else
+    return {};
+}
+
+win32::Str SaveFileDlg(win32::CStr init_dir) {
+  OPENFILENAME ofn;
+  char szFile[260];
+  HWND hwnd{};
+  HANDLE hf{};
+
+  ZeroMemory(&ofn, sizeof(ofn));
+  ofn.lStructSize = sizeof(ofn);
+  ofn.hwndOwner = hwnd;
+  ofn.lpstrFile = szFile;
+  ofn.lpstrFile[0] = WPL_SYSSTR('\0');
+  ofn.nMaxFile = sizeof(szFile);
+  ofn.lpstrFilter = WPL_SYSSTR("All\0*.*\0Text\0*.TXT\0");
+  ofn.nFilterIndex = 1;
+  ofn.lpstrFileTitle = NULL;
+  ofn.nMaxFileTitle = 0;
+  ofn.lpstrInitialDir = init_dir;
+  ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+  if (GetSaveFileName(&ofn) == TRUE)
+    return win32::Str(ofn.lpstrFile);
+  else
+    return {};
 }
 
 string WinErrMsg(win32::DWord err_num) {

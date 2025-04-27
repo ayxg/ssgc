@@ -17,7 +17,7 @@
 #define HEADER_GUARD_CALE_CAND_OFFICIAL_COMPILER_CAOCO_LEXER_H
 #include "cxxx.hpp"
 
-// 
+//
 #include "caoco_char_traits.h"
 #include "caoco_grammar.h"
 //
@@ -39,10 +39,12 @@ class Lexer {
 
   /// @defgroup cand_compiler_lexer_interface Public Interface
   /// @ingroup cand_compiler_lexer
-  /// 
+  ///
   /// Static methods for easy lexing of vectors or strings
   /// @{
  public:
+  constexpr LexerResult LexRaw();
+  constexpr TkVector RemoveComments(const TkVector& output_tokens);
   static constexpr inline LexerResult Lex(CharVectorCIter beg,
                                           CharVectorCIter end) {
     Lexer lexer(beg, end);
@@ -74,7 +76,7 @@ class Lexer {
 
   /// @defgroup cand_compiler_lexer_util Lexing Utils
   /// @ingroup cand_compiler_lexer
-  /// 
+  ///
   /// Lexer's utility methods.
   /// @{
  private:
@@ -131,7 +133,8 @@ class Lexer {
 
     // Adjust the pretty line end iterator if it exceeds 40 characters to the
     // right
-    size_t chars_to_right = std::min(std::distance(it, next_newline), (std::ptrdiff_t)40);
+    size_t chars_to_right =
+        std::min(std::distance(it, next_newline), (std::ptrdiff_t)40);
     if (std::distance(it, next_newline) > 40)
       pretty_line_end = std::next(it, chars_to_right);
 
@@ -207,7 +210,7 @@ constexpr inline Lexer::LexMethodResult Lexer::Success(eTk type,
   return LexMethodResult::Success(
       end_it, Tk(type, beg_it, end_it,
                  std::make_tuple(std::distance(Begin(), beg_it),
-                            std::distance(Begin(), end_it))));
+                                 std::distance(Begin(), end_it))));
 }
 
 constexpr inline Lexer::LexMethodResult Lexer::NoneResult(
@@ -785,6 +788,100 @@ constexpr Lexer::LexerResult Lexer::Lex() {
 
   return LexerResult::Success(sanitized);
 }  // end tokenize
+constexpr Lexer::LexerResult Lexer::LexRaw() {
+  using namespace caerr;
+  CharVectorCIter it = Begin();
+  TkVector output_tokens;
+  std::size_t current_line = 1;
+  std::size_t current_col = 1;
+
+  // Lambda for executing a lexer and updating the iterator.
+  LAMBDA xPerformLex = [&](auto lexer) constexpr -> cxx::Expected<bool> {
+    using cxx::Expected;
+    // Disable warning for uninitialized variable, it is initialized above.
+#pragma warning(disable : 6001)
+    LexMethodResult lex_result = (this->*lexer)(it);
+#pragma warning(default : 6001)
+    if (!lex_result.Valid()) {
+      CalculateLineColPos(it, current_line, current_col);
+      return Expected<bool>::Failure(CaErr::ErrDetail<CaErr::LexerUnknownChar>(
+          current_line, current_col, *it, GeneratePrettyErrorLineLocation(it),
+          lex_result.Error()));
+    }
+    Tk result_token = lex_result.Value();
+    CharVectorCIter result_end = lex_result.Always();
+
+    if (result_token.Type() == eTk::NONE) {  // No match, try next lexer
+      return Expected<bool>::Success(false);
+    }
+
+    else {  // Lexing was successful
+      CalculateLineColPos(it, current_line, current_col);
+      // Set the line and col of the resulting token and emplace it into the
+      // output vector
+      result_token.SetLine(current_line);
+      result_token.SetCol(current_col);
+      output_tokens.push_back(result_token);
+      it = result_end;  // Advance the iterator to the end of lexing. Note lex
+      // end and token end may differ.
+      return Expected<bool>::Success(true);
+    }
+  };  // end xPerformLex
+
+  // Attempt to lex a token using one of the lexers until one succeeds. If none
+  // succeed, report error. Order of lexers is important. For example, the
+  // identifier lexer will match keywords, so it must come after the keyword
+  // lexer.
+  while (it != end_) {
+    bool match = false;
+    for (auto lexer :
+         {&Lexer::LexSolidus, &Lexer::LexQuotation, &Lexer::LexNewline,
+          &Lexer::LexWhitespace, &Lexer::LexEof, &Lexer::LexKeyword,
+          &Lexer::LexDirective, &Lexer::LexNumber, &Lexer::LexIdentifier,
+          &Lexer::LexOperator, &Lexer::LexScopes, &Lexer::LexSemicolon,
+          &Lexer::LexColon, &Lexer::LexComma, &Lexer::LexPeriod}) {
+      auto lex_result = xPerformLex(lexer);
+      if (not lex_result) {  // Error inside one of the lexers
+        return LexerResult::Failure(lex_result.Error());
+      } else if (lex_result.Value()) {
+        // Note: The iterator 'it' is advanced in perform_lex lambda.
+        match = true;
+        break;  // Exit for-loop
+      }
+    }
+    // None of the lexers matched, report an error
+    // Update position based on the number of characters consumed
+    if (!match) {
+      CalculateLineColPos(it, current_line, current_col);
+      return LexerResult::Failure(CaErr::ErrDetail<CaErr::LexerUnknownChar>(
+          current_line, current_col, *it, GeneratePrettyErrorLineLocation(it)));
+    }
+  }  // end while
+
+  return LexerResult::Success(output_tokens);
+}  // end tokenize
+constexpr TkVector Lexer::RemoveComments(const TkVector& output_tokens) {
+  // Remove redundant tokens after lexing
+  // Note: "i" is used instead of "it" to avoid ambiguity with the iterator
+  // above.
+  return [&]() constexpr {
+    TkVector new_output;
+    for (auto i = output_tokens.cbegin(); i != output_tokens.cend(); ++i) {
+      const std::initializer_list<eTk> REDUNDANT_TOKEN_KINDS{eTk::LineComment,
+                                                             eTk::BlockComment};
+
+      if (std::any_of(REDUNDANT_TOKEN_KINDS.begin(),
+                      REDUNDANT_TOKEN_KINDS.end(),
+                      [i](eTk match) { return match == i->Type(); })) {
+        new_output.push_back(eTk::Whitespace);
+        continue;
+      } else {  // Push back non-redundant tokens
+        new_output.push_back(*i);
+      }
+    }
+    return new_output;
+  }();  // Note: The lambda is immediately called.
+}
 
 }  // namespace caoco
 
