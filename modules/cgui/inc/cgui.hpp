@@ -84,8 +84,10 @@ class TreeNode;
 
 namespace single_widget {
 class Button;
+class TextLabel;
 class MenuItem;
 class Selectable;
+class TextInput;
 class MultilineTextInput;
 }  // namespace single_widget
 
@@ -492,7 +494,7 @@ namespace single_widget {
 
 class Button : public SingularWidgetBase {
  public:
-  const std::string& Text() const;
+  const std::string_view& Text() const;
   const CguiVec2& Size() const;
   static  Button Delayed(const std::string& text, CguiVec2 size = {});
   Button(const std::string& text, CguiVec2 size = {},
@@ -504,9 +506,25 @@ class Button : public SingularWidgetBase {
   bool BoundBegin() override;
 
  private:
-  std::string text_;
+  std::string_view text_;
   CguiVec2 size_;
 };
+
+class TextLabel : public SingularWidgetBase {
+ public:
+  std::string_view Text() const;
+  static TextLabel Delayed(std::string_view text);
+  TextLabel(std::string_view text, bool delayed_begin = kWidgetInitImmediate);
+  bool BeginLate() override;
+  ~TextLabel() = default;
+
+ protected:
+  bool BoundBegin() override;
+
+ private:
+  std::string_view text_;
+};
+
 
 class MenuItem : public SingularWidgetBase {
  public:
@@ -544,6 +562,29 @@ class Selectable : public SingularWidgetBase {
 
  private:
   std::string text_;
+};
+
+class TextInput : public SingularWidgetBase {
+  std::string_view label_;
+  std::string& buffer_;
+  InputTextFlags flags_;
+
+ public:
+  std::string_view Label() const;
+  std::string& Buffer();
+  InputTextFlags& InputFlags();
+  const std::string& Buffer() const;
+  const InputTextFlags& InputFlags() const;
+  static TextInput Delayed(std::string_view label, std::string& buffer,
+                           InputTextFlags flags = InputTextFlags());
+  TextInput(std::string_view label, std::string& buffer,
+            InputTextFlags flags = InputTextFlags(),
+            bool delayed_begin = kWidgetInitImmediate);
+  bool BeginLate() override;
+  ~TextInput() = default;
+
+  protected:
+  bool BoundBegin() override;
 };
 
 class MultilineTextInput : public SingularWidgetBase {
@@ -595,10 +636,11 @@ class DirectoryView : public SingularWidgetBase {
  private:
   bool BoundBegin() override;
   void RecursiveDisplayDirectory(const PathT& path, int depth = 0);
-
   SelectedCallbackT select_file_callback;
   SelectedCallbackT right_click_file_callback;
-  const PathT& root;
+
+ public:
+  PathT root;
 };
 
 };  // namespace combo_widget
@@ -657,8 +699,10 @@ using CguiTreeNode = cgui::scoped_widget::TreeNode;
 
 // Single widgets
 using CguiButton = cgui::single_widget::Button;
+using CguiTextLabel = cgui::single_widget::TextLabel;
 using CguiMenuItem = cgui::single_widget::MenuItem;
 using CguiSelectable = cgui::single_widget::Selectable;
+using CguiTextInput = cgui::single_widget::TextInput;
 using CguiMultilineTextInput = cgui::single_widget::MultilineTextInput;
 
 // Combo widgets

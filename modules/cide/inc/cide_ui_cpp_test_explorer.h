@@ -45,7 +45,7 @@ class CideTestExplorerInterface {
 
    public:
     TestModuleResult(const string& test_module_name, bool is_test_passed,
-                     BoolCallbackT test_case)
+                     function<bool(void)> test_case)
         : test_module_name_(test_module_name),
           is_test_passed_(is_test_passed),
           test_case_(test_case) {}
@@ -54,7 +54,7 @@ class CideTestExplorerInterface {
     bool* GetRawEnableTestPtr() { return run_this_test; }
 
     bool is_test_passed_{false};
-    BoolCallbackT test_case_{xNullBoolCallback};
+    function<bool(void)> test_case_{xNullBoolCallback};
     bool* run_this_test = new (bool)(false); 
     string test_module_name_{""};
   };
@@ -72,7 +72,7 @@ class CideTestExplorerInterface {
     test_explorer_window.EndEarly();
   }
 
-  void RegisterTestCase(BoolCallbackT test_case,
+  void RegisterTestCase(function<bool(void)> test_case,
                         const std::string& test_module_name) {
     registered_test_cases.push_back(
         TestModuleResult{test_module_name, false, test_case});
@@ -92,7 +92,7 @@ class CideTestExplorerInterface {
     ImGui::Checkbox((std::string("Run##") + std::to_string(style_id)).c_str(),
                     t_module.GetRawEnableTestPtr());
     ImGui::SameLine();
-    ImGui::PushID(style_id);
+    ImGui::PushID(static_cast<int>(style_id));
     style_id++;
     ImGui::PushStyleColor(ImGuiCol_Button,
                           (ImVec4)ImColor::HSV(1.0f, .75f, .75f));

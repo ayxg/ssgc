@@ -45,6 +45,7 @@
 #include <span>  // std::span
 #include <sstream>
 #include <stack>
+#include <format>
 #include <stdexcept>
 #include <string>  // std::string
 #include <tuple>

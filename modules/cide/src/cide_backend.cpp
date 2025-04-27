@@ -422,6 +422,26 @@ ApiRes<void> IdeParamList::SaveToDefault() {
   return ApiRes<void>();
 }
 
+  ApiRes<void> RepoParams::Load(const string& from){
+  if (!stdfs::exists(from))
+    return MakeApiFail(eApiErr::kFileNotFound, from.c_str());
+  std::ifstream cache_file(from);
+  if (!cache_file.is_open())
+    return MakeApiFail(eApiErr::kFileNotFound, from.c_str());
+  try {
+    *this = FromJson(jsonlib::json::parse(cache_file));
+  } catch (jsonlib::json::parse_error& e) {
+    return MakeApiFail(eApiErr::kJsonParseError, e.what());
+  }
+  };
+  ApiRes<void> RepoParams::Save(const string& to){ using enum eApiErr;
+    std::ofstream cache_file(to);
+    if (!cache_file.is_open()) return MakeApiFail(kFileNotFound, to.c_str());
+    cache_file << ToJson(*this).dump(2);
+    cache_file.close();
+    return ApiRes<void>{};
+  };
+
 /// @} // end of cand_cide_backend
 
 // inline stdfs::path IdeSettings::GetDefaultBinaryPath() {

@@ -533,13 +533,14 @@ void TreeNode::BoundEnd() { ImGui::TreePop(); }
 
 namespace single_widget {
 
-const std::string& Button::Text() const { return text_; }
+const std::string_view& Button::Text() const { return text_; }
 
 const CguiVec2& Button::Size() const { return size_; }
 
 Button Button::Delayed(const std::string& text, CguiVec2 size) {
   return Button(text, size, kWidgetInitDelayed);
 }
+
 Button::Button(const std::string& text, CguiVec2 size, bool delayed_begin)
     : SingularWidgetBase(delayed_begin) {
   text_ = text;
@@ -552,7 +553,57 @@ Button::Button(const std::string& text, CguiVec2 size, bool delayed_begin)
 bool Button::BeginLate() { return BeginLateImpl(); }
 
 bool Button::BoundBegin() {
-  return ImGui::Button(text_.c_str(), {size_.first, size_.second});
+  return ImGui::Button(text_.data(), {size_.first, size_.second});
+}
+
+std::string_view TextLabel::Text() const { return text_; }
+
+TextLabel TextLabel::Delayed(std::string_view text) {
+  return TextLabel(text, kWidgetInitDelayed);
+}
+
+TextLabel::TextLabel(std::string_view text,
+                     bool delayed_begin)
+    : SingularWidgetBase(delayed_begin) {
+  text_ = text;
+  BeginImpl();
+}
+
+bool TextLabel::BeginLate() { return BeginLateImpl(); }
+
+bool TextLabel::BoundBegin() {
+  ImGui::TextUnformatted(text_.data(), text_.data() + text_.size());
+  return true;
+}
+
+std::string_view TextInput::Label() const { return label_; }
+
+std::string& TextInput::Buffer() { return buffer_; }
+
+InputTextFlags& TextInput::InputFlags() { return flags_; }
+
+const std::string& TextInput::Buffer() const { return buffer_; }
+
+const InputTextFlags& TextInput::InputFlags() const { return flags_; }
+
+TextInput TextInput::Delayed(std::string_view label, std::string& buffer,
+                             InputTextFlags flags) {
+  return TextInput(label, buffer, flags, kWidgetInitDelayed);
+}
+
+TextInput::TextInput(std::string_view label, std::string& buffer,
+                     InputTextFlags flags,
+                     bool delayed_begin)
+    : SingularWidgetBase(delayed_begin), buffer_(buffer) {
+  label_ = label;
+  flags_ = flags;
+  BeginImpl();
+}
+
+bool TextInput::BeginLate() { return BeginLateImpl(); }
+
+bool TextInput::BoundBegin() {
+  return ImGui::InputText(label_.data(), &buffer_, flags_.Get());
 }
 
 const std::string& MenuItem::Text() const { return text_; }

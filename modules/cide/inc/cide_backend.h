@@ -9,17 +9,16 @@
 /// @file
 /// @ingroup cand_cide
 /// @brief CIDE Backend Implementation.
-///
-///
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-// Standard
-#include "caf.hpp"
+// clang-format off
 #include "cxxx.hpp"
-// CIDE Common Defs
-#include "cide_common.h"
+#include "caf.hpp"
 #include "wpl_core.hpp"
+
+#include "cide_common.h"
+// clang-format on
 
 /// @addtogroup cand_cide_backend
 /// @{
@@ -115,6 +114,7 @@ static constexpr cstring kDefaultToolchainCacheFilePath =
     "cache\\CideToolchainParams.json";
 static constexpr cstring kOsAppdataToolchainCacheFilePath =
     "cide\\cache\\CideToolchainParams.json";
+static constexpr cstring kRepoCacheFileName = "CideRepoParams.json";
 
 /// Volatile host env vars which must be loaded at runtime.
 /// Cached as "CideToolchainParams.json"
@@ -293,17 +293,41 @@ static_assert(JsonConvertible<IdeParamList>);
 /// a cidr (continious integrated developer repository) file.
 /// There can only be one "[name].cidr" file per folder structure.
 struct RepoParams {
-  ApiRes<void> LoadCached(const string& from);
-  ApiRes<void> Load();
+  static JsonObj ToJson(const RepoParams& obj) {
+    JsonObj json;
+    json["build_system_type"] = static_cast<int>(obj.build_system_type);
+    json["solution_path"] = obj.solution_path.string();
+    json["cache_path"] = obj.cache_path.string();
+    json["solution_file"] = obj.solution_file.string();
+    json["build_dir"] = obj.build_dir.string();
+    json["build_files"] = obj.build_files;
+    json["working_files"] = obj.working_files;
+    return json;
+  }
+
+  static RepoParams FromJson(const JsonObj& json) {
+    RepoParams obj;
+    obj.build_system_type =
+        static_cast<eRepoBuildSystemType>(json.at("build_system_type"));
+    obj.solution_path = json.at("solution_path").get<string>();
+    obj.cache_path = json.at("cache_path").get<string>();
+    obj.solution_file = json.at("solution_file").get<string>();
+    obj.build_dir = json.at("build_dir").get<string>();
+    obj.build_files = json.at("build_files");
+    obj.working_files = json.at("working_files");
+    return obj;
+  }
+
+  ApiRes<void> Load(const string& from);
   ApiRes<void> Save(const string& to);
-  ApiRes<void> SaveToDefault();
   eRepoBuildSystemType build_system_type{eRepoBuildSystemType::kManual};
+  stdfs::path solution_path;
 
   // Directory of the solution.[RELATIVE: Relative to the repository path.]
   // This is the working directory of the Solution's filesystem.
   // If you load a file from IDE code. This is the root directory.
   // For this solution's executable.
-  stdfs::path solution_path;
+  stdfs::path cache_path;
 
   // Solution file [RELATIVE: Relative to the repository path]
   // .cansln file where solution metadata is stored. Only 1 per solution.
@@ -322,117 +346,6 @@ struct RepoParams {
   // files.
   std::vector<stdfs::path> working_files;
 };
-
-//// IDE startup settings
-//// Represent a .caide file
-// class IdeSettings {
-//  public:
-//   static constexpr inline const wchar_t* kSolutionCacheSettingTag = L"#\n";
-//   static constexpr inline auto kDefaultRepoPath =
-//   L"C:\\candide\\repository\\"; static stdfs::path GetDefaultBinaryPath();
-//   static stdfs::path GetDefaultRepoPath();
-//   static stdfs::path GetDefaultSettingsFilePath();
-//
-//   const stdfs::path& ViewRepoPath() const;
-//   const stdfs::path& ViewBinaryPath() const;
-//   // Load the settings from a file. Return false if the file is invalid.
-//   bool Load();
-//   // Save the settings to a file in the current binary path.
-//   bool Save();
-//   // Cache a solution folder, if already chached, returns false.
-//   bool CacheSolution(const stdfs::path& sln_folder);
-//
-//   IdeSettings() = default;
-//   IdeSettings(const stdfs::path& bin_path);
-//   IdeSettings(const stdfs::path& bin_path, const stdfs::path& repo_path);
-//
-//  private:
-//   caf::CacheFile ide_cache_{GetDefaultSettingsFilePath()};
-//
-//   // Get the binary path of the IDE. Current working directory of the C++
-//   // context. NOTE: this a copy not reference. current_path() is a dangerous
-//   // global.
-//   // In the context of development it will be the cand-ide project folder.
-//   stdfs::path binary_path{
-//       GetDefaultBinaryPath()};  // fs::path to the IDE executable/binaries.
-//                                 // This is the current working path of
-//                                 // the C++ backend. fs::path to the
-//                                 // cand-ide.exe folder.
-//   stdfs::path repository_path{
-//       GetDefaultRepoPath()};  // fs::path to the folder containing all
-//       solutions
-//                               // Which belong to this IDE. Only these will be
-//                               // Scanned and populated in the solution list.
-//                               // Each folder which ccontains a '.casln' file
-//   // is a solution. Only one .casln is loaded per folder.
-//   // The rest are ignored.
-//
-//   std::vector<stdfs::path> cached_solutions{};
-//
-//   // inline void GenerateSettingsFile() const {
-//   //   std::ofstream(GetSettingsFilePath())
-//   //       // 1. Binary fs::path
-//   //       << binary_path.string()
-//   //       << '\n'
-//   //       // 2. Repository fs::path
-//   //       << repository_path.string()
-//   //       << '\n'
-//   //       // 3. Cached Solutions
-//   //       << [this]() -> string {
-//   //     std::wstring sln_folders = kSolutionCacheSettingTag;
-//   //     for (auto& cached_sln : this->cached_solutions) {
-//   //       sln_folders += cached_sln.native() + L'\n';
-//   //     }
-//   //     sln_folders += kSolutionCacheSettingTag;
-//   //     return string(sln_folders.cbegin(), sln_folders.cend());
-//   //   }();
-//   // }
-//
-//   //// Create folder default repository path of C://candide/repository/
-//   //// If folder does not exist. Adds repo path.
-//   //// Generate a default settings file and save it in the current binary
-//   path.
-//   // bool Default() {
-//   //   repository_path = "C:\\candide\\repository\\";
-//   //   try {
-//   //     std::filesystem::create_directories(repository_path);
-//   //     GenerateSettingsFile();
-//   //   } catch (...) {
-//   //     // Failed to load/create file.
-//   //     return false;
-//   //   }
-//   //   return true;
-//   // };
-// };
-//
-//// Represent a .casln file which holds metadata about a solution.
-//// Can be saved and reloaded.
-// struct SolutionSettings {
-//   stdfs::path GetSettingsFilePath() const;
-//   bool Default();
-//   bool Save();
-//   bool Load();
-//   // Directory of the solution.[RELATIVE: Relative to the repository path.]
-//   // This is the working directory of the Solution's filesystem.
-//   // If you load a file from IDE code. This is the root directory.
-//   // For this solution's executable.
-//   stdfs::path solution_path;
-//
-//   // Solution file [RELATIVE: Relative to the repository path]
-//   // .cansln file where solution metadata is stored. Only 1 per solution.
-//   // It is auto-inferred to be the file named '.casln' inside the solution
-//   path. stdfs::path solution_file;
-//
-//   // .camake files describing a build process of this solution.Autogenerated,
-//   // user-editable. unnamed file '.camake' is automatically included as the
-//   // first and default build file.
-//   std::vector<stdfs::path> build_files;
-//
-//   // Working files which belong to the solution. Not including .casln /
-//   .camake
-//   // files.
-//   std::vector<stdfs::path> working_files;
-// };
 
 // Model of an instance of a file tab in the editor.
 struct IdeFileTab {
@@ -638,38 +551,51 @@ struct IdeModel {
     return ApiRes<void>{};
   }
 
-  // Creates a new solution.
-  cxx::BoolError NewRepo(const string& name) {
-    // Check if the path exists. If it already does cancel.
-    // Query for a diffrent solution name.
-    stdfs::path sln_folder_path = ide_params_.repo_dir;
-    sln_folder_path += name;
+  expected<void, string> NewRepo(const string& repo_dir,
+                                 const string& repo_name) {
+    stdfs::path repo_path = repo_dir + "\\" + repo_name;
 
-    if (stdfs::exists(sln_folder_path)) {
-      return "Could not create solution dirs: Solution folder is already in "
-             "use.";
-    }
+    if (stdfs::exists(repo_path))
+      return std::unexpected<string>{
+          "Could not create solution dirs: Solution folder is already in "
+          "use."};
 
-    if (!stdfs::create_directories(sln_folder_path)) {
-      return "Could not create solution dirs: OS write access may not be "
-             "available.";
-    };
+    if (!stdfs::create_directories(repo_path))
+      return std::unexpected<string>{
+          "Could not create solution dirs: OS write access may not be "
+          "available."};
 
-    // Add this solution to the solution cache.
-    ide_params_.CacheRepo(sln_folder_path.string());
-
-    // Create the solution settings file.
-    // Arg to constructor is the root solution dir.
+    ide_params_.CacheRepo(repo_path.string());
     RepoParams sln_settings{};
-    sln_settings.solution_path = sln_folder_path;
-
-    // Generate default solution settings.
-    sln_settings.Save(name + ".cidr");
-
-    // Set as current active solution.
+    sln_settings.solution_path = repo_path;  // Root repo dir.
+    // sln_settings.Save((repo_path / ".cidr").string());  // Gens default.
+    sln_settings.working_files.push_back(repo_path / kRepoCacheFileName);
     active_repo_ = sln_settings;
+    return expected<void, string>{};
+  }
 
-    return true;
+  expected<void, string> OpenRepo(const stdfs::path& dir) {
+    if (!stdfs::exists(dir))
+      return std::unexpected<string>{
+          "Could not open repository. Folder does not exist."};
+    if (!stdfs::exists(dir / kRepoCacheFileName))
+      return std::unexpected<string>{
+          "Could not open repository. CideRepoParams.json not found."};
+    RepoParams repo_params{};
+    repo_params.solution_path = dir;
+    auto load_result = repo_params.Load((dir / kRepoCacheFileName).string());
+    if (!load_result)
+      return std::unexpected<string>{
+          string("Could not open repository. CideRepoParams.json possibly "
+                 "corrupted. Error detail: ") +
+          load_result.error().data};
+    this->active_repo_ = repo_params;
+    return expected<void, string>{};
+  }
+
+  void RefreshCurrentRepoRootDir(stdfs::path& old_root_dir) const {
+    if (old_root_dir != active_repo_.solution_path)
+      old_root_dir = active_repo_.solution_path;
   }
 
   // Open an existing solution as the active solution.
@@ -691,10 +617,10 @@ struct IdeModel {
     // Load the solution settings file.
     RepoParams sln_settings{};
     sln_settings.solution_path = sln_folder_path;
-    if (!sln_settings.Load()) {
-      return "Could not open solution: .casln' solution settings file possibly "
-             "corrupted.";
-    }
+    //if (!sln_settings.Load()) {
+    //  return "Could not open solution: .casln' solution settings file possibly "
+    //         "corrupted.";
+    //}
 
     // Load the solution settings into the active solution.
     active_repo_ = sln_settings;
