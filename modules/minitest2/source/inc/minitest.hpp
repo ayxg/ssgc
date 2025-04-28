@@ -1,3 +1,19 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2025 Anton Yashchenko
+// Licensed under the Apache License, Version 2.0(the "License");
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: Minitest Framework
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup minitest
+/// @brief Minitest framework's public api. Only methods and macros listed in
+///        this file should be used by users.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup minitest
+/// @{
 #pragma once
 #include "test_framework.hpp"
 
@@ -6,6 +22,9 @@
 /////////////////////////////////////////////////////////////////////////////////
 ///* Checks and Asserts */
 /////////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup minitest0_macro_api1_checks_and_asserts
+/// @{
 
 #define EXPECT_TRUE(x) minitest::gFramework.ExpectTrue(!!(x), #x)
 #define EXPECT_FALSE(x) minitest::gFramework.ExpectFalse(!!(x), #x)
@@ -57,12 +76,16 @@
 #define ASSERT_ANY_THROW_LOG(s,...) if (!minitest::gFramework.AssertAnyThrowLog([=](){s},#s,__VA_ARGS__)) return
 #define ASSERT_NO_THROW_LOG(s,...) if (!minitest::gFramework.AssertNoThrowLog([=](){s},#s,__VA_ARGS__)) return
 
+/// @} // end of minitest0_macro_api1_checks_and_asserts
 
 /////////////////////////////////////////////////////////////////////////////////
 ///* Unit Test Declarations */
 /////////////////////////////////////////////////////////////////////////////////
 
 // clang-format on
+
+/// @addtogroup minitest0_macro_api0_case_definitions
+/// @{
 
 /// @def TEST
 /// @brief Auto-registered free function unit test.
@@ -114,7 +137,7 @@
   }();                                                                      \
   static void test_suite##test_name##_impl(fixture_class& self)
 
-/// @def TEST_F
+/// @def TEST_FA
 /// @brief Auto-registered fixture unit test, calls Run() to test.
 /// @param test_suite Name of a unit test suite(category).
 /// @param test_name Name of the test case,must be unique per suite.
@@ -136,3 +159,35 @@
                                       test_suite##test_name##_impl); \
     return 0;                                                        \
   }()
+
+/// @def MINITEST_RUN
+/// @brief Runs unit tests, returns true if all passed.
+/// @see MinitestFramework::RunTests for accepted arg formats.
+#define MINITEST_RUN(...) minitest::gFramework.RunTests(__VA_ARGS__)
+
+/// @def MINITEST_CLI_RUN
+/// @brief Runs unit tests returns 0 if all passed, otherwise 1.
+#define MINITEST_CLI_RUN(argc, argv) minitest::gFramework.CliMain(argc, argv)
+
+
+/// @} // end of minitest0_macro_api0_case_definitions
+
+/// @} // end of minitest
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: Minitest Framework
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2025 Anton Yashchenko
+//
+// Licensed under the Apache License, Version 2.0(the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
