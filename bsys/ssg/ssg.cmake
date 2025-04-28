@@ -166,6 +166,115 @@ macro(ssg_generate_cxx_strict_warning_flags)
 endmacro()
 
 
+# Setup project options for internal executables and libraries.
+macro(SSG_ROOT_SETUP_PROJECT_OPTIONS)
+  include(CMakeDependentOption)
+  include(CheckCXXCompilerFlag)
+  include(bsys/cmake/LibFuzzer.cmake)
+
+  option(SSG_ROOT_CXX_ENABLE_HARDENING "Enable hardening" ON)
+  option(SSG_ROOT_CXX_ENABLE_COVERAGE "Enable coverage reporting" OFF)
+  cmake_dependent_option(
+      SSG_ROOT_CXX_ENABLE_GLOBAL_HARDENING
+      "Attempt to push hardening options to built dependencies"
+      ON
+      SSG_ROOT_CXX_ENABLE_HARDENING
+      OFF)
+
+  # check undefined behavior/address sanitizer support
+  ssg_check_cxx_sanitizer_support()
+
+  if(NOT PROJECT_IS_TOP_LEVEL OR SSG_ROOT_CXX_PACKAGING_MAINTAINER_MODE)
+      option(SSG_ROOT_CXX_ENABLE_IPO "Enable IPO/LTO" OFF)
+      option(SSG_ROOT_CXX_WARNINGS_AS_ERRORS "Treat Warnings As Errors" OFF)
+      option(SSG_ROOT_CXX_ENABLE_USER_LINKER "Enable user-selected linker" OFF)
+      option(SSG_ROOT_CXX_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" OFF)
+      option(SSG_ROOT_CXX_ENABLE_SANITIZER_LEAK "Enable leak sanitizer" OFF)
+      option(SSG_ROOT_CXX_ENABLE_SANITIZER_UNDEFINED "Enable undefined sanitizer" OFF)
+      option(SSG_ROOT_CXX_ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
+      option(SSG_ROOT_CXX_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
+      option(SSG_ROOT_CXX_ENABLE_UNITY_BUILD "Enable unity builds" OFF)
+      option(SSG_ROOT_CXX_ENABLE_CLANG_TIDY "Enable clang-tidy" OFF)
+      option(SSG_ROOT_CXX_ENABLE_CPPCHECK "Enable cpp-check analysis" OFF)
+      option(SSG_ROOT_CXX_ENABLE_PCH "Enable precompiled headers" OFF)
+      option(SSG_ROOT_CXX_ENABLE_CACHE "Enable ccache" OFF)
+  else()
+      option(SSG_ROOT_CXX_ENABLE_IPO "Enable IPO/LTO" ON)
+      option(SSG_ROOT_CXX_WARNINGS_AS_ERRORS "Treat Warnings As Errors" ON)
+      option(SSG_ROOT_CXX_ENABLE_USER_LINKER "Enable user-selected linker" OFF)
+      option(SSG_ROOT_CXX_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" ${SSG_CXX_COMPILER_HAS_ASAN})
+      option(SSG_ROOT_CXX_ENABLE_SANITIZER_LEAK "Enable leak sanitizer" OFF)
+      option(SSG_ROOT_CXX_ENABLE_SANITIZER_UNDEFINED "Enable undefined sanitizer" ${SSG_CXX_COMPILER_HAS_UBSAN})
+      option(SSG_ROOT_CXX_ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
+      option(SSG_ROOT_CXX_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
+      option(SSG_ROOT_CXX_ENABLE_UNITY_BUILD "Enable unity builds" OFF)
+      option(SSG_ROOT_CXX_ENABLE_CLANG_TIDY "Enable clang-tidy" ON)
+      option(SSG_ROOT_CXX_ENABLE_CPPCHECK "Enable cpp-check analysis" ON)
+      option(SSG_ROOT_CXX_ENABLE_PCH "Enable precompiled headers" OFF)
+      option(SSG_ROOT_CXX_ENABLE_CACHE "Enable ccache" ON)
+  endif()
+
+  if(NOT PROJECT_IS_TOP_LEVEL)
+  mark_as_advanced(
+          SSG_ROOT_CXX_ENABLE_IPO
+          SSG_ROOT_CXX_WARNINGS_AS_ERRORS
+          SSG_ROOT_CXX_ENABLE_USER_LINKER
+          SSG_ROOT_CXX_ENABLE_SANITIZER_ADDRESS
+          SSG_ROOT_CXX_ENABLE_SANITIZER_LEAK
+          SSG_ROOT_CXX_ENABLE_SANITIZER_UNDEFINED
+          SSG_ROOT_CXX_ENABLE_SANITIZER_THREAD
+          SSG_ROOT_CXX_ENABLE_SANITIZER_MEMORY
+          SSG_ROOT_CXX_ENABLE_UNITY_BUILD
+          SSG_ROOT_CXX_ENABLE_CLANG_TIDY
+          SSG_ROOT_CXX_ENABLE_CPPCHECK
+          SSG_ROOT_CXX_ENABLE_COVERAGE
+          SSG_ROOT_CXX_ENABLE_PCH
+          SSG_ROOT_CXX_ENABLE_CACHE)
+  endif()
+
+  ssg_check_cxx_libfuzzer_support(LIBFUZZER_SUPPORTED)
+  if(LIBFUZZER_SUPPORTED AND (SSG_ROOT_CXX_ENABLE_SANITIZER_ADDRESS 
+      OR SSG_ROOT_CXX_ENABLE_SANITIZER_THREAD 
+      OR SSG_ROOT_CXX_ENABLE_SANITIZER_UNDEFINED))
+      set(DEFAULT_FUZZER ON)
+  else()
+      set(DEFAULT_FUZZER OFF)
+  endif()
+
+  option(SSG_ROOT_CXX_BUILD_FUZZ_TESTS "Enable fuzz testing executable" ${DEFAULT_FUZZER})
+endmacro()
+
+
+macro(SSG_ROOT_HANDLE_PROJECT_OPTIONS)
+  if(SSG_ROOT_CXX_ENABLE_IPO)
+    include(CheckIPOSupported)
+    check_ipo_supported(RESULT result OUTPUT output)
+    if(result)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+    else()
+    message(WARNING "IPO is not supported: ${output}")
+    endif()
+  endif()
+
+  # check undefined behavior/address sanitizer support
+  ssg_check_cxx_sanitizer_support()
+
+  if(SSG_ROOT_CXX_ENABLE_HARDENING AND SSG_ROOT_CXX_ENABLE_GLOBAL_HARDENING)
+    include(bsys/cmake/Hardening.cmake)
+    if(NOT SSG_CXX_COMPILER_HAS_UBSAN 
+        OR SSG_ROOT_CXX_ENABLE_SANITIZER_UNDEFINED
+        OR SSG_ROOT_CXX_ENABLE_SANITIZER_ADDRESS
+        OR SSG_ROOT_CXX_ENABLE_SANITIZER_THREAD
+        OR SSG_ROOT_CXX_ENABLE_SANITIZER_LEAK)
+        set(ENABLE_UBSAN_MINIMAL_RUNTIME FALSE)
+    else()
+        set(ENABLE_UBSAN_MINIMAL_RUNTIME TRUE)
+    endif()
+    message("${SSG_ROOT_CXX_ENABLE_HARDENING} ${ENABLE_UBSAN_MINIMAL_RUNTIME} ${SSG_ROOT_CXX_ENABLE_SANITIZER_UNDEFINED}")
+    SSG_ROOT_CXX_enable_hardening(SSG_ROOT_CXX_options ON ${ENABLE_UBSAN_MINIMAL_RUNTIME})
+  endif()
+endmacro()
+
 ## @} // end of namespace ssg_cmake_extensions
 #---------------------------------------------------------------------------------------------------------------------#
 ## @project: C& Programming Language
