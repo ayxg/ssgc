@@ -1,10 +1,28 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2025 Anton Yashchenko
+// Licensed under the GNU Affero General Public License, Version 3.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: Minitest Framework
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup minitest
+/// @brief Minitest internal implementation.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
+// clang-format off
 #include "common.hpp"
 #include "fixture.hpp"
 #include "form.hpp"
 #include "unit_test.hpp"
+// clang-format on
 
 namespace minitest {
+
+/// @addtogroup minitest2_framework_impl
+/// @{
 
 /// Dynamic array which stores unit test definitions.
 using UnitTestArray = vector<UnitTest>;
@@ -15,13 +33,12 @@ using UnitTestIndexMap = map<UnitTestSignature, size_t, std::less<>>;
 struct MinitestFramework {  // NOSONAR - class is big because it models entire
                             // lib.
   UnitTestArray& tests;
-  UnitTestIndexMap
-      test_indices{};  // maps test names their index in the tests array.
+  UnitTestIndexMap test_indices{};  // maps test names to index in tests array.
   UnitTestArray::iterator curr_test{tests.end()};
   bool enable_stdout{true};
   reference_wrapper<ostream> target_stdout{std::ref(std::cout)};
 
-public:
+ public:
   MinitestFramework() = delete;
   explicit MinitestFramework(UnitTestArray& unit_tests) : tests(unit_tests) {}
 
@@ -146,11 +163,54 @@ public:
     return !is_failure_detected;
   }
 
+  bool RunTests() { return RunAllTests(); }
+
+  bool RunTests(const string& suite_name) {
+    return RunTestSuite(suite_name);
+  }
+
+  bool RunTests(const string& suite_name, const string& test_name) {
+    return RunUnitTest(suite_name, test_name);
+  };
+
+  bool RunTests(const string& suite_name,
+                       vector<string>::const_iterator test_list_beg,
+                       vector<string>::const_iterator test_list_end) {
+    return RunUnitTestRange(suite_name, test_list_beg,
+                                       test_list_end);
+  };
+
+  bool RunTests(const UnitTestSignature& ut_signature) {
+    return RunUnitTest(ut_signature);
+  }
+
   /// Command line interface main method.
   /// @note unlike 'RunTests' this method returns 0 on success, non-zero on
   /// failure.
   int CliMain(int argc, char* argv[]) {
     vector<string> args{argv, argv + argc};
+    // Handle special case cli args.
+    if (args.size() > 1) {
+      // Scan mode
+      if (args[1] == "--scan") {
+        std::stringstream ss{""};
+        if (args.size() > 2) {
+          for (auto& tcase : tests) {
+            if (std::any_of(args.begin() + 2, args.end(),
+                            [&tcase](auto& t) { return t == tcase.suite; })) {
+              ss << tcase.suite << ";" << tcase.name << ";";
+            }
+          }
+        } else {
+          for (auto& tcase : tests) {
+            ss << tcase.suite << ";" << tcase.name << ";";
+          }
+        }
+        std::cout << ss.str();
+        return 0;
+      }
+    }
+    // else run tests...
     switch (args.size()) {
       case 1:
         return !RunAllTests();
@@ -341,8 +401,8 @@ public:
   template <class StrT>
   bool AssertFalse(bool v, StrT&& value_code) {
     if (v) {
-      RecordFailure(FmtTagFail(
-          FmtTagAssert(FmtExpectFalse(forward<StrT>(value_code)))));
+      RecordFailure(
+          FmtTagFail(FmtTagAssert(FmtExpectFalse(forward<StrT>(value_code)))));
       return false;
     }
     return true;
@@ -578,8 +638,8 @@ public:
   bool AssertFalseLog(bool v, StrT&& value_code, BadLogT&& badlog,
                       GoodLogT&& goodlog) {
     if (v) {
-      RecordFailure(FmtTagFail(
-          FmtTagAssert(FmtExpectFalse(forward<StrT>(value_code)))));
+      RecordFailure(
+          FmtTagFail(FmtTagAssert(FmtExpectFalse(forward<StrT>(value_code)))));
       RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
       return false;
     }
@@ -706,4 +766,24 @@ static UnitTestArray gTestMap{};  // NOSONAR
 /// Minitest library's global test framework.
 static MinitestFramework gFramework{gTestMap};  // NOSONAR
 
+/// @} // end of minitest2_framework_impl
+
 }  // namespace minitest
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: Minitest Framework
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2025 Anton Yashchenko
+//
+// Licensed under the GNU Affero General Public License, Version 3. you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
