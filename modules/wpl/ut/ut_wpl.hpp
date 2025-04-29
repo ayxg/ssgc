@@ -1,7 +1,7 @@
 #include "minitest.hpp"
 #include "wpl_core.hpp"
 
-TEST(TestCase_WplCliSession, Test_SendMessagePing) {
+TEST(WplCliSession, SendMessagePing) {
   wpl::CmdShell cmd_sesh{};
   std::string read_buffer{};
   EXPECT_TRUE(wpl::ApiRes<void>{} == cmd_sesh.Create(10));
@@ -12,7 +12,7 @@ TEST(TestCase_WplCliSession, Test_SendMessagePing) {
 }
 
 
-TEST(TestCase_WplRunExe, Test_SimpleCommand) {
+TEST(WplRunExe, SimpleCommand) {
   // @note the use of /c to run the cmd.exe in close mode.
   // You may also call cmd or cmd.exe, system PATHS are searched for files.
   auto run_res =
@@ -26,7 +26,7 @@ TEST(TestCase_WplRunExe, Test_SimpleCommand) {
 }
 
 
-TEST(TestCase_WplCliSession, Test_WriteToStdin) {
+TEST(WplCliSession, WriteToStdin) {
   wpl::CmdShell cmd_sesh;
   std::string read_buffer{};
   auto curr_path = wpl::stdfs::current_path().string();
@@ -38,7 +38,7 @@ TEST(TestCase_WplCliSession, Test_WriteToStdin) {
 }
 
 
-TEST(TestCase_WplCliSession, Test_WriteToStdinLargeString) {
+TEST(WplCliSession, WriteToStdinLargeString) {
   // Test writing a string which exceed the input buffer step
   // size, usually a small amount.
   // Find the actual size in : wpl::CmdSession::kIoStepBufferSize
@@ -52,7 +52,7 @@ TEST(TestCase_WplCliSession, Test_WriteToStdinLargeString) {
 }
 
 
-TEST(TestCase_WplRunExe, Test_CidrLoad) {
+TEST(WplRunExe, CidrLoad) {
   // Find vswhere executable.
   // Default path: vswhere is included with the installer as of Visual Studio
   //  2017 version 15.2 and later, and can be found at the following
