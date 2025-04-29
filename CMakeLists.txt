@@ -226,19 +226,25 @@ add_test(
   NAME ut_cxxx
   COMMAND $<TARGET_FILE:cxxx_minitest>)
 
-
+#--------------------------------------
+# Unit Test : CxxxLibraryTests
+#--------------------------------------
 set(CXXX_MINITEST_HEADERS ut_expected.h)
 set(CXXX_MINITEST_TEST_DIR modules/cxxx/ut)
 
 minitest_add_executable(
-    NAME CxxxLibraryTests
-    INCLUDE_DIRECTORIES modules/cxxx/ut
-    LINK_LIBS 
-      ssgmod::mta::mta_interface 
-      ssgmod::cxxx::cxxx_interface
-    TEST_HEADERS ut_expected.h
+  NAME CxxxLibraryTests
+  INCLUDE_DIRECTORIES modules/cxxx/ut
+  LINK_LIBS 
+    ssgmod::mta::mta_interface 
+    ssgmod::cxxx::cxxx_interface
+  TEST_HEADERS ut_expected.h
 )
-
+minitest_from_headers(
+  PREFIX UtCxxx
+  TARGET CxxxLibraryTests
+  SCAN_ALL
+)
 
 # ut : wpl module
 add_executable(wpl_minitest modules/wpl/ut/utmain.cpp)

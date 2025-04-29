@@ -40,7 +40,7 @@ target_include_directories(MinitestLibrary INTERFACE "source/inc")
 add_library(MinitestProject::MinitestLibrary ALIAS MinitestLibrary)
 
 # Must be set for 'UseMinitest.cmake'.
-set(MINITEST_LIBRARY MinitestLibrary) 
+set(MINITEST_LIBRARY MinitestLibrary PARENT_SCOPE) 
 
 # enable_tests() must also be called by the consuming project.
 if(${MINITEST_CONFIG_ENABLE_CMAKE_INTEGRATION})
