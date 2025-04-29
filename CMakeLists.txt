@@ -215,7 +215,7 @@ endif()
 enable_testing()
 
 
-# Test Suite : CxxxModuleTests
+# Test Group : CxxxModuleTests
 minitest_add_executable(
   NAME                CxxxModuleTests
   INCLUDE_DIRECTORIES modules/cxxx/ut
@@ -230,7 +230,7 @@ minitest_from_headers(
   SCAN_ALL
 )
 
-# Test Suite : WplLibraryTests
+# Test Group : WplLibraryTests
 minitest_add_executable(
   NAME                WplModuleTests
   INCLUDE_DIRECTORIES modules/wpl/ut
@@ -242,6 +242,24 @@ minitest_from_headers(
   PREFIX UtWpl
   TARGET WplModuleTests
   SCAN_ALL
+)
+
+
+# Test Group : CndModuleTests
+minitest_add_executable(
+  NAME                CndModuleTests
+  INCLUDE_DIRECTORIES modules/cnd/inc 
+                      modules/cnd/ut
+  WORKING_DIRECTORY   modules/cnd/ut/res
+  LINK_LIBS           ssgmod::mta::mta_interface
+                      ssgmod::cxxx::cxxx_interface
+  TEST_HEADERS        test_trtools_parser.hpp
+)
+
+minitest_from_headers(
+  PREFIX UtCnd
+  TARGET CndModuleTests
+  TEST_HEADERS test_trtools_parser.hpp
 )
 
 #[=[
