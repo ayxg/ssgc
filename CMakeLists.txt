@@ -214,49 +214,35 @@ endif()
 #------------------------------------------------------------------------------
 enable_testing()
 
-# ut : cxxx module
-add_executable(cxxx_minitest modules/cxxx/ut/utmain.cpp)
-target_link_libraries(cxxx_minitest
-  ssgmod::minitest::minitest_interface
-  ssgmod::mta::mta_interface
-  ssgmod::cxxx::cxxx_interface
-)
-target_include_directories(cxxx_minitest INTERFACE modules/cxxx/ut/)
-add_test(
-  NAME ut_cxxx
-  COMMAND $<TARGET_FILE:cxxx_minitest>)
 
-#--------------------------------------
-# Unit Test : CxxxLibraryTests
-#--------------------------------------
-set(CXXX_MINITEST_HEADERS ut_expected.h)
-set(CXXX_MINITEST_TEST_DIR modules/cxxx/ut)
-
+# Test Suite : CxxxModuleTests
 minitest_add_executable(
-  NAME CxxxLibraryTests
+  NAME                CxxxModuleTests
   INCLUDE_DIRECTORIES modules/cxxx/ut
-  LINK_LIBS 
-    ssgmod::mta::mta_interface 
-    ssgmod::cxxx::cxxx_interface
-  TEST_HEADERS ut_expected.h
+  LINK_LIBS           ssgmod::mta::mta_interface 
+                      ssgmod::cxxx::cxxx_interface
+  TEST_HEADERS        ut_expected.h
 )
+
 minitest_from_headers(
   PREFIX UtCxxx
-  TARGET CxxxLibraryTests
+  TARGET CxxxModuleTests
   SCAN_ALL
 )
 
-# ut : wpl module
-add_executable(wpl_minitest modules/wpl/ut/utmain.cpp)
-target_link_libraries(wpl_minitest
-  ssgmod::minitest::minitest_interface
-  ssgmod::wpl::wpl_interface
+# Test Suite : WplLibraryTests
+minitest_add_executable(
+  NAME                WplModuleTests
+  INCLUDE_DIRECTORIES modules/wpl/ut
+  LINK_LIBS           ssgmod::wpl::wpl_interface
+  TEST_HEADERS        ut_wpl.hpp
 )
-target_include_directories(wpl_minitest INTERFACE modules/wpl/ut/)
-add_test(
-  NAME ut_wpl
-  COMMAND $<TARGET_FILE:wpl_minitest>)
 
+minitest_from_headers(
+  PREFIX UtWpl
+  TARGET WplModuleTests
+  SCAN_ALL
+)
 
 #[=[
   # Unit Tests : C& Compiler Module
