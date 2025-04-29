@@ -57,6 +57,7 @@ SSG_GITPKG_NLOHMANJSON() # Json parsing library
 add_subdirectory(modules/mta)
 add_subdirectory(modules/cxxx)
 add_subdirectory(modules/minitest)
+add_subdirectory(modules/minitest2)
 add_subdirectory(modules/caoco)
 add_subdirectory(modules/caf)
 add_subdirectory(modules/cgui)
@@ -75,7 +76,7 @@ SSG_ROOT_SETUP_PROJECT_OPTIONS()
 SSG_ROOT_HANDLE_PROJECT_OPTIONS()
 ssg_generate_cxx_strict_warning_flags()
 
-include(bsys/cmake/UseCandLang.cmake)
+# include(bsys/cmake/UseCandLang.cmake)
 
 #cand_configure()
 
@@ -213,28 +214,52 @@ endif()
 #------------------------------------------------------------------------------
 enable_testing()
 
-# ut : cxxx module
-add_executable(cxxx_minitest modules/cxxx/ut/utmain.cpp)
-target_link_libraries(cxxx_minitest
-  ssgmod::minitest::minitest_interface
-  ssgmod::mta::mta_interface
-  ssgmod::cxxx::cxxx_interface
+# Test Group : CxxxModuleTests
+minitest_add_executable(
+  NAME                CxxxModuleTests
+  INCLUDE_DIRECTORIES modules/cxxx/ut
+  LINK_LIBS           ssgmod::mta::mta_interface 
+                      ssgmod::cxxx::cxxx_interface
+  TEST_HEADERS        ut_expected.h
 )
-target_include_directories(cxxx_minitest INTERFACE modules/cxxx/ut/)
-add_test(
-  NAME ut_cxxx
-  COMMAND $<TARGET_FILE:cxxx_minitest>)
 
-# ut : wpl module
-add_executable(wpl_minitest modules/wpl/ut/utmain.cpp)
-target_link_libraries(wpl_minitest
-  ssgmod::minitest::minitest_interface
-  ssgmod::wpl::wpl_interface
+minitest_from_headers(
+  PREFIX UtCxxx
+  TARGET CxxxModuleTests
+  SCAN_ALL
 )
-target_include_directories(wpl_minitest INTERFACE modules/wpl/ut/)
-add_test(
-  NAME ut_wpl
-  COMMAND $<TARGET_FILE:wpl_minitest>)
+
+# Test Group : WplLibraryTests
+minitest_add_executable(
+  NAME                WplModuleTests
+  INCLUDE_DIRECTORIES modules/wpl/ut
+  LINK_LIBS           ssgmod::wpl::wpl_interface
+  TEST_HEADERS        ut_wpl.hpp
+)
+
+minitest_from_headers(
+  PREFIX UtWpl
+  TARGET WplModuleTests
+  SCAN_ALL
+)
+
+
+# Test Group : CndModuleTests
+minitest_add_executable(
+  NAME                CndModuleTests
+  INCLUDE_DIRECTORIES modules/cnd/inc 
+                      modules/cnd/ut
+  WORKING_DIRECTORY   modules/cnd/ut/res
+  LINK_LIBS           ssgmod::mta::mta_interface
+                      ssgmod::cxxx::cxxx_interface
+  TEST_HEADERS        test_trtools_parser.hpp
+)
+
+minitest_from_headers(
+  PREFIX UtCnd
+  TARGET CndModuleTests
+  TEST_HEADERS test_trtools_parser.hpp
+)
 
 
 #[=[

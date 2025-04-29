@@ -19,8 +19,7 @@
 #include "cxxx.hpp"
 #include "minitest.hpp"
 
-namespace ut {
-INLINE_MINITEST(Test_CxxExpected, TestCase_CxxExpected) {
+TEST(CxxExpected, Expected) {
   using ExpectedString = cxx::Expected<std::string>;
   ExpectedString e_good = ExpectedString::Success("42");
   ExpectedString e_bad = ExpectedString::Failure("42");
@@ -40,10 +39,8 @@ INLINE_MINITEST(Test_CxxExpected, TestCase_CxxExpected) {
   EXPECT_FALSE(e_good);
   EXPECT_FALSE(e_bad);
 }
-INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(Test_CxxExpected, TestCase_CxxExpected);
 
-INLINE_MINITEST(Test_CxxExpected, TestCase_PartialExpectedConstrtuct) {
+TEST(CxxExpected, PartialExpectedConstrtuct) {
   using PartialExpectedString = cxx::PartialExpected<std::string, std::string>;
   PartialExpectedString e_good =
       PartialExpectedString::Success("Always", "Good");
@@ -85,10 +82,8 @@ INLINE_MINITEST(Test_CxxExpected, TestCase_PartialExpectedConstrtuct) {
   EXPECT_FALSE(e_good);
   EXPECT_FALSE(e_bad);
 }
-INLINE_END_MINITEST;
-MINITEST_REGISTER_CASE(Test_CxxExpected, TestCase_PartialExpectedConstrtuct);
 
-INLINE_MINITEST(Test_CxxExpected, TestCase_BoolError) {
+TEST(CxxExpected, BoolError) {
   using BoolError = cxx::BoolError;
   BoolError bool_err = BoolError("Error");
   BoolError bool_good = BoolError(true);
@@ -108,9 +103,6 @@ INLINE_MINITEST(Test_CxxExpected, TestCase_BoolError) {
   EXPECT_TRUE(bool_good);
   EXPECT_FALSE(bool_bad);
 }
-INLINE_END_MINITEST
-MINITEST_REGISTER_CASE(Test_CxxExpected, TestCase_BoolError);
-}  // namespace ut
 
 #endif HEADER_GUARD_CAOCO_UNIT_TESTS_UT0_EXPECTED_H
 /// @} // end of unittest0_cppextended
