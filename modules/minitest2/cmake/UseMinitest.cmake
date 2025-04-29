@@ -366,14 +366,17 @@ function(minitest_from_headers)
   foreach(header_file IN ITEMS "${arg_HEADERS}") # Scan all given headers for test cases.
     get_target_property(tgt_includes ${arg_TARGET} INCLUDE_DIRECTORIES)
     find_file(header_file_path 
-        NAMES "${header_file}"
+        "${header_file}"
         PATHS ${tgt_includes}
-        NO_DEFAULT_PATH
+        NO_DEFAULT_PATH NO_CACHE 
     )
     if(header_file_path)
       get_filename_component(abs_header_file_path ${header_file_path} ABSOLUTE)
     else()
-      message(FATAL_ERROR "[Minitest] Test header file not found in target include directories.")
+      message(FATAL_ERROR "[Minitest] Test header file not found in target include directories.
+        File: ${header_file}
+        Directories: ${tgt_includes}
+      ")
     endif()
 
     set(this_file_signatures "")
@@ -560,7 +563,7 @@ function(z_minitest_add_target_tests_from_list)
               ${case_name}
         WORKING_DIRECTORY ${arg_WORKING_DIRECTORY}
       )
-      message(VERBOSE "[Minitest] Added test: ${idx} - ${_TEST_NAME}")
+      message(STATUS "[Minitest] Added test: ${idx} - ${_TEST_NAME}")
     endforeach()
   endif()
 endfunction()
