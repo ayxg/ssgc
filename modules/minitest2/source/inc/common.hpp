@@ -79,14 +79,15 @@ static_assert(iStreamable<string>::value,
 /// functionality. Define a stringstream input operator for your type and
 /// minitest will apply it when logging errors from that value type.
 template <class T>
-static enable_if_t<iStreamableV<T>, string> OverloadToString(T v) {
+static enable_if_t<iStreamableV<T>, string> OverloadToString(T&& v) {
   stringstream ss{};
-  ss << v;
+  ss << std::forward<T>(v);
   return ss.str();
-}
+} 
+
 
 template <class T>
-static enable_if_t<!iStreamableV<T>, string> OverloadToString(T v) {
+static enable_if_t<!iStreamableV<T>, string> OverloadToString(T&& v) {
   stringstream ss{};
   ss << "[Address][" << &v << "]";
   return ss.str();
