@@ -1,7 +1,7 @@
 #include "minitest.hpp"
 #include "wpl_core.hpp"
 
-MINITEST(TestCase_WplCliSession, Test_SendMessagePing) {
+TEST(TestCase_WplCliSession, Test_SendMessagePing) {
   wpl::CmdShell cmd_sesh{};
   std::string read_buffer{};
   EXPECT_TRUE(wpl::ApiRes<void>{} == cmd_sesh.Create(10));
@@ -10,9 +10,9 @@ MINITEST(TestCase_WplCliSession, Test_SendMessagePing) {
           .value()
           .starts_with("Pinging DESKTOP-KSJHG2V [::1] with 32 bytes of data:"));
 }
-END_MINITEST;
 
-MINITEST(TestCase_WplRunExe, Test_SimpleCommand) {
+
+TEST(TestCase_WplRunExe, Test_SimpleCommand) {
   // @note the use of /c to run the cmd.exe in close mode.
   // You may also call cmd or cmd.exe, system PATHS are searched for files.
   auto run_res =
@@ -24,9 +24,9 @@ MINITEST(TestCase_WplRunExe, Test_SimpleCommand) {
     EXPECT_TRUE(run_res.value().out.value_or("") == "ILoveCpp\r\n");
   }
 }
-END_MINITEST;
 
-MINITEST(TestCase_WplCliSession, Test_WriteToStdin) {
+
+TEST(TestCase_WplCliSession, Test_WriteToStdin) {
   wpl::CmdShell cmd_sesh;
   std::string read_buffer{};
   auto curr_path = wpl::stdfs::current_path().string();
@@ -36,9 +36,9 @@ MINITEST(TestCase_WplCliSession, Test_WriteToStdin) {
   EXPECT_TRUE("hello" == cmd_sesh.SendMsg("echo hello"));
   EXPECT_TRUE(wpl::ApiRes<void>{} == cmd_sesh.Close());
 }
-END_MINITEST;
 
-MINITEST(TestCase_WplCliSession, Test_WriteToStdinLargeString) {
+
+TEST(TestCase_WplCliSession, Test_WriteToStdinLargeString) {
   // Test writing a string which exceed the input buffer step
   // size, usually a small amount.
   // Find the actual size in : wpl::CmdSession::kIoStepBufferSize
@@ -50,9 +50,9 @@ MINITEST(TestCase_WplCliSession, Test_WriteToStdinLargeString) {
   EXPECT_TRUE(wpl::ApiRes<void>{} == cmd_sesh.Create(10));
   EXPECT_TRUE(expected_answer == cmd_sesh.SendMsg(input));
 }
-END_MINITEST;
 
-MINITEST(TestCase_WplRunExe, Test_CidrLoad) {
+
+TEST(TestCase_WplRunExe, Test_CidrLoad) {
   // Find vswhere executable.
   // Default path: vswhere is included with the installer as of Visual Studio
   //  2017 version 15.2 and later, and can be found at the following
@@ -95,4 +95,3 @@ MINITEST(TestCase_WplRunExe, Test_CidrLoad) {
   //                         compile_result.exit_code, compile_result.out.value())
   //          << std::endl;
 }
-END_MINITEST;
