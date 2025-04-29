@@ -28,7 +28,7 @@ if(CMAKE_CXX_STANDARD LESS 14)
   message(FATAL_ERROR "[Minitest] C++14 is required to build Minitest library.")
 endif()
 
-option(MINITEST_CONFIG_ENABLE_TESTS "[Minitest] Enable test targets. Requires 'MINITEST_CONFIG_ENABLE_CMAKE_INTEGRATION'." OFF)
+option(MINITEST_CONFIG_ENABLE_TESTS "[Minitest] Enable test targets. Requires 'MINITEST_CONFIG_ENABLE_CMAKE_INTEGRATION'." ON)
 option(MINITEST_CONFIG_BUILD_DOCS "[Minitest] Enable building documentation." OFF)
 option(MINITEST_CONFIG_ENABLE_CMAKE_INTEGRATION "[Minitest] Enables and includes unit Minitest-CTest integration functions." ON)
 

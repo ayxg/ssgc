@@ -57,6 +57,7 @@ SSG_GITPKG_NLOHMANJSON() # Json parsing library
 add_subdirectory(modules/mta)
 add_subdirectory(modules/cxxx)
 add_subdirectory(modules/minitest)
+add_subdirectory(modules/minitest2)
 add_subdirectory(modules/caoco)
 add_subdirectory(modules/caf)
 add_subdirectory(modules/cgui)
@@ -75,7 +76,7 @@ SSG_ROOT_SETUP_PROJECT_OPTIONS()
 SSG_ROOT_HANDLE_PROJECT_OPTIONS()
 ssg_generate_cxx_strict_warning_flags()
 
-include(bsys/cmake/UseCandLang.cmake)
+# include(bsys/cmake/UseCandLang.cmake)
 
 #cand_configure()
 
@@ -224,6 +225,20 @@ target_include_directories(cxxx_minitest INTERFACE modules/cxxx/ut/)
 add_test(
   NAME ut_cxxx
   COMMAND $<TARGET_FILE:cxxx_minitest>)
+
+
+set(CXXX_MINITEST_HEADERS ut_expected.h)
+set(CXXX_MINITEST_TEST_DIR modules/cxxx/ut)
+
+minitest_add_executable(
+    NAME CxxxLibraryTests
+    INCLUDE_DIRECTORIES modules/cxxx/ut
+    LINK_LIBS 
+      ssgmod::mta::mta_interface 
+      ssgmod::cxxx::cxxx_interface
+    TEST_HEADERS ut_expected.h
+)
+
 
 # ut : wpl module
 add_executable(wpl_minitest modules/wpl/ut/utmain.cpp)
