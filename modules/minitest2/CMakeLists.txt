@@ -23,10 +23,8 @@ Options:
 #]====================================================================================================================]
 cmake_minimum_required (VERSION 3.8)
 project(MinitestFramework LANGUAGES C CXX)
-
-if(CMAKE_CXX_STANDARD LESS 14)
-  message(FATAL_ERROR "[Minitest] C++14 is required to build Minitest library.")
-endif()
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
 option(MINITEST_CONFIG_ENABLE_TESTS "[Minitest] Enable test targets. Requires 'MINITEST_CONFIG_ENABLE_CMAKE_INTEGRATION'." ON)
 option(MINITEST_CONFIG_BUILD_DOCS "[Minitest] Enable building documentation." OFF)
@@ -36,8 +34,28 @@ option(MINITEST_CONFIG_ENABLE_CMAKE_INTEGRATION "[Minitest] Enables and includes
   Source Targets
 #]============================================================================]
 add_library(MinitestLibrary INTERFACE)
-target_include_directories(MinitestLibrary INTERFACE "source/inc")
-add_library(MinitestProject::MinitestLibrary ALIAS MinitestLibrary)
+
+set(MINITEST_EXPORT_HEADERS "")
+list(APPEND MINITEST_EXPORT_HEADERS
+  source/inc/common.hpp
+  source/inc/fixture.hpp
+  source/inc/form.hpp
+  source/inc/minitest.hpp
+  source/inc/test_framework.hpp
+  source/inc/unit_test.hpp
+)
+
+set_target_properties(
+  MinitestLibrary 
+  PROPERTIES  CMAKE_CXX_STANDARD 14
+              CMAKE_CXX_STANDARD_REQUIRED ON
+)
+
+target_include_directories(
+  MinitestLibrary 
+  INTERFACE "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source/inc>" # in-project module
+            "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"          # installed module
+)
 
 # Must be set for 'UseMinitest.cmake'.
 set(MINITEST_LIBRARY MinitestLibrary PARENT_SCOPE) 
@@ -88,6 +106,39 @@ if(${MINITEST_CONFIG_BUILD_DOCS})
   endif (DOXYGEN_FOUND)
 endif(${MINITEST_CONFIG_BUILD_DOCS})
 
+#[============================================================================[
+  Install
+#]============================================================================]
+
+# Export library target.
+install(TARGETS MinitestLibrary
+  EXPORT MinitestLibraryTargets
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" # standard dirs
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+)
+
+# Export interface headers.
+install(FILES ${MINITEST_EXPORT_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+# Install library targets file.
+install(EXPORT MinitestLibraryTargets
+  FILE MinitestLibraryTargets.cmake
+  NAMESPACE MinitestLibrary::
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/MinitestLibrary"
+)
+
+configure_package_config_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in
+  "${CMAKE_CURRENT_BINARY_DIR}/MinitestLibraryConfig.cmake"
+  INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/MinitestLibrary"
+)
+
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/MinitestLibraryConfig.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MinitestLibrary
+)
 
 #[====================================================================================================================[
 Copyright 2025 Anton Yashchenko

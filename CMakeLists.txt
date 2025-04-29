@@ -54,10 +54,10 @@ SSG_GITPKG_IMGUI_SFML()
 SSG_GITPKG_NLOHMANJSON() # Json parsing library
 
 # SSG Internal Modules
-add_subdirectory(modules/mta)
-add_subdirectory(modules/cxxx)
 add_subdirectory(modules/minitest)
 add_subdirectory(modules/minitest2)
+add_subdirectory(modules/mta)
+add_subdirectory(modules/cxxx)
 add_subdirectory(modules/caoco)
 add_subdirectory(modules/caf)
 add_subdirectory(modules/cgui)
@@ -75,8 +75,6 @@ SSG_ROOT_SETUP_PROJECT_OPTIONS()
 #------------------------------------------------------------------------------
 SSG_ROOT_HANDLE_PROJECT_OPTIONS()
 ssg_generate_cxx_strict_warning_flags()
-
-# include(bsys/cmake/UseCandLang.cmake)
 
 #cand_configure()
 
@@ -103,13 +101,7 @@ target_sources(cnd_compiler PRIVATE
 )
 
 target_include_directories(cnd_compiler PUBLIC 
-    #modules/cnd/imp
     modules/cnd/inc
-    #modules/cnd/inc/ccapi
-    #modules/cnd/inc/cldata
-    #modules/cnd/inc/cldev
-    #modules/cnd/inc/corevals
-    #modules/cnd/inc/trtools
 )
 
 target_link_libraries(cnd_compiler
@@ -215,36 +207,6 @@ endif()
 enable_testing()
 
 
-# Test Group : CxxxModuleTests
-minitest_add_executable(
-  NAME                CxxxModuleTests
-  INCLUDE_DIRECTORIES modules/cxxx/ut
-  LINK_LIBS           ssgmod::mta::mta_interface 
-                      ssgmod::cxxx::cxxx_interface
-  TEST_HEADERS        ut_expected.h
-)
-
-minitest_from_headers(
-  PREFIX UtCxxx
-  TARGET CxxxModuleTests
-  SCAN_ALL
-)
-
-# Test Group : WplLibraryTests
-minitest_add_executable(
-  NAME                WplModuleTests
-  INCLUDE_DIRECTORIES modules/wpl/ut
-  LINK_LIBS           ssgmod::wpl::wpl_interface
-  TEST_HEADERS        ut_wpl.hpp
-)
-
-minitest_from_headers(
-  PREFIX UtWpl
-  TARGET WplModuleTests
-  SCAN_ALL
-)
-
-
 # Test Group : CndModuleTests
 minitest_add_executable(
   NAME                CndModuleTests
@@ -261,151 +223,3 @@ minitest_from_headers(
   TARGET CndModuleTests
   TEST_HEADERS test_trtools_parser.hpp
 )
-
-#[=[
-  # Unit Tests : C& Compiler Module
-     # ssgmod::minitest::minitest_interface
-     # ssgmod::mta::mta_interface
-     # ssgmod::cxxx::cxxx_interface
-     # ssgmod::caoco::caoco_interface
-
-  set(MINITEST_LIBRARY ssgmod::minitest::minitest_interface)
-
-  #--------------------------------------------------------------
-  # Unit Tests : C& Compiler Module
-  #--------------------------------------------------------------
-  set(SSG_UT_CND_INCLUDE_DIRS modules/caoco/ut/)
-  set(SSG_UT_CND_WORKING_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/caoco/ut/res/)
-  set(SSG_UT_CND_LIBS_TO_LINK 
-    ssgmod::minitest::minitest_interface
-    ssgmod::mta::mta_interface
-    ssgmod::cxxx::cxxx_interface 
-    ssgmod::caoco::caoco_interface
-  )
-
-  # Executables
-  if(0)
-    add_minitest_executable(
-      NAME ut_cnd_Lexer
-      SOURCES ${SSG_UT_CND_INCLUDE_DIRS}ut_cnd_Lexer.cpp
-      INCLUDE_DIRECTORIES ${SSG_UT_CND_INCLUDE_DIRS}
-      LINK_LIBS ${SSG_UT_CND_LIBS_TO_LINK}
-    )
-
-    add_minitest_executable(
-      NAME ut_cnd_TokenScope
-      SOURCES ${SSG_UT_CND_INCLUDE_DIRS}ut_cnd_TokenScope.cpp
-      INCLUDE_DIRECTORIES ${SSG_UT_CND_INCLUDE_DIRS}
-      LINK_LIBS ${SSG_UT_CND_LIBS_TO_LINK}
-    )
-
-    add_minitest_executable(
-      NAME ut_cnd_ParserBasics
-      SOURCES ${SSG_UT_CND_INCLUDE_DIRS}ut_cnd_ParserBasics.cpp
-      INCLUDE_DIRECTORIES ${SSG_UT_CND_INCLUDE_DIRS}
-      LINK_LIBS ${SSG_UT_CND_LIBS_TO_LINK}
-    )
-
-    add_minitest_executable(
-      NAME ut_cnd_Build
-      SOURCES ${SSG_UT_CND_INCLUDE_DIRS}ut_cnd_Build.cpp
-      INCLUDE_DIRECTORIES ${SSG_UT_CND_INCLUDE_DIRS}
-      LINK_LIBS ${SSG_UT_CND_LIBS_TO_LINK}
-    )
-
-    # Modules
-
-    add_minitest_module(
-      TARGET ut_cnd_Lexer
-      MODULE_NAME Test_Lexer
-      WORKING_DIRECTORY ${SSG_UT_CND_WORKING_DIR}
-      CASE_NAMES TestCase_Keywords
-    )
-
-    add_minitest_module(
-      TARGET ut_cnd_TokenScope
-      MODULE_NAME Test_TokenScope
-      WORKING_DIRECTORY ${SSG_UT_CND_WORKING_DIR}
-      CASE_NAMES 
-      TestCase_ParenScopeFinder
-      TestCase_ListScopeFinder
-      TestCase_FrameScopeFinder
-      TestCase_StatementScopeFinder
-    )
-
-    add_minitest_module(
-      TARGET ut_cnd_ParserBasics
-      MODULE_NAME Test_ParserBasics
-      WORKING_DIRECTORY ${SSG_UT_CND_WORKING_DIR}
-      CASE_NAMES 
-        TestCase_SingleOperand
-        TestCase_ValueExpr
-        TestCase_PrimaryStatement
-        TestCase_VariableDeclarationNoTypeNoAssignNoMod
-        TestCase_VariableDeclarationNoTypeNoAssign
-        TestCase_VariableDeclarationNoAssign
-        TestCase_VariableDefinition
-        TestCase_TypeAlias
-        TestCase_LibraryNamespaceInclusion
-        TestCase_NamespaceInclusion
-        TestCase_ObjectInclusion
-        TestCase_TypeInclusion
-        TestCase_ObjectInclusionFromLibrary
-        TestCase_TypeInclusionFromLibrary
-        TestCase_TypeImportDeclaration
-        TestCase_MethodDeclImplicitVoidArgNoRet
-        TestCase_MethodDeclImplicitVoidArgNoRet2
-        TestCase_MethodDeclImplicitVoidArgAnyRet
-        TestCase_MethodDeclImplicitVoidArgAnyRet2
-        TestCase_MethodDeclArgNoRet
-        TestCase_MethodDeclArgAnyRet
-        TestCase_MethodDeclArgIdentifiedAnyRet
-        TestCase_MethodDeclArgsTypedRet
-        TestCase_MethodDeclTypedArgsTypedRet
-        TestCase_MethodDeclTypedArgsTypedRetWithModifiers
-        TestCase_ClassDecl
-        TestCase_ClassDeclWithMod
-        TestCase_LibWithMod
-        TestCase_LibWithModAndDefinition
-        TestCase_ClassWithModAndDefinition
-        TestCase_MethodDefinition
-        TestCase_MainDefinition
-        TestCase_PragmaticDeclarations
-        TestCase_ParseProgramWithDeclrations
-        TestCase_ReturnStatement
-        TestCase_IfStatement
-        TestCase_IfElseStatement
-        TestCase_IfElifStatement
-        TestCase_IfElifElseStatement
-        TestCase_WhileStatement
-        TestCase_ForStatement
-        TestCase_AnimalsExampleProgram
-        TestCase_BasicEnumDefinition
-        TestCase_EnumDefinitionWithValues
-    )
-
-    add_minitest_module(
-      TARGET ut_cnd_Build
-      MODULE_NAME Test_Build
-      WORKING_DIRECTORY ${SSG_UT_CND_WORKING_DIR}
-      CASE_NAMES TestCase_BasicBuild
-    )
-  endif()
-
-  #--------------------------------------------------------------
-  # @end Unit Tests : C& Compiler Module
-  #--------------------------------------------------------------
-  set(SSG_UT_CCC_INCLUDE_DIRS modules/cnd/inc;modules/cnd/ut/)
-  set(SSG_UT_CCC_WORKING_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/cnd/ut/res/)
-  set(SSG_UT_CCC_LIBS_TO_LINK 
-    ssgmod::mta::mta_interface
-    ssgmod::cxxx::cxxx_interface 
-  )
-
-  add_minitest_executable(
-    NAME test_trtools_parser
-    TEST_HEADER test_trtools_parser.hpp
-    INCLUDE_DIRECTORIES ${SSG_UT_CCC_INCLUDE_DIRS}
-    LINK_LIBS ${SSG_UT_CCC_LIBS_TO_LINK}
-  )
-]=]
