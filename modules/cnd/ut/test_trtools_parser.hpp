@@ -17,6 +17,11 @@
 #include "minitest.hpp"
 #include "trtools/parser.hpp"
 
+std::ostream& operator<<(std::ostream& os, const cnd::corevals::grammar::eAst& obj) {
+  os << static_cast<std::underlying_type<cnd::corevals::grammar::eAst>::type>(obj);
+  return os;
+}
+
 namespace test_util {
 
 // Compare two produced asts using minitest to log any inequality.
@@ -188,58 +193,51 @@ static inline void TestLLParse(std::string_view code,
 /* Test Parsing Basic Operands. */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MTEST(test_llparser, ParseOperand_WholeNumber) {
+TEST(test_llparser, ParseOperand_WholeNumber) {
   using namespace cnd;
   test_util::TestLLParserMethod("1", trtools::parser::ParseOperand, Sast{eAst::kLitInt, "1"});
 }
-END_MTEST(test_llparser, ParseOperand_WholeNumber);
 
-MTEST(test_llparser, ParseOperand_RealNumber) {
+
+TEST(test_llparser, ParseOperand_RealNumber) {
   using namespace cnd;
   test_util::TestLLParserMethod("1.1", trtools::parser::ParseOperand, Sast{eAst::kLitReal, "1.1"});
 }
-END_MTEST(test_llparser, ParseOperand_RealNumber);
 
-MTEST(test_llparser, ParseOperand_CString) {
+TEST(test_llparser, ParseOperand_CString) {
   using namespace cnd;
   test_util::TestLLParserMethod("\"string literal\"", trtools::parser::ParseOperand,
                                 Sast{eAst::kLitCstr, "\"string literal\""});
   test_util::TestLLParserMethod("\"\\\\\"", trtools::parser::ParseOperand, Sast{eAst::kLitCstr, "\"\\\\\""});
 }
-END_MTEST(test_llparser, ParseOperand_CString);
 
-MTEST(test_llparser, ParseOperand_Alnumus) {
+TEST(test_llparser, ParseOperand_Alnumus) {
   using namespace cnd;
   test_util::TestLLParserMethod("alnumus", trtools::parser::ParseOperand, Sast{eAst::kIdent, "alnumus"});
 }
-END_MTEST(test_llparser, ParseOperand_Alnumus);
 
-MTEST(test_llparser, ParseOperand_ByteLiteral) {
+TEST(test_llparser, ParseOperand_ByteLiteral) {
   using namespace cnd;
   test_util::TestLLParserMethod("1c", trtools::parser::ParseOperand, Sast{eAst::kLitByte, "1c"});
 }
-END_MTEST(test_llparser, ParseOperand_ByteLiteral);
 
-MTEST(test_llparser, ParseOperand_BoolLiteral) {
+TEST(test_llparser, ParseOperand_BoolLiteral) {
   using namespace cnd;
   test_util::TestLLParserMethod("1b", trtools::parser::ParseOperand, Sast{eAst::kLitBool, "1b"});
 }
-END_MTEST(test_llparser, ParseOperand_BoolLiteral);
 
-MTEST(test_llparser, ParseOperand_UnsignedLiteral) {
+TEST(test_llparser, ParseOperand_UnsignedLiteral) {
   using namespace cnd;
   test_util::TestLLParserMethod("1u", trtools::parser::ParseOperand, Sast{eAst::kLitUint, "1u"});
 }
-END_MTEST(test_llparser, ParseOperand_UnsignedLiteral);
 
-MTEST(test_llparser, ParseOperand_NoneKeyword) {
+TEST(test_llparser, ParseOperand_NoneKeyword) {
   using namespace cnd;
   test_util::TestLLParserMethod("none", trtools::parser::ParseOperand, Sast{eAst::kKwNone, "none"});
 }
-END_MTEST(test_llparser, ParseOperand_NoneKeyword);
 
 // This test confirms proper advancement of the iterator after parsing an operand.
-MTEST(test_llparser, ParseOperand_AllSingularOperands) {
+TEST(test_llparser, ParseOperand_AllSingularOperands) {
   using namespace cnd::trtools::literals;
   using namespace cnd;
   using namespace cnd::trtools::parser;
@@ -304,9 +302,8 @@ MTEST(test_llparser, ParseOperand_AllSingularOperands) {
   EXPECT_EQ(none_lit.Value().ast.type, expected_result[8].first);
   EXPECT_EQ(none_lit.Value().ast.GetLiteral(), expected_result[8].second);
 }
-END_MTEST(test_llparser, ParseOperand_AllSingularOperands);
 
-MTEST(test_llparser, ParseResolution) {
+TEST(test_llparser, ParseResolution) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -345,9 +342,8 @@ MTEST(test_llparser, ParseResolution) {
   //          "c"})), Sast{kIdent, "d"}),
   //     "a::(b::c)::d");
 }
-END_MTEST(test_llparser, ParseResolution);
 
-MTEST(test_llparser, ParsePostfix) {
+TEST(test_llparser, ParsePostfix) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -365,9 +361,8 @@ MTEST(test_llparser, ParsePostfix) {
   TestLLParse("a::b++--::c", ParsePostfix);
   TestLLParse("a++--::b::c", ParsePostfix);
 }
-END_MTEST(test_llparser, ParsePostfix);
 
-MTEST(test_llparser, ParseMemberAccess) {
+TEST(test_llparser, ParseMemberAccess) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -382,9 +377,8 @@ MTEST(test_llparser, ParseMemberAccess) {
   TestLLParse("a::b.d::c.e::f", ParseAccess);
   TestLLParse("a--.b++.c--.d++", ParseAccess);
 }
-END_MTEST(test_llparser, ParseMemberAccess);
 
-MTEST(test_llparser, ParsePrefix) {
+TEST(test_llparser, ParsePrefix) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -418,9 +412,8 @@ MTEST(test_llparser, ParsePrefix) {
   TestLLParse("!a.b", ParsePrefix,
               Sast(kNot, "!a.b", Sast(kMemberAccess, "a.b", Sast(kIdent, "a"), Sast(kIdent, "b"))));
 }
-END_MTEST(test_llparser, ParsePrefix);
 
-MTEST(test_llparser, ParseProduction) {
+TEST(test_llparser, ParseProduction) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -462,9 +455,8 @@ MTEST(test_llparser, ParseProduction) {
   //// Production -> Prefix
   // TestLLParse("a::b * c::d", ParseProduction, Sast{kMul, "a::b*c::d", Sast{kIdent, "a"}, Sast{kIdent, "b"}});
 }
-END_MTEST(test_llparser, ParseProduction);
 
-MTEST(test_llparser, ParseSummation) {
+TEST(test_llparser, ParseSummation) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -500,9 +492,8 @@ MTEST(test_llparser, ParseSummation) {
 
   /// Summation -> Production
 }
-END_MTEST(test_llparser, ParseSummation);
 
-MTEST(test_llparser, ParseListFold) {
+TEST(test_llparser, ParseListFold) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -530,13 +521,12 @@ MTEST(test_llparser, ParseListFold) {
 
   /// Summation -> Production
 }
-END_MTEST(test_llparser, ParseListFold);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* Test LR Primary Expr Parser. */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MTEST(LLParser_PrimaryExpressions, WholeNumber) {
+TEST(LLParser_PrimaryExpressions, WholeNumber) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -544,117 +534,104 @@ MTEST(LLParser_PrimaryExpressions, WholeNumber) {
 
   TestLLParse("1", ParsePrimaryExpr, Sast(kLitInt, "1"));
 }
-END_MTEST(LLParser_PrimaryExpressions, WholeNumber);
 
-MTEST(LLParser_PrimaryExpressions, RealNumber) {
+TEST(LLParser_PrimaryExpressions, RealNumber) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   using cnd::trtools::parser::ParsePrimaryExpr;
   TestLLParse("1.1", ParsePrimaryExpr, Sast(kLitReal, "1.1"));
 }
-END_MTEST(LLParser_PrimaryExpressions, RealNumber);
 
-MTEST(LLParser_PrimaryExpressions, CString) {
+TEST(LLParser_PrimaryExpressions, CString) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   using cnd::trtools::parser::ParsePrimaryExpr;
   TestLLParse("\"string literal\"", ParsePrimaryExpr, Sast(kLitCstr, "\"string literal\""));
 }
-END_MTEST(LLParser_PrimaryExpressions, CString);
 
-MTEST(LLParser_PrimaryExpressions, CStringEscaped) {
+TEST(LLParser_PrimaryExpressions, CStringEscaped) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   using cnd::trtools::parser::ParsePrimaryExpr;
   TestLLParse("\"\\\\\"", ParsePrimaryExpr, Sast(kLitCstr, "\"\\\\\""));
 }
-END_MTEST(LLParser_PrimaryExpressions, CStringEscaped);
 
-MTEST(LLParser_PrimaryExpressions, Alnumus) {
+TEST(LLParser_PrimaryExpressions, Alnumus) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   using cnd::trtools::parser::ParsePrimaryExpr;
   TestLLParse("alnumus", ParsePrimaryExpr, Sast(kIdent, "alnumus"));
 }
-END_MTEST(LLParser_PrimaryExpressions, Alnumus);
 
-MTEST(LLParser_PrimaryExpressions, ByteLiteral) {
+TEST(LLParser_PrimaryExpressions, ByteLiteral) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   using cnd::trtools::parser::ParsePrimaryExpr;
   TestLLParse("1c", ParsePrimaryExpr, Sast(kLitByte, "1c"));
 }
-END_MTEST(LLParser_PrimaryExpressions, ByteLiteral);
 
-MTEST(LLParser_PrimaryExpressions, BoolLiteral) {
+TEST(LLParser_PrimaryExpressions, BoolLiteral) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   using cnd::trtools::parser::ParsePrimaryExpr;
   TestLLParse("1b", ParsePrimaryExpr, Sast(kLitBool, "1b"));
 }
-END_MTEST(LLParser_PrimaryExpressions, BoolLiteral);
 
-MTEST(LLParser_PrimaryExpressions, UnsignedLiteral) {
+TEST(LLParser_PrimaryExpressions, UnsignedLiteral) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   using cnd::trtools::parser::ParsePrimaryExpr;
   TestLLParse("1u", ParsePrimaryExpr, Sast(kLitUint, "1u"));
 }
-END_MTEST(LLParser_PrimaryExpressions, UnsignedLiteral);
 
-MTEST(LLParser_PrimaryExpressions, NoneKeyword) {
+TEST(LLParser_PrimaryExpressions, NoneKeyword) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   using cnd::trtools::parser::ParsePrimaryExpr;
   TestLLParse("none", ParsePrimaryExpr, Sast(kKwNone, "none"));
 }
-END_MTEST(LLParser_PrimaryExpressions, NoneKeyword);
 
-MTEST(LLParser_PrimaryExpressions, OperandInParenthesis) {
+TEST(LLParser_PrimaryExpressions, OperandInParenthesis) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   using cnd::trtools::parser::ParsePrimaryExpr;
   TestLLParse("(1)", ParsePrimaryExpr, Sast(kSubexpression, "(1)", Sast(kLitInt, "1")));
 }
-END_MTEST(LLParser_PrimaryExpressions, OperandInParenthesis);
 
-MTEST(LLParser_PrimaryExpressions, OperandInSquareBrackets) {
+TEST(LLParser_PrimaryExpressions, OperandInSquareBrackets) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   using cnd::trtools::parser::ParsePrimaryExpr;
   TestLLParse("[1]", ParsePrimaryExpr, Sast(kSquareSubexpr, "[1]", Sast(kLitInt, "1")));
 }
-END_MTEST(LLParser_PrimaryExpressions, OperandInSquareBrackets);
 
-MTEST(LLParser_PrimaryExpressions, OperandInCurlyBraces) {
+TEST(LLParser_PrimaryExpressions, OperandInCurlyBraces) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   using cnd::trtools::parser::ParsePrimaryExpr;
   TestLLParse("{1}", ParsePrimaryExpr, Sast(kCurlySubexpr, "{1}", Sast(kLitInt, "1")));
 }
-END_MTEST(LLParser_PrimaryExpressions, OperandInCurlyBraces);
 
-MTEST(LLParser_PrimaryExpressions, BinarySum) {
+TEST(LLParser_PrimaryExpressions, BinarySum) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   using cnd::trtools::parser::ParsePrimaryExpr;
   TestLLParse("1 + 1", ParsePrimaryExpr, Sast(kAdd, "1+1", Sast(kLitInt, "1"), Sast(kLitInt, "1")));
 }
-END_MTEST(LLParser_PrimaryExpressions, BinarySum);
 
-MTEST(LLParser_PrimaryExpressions, BinarySumThenTerm) {
+TEST(LLParser_PrimaryExpressions, BinarySumThenTerm) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -662,9 +639,8 @@ MTEST(LLParser_PrimaryExpressions, BinarySumThenTerm) {
   TestLLParse("1 + 2 * 3", ParsePrimaryExpr,
               Sast(kAdd, "1+2*3", Sast(kLitInt, "1"), Sast(kMul, "2*3", Sast(kLitInt, "2"), Sast(kLitInt, "3"))));
 }
-END_MTEST(LLParser_PrimaryExpressions, BinarySumThenTerm);
 
-MTEST(LLParser_PrimaryExpressions, BinaryTermThenSum) {
+TEST(LLParser_PrimaryExpressions, BinaryTermThenSum) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -672,17 +648,15 @@ MTEST(LLParser_PrimaryExpressions, BinaryTermThenSum) {
   TestLLParse("1 * 2 + 3", ParsePrimaryExpr,
               Sast(kAdd, "1*2+3", Sast(kMul, "1*2", Sast(kLitInt, "1"), Sast(kLitInt, "2")), Sast(kLitInt, "3")));
 }
-END_MTEST(LLParser_PrimaryExpressions, BinaryTermThenSum);
 
-MTEST(LLParser_PrimaryExpressions, BinarySumIsLeftAssociative) {
+TEST(LLParser_PrimaryExpressions, BinarySumIsLeftAssociative) {
   using namespace cnd;
   using enum eAst;
   test_util::TestLLParse("1 + 2 - 3", trtools::parser::ParsePrimaryExpr,
                          Sast(kSub, "1+2-3", Sast(kAdd, "1+2", Sast(kLitInt, "1"), Sast(kLitInt, "2")), Sast(kLitInt, "3")));
 }
-END_MTEST(LLParser_PrimaryExpressions, BinarySumIsLeftAssociative);
 
-MTEST(LLParser_PrimaryExpressions, BinaryMemberAccessIsLeftAssociative) {
+TEST(LLParser_PrimaryExpressions, BinaryMemberAccessIsLeftAssociative) {
   using namespace cnd;
   using enum eAst;
   test_util::TestLLParse(
@@ -692,9 +666,8 @@ MTEST(LLParser_PrimaryExpressions, BinaryMemberAccessIsLeftAssociative) {
                                    Sast(kMemberAccess, "a.b", Sast(kIdent, "a"), Sast(kIdent, "b")), Sast(kIdent, "c")),
            Sast(kIdent, "d")));
 }
-END_MTEST(LLParser_PrimaryExpressions, BinaryMemberAccessIsLeftAssociative);
 
-MTEST(LLParser_PrimaryExpressions, ParenIsResolvedFirst) {
+TEST(LLParser_PrimaryExpressions, ParenIsResolvedFirst) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -703,26 +676,23 @@ MTEST(LLParser_PrimaryExpressions, ParenIsResolvedFirst) {
                               Sast(kSubexpression, "(1+2)", Sast(kAdd, "1+2", Sast(kLitInt, "1"), Sast(kLitInt, "2"))),
                                    Sast(kLitInt, "3")));
 }
-END_MTEST(LLParser_PrimaryExpressions, ParenIsResolvedFirst);
 
-MTEST(LLParser_PrimaryExpressions, UnaryPrefix) {
+TEST(LLParser_PrimaryExpressions, UnaryPrefix) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   test_util::TestLLParse("!a", trtools::parser::ParsePrimaryExpr, Sast(kNot, "!a", Sast(kIdent, "a")));
 }
-END_MTEST(LLParser_PrimaryExpressions, UnaryPrefix);
 
-MTEST(LLParser_PrimaryExpressions, RepeatedUnaryPrefix) {
+TEST(LLParser_PrimaryExpressions, RepeatedUnaryPrefix) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   test_util::TestLLParse("!!a", trtools::parser::ParsePrimaryExpr, "Unary Prefix Repeated",
                          Sast(kNot, "!!a", Sast(kNot, "!a", Sast(kIdent, "a"))));
 }
-END_MTEST(LLParser_PrimaryExpressions, RepeatedUnaryPrefix);
 
-MTEST(LLParser_PrimaryExpressions, AssignmentIsRightAssociative) {
+TEST(LLParser_PrimaryExpressions, AssignmentIsRightAssociative) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -736,54 +706,48 @@ MTEST(LLParser_PrimaryExpressions, AssignmentIsRightAssociative) {
       Sast(kAssign, "x=a=b=c", Sast(kIdent, "x"),
            Sast(kAssign, "a=b=c", Sast(kIdent, "a"), Sast(kAssign, "b=c", Sast(kIdent, "b"), Sast(kIdent, "c")))));
 }
-END_MTEST(LLParser_PrimaryExpressions, AssignmentIsRightAssociative);
 
-MTEST(LLParser_PrimaryExpressions, PrefixUnaryThenBinary) {
+TEST(LLParser_PrimaryExpressions, PrefixUnaryThenBinary) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   test_util::TestLLParse("!1+2", trtools::parser::ParsePrimaryExpr, "Prefix Unary then Binary",
                          Sast(kAdd, "!1+2", Sast(kNot, "!1", Sast(kLitInt, "1")), Sast(kLitInt, "2")));
 }
-END_MTEST(LLParser_PrimaryExpressions, PrefixUnaryThenBinary);
 
-MTEST(LLParser_PrimaryExpressions, PrefixUnaryThenMemberAccess) {
+TEST(LLParser_PrimaryExpressions, PrefixUnaryThenMemberAccess) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   test_util::TestLLParse("!a.b", trtools::parser::ParsePrimaryExpr, "Prefix Unary then Higher Priority Member Access",
                          Sast(kNot, "!a.b", Sast(kMemberAccess, "a.b", Sast(kIdent, "a"), Sast(kIdent, "b"))));
 }
-END_MTEST(LLParser_PrimaryExpressions, PrefixUnaryThenMemberAccess);
 
-MTEST(LLParser_PrimaryExpressions, PrefixUnaryAfterBinary) {
+TEST(LLParser_PrimaryExpressions, PrefixUnaryAfterBinary) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   test_util::TestLLParse("1+!2", trtools::parser::ParsePrimaryExpr, "Prefix Unary After Binary 1+!2",
                          Sast(kAdd, "1+!2", Sast(kLitInt, "1"), Sast(kNot, "!2", Sast(kLitInt, "2"))));
 }
-END_MTEST(LLParser_PrimaryExpressions, PrefixUnaryAfterBinary);
 
-MTEST(LLParser_PrimaryExpressions, EmptyFunctionCall) {
+TEST(LLParser_PrimaryExpressions, EmptyFunctionCall) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   test_util::TestLLParse("a()", trtools::parser::ParsePrimaryExpr, "Empty Function Call",
                          Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()")));
 }
-END_MTEST(LLParser_PrimaryExpressions, EmptyFunctionCall);
 
-MTEST(LLParser_PrimaryExpressions, PrefixUnaryThenFunctionCall) {
+TEST(LLParser_PrimaryExpressions, PrefixUnaryThenFunctionCall) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   test_util::TestLLParse("!a()", trtools::parser::ParsePrimaryExpr, "Prefix Unary then Function Call",
                          Sast(kNot, "!a()", Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()"))));
 }
-END_MTEST(LLParser_PrimaryExpressions, PrefixUnaryThenFunctionCall);
 
-MTEST(LLParser_PrimaryExpressions, RepeatedUnaryThenRepeatedFunctionCall) {
+TEST(LLParser_PrimaryExpressions, RepeatedUnaryThenRepeatedFunctionCall) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -794,9 +758,8 @@ MTEST(LLParser_PrimaryExpressions, RepeatedUnaryThenRepeatedFunctionCall) {
                 Sast(kFunctionCall, "a()()", Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()")),
                      Sast(kArguments, "()")))));
 }
-END_MTEST(LLParser_PrimaryExpressions, RepeatedUnaryThenRepeatedFunctionCall);
 
-MTEST(LLParser_PrimaryExpressions, FunctionCallThenBinary) {
+TEST(LLParser_PrimaryExpressions, FunctionCallThenBinary) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -804,9 +767,8 @@ MTEST(LLParser_PrimaryExpressions, FunctionCallThenBinary) {
       "a()+2", trtools::parser::ParsePrimaryExpr, "Function Call then Binary",
       Sast(kAdd, "a()+2", Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()")), Sast(kLitInt, "2")));
 }
-END_MTEST(LLParser_PrimaryExpressions, FunctionCallThenBinary);
 
-MTEST(LLParser_PrimaryExpressions, FunctionCallThenMemberAccess) {
+TEST(LLParser_PrimaryExpressions, FunctionCallThenMemberAccess) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -814,9 +776,8 @@ MTEST(LLParser_PrimaryExpressions, FunctionCallThenMemberAccess) {
       "a().b", trtools::parser::ParsePrimaryExpr, "Function Call then Member Access",
       Sast(kMemberAccess, "a().b", Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()")), Sast(kIdent, "b")));
 }
-END_MTEST(LLParser_PrimaryExpressions, FunctionCallThenMemberAccess);
 
-MTEST(LLParser_PrimaryExpressions, MemberAccessThenFunctionCall) {
+TEST(LLParser_PrimaryExpressions, MemberAccessThenFunctionCall) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -824,9 +785,8 @@ MTEST(LLParser_PrimaryExpressions, MemberAccessThenFunctionCall) {
       "a.b()", trtools::parser::ParsePrimaryExpr, "Member Access then Function Call",
       Sast(kFunctionCall, "a.b()", Sast(kMemberAccess, "a.b", Sast(kIdent, "a"), Sast(kIdent, "b")), Sast(kArguments, "()")));
 }
-END_MTEST(LLParser_PrimaryExpressions, MemberAccessThenFunctionCall);
 
-MTEST(LLParser_PrimaryExpressions, BinaryThenFunctionCall) {
+TEST(LLParser_PrimaryExpressions, BinaryThenFunctionCall) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -834,9 +794,8 @@ MTEST(LLParser_PrimaryExpressions, BinaryThenFunctionCall) {
       "1+a()", trtools::parser::ParsePrimaryExpr, "Binary Then Function Call 1 + a()",
       Sast(kAdd, "1+a()", Sast(kLitInt, "1"), Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()"))));
 }
-END_MTEST(LLParser_PrimaryExpressions, BinaryThenFunctionCall);
 
-MTEST(LLParser_PrimaryExpressions, InteleavedMemberAccessAndFunctionCall) {
+TEST(LLParser_PrimaryExpressions, InteleavedMemberAccessAndFunctionCall) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -851,9 +810,8 @@ MTEST(LLParser_PrimaryExpressions, InteleavedMemberAccessAndFunctionCall) {
                 Sast(kIdent, "c")),
            Sast(kIdent, "d")));
 }
-END_MTEST(LLParser_PrimaryExpressions, InteleavedMemberAccessAndFunctionCall);
 
-MTEST(LLParser_PrimaryExpressions, ComplexExpr) {
+TEST(LLParser_PrimaryExpressions, ComplexExpr) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -865,9 +823,8 @@ MTEST(LLParser_PrimaryExpressions, ComplexExpr) {
                                    Sast(kLitInt, "1")),
                               Sast(kLitInt, "1")));
 }
-END_MTEST(LLParser_PrimaryExpressions, ComplexExpr);
 
-MTEST(LLParser_PrimaryExpressions, ComplexExpr2) {
+TEST(LLParser_PrimaryExpressions, ComplexExpr2) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -880,9 +837,8 @@ MTEST(LLParser_PrimaryExpressions, ComplexExpr2) {
                                    Sast(kLitInt, "1")),
                               Sast(kLitInt, "1")));
 }
-END_MTEST(LLParser_PrimaryExpressions, ComplexExpr2);
 
-MTEST(LLParser_PrimaryExpressions, AssignmentExpression) {
+TEST(LLParser_PrimaryExpressions, AssignmentExpression) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -890,9 +846,8 @@ MTEST(LLParser_PrimaryExpressions, AssignmentExpression) {
       "foo = 1 + 2", trtools::parser::ParsePrimaryExpr, "Assignment Expression : foo = 1 + 2",
       Sast(kAssign, "foo=1+2", Sast(kIdent, "foo"), Sast(kAdd, "1+2", Sast(kLitInt, "1"), Sast(kLitInt, "2"))));
 }
-END_MTEST(LLParser_PrimaryExpressions, AssignmentExpression);
 
-MTEST(LLParser_PrimaryExpressions, FunctionCallAfterBinaryLeftAssociative) {
+TEST(LLParser_PrimaryExpressions, FunctionCallAfterBinaryLeftAssociative) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -903,9 +858,8 @@ MTEST(LLParser_PrimaryExpressions, FunctionCallAfterBinaryLeftAssociative) {
                    Sast(kAdd, "a+b+c", Sast(kAdd, "a+b", Sast{kIdent, "a"}, Sast{kIdent, "b"}), Sast{kIdent, "c"}),
            Sast(kFunctionCall, "d()", Sast(kIdent, "d"), Sast(kArguments, "()"))));
 }
-END_MTEST(LLParser_PrimaryExpressions, FunctionCallAfterBinaryLeftAssociative);
 
-MTEST(LLParser_PrimaryExpressions, FunctionCallWithArguments) {
+TEST(LLParser_PrimaryExpressions, FunctionCallWithArguments) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -915,9 +869,8 @@ MTEST(LLParser_PrimaryExpressions, FunctionCallWithArguments) {
            Sast(kArguments, "(a,b,c)",
                 Sast(kComma, "a,b,c", Sast(kComma, "a,b", Sast{kIdent, "a"}, Sast{kIdent, "b"}), Sast{kIdent, "c"}))));
 }
-END_MTEST(LLParser_PrimaryExpressions, FunctionCallWithArguments);
 
-MTEST(LLParser_PrimaryExpressions, IndexingCallWithArguments) {
+TEST(LLParser_PrimaryExpressions, IndexingCallWithArguments) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -927,9 +880,8 @@ MTEST(LLParser_PrimaryExpressions, IndexingCallWithArguments) {
            Sast(kArguments, "[a,b,c]",
                 Sast(kComma, "a,b,c", Sast(kComma, "a,b", Sast{kIdent, "a"}, Sast{kIdent, "b"}), Sast{kIdent, "c"}))));
 }
-END_MTEST(LLParser_PrimaryExpressions, IndexingCallWithArguments);
 
-MTEST(LLParser_PrimaryExpressions, ListingCallWithArguments) {
+TEST(LLParser_PrimaryExpressions, ListingCallWithArguments) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
@@ -939,18 +891,16 @@ MTEST(LLParser_PrimaryExpressions, ListingCallWithArguments) {
            Sast(kArguments, "{a,b,c}",
                 Sast(kComma, "a,b,c", Sast(kComma, "a,b", Sast{kIdent, "a"}, Sast{kIdent, "b"}), Sast{kIdent, "c"}))));
 }
-END_MTEST(LLParser_PrimaryExpressions, ListingCallWithArguments);
 
-MTEST(LLParser_PrimaryExpressions, ResolutionOperator) {
+TEST(LLParser_PrimaryExpressions, ResolutionOperator) {
   using namespace cnd;
   using namespace test_util;
   using enum eAst;
   test_util::TestLLParse("foo::bar", trtools::parser::ParsePrimaryExpr, "Access Operator foo::bar",
                          Sast(kResolutionOp, "foo::bar", Sast(kIdent, "foo"), Sast(kIdent, "bar")));
 }
-END_MTEST(LLParser_PrimaryExpressions, ResolutionOperator);
 
-//MTEST(LLParser_PrimaryExpressions, UnaryMinusSingleOperand) {
+//TEST(LLParser_PrimaryExpressions, UnaryMinusSingleOperand) {
 //  using namespace cnd;
 //  using namespace test_util;
 //  using enum eAst;
@@ -959,7 +909,7 @@ END_MTEST(LLParser_PrimaryExpressions, ResolutionOperator);
 //}
 //END_MTEST(LLParser_PrimaryExpressions, UnaryMinusSingleOperand);
 //
-//MTEST(LLParser_PrimaryExpressions, UnaryMinusInExpr) {
+//TEST(LLParser_PrimaryExpressions, UnaryMinusInExpr) {
 //  using namespace cnd;
 //  using namespace test_util;
 //  using enum eAst;
@@ -968,7 +918,7 @@ END_MTEST(LLParser_PrimaryExpressions, ResolutionOperator);
 //}
 //END_MTEST(LLParser_PrimaryExpressions, UnaryMinusInExpr);
 //
-//MTEST(LLParser_PrimaryExpressions, UnaryMinusInExprWithSubtraction) {
+//TEST(LLParser_PrimaryExpressions, UnaryMinusInExprWithSubtraction) {
 //  using namespace cnd;
 //  using namespace test_util;
 //  using enum eAst;
@@ -978,7 +928,7 @@ END_MTEST(LLParser_PrimaryExpressions, ResolutionOperator);
 //}
 //END_MTEST(LLParser_PrimaryExpressions, UnaryMinusInExprWithSubtraction);
 //
-//MTEST(LLParser_PrimaryExpressions, UnaryPlusSingleOperand) {
+//TEST(LLParser_PrimaryExpressions, UnaryPlusSingleOperand) {
 //  using namespace cnd;
 //  using namespace test_util;
 //  using enum eAst;
@@ -987,7 +937,7 @@ END_MTEST(LLParser_PrimaryExpressions, ResolutionOperator);
 //}
 //END_MTEST(LLParser_PrimaryExpressions, UnaryPlusSingleOperand);
 //
-//MTEST(LLParser_PrimaryExpressions, UnaryPlusInExpr) {
+//TEST(LLParser_PrimaryExpressions, UnaryPlusInExpr) {
 //  using namespace cnd;
 //  using namespace test_util;
 //  using enum eAst;
@@ -996,7 +946,7 @@ END_MTEST(LLParser_PrimaryExpressions, ResolutionOperator);
 //}
 //END_MTEST(LLParser_PrimaryExpressions, UnaryPlusInExpr);
 //
-//MTEST(LLParser_PrimaryExpressions, UnaryPlusInExprWithSubtraction) {
+//TEST(LLParser_PrimaryExpressions, UnaryPlusInExprWithSubtraction) {
 //  using namespace cnd;
 //  using namespace test_util;
 //  using enum eAst;
@@ -1010,7 +960,7 @@ END_MTEST(LLParser_PrimaryExpressions, ResolutionOperator);
 /* Test LL Parser Methods. */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MTEST(Test_ParserBasics, TestCase_PrimaryStatement) {
+TEST(Test_ParserBasics, TestCase_PrimaryStatement) {
   using namespace cnd;
   using namespace cnd::trtools;
   using namespace test_util;
@@ -1018,22 +968,20 @@ MTEST(Test_ParserBasics, TestCase_PrimaryStatement) {
   // test a primary expr statement starting with a subexpression.
   TestLLParserMethod("(1+2)*a;", parser::ParsePrimaryStatement, "Primary Statement");
 }
-END_MTEST(Test_ParserBasics, TestCase_PrimaryStatement);
 
 ///////////////////////////////////////////////////////////
 /* Declarations. */
 ///////////////////////////////////////////////////////////
 
-MTEST(Test_ParserBasics, TestCase_VariableDeclarationNoTypeNoAssignNoMod) {
+TEST(Test_ParserBasics, TestCase_VariableDeclarationNoTypeNoAssignNoMod) {
   using namespace cnd;
   using namespace cnd::trtools;
   using namespace test_util;
   using enum cnd::eAst;
   TestLLParserMethod("def@Foo;", parser::ParseVariableDecl, "VariableDeclarationNoTypeNoAssignNoMod");
 }
-END_MTEST(Test_ParserBasics, TestCase_VariableDeclarationNoTypeNoAssignNoMod);
 
-MTEST(Test_ParserBasics, TestCase_VariableDeclarationNoTypeNoAssign) {
+TEST(Test_ParserBasics, TestCase_VariableDeclarationNoTypeNoAssign) {
   using namespace cnd;
   using namespace cnd::trtools;
   using namespace test_util;
@@ -1041,18 +989,16 @@ MTEST(Test_ParserBasics, TestCase_VariableDeclarationNoTypeNoAssign) {
 
   TestLLParserMethod("const def@Foo;", parser::ParseVariableDecl, "VariableDeclarationNoTypeNoAssign");
 }
-END_MTEST(Test_ParserBasics, TestCase_VariableDeclarationNoTypeNoAssign);
 
-MTEST(Test_ParserBasics, TestCase_VariableDeclarationNoAssign) {
+TEST(Test_ParserBasics, TestCase_VariableDeclarationNoAssign) {
   using namespace cnd;
   using namespace cnd::trtools;
   using namespace test_util;
   using enum cnd::eAst;
   TestLLParserMethod("const def str@Foo;", parser::ParseVariableDecl, "VariableDeclarationNoAssign");
 }
-END_MTEST(Test_ParserBasics, TestCase_VariableDeclarationNoAssign);
 
-MTEST(Test_ParserBasics, TestCase_VariableDefinition) {
+TEST(Test_ParserBasics, TestCase_VariableDefinition) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1060,9 +1006,8 @@ MTEST(Test_ParserBasics, TestCase_VariableDefinition) {
 
   TestLLParserMethod("const def str@Foo: 42;", ParseVariableDecl, "VariableDefinition");
 }
-END_MTEST(Test_ParserBasics, TestCase_VariableDefinition);
 
-MTEST(Test_ParserBasics, TestCase_TypeAlias) {
+TEST(Test_ParserBasics, TestCase_TypeAlias) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1070,9 +1015,8 @@ MTEST(Test_ParserBasics, TestCase_TypeAlias) {
 
   TestLLParserMethod("using @MyInteger: int;", ParseUsingDecl, "TypeAlias");
 }
-END_MTEST(Test_ParserBasics, TestCase_TypeAlias);
 
-MTEST(Test_ParserBasics, TestCase_LibraryNamespaceInclusion) {
+TEST(Test_ParserBasics, TestCase_LibraryNamespaceInclusion) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1080,9 +1024,8 @@ MTEST(Test_ParserBasics, TestCase_LibraryNamespaceInclusion) {
 
   TestLLParserMethod("using lib my_math_lib;", ParseUsingDecl, "LibraryNamespaceInclusion");
 }
-END_MTEST(Test_ParserBasics, TestCase_LibraryNamespaceInclusion);
 
-MTEST(Test_ParserBasics, TestCase_NamespaceInclusion) {
+TEST(Test_ParserBasics, TestCase_NamespaceInclusion) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1090,9 +1033,8 @@ MTEST(Test_ParserBasics, TestCase_NamespaceInclusion) {
 
   TestLLParserMethod("using namespace my_ns;", ParseUsingDecl, "NamespaceInclusion");
 }
-END_MTEST(Test_ParserBasics, TestCase_NamespaceInclusion);
 
-MTEST(Test_ParserBasics, TestCase_ObjectInclusion) {
+TEST(Test_ParserBasics, TestCase_ObjectInclusion) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1100,9 +1042,8 @@ MTEST(Test_ParserBasics, TestCase_ObjectInclusion) {
 
   TestLLParserMethod("using my_ns::Foo;", ParseUsingDecl, "ObjectInclusion");
 }
-END_MTEST(Test_ParserBasics, TestCase_ObjectInclusion);
 
-MTEST(Test_ParserBasics, TestCase_TypeInclusion) {
+TEST(Test_ParserBasics, TestCase_TypeInclusion) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1110,9 +1051,8 @@ MTEST(Test_ParserBasics, TestCase_TypeInclusion) {
 
   TestLLParserMethod("using@MyFooType: my_ns::Foo;", ParseUsingDecl, "TypeInclusion");
 }
-END_MTEST(Test_ParserBasics, TestCase_TypeInclusion);
 
-MTEST(Test_ParserBasics, TestCase_ObjectInclusionFromLibrary) {
+TEST(Test_ParserBasics, TestCase_ObjectInclusionFromLibrary) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1120,9 +1060,8 @@ MTEST(Test_ParserBasics, TestCase_ObjectInclusionFromLibrary) {
 
   TestLLParserMethod("using lib my_math_lib::add;", ParseUsingDecl, "ObjectInclusionFromLibrary");
 }
-END_MTEST(Test_ParserBasics, TestCase_ObjectInclusionFromLibrary);
 
-MTEST(Test_ParserBasics, TestCase_TypeInclusionFromLibrary) {
+TEST(Test_ParserBasics, TestCase_TypeInclusionFromLibrary) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1130,9 +1069,8 @@ MTEST(Test_ParserBasics, TestCase_TypeInclusionFromLibrary) {
 
   TestLLParserMethod("using @MyAddMethodImpl: lib my_math_lib::add;", ParseUsingDecl, "TypeInclusionFromLibrary");
 }
-END_MTEST(Test_ParserBasics, TestCase_TypeInclusionFromLibrary);
 
-MTEST(Test_ParserBasics, TestCase_TypeImportDeclaration) {
+TEST(Test_ParserBasics, TestCase_TypeImportDeclaration) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1140,9 +1078,8 @@ MTEST(Test_ParserBasics, TestCase_TypeImportDeclaration) {
 
   TestLLParserMethod("import foo;", ParseImportDecl, "ImportDeclaration");
 }
-END_MTEST(Test_ParserBasics, TestCase_TypeImportDeclaration);
 
-MTEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet) {
+TEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1150,9 +1087,8 @@ MTEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet) {
 
   TestLLParserMethod("fn@add;", ParseMethodDecl, "MethodDeclImplicitVoidArgNoRet");
 }
-END_MTEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet);
 
-MTEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet2) {
+TEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet2) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1160,9 +1096,8 @@ MTEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet2) {
 
   TestLLParserMethod("fn@add();", ParseMethodDecl, "MethodDeclImplicitVoidArgNoRet");
 }
-END_MTEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgNoRet2);
 
-MTEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet) {
+TEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1170,9 +1105,8 @@ MTEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet) {
 
   TestLLParserMethod("fn@add>;", ParseMethodDecl, "TestCaseMethodDeclImplicitVoidArgAnyRet");
 }
-END_MTEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet);
 
-MTEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet2) {
+TEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet2) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1180,9 +1114,8 @@ MTEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet2) {
 
   TestLLParserMethod("fn@add()>;", ParseMethodDecl, "TestCaseMethodDeclImplicitVoidArgAnyRet2");
 }
-END_MTEST(Test_ParserBasics, TestCase_MethodDeclImplicitVoidArgAnyRet2);
 
-MTEST(Test_ParserBasics, TestCase_MethodDeclArgNoRet) {
+TEST(Test_ParserBasics, TestCase_MethodDeclArgNoRet) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1190,9 +1123,8 @@ MTEST(Test_ParserBasics, TestCase_MethodDeclArgNoRet) {
 
   TestLLParserMethod("fn@add(a,b);", ParseMethodDecl, "TestCaseMethodDeclArgNoRet");
 }
-END_MTEST(Test_ParserBasics, TestCase_MethodDeclArgNoRet);
 
-MTEST(Test_ParserBasics, TestCase_MethodDeclArgAnyRet) {
+TEST(Test_ParserBasics, TestCase_MethodDeclArgAnyRet) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1200,9 +1132,8 @@ MTEST(Test_ParserBasics, TestCase_MethodDeclArgAnyRet) {
 
   TestLLParserMethod("fn@add(a,b)>;", ParseMethodDecl, "TestCaseMethodDeclArgAnyRet");
 }
-END_MTEST(Test_ParserBasics, TestCase_MethodDeclArgAnyRet);
 
-MTEST(Test_ParserBasics, TestCase_MethodDeclArgIdentifiedAnyRet) {
+TEST(Test_ParserBasics, TestCase_MethodDeclArgIdentifiedAnyRet) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1210,9 +1141,8 @@ MTEST(Test_ParserBasics, TestCase_MethodDeclArgIdentifiedAnyRet) {
 
   TestLLParserMethod("fn@add(@a,@b)>;", ParseMethodDecl, "TestCaseMethodDeclArgAnyRet");
 }
-END_MTEST(Test_ParserBasics, TestCase_MethodDeclArgIdentifiedAnyRet);
 
-MTEST(Test_ParserBasics, TestCase_MethodDeclArgsTypedRet) {
+TEST(Test_ParserBasics, TestCase_MethodDeclArgsTypedRet) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1220,9 +1150,8 @@ MTEST(Test_ParserBasics, TestCase_MethodDeclArgsTypedRet) {
 
   TestLLParserMethod("fn@add(@a,@b)>int;", ParseMethodDecl, "TestCaseMethodDeclArgsTypedRet");
 }
-END_MTEST(Test_ParserBasics, TestCase_MethodDeclArgsTypedRet);
 
-MTEST(Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRet) {
+TEST(Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRet) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1230,9 +1159,8 @@ MTEST(Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRet) {
 
   TestLLParserMethod("fn@add(int @a,int @b)>int;", ParseMethodDecl, "TestCaseMethodDeclTypedArgsTypedRet");
 }
-END_MTEST(Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRet);
 
-MTEST(Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRetWithModifiers) {
+TEST(Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRetWithModifiers) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1241,9 +1169,8 @@ MTEST(Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRetWithModifiers) {
   TestLLParserMethod("fn@add(const int @a,const int @b)>const int;", ParseMethodDecl,
                      "TestCaseMethodDeclTypedArgsTypedRet");
 }
-END_MTEST(Test_ParserBasics, TestCase_MethodDeclTypedArgsTypedRetWithModifiers);
 
-MTEST(Test_ParserBasics, TestCase_ClassDecl) {
+TEST(Test_ParserBasics, TestCase_ClassDecl) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1251,9 +1178,8 @@ MTEST(Test_ParserBasics, TestCase_ClassDecl) {
 
   TestLLParserMethod("class@Husky;", ParseClassDecl, "TestCaseMethodDeclTypedArgsTypedRet");
 }
-END_MTEST(Test_ParserBasics, TestCase_ClassDecl);
 
-MTEST(Test_ParserBasics, TestCase_ClassDeclWithMod) {
+TEST(Test_ParserBasics, TestCase_ClassDeclWithMod) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1261,9 +1187,8 @@ MTEST(Test_ParserBasics, TestCase_ClassDeclWithMod) {
 
   TestLLParserMethod("const static class@Husky;", ParseClassDecl, "TestCaseClassDeclWithMod");
 }
-END_MTEST(Test_ParserBasics, TestCase_ClassDeclWithMod);
 
-MTEST(Test_ParserBasics, TestCase_LibWithMod) {
+TEST(Test_ParserBasics, TestCase_LibWithMod) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1271,9 +1196,8 @@ MTEST(Test_ParserBasics, TestCase_LibWithMod) {
 
   TestLLParserMethod("const static lib@MathLib;", ParseLibDecl, "TestCaseCLibDeclWithMod");
 }
-END_MTEST(Test_ParserBasics, TestCase_LibWithMod);
 
-MTEST(Test_ParserBasics, TestCase_LibWithModAndDefinition) {
+TEST(Test_ParserBasics, TestCase_LibWithModAndDefinition) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1282,9 +1206,8 @@ MTEST(Test_ParserBasics, TestCase_LibWithModAndDefinition) {
   TestLLParserMethod("const static lib@MathLib:{const def str@Foo: 42;using @MyInteger: int;};", ParseLibDecl,
                      "TestCaseCLibDeclWithMod");
 }
-END_MTEST(Test_ParserBasics, TestCase_LibWithModAndDefinition);
 
-MTEST(Test_ParserBasics, TestCase_ClassWithModAndDefinition) {
+TEST(Test_ParserBasics, TestCase_ClassWithModAndDefinition) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1293,9 +1216,8 @@ MTEST(Test_ParserBasics, TestCase_ClassWithModAndDefinition) {
   TestLLParserMethod("const static class@Husky:{const def str@Foo: 42;using @MyInteger: int;};", ParseClassDecl,
                      "TestCaseClassDeclWithMod");
 }
-END_MTEST(Test_ParserBasics, TestCase_ClassWithModAndDefinition);
 
-MTEST(Test_ParserBasics, TestCase_MethodDefinition) {
+TEST(Test_ParserBasics, TestCase_MethodDefinition) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1304,9 +1226,8 @@ MTEST(Test_ParserBasics, TestCase_MethodDefinition) {
   TestLLParserMethod("fn@add(const int @a,const int @b)>const int:{a+b;};", ParseMethodDecl,
                      "TestCaseMethodDefinition");
 }
-END_MTEST(Test_ParserBasics, TestCase_MethodDefinition);
 
-MTEST(Test_ParserBasics, TestCase_MainDefinition) {
+TEST(Test_ParserBasics, TestCase_MainDefinition) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1314,11 +1235,10 @@ MTEST(Test_ParserBasics, TestCase_MainDefinition) {
 
   TestLLParserMethod("main(a,b):{a+b;};", ParseMainDecl, "TestCaseMainDefinition");
 }
-END_MTEST(Test_ParserBasics, TestCase_MainDefinition);
 
 // Pragmatic statements appears at program top level, or in a library.
 // This tests that the ParsePragmaticStmt can handle all statement types (none were missed.).
-MTEST(Test_ParserBasics, TestCase_PragmaticDeclarations) {
+TEST(Test_ParserBasics, TestCase_PragmaticDeclarations) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1346,9 +1266,8 @@ MTEST(Test_ParserBasics, TestCase_PragmaticDeclarations) {
   TestLLParserMethod("const static class@Husky;", ParsePragmaticStmt, "TestCaseClassDeclWithMod");
   TestLLParserMethod("const static lib@MathLib;", ParsePragmaticStmt, "TestCaseCLibDeclWithMod");
 }
-END_MTEST(Test_ParserBasics, TestCase_PragmaticDeclarations);
 
-MTEST(Test_ParserBasics, TestCase_ParseProgramWithDeclarations) {
+TEST(Test_ParserBasics, TestCase_ParseProgramWithDeclarations) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1362,85 +1281,77 @@ MTEST(Test_ParserBasics, TestCase_ParseProgramWithDeclarations) {
       "const static class @Husky;",
       ParseProgram, "TestCaseParseProgramWithDeclrations");
 }
-END_MTEST(Test_ParserBasics, TestCase_ParseProgramWithDeclarations);
 
 ///////////////////////////////////////////////////////////
 /* Control Flow Statements. */
 ///////////////////////////////////////////////////////////
 
-MTEST(Test_ParserBasics, TestCase_ReturnStatement) {
+TEST(Test_ParserBasics, TestCase_ReturnStatement) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
   using enum cnd::eAst;
   TestLLParserMethod("return a + b;", ParseReturnStmt, "TestCaseReturnStatement");
 }
-END_MTEST(Test_ParserBasics, TestCase_ReturnStatement);
 
-MTEST(Test_ParserBasics, TestCase_IfStatement) {
+TEST(Test_ParserBasics, TestCase_IfStatement) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
   using enum cnd::eAst;
   TestLLParserMethod("if(a){ a + b; };", ParseIfDecl, "TestCaseIfStatement");
 }
-END_MTEST(Test_ParserBasics, TestCase_IfStatement);
 
-MTEST(Test_ParserBasics, TestCase_IfElseStatement) {
+TEST(Test_ParserBasics, TestCase_IfElseStatement) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
   using enum cnd::eAst;
   TestLLParserMethod("if(a){ a + b; }else{a;};", ParseIfDecl, "TestCaseIfElseStatement");
 }
-END_MTEST(Test_ParserBasics, TestCase_IfElseStatement);
 
-MTEST(Test_ParserBasics, TestCase_IfElifStatement) {
+TEST(Test_ParserBasics, TestCase_IfElifStatement) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
   using enum cnd::eAst;
   TestLLParserMethod("if(a){ a + b; }elif(b){a;};", ParseIfDecl, "TestCaseIfElifStatement");
 }
-END_MTEST(Test_ParserBasics, TestCase_IfElifStatement);
 
-MTEST(Test_ParserBasics, TestCase_IfElifElseStatement) {
+TEST(Test_ParserBasics, TestCase_IfElifElseStatement) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
   using enum cnd::eAst;
   TestLLParserMethod("if(a){ a + b; }elif(b){a;}else{b;};", ParseIfDecl, "TestCaseIfElifElseStatement");
 }
-END_MTEST(Test_ParserBasics, TestCase_IfElifElseStatement);
 
 ///////////////////////////////////////////////////////////
 /* Loop Statements. */
 ///////////////////////////////////////////////////////////
 
-MTEST(Test_ParserBasics, TestCase_WhileStatement) {
+TEST(Test_ParserBasics, TestCase_WhileStatement) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
   using enum cnd::eAst;
   TestLLParserMethod("while(a){ a + b; };", ParseWhileDecl, "TestCaseWhileStatement");
 }
-END_MTEST(Test_ParserBasics, TestCase_WhileStatement);
 
-MTEST(Test_ParserBasics, TestCase_ForStatement) {
+TEST(Test_ParserBasics, TestCase_ForStatement) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
   using enum cnd::eAst;
   TestLLParserMethod("for(def@a:0;a!=end;a++){ a + b; };", ParseForDecl, "TestCaseForStatement");
 }
-END_MTEST(Test_ParserBasics, TestCase_ForStatement);
 
 ///////////////////////////////////////////////////////////
 /* Uncategorized. */
 ///////////////////////////////////////////////////////////
 
 // Animals Example Program.
-MTEST(Test_ParserBasics, TestCase_AnimalsExampleProgram) {
+TEST(Test_ParserBasics, TestCase_AnimalsExampleProgram) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1460,45 +1371,40 @@ MTEST(Test_ParserBasics, TestCase_AnimalsExampleProgram) {
       "makeAnimalSounds(all_animals);};",
       ParseProgram, "TestCaseAnimalsExampleProgram");
 }
-END_MTEST(Test_ParserBasics, TestCase_AnimalsExampleProgram);
 
-MTEST(Test_ParserBasics, TestCase_BasicEnumDefinition) {
+TEST(Test_ParserBasics, TestCase_BasicEnumDefinition) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
   using enum cnd::eAst;
   TestLLParserMethod("enum @eResult:{@Good;@Bad;}", ParseEnumDecl, "TestCaseEnumDecl");
 }
-END_MTEST(Test_ParserBasics, TestCase_BasicEnumDefinition);
 
-MTEST(Test_ParserBasics, TestCase_EnumDefinitionWithValues) {
+TEST(Test_ParserBasics, TestCase_EnumDefinitionWithValues) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
   using enum cnd::eAst;
   TestLLParserMethod("enum @eResult:{@Good:0;@Bad:1;}", ParseEnumDecl, "TestCaseEnumDecl");
 }
-END_MTEST(Test_ParserBasics, TestCase_EnumDefinitionWithValues);
 
-MTEST(Test_ParserBasics, TestCase_EnumDefinitionWithPositionalAssociatedValue) {
+TEST(Test_ParserBasics, TestCase_EnumDefinitionWithPositionalAssociatedValue) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
   using enum cnd::eAst;
   TestLLParserMethod("enum @eResult:str:{@Good:1:\"Good\":;@Bad:\"Bad\";}", ParseEnumDecl, "TestCaseEnumDecl");
 }
-END_MTEST(Test_ParserBasics, TestCase_EnumDefinitionWithPositionalAssociatedValue);
 
-MTEST(Test_ParserBasics, TestCase_EnumDefinitionWithNamedAssociatedValue) {
+TEST(Test_ParserBasics, TestCase_EnumDefinitionWithNamedAssociatedValue) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
   using enum cnd::eAst;
   TestLLParserMethod("enum @eResult:str @EnumStr:{@Good:1:\"Good\":;@Bad:\"Bad\";}", ParseEnumDecl, "TestCaseEnumDecl");
 }
-END_MTEST(Test_ParserBasics, TestCase_EnumDefinitionWithNamedAssociatedValue);
 
-MTEST(Test_ParserBasics, TestCase_EnumDefinitionWithTaggedEntries) {
+TEST(Test_ParserBasics, TestCase_EnumDefinitionWithTaggedEntries) {
   using namespace cnd;
   using namespace cnd::trtools::parser;
   using namespace test_util;
@@ -1506,7 +1412,6 @@ MTEST(Test_ParserBasics, TestCase_EnumDefinitionWithTaggedEntries) {
   TestLLParserMethod("enum @eResult:str @EnumStr:{@Good:1:\"Good\";tag@ErrorState:@Bad:1:\"Bad\";}", ParseEnumDecl,
                      "TestCaseEnumDecl");
 }
-END_MTEST(Test_ParserBasics, TestCase_EnumDefinitionWithTaggedEntries);
 
 /// @} // end of cnd_unit_test
 
