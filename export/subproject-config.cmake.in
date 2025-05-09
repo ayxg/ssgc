@@ -1,0 +1,5 @@
+@SSG_THIS_PACKAGE_SUBPROJECT_CONFIG_INIT@
+
+# Add scripts dir to module path so other subprojects can find them.
+list(APPEND CMAKE_MODULE_PATH "@SSGMONO_BOX_CMAKE_MODULES_DIR@")
+
