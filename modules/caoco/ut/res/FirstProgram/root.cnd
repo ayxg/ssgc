@@ -1,5 +1,0 @@
-#include "csl.cnd"
-
-main:{
-  return 0;
-}
