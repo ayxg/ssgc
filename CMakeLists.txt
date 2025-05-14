@@ -85,9 +85,9 @@ ssg_declare_subprojects(
 
 #======================================
 # Aquire external subprojects.
-#include(SsgGitPkg)
-#ssg_gitpkg_imgui_sfml()
-#ssg_gitpkg_nlohmanjson()
+include(SsgGitPkg)
+ssg_gitpkg_imgui_sfml()
+ssg_gitpkg_nlohmanjson()
 #======================================
 
 #[============================================================================[
