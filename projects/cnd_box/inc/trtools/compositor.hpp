@@ -92,10 +92,6 @@ class Composer {
     if (!loaded_src) return CND_STDLOG.PrintErrForward(loaded_src.error());
     StrView src_view = {loaded_src.value().begin(), loaded_src.value().end()};
 
-    // CND_STDLOG.PrintDiagnostic(
-    //     "[" __FUNCTION__ "][Splitting first source file characters.] File: ", root_file.filename(), "\n");
-    // cnd::SrcLines src_lines = scanner::SplitSourceLines(loaded_src.value());
-
     CND_STDLOG.PrintDiagnostic("[" __FUNCTION__ "][Tokenizing first source file.] File: ", root_file.filename(), "\n");
 
     auto lex_res = trtools::Lexer::Lex(src_view);

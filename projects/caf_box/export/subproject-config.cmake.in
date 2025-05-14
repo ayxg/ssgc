@@ -1,4 +1,0 @@
-@SSG_THIS_PACKAGE_SUBPROJECT_CONFIG_INIT@
-
-# Export aliased targets.
-include("@SSG_THIS_PACKAGE_IMPORT_DIR@/${CMAKE_FIND_PACKAGE_NAME}-subproject-targets.cmake")

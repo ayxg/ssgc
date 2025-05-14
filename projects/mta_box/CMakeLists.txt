@@ -44,23 +44,12 @@ set_target_properties(mta_library
 #[============================================================================[
   Subproject Exports
 #]============================================================================]
-if (NOT PROJECT_IS_TOP_LEVEL)
-  get_directory_property(MTA_PKG_EXPORT_DIR SSG_PROJECT_EXPORT_DIR)
-  get_directory_property(MTA_PKG_IMPORT_DIR SSG_PROJECT_IMPORT_DIR)
-
-  ssg_configure_alias_targets_file(
-    TARGETS mta_library
-    PREFIX ${PROJECT_NAME}
-    OUTPUT_FILE_PATH "${MTA_PKG_IMPORT_DIR}/${PROJECT_NAME}-subproject-targets.cmake"
-    INPUT_FILE_PATH "${MTA_PKG_EXPORT_DIR}/subproject-targets.cmake.in"
-  )
-
-  ssg_export_subproject_config(${PROJECT_NAME} 
-    CONFIG_SUBPROJECT "${MTA_PKG_EXPORT_DIR}/subproject-config.cmake.in"
-    OUTPUT_DIR "${MTA_PKG_IMPORT_DIR}"
-  ) 
-endif()
-
+include(SsgProjectPackageUtils)
+ssg_export_subproject(
+	"${PROJECT_NAME}"
+	TARGETS mta_library
+	REDIRECT_FIND_PACKAGE
+)
 
 #[============================================================================[
 Copyright 2025 Anton Yashchenko

@@ -62,54 +62,32 @@ find_package(ssgmono_box REQUIRED CONFIG)
 #
 # Declare all other subprojects here...
 #
-
-# [minitest_box] Minimal Testing Framework
-ssg_declare_subproject(minitest_box 
-	SOURCE_DIR "${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/minitest_box"
+ssg_declare_subprojects(
+	NAMES 
+		minitest_box
+		mta_box
+		cxxx_box
+		wpl_box
+		caf_box
+		cgui_box
+		cnd_box
+		cide_box
+	SOURCE_DIRS
+		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/minitest_box"
+		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/mta_box"
+		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cxxx_box"
+		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/wpl_box"
+		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/caf_box"
+		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cgui_box"
+		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cnd_box"
+		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cide_box"
 )
-
-# [mta_box] Meta Template Archive
-ssg_declare_subproject(mta_box 
-	SOURCE_DIR "${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/mta_box"
-)
-
-# [mta_box] C++ Standard Extended
-ssg_declare_subproject(cxxx_box 
-	SOURCE_DIR "${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cxxx_box"
-)
-
-# [wpl_box] Windows Process Library
-ssg_declare_subproject(wpl_box 
-	SOURCE_DIR "${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/wpl_box"
-)
-
-# [caf_box] Core Application Framework
-ssg_declare_subproject(caf_box 
-	SOURCE_DIR "${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/caf_box"
-)
-
-# [cgui_box] ImGui Object-Oriented Interface Library
-ssg_declare_subproject(cgui_box 
-	SOURCE_DIR "${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/caf_box"
-)
-
-# [cnd_box] C& Programming Language Official Compiler
-ssg_declare_subproject(cnd_box 
-	SOURCE_DIR "${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cnd_box"
-)
-
-# [cide_box] C& Integrated Developer Environment
-ssg_declare_subproject(cide_box 
-	SOURCE_DIR "${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cide_box"
-)
-
-#======================================
 
 #======================================
 # Aquire external subprojects.
-include(SsgGitPkg)
-ssg_gitpkg_imgui_sfml()
-ssg_gitpkg_nlohmanjson()
+#include(SsgGitPkg)
+#ssg_gitpkg_imgui_sfml()
+#ssg_gitpkg_nlohmanjson()
 #======================================
 
 #[============================================================================[
@@ -117,11 +95,11 @@ ssg_gitpkg_nlohmanjson()
 #]============================================================================]
 
 #find_package(minitest_box REQUIRED CONFIG)
-#find_package(mta_box REQUIRED CONFIG)
+find_package(mta_box REQUIRED CONFIG)
 #find_package(cxxx_box REQUIRED CONFIG)
 #find_package(wpl_box REQUIRED CONFIG)
 find_package(cnd_box REQUIRED CONFIG)
-
+set(TETS_RUN_DEBUG "")
 
 
 #[============================================================================[
