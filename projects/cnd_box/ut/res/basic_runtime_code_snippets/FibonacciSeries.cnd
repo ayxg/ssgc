@@ -1,0 +1,31 @@
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/
+
+/`
+@project: C& Compiler Test Code
+@file: FibonacciSeries
+@brief Very basic fibonacci series example using a 'while' loop.
+`/
+
+proc @root:
+  main:{
+	`Fibonacci series:
+	`the sum of two elements defines the next
+	def @a@b:1:2;
+
+	` compute the last fibonacci number before 10
+	while (a < 10){
+		def @c:b;
+		a = b;
+		b = a + c;
+	}
+	
+	return a;
+  }
+	
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/
