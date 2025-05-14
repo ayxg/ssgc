@@ -56,23 +56,12 @@ set_target_properties(cgui_library
 #[============================================================================[
   Subproject Exports
 #]============================================================================]
-if (NOT PROJECT_IS_TOP_LEVEL)
-  get_directory_property(CGUI_BOX_EXPORT_DIR SSG_PROJECT_EXPORT_DIR)
-  get_directory_property(CGUI_BOX_IMPORT_DIR SSG_PROJECT_IMPORT_DIR)
-
-  ssg_configure_alias_targets_file(
-    TARGETS cgui_library
-    PREFIX ${PROJECT_NAME}
-    OUTPUT_FILE_PATH "${CGUI_BOX_IMPORT_DIR}/${PROJECT_NAME}-subproject-targets.cmake"
-    INPUT_FILE_PATH "${CGUI_BOX_EXPORT_DIR}/subproject-targets.cmake.in"
-  )
-
-  ssg_export_subproject_config(${PROJECT_NAME} 
-    CONFIG_SUBPROJECT "${CGUI_BOX_EXPORT_DIR}/subproject-config.cmake.in"
-    OUTPUT_DIR "${CGUI_BOX_IMPORT_DIR}"
-  ) 
-endif()
-
+include(SsgProjectPackageUtils)
+ssg_export_subproject(
+	"${PROJECT_NAME}"
+	TARGETS cgui_library
+	REDIRECT_FIND_PACKAGE
+)
 
 #[============================================================================[
 Copyright 2025 Anton Yashchenko

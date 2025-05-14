@@ -86,22 +86,12 @@ set_target_properties(cide_executable
 #[============================================================================[
   Subproject Exports
 #]============================================================================]
-if (NOT PROJECT_IS_TOP_LEVEL)
-  get_directory_property(CIDE_BOX_EXPORT_DIR SSG_PROJECT_EXPORT_DIR)
-  get_directory_property(CIDE_BOX_IMPORT_DIR SSG_PROJECT_IMPORT_DIR)
-
-  ssg_configure_alias_targets_file(
-    TARGETS cide_executable
-    PREFIX ${PROJECT_NAME}
-    OUTPUT_FILE_PATH "${CIDE_BOX_IMPORT_DIR}/${PROJECT_NAME}-subproject-targets.cmake"
-    INPUT_FILE_PATH "${CIDE_BOX_EXPORT_DIR}/subproject-targets.cmake.in"
-  )
-
-  ssg_export_subproject_config(${PROJECT_NAME} 
-    CONFIG_SUBPROJECT "${CIDE_BOX_EXPORT_DIR}/subproject-config.cmake.in"
-    OUTPUT_DIR "${CIDE_BOX_IMPORT_DIR}"
-  ) 
-endif()
+include(SsgProjectPackageUtils)
+ssg_export_subproject(
+	"${PROJECT_NAME}"
+	TARGETS cide_executable
+	REDIRECT_FIND_PACKAGE
+)
 
 #[============================================================================[
   Install

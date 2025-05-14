@@ -30,17 +30,12 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(SsgProjectBase)
 ssg_setup_standard_project_vars()
 
-if (NOT PROJECT_IS_TOP_LEVEL)
-	include(SsgProjectPackageUtils)
-	get_directory_property(SSGMONO_BOX_EXPORT_DIR SSG_PROJECT_EXPORT_DIR)
-	get_directory_property(SSGMONO_BOX_IMPORT_DIR SSG_PROJECT_IMPORT_DIR)
-	get_directory_property(SSGMONO_BOX_CMAKE_MODULES_DIR SSG_PROJECT_CMAKE_MODULES_DIR)
-	ssg_export_subproject_config(${PROJECT_NAME}
-		CONFIG_SUBPROJECT "${SSGMONO_BOX_EXPORT_DIR}/subproject-config.cmake.in"
-		OUTPUT_DIR "${SSGMONO_BOX_IMPORT_DIR}"
-	)
-endif()
-
+include(SsgProjectPackageUtils)
+ssg_export_subproject(
+	"${PROJECT_NAME}"
+	MODULE_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
+	REDIRECT_FIND_PACKAGE
+)
 
 #[============================================================================[
 Copyright 2025 Anton Yashchenko
