@@ -1,5 +1,0 @@
-def class fn import main namespace using lib dll if elif else cxif
-cxelif cxelse switch case default while for return break continue int
-uint real bool char byte cstr str ptr list array true false none void
-in as cin cout native const ref private public static any auto type
-value template
