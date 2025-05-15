@@ -27,7 +27,7 @@ find_package(ssgmono_box REQUIRED CONFIG)
 find_package(minitest_box REQUIRED CONFIG)
 find_package(mta_box REQUIRED CONFIG)
 find_package(cxxx_box REQUIRED CONFIG)
-find_package(wpl_box REQUIRED CONFIG)
+#find_package(wpl_box REQUIRED CONFIG)
 
 #[============================================================================[
   Project Init
@@ -47,7 +47,7 @@ target_include_directories(cnd_compiler_interface INTERFACE "${cnd_compiler_inte
 target_link_libraries(cnd_compiler_interface 
   INTERFACE mta_box::mta_library
             cxxx_box::cxxx_library
-            wpl_box::wpl_library
+            #wpl_box::wpl_library
 )
 set_target_properties(
   cnd_compiler_interface 
