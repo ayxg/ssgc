@@ -135,17 +135,25 @@ static inline void TestLLParse(std::string_view code,
   using std::format;
 
   auto expected_source = cnd::trtools::Lexer::Lex(code);
+
+  auto err_msg_buffer = expected_source ? "" : expected_source.error().Format();
+
   ASSERT_TRUE_LOG(
-      expected_source.has_value(), "[TestLLParse] Tokenization is valid.",
-      format("[TestLLParse] Unexpected lexer error: {} \n[INPUT]: {}", expected_source.error().Format(), code));
+    expected_source.has_value(),
+                  format("[TestLLParse] Unexpected lexer error: {} \n[INPUT]: {}", err_msg_buffer, code),
+    "[TestLLParse] Tokenization is valid.");
 
   auto source = cnd::trtools::Lexer::Sanitize(expected_source.value());
   std::span<const cnd::Tk> src_view = source;
   auto parse_result = fn({src_view.cbegin(), src_view.cend()});
 
+  err_msg_buffer = parse_result ? "" : parse_result.error().Format();
+
   ASSERT_TRUE_LOG(
-      parse_result.has_value(), "[TestLLParse] Parse is valid.",
-      format("[TestLLParse] Unexpected parser error: {} \n[INPUT]: {}", parse_result.error().Format(), code));
+      parse_result.has_value(), 
+      format("[TestLLParse] Unexpected parser error: {} \n[INPUT]: {}", err_msg_buffer, code),
+      "[TestLLParse] Parse is valid.");
+
   ASSERT_TRUE_LOG(CompareAst(parse_result.value().ast, expected), "[TestLLParse] Expected syntax tree is equal.",
                   format("[TestLLParse] Expected syntax tree is not equal:\n[EXPECTED]:\n {}\nPARSED:\n {}\n",
                          expected.Format(), parse_result.value().ast.Format()));
