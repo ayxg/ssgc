@@ -1,0 +1,73 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax_VariableDefinition
+`
+` <variable> ::= <variable_decl> | <variable_def>
+` <variable_decl> :: <variable_decl_untyped> | <variable_decl_typed>
+` <variable_def> :: <variable_def_untyped> | <variable_def_typed> | <variable_def_untyped_lambda> | <variable_def_typed_lambda>
+` 
+` <variable_decl_untyped> ::= <KW_DEF> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <SEMICOLON>
+` <variable_decl_typed> ::= <KW_DEF> <IGNORED> <type_expr> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <SEMICOLON>
+` <variable_def_untyped> ::= <KW_DEF> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <EQUALS_SIGN> <IGNORED> <value_expr> <IGNORED> <SEMICOLON>
+` <variable_def_typed> ::= <KW_DEF> <IGNORED> <type_expr> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <EQUALS_SIGN> <IGNORED> <value_expr> <IGNORED> <SEMICOLON>
+` <variable_def_untyped_lambda> ::= <KW_DEF> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <lambda_block> <IGNORED> <SEMICOLON>
+` <variable_def_typed_lambda> ::= <KW_DEF> <IGNORED> <type_expr> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> <lambda_block> <IGNORED> <SEMICOLON>
+`
+` implicit variable def, does not require a 'def' keyword. Appears in for/if/while
+` statement headers to declare scoped variables.
+` <implicit_variable> ::= <implicit_variable_decl> | <implicit_variable_def>
+` <implicit_variable_decl> ::= <implicit_variable_decl_untyped> | <implicit_variable_decl_typed>
+` <implicit_variable_def> ::= <implicit_variable_def_untyped> 
+`							| <implicit_variable_def_typed> 
+`							| <implicit_variable_def_untyped_lambda> 
+`							| <implicit_variable_def_typed_lambda>
+` <implicit_variable_decl_untyped> ::= <AT_SIGN> <IDENTIFIER>
+` <implicit_variable_decl_typed> ::= <type_expr> <AT_SIGN> <IDENTIFIER>
+` <implicit_variable_def_untyped> ::= <AT_SIGN> <IDENTIFIER> <IGNORED> <EQUALS_SIGN> <IGNORED> <value_expr>
+` <implicit_variable_def_typed> ::= <type_expr> <AT_SIGN> <IDENTIFIER> <IGNORED> <EQUALS_SIGN> <IGNORED> <value_expr>
+` <implicit_variable_def_untyped_lambda> ::= <AT_SIGN> <IDENTIFIER> <IGNORED> <lambda_block>
+` <implicit_variable_def_typed_lambda> ::= <type_expr> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> <lambda_block>
+
+
+` Variables may be declared in 5 contexts:
+
+` 1. Pragmatic Context is a compile time translation unit-wide value.
+def @MyDogsName : "Leeloo";
+
+` Process Context
+proc ZooManager {
+	
+	namespace Animals {
+		` 2. At the namespace level the def is a process-wide static value.
+		def @my_dog:|->MyDogsName;
+
+		` 3. At the class level the def is a value member or 
+		` static value(namespace equivalent) of the class in which it appears.
+		class@Dog:{
+		  def @name:|->MyDogsName;
+		}
+
+		` 4. At the local function level the def is a stack-frame(*by default) allocated value. 
+		fn@GetDogName():{
+		  def Dog @my_dog;
+		  return my_dog.name;
+		}
+	}
+	
+	fn@fib(n):{  
+	  def @a@b:1:2;
+	  while (a < n){
+		cout(a);
+		def @c:b; `5 .Inside a loop which is part of a function or a sub-loop of another loop.
+		a = b;
+		b = a + c;
+	  }
+	}
+	
+	main(int @argc, ptr[str] @argv) {
+		if(argc > 0) {
+			if(argv[0] == "exit")
+		}
+	}
+}
