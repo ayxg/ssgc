@@ -155,6 +155,12 @@ class TkCursor {
     return c.IsModifier() || c.IsDeclarative();
   }
 
+  // Valid first terminal in a top level syntax statement.
+  constexpr Bool IsDirectiveFirstSet() const noexcept {
+    auto& c = Get();
+    return c.IsModifier() || c.IsDeclarative() || c.IsPrimary();
+  }
+
   constexpr eAst NodeType() const noexcept { return Get().NodeType(); }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

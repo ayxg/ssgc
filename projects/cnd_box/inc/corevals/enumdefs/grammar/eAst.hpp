@@ -91,6 +91,7 @@ namespace cnd::corevals::grammar {
   sep m(EnumBlock)                                           \
   sep m(EnumCategory)                                        \
   sep m(EnumEntry)                                           \
+  sep m(UnnamedScope)                                        \
   lst
 
 // Define the enum.
