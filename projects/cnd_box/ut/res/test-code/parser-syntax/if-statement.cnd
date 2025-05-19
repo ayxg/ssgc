@@ -1,0 +1,12 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax - if Statement
+
+if(a){ a + b; }
+
+if(a){ a + b; } else { a + c; }
+
+if(a){ a + b; } elif(b){ a + c; }
+
+if(a){ a + b; } elif(b){ a + c; } else { a + d; }

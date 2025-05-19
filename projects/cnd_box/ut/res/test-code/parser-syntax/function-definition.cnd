@@ -1,0 +1,102 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax_FunctionDefinition
+`
+` function parts
+` <function_signature_specifier> ::= <KW_fn> <ignored> <AT_SIGN> <identifier>
+` <function_description> ::= <functional_stmt> | <functional_block>
+` <functional_block> ::= <LEFT_CURLY_BRACKET> <functional_stmt>* <RIGHT_CURLY_BRACKET>
+` <functional_stmt> ::= <variable> | <function> | <using> | <struct> | <pragma> | <return> | <if> | <switch> | <while> | <for>
+`
+` function_signature
+` <function_signature_no_params> ::= <function_signature_specifier> <ignored>
+` <function_signature_empty_params> ::= <function_signature_specifier> <ignored> <LEFT_PARENTHESIS> <RIGHT_PARENTHESIS>
+` <function_signature_with_params> ::= <function_signature_specifier> <ignored> <LEFT_PARENTHESIS> <function_param_list> <RIGHT_PARENTHESIS>
+` <function_signature_no_params_with_return_constraint> ::= <function_signature_specifier> <ignored> <GREATER_THAN_SIGN> <function_return_constraint>
+` <function_signature_empty_params_with_return_constraint>
+` 	::= <function_signature_specifier> <ignored> <LEFT_PARENTHESIS> <RIGHT_PARENTHESIS> <GREATER_THAN_SIGN> <function_return_constraint>
+` <function_signature_with_params_and_return_constraint>
+` 	::= <function_signature_specifier> <ignored> <LEFT_PARENTHESIS> <function_param_list> <RIGHT_PARENTHESIS> <GREATER_THAN_SIGN> <function_return_constraint>
+`
+` function_decl
+` <function_decl_no_params> ::= <function_signature_no_params> <ignored> <SEMICOLON>
+` <function_decl_empty_params> ::= <function_signature_empty_params> <ignored> <SEMICOLON>
+` <function_decl_with_params> ::= <function_signature_with_params> <ignored> <SEMICOLON>
+` <function_decl_no_params_with_return_constraint> ::= <function_signature_no_params_with_return_constraint> <ignored>  <SEMICOLON>
+` <function_decl_empty_params_with_return_constraint> ::= <function_signature_empty_params_with_return_constraint> <ignored> <SEMICOLON>
+` <function_decl_with_params_and_return_constraint> ::= <function_signature_with_params_and_return_constraint> <ignored> <SEMICOLON>
+`
+`  function_def
+` <function_def_no_params> ::= <function_signature_no_params> <COLON> <function_description>
+` <function_def_empty_params> ::= <function_signature_empty_params> <COLON> <function_description>
+` <function_def_with_params> ::= <function_signature_with_params> <COLON> <function_description>
+` <function_def_no_params_with_return_constraint> ::= <function_signature_no_params_with_return_constraint> <COLON> <function_description>
+` <function_def_empty_params_with_return_constraint> ::= <function_signature_empty_params_with_return_constraint> <COLON> <function_description>
+` <function_def_with_params_and_return_constraint> ::= <function_signature_with_params_and_return_constraint> <COLON> <function_description>
+
+
+fn@DoSomething1:{
+	Something();
+}
+
+fn@DoSomething2:Something();
+
+fn@DoSomething3:{
+	return Something();
+}
+
+fn@DoSomething4(@a):Something(a);
+
+fn@DoSomething5(@a)>void :Something(a);
+
+fn@DoSomething6(@b)>int : return Something(a);
+
+fn@DoSomething7(@b)>any : return Something(a);
+
+fn@DoSomething8(@b)>[ int, real, bool ]: return Something(b);
+
+fn@DoSomething9(@b)>tup [ int, real, bool ]: return Something(b);
+
+`Implicit Void Arg, No Return Type.
+fn@DoSomething10:{ 1+1;};
+fn@DoSomething11():{ 1+1;};
+
+
+` Implicit Void Arg, Any Return Type.
+fn@DoSomething12>:{ 1+1;};
+fn@DoSomething13()>:{ 1+1;};
+
+
+`If there is no @, args are identifiers.
+`If there is an @ but nothing preceding, args are identifiers.
+`Arguments are implict Any, Return is Any.
+fn@DoSomething14(a,b)>:{ ret a+b;};
+fn@DoSomething15(@a,@b)>:{ ret a+b;};
+
+
+`Arguments are any, return is int.
+fn@DoSomething16(a,b)>int:{ ret a+b;};
+
+
+`Arguments are int, return is int. 
+fn@DoSomething17(int @a,int @b)>int:{ ret a+b;};
+
+
+`Parameters and Return Types may have modifiers.
+`ex:
+`		a is a reference type, mutable.
+` 		b is a const reference, immutable.
+fn@DoSomething18(ref int @a, const ref int @b)>ref int: { 
+	a += b;
+	ret a;
+};
+
+
+`TODO: Implement LATER
+`Parameters may have default values.
+fn@DoSomething19(ref int @a,int @b:42)> ref int: { 
+	a += b;
+	ret a;
+};
+ 
