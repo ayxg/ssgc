@@ -85,11 +85,13 @@ using SepScopePrsResT = CompilerProcessResult<Vec<TkScopeT>>;
 /// Only for use within the parser's internal implementation.
 namespace detail {
 
+/// Advance cursor to parse result head. Move and append ast node from parse result to root ast.
 CND_CX void ExtractAndAdvance(TkCursorT& cursor, Ast& root, LLPrsResT& parse_res) CND_NX {
   cursor.Advance(parse_res.value().head);
   root.PushBack(move(parse_res.value().ast));
 };
 
+// Advance cursor to parse result head. Return forwarded r-value ast node from parse result.
 CND_CX Ast&& ExtractAndAdvance(TkCursorT cursor, LLPrsResT& parse_res) CND_NX {
   cursor.Advance(parse_res.value().head);
   return forward<Ast>(move(parse_res.value().ast));
@@ -174,7 +176,6 @@ CND_CX LLPrsResT ParseScopedArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
 CND_CX LLPrsResT ParseParenArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
 CND_CX LLPrsResT ParseSquareArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
 CND_CX LLPrsResT ParseCurlyArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-
 
 CND_CX LLPrsResT ParsePrimaryOperand(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
 CND_CX LLPrsResT ParseOperandSet(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
@@ -292,11 +293,15 @@ CND_CX LLPrsResT ParseListingArguments(TkCursorT c) CND_NX {
 
 CND_CX LLPrsResT ParsePrimaryStatement(TkCursorT c) CND_NX {
   if (!c.IsPrimary()) return DEBUG_FAIL("ImplExpectedToken");
-  ScopePrsResT stmt_scope = FindProgramStatement(c);
-  if (!stmt_scope) return LLPrsResT::Failure(move(stmt_scope.error()));
-  LRPrsResT expr_result = ParseExpr({stmt_scope->Begin(), stmt_scope->ContainedEnd()});
+  LLPrsResT expr_result = ParsePrimaryExpr(c);
   if (!expr_result) return LLPrsResT::Failure(move(expr_result.error()));
-  return LLParserResult(c.Advance(stmt_scope.value().End()), move(expr_result.value()));
+  c.Advance(expr_result->head);
+  if (c.TypeIs(eTk::kSemicolon)) {
+    c.Advance();
+  } else {
+    return DEBUG_FAIL("Expected semicolon after <primary-expr>.");
+  }
+  return LLParserResult(c, move(expr_result->ast));
 }
 
 CND_CX LLPrsResT ParseConditionalSubExpression(TkCursorT c) CND_NX {
@@ -304,9 +309,9 @@ CND_CX LLPrsResT ParseConditionalSubExpression(TkCursorT c) CND_NX {
   if (!paren_scope) return LLPrsResT::Failure(move(paren_scope.error()));
   if (!paren_scope.value().ContainedBegin()->IsPrimary())
     return DEBUG_FAIL("Invalid start of conditional sub-expression.");
-  LRPrsResT subexpr_result = ParseExpr(paren_scope.value().Contained());
+  LLPrsResT subexpr_result = ParsePrimaryExpr({paren_scope.value().ContainedBegin(), c.End()});
   if (!subexpr_result) return LLPrsResT::Failure(move(subexpr_result.error()));
-  return LLParserResult(c.Advance(paren_scope.value().End()), move(subexpr_result.value()));
+  return LLParserResult(c.Advance(paren_scope.value().End()), move(subexpr_result->ast));
 }
 
 CND_CX LLPrsResT ParsePrimaryPreIdentifier(TkCursorT c) CND_NX {
@@ -315,11 +320,14 @@ CND_CX LLPrsResT ParsePrimaryPreIdentifier(TkCursorT c) CND_NX {
   if (c.TypeIs(kCommercialAt))
     return LLParserResult(c.Advance(), eAst::kKwAny);
   else if (c.IsPrimary()) {
-    ScopePrsResT stmt_scope = FindOpenStatement(kCommercialAt, c.Iter(), c.End());
-    if (!stmt_scope) return LLPrsResT::Failure(move(stmt_scope.error()));
-    LRPrsResT stmt_result = ParseExpr(stmt_scope.value().Contained());
-    if (!stmt_result) return LLPrsResT::Failure(move(stmt_result.error()));
-    return LLParserResult(c.Advance(stmt_scope.value().End()), move(stmt_result.value()));
+    LLPrsResT expr_result = ParsePrimaryExpr(c);
+    if (!expr_result) return LLPrsResT::Failure(move(expr_result.error()));
+    c.Advance(expr_result->head);
+    if (c.TypeIs(eTk::kCommercialAt))
+      c.Advance();
+    else
+      return DEBUG_FAIL("Expecting a <@> after <primary-type-expression>.");
+    return LLParserResult(c, move(expr_result->ast));
   } else
     return DEBUG_FAIL("Expecting a <primary-type-expression> or <@>.");
 }
@@ -334,17 +342,19 @@ CND_CX LLPrsResT ParsePrimaryPostIdentifier(TkCursorT c) CND_NX {
   if (c.TypeIs(kCommercialAt))
     return LLParserResult(c.Advance(), eAst::kKwAny);
   else if (c.IsPrimary()) {
-    ScopePrsResT stmt_scope = FindOpenStatement({kColon, kSemicolon}, c.Iter(), c.End());
-    if (!stmt_scope) return LLPrsResT::Failure(move(stmt_scope.error()));
-    LRPrsResT stmt_result = ParseExpr(stmt_scope.value().Contained());
-    if (!stmt_result) return LLPrsResT::Failure(move(stmt_result.error()));
+    LLPrsResT expr_result = ParsePrimaryExpr(c);
+    if (!expr_result) return LLPrsResT::Failure(move(expr_result.error()));
+    c.Advance(expr_result->head);
 
     // !SPECIAL CASE: if end of statement is a semicolon, go 1 offset back.
     // This will allow the caller to determine if the statement is terminated or not.
-    if (stmt_scope.value().ContainedEnd()->TypeIs(kSemicolon))
-      return LLParserResult(c.Advance(stmt_scope.value().ContainedEnd()), move(stmt_result.value()));
-
-    return LLParserResult(c.Advance(stmt_scope.value().End()), move(stmt_result.value()));
+    if (c.TypeIs(eTk::kSemicolon))
+      return LLParserResult(c, move(expr_result->ast));
+    else if (c.TypeIs(eTk::kColon)) {
+      c.Advance();
+      return LLParserResult(c, move(expr_result->ast));
+    } else
+      return DEBUG_FAIL("Expecting a <:> or <;> after <primary-type-expression>.");
   } else
     return DEBUG_FAIL("Expecting a <primary-type-expression> or <:>.");
 }
@@ -375,54 +385,6 @@ CND_CX LLPrsResT ParseReturnStmt(TkCursorT c) CND_NX {
   Ast return_stmt(eAst::kKwReturn);
   return_stmt.children.push_back(move(expr_result.value().ast));
   return LLParserResult(expr_result.value().head, move(return_stmt));
-}
-
-CND_CX LLPrsResT ParsePragmaticStmt(TkCursorT c) CND_NX {
-  using enum eTk;
-
-  // Format: <modifiers?><decl keyword>
-  if (c.TypeIs(kSemicolon)) return DEBUG_FAIL("Empty statement in code.");
-
-  // Check for keywords which don't use modifiers.
-  if (c.IsDeclarativeKeyword()) {
-    switch (c.Type()) {
-      case kKwUse:
-        return ParseUsingDecl(c);
-      case kKwMain:
-        return ParseMainDecl(c);
-      case kKwImport:
-        return ParseImportDecl(c);
-      case kKwEnum:
-        return ParseEnumDecl(c);
-      case kKwReturn:
-        return ParseReturnStmt(c);
-      default:
-        break;
-    }
-  }
-
-  TkCursorT decl_begin = c;  // Store the initial modifier location.
-  while (c.IsModifierKeyword()) c.Advance();
-
-  // Check for all keywords which are valid pragmatic declarations.
-  if (c.IsDeclarativeKeyword()) {
-    switch (c.Type()) {
-      case kKwDef:
-        return ParseVariableDecl(decl_begin);
-      case kKwFn:
-        return ParseMethodDecl(decl_begin);
-      case kKwClass:
-        return ParseClassDecl(decl_begin);
-      case kKwLib:
-        return ParseLibDecl(decl_begin);
-      case kKwUse:
-      case kKwMain:
-        return DEBUG_FAIL("Declaration keyword cannot be modified.");
-      default:
-        return DEBUG_FAIL("Declaration keyword not permitted inside pragmatic code block.");
-    }
-  } else
-    return DEBUG_FAIL("Expected <pragmatic-decl-keyword>.");
 }
 
 CND_CX LLPrsResT ParseFunctionalStmt(TkCursorT c) CND_NX {
@@ -594,13 +556,13 @@ CND_CX LLPrsResT ParseForDecl(TkCursorT c) CND_NX {
   SepScopePrsResT cond_scopes = FindSeperatedParen(c.Iter(), c.End(), eTk::kSemicolon);
   if (cond_scopes.value().size() > 3)
     return DEBUG_FAIL("InvalidForLoopSyntax. For condition may have a maximum of 3 statements.");
-  auto init_var_res = ParseVariableDecl(cond_scopes.value()[0].Contained());
+  auto init_var_res = ParseVariableDecl({cond_scopes.value()[0].ContainedBegin(), c.End()});
   if (!init_var_res) return init_var_res;
 
-  auto cond_res = ParsePrimaryStatement(cond_scopes.value()[1].Contained());
+  auto cond_res = ParsePrimaryStatement({cond_scopes.value()[1].ContainedBegin(), c.End()});
   if (!cond_res) return cond_res;
 
-  auto inc_res = ParseExpr(cond_scopes.value()[2].Contained());
+  auto inc_res = ParsePrimaryExpr({cond_scopes.value()[2].ContainedBegin(), c.End()});
   if (!inc_res) return LLPrsResT::Failure(move(inc_res.error()));
   c.Advance(cond_scope.value().End());
 
@@ -614,73 +576,108 @@ CND_CX LLPrsResT ParseForDecl(TkCursorT c) CND_NX {
     std::advance(stmt_end, 1);
   }
   Ast ret = {eAst::kKwFor, stmt_begin, stmt_end};
-  ret.Append(init_var_res.Extract().ast, cond_res.Extract().ast, inc_res.Extract(), body_res.Extract().ast);
+  ret.Append(init_var_res.Extract().ast, cond_res.Extract().ast, inc_res.Extract().ast, body_res.Extract().ast);
   return LLParserResult{c, ret};
 }
 
+// <using> ::= <using_type_alias>
+//		  | <using_library_alias>
+//		  | <using_namespace_alias>
+//		  | <using_function_alias>
+//		  | <using_variable_alias>
+//		  | <using_process_alias>
+//		  | <using_enum_alias>
+//		  | <using_library_unscope>
+//		  | <using_namespace_unscope>
+//		  | <using_function_unscope>
+//		  | <using_def_unscope>
+//		  | <using_proc_unscope>
+//		  | <using_type_unscope>
+//		  | <using_enum_unscope>
+//
+// <using_type_alias> ::= <KW_USE> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN>  <type_expr>  <SEMICOLON>
+// <using_library_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+// <using_namespace_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+// <using_function_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+// <using_variable_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+// <using_process_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+// <using_enum_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+//
+// <using_library_unscope> ::= <KW_USE> <KW_LIB> <id_expr> <SEMICOLON>
+// <using_namespace_unscope> ::= <KW_USE> <KW_NAMESPACE> <id_expr> <SEMICOLON>
+// <using_function_unscope> ::= <KW_USE> <KW_FN> <id_expr> <SEMICOLON>
+// <using_def_unscope> ::= <KW_USE> <KW_DEF> <id_expr> <SEMICOLON>
+// <using_proc_unscope> ::= <KW_USE> <KW_PROC> <id_expr> <SEMICOLON>
+// <using_type_unscope> ::= <KW_USE> <id_expr> <SEMICOLON>
+// <using_enum_unscope> ::= <KW_USE> <KW_ENUM> <id_expr> <SEMICOLON>
 CND_CX LLPrsResT ParseUsingDecl(TkCursorT c) CND_NX {
   using enum eTk;
-  if (c.TypeIsnt(kKwUse)) return DEBUG_FAIL("Expected use.");
+  if (c.TypeIsnt(kKwUse)) return DEBUG_FAIL("Expected 'use' keyword.");
   auto stmt_begin = c.Iter();
   c.Advance();
-  // Next token may be:
-  // - @ commercial at -> Type Alias
-  // - @name: lib-> Library Type Alias.
+
+  // - @foo -> Type Alias
+  // - @foo : lib -> Library Type Alias.
   if (c.TypeIs(kCommercialAt)) {
     c.Advance();
     if (c.TypeIsnt(kIdent)) DEBUG_FAIL("Expected <ident>.");
     Ast alias = Ast(c);
     c.Advance();
-
     if (c.TypeIsnt(kColon)) DEBUG_FAIL("Expected <:>.");
     c.Advance();
 
     // If next is lib, then it is a library type alias.
     // Everything following lib must be a value expression closed by a
     // semicolon. Wether it is reduced to a type is determined at a later
-    // stage. Builds a kLibraryTypeAlias else it is a type alias.
+    // stage.
     if (c.TypeIs(kKwLib)) {
       c.Advance();
       auto val_expr = ParsePrimaryStatement(c);
       if (!val_expr) return val_expr;
       c.Advance(val_expr.value().head);
-      return LLParserResult(
-          c, {eAst::kLibraryTypeAlias, stmt_begin, c.Iter(), nullptr, {move(alias), val_expr.Extract().ast}});
-    } else {
-      auto val_expr = ParsePrimaryStatement(c);
-      if (!val_expr) return val_expr;
-      c.Advance(val_expr.value().head);
-      return LLParserResult(c,
-                            {eAst::kTypeAlias, stmt_begin, c.Iter(), nullptr, {move(alias), val_expr.Extract().ast}});
+      return LLParserResult(c, {eAst::kLibraryTypeAlias, stmt_begin, c.Iter(), nullptr, {alias, val_expr->ast}});
     }
+
+    // else it is a type alias...
+    auto val_expr = ParsePrimaryStatement(c);
+    if (!val_expr) return val_expr;
+    c.Advance(val_expr.value().head);
+    return LLParserResult(c, {eAst::kTypeAlias, stmt_begin, c.Iter(), nullptr, {alias, val_expr->ast}});
   }
+
   // - lib-> Library Namespace Inclusion.
   else if (c.TypeIs(kKwLib)) {
     c.Advance();
     auto val_expr = ParsePrimaryStatement(c);
     if (!val_expr) return val_expr;
     c.Advance(val_expr.value().head);
-    return LLParserResult(
-        c, Ast(eAst::kLibraryNamespaceInclusion, stmt_begin, c.Iter(), nullptr, {val_expr.Extract().ast}));
+    return LLParserResult(c,
+                          {eAst::kLibraryNamespaceInclusion, stmt_begin, c.Iter(), nullptr, {val_expr.Extract().ast}});
 
   }
+
   // - namespace-> Namespace Inclusion.
   else if (c.TypeIs(kKwNamespace)) {
     c.Advance();
     auto val_expr = ParsePrimaryStatement(c);
     if (!val_expr) return val_expr;
-    c.Advance(val_expr.value().head);
+    c.Advance(val_expr->head);
+    return LLParserResult(c, Ast(eAst::kNamespaceInclusion, stmt_begin, c.Iter(), nullptr, {val_expr->ast}));
+  }
 
-    return LLParserResult(c, Ast(eAst::kNamespaceInclusion, stmt_begin, c.Iter(), nullptr, {val_expr.Extract().ast}));
-  } else if (c.IsPrimary()) {
+  // Namespace object inclusion.
+  // The primary expr assumed to resolve to an object or function name. Validate at a later stage.
+  else if (c.IsPrimary()) {
     auto primary_result = ParsePrimaryStatement(c);
     if (!primary_result) return primary_result;
-
-    c.Advance(primary_result.value().head);
+    c.Advance(primary_result->head);
     return LLParserResult(
-        c, Ast(eAst::kNamespaceObjectInclusion, stmt_begin, c.Iter(), nullptr, {primary_result.Extract().ast}));
+        c, Ast(eAst::kNamespaceObjectInclusion, stmt_begin, c.Iter(), nullptr, {primary_result->ast}));
 
-  } else
+  }
+
+  // Invalid format.
+  else
     return DEBUG_FAIL("Using statement expected <@> or <kw-lib> or <kw-namespace> or <type-expression>.");
 };
 
@@ -1088,14 +1085,9 @@ CND_CX LLPrsResT ParseMethodSignature(TkCursorT c) CND_NX {
     return Ast(kMethodSignature, param_list_ast, ret_type_ast);
   };
 
-  ///////////////////////////////////////////////////////////////////////////////
   // Colon after identifier -> Implicit void arg, no return.
-  ///////////////////////////////////////////////////////////////////////////////
   if (c.TypeIs(eTk::kColon)) return LLParserResult(c, xMake1ParamSigAst(kMethodVoid, kMethodVoid));
-
-  ///////////////////////////////////////////////////////////////////////////////
   // GreaterThan after identifier -> Some sort of void arg with a return.
-  ///////////////////////////////////////////////////////////////////////////////
   else if (c.TypeIs(eTk::kGt)) {
     c.Advance();
     // Implicit any return void method.
@@ -1111,10 +1103,7 @@ CND_CX LLPrsResT ParseMethodSignature(TkCursorT c) CND_NX {
     return LLParserResult(c, xMakeSigAst(return_type_result.Extract().head,
                                          Ast{kMethodParameterList, Ast{kMethodParameter, Ast{kMethodVoid}}}));
   }
-
-  ///////////////////////////////////////////////////////////////////////////////
   // Open Paren After Identifier -> Method with arguments.
-  ///////////////////////////////////////////////////////////////////////////////
   else if (c.TypeIs(eTk::kLParen)) {
     auto method_params_result = ParseMethodParameters(c);
     if (!method_params_result) return method_params_result;
@@ -1260,18 +1249,155 @@ CND_CX LLPrsResT ParseLibDef(TkCursorT c) CND_NX {
   return LLParserResult(c, move(node));
 }
 
+CND_CX LLPrsResT ParsePragmaticStmt(TkCursorT c) CND_NX {
+  using enum eTk;
+
+  // Format: <modifiers?><decl keyword>
+  if (c.TypeIs(kSemicolon)) return DEBUG_FAIL("Empty statement in code.");
+
+  // Check for keywords which don't use modifiers.
+  if (c.IsDeclarativeKeyword()) {
+    switch (c.Type()) {
+      case kKwUse:
+        return ParseUsingDecl(c);
+      case kKwMain:
+        return ParseMainDecl(c);
+      case kKwImport:
+        return ParseImportDecl(c);
+      case kKwEnum:
+        return ParseEnumDecl(c);
+      case kKwReturn:
+        return ParseReturnStmt(c);
+      default:
+        break;
+    }
+  }
+
+  TkCursorT decl_begin = c;  // Store the initial modifier location.
+  while (c.IsModifierKeyword()) c.Advance();
+
+  // Check for all keywords which are valid pragmatic declarations.
+  if (c.IsDeclarativeKeyword()) {
+    switch (c.Type()) {
+      case kKwDef:
+        return ParseVariableDecl(decl_begin);
+      case kKwFn:
+        return ParseMethodDecl(decl_begin);
+      case kKwClass:
+        return ParseClassDecl(decl_begin);
+      case kKwLib:
+        return ParseLibDecl(decl_begin);
+      case kKwUse:
+      case kKwMain:
+        return DEBUG_FAIL("Declaration keyword cannot be modified.");
+      default:
+        return DEBUG_FAIL("Declaration keyword not permitted inside pragmatic code block.");
+    }
+  } else
+    return DEBUG_FAIL("Expected <pragmatic-decl-keyword>.");
+}
+
+// <directive_desc> ::= <directive_stmt>* | <directive_block>
+// <directive_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <directive_stmt_list> <IGNORED> <RIGHT_CURLY_BRACKET>
+// <directive_stmt_list> ::= <directive_stmt>*
+// <directive_stmt> ::= <primary_stmt>
+//				   | <include>
+//				   | <pragma>
+//				   | <process>
+//				   | <library>
+//				   | <variable>
+//				   | <function>
+//				   | <struct>
+//				   | <using>
+//				   | <enum>
+//				   | <directive_namespace>
+//				   | <directive_if>
+//				   | <directive_switch>
+//				   | <directive_while>
+//				   | <directive_for>
+//				   | <directive_return>
+CND_CX LLPrsResT ParseDirectiveDesc(TkCursorT c) CND_NX {
+  using enum eTk;
+  // Error on empty statement early
+  if (c.TypeIs(kSemicolon)) return DEBUG_FAIL("Empty statement in code. Unnecessary semicolon ';'.");
+
+  // Check if there is an unnamed scope. Override possible left brace in primary expressions,
+  // and recursivley call this method to parse contained statements.
+  if (c.TypeIs(eTk::kLBrace)) {
+    Ast scope_node{eAst::kUnnamedScope};
+    while (c.TypeIsnt(eTk::kRBrace) || c.AtEnd()) {
+      auto sub_description = ParseDirectiveDesc(c);
+      if (!sub_description) return sub_description;
+      detail::ExtractAndAdvance(c, scope_node, sub_description);
+    }
+    if (c.AtEnd()) return DEBUG_FAIL("Unclosed unnamed scope. Closing brace '}' not found.");
+    c.Advance();
+    if (c.TypeIs(kSemicolon)) return DEBUG_FAIL("Empty statement in code. Unnecessary semicolon ';'.");
+    return LLParserResult{c, scope_node};
+  }
+
+  /////////////////////////////////////////////////////////
+  // From here we are parsing a single statement...
+  /////////////////////////////////////////////////////////
+  if (c.IsPrimary()) {
+    return ParsePrimaryStatement(c);
+  }
+
+  // Parse a valid directive keyword statement.
+  // Check for keywords which don't allow any modifiers.
+  switch (c.Type()) {
+    case kKwUse:
+      return ParseUsingDecl(c);
+    case kKwMain:
+      return ParseMainDecl(c);
+    case kKwImport:
+      return ParseImportDecl(c);
+    case kKwEnum:
+      return ParseEnumDecl(c);
+    case kKwReturn:
+      return ParseReturnStmt(c);
+    default:
+      break;
+  }
+
+  // Store the initial statement begin location.
+  // Skip any modifiers to determine the parsing method to call based on declarative keyword.
+  // Parse from decl begin to allow called method to handle modifiers.
+  TkCursorT decl_begin = c;
+  while (c.IsModifierKeyword()) c.Advance();
+  switch (c.Type()) {
+    case kKwDef:
+      return ParseVariableDecl(decl_begin);
+    case kKwFn:
+      return ParseMethodDecl(decl_begin);
+    case kKwClass:
+      return ParseClassDecl(decl_begin);
+    case kKwLib:
+      return ParseLibDecl(decl_begin);
+    case kKwUse:
+    case kKwMain:
+    case kKwImport:
+    case kKwEnum:
+    case kKwReturn:
+      return DEBUG_FAIL("Declaration keyword cannot be modified.");
+    default:
+      return DEBUG_FAIL("Declaration keyword not permitted inside directive code block.");
+  }
+}
+
+// <syntax> ::= <directive_desc>
 CND_CX LLPrsResT ParseProgram(TkCursorT c) CND_NX {
   using namespace detail;
   Ast program_node{eAst::kProgram};
   while (!c.AtEnd()) {
-    if (c.IsPragmatic()) {
-      auto decl = ParsePragmaticStmt(c);
-      if (!decl) return decl;
-      ExtractAndAdvance(c, program_node, decl);
+    if (c.IsDirectiveFirstSet()) {
+      auto directive_desc = ParseDirectiveDesc(c);
+      if (!directive_desc) return directive_desc;
+      ExtractAndAdvance(c, program_node, directive_desc);
     } else
-      return DEBUG_FAIL("Expected <pragmatic-decl>.");
+      return DEBUG_FAIL("Expected a directive description at the top level.");
   }
-  return LLParserResult(c, move(program_node));
+  return LLParserResult(c, program_node);
 }
 
 CND_CX LLPrsResT ParseEnumDecl(TkCursorT c) CND_NX {
@@ -1348,17 +1474,17 @@ CND_CX LLPrsResT ParseEnumBlock(TkCursorT c) CND_NX {
 
   using enum eTk;
   using namespace detail;
-  CND_CX LAMBDA xParseAssociationInitializers = [](TkCursorT& crsr, Ast& entry) -> LLPrsResT {
-    while (crsr.TypeIsnt(kSemicolon)) {
-      if (crsr.TypeIsnt(kColon)) return DEBUG_FAIL("Expected <:>.");
-      crsr.Advance();
-      auto next_assoc = ParsePrimaryPostIdentifier(crsr);
-      if (!next_assoc) return next_assoc;
-
-      ExtractAndAdvance(crsr, entry, next_assoc);
-    }
-    crsr.Advance();
-  };
+  // LAMBDA xParseAssociationInitializers = [](TkCursorT& crsr, Ast& entry) -> LLPrsResT {
+  //   while (crsr.TypeIsnt(kSemicolon)) {
+  //     if (crsr.TypeIsnt(kColon)) return DEBUG_FAIL("Expected <:>.");
+  //     crsr.Advance();
+  //     auto next_assoc = ParsePrimaryPostIdentifier(crsr);
+  //     if (!next_assoc) return next_assoc;
+  //     crsr.Advance(next_assoc->head);
+  //     entry.PushBack(move(next_assoc->ast));
+  //   }
+  //   crsr.Advance();
+  // };
 
   Ast node{eAst::kEnumBlock};
   if (c.TypeIsnt(kLBrace))  // Require opening brace.
@@ -1373,7 +1499,16 @@ CND_CX LLPrsResT ParseEnumBlock(TkCursorT c) CND_NX {
       auto& this_entry = node.children.back();
       c.Advance();
       // Check for association initializers. Expect a colon or semicolon.
-      xParseAssociationInitializers(c, this_entry);
+      while (c.TypeIsnt(kSemicolon)) {
+        if (c.TypeIsnt(kColon)) return DEBUG_FAIL("Expected <:>.");
+        c.Advance();
+        auto next_assoc = ParsePrimaryPostIdentifier(c);
+        if (!next_assoc) return next_assoc;
+        c.Advance(next_assoc->head);
+        this_entry.PushBack(next_assoc->ast);
+      }
+      c.Advance();
+      // xParseAssociationInitializers(c, this_entry);
     }
     // EnumCategory
     else if (c.TypeIs(kKwUse)) {
@@ -1402,7 +1537,15 @@ CND_CX LLPrsResT ParseEnumBlock(TkCursorT c) CND_NX {
         for (auto& tk_iter : this_category) added_category.PushBack(tk_iter);
 
         // Check for association initializers. Expect a colon or semicolon.
-        xParseAssociationInitializers(c, this_entry);
+        while (c.TypeIsnt(kSemicolon)) {
+          if (c.TypeIsnt(kColon)) return DEBUG_FAIL("Expected <:>.");
+          c.Advance();
+          auto next_assoc = ParsePrimaryPostIdentifier(c);
+          if (!next_assoc) return next_assoc;
+          c.Advance(next_assoc->head);
+          this_entry.PushBack(move(next_assoc->ast));
+        }
+        c.Advance();
       }
       // a block
       else if (c.TypeIs(kLBrace)) {
@@ -1476,7 +1619,7 @@ CND_CX ScopePrsResT FindBrace(TkCursorT c) CND_NX {
   if (c.AtEnd()) return DEBUG_FAIL("OutOfBounds");  // Out of bounds begin passed to method...
   if (c.TypeIsnt(eTk::kLBrace)) return DEBUG_FAIL("Expected opening scope.");  // No open token to start with.
   auto scope_begin = c.Iter();
-  c.Advance();
+  // c.Advance();
   if (c.AtEnd()) return DEBUG_FAIL("kParserOpeningScopeAtEof.");  // End right after open, cannot be closed.
   if (c.TypeIs(eTk::kRBrace)) return TkScopeT{true, scope_begin, c.Advance().Iter()};  // Empty paren scope '()'
   return FindScopeImpl(c);
@@ -1495,38 +1638,8 @@ CND_CX ScopePrsResT FindBracket(TkCursorT c) CND_NX {
 CND_CX LRPrsResT ParseExpr(TkCursorT c) CND_NX { return DEBUG_FAIL("NOT IMPLEMENTED"); }
 
 CND_CX LLPrsResT ParsePrimaryExpr(TkCursorT c) CND_NX {
-  if (c.IsAnOperand() || c.IsSingularPrefixOperator() || c.IsOpeningScope()) return ParseListFold(c);
-  /*  else if (c.TypeIs(eTk::kLParen)) {
-      TkCursorT subexpr_beg = c;
-      c.Advance();
-      auto subexpr = ParsePrimaryExpr(c);
-      if (!subexpr) return subexpr;
-      c.Advance(subexpr->head);
-      if (c.TypeIsnt(eTk::kRParen)) return DEBUG_FAIL("Mismatched parentheses");
-      c.Advance();
-      Ast ret{eAst::kSubexpression, subexpr_beg.Iter(), c.Iter(), subexpr->ast};
-      return LLParserResult{c, ret};
-    } else if (c.TypeIs(eTk::kLBracket)) {
-      TkCursorT subexpr_beg = c;
-      c.Advance();
-      auto subexpr = ParsePrimaryExpr(c);
-      if (!subexpr) return subexpr;
-      c.Advance(subexpr->head);
-      if (c.TypeIsnt(eTk::kRBracket)) return DEBUG_FAIL("Mismatched parentheses");
-      c.Advance();
-      Ast ret{eAst::kSquareSubexpr, subexpr_beg.Iter(), c.Iter(), subexpr->ast};
-      return LLParserResult{c, ret};
-    } else if (c.TypeIs(eTk::kLBrace)) {
-      TkCursorT subexpr_beg = c;
-      c.Advance();
-      auto subexpr = ParsePrimaryExpr(c);
-      if (!subexpr) return subexpr;
-      c.Advance(subexpr->head);
-      if (c.TypeIsnt(eTk::kRBrace)) return DEBUG_FAIL("Mismatched parentheses");
-      c.Advance();
-      Ast ret{eAst::kCurlySubexpr, subexpr_beg.Iter(), c.Iter(), subexpr->ast};
-      return LLParserResult{c, ret};
-    } */
+  if (c.IsAnOperand() || c.IsSingularPrefixOperator() || c.IsOpeningScope())
+    return ParseListFold(c);
   else
     DEBUG_FAIL("Unexpected token at start of primary expression.");
 }
@@ -1911,7 +2024,6 @@ CND_CX LLPrsResT ParsePostfixAccess(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
   return LLParserResult{c, reduced_binop.back()};
 };
 
-
 // [L->R] <postfix> ::= <resolution> <INCREMENT_SIGN>*
 //             | <resolution> <DECREMENT_SIGN>*
 CND_CX LLPrsResT ParsePostfix(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
@@ -1967,12 +2079,12 @@ CND_CX LLPrsResT ParsePostfix(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
         accum_op.back().PushBack(move(scoped_args->ast));
         c.Advance(scoped_args->head);
       }
-    } 
+    }
     // Binary member access.
     else {
       // Store the immediate right hand side of this member access operation which
       // is all less-precedent operations: currently only resolution.
-      c.Advance(); // Pass '.'
+      c.Advance();  // Pass '.'
       auto access_rhs = ParseResolution(c);
       if (!access_rhs) return access_rhs;
       accum_op.emplace_back(eAst::kMemberAccess, c.Iter(), access_rhs->ast.src_end, move(access_rhs->ast));
@@ -1990,15 +2102,15 @@ CND_CX LLPrsResT ParsePostfix(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
   for (const auto& next_op : subrange(accum_op.cbegin(), accum_op.cend()) | reverse) {
     // Binary call operator.
     if (next_postfix->TypeIs(eAst::kFunctionCall) || next_postfix->TypeIs(eAst::kListingOperator) ||
-      next_postfix->TypeIs(eAst::kIndexOperator)) {
-      //next_postfix->src_begin = next_op.src_begin;
+        next_postfix->TypeIs(eAst::kIndexOperator)) {
+      // next_postfix->src_begin = next_op.src_begin;
       next_postfix->PushFront(move(next_op));
       next_postfix = &next_postfix->children.front();
       next_postfix->src_begin = reduced_begin;
-    } 
+    }
     // Binary member access.
     else if (next_postfix->TypeIs(eAst::kMemberAccess)) {
-      //next_postfix->src_begin = next_op.src_begin;
+      // next_postfix->src_begin = next_op.src_begin;
       next_postfix->PushFront(move(next_op));
       next_postfix = &next_postfix->children.front();
       next_postfix->src_begin = reduced_begin;
@@ -2009,7 +2121,7 @@ CND_CX LLPrsResT ParsePostfix(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
       next_postfix = &next_postfix->children.back();
       next_postfix->src_begin = reduced_begin;
     }
-    }
+  }
   accum_op.clear();
 
   return LLParserResult{c, reduced_postfix};
