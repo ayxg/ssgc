@@ -580,107 +580,6 @@ CND_CX LLPrsResT ParseForDecl(TkCursorT c) CND_NX {
   return LLParserResult{c, ret};
 }
 
-// <using> ::= <using_type_alias>
-//		  | <using_library_alias>
-//		  | <using_namespace_alias>
-//		  | <using_function_alias>
-//		  | <using_variable_alias>
-//		  | <using_process_alias>
-//		  | <using_enum_alias>
-//		  | <using_library_unscope>
-//		  | <using_namespace_unscope>
-//		  | <using_function_unscope>
-//		  | <using_def_unscope>
-//		  | <using_proc_unscope>
-//		  | <using_type_unscope>
-//		  | <using_enum_unscope>
-//
-// <using_type_alias> ::= <KW_USE> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN>  <type_expr>  <SEMICOLON>
-// <using_library_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
-// <using_namespace_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
-// <using_function_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
-// <using_variable_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
-// <using_process_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
-// <using_enum_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
-//
-// <using_library_unscope> ::= <KW_USE> <KW_LIB> <id_expr> <SEMICOLON>
-// <using_namespace_unscope> ::= <KW_USE> <KW_NAMESPACE> <id_expr> <SEMICOLON>
-// <using_function_unscope> ::= <KW_USE> <KW_FN> <id_expr> <SEMICOLON>
-// <using_def_unscope> ::= <KW_USE> <KW_DEF> <id_expr> <SEMICOLON>
-// <using_proc_unscope> ::= <KW_USE> <KW_PROC> <id_expr> <SEMICOLON>
-// <using_type_unscope> ::= <KW_USE> <id_expr> <SEMICOLON>
-// <using_enum_unscope> ::= <KW_USE> <KW_ENUM> <id_expr> <SEMICOLON>
-CND_CX LLPrsResT ParseUsingDecl(TkCursorT c) CND_NX {
-  using enum eTk;
-  if (c.TypeIsnt(kKwUse)) return DEBUG_FAIL("Expected 'use' keyword.");
-  auto stmt_begin = c.Iter();
-  c.Advance();
-
-  // - @foo -> Type Alias
-  // - @foo : lib -> Library Type Alias.
-  if (c.TypeIs(kCommercialAt)) {
-    c.Advance();
-    if (c.TypeIsnt(kIdent)) DEBUG_FAIL("Expected <ident>.");
-    Ast alias = Ast(c);
-    c.Advance();
-    if (c.TypeIsnt(kColon)) DEBUG_FAIL("Expected <:>.");
-    c.Advance();
-
-    // If next is lib, then it is a library type alias.
-    // Everything following lib must be a value expression closed by a
-    // semicolon. Wether it is reduced to a type is determined at a later
-    // stage.
-    if (c.TypeIs(kKwLib)) {
-      c.Advance();
-      auto val_expr = ParsePrimaryStatement(c);
-      if (!val_expr) return val_expr;
-      c.Advance(val_expr.value().head);
-      return LLParserResult(c, {eAst::kLibraryTypeAlias, stmt_begin, c.Iter(), nullptr, {alias, val_expr->ast}});
-    }
-
-    // else it is a type alias...
-    auto val_expr = ParsePrimaryStatement(c);
-    if (!val_expr) return val_expr;
-    c.Advance(val_expr.value().head);
-    return LLParserResult(c, {eAst::kTypeAlias, stmt_begin, c.Iter(), nullptr, {alias, val_expr->ast}});
-  }
-
-  // - lib-> Library Namespace Inclusion.
-  else if (c.TypeIs(kKwLib)) {
-    c.Advance();
-    auto val_expr = ParsePrimaryStatement(c);
-    if (!val_expr) return val_expr;
-    c.Advance(val_expr.value().head);
-    return LLParserResult(c,
-                          {eAst::kLibraryNamespaceInclusion, stmt_begin, c.Iter(), nullptr, {val_expr.Extract().ast}});
-
-  }
-
-  // - namespace-> Namespace Inclusion.
-  else if (c.TypeIs(kKwNamespace)) {
-    c.Advance();
-    auto val_expr = ParsePrimaryStatement(c);
-    if (!val_expr) return val_expr;
-    c.Advance(val_expr->head);
-    return LLParserResult(c, Ast(eAst::kNamespaceInclusion, stmt_begin, c.Iter(), nullptr, {val_expr->ast}));
-  }
-
-  // Namespace object inclusion.
-  // The primary expr assumed to resolve to an object or function name. Validate at a later stage.
-  else if (c.IsPrimary()) {
-    auto primary_result = ParsePrimaryStatement(c);
-    if (!primary_result) return primary_result;
-    c.Advance(primary_result->head);
-    return LLParserResult(
-        c, Ast(eAst::kNamespaceObjectInclusion, stmt_begin, c.Iter(), nullptr, {primary_result->ast}));
-
-  }
-
-  // Invalid format.
-  else
-    return DEBUG_FAIL("Using statement expected <@> or <kw-lib> or <kw-namespace> or <type-expression>.");
-};
-
 CND_CX LLPrsResT ParseVariableDecl(TkCursorT c) CND_NX {
   using enum eTk;
   using namespace detail;
@@ -1297,6 +1196,195 @@ CND_CX LLPrsResT ParsePragmaticStmt(TkCursorT c) CND_NX {
     return DEBUG_FAIL("Expected <pragmatic-decl-keyword>.");
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// <process_def> ::= <KW_PROC> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> <process_block>
+// <process_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <process_stmt_list> <IGNORED> <RIGHT_CURLY_BRACKET>
+// <process_stmt_list> ::= <process_stmt>*
+// <process_stmt> ::= <import> | <main> | <pragma> | <primary> | <variable> | <function> | <struct>
+//				          | <namespace> | <using> | <enum>
+CND_CX LLPrsResT ParseProcDef(TkCursorT c) CND_NX {
+  using enum eTk;
+  Ast node{eAst::kLibraryDefinition};
+  auto stmt = FindBrace(c);
+  if (!stmt) return LLPrsResT::Failure(stmt.error());
+  c.Advance();
+
+  while (c.Iter() != stmt.value().ContainedEnd()) {
+    if (c.IsPragmatic()) {
+      auto decl = ParsePragmaticStmt(c);
+      if (!decl) return decl;
+      detail::ExtractAndAdvance(c, node, decl);
+    } else {
+      return DEBUG_FAIL("Expected <pragmatic-decl>.");
+    }
+  }
+  c.Advance();
+
+  if (c.TypeIs(kSemicolon))
+    c.Advance();
+  else
+    return LLParserResult(c, move(node));
+
+  return LLParserResult(c, move(node));
+}
+
+// <process> ::= <process_decl> | <process_def>
+// <process_decl> ::= <KW_PROC> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <SEMICOLON>
+CND_CX LLPrsResT ParseProcDecl(TkCursorT c) CND_NX {
+  using enum eTk;
+  // Check if there are any modifiers.
+  Ast mod_node;  
+  auto decl_begin = c.Iter();
+  if (c.IsModifierKeyword()) {
+    auto mod_result = ParseModifiers(c);
+    if (!mod_result) return mod_result;
+    mod_node = move(mod_result.value().ast);
+    c.Advance(mod_result.value().head);
+  }
+  // No modifiers found. Create empty modifiers node.
+  else {
+    mod_node = Ast(eAst::kModifiers, c.Iter(), c.Iter());
+  }
+
+  if (c.TypeIsnt(kKwProc)) return DEBUG_FAIL("Expected <kw-proc>.");
+  c.Advance();
+
+  // If there is a colon, this is an unnamed process. Unamed processes must be defined inline.
+  // Expect a definition ending in a semicolon.
+  if (c.TypeIs(kColon)) {
+    c.Advance();
+    auto def_result = ParseProcDef(c);
+    if (!def_result) return def_result;
+    c.Advance(def_result->head);
+    return LLParserResult(
+        c, Ast(eAst::kProcDecl, decl_begin, c.Iter(), {mod_node, def_result->ast}));
+  }
+
+  // If there is a @ following the proc keyword, this is a named library.
+  if (c.TypeIsnt(kCommercialAt)) DEBUG_FAIL("Expected '@' symbol after 'proc' keyword.");
+  c.Advance();
+  if (c.TypeIsnt(kIdent)) DEBUG_FAIL("Expected identifier after '@' symbol.");
+  Ast ident_node{c};
+  c.Advance();
+  
+  // Library declaration
+  if (c.TypeIs(kSemicolon)) {
+    c.Advance();
+    return LLParserResult(c, Ast(eAst::kLibraryDeclaration, decl_begin, c.Iter(), {mod_node, ident_node}));
+  }
+
+  if (c.TypeIsnt(kColon)) DEBUG_FAIL("Expected ':' symbol followed by process definition.");
+  c.Advance();
+
+  auto def_result = ParseProcDef(c);
+  if (!def_result) return def_result;
+  c.Advance(def_result->head);
+  return LLParserResult(c, Ast(eAst::kLibraryDeclaration, decl_begin, c.Iter(), {mod_node, ident_node, def_result->ast}));
+}
+
+// <using> ::= <using_type_alias>
+//		  | <using_library_alias>
+//		  | <using_namespace_alias>
+//		  | <using_function_alias>
+//		  | <using_variable_alias>
+//		  | <using_process_alias>
+//		  | <using_enum_alias>
+//		  | <using_library_unscope>
+//		  | <using_namespace_unscope>
+//		  | <using_function_unscope>
+//		  | <using_def_unscope>
+//		  | <using_proc_unscope>
+//		  | <using_type_unscope>
+//		  | <using_enum_unscope>
+//
+// <using_type_alias> ::= <KW_USE> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN>  <type_expr>  <SEMICOLON>
+// <using_library_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+// <using_namespace_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+// <using_function_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+// <using_variable_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+// <using_process_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+// <using_enum_alias> ::= <KW_USE> <KW_LIB> <AT_SIGN> <IDENTIFIER> <EQUALS_SIGN> <id_expr> <SEMICOLON>
+//
+// <using_library_unscope> ::= <KW_USE> <KW_LIB> <id_expr> <SEMICOLON>
+// <using_namespace_unscope> ::= <KW_USE> <KW_NAMESPACE> <id_expr> <SEMICOLON>
+// <using_function_unscope> ::= <KW_USE> <KW_FN> <id_expr> <SEMICOLON>
+// <using_def_unscope> ::= <KW_USE> <KW_DEF> <id_expr> <SEMICOLON>
+// <using_proc_unscope> ::= <KW_USE> <KW_PROC> <id_expr> <SEMICOLON>
+// <using_type_unscope> ::= <KW_USE> <id_expr> <SEMICOLON>
+// <using_enum_unscope> ::= <KW_USE> <KW_ENUM> <id_expr> <SEMICOLON>
+CND_CX LLPrsResT ParseUsingDecl(TkCursorT c) CND_NX {
+  using enum eTk;
+  if (c.TypeIsnt(kKwUse)) return DEBUG_FAIL("Expected 'use' keyword.");
+  auto stmt_begin = c.Iter();
+  c.Advance();
+
+  // - @foo -> Type Alias
+  // - @foo : lib -> Library Type Alias.
+  if (c.TypeIs(kCommercialAt)) {
+    c.Advance();
+    if (c.TypeIsnt(kIdent)) DEBUG_FAIL("Expected <ident>.");
+    Ast alias = Ast(c);
+    c.Advance();
+    if (c.TypeIsnt(kColon)) DEBUG_FAIL("Expected <:>.");
+    c.Advance();
+
+    // If next is lib, then it is a library type alias.
+    // Everything following lib must be a value expression closed by a
+    // semicolon. Wether it is reduced to a type is determined at a later
+    // stage.
+    if (c.TypeIs(kKwLib)) {
+      c.Advance();
+      auto val_expr = ParsePrimaryStatement(c);
+      if (!val_expr) return val_expr;
+      c.Advance(val_expr.value().head);
+      return LLParserResult(c, {eAst::kLibraryTypeAlias, stmt_begin, c.Iter(), nullptr, {alias, val_expr->ast}});
+    }
+
+    // else it is a type alias...
+    auto val_expr = ParsePrimaryStatement(c);
+    if (!val_expr) return val_expr;
+    c.Advance(val_expr.value().head);
+    return LLParserResult(c, {eAst::kTypeAlias, stmt_begin, c.Iter(), nullptr, {alias, val_expr->ast}});
+  }
+
+  // - lib-> Library Namespace Inclusion.
+  else if (c.TypeIs(kKwLib)) {
+    c.Advance();
+    auto val_expr = ParsePrimaryStatement(c);
+    if (!val_expr) return val_expr;
+    c.Advance(val_expr.value().head);
+    return LLParserResult(c,
+                          {eAst::kLibraryNamespaceInclusion, stmt_begin, c.Iter(), nullptr, {val_expr.Extract().ast}});
+
+  }
+
+  // - namespace-> Namespace Inclusion.
+  else if (c.TypeIs(kKwNamespace)) {
+    c.Advance();
+    auto val_expr = ParsePrimaryStatement(c);
+    if (!val_expr) return val_expr;
+    c.Advance(val_expr->head);
+    return LLParserResult(c, Ast(eAst::kNamespaceInclusion, stmt_begin, c.Iter(), nullptr, {val_expr->ast}));
+  }
+
+  // Namespace object inclusion.
+  // The primary expr assumed to resolve to an object or function name. Validate at a later stage.
+  else if (c.IsPrimary()) {
+    auto primary_result = ParsePrimaryStatement(c);
+    if (!primary_result) return primary_result;
+    c.Advance(primary_result->head);
+    return LLParserResult(c,
+                          Ast(eAst::kNamespaceObjectInclusion, stmt_begin, c.Iter(), nullptr, {primary_result->ast}));
+
+  }
+
+  // Invalid format.
+  else
+    return DEBUG_FAIL("Using statement expected <@> or <kw-lib> or <kw-namespace> or <type-expression>.");
+};
+
 // <directive_desc> ::= <directive_stmt>* | <directive_block>
 // <directive_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <directive_stmt_list> <IGNORED> <RIGHT_CURLY_BRACKET>
 // <directive_stmt_list> ::= <directive_stmt>*
@@ -1386,7 +1474,7 @@ CND_CX LLPrsResT ParseDirectiveDesc(TkCursorT c) CND_NX {
 }
 
 // <syntax> ::= <directive_desc>
-CND_CX LLPrsResT ParseProgram(TkCursorT c) CND_NX {
+CND_CX LLPrsResT ParseSyntax(TkCursorT c) CND_NX {
   using namespace detail;
   Ast program_node{eAst::kProgram};
   while (!c.AtEnd()) {
@@ -1399,6 +1487,8 @@ CND_CX LLPrsResT ParseProgram(TkCursorT c) CND_NX {
   }
   return LLParserResult(c, program_node);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 CND_CX LLPrsResT ParseEnumDecl(TkCursorT c) CND_NX {
   using enum eTk;
@@ -2435,78 +2525,6 @@ CND_CX LLPrsResT ParseOptionalModifiers(TkCursorT& c) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* end Internal parsing methods impl */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-class Parser {
- public:
-  using ParserOutputT = Ex<Ast, ClMsgBuffer>;
-  using ParserFailT = Unex<ClMsgBuffer>;
-  using CppSrcLocT = std::source_location;
-
-  struct ParserCursor {
-    Ast ast{};
-    std::span<const Tk>::const_iterator head{};
-  };
-
-  using ParserResultT = Ex<ParserCursor, ClMsgBuffer>;
-
-  static CND_CX ParserResultT ParseOperand(const std::span<const Tk>& tokens,
-                                           std::span<const Tk>::const_iterator c) noexcept {
-    using cldev::clmsg::MakeClMsg;
-    using std::next;
-    using std::span;
-    if (c->IsAnOperand())
-      return ParserCursor{.ast = {c->Type(), c, next(c)}, .head = next(c)};
-    else
-      return ParserFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, "Opening token is not an operand.")};
-  };
-
-  static CND_CX ParserResultT ParseReturnStmt(const std::span<const Tk>& tokens,
-                                              std::span<const Tk>::const_iterator c) {
-    using enum eTk;
-    using cldev::clmsg::MakeClMsg;
-    using std::move;
-    using std::next;
-    using std::span;
-    span<const Tk>::const_iterator beg_it = c;
-    if (c->TypeIs(kKwReturn)) {
-      c++;
-      if (c->TypeIs(kSemicolon))  // Check for valid empty return statement
-        return ParserCursor{.ast = {eAst::kKwReturn, beg_it, next(c)}, .head = next(c)};
-
-      // Skip any preceding whitespace.
-      while (c->TypeIs(kNewline) || c->TypeIs(kWhitespace)) c++;
-
-      // Get the primary expr and ending semicolon6 following this return keyword.
-      /*   auto value_expr_result = ParsePrimaryStatement(c);*/
-      auto expr_res = ParseOperand(tokens, c);
-      if (!expr_res) return expr_res;
-      return ParserCursor{.ast = {eAst::kKwReturn, beg_it, expr_res.value().head, nullptr, {expr_res.value().ast}},
-                          .head = ++(expr_res.value().head)};
-    } else {
-      return ParserFailT{
-          MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, "Opening token is not a return keyword.")};
-    }
-  }
-
-  static CND_CX ParserOutputT ParseProgram(std::span<const Tk> tokens) {
-    using cldev::clmsg::MakeClMsg;
-    using std::advance;
-    using std::move;
-
-    auto head = tokens.cbegin();
-    Ast program_node{eAst::kProgram};
-    while (head != tokens.cend()) {
-      if (head->IsDeclarative()) {
-        ParserResultT parsed_decl = ParseReturnStmt(tokens, head);
-        if (!parsed_decl) return ParserFailT{move(parsed_decl.error())};
-        program_node.children.push_back(move(parsed_decl.value().ast));
-        head = move(parsed_decl.value().head);
-      } else
-        return ParserFailT{MakeClMsg<eClErr::kParserExpectedDeclaration>()};
-    }
-    return program_node;
-  }
-};
 
 }  // namespace trtools
 }  // namespace cnd
