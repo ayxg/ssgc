@@ -493,11 +493,14 @@
 
 # process :
 # valid_context: pragmatic
-<process> ::= <process_decl> | <process_def>
+<process> ::= <process_decl> | <process_def> | <process_unnamed_def>
 <process_decl> ::= <KW_PROC> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <SEMICOLON>
-<process_def> ::= <KW_PROC> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> <process_block>
-<process_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <process_stmt_list> <IGNORED> <RIGHT_CURLY_BRACKET>
-<process_stmt_list> ::= <process_stmt>*
+<process_def> ::= <KW_PROC> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> 
+									<LEFT_CURLY_BRACKET> <IGNORED> <process_desc> <IGNORED> <RIGHT_CURLY_BRACKET>
+<process_unnamed_def> ::= <KW_PROC> <IGNORED> <COLON> <IGNORED> 
+									<LEFT_CURLY_BRACKET> <IGNORED> <process_desc> <IGNORED> <RIGHT_CURLY_BRACKET>
+<process_desc> ::= (<process_stmt> | <process_block>)*
+<process_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <process_stmt>* <IGNORED> <RIGHT_CURLY_BRACKET>
 <process_stmt> ::= <import> | <main> | <pragma> | <primary> | <variable> | <function> | <struct>
 				 | <namespace> | <using> | <enum>
 
