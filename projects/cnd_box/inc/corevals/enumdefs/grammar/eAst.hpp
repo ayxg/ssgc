@@ -53,6 +53,8 @@ namespace cnd::corevals::grammar {
   sep m(ClassDefinition)                                     \
   sep m(ClassDeclaration)                                    \
   sep m(ImportDeclaration)                                   \
+  sep m(ProcessDeclaration)                                  \
+  sep m(ProcessDefinition)                                   \
   sep m(LibraryDeclaration)                                  \
   sep m(LibraryDefinition)                                   \
   sep m(MainDeclaration)                                     \

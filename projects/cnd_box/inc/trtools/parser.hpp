@@ -1198,36 +1198,131 @@ CND_CX LLPrsResT ParsePragmaticStmt(TkCursorT c) CND_NX {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// <directive_desc> ::= <directive_stmt>* | <directive_block>
+// <directive_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <directive_stmt_list> <IGNORED> <RIGHT_CURLY_BRACKET>
+// <directive_stmt_list> ::= <directive_stmt>*
+// <directive_stmt> ::= <primary_stmt>
+//				   | <include>
+//				   | <pragma>
+//				   | <process>
+//				   | <library>
+//				   | <variable>
+//				   | <function>
+//				   | <struct>
+//				   | <using>
+//				   | <enum>
+//				   | <directive_namespace>
+//				   | <directive_if>
+//				   | <directive_switch>
+//				   | <directive_while>
+//				   | <directive_for>
+//				   | <directive_return>
+CND_CX LLPrsResT ParsePragmaticDesc(TkCursorT c) CND_NX {
+  using enum eTk;
+  // Error on empty statement early
+  if (c.TypeIs(kSemicolon)) return DEBUG_FAIL("Empty statement in code. Unnecessary semicolon ';'.");
 
-// <process_def> ::= <KW_PROC> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> <process_block>
-// <process_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <process_stmt_list> <IGNORED> <RIGHT_CURLY_BRACKET>
-// <process_stmt_list> ::= <process_stmt>*
+  // Check if there is an unnamed scope. Override possible left brace in primary expressions,
+  // and recursivley call this method to parse contained statements.
+  if (c.TypeIs(eTk::kLBrace)) {
+    Ast scope_node{eAst::kUnnamedScope};
+    while (c.TypeIsnt(eTk::kRBrace) || c.AtEnd()) {
+      auto sub_description = ParsePragmaticDesc(c);
+      if (!sub_description) return sub_description;
+      detail::ExtractAndAdvance(c, scope_node, sub_description);
+    }
+    if (c.AtEnd()) return DEBUG_FAIL("Unclosed unnamed scope. Closing brace '}' not found.");
+    c.Advance();
+    if (c.TypeIs(kSemicolon)) return DEBUG_FAIL("Empty statement in code. Unnecessary semicolon ';'.");
+    return LLParserResult{c, scope_node};
+  }
+
+  /////////////////////////////////////////////////////////
+  // From here we are parsing a single statement...
+  /////////////////////////////////////////////////////////
+  if (c.IsPrimary()) {
+    return ParsePrimaryStatement(c);
+  }
+
+  // Parse a valid directive keyword statement.
+  // Check for keywords which don't allow any modifiers.
+  switch (c.Type()) {
+    case kKwUse:
+      return ParseUsingDecl(c);
+    case kKwMain:
+      return ParseMainDecl(c);
+    case kKwImport:
+      return ParseImportDecl(c);
+    case kKwEnum:
+      return ParseEnumDecl(c);
+    default:
+      break;
+  }
+
+  // Store the initial statement begin location.
+  // Skip any modifiers to determine the parsing method to call based on declarative keyword.
+  // Parse from decl begin to allow called method to handle modifiers.
+  TkCursorT decl_begin = c;
+  while (c.IsModifierKeyword()) c.Advance();
+  switch (c.Type()) {
+    case kKwDef:
+      return ParseVariableDecl(decl_begin);
+    case kKwFn:
+      return ParseMethodDecl(decl_begin);
+    case kKwClass:
+      return ParseClassDecl(decl_begin);
+    case kKwUse:
+    case kKwMain:
+    case kKwImport:
+    case kKwEnum:
+    case kKwReturn:
+      return DEBUG_FAIL("Declaration keyword cannot be modified.");
+    default:
+      return DEBUG_FAIL("Declaration keyword not permitted inside pragmatic code block.");
+  }
+}
+
+// <process_def> ::= <KW_PROC> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> 
+//									<LEFT_CURLY_BRACKET> <IGNORED> <process_desc> <IGNORED> <RIGHT_CURLY_BRACKET>
+// <process_unnamed_def> ::= <KW_PROC> <IGNORED> <COLON> <IGNORED> 
+//									<LEFT_CURLY_BRACKET> <IGNORED> <process_desc> <IGNORED> <RIGHT_CURLY_BRACKET>
+// <process_desc> ::= (<process_stmt> | <process_block>)*
+// <process_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <process_stmt>* <IGNORED> <RIGHT_CURLY_BRACKET>
 // <process_stmt> ::= <import> | <main> | <pragma> | <primary> | <variable> | <function> | <struct>
-//				          | <namespace> | <using> | <enum>
+//				        | <namespace> | <using> | <enum>
 CND_CX LLPrsResT ParseProcDef(TkCursorT c) CND_NX {
   using enum eTk;
-  Ast node{eAst::kLibraryDefinition};
-  auto stmt = FindBrace(c);
-  if (!stmt) return LLPrsResT::Failure(stmt.error());
-  c.Advance();
+  Ast process_node{eAst::kProcessDefinition};
 
-  while (c.Iter() != stmt.value().ContainedEnd()) {
-    if (c.IsPragmatic()) {
-      auto decl = ParsePragmaticStmt(c);
-      if (!decl) return decl;
-      detail::ExtractAndAdvance(c, node, decl);
-    } else {
-      return DEBUG_FAIL("Expected <pragmatic-decl>.");
-    }
-  }
-  c.Advance();
-
-  if (c.TypeIs(kSemicolon))
+  // Process def will either be a single statement or a block.
+  if (c.TypeIs(kSemicolon)) return DEBUG_FAIL("Empty process definition.");
+ 
+  // Process block
+  if (c.TypeIs(kLBrace)) {
     c.Advance();
-  else
-    return LLParserResult(c, move(node));
+    while (!c.AtEnd() || c.TypeIs(kRBrace)) {
+      if (c.IsPragmaticFirstSet()) {
+        auto pragmatic_desc = ParsePragmaticDesc(c);
+        if (!pragmatic_desc) return pragmatic_desc;
+        detail::ExtractAndAdvance(c, process_node, pragmatic_desc);
+      } else
+        return DEBUG_FAIL("Expected a pragmatic description at the process level.");
+    }
+    // eof before closing brace
+    if (c.AtEnd()) return DEBUG_FAIL("Expected closing brace.");
+    c.Advance();
+    return LLParserResult{c, process_node};
+  } 
 
-  return LLParserResult(c, move(node));
+  // Single statement process
+  if (c.IsPragmaticFirstSet()) {
+    auto pragmatic_desc = ParsePragmaticDesc(c);
+    if (!pragmatic_desc) return pragmatic_desc;
+    detail::ExtractAndAdvance(c, process_node, pragmatic_desc);
+  } else
+    return DEBUG_FAIL("Expected a pragmatic description at the process level.");  
+
+  return LLParserResult(c, process_node);
 }
 
 // <process> ::= <process_decl> | <process_def>
@@ -1259,7 +1354,7 @@ CND_CX LLPrsResT ParseProcDecl(TkCursorT c) CND_NX {
     if (!def_result) return def_result;
     c.Advance(def_result->head);
     return LLParserResult(
-        c, Ast(eAst::kProcDecl, decl_begin, c.Iter(), {mod_node, def_result->ast}));
+        c, Ast(eAst::kProcessDeclaration, decl_begin, c.Iter(), {mod_node, def_result->ast}));
   }
 
   // If there is a @ following the proc keyword, this is a named library.
