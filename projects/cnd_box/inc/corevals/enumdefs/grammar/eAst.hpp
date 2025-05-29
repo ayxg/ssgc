@@ -34,9 +34,9 @@ namespace cnd::corevals::grammar {
   sep m(ResolutionOp)                                        \
   sep m(RootNamespace)                                       \
   sep m(MemberAccess)                                        \
-  sep m(ParenSubexpr)                                       \
-  sep m(SquareSubexpr)                                      \
-  sep m(CurlySubexpr)                                       \
+  sep m(ParenSubexpr)                                        \
+  sep m(SquareSubexpr)                                       \
+  sep m(CurlySubexpr)                                        \
   sep m(Statement)                                           \
   sep m(Expression)                                          \
   sep m(Declaration)                                         \
@@ -84,7 +84,7 @@ namespace cnd::corevals::grammar {
   sep m(IndexArguments)                                      \
   sep m(Modifiers)                                           \
   sep m(UnaryMinus)                                          \
-  sep m(UnaryPlus)\
+  sep m(UnaryPlus)                                           \
   sep m(Dereference)                                         \
   sep m(AddressOf)                                           \
   sep m(EnumDeclaration)                                     \
@@ -93,6 +93,15 @@ namespace cnd::corevals::grammar {
   sep m(EnumBlock)                                           \
   sep m(EnumCategory)                                        \
   sep m(EnumEntry)                                           \
+  sep m(IncludeSystemStmt)                                   \
+  sep m(IncludeLocalStmt)                                    \
+  sep m(IQCharSeuquence)                                     \
+  sep m(PFCharSequence)                                      \
+  sep m(IACharSeuquence)                                     \
+  sep m(PragmaEscapedStmt)                                   \
+  sep m(PragmaFunctionalStmt)                                \
+  sep m(PragmaNamedStmt)                                     \
+  sep m(NamespaceDecl)\
   sep m(UnnamedScope)                                        \
   lst
 

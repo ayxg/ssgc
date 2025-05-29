@@ -1,0 +1,16 @@
+include "stddef.cnd"
+
+lib @cstd:{
+ extern fn@abort;
+ extern fn@exit;
+ extern fn@quick_exit;
+ extern fn@_Exit;
+ extern fn@atexit(extern fn(void)(void)@func);
+ extern fn@at_quick_exit(extern fn(void)(void)@func);
+ compeval def int @EXIT_SUCCESS = 0;
+ compeval def int @EXIT_FAILURE = 1;
+ extern fn@system(const char ptr @command);
+ extern fn@getenv(const char ptr @name);
+ extern fn@getenv_s(size_t ptr @len, char ptr @value, rsize_t @valuesz, const char @name);
+ extern fn@memalignment(const void ptr @p);
+}

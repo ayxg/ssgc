@@ -140,6 +140,9 @@ CND_CX LLPrsResT ParseIfDecl(TkCursorT c) CND_NX;
 CND_CX LLPrsResT ParseMainDecl(TkCursorT c) CND_NX;
 CND_CX LLPrsResT ParseLibDecl(TkCursorT c) CND_NX;
 CND_CX LLPrsResT ParseImportDecl(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParseIncludeStmt(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParsePragmaStmt(TkCursorT c) CND_NX;
+
 CND_CX LLPrsResT ParseWhileDecl(TkCursorT c) CND_NX;
 CND_CX LLPrsResT ParseForDecl(TkCursorT c) CND_NX;
 CND_CX LLPrsResT ParseUsingDecl(TkCursorT c) CND_NX;
@@ -149,7 +152,7 @@ CND_CX LLPrsResT ParseClassDecl(TkCursorT c) CND_NX;
 CND_CX LLPrsResT ParseEnumDecl(TkCursorT c) CND_NX;
 CND_CX LLPrsResT ParseEnumDef(TkCursorT c) CND_NX;
 CND_CX LLPrsResT ParseEnumBlock(TkCursorT c) CND_NX;
-CND_CX LLPrsResT ParseProgram(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParseSyntax(TkCursorT c) CND_NX;
 CND_CX LRPrsResT ParseExpr(TkCursorT c) CND_NX;
 
 CND_CX LLPrsResT ParsePrimaryExpr(TkCursorT c) CND_NX;
@@ -1197,6 +1200,10 @@ CND_CX LLPrsResT ParsePragmaticStmt(TkCursorT c) CND_NX {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CND_CX LLPrsResT ParseIncludeStmt(TkCursorT c) CND_NX { return DEBUG_FAIL("Not implemented"); }
+CND_CX LLPrsResT ParsePragmaStmt(TkCursorT c) CND_NX { return DEBUG_FAIL("Not implemented"); }
+CND_CX LLPrsResT ParseSwitchStmt(TkCursorT c) CND_NX { return DEBUG_FAIL("Not implemented"); }
 
 // <directive_desc> ::= <directive_stmt>* | <directive_block>
 // <directive_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <directive_stmt_list> <IGNORED> <RIGHT_CURLY_BRACKET>

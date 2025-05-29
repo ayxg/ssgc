@@ -156,6 +156,13 @@ class TkCursor {
   }
 
   // Valid first terminal in a top level syntax statement.
+  constexpr Bool IsPragmaticFirstSet() const noexcept {
+    auto& c = Get();
+    return (c.IsModifier() || c.IsDeclarative() || c.IsPrimary()) && (c.Type() != eTk::kKwProc) &&
+           (c.Type() != eTk::kKwLib);
+  }
+
+  // Valid first terminal in a top level syntax statement.
   constexpr Bool IsDirectiveFirstSet() const noexcept {
     auto& c = Get();
     return c.IsModifier() || c.IsDeclarative() || c.IsPrimary();
