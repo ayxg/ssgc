@@ -133,7 +133,28 @@ struct Ast {
         return false;
     }
   }
-
+  constexpr bool IsLiteralSignificant() const noexcept {
+    switch (type) {
+      using enum eAst;
+      // Literal terminals
+      case kLitCstr:
+      case kLitInt:
+      case kLitUint:
+      case kLitBool:
+      case kLitReal:
+      case kLitChar:
+      case kLitByte:
+      case kKwNone:
+      case kKwTrue:
+      case kKwFalse:
+      case kIdent:
+      // Intermediates which store a literal value
+      case kEnumEntry:
+        return true;
+      default:
+        return false;
+    }
+  }
   constexpr Str GetLiteral() const noexcept {
     if (src_begin != src_end) {
       Str ret;

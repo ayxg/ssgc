@@ -108,6 +108,7 @@ set_target_properties(
 #)
 
 # Test Group : CndModuleTests
+#[=[
 minitest_add_executable(
   NAME                CndModuleTests
   INCLUDE_DIRECTORIES ut
@@ -120,6 +121,35 @@ minitest_from_headers(
   PREFIX UtCnd
   TARGET CndModuleTests
   HEADERS test_trtools_parser.hpp
+)
+]=]
+
+minitest_add_executable(
+  NAME                UtCndParserPrimaryExpr
+  INCLUDE_DIRECTORIES ut
+  WORKING_DIRECTORY   ut/res
+  LINK_LIBS           cnd_compiler_interface
+  TEST_HEADERS        UtParserPrimaryExpr.hpp
+)
+
+minitest_from_headers(
+  PREFIX UtCndFrontEnd
+  TARGET UtCndParserPrimaryExpr
+  HEADERS UtParserPrimaryExpr.hpp
+)
+
+minitest_add_executable(
+  NAME                UtParserGrammarRules
+  INCLUDE_DIRECTORIES ut
+  WORKING_DIRECTORY   ut/res
+  LINK_LIBS           cnd_compiler_interface
+  TEST_HEADERS        UtParserGrammarRules.hpp
+)
+
+minitest_from_headers(
+  PREFIX UtCndFrontEnd
+  TARGET UtParserGrammarRules
+  HEADERS UtParserGrammarRules.hpp
 )
 
 #[============================================================================[
