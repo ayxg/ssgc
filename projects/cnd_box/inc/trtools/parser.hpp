@@ -21,13 +21,11 @@
 #include "cldata/tk.hpp"
 #include "cldata/ast.hpp"
 #include "cldata/synth_ast.hpp"
-#include "token_cursor.hpp"
+#include "TkCursor.hpp"
 #include "token_scope.hpp"
 
-#include "token_closure.hpp"
-#include "lexer.hpp"
-
-//#include "lr_parser.hpp"
+#include "Lexer.hpp"
+#include "CompilerIO.hpp"
 // clang-format on
 
 /// File local macro, returns a debug error for creating and debugging compiler errors on the fly.
@@ -222,6 +220,27 @@ CND_CX SepScopePrsResT FindSeperatedBracket(const TkScopeT& ls, eTk separator) C
 /// @} // end of cand_compiler_parser_scope
 
 }  // namespace parser
+
+/// @brief Parse pre-loaded or generated C& source file data.
+/// @param src_data Source file data. EOF character should be the last element.
+static CompilerProcessResult<Ast> ParseSource(const Vec<char>& src_data) {
+  StrView src_view = {src_data.begin(), src_data.end()};
+  auto lex_res = Lexer::Lex(src_view);
+  if (!lex_res) return CompilerProcessFailure(lex_res.error());
+  auto sanitized_src = Lexer::Sanitize(*lex_res);
+  std::span<const Tk> src_span = std::span{sanitized_src.data(), sanitized_src.size()};
+  auto parse_res = parser::ParseSyntax({src_span.cbegin(), src_span.cend()});
+  if (!parse_res) return CompilerProcessFailure(parse_res.error());
+  return parse_res->ast;
+}
+
+/// @brief Parse a C& source file.
+/// @param fp Source file path. Absolute or relative to working dir.
+static CompilerProcessResult<Ast> ParseFile(const Path& fp) {
+  auto loaded_src = LoadSourceFile<char>(fp.string());
+  if (!loaded_src) loaded_src.error(); 
+  return ParseSource(*loaded_src);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* Internal parsing methods impl */
@@ -1289,10 +1308,12 @@ CND_CX LLPrsResT ParsePragmaticDesc(TkCursorT c) CND_NX {
   }
 }
 
-// <process_def> ::= <KW_PROC> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> 
-//									<LEFT_CURLY_BRACKET> <IGNORED> <process_desc> <IGNORED> <RIGHT_CURLY_BRACKET>
-// <process_unnamed_def> ::= <KW_PROC> <IGNORED> <COLON> <IGNORED> 
-//									<LEFT_CURLY_BRACKET> <IGNORED> <process_desc> <IGNORED> <RIGHT_CURLY_BRACKET>
+// <process_def> ::= <KW_PROC> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED>
+//									<LEFT_CURLY_BRACKET> <IGNORED> <process_desc>
+//<IGNORED> <RIGHT_CURLY_BRACKET>
+// <process_unnamed_def> ::= <KW_PROC> <IGNORED> <COLON> <IGNORED>
+//									<LEFT_CURLY_BRACKET> <IGNORED> <process_desc>
+//<IGNORED> <RIGHT_CURLY_BRACKET>
 // <process_desc> ::= (<process_stmt> | <process_block>)*
 // <process_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <process_stmt>* <IGNORED> <RIGHT_CURLY_BRACKET>
 // <process_stmt> ::= <import> | <main> | <pragma> | <primary> | <variable> | <function> | <struct>
@@ -1303,7 +1324,7 @@ CND_CX LLPrsResT ParseProcDef(TkCursorT c) CND_NX {
 
   // Process def will either be a single statement or a block.
   if (c.TypeIs(kSemicolon)) return DEBUG_FAIL("Empty process definition.");
- 
+
   // Process block
   if (c.TypeIs(kLBrace)) {
     c.Advance();
@@ -1319,7 +1340,7 @@ CND_CX LLPrsResT ParseProcDef(TkCursorT c) CND_NX {
     if (c.AtEnd()) return DEBUG_FAIL("Expected closing brace.");
     c.Advance();
     return LLParserResult{c, process_node};
-  } 
+  }
 
   // Single statement process
   if (c.IsPragmaticFirstSet()) {
@@ -1327,7 +1348,7 @@ CND_CX LLPrsResT ParseProcDef(TkCursorT c) CND_NX {
     if (!pragmatic_desc) return pragmatic_desc;
     detail::ExtractAndAdvance(c, process_node, pragmatic_desc);
   } else
-    return DEBUG_FAIL("Expected a pragmatic description at the process level.");  
+    return DEBUG_FAIL("Expected a pragmatic description at the process level.");
 
   return LLParserResult(c, process_node);
 }
@@ -1337,7 +1358,7 @@ CND_CX LLPrsResT ParseProcDef(TkCursorT c) CND_NX {
 CND_CX LLPrsResT ParseProcDecl(TkCursorT c) CND_NX {
   using enum eTk;
   // Check if there are any modifiers.
-  Ast mod_node;  
+  Ast mod_node;
   auto decl_begin = c.Iter();
   if (c.IsModifierKeyword()) {
     auto mod_result = ParseModifiers(c);
@@ -1360,8 +1381,7 @@ CND_CX LLPrsResT ParseProcDecl(TkCursorT c) CND_NX {
     auto def_result = ParseProcDef(c);
     if (!def_result) return def_result;
     c.Advance(def_result->head);
-    return LLParserResult(
-        c, Ast(eAst::kProcessDeclaration, decl_begin, c.Iter(), {mod_node, def_result->ast}));
+    return LLParserResult(c, Ast(eAst::kProcessDeclaration, decl_begin, c.Iter(), {mod_node, def_result->ast}));
   }
 
   // If there is a @ following the proc keyword, this is a named library.
@@ -1370,7 +1390,7 @@ CND_CX LLPrsResT ParseProcDecl(TkCursorT c) CND_NX {
   if (c.TypeIsnt(kIdent)) DEBUG_FAIL("Expected identifier after '@' symbol.");
   Ast ident_node{c};
   c.Advance();
-  
+
   // Library declaration
   if (c.TypeIs(kSemicolon)) {
     c.Advance();
@@ -1383,7 +1403,8 @@ CND_CX LLPrsResT ParseProcDecl(TkCursorT c) CND_NX {
   auto def_result = ParseProcDef(c);
   if (!def_result) return def_result;
   c.Advance(def_result->head);
-  return LLParserResult(c, Ast(eAst::kLibraryDeclaration, decl_begin, c.Iter(), {mod_node, ident_node, def_result->ast}));
+  return LLParserResult(c,
+                        Ast(eAst::kLibraryDeclaration, decl_begin, c.Iter(), {mod_node, ident_node, def_result->ast}));
 }
 
 // <using> ::= <using_type_alias>

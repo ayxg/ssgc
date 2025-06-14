@@ -19,7 +19,7 @@
 #include "cxxx_enumerated_flags.hpp"
 #include "minitest.hpp"
 #include "trtools/CompilerIO.hpp"
-#include "trtools/parser.hpp"
+#include "trtools/Parser.hpp"
 
 // Overload ostream >> for eAst enum for minitest library.
 std::ostream& operator<<(std::ostream& os, const cnd::corevals::grammar::eAst& obj) {

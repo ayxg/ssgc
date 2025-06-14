@@ -1,0 +1,22 @@
+`Fibonacci series:
+`the sum of two elements defines the next
+def @a:1;
+def @b:2;
+
+while (a < 10){
+	std::msg(a);
+	def @c:b;
+	a = b;
+	b = a + c;
+}
+
+/`
+Output:
+0 
+1
+1  
+2
+3
+5
+8
+`/

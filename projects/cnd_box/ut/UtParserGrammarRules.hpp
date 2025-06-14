@@ -18,7 +18,7 @@
 // !!Keep clang format OFF for this file ,or else expected ast constructors will be unreadable.
 // clang-format off
 #include "minitest.hpp"
-#include "trtools/parser.hpp"
+#include "trtools/Parser.hpp"
 #include "ParserTestUtils.hpp"
 
 namespace cnd_unit_test::frontend::parser {
@@ -30,7 +30,7 @@ using enum cnd::eAst;
 using cnd_unit_test::frontend::test_util::TestParsingMethod;
 using enum cnd_unit_test::frontend::test_util::eTestParsingMethod;
 
-// The namespace being tested from "trtools/parser.hpp" header.
+// The namespace being tested from "trtools/Parser.hpp" header.
 using namespace cnd::trtools::parser;
 
 ///////////////////////////////////////

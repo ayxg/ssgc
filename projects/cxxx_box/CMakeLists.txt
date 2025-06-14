@@ -10,7 +10,7 @@ Licensed under the GNU Affero General Public License, Version 3.
 @ingroup
 @brief 
 #]============================================================================]
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.8...3.10)
 
 project(cxxx_box
 	VERSION 0.0.0.0

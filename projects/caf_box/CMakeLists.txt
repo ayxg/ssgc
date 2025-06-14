@@ -10,7 +10,7 @@ Licensed under the GNU Affero General Public License, Version 3.
 @ingroup
 @brief 
 #]============================================================================]
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.8...3.10)
 
 project(caf_box
 	VERSION 0.0.0.0
@@ -23,8 +23,12 @@ project(caf_box
   Find Dependencies
 #]============================================================================]
 find_package(ssgmono_box REQUIRED CONFIG)
-find_package(imgui-sfml REQUIRED)
 
+find_package(imgui-sfml REQUIRED)
+find_package(nlohmanjson REQUIRED)
+
+find_package(mta_box REQUIRED CONFIG)
+find_package(cxxx_box REQUIRED CONFIG)
 #[============================================================================[
   Project Init
 #]============================================================================]
@@ -38,13 +42,20 @@ ssg_setup_standard_project_vars()
 set(CAF_LIBRARY_HEADERS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 set(CAF_LIBRARY_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-add_library(caf_library 
+add_library(caf_library STATIC
   "${CAF_LIBRARY_SOURCES_DIR}/caf_cache_file.cpp"
   "${CAF_LIBRARY_SOURCES_DIR}/caf_context.cpp"
   "${CAF_LIBRARY_SOURCES_DIR}/caf_imgui_ext.cpp"
   "${CAF_LIBRARY_SOURCES_DIR}/caf_time.cpp"
 )
 target_include_directories(caf_library PUBLIC "${CAF_LIBRARY_HEADERS_DIR}")
+target_link_libraries(caf_library 
+  PUBLIC    mta_box::mta_library
+            cxxx_box::cxxx_library
+            ImGui-SFML::ImGui-SFML
+            nlohmann_json::nlohmann_json
+            #wpl_box::wpl_library
+)
 target_sources(caf_library 
   INTERFACE 
   "${CAF_LIBRARY_HEADERS_DIR}/caf.hpp"
