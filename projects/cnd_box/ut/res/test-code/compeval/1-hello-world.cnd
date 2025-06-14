@@ -1,0 +1,9 @@
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+  @project: C& Compiler Test Code
+  @file: 1-hello-world
+  @brief A "hello world" program at compile time in C&.
+`/
+
+std::msg("Hello World!\n");

@@ -10,7 +10,7 @@ Licensed under the Apache License, Version 2.0(the "License");
 @ingroup
 @brief 
 #]============================================================================]
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.8...3.10)
 
 project(cxxx_box
 	VERSION 0.0.0.0

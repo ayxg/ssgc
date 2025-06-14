@@ -10,7 +10,7 @@ Licensed under the Apache License, Version 2.0(the "License");
 @ingroup
 @brief 
 #]============================================================================]
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.8...3.10)
 
 project(cnd_box
 	VERSION 0.0.0.0
@@ -43,7 +43,13 @@ set(cnd_compiler_interface_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Compiler Library : for use as an embedded api.
 add_library(cnd_compiler_interface INTERFACE)
-target_include_directories(cnd_compiler_interface INTERFACE "${cnd_compiler_interface_HEADERS_DIR}")
+target_include_directories(cnd_compiler_interface 
+  INTERFACE "${cnd_compiler_interface_HEADERS_DIR}"
+)
+target_sources(cnd_compiler_interface INTERFACE
+  "${cnd_compiler_interface_SOURCES_DIR}/CliMain.cpp" # SsgcCliMain.hpp
+  "${cnd_compiler_interface_SOURCES_DIR}/CliDriver.cpp" # SsgcDriver.hpp
+)
 target_link_libraries(cnd_compiler_interface 
   INTERFACE mta_box::mta_library
             cxxx_box::cxxx_library
@@ -56,78 +62,56 @@ set_target_properties(
               CMAKE_CXX_EXTENSIONS OFF
 )
 
-#target_sources(cnd_compiler_library 
-#  PUBLIC 
-#  "${CND_LIBRARY_HEADERS_DIR}/cgui.hpp"
-#)
-
-# Compiler CLI executable
-#add_executable(cnd_compiler_executable
-#  "${CND_LIBRARY_SOURCES_DIR}/cnd_main.cpp"
-#  "${CND_LIBRARY_SOURCES_DIR}/cli_main.cpp"
-#  "${CND_LIBRARY_SOURCES_DIR}/driver.cpp"
-#)
-#target_include_directories(cnd_compiler_executable PRIVATE "${CND_LIBRARY_HEADERS_DIR}")
-#target_sources(cnd_compiler_executable 
-#  PUBLIC 
-#  "${CND_LIBRARY_HEADERS_DIR}/cgui.hpp"
-#)
-#target_link_libraries(cnd_compiler_executable
-#  PRIVATE
-#    nlohmann_json::nlohmann_json
-#    # SSG Modules
-#    mta_box::mta_library
-#    cxxx_box::cxxx_library
-#    wpl_box::wpl_library
-#)
-#set_target_properties(
-#  cnd_compiler_executable 
-#  PROPERTIES  CMAKE_CXX_STANDARD 23
-#              CMAKE_CXX_STANDARD_REQUIRED ON
-#             CMAKE_CXX_EXTENSIONS OFF
-#)
+# SSG Compiler CLI: command line interface executable.
+#
+# The implementation is contained inside 'cnd_compiler_interface'.
+# This target only calls 'ssgc::CliMain' method defined the interface. 
+add_executable(ssgc_compiler_executable
+  "${cnd_compiler_interface_SOURCES_DIR}/Main.cpp"
+)
+target_link_libraries(ssgc_compiler_executable PRIVATE cnd_compiler_interface)
 
 #[============================================================================[
   Test Targets
 #]============================================================================]
 
-# Add static unit tests.
-#target_sources(cnd_compiler_library PRIVATE
-#  ut/sut_LexerBasics.cpp
-#  ut/sut_LexerLexEscapedCharSequence.cpp
-#  ut/sut_LexerLexIdentifier.cpp
-#  ut/sut_LexerLexNumber.cpp
-#  ut/sut_LexerLexPunctuator.cpp
-#)
-#target_sources(cnd_compiler_executable PRIVATE
-#  ut/sut_LexerBasics.cpp
-#  ut/sut_LexerLexEscapedCharSequence.cpp
-# ut/sut_LexerLexIdentifier.cpp
-#  ut/sut_LexerLexNumber.cpp
-#  ut/sut_LexerLexPunctuator.cpp
-#)
+#[====================================[
+  Test Suite : UtCompeval
+#]====================================]
+# This suite requires test scripts defined in the 'ut/res' directory. But we dont wan't to perform tests in the source
+# tree. So we copy the test scripts folder to the build directory.
+set(UT_COMPEVAL_TEST_CODE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ut/res/test-code/compeval")
+set(UT_COMPEVAL_TEST_CODE_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/test-code/compeval")
+execute_process(
+  COMMAND 
+    ${CMAKE_COMMAND} -E copy_directory_if_different "${UT_COMPEVAL_TEST_CODE_SOURCE_DIR}" "${UT_COMPEVAL_TEST_CODE_BINARY_DIR}"
+)
 
-# Test Group : CndModuleTests
-#[=[
 minitest_add_executable(
-  NAME                CndModuleTests
+  NAME                UtCompeval
   INCLUDE_DIRECTORIES ut
-  WORKING_DIRECTORY   ut/res
   LINK_LIBS           cnd_compiler_interface
-  TEST_HEADERS        test_trtools_parser.hpp
+  TEST_HEADERS        UtCompeval.hpp
 )
 
 minitest_from_headers(
-  PREFIX UtCnd
-  TARGET CndModuleTests
-  HEADERS test_trtools_parser.hpp
+  PREFIX UtCndFrontEnd
+  TARGET UtCompeval
+  HEADERS UtCompeval.hpp
+  WORKING_DIRECTORY "${UT_COMPEVAL_TEST_CODE_BINARY_DIR}"
 )
-]=]
+
+unset(UT_COMPEVAL_TEST_CODE_SOURCE_DIR)
+unset(UT_COMPEVAL_TEST_CODE_BINARY_DIR)
+
+#[====================================[
+  Test Suite : UtCndParserPrimaryExpr 
+             & UtParserGrammarRules
+#]====================================]
 
 minitest_add_executable(
   NAME                UtCndParserPrimaryExpr
   INCLUDE_DIRECTORIES ut
-  WORKING_DIRECTORY   ut/res
   LINK_LIBS           cnd_compiler_interface
   TEST_HEADERS        UtParserPrimaryExpr.hpp
 )
@@ -151,6 +135,23 @@ minitest_from_headers(
   TARGET UtParserGrammarRules
   HEADERS UtParserGrammarRules.hpp
 )
+
+# Add static unit tests.
+#target_sources(cnd_compiler_library PRIVATE
+#  ut/sut_LexerBasics.cpp
+#  ut/sut_LexerLexEscapedCharSequence.cpp
+#  ut/sut_LexerLexIdentifier.cpp
+#  ut/sut_LexerLexNumber.cpp
+#  ut/sut_LexerLexPunctuator.cpp
+#)
+#target_sources(cnd_compiler_executable PRIVATE
+#  ut/sut_LexerBasics.cpp
+#  ut/sut_LexerLexEscapedCharSequence.cpp
+# ut/sut_LexerLexIdentifier.cpp
+#  ut/sut_LexerLexNumber.cpp
+#  ut/sut_LexerLexPunctuator.cpp
+#)
+
 
 #[============================================================================[
   Subproject Exports

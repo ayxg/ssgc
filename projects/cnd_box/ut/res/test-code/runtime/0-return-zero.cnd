@@ -1,0 +1,14 @@
+def @a:0;
+return a + 1;
+` #push 0
+` #load #rg1 #rsp-4
+` #add #rg1 1
+` #ret #rg1
+
+
+def @a: "Horse";
+cout(a);
+
+` Note how the call is 8 bytes from the stack pointer. Because memory alignment is 4 bytes.
+` #push_bytes 6 "Horse\0"
+` #call printf #rsp-8

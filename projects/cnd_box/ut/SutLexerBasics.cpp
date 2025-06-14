@@ -20,7 +20,7 @@
 #include "use_corevals.hpp"
 #include "use_clmsg.hpp"
 #include "cldata/tk.hpp"
-#include "trtools/lexer.hpp"
+#include "trtools/Lexer.hpp"
 // clang-format on
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
