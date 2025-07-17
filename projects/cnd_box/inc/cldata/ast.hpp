@@ -170,6 +170,8 @@ struct Ast {
   constexpr void PushBack(const Ast& ast) { children.push_back(ast); }
   constexpr void PushFront(Ast&& ast) { children.insert(children.begin(), ast); }
   constexpr void PushFront(const Ast& ast) { children.insert(children.begin(), ast); }
+  constexpr Ast& At(std::size_t i) { return children[i]; }
+  constexpr const Ast& At(std::size_t i) const { return children[i]; }
 
   constexpr void Append(std::same_as<Ast> auto&&... ast) { children.append_range(Vec<Ast>{std::forward<Ast>(ast)...}); }
 };
