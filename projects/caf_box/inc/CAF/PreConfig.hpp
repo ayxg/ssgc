@@ -1,4 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2025 Anton Yashchenko
+// Licensed under the GNU Affero General Public License, Version 3.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: [CAF] Core Application Framework
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup coreappfw
+/// @brief [HEADER] Core App Framework macro pre-configuration.
+/// @TODO : bettter brief here outlining details and declared macros next time you look! :(
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup coreappfw
+/// @{
+
 #pragma once
+
 ///////////////////////////////////////////////////////////
 // Identify host operating system.
 // Define CAF_HOST_OS_[name] macro.
@@ -142,15 +160,13 @@ using std::min;
 
 #define CAF_DEFINE_DISCRETE_GPU_PREFERENCE                                \
   extern "C" __declspec(dllexport) unsigned long NvOptimusEnablement = 1; \
-  extern "C" __declspec(                                                  \
-      dllexport) unsigned long AmdPowerXpressRequestHighPerformance = 1;
+  extern "C" __declspec(dllexport) unsigned long AmdPowerXpressRequestHighPerformance = 1;
 
 #else
 
 #define CAF_DEFINE_DISCRETE_GPU_PREFERENCE
 
 #endif
-
 
 ///////////////////////////////////////////////////////////
 /// Determine the backend context for the application.
@@ -176,15 +192,15 @@ using std::min;
 #include <SFML/Window.hpp>
 
 // On iOS SFML must override the main.
-#ifdef  CAF_HOST_OS_IOS
+#ifdef CAF_HOST_OS_IOS
 #include <SFML/Main.hpp>
 #endif  //  CAF_HOST_OS_IOS
 
 // Use the ImGui-SFML bindings.
-#include "imgui.h"
 #include "imgui-SFML.h"
+#include "imgui.h"
 // Add interface to allow use of std::string with ImGui
-#include "caf_imgui_ext.hpp"
+#define CAF_ENABLE_EXTENSION_DEARIMGUI 1
 
 #endif
 
@@ -194,8 +210,25 @@ using std::min;
 ///////////////////////////////////////////////////////////
 #include <nlohmann/json.hpp>
 
+/// @} // end of coreappfw
 
-///////////////////////////////////////////////////////////
-/// Include CAF pre-defined constants header
-///////////////////////////////////////////////////////////
-#include "caf_predef.hpp"
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: [CAF] Core Application Framework
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+// @created: 2025/05/09
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2025 Anton Yashchenko
+//
+// Licensed under the GNU Affero General Public License, Version 3.
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

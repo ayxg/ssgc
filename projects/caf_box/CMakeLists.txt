@@ -43,10 +43,28 @@ set(CAF_LIBRARY_HEADERS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 set(CAF_LIBRARY_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_library(caf_library STATIC
-  "${CAF_LIBRARY_SOURCES_DIR}/caf_cache_file.cpp"
-  "${CAF_LIBRARY_SOURCES_DIR}/caf_context.cpp"
-  "${CAF_LIBRARY_SOURCES_DIR}/caf_imgui_ext.cpp"
-  "${CAF_LIBRARY_SOURCES_DIR}/caf_time.cpp"
+    # /CAF/Demo/
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Demo/ExWindowHandling.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Demo/ExAnimatedSquare.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Demo/ExBasicUserInterface.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Demo/ExBasicErrorModal.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Demo/ExAdvancedErrorModal.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Demo/ExLoadingBanner.cpp"
+
+    # /CAF/Tool/
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Tool/BconObject.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Tool/ProgressSequence.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Tool/Timeframe.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Tool/Timeline.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Tool/Timer.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Tool/Stopwatch.cpp"
+
+    # /CAF/System/
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/System/Windows.cpp"
+
+    # /CAF/Extension/
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Extension/ExtImGui.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Extension/ExtImGuiTheme.cpp"
 )
 target_include_directories(caf_library PUBLIC "${CAF_LIBRARY_HEADERS_DIR}")
 target_link_libraries(caf_library 
@@ -59,17 +77,52 @@ target_link_libraries(caf_library
 target_sources(caf_library 
   INTERFACE 
   "${CAF_LIBRARY_HEADERS_DIR}/caf.hpp"
-  "${CAF_LIBRARY_HEADERS_DIR}/caf_cache_file.hpp"
-  "${CAF_LIBRARY_HEADERS_DIR}/caf_config.hpp"
-  "${CAF_LIBRARY_HEADERS_DIR}/caf_context.hpp"
-  "${CAF_LIBRARY_HEADERS_DIR}/caf_imgui_ext.hpp"
-  "${CAF_LIBRARY_HEADERS_DIR}/caf_predef.hpp"
-  "${CAF_LIBRARY_HEADERS_DIR}/caf_time.hpp"
+    # /CAF/
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/Demo.hpp"
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/PreConfig.hpp"
+
+    # /CAF/Tool/
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/Tool/BconObject.hpp"
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/Tool/JsonObject.hpp"
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/Tool/ProgressSequence.hpp"
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/Tool/Timeframe.hpp"
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/Tool/Timeline.hpp"
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/Tool/Timer.hpp"
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/Tool/Trigger.hpp"
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/Tool/Stopwatch.hpp"
+
+    # /CAF/System/
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/System/Windows.hpp"
+
+    # /CAF/Extension/
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/Extension/ExtImGui.hpp"
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/Extension/ExtImGuiTheme.hpp"
 )
 
 set_target_properties(caf_library 
   PROPERTIES  CMAKE_CXX_STANDARD 20
               CMAKE_CXX_STANDARD_REQUIRED ON
+)
+
+#[============================================================================[
+  Test Targets
+#]============================================================================]
+
+#[====================================[
+  Test Suite : UtDemoExamples
+#]====================================]
+
+minitest_add_executable(
+  NAME                UtDemoExamples
+  INCLUDE_DIRECTORIES test
+  LINK_LIBS           caf_library
+  TEST_HEADERS        UtDemoExamples.hpp
+)
+
+minitest_from_headers(
+  PREFIX UtCaf
+  TARGET UtDemoExamples
+  HEADERS UtDemoExamples.hpp
 )
 
 #[============================================================================[
