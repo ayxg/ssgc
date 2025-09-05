@@ -104,6 +104,7 @@ ssg_gitpkg_nlohmanjson()
 find_package(cnd_box REQUIRED CONFIG)
 find_package(cide_box REQUIRED CONFIG)
 
+set(CANDIL_PARSER_INCLUDES candil_parser/token.hpp)
 
 #[============================================================================[
 Copyright 2025 Anton Yashchenko
