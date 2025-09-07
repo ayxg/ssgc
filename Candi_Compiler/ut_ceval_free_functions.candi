@@ -1,5 +1,0 @@
-#func add(x) {
-	#return x + 40;
-};
-
-add(2);
