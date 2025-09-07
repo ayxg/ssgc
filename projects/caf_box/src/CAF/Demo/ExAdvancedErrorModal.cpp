@@ -117,7 +117,7 @@ namespace caf::demo {
      };
 
      void Update(const sf::Time& dt) {
-       if (isopen && mwin && mwin->IsAllocated() && mwin->IsOpen()) {
+       if (Windows::IsAvailable(mwin)) {
          caf::imgui::Update(mwin, dt);
          caf::imgui::SetCurrentWindow(mwin);
          ImGui::SetNextWindowSize(mwin->Size());
@@ -154,7 +154,7 @@ namespace caf::demo {
      };
 
      void Render() {
-       if (isopen && mwin && mwin->IsAllocated() && mwin->IsOpen()) {
+       if (Windows::IsAvailable(mwin)) {
          mwin->GetRenderBuffer()->clear();
          caf::imgui::Render(mwin);
          mwin->Display();
@@ -200,38 +200,40 @@ namespace caf::demo {
          modals.push_back(ErrorModal(ErrorModal::kError));
          modals.back().Init(*base_hints, mwin);
          // Freeze main window until error modal is closed.
-         mwin->Freeze(modals.back().mwin);
+         mwin->Freeze(true,modals.back().mwin);
        }
 
        // Update modal list
-       modals.erase(std::remove_if(modals.begin(), modals.end(),
-                                   [](ErrorModal& modal) {
-                                     bool isdone{false};
-                                     // if (!modal.mwin) {
-                                     //   isdone = true;
-                                     //   std::cout << "[Removing Modal because node is nullptr]" << modal.mwin <<
-                                     '\n';
-                                     // } else if (!modal.mwin->Exists()) {
-                                     //   isdone = true;
+       if (Windows::IsGraphDirty()) {
+         modals.erase(std::remove_if(modals.begin(), modals.end(),
+                                     [](ErrorModal& modal) {
+                                       bool isdone{false};
+                                       // if (!modal.mwin) {
+                                       //   isdone = true;
+                                       //   std::cout << "[Removing Modal because node is nullptr]" << modal.mwin <<
+                                       '\n';
+                                       // } else if (!modal.mwin->Exists()) {
+                                       //   isdone = true;
 
-                                     //  std::cout << "[Removing Modal because window !Exists]" << modal.mwin << '\n';
-                                     //} /*else if (modal.mwin->MarkedForDestruction()) {
-                                     //  isdone = true;
+                                       //  std::cout << "[Removing Modal because window !Exists]" << modal.mwin << '\n';
+                                       //} /*else if (modal.mwin->MarkedForDestruction()) {
+                                       //  isdone = true;
 
-                                     //  std::cout << "[Removing Modal because window is MarkedForDestruction]" <<
-                                     '\n';
-                                     //} else if (!modal.mwin->GetSystemHandle()) {
-                                     //  isdone = true;
+                                       //  std::cout << "[Removing Modal because window is MarkedForDestruction]" <<
+                                       '\n';
+                                       //} else if (!modal.mwin->GetSystemHandle()) {
+                                       //  isdone = true;
 
-                                     //  std::cout << "[Removing Modal because window !IsOpen]" << modal.mwin << '\n';
-                                     if (!modal.isopen) {
-                                       isdone = true;
-                                       std::cout << "[Removing Modal because tagged closed]" << modal.mwin << '\n';
-                                     }
+                                       //  std::cout << "[Removing Modal because window !IsOpen]" << modal.mwin << '\n';
+                                       if (!modal.isopen) {
+                                         isdone = true;
+                                         std::cout << "[Removing Modal because tagged closed]" << modal.mwin << '\n';
+                                       }
 
-                                     return isdone;
-                                   }),
-                    modals.end());
+                                       return isdone;
+                                     }),
+                      modals.end());
+       }
 
        for (auto& modal : modals) {
          modal.ProcessEvents();
@@ -258,7 +260,7 @@ namespace caf::demo {
      };
 
      void Update(const sf::Time& dt) {
-       if (mwin && mwin->IsOpen()) {
+       if (Windows::IsAvailable(mwin)) {
          caf::imgui::Update(mwin, dt);
          caf::imgui::SetCurrentWindow(mwin);
          ImGui::SetNextWindowSize(mwin->Size());
@@ -282,7 +284,7 @@ namespace caf::demo {
      };
 
      void Render() {
-       if (mwin && mwin->IsOpen()) {
+       if (Windows::IsAvailable(mwin)) {
          mwin->GetRenderBuffer()->clear();
          caf::imgui::Render(mwin);
          mwin->Display();
@@ -330,7 +332,7 @@ namespace caf::demo {
 
      main_wnd.Update(delta_time);
 
-     if (win_other && win_other->IsOpen()) {
+     if (Windows::IsAvailable(win_other)) {
        caf::imgui::Update(win_other, delta_time);
        caf::imgui::SetCurrentWindow(win_other);
        ImGui::SetNextWindowSize(win_other->Size());
@@ -343,7 +345,7 @@ namespace caf::demo {
      // Apply render
      main_wnd.Render();
 
-     if (win_other && win_other->IsOpen()) {
+     if (Windows::IsAvailable(win_other)) {
        win_other->Clear();
        caf::imgui::Render(win_other);
        win_other->Display();

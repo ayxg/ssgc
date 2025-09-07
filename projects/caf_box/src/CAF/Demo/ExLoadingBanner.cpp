@@ -84,18 +84,32 @@ int ExLoadingBanner() {
     return init_load_seq.Label();
   };
 
+  // Flag - We will turn this off once loading thread has joined.
+  bool flag_loading{true};
+
   // Main loop
   sf::Clock delta_timer{};
   sf::Time frame_delta{};
   while (!Windows::GetWindows().empty()) {
+    // Close the loading window once finished.
+    // Note that this must be called before Windows::ProcessEvents().
+    if (!flag_loading) {
+      Windows::Destroy(win);
+    }
+
     Windows::ProcessEvents();
     frame_delta = delta_timer.restart();
 
     // Join the loading thread once its complete.
-    if (loading_thread->joinable() && init_load_seq.IsDone()) loading_thread->join();
-    
+    if (flag_loading) {
+      if (loading_thread->joinable() && init_load_seq.IsDone()) {
+        loading_thread->join();
+        flag_loading = false;
+      }
+    }
+
     // Update ui.
-    if (win->IsOpen()) {
+    if (Windows::IsAvailable(win)) {
       static int loading_dots = 1;
       static float dot_anim = loading_dots;
       caf::imgui::SetCurrentWindow(win);
@@ -105,7 +119,7 @@ int ExLoadingBanner() {
       if (ImGui::Begin("###BannerWindow")) {
         if (ImGui::BeginChild("###BannerLayout")) {
           ImVec2 textPos = ImGui::GetCursorScreenPos();
-          ImGui::GetWindowDrawList()->AddText(ImGui::GetFont(), 18.0f, textPos, IM_COL32(0, 0, 0, 255),
+          ImGui::GetWindowDrawList()->AddText(ImGui::GetFont(), 18.0f, textPos, IM_COL32(255, 255, 255, 255),
                                               "Foo Application");
           ImGui::Dummy(ImVec2(0, 18.0f));
           ImGui::Text("Application description.");
@@ -123,7 +137,7 @@ int ExLoadingBanner() {
     }
 
     // Render
-    if (win->IsOpen()) {
+    if (Windows::IsAvailable(win)) {
       win->Clear();
       caf::imgui::Render(win);
       win->Display();
@@ -141,7 +155,7 @@ int ExLoadingBanner() {
 // @project: [CAF] Core Application Framework
 // @author(s): Anton Yashchenko
 // @website: https://www.acpp.dev
-// @created: 2025/07/16
+// @created: 2025/07/20
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright 2025 Anton Yashchenko
 //

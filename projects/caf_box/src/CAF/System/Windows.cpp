@@ -19,7 +19,7 @@
 #include "cxxx.hpp"
 #include "CAF/PreConfig.hpp"
 // clang-format on
-
+#include <stacktrace>
 namespace caf::sys {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,27 +29,27 @@ std::list<Windows::Node> Windows::windows_{};
 Windows::Node* Windows::last_window_{nullptr};
 Windows::Node* Windows::curr_window_{nullptr};
 Windows::EventType Windows::curr_event_{};
-
+std::unordered_set<const Windows::Node*> Windows::live_windows_{};
+bool Windows::graph_changing_{false};
+bool Windows::graph_dirty_{false};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/* Window::Node impl */ 
+/* Window::Node impl */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Windows::Node::Node(Node* parent)
     : under_(std::make_unique<WindowType>(VideoModeType::getDesktopMode(), "")),
       title_(""),
       marked_for_destruction_(false),
-      frozen_(std::make_pair(false,nullptr)),
+      frozen_(false),
+      freezer_(nullptr),
       event_handlers_(),
-      cbOnDealloc_([]() {})
-{
-
+      cbOnDealloc_([]() {}) {
   if (parent) node_base_stem__ = parent;
   cbFrozenEvent_ = [this](const EventType& ev) { DefaultFrozenEvent(ev); };
 }
 
 Windows::Node::Node(const Hints& hints, Node* parent)
-    : marked_for_destruction_(false),
-      frozen_(std::make_pair(false, nullptr)),
+    : marked_for_destruction_(false), frozen_(false), freezer_(nullptr),
       event_handlers_(),
       cbOnDealloc_([]() {}) {
   if (parent) node_base_stem__ = parent;
@@ -126,9 +126,13 @@ void Windows::Node::Title(const std::string& new_title) {
 
 Windows::WindowType& Windows::Node::GetUnderlying() const { return *under_; }
 
-Windows::SystemWindowHandleType Windows::Node::GetSystemHandle() const { return under_->getSystemHandle(); }
+Windows::SystemWindowHandleType Windows::Node::GetSystemHandle() const {
+  if (!IsAllocated()) std::cout << std::stacktrace::current() << '\n';
+  assert(IsAllocated() && "[Wnd::GetSystemHandle] Window is not allocated!");
+  return under_->getSystemHandle();
+}
 
-const std::pair<bool, Windows::Node*>& Windows::Node::IsFrozen() const { return frozen_; }
+bool Windows::Node::IsFrozen() const { return frozen_; }
 
 bool Windows::Node::IsAllocated() const { return under_ != nullptr; }
 
@@ -143,9 +147,31 @@ bool Windows::Node::IsFocused() const { return under_->hasFocus(); };
 
 // Windows::Node -  Modification
 
-void Windows::Node::Freeze(bool enable, Node* node) { frozen_ = {enable, node}; }
+void Windows::Node::Freeze(bool enable, Node* node) { 
+    if (enable) {
+      frozen_ = true;  
+      if (!node) freezer_ = nullptr;
+      else {
+        assert(Windows::Exists(node) && "[Wnd::Freeze] Freezer node does not exist!");
+        freezer_ = node;
+      }
+      cbFrozenEvent_ = [this](const EventType& ev) { DefaultFrozenEvent(ev); };
+    } else {
+      frozen_ = false;
+      if (!node)
+        freezer_ = nullptr;
+      else {
+        assert(Windows::Exists(node) && "[Wnd::Freeze] Freezer node does not exist!");
+        freezer_ = node;
+      }
+        cbFrozenEvent_ = [](const EventType&) {};
+    }
+}
 
-void Windows::Node::Freeze(Node* node) { frozen_ = {true, node}; }
+// Freeze the passed node setting this node as the 'freezer'.
+void Windows::Node::Freeze(Node* node) { 
+  Freeze(true, node);
+}
 
 void Windows::Node::Close() { under_->close(); }
 
@@ -195,7 +221,7 @@ void Windows::Node::PushEventHandler(std::function<void(const EventType&)>&& han
 void Windows::Node::ClearEventHandlers() { event_handlers_.clear(); }
 
 bool Windows::Node::CreateVulkanSurface(const VkInstance& instance, VkSurfaceKHR& surface,
-                                       const VkAllocationCallbacks* allocator) {
+                                        const VkAllocationCallbacks* allocator) {
   return under_->createVulkanSurface(instance, surface, allocator);
 }
 
@@ -210,14 +236,14 @@ constexpr const Windows::RenderBufferType* Windows::Node::GetRenderBuffer() cons
 void Windows::Node::DefaultFrozenEvent(const EventType& ev) {
   // Upon any event in the frozen window, request focus to the freezer window if it exists.
   if (ev.type != sf::Event::Closed) {
-    if (frozen_.second) frozen_.second->SetFocused();
+    if (Windows::Exists(freezer_)) freezer_->SetFocused();
   }
 }
 
 constexpr bool Windows::Node::operator==(const Node& other) const noexcept { return under_ == other.under_; }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/* Window - static windowing system */ 
+/* Window - static windowing system */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Windows::Node* Windows::Create(const Hints& hints, Node* parent) {
@@ -232,6 +258,7 @@ Windows::Node* Windows::Create(const Hints& hints, Node* parent) {
     // **Parent must be set manually
     last_window_ = &parent->back();
   }
+  live_windows_.insert(last_window_);
   return last_window_;
 }
 
@@ -239,22 +266,30 @@ void Windows::Destroy(Node* node) {
   if (!node) return;
   // Recursivley mark all subnodes for destruction
   node->apply([](Node& win) { win.marked_for_destruction_ = true; });
+  graph_changing_ = true;
 }
 
 void Windows::Destroy(const Node* node) {
   if (!node) return;
   // Recursivley mark all subnodes for destruction
   const_cast<Node*>(node)->apply([](Node& win) { win.marked_for_destruction_ = true; });
+  graph_changing_ = true;
 }
 
 void Windows::ProcessEvents() {
   // Destroy any windows that are marked for destruction befroe the next processing frame.
   // Otherwise, mangling the window node graph during event handling may cause a null pointer exception.
-  ApplyWindowRemoval();
+  if (graph_changing_) {
+    ApplyWindowRemoval();
+    graph_changing_ = false;
+    graph_dirty_ = true;  // Graph is ONLY dirty when a window is node is removed, not when a window is created.
+  } else
+    graph_dirty_ = false;
+
   // For each root window. Process events or call frozen event handler.
   for (auto& wnd : windows_) {
     curr_window_ = &wnd;
-    if (!wnd.IsFrozen().first)
+    if (!wnd.IsFrozen())
       while (wnd.PollEvent(curr_event_))
         for (auto& handler : wnd.event_handlers_) handler(curr_event_);
     else
@@ -264,7 +299,7 @@ void Windows::ProcessEvents() {
     if (!wnd.is_leaf())
       wnd.apply_branches([](Windows::Node& cwnd) {
         curr_window_ = &cwnd;
-        if (!cwnd.IsFrozen().first)
+        if (!cwnd.IsFrozen())
           while (cwnd.PollEvent(curr_event_))
             for (auto& handler : cwnd.event_handlers_) handler(curr_event_);
         else
@@ -281,6 +316,7 @@ void Windows::RemoveWindows(Node* node) {
   node->cbOnDealloc_();
   if (node->IsOpen()) node->Close();
   node->prune();
+  live_windows_.erase(node);
 }
 
 void Windows::RemoveSubwindows(Node* node) {
@@ -297,6 +333,7 @@ void Windows::ApplyWindowRemoval(Node* node) {
         if (!wnd.is_leaf()) RemoveSubwindows(&wnd);
         wnd.cbOnDealloc_();
         if (wnd.IsOpen()) wnd.Close();
+        live_windows_.erase(&wnd);
       } else {
         ApplyWindowRemoval(&wnd);
       }
@@ -311,6 +348,7 @@ void Windows::ApplyWindowRemoval(Node* node) {
         subwin.cbOnDealloc_();
         if (subwin.IsOpen()) subwin.Close();
         subwin.prune();
+        live_windows_.erase(&subwin);
       } else {
         ApplyWindowRemoval(&subwin);
       }
@@ -318,6 +356,23 @@ void Windows::ApplyWindowRemoval(Node* node) {
     node->branches().remove_if([](const Node& wnd) { return wnd.IsMarkedForDestruction(); });
   }
 }
+
+bool Windows::Exists(Node* pnode) {
+  return live_windows_.contains(const_cast<const Node*>(pnode));
+}
+
+bool Windows::Exists(const Node* pnode) {
+  return live_windows_.contains(pnode);
+}
+
+bool Windows::IsAvailable(Node* pnode) { return Exists(pnode) && !pnode->IsMarkedForDestruction() && pnode->IsOpen(); }
+
+bool Windows::IsAvailable(const Node* pnode) {
+ 
+  return Exists(pnode) && !pnode->IsMarkedForDestruction() && pnode->IsOpen();
+}
+
+bool Windows::IsGraphDirty() { return graph_changing_ || graph_dirty_; }
 
 }  // namespace caf::sys
 

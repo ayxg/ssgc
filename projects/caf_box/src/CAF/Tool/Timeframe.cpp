@@ -47,6 +47,7 @@ bool Timeframe::Begin() {
     is_init_ = true;
     prev_frame_ = epoch_;
     frame_start_ = epoch_;
+    accum_delta_ = target_delta_;
     should_update_ = true;
   }
 
@@ -55,11 +56,16 @@ bool Timeframe::Begin() {
   frame_start_ = ClockType::now();
 
   // Has delta time elapsed since last Begin() call?
-  // Ready to run next frame, else skip.
-  if (LiveDelta() < target_delta_)
-    should_update_ = false;
-  else
+  if (accum_delta_ + LiveDelta() >= target_delta_) {
+    // Ready to run next frame, accumulate delta, reduce accumulated delta by target delta for 1 frame.
     should_update_ = true;
+    accum_delta_ += LiveDelta();
+    accum_delta_ -= target_delta_;
+  } else {
+    // Not enough time has passed, skip this frame, accumulate delta.
+    accum_delta_ += LiveDelta();
+    should_update_ = true;
+  }
 
   return should_update_;
 }
@@ -67,7 +73,7 @@ bool Timeframe::Begin() {
 [[nodiscard]] bool Timeframe::ShouldUpdate() const { return should_update_; }
 
 [[nodiscard]] Timeframe::MicroDurationType Timeframe::LiveDelta() const {
-  return std::chrono::duration_cast<MicroDurationType>(frame_start_ - prev_frame_);
+  return std::chrono::duration_cast<MicroDurationType>(frame_start_ - prev_frame_ - target_delta_);
 }
 
 [[nodiscard]] Timeframe::MicroDurationType Timeframe::TargetDelta() const { return target_delta_; }

@@ -92,13 +92,20 @@ class Windows {
     // Observable Properties
     WindowType& GetUnderlying() const;
     SystemWindowHandleType GetSystemHandle() const;
-    const std::pair<bool, Node*>& IsFrozen() const;
+    bool IsFrozen() const;
     bool IsAllocated() const;
     bool IsMarkedForDestruction() const;
     bool IsOpen() const;
     bool IsFocused() const;
 
     // Modification
+    void Reset() {
+      under_.reset();
+      marked_for_destruction_ = true;
+      frozen_ = false;
+      freezer_ = nullptr;
+      event_handlers_.clear();
+    }
     void Freeze(bool enable, Node* node = nullptr);
     void Freeze(Node* node = nullptr);
     void Close();
@@ -142,7 +149,8 @@ class Windows {
     std::unique_ptr<WindowType> under_;
     std::string title_;
     bool marked_for_destruction_;
-    std::pair<bool, Node*> frozen_;
+    bool frozen_{false};
+    Node* freezer_{nullptr};
     std::vector<std::function<void(const EventType&)>> event_handlers_;
 
     // Callbacks
@@ -177,6 +185,17 @@ class Windows {
   static void Destroy(Node* node);
   static void Destroy(const Node* node);
 
+  /// Check if a window exists in the window graph. If you created a window with Create and then destroyed it using
+  /// Destroy the raw you pointer you have will be pointing to garbage, not nullptr. So the only way to properly check
+  /// if the window pointer still exists is to use this method.
+  static bool Exists(Node* pnode);
+  static bool Exists(const Node* pnode);
+
+  /// Node exits. Node is not MarkedForDestruction. Window is open.
+  static bool IsAvailable(Node* pnode);
+  static bool IsAvailable(const Node* pnode);
+
+  static bool IsGraphDirty();
  private:
   /// Recursively removes all sub-windows in reverse order then removes the node itself from the graph.
   static void RemoveWindows(Node* node);
@@ -188,10 +207,13 @@ class Windows {
   static void ApplyWindowRemoval(Node* node = nullptr);
 
  private:
-  static std::list<Node> windows_;  // Detached window node graphs list.
-  static Node* last_window_;        // Last created window by Windows::Create.
-  static Node* curr_window_;        // Current window being processed by Windows::ProcessEvents.
-  static EventType curr_event_;     // Current event being processed by Windows::ProcessEvents.
+  static std::list<Node> windows_;                       // Detached window node graphs list.
+  static Node* last_window_;                             // Last created window by Windows::Create.
+  static Node* curr_window_;                             // Current window being processed by Windows::ProcessEvents.
+  static EventType curr_event_;                          // Current event being processed by Windows::ProcessEvents.
+  static std::unordered_set<const Node*> live_windows_;  // Allows user to query invalidated/deleted windows.
+  static bool graph_dirty_;
+  static bool graph_changing_;
 };
 
 }  // namespace caf::sys

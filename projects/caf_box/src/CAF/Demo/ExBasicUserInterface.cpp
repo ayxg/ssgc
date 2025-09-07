@@ -80,7 +80,7 @@ int ExBasicUserInterface() {
     // Update
     for (auto& lwnd : Windows::GetWindowsMutable()) {
       lwnd.apply([&delta_time](Windows::Node& w) {
-        if (w.IsOpen() && !w.IsMarkedForDestruction()) {
+        if (!w.IsMarkedForDestruction()) {
           caf::imgui::Update(&w, delta_time);
           caf::imgui::SetCurrentWindow(&w);
           ImGui::SetNextWindowSize(w.Size());
@@ -95,7 +95,7 @@ int ExBasicUserInterface() {
     // Render
     for (auto& lwnd : Windows::GetWindowsMutable()) {
       lwnd.apply([&shape](Windows::Node& w) {
-        if (w.IsOpen() && !w.IsMarkedForDestruction()) {
+        if (!w.IsMarkedForDestruction()) {
           w.Clear();
           w.Draw(shape);
           caf::imgui::Render(&w);
