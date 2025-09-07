@@ -16,24 +16,26 @@
 
 // clang-format off
 #pragma once
+#include <filesystem>
 #include "cxxx.hpp"
+
 // clang-format on
 
 namespace caf {
-
+namespace stdfs = std::filesystem;
 template <class T>
 struct CacheFile {
-  using PathT = stdfs::path;
-  using DataT = T;
-  DataT data{};
-  PathT path{};
+  using PathType = stdfs::path;
+  using DataType = T;
+  PathType data{};
+  DataType path{};
 
   bool Load() {
     if (!stdfs::exists(path)) return false;
     std::ifstream cache_file(path);
     if (!cache_file.is_open()) return false;
     try {
-      data = T::FromJson(nlohmann::json::parse(cache_file));
+      data = DataType::FromJson(nlohmann::json::parse(cache_file));
     } catch (nlohmann::json::parse_error& err) {
       return false;
     }
@@ -42,12 +44,11 @@ struct CacheFile {
   bool Save() const {
     std::ofstream cache_file(path);
     if (!cache_file.is_open()) return false;
-    cache_file << DataT::ToJson(data).dump();
+    cache_file << DataType::ToJson(data).dump();
     cache_file.close();
     return true;
   };
 };
-
 
 }  // namespace caf
 

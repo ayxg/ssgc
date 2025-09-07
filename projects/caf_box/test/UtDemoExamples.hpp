@@ -29,6 +29,8 @@ TEST(UtDemoExamples, ExBasicUserInterface) { ASSERT_FALSE(caf::demo::ExBasicUser
 TEST(UtDemoExamples, ExBasicErrorModal) { ASSERT_FALSE(caf::demo::ExBasicErrorModal()); }
 TEST(UtDemoExamples, ExAdvancedErrorModal) { ASSERT_FALSE(caf::demo::ExAdvancedErrorModal()); }
 TEST(UtDemoExamples, ExLoadingBanner) { ASSERT_FALSE(caf::demo::ExLoadingBanner()); }
+TEST(UtDemoExamples, ExImGuiTheme) { ASSERT_FALSE(caf::demo::ExImGuiTheme()); }
+TEST(UtDemoExamples, ExUsingEntities) { ASSERT_FALSE(caf::demo::ExUsingEntities()); }
 }  // namespace caf_unit_test
 
 /// @} // end of coreappfw

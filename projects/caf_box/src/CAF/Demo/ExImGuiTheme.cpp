@@ -8,7 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file
 /// @ingroup core_app_framework
-/// @brief [SOURCE] Basic user interface example
+/// @brief [SOURCE] How to apply theme/font to a Dear ImGui context.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// @addtogroup core_app_framework
@@ -20,11 +20,42 @@
 #include <thread> // std::this_thread
 #include "cxxx.hpp"
 #include "CAF/System/Windows.hpp"
+#include "CAF/Extension/ExtImGuiTheme.hpp"
 // clang-format on
-
+using namespace caf::sys;
 namespace caf::demo {
+
+struct exEventHandler {
+  const Windows::Hints& hints;
+  Windows::Node* win;
+  void operator()(const Windows::EventType& e) {
+    if (win->IsOpen()) caf::imgui::ProcessEvent(Windows::GetCurrent(), e);
+    //  On key click
+    if (e.type == sf::Event::KeyReleased) {
+      // [T] -> Create a new detached window.
+      if (e.key.code == sf::Keyboard::T) {
+        Windows::Node* new_win = Windows::Create(hints);
+        caf::imgui::Init(new_win, true);
+        new_win->PushEventHandler(exEventHandler{hints, new_win});
+        new_win->SetDeallocCallback([new_win]() { caf::imgui::Shutdown(new_win); });
+      }
+      // [Y] -> Create a new child window.
+      if (e.key.code == sf::Keyboard::Y) {
+        Windows::Node* new_win = Windows::Create(hints, Windows::GetCurrent());
+        caf::imgui::Init(new_win, true);
+        new_win->PushEventHandler(exEventHandler{hints, new_win});
+        new_win->SetDeallocCallback([new_win]() { caf::imgui::Shutdown(new_win); });
+      }
+    }
+
+    // [CLOSE] -> Close the current window, and all child windows, if not already closed.
+    if (e.type == sf::Event::Closed) {
+      Windows::Destroy(Windows::GetCurrent());
+    }
+  }
+};
+
 int ExImGuiTheme() {
-  using namespace caf::sys;
   caf::imgui::Theme t{caf::imgui::Theme::DefaultLight()};
   t.font_path = "font/DroidSans/DroidSans.ttf";
   t.font_size = 15.f;
@@ -106,54 +137,21 @@ int ExImGuiTheme() {
   colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.20f);
   colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
 
-  struct exEventHandler {
-    const Windows::Hints& hints;
-    Windows::Node* win;
-    void operator()(const Windows::EventType& e) {
-      if (win->IsOpen()) caf::imgui::ProcessEvent(Windows::GetCurrent(), e);
-      //  On key click
-      if (e.type == sf::Event::KeyReleased) {
-        // [T] -> Create a new detached window.
-        if (e.key.code == sf::Keyboard::T) {
-          Windows::Node* new_win = Windows::Create(hints);
-          caf::imgui::Init(new_win, true);
-          new_win->PushEventHandler(exEventHandler{hints, new_win});
-          new_win->SetDeallocCallback([new_win]() { caf::imgui::Shutdown(new_win); });
-        }
-        // [Y] -> Create a new child window.
-        if (e.key.code == sf::Keyboard::Y) {
-          Windows::Node* new_win = Windows::Create(hints, Windows::GetCurrent());
-          caf::imgui::Init(new_win, true);
-          new_win->PushEventHandler(exEventHandler{hints, new_win});
-          new_win->SetDeallocCallback([new_win]() { caf::imgui::Shutdown(new_win); });
-        }
-      }
-
-      // [CLOSE] -> Close the current window, and all child windows, if not already closed.
-      if (e.type == sf::Event::Closed) {
-        Windows::Destroy(Windows::GetCurrent());
-      }
-    }
-  };
-
   Windows::Hints hints{};
   hints.InitialTitle = "A Window";
   hints.InitialWidth = 500;
   hints.InitialHeight = 500;
   hints.FrameLimit = 60;
   Windows::Node* win = Windows::Create(hints);
-  win->PushEventHandler([](auto& e) {
-    if (win->IsOpen()) caf::imgui::ProcessEvent(Windows::GetCurrent(), e)
+  win->PushEventHandler([win](auto& e) {
+    if (win->IsOpen()) caf::imgui::ProcessEvent(Windows::GetCurrent(), e);
     if (e.type == sf::Event::Closed) {
-        Windows::Destroy(Windows::GetCurrent());
-      }
+      Windows::Destroy(Windows::GetCurrent());
+    }
   });
   caf::imgui::Init(win, true);
   win->SetDeallocCallback([win]() { caf::imgui::Shutdown(win); });
-
-
-
-  t.Apply(ImGui::GetStyle());
+  t.Apply(ImGui::GetStyle());  // Apply theme to window.
 
   // main loop
   sf::Clock delta_clock{};
@@ -179,19 +177,18 @@ int ExImGuiTheme() {
 
     // Render
     for (auto& lwnd : Windows::GetWindowsMutable()) {
-      lwnd.apply([&shape](Windows::Node& w) {
+      lwnd.apply([](Windows::Node& w) {
         if (w.IsOpen() && !w.IsMarkedForDestruction()) {
           w.Clear();
-          w.Draw(shape);
           caf::imgui::Render(&w);
           w.Display();
         }
       });
     }
   }
-  // ImGui::SFML::Shutdown(); // This has to be called ??? idk maybe
   return EXIT_SUCCESS;
 }
+
 }  // namespace caf::demo
 
 /// @} // end of core_app_framework
@@ -200,7 +197,7 @@ int ExImGuiTheme() {
 // @project: [CAF] Core Application Framework
 // @author(s): Anton Yashchenko
 // @website: https://www.acpp.dev
-// @created: 2025/07/15
+// @created: 2025/07/20
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright 2025 Anton Yashchenko
 //

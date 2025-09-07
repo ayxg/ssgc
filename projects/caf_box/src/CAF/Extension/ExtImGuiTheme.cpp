@@ -26,34 +26,35 @@
 #include "imgui.h"
 #include "CAF/System/Windows.hpp"
 #include "CAF/Tool/JsonObject.hpp"
+#include "CAF/Extension/ExtImGui.hpp"
 // clang-format on
 
 #ifdef CAF_ENABLE_EXTENSION_DEARIMGUI
 
 namespace caf::imgui {
-caf::JsonObj Theme::ToJson(const Theme& obj) noexcept {
-  caf::JsonObj j{};
+caf::JsonObject Theme::ToJson(const Theme& obj) noexcept {
+  caf::JsonObject j{};
   if (obj.style) {
     // Settings
     j["Alpha"] = obj.style->Alpha;
     j["DisabledAlpha"] = obj.style->DisabledAlpha;
-    j["WindowPadding"] = backend::ToJson(obj.style->WindowPadding);
+    j["WindowPadding"] = caf::ToJson(obj.style->WindowPadding);
     j["WindowRounding"] = obj.style->WindowRounding;
     j["WindowBorderSize"] = obj.style->WindowBorderSize;
-    j["WindowMinSize"] = backend::ToJson(obj.style->WindowMinSize);
-    j["WindowTitleAlign"] = backend::ToJson(obj.style->WindowTitleAlign);
+    j["WindowMinSize"] = caf::ToJson(obj.style->WindowMinSize);
+    j["WindowTitleAlign"] = caf::ToJson(obj.style->WindowTitleAlign);
     j["WindowMenuButtonPosition"] = static_cast<int>(obj.style->WindowMenuButtonPosition);
     j["ChildRounding"] = obj.style->ChildRounding;
     j["ChildBorderSize"] = obj.style->ChildBorderSize;
     j["PopupRounding"] = obj.style->PopupRounding;
     j["PopupBorderSize"] = obj.style->PopupBorderSize;
-    j["FramePadding"] = backend::ToJson(obj.style->FramePadding);
+    j["FramePadding"] = caf::ToJson(obj.style->FramePadding);
     j["FrameRounding"] = obj.style->FrameRounding;
     j["FrameBorderSize"] = obj.style->FrameBorderSize;
-    j["ItemSpacing"] = backend::ToJson(obj.style->ItemSpacing);
-    j["ItemInnerSpacing"] = backend::ToJson(obj.style->ItemInnerSpacing);
-    j["CellPadding"] = backend::ToJson(obj.style->CellPadding);
-    j["TouchExtraPadding"] = backend::ToJson(obj.style->TouchExtraPadding);
+    j["ItemSpacing"] = caf::ToJson(obj.style->ItemSpacing);
+    j["ItemInnerSpacing"] = caf::ToJson(obj.style->ItemInnerSpacing);
+    j["CellPadding"] = caf::ToJson(obj.style->CellPadding);
+    j["TouchExtraPadding"] = caf::ToJson(obj.style->TouchExtraPadding);
     j["IndentSpacing"] = obj.style->IndentSpacing;
     j["ColumnsMinSpacing"] = obj.style->ColumnsMinSpacing;
     j["ScrollbarSize"] = obj.style->ScrollbarSize;
@@ -67,15 +68,15 @@ caf::JsonObj Theme::ToJson(const Theme& obj) noexcept {
     j["TabBarBorderSize"] = obj.style->TabBarBorderSize;
     j["TabBarOverlineSize"] = obj.style->TabBarOverlineSize;
     j["TableAngledHeadersAngle"] = obj.style->TableAngledHeadersAngle;
-    j["TableAngledHeadersTextAlign"] = backend::ToJson(obj.style->TableAngledHeadersTextAlign);
+    j["TableAngledHeadersTextAlign"] = caf::ToJson(obj.style->TableAngledHeadersTextAlign);
     j["ColorButtonPosition"] = static_cast<int>(obj.style->ColorButtonPosition);
-    j["ButtonTextAlign"] = backend::ToJson(obj.style->ButtonTextAlign);
-    j["SelectableTextAlign"] = backend::ToJson(obj.style->SelectableTextAlign);
+    j["ButtonTextAlign"] = caf::ToJson(obj.style->ButtonTextAlign);
+    j["SelectableTextAlign"] = caf::ToJson(obj.style->SelectableTextAlign);
     j["SeparatorTextBorderSize"] = obj.style->SeparatorTextBorderSize;
-    j["SeparatorTextAlign"] = backend::ToJson(obj.style->SeparatorTextAlign);
-    j["SeparatorTextPadding"] = backend::ToJson(obj.style->SeparatorTextPadding);
-    j["DisplayWindowPadding"] = backend::ToJson(obj.style->DisplayWindowPadding);
-    j["DisplaySafeAreaPadding"] = backend::ToJson(obj.style->DisplaySafeAreaPadding);
+    j["SeparatorTextAlign"] = caf::ToJson(obj.style->SeparatorTextAlign);
+    j["SeparatorTextPadding"] = caf::ToJson(obj.style->SeparatorTextPadding);
+    j["DisplayWindowPadding"] = caf::ToJson(obj.style->DisplayWindowPadding);
+    j["DisplaySafeAreaPadding"] = caf::ToJson(obj.style->DisplaySafeAreaPadding);
     j["MouseCursorScale"] = obj.style->MouseCursorScale;
     j["AntiAliasedLines"] = obj.style->AntiAliasedLines;
     j["AntiAliasedLinesUseTex"] = obj.style->AntiAliasedLinesUseTex;
@@ -85,37 +86,37 @@ caf::JsonObj Theme::ToJson(const Theme& obj) noexcept {
     // Colors
     for (int i = 0; i < ImGuiCol_COUNT; ++i) {
       j["Colors"][std::string{ImGui::GetStyleColorName(static_cast<ImGuiCol>(i))}] =
-          backend::ToJson(obj.style->Colors[i]);
+          caf::ToJson(obj.style->Colors[i]);
     }
   }
   // else export empty object
   return j;
 };
 
-Theme Theme::FromJson(const caf::JsonObj& obj) noexcept {
+Theme Theme::FromJson(const caf::JsonObject& obj) noexcept {
   if (obj.empty()) return Theme{};  // Error. Nothing to parse.
   Theme t{Theme::Default()};        // Create default in case any params are missing.
   // Settings
   t.style->Alpha = obj.value("Alpha", t.style->Alpha);
   t.style->DisabledAlpha = obj.value("DisabledAlpha", t.style->DisabledAlpha);
-  if (obj.contains("WindowPadding")) backend::FromJson(t.style->WindowPadding, obj["WindowPadding"]);
+  if (obj.contains("WindowPadding")) caf::FromJson(t.style->WindowPadding, obj["WindowPadding"]);
   t.style->WindowRounding = obj.value("WindowRounding", t.style->WindowRounding);
   t.style->WindowBorderSize = obj.value("WindowBorderSize", t.style->WindowBorderSize);
-  if (obj.contains("WindowMinSize")) backend::FromJson(t.style->WindowMinSize, obj["WindowMinSize"]);
-  if (obj.contains("WindowTitleAlign")) backend::FromJson(t.style->WindowTitleAlign, obj["WindowTitleAlign"]);
+  if (obj.contains("WindowMinSize")) caf::FromJson(t.style->WindowMinSize, obj["WindowMinSize"]);
+  if (obj.contains("WindowTitleAlign")) caf::FromJson(t.style->WindowTitleAlign, obj["WindowTitleAlign"]);
   t.style->WindowMenuButtonPosition =
       static_cast<ImGuiDir>(obj.value("WindowMenuButtonPosition", static_cast<int>(t.style->WindowMenuButtonPosition)));
   t.style->ChildRounding = obj.value("ChildRounding", t.style->ChildRounding);
   t.style->ChildBorderSize = obj.value("ChildBorderSize", t.style->ChildBorderSize);
   t.style->PopupRounding = obj.value("PopupRounding", t.style->PopupRounding);
   t.style->PopupBorderSize = obj.value("PopupBorderSize", t.style->PopupBorderSize);
-  if (obj.contains("FramePadding")) backend::FromJson(t.style->FramePadding, obj["FramePadding"]);
+  if (obj.contains("FramePadding")) caf::FromJson(t.style->FramePadding, obj["FramePadding"]);
   t.style->FrameRounding = obj.value("FrameRounding", t.style->FrameRounding);
   t.style->FrameBorderSize = obj.value("FrameBorderSize", t.style->FrameBorderSize);
-  if (obj.contains("ItemSpacing")) backend::FromJson(t.style->ItemSpacing, obj["ItemSpacing"]);
-  if (obj.contains("ItemInnerSpacing")) backend::FromJson(t.style->ItemSpacing, obj["ItemInnerSpacing"]);
-  if (obj.contains("CellPadding")) backend::FromJson(t.style->CellPadding, obj["CellPadding"]);
-  if (obj.contains("TouchExtraPadding")) backend::FromJson(t.style->TouchExtraPadding, obj["TouchExtraPadding"]);
+  if (obj.contains("ItemSpacing")) caf::FromJson(t.style->ItemSpacing, obj["ItemSpacing"]);
+  if (obj.contains("ItemInnerSpacing")) caf::FromJson(t.style->ItemSpacing, obj["ItemInnerSpacing"]);
+  if (obj.contains("CellPadding")) caf::FromJson(t.style->CellPadding, obj["CellPadding"]);
+  if (obj.contains("TouchExtraPadding")) caf::FromJson(t.style->TouchExtraPadding, obj["TouchExtraPadding"]);
   t.style->IndentSpacing = obj.value("IndentSpacing", t.style->IndentSpacing);
   t.style->ColumnsMinSpacing = obj.value("ColumnsMinSpacing", t.style->ColumnsMinSpacing);
   t.style->ScrollbarSize = obj.value("ScrollbarSize", t.style->ScrollbarSize);
@@ -130,28 +131,29 @@ Theme Theme::FromJson(const caf::JsonObj& obj) noexcept {
   t.style->TabBarOverlineSize = obj.value("TabBarOverlineSize", t.style->TabBarOverlineSize);
   t.style->TableAngledHeadersAngle = obj.value("TableAngledHeadersAngle", t.style->TableAngledHeadersAngle);
   if (obj.contains("TableAngledHeadersTextAlign"))
-    backend::FromJson(t.style->TableAngledHeadersTextAlign, obj["TableAngledHeadersTextAlign"]);
+    caf::FromJson(t.style->TableAngledHeadersTextAlign, obj["TableAngledHeadersTextAlign"]);
   t.style->ColorButtonPosition =
       static_cast<ImGuiDir>(obj.value("ColorButtonPosition", static_cast<int>(t.style->ColorButtonPosition)));
-  if (obj.contains("ButtonTextAlign")) backend::FromJson(t.style->ButtonTextAlign, obj["ButtonTextAlign"]);
-  if (obj.contains("SelectableTextAlign")) backend::FromJson(t.style->SelectableTextAlign, obj["SelectableTextAlign"]);
+  if (obj.contains("ButtonTextAlign")) caf::FromJson(t.style->ButtonTextAlign, obj["ButtonTextAlign"]);
+  if (obj.contains("SelectableTextAlign")) caf::FromJson(t.style->SelectableTextAlign, obj["SelectableTextAlign"]);
   t.style->SeparatorTextBorderSize = obj.value("SeparatorTextBorderSize", t.style->SeparatorTextBorderSize);
-  if (obj.contains("SeparatorTextAlign")) backend::FromJson(t.style->SeparatorTextAlign, obj["SeparatorTextAlign"]);
+  if (obj.contains("SeparatorTextAlign")) caf::FromJson(t.style->SeparatorTextAlign, obj["SeparatorTextAlign"]);
   if (obj.contains("SeparatorTextPadding"))
-    backend::FromJson(t.style->SeparatorTextPadding, obj["SeparatorTextPadding"]);
+    caf::FromJson(t.style->SeparatorTextPadding, obj["SeparatorTextPadding"]);
   if (obj.contains("DisplayWindowPadding"))
-    backend::FromJson(t.style->DisplayWindowPadding, obj["DisplayWindowPadding"]);
+    caf::FromJson(t.style->DisplayWindowPadding, obj["DisplayWindowPadding"]);
   if (obj.contains("DisplaySafeAreaPadding"))
-    backend::FromJson(t.style->DisplaySafeAreaPadding, obj["DisplaySafeAreaPadding"]);
+    caf::FromJson(t.style->DisplaySafeAreaPadding, obj["DisplaySafeAreaPadding"]);
   t.style->MouseCursorScale = obj.value("MouseCursorScale", t.style->MouseCursorScale);
   t.style->AntiAliasedLines = obj.value("AntiAliasedLines", t.style->AntiAliasedLines);
   t.style->AntiAliasedLinesUseTex = obj.value("AntiAliasedLinesUseTex", t.style->AntiAliasedLinesUseTex);
   t.style->AntiAliasedFill = obj.value("AntiAliasedFill", t.style->AntiAliasedFill);
   t.style->CurveTessellationTol = obj.value("CurveTessellationTol", t.style->CurveTessellationTol);
   t.style->CircleTessellationMaxError = obj.value("CircleTessellationMaxError", t.style->CircleTessellationMaxError);
+  return t;
 };
 
-void Theme::Apply(StyleT& curr_style) noexcept {
+void Theme::Apply(StyleType& curr_style) noexcept {
   //  Apply font, failure will revert to UI framework default font.
   if (!font_path.empty() && std::filesystem::exists(font_path)) {
     ImGuiIO& io = ImGui::GetIO();
@@ -236,17 +238,27 @@ void Theme::Apply(StyleT& curr_style) noexcept {
 // Clears the stored style data. Do not apply after clearing.
 void Theme::Clear() noexcept { style.reset(); }
 
-void Theme::Copy(const StyleT& curr_style) noexcept {
+void Theme::Copy(const StyleType& other) noexcept {
   if (style)
-    *style = curr_style;
+    *style = other;
   else
-    style = std::make_unique<StyleT>(curr_style);
+    style = std::make_unique<StyleType>(other);
+}
+
+void Theme::Copy(const Theme& other) noexcept {
+  if (style)
+    *style = *other.style;
+  else
+    style = std::make_unique<StyleType>(*other.style);
+  font_path = other.font_path;
+  font_name = other.font_name;
+  font_size = other.font_size;
 }
 
 // Generates default underlying UI framework theme.
 Theme Theme::Default() noexcept {
   Theme t{};
-  t.style = std::make_unique<StyleT>();
+  t.style = std::make_unique<StyleType>();
   ImGui::StyleColorsClassic(t.style.get());
   return t;
 };
@@ -254,7 +266,7 @@ Theme Theme::Default() noexcept {
 // Generates default underlying UI framework theme.
 Theme Theme::DefaultDark() noexcept {
   Theme t{};
-  t.style = std::make_unique<StyleT>();
+  t.style = std::make_unique<StyleType>();
   ImGui::StyleColorsDark(t.style.get());
   return t;
 };
@@ -262,7 +274,7 @@ Theme Theme::DefaultDark() noexcept {
 // Generates default underlying UI framework theme.
 Theme Theme::DefaultLight() noexcept {
   Theme t{};
-  t.style = std::make_unique<StyleT>();
+  t.style = std::make_unique<StyleType>();
   ImGui::StyleColorsLight(t.style.get());
   return t;
 };

@@ -50,6 +50,8 @@ add_library(caf_library STATIC
     "${CAF_LIBRARY_SOURCES_DIR}/CAF/Demo/ExBasicErrorModal.cpp"
     "${CAF_LIBRARY_SOURCES_DIR}/CAF/Demo/ExAdvancedErrorModal.cpp"
     "${CAF_LIBRARY_SOURCES_DIR}/CAF/Demo/ExLoadingBanner.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Demo/ExImGuiTheme.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Demo/ExUsingEntities.cpp"
 
     # /CAF/Tool/
     "${CAF_LIBRARY_SOURCES_DIR}/CAF/Tool/BconObject.cpp"
@@ -61,10 +63,12 @@ add_library(caf_library STATIC
 
     # /CAF/System/
     "${CAF_LIBRARY_SOURCES_DIR}/CAF/System/Windows.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/System/GLWindow.cpp"
 
     # /CAF/Extension/
     "${CAF_LIBRARY_SOURCES_DIR}/CAF/Extension/ExtImGui.cpp"
     "${CAF_LIBRARY_SOURCES_DIR}/CAF/Extension/ExtImGuiTheme.cpp"
+    "${CAF_LIBRARY_SOURCES_DIR}/CAF/Extension/ExtImGuiWidget.cpp"
 )
 target_include_directories(caf_library PUBLIC "${CAF_LIBRARY_HEADERS_DIR}")
 target_link_libraries(caf_library 
@@ -93,10 +97,12 @@ target_sources(caf_library
 
     # /CAF/System/
     "${CAF_LIBRARY_HEADERS_DIR}/CAF/System/Windows.hpp"
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/System/Entity.hpp"
 
     # /CAF/Extension/
     "${CAF_LIBRARY_HEADERS_DIR}/CAF/Extension/ExtImGui.hpp"
     "${CAF_LIBRARY_HEADERS_DIR}/CAF/Extension/ExtImGuiTheme.hpp"
+    "${CAF_LIBRARY_HEADERS_DIR}/CAF/Extension/ExtImGuiWidget.hpp"
 )
 
 set_target_properties(caf_library 
@@ -123,6 +129,19 @@ minitest_from_headers(
   PREFIX UtCaf
   TARGET UtDemoExamples
   HEADERS UtDemoExamples.hpp
+)
+
+minitest_add_executable(
+  NAME                UtEntitySystem
+  INCLUDE_DIRECTORIES test
+  LINK_LIBS           caf_library
+  TEST_HEADERS        UtEntitySystem.hpp
+)
+
+minitest_from_headers(
+  PREFIX UtCaf
+  TARGET UtEntitySystem
+  HEADERS UtEntitySystem.hpp
 )
 
 #[============================================================================[

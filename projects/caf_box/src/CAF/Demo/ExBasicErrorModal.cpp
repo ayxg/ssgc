@@ -24,6 +24,84 @@
 // clang-format on
 
 namespace caf::demo {
+using namespace caf::sys;
+enum eModalType { kError, kFatal, kWarning };
+
+struct exModalEventHandler {
+  Windows::Node* win;
+  eModalType type{kError};
+  void operator()(const Windows::EventType& e) {
+    if (win->IsOpen()) caf::imgui::ProcessEvent(Windows::GetCurrent(), e);
+
+    // [CLOSE] -> Close proc based on modal type.
+    if (e.type == sf::Event::Closed) {
+      switch (type) {
+        case kError:
+          Windows::Destroy(win->stem());  // Parent
+          break;
+        case kFatal:
+          for (auto& wnd : Windows::GetWindows()) Windows::Destroy(&wnd);  // All
+          break;
+        case kWarning:
+          Windows::Destroy(Windows::GetCurrent());  // Current
+          break;
+        default:
+          Windows::Destroy(Windows::GetCurrent());
+          break;
+      }
+    }
+  }
+};
+
+struct exEventHandler {
+  Windows::Node* win;
+  std::list<std::pair<Windows::Node*, eModalType>>& modals;
+  Windows::Hints& modal_hints;
+  caf::Trigger* warning_btn;
+  caf::Trigger* fatal_btn;
+  caf::Trigger* error_btn;
+
+  void operator()(const Windows::EventType& e) {
+    // Handle UI events
+    if (win->IsOpen()) caf::imgui::ProcessEvent(Windows::GetCurrent(), e);
+
+    // Handle Window events
+    if (e.type == sf::Event::KeyReleased) {
+      // [Y] -> Create a new child window.
+      if (e.key.code == sf::Keyboard::Y) {
+        modal_hints.InitialTitle = "[Child Warning Modal]";
+        modal_hints.InitialWidth = 400;
+        modal_hints.InitialHeight = 200;
+        modal_hints.FrameLimit = 60;
+        Windows::Node* new_win = Windows::Create(modal_hints, Windows::GetCurrent());
+        caf::imgui::Init(new_win, true);
+        new_win->PushEventHandler(exModalEventHandler{new_win, eModalType::kWarning});
+        new_win->SetDeallocCallback([new_win]() { caf::imgui::Shutdown(new_win); });
+        modals.push_back({new_win, eModalType::kWarning});
+      }
+    }
+    // [CLOSE] -> Close all windows.
+    if (e.type == sf::Event::Closed) {
+      for (auto& wnd : Windows::GetWindows()) Windows::Destroy(&wnd);
+    }
+
+    // Update modal list
+    modals.erase(
+        std::remove_if(modals.begin(), modals.end(), [](auto& wnd) { return !wnd.first || !wnd.first->IsOpen(); }),
+        modals.end());
+  }
+};
+
+struct exEmptyEventHandler {
+  Windows::Node* win;
+  void operator()(const Windows::EventType& e) {
+    if (win->IsOpen()) caf::imgui::ProcessEvent(Windows::GetCurrent(), e);
+    // [CLOSE] -> Close the current window, and all child windows, if not already closed.
+    if (e.type == sf::Event::Closed) {
+      Windows::Destroy(Windows::GetCurrent());
+    }
+  }
+};
 
 /// Demonstrates how to properly create and destroy modal windows which may control the state of other windows in the
 /// window node graph. Demonstrates how to handle UI events which may cause creation or destruction of other
@@ -33,232 +111,160 @@ namespace caf::demo {
 /// - [Error] -> Close to exit parent window.
 /// - [Fatal] -> Close to exit all windows.
 /// - [Warning] -> Close to exit the current window.
- int ExBasicErrorModal() {
-   using namespace caf::sys;
-   enum eModalType { kError, kFatal, kWarning };
+int ExBasicErrorModal()  {
+  // Helper lambda for creating a Dear ImGui capable window.
+  LAMBDA xCreateImGuiWindow = [](const Windows::Hints& h, Windows::Node* p = nullptr) {
+    Windows::Node* w = Windows::Create(h, p);
+    caf::imgui::Init(w, true);
+    w->SetDeallocCallback([w]() { caf::imgui::Shutdown(w); });
+    return w;
+  };
 
-   struct exModalEventHandler {
-     Windows::Node* win;
-     eModalType type{kError};
-     void operator()(const Windows::EventType& e) {
-       if (win->IsOpen()) caf::imgui::ProcessEvent(Windows::GetCurrent(), e);
+  // Modals setup
+  std::list<std::pair<Windows::Node*, eModalType>> modals{};
+  caf::Trigger warning_btn{false};
+  caf::Trigger fatal_btn{false};
+  caf::Trigger error_btn{false};
 
-       // [CLOSE] -> Close proc based on modal type.
-       if (e.type == sf::Event::Closed) {
-         switch (type) {
-           case kError:
-             Windows::Destroy(win->stem());  // Parent
-             break;
-           case kFatal:
-             for (auto& wnd : Windows::GetWindows()) Windows::Destroy(&wnd);  // All
-             break;
-           case kWarning:
-             Windows::Destroy(Windows::GetCurrent());  // Current
-             break;
-           default:
-             Windows::Destroy(Windows::GetCurrent());
-             break;
-         }
-       }
-     }
-   };
+  // Default base modal hints
+  Windows::Hints modal_hints{};
+  modal_hints.InitialWidth = 400;
+  modal_hints.InitialHeight = 200;
+  modal_hints.FrameLimit = 60;
 
-   struct exEventHandler {
-     Windows::Node* win;
-     std::list<std::pair<Windows::Node*, eModalType>>& modals;
-     Windows::Hints& modal_hints;
-     caf::Trigger* warning_btn;
-     caf::Trigger* fatal_btn;
-     caf::Trigger* error_btn;
+  // Main window init
+  Windows::Hints hints{};
+  hints.InitialTitle = "A Window";
+  hints.InitialWidth = 800;
+  hints.InitialHeight = 200;
+  hints.FrameLimit = 60;
+  Windows::Node* win = xCreateImGuiWindow(hints);
+  win->PushEventHandler(exEventHandler{win, modals, modal_hints, &warning_btn, &fatal_btn, &error_btn});
 
-     void operator()(const Windows::EventType& e) {
-       // Handle UI events
-       if (win->IsOpen()) caf::imgui::ProcessEvent(Windows::GetCurrent(), e);
+  // Other random detached window.
+  hints.InitialTitle = "A Separate Window";
+  hints.InitialWidth = 500;
+  hints.InitialHeight = 500;
+  Windows::Node* win_other = xCreateImGuiWindow(hints);
+  win_other->PushEventHandler(exEmptyEventHandler{win_other});
 
-       // Handle Window events
-       if (e.type == sf::Event::KeyReleased) {
-         // [Y] -> Create a new child window.
-         if (e.key.code == sf::Keyboard::Y) {
-           modal_hints.InitialTitle = "[Child Warning Modal]";
-           modal_hints.InitialWidth = 400;
-           modal_hints.InitialHeight = 200;
-           modal_hints.FrameLimit = 60;
-           Windows::Node* new_win = Windows::Create(modal_hints, Windows::GetCurrent());
-           caf::imgui::Init(new_win, true);
-           new_win->PushEventHandler(exModalEventHandler{new_win, eModalType::kWarning});
-           new_win->SetDeallocCallback([new_win]() { caf::imgui::Shutdown(new_win); });
-           modals.push_back({new_win, eModalType::kWarning});
-         }
-       }
-       // [CLOSE] -> Close all windows.
-       if (e.type == sf::Event::Closed) {
-         for (auto& wnd : Windows::GetWindows()) Windows::Destroy(&wnd);
-       }
+  sf::Clock delta_clock{};
+  sf::Time delta_time{};
+  while (!Windows::GetWindows().empty()) {
+    Windows::ProcessEvents();
+    // Handle triggers
+    if (warning_btn.Reset()) {
+      modal_hints.InitialTitle = "[Warning]";
+      Windows::Node* new_win = xCreateImGuiWindow(modal_hints, win);
+      new_win->PushEventHandler(exModalEventHandler{new_win, eModalType::kWarning});
+      modals.push_back({new_win, eModalType::kWarning});
+    }
 
-       // Update modal list
-       modals.erase(std::remove_if(modals.begin(), modals.end(), [](auto& wnd) { return !wnd.first || !wnd.first->IsOpen(); }),
-                    modals.end());
-     }
-   };
+    if (fatal_btn.Reset()) {
+      modal_hints.InitialTitle = "[Fatal]";
+      Windows::Node* new_win = xCreateImGuiWindow(modal_hints, win);
+      new_win->PushEventHandler(exModalEventHandler{new_win, eModalType::kFatal});
+      modals.push_back({new_win, eModalType::kFatal});
+    }
 
-   struct exEmptyEventHandler {
-     Windows::Node* win;
-     void operator()(const Windows::EventType& e) {
-       if (win->IsOpen()) caf::imgui::ProcessEvent(Windows::GetCurrent(), e);
-       // [CLOSE] -> Close the current window, and all child windows, if not already closed.
-       if (e.type == sf::Event::Closed) {
-         Windows::Destroy(Windows::GetCurrent());
-       }
-     }
-   };
+    if (error_btn.Reset()) {
+      modal_hints.InitialTitle = "[Error]";
+      Windows::Node* new_win = xCreateImGuiWindow(modal_hints, win);
+      new_win->PushEventHandler(exModalEventHandler{new_win, eModalType::kError});
+      modals.push_back({new_win, eModalType::kError});
+    }
 
-   // Modals setup
-   std::list<std::pair<Windows::Node*, eModalType>> modals{};
-   caf::Trigger warning_btn{false};
-   caf::Trigger fatal_btn{false};
-   caf::Trigger error_btn{false};
+    // Update modal list, we can be more efficient by only erasing if the window graph is changing.
+    if (Windows::IsGraphDirty()) {
+      modals.erase(
+          std::remove_if(modals.begin(), modals.end(), [](auto& wnd) { return !Windows::IsAvailable(wnd.first); }),
+          modals.end());
+    }
 
-   LAMBDA xCreateImGuiWindow = [](const Windows::Hints& h, Windows::Node* p = nullptr) { 
-     Windows::Node* w = Windows::Create(h,p);
-     caf::imgui::Init(w, true);
-     w->SetDeallocCallback([&w]() { caf::imgui::Shutdown(w); });
-     return w;
-   };
+    delta_time = delta_clock.restart();
 
-   // Default base modal hints
-   Windows::Hints modal_hints{};
-   modal_hints.InitialWidth = 400;
-   modal_hints.InitialHeight = 200;
-   modal_hints.FrameLimit = 60;
+    // Apply updates
+    if (Windows::IsAvailable(win)) {
+      caf::imgui::Update(win, delta_time);
+      caf::imgui::SetCurrentWindow(win);
+      ImGui::SetNextWindowSize(win->Size());
+      ImGui::SetNextWindowPos(ImVec2(0.f, 0.f));
+      ImGui::Begin("exErrorModalWindow");
+      if (ImGui::Button("Warning##btn")) warning_btn.Set(true);
+      ImGui::SameLine();
+      if (ImGui::Button("Error##btn")) error_btn.Set(true);
+      ImGui::SameLine();
+      if (ImGui::Button("Fatal##btn")) fatal_btn.Set(true);
+      ImGui::Text(R"(Click the buttons in the main window to spawn a new error modal:
+- [Error] -> Closes parent window.
+- [Fatal] -> Closes all windows.
+- [Warning] -> Closes only modal window.
+See caf::demo::ExAdvancedErrorModal on how to : freeze other windows when modal is open,
+and display/connect buttons which may control the state of other windows.
+)");
+      ImGui::End();
 
-   // Main window init
-   Windows::Hints hints{};
-   hints.InitialTitle = "A Window";
-   hints.InitialWidth = 800;
-   hints.InitialHeight = 200;
-   hints.FrameLimit = 60;
-   Windows::Node* win = xCreateImGuiWindow(hints);
-   win->PushEventHandler(exEventHandler{win, modals, modal_hints, &warning_btn, &fatal_btn, &error_btn});
+      for (std::pair<Windows::Node*, eModalType>& lwnd : modals)
+        if (Windows::IsAvailable(lwnd.first)) {
+          caf::imgui::Update(lwnd.first, delta_time);
+          caf::imgui::SetCurrentWindow(lwnd.first);
+          ImGui::SetNextWindowSize(lwnd.first->Size());
+          ImGui::SetNextWindowPos(ImVec2(0.f, 0.f));
+          switch (lwnd.second) {
+            case kError:
+              ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.5f, 0.0f, 0.0f, 1.0f));
+              ImGui::Begin("[Error]");
+              ImGui::Text("Exit to close parent window.");
+              break;
+            case kFatal:
+              ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+              ImGui::Begin("[Fatal]");
+              ImGui::Text("Exit to close all windows.");
+              break;
+            case kWarning:
+              ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 0.5f, 0.0f, 1.0f));
+              ImGui::Begin("[Warning]");
+              ImGui::Text("Exit closes modal window and it's children.");
+              break;
+          }
+          ImGui::End();
+          ImGui::PopStyleColor();
+        };
+    }
 
-   // Other random detached window.
-   hints.InitialTitle = "A Separate Window";
-   hints.InitialWidth = 500;
-   hints.InitialHeight = 500;
-   Windows::Node* win_other = xCreateImGuiWindow(hints);
-   win_other->PushEventHandler(exEmptyEventHandler{win_other});
+    if (Windows::IsAvailable(win_other)) {
+      caf::imgui::Update(win_other, delta_time);
+      caf::imgui::SetCurrentWindow(win_other);
+      ImGui::SetNextWindowSize(win_other->Size());
+      ImGui::SetNextWindowPos(ImVec2(0.f, 0.f));
+      ImGui::Begin("A Separate Window");
+      ImGui::Text("This is a separate window that can be closed independently.");
+      ImGui::End();
+    }
 
-   sf::Clock delta_clock{};
-   sf::Time delta_time{};
-   while (!Windows::GetWindows().empty()) {
-     Windows::ProcessEvents();
-     // Handle triggers
-     if (warning_btn.Reset()) {
-       modal_hints.InitialTitle = "[Warning]";
-       Windows::Node* new_win = xCreateImGuiWindow(modal_hints, win);
-       new_win->PushEventHandler(exModalEventHandler{new_win, eModalType::kWarning});
-       modals.push_back({new_win, eModalType::kWarning});
-     }
+    // Apply render
+    if (Windows::IsAvailable(win)) {
+      win->GetRenderBuffer()->clear();
+      caf::imgui::Render(win);
+      win->Display();
 
-     if (fatal_btn.Reset()) {
-       modal_hints.InitialTitle = "[Fatal]";
-       Windows::Node* new_win = xCreateImGuiWindow(modal_hints, win);
-       new_win->PushEventHandler(exModalEventHandler{new_win, eModalType::kFatal});
-       modals.push_back({new_win, eModalType::kFatal});
-     }
+      for (auto& lwnd : modals)
+        if (Windows::IsAvailable(lwnd.first)) {
+          assert(lwnd.first->stem() == win);  // Ensure modal is a child of the main window
+          lwnd.first->Clear();
+          caf::imgui::Render(lwnd.first);
+          lwnd.first->Display();
+        };
+    }
 
-     if (error_btn.Reset()) {
-       modal_hints.InitialTitle = "[Error]";
-       Windows::Node* new_win = xCreateImGuiWindow(modal_hints, win);
-       new_win->PushEventHandler(exModalEventHandler{new_win, eModalType::kError});
-       modals.push_back({new_win, eModalType::kError});
-     }
-
-     // Update modal list
-     modals.erase(std::remove_if(modals.begin(), modals.end(), [](auto& wnd) { return !wnd.first || !wnd.first->IsOpen(); }),
-                  modals.end());
-
-     delta_time = delta_clock.restart();
-
-     // Apply updates
-     if (win->IsOpen()) {
-       caf::imgui::Update(win, delta_time);
-       caf::imgui::SetCurrentWindow(win);
-       ImGui::SetNextWindowSize(win->Size());
-       ImGui::SetNextWindowPos(ImVec2(0.f, 0.f));
-       ImGui::Begin("exErrorModalWindow");
-       if (ImGui::Button("Warning##btn")) warning_btn.Set(true);
-       ImGui::SameLine();
-       if (ImGui::Button("Error##btn")) error_btn.Set(true);
-       ImGui::SameLine();
-       if (ImGui::Button("Fatal##btn")) fatal_btn.Set(true);
-       ImGui::Text(R"(Click the buttons in the main window to spawn a new error modal:
-- [Error] -> Blocks main window, Abort exits parent window, Resume closes the error modal and unblocks.
-- [Fatal] -> Blocks all windows, Abort exits app, Resume closes the error modal and unblocks.
-- [Warning] -> Does not block, Abort exits parent window, Resume closes the error modal.)");
-       ImGui::End();
-
-       for (std::pair<Windows::Node*, eModalType>& lwnd : modals)
-         if (lwnd.first && lwnd.first->IsOpen()) {
-           caf::imgui::Update(lwnd.first, delta_time);
-           caf::imgui::SetCurrentWindow(lwnd.first);
-           ImGui::SetNextWindowSize(lwnd.first->Size());
-           ImGui::SetNextWindowPos(ImVec2(0.f, 0.f));
-           switch (lwnd.second) {
-             case kError:
-               ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.5f, 0.0f, 0.0f, 1.0f));
-               ImGui::Begin("[Error]");
-               ImGui::Text("Exit to close parent window.");
-               break;
-             case kFatal:
-               ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
-               ImGui::Begin("[Fatal]");
-               ImGui::Text("Exit to close all windows.");
-               break;
-             case kWarning:
-               ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 0.5f, 0.0f, 1.0f));
-               ImGui::Begin("[Warning]");
-               ImGui::Text("Exit closes modal window and it's children.");
-               break;
-           }
-           ImGui::End();
-           ImGui::PopStyleColor();
-         };
-     }
-
-     if (win_other->IsOpen()) {
-       caf::imgui::Update(win_other, delta_time);
-       caf::imgui::SetCurrentWindow(win_other);
-       ImGui::SetNextWindowSize(win_other->Size());
-       ImGui::SetNextWindowPos(ImVec2(0.f, 0.f));
-       ImGui::Begin("A Separate Window");
-       ImGui::Text("This is a separate window that can be closed independently.");
-       ImGui::End();
-     }
-
-     // Apply render
-     if (win->IsOpen()) {
-       win->GetRenderBuffer()->clear();
-       caf::imgui::Render(win);
-       win->Display();
-
-       for (auto& lwnd : modals)
-         if (lwnd.first && lwnd.first->IsOpen()) {
-           assert(lwnd.first->stem() == win);  // Ensure modal is a child of the main window
-           lwnd.first->Clear();
-           caf::imgui::Render(lwnd.first);
-           lwnd.first->Display();
-         };
-     }
-
-     if (win_other->IsOpen()) {
-       win_other->GetRenderBuffer()->clear();
-       caf::imgui::Render(win_other);
-       win_other->Display();
-     }
-
-   }
-   return EXIT_SUCCESS;
- }
+    if (Windows::IsAvailable(win_other)) {
+      win_other->GetRenderBuffer()->clear();
+      caf::imgui::Render(win_other);
+      win_other->Display();
+    }
+  }
+  return EXIT_SUCCESS;
+}
 }  // namespace caf::demo
 
 /// @} // end of core_app_framework
