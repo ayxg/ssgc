@@ -387,7 +387,7 @@ function(minitest_from_headers)
 
   z_minitest_add_target_tests_from_list(
     TARGET            ${arg_TARGET}
-    WORKING_DIRECTORY ${arg_WORKING_DIRECTORY}
+    WORKING_DIRECTORY "${arg_WORKING_DIRECTORY}"
     PREFIX            ${arg_PREFIX}
     TESTS             ${filtered_test_case_signatures}
   )
@@ -559,7 +559,7 @@ function(z_minitest_add_target_tests_from_list)
               ${case_name}
         WORKING_DIRECTORY ${arg_WORKING_DIRECTORY}
       )
-      message(DEBUG "[Minitest] Added test: ${idx} - ${_TEST_NAME}")
+      message(TRACE "[Minitest] Added test: ${idx} - ${_TEST_NAME}")
     endforeach()
   endif()
 endfunction()

@@ -1,0 +1,14 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax - switch statement
+
+switch(grok):{
+	case foo:
+		a + b;
+	case bar:{ ` using a block will create a new scope
+		a + c;
+	}
+	default:
+		a + d;
+}

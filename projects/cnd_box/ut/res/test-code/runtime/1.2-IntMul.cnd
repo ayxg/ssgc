@@ -1,0 +1,21 @@
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/
+
+/`
+@project: C& Compiler Test Code
+@file: IntMul
+`/
+
+proc @root:
+  main:{
+	def @a:12;
+	def @b:12;
+	return a * b; ` 144
+  }
+	
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/

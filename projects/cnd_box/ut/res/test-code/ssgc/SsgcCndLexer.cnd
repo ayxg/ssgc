@@ -1,0 +1,51 @@
+include "SsgcCndCharTraits.cnd"
+include "SsgcCndGrammar.cnd";
+
+static const def char @kEofChar = '\0';
+
+class @Tk:{
+ def eTk @type;
+ def str @literal;
+}
+
+struct @LexerCursor:{
+	def Tk @tkn: eTk::None;
+	def cstr @head:"";
+}
+
+class @Lexer:{
+ public:
+	fn@Lex(cstr @src);
+ private:
+  cx fn@LexNumber(cstr c)>err[LexerCursor];
+  cx fn@LexIdentifier(cstr c)>err[LexerCursor];
+  cx fn@LexPunctuator(cstr c)>err[LexerCursor];
+  cx fn@LexWhitespace(cstr c)>err[LexerCursor];
+  cx fn@LexNewline(cstr c)>err[LexerCursor];
+  cx fn@LexEscapedCharSequence(cstr c)>err[LexerCursor];
+  cx fn@LexRecursiveTokenLiteral(cstr c)>err[LexerCursor];  
+ private:
+  cx fn@ApplyLex(cstr @head, cref fn @lex_method)>err[void];
+  cx fn@AdvanceLine()>void;
+  cx fn@AdvanceCol()>void;
+ private:
+  def u64 @line_:0;
+  def u64 @col_:0;
+  def cstr @head_:"";
+  def vec[Tk] @out_;
+}
+
+cx fn@Lexer::Lex(const ref str @s)>err[LexerCursor]:{
+  if (s == "") return err("Cannot lex empty source.");
+  while (head[0] != "\0") {
+	if (IsSrcCharNewline(head_ at 0)) ApplyLex(head,LexNewline,out) ? : return err;
+	elif (IsSrcCharSpace(head_ at 0)) ApplyLex(head,LexWhitespace,out) ? : return err;
+	elif (IsSrcCharAlphaUnderscore(head_ at 0)) ApplyLex(head,LexIdentifier,out) ? : return err;
+	elif (IsSrcCharNumeric(head_ at 0)) ApplyLex(head,LexNumber,out) ? : return err;
+	elif (head_ at 0 == '"') ApplyLex(head,LexEscapedCharSequence,out) ? : return err;
+	elif (IsSrcCharPunctuator(head_ at 0))ApplyLex(head,LexPunctuator,out) ? : return err;
+	else return err("Unexpected codepoint encountered in source:" + head at 0);   
+  }
+  return out_;
+}
+

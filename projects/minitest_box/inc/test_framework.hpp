@@ -42,6 +42,11 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
   MinitestFramework() = delete;
   explicit MinitestFramework(UnitTestArray& unit_tests) : tests(unit_tests) {}
 
+  std::string CurrentTestCaseName() const { 
+    return curr_test->name;
+  }
+  std::string CurrentTestSuiteName() const { return curr_test->suite; }
+
   ostream& TargetStdout() const { return target_stdout.get(); }
 
   ostream& TargetStdout(ostream& oss) {

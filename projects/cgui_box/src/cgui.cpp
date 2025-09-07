@@ -576,6 +576,26 @@ bool TextLabel::BoundBegin() {
   return true;
 }
 
+
+std::string_view& FormattedTextLabel::Text() { return text_; }
+void FormattedTextLabel::Text(std::string_view sv) { text_ = sv; }
+
+FormattedTextLabel FormattedTextLabel::Delayed(std::string_view text) {
+  return FormattedTextLabel(text, kWidgetInitDelayed);
+}
+
+FormattedTextLabel::FormattedTextLabel(std::string_view text, bool delayed_begin) : SingularWidgetBase(delayed_begin) {
+  text_ = text;
+  BeginImpl();
+}
+
+bool FormattedTextLabel::BeginLate() { return BeginLateImpl(); }
+
+bool FormattedTextLabel::BoundBegin() {
+  ImGui::Text(text_.data());
+  return true;
+}
+
 std::string_view TextInput::Label() const { return label_; }
 
 std::string& TextInput::Buffer() { return buffer_; }

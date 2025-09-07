@@ -1,0 +1,33 @@
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/
+
+/`
+@project: C& Compiler Test Code
+@file: IntBitwiseOr
+@brief The Bitwise OR operator returns 1 in the result if either of their
+	corresponding operands is 1 in the operand and if it does not, then it
+	returns 0 in the result.
+	   
+12 = 00001100 (In Binary)
+25 = 00011001 (In Binary)
+
+Bitwise OR Operation of 12 and 25
+  00001100
+| 00011001
+  ________
+  00011101 = 29 (In decimal)
+`/
+
+proc @root:
+  main:{
+	def @a:12;
+	def @b:25;
+	return a | b;
+  }
+	
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/

@@ -21,7 +21,7 @@ Options:
   [MINITEST_CONFIG_SCAN_RESULT_DIR [path]]  : Path where minitest scan results are stored. 
                                               Defaults to "${MINITEST_CONFIG_AUXILLARY_DIR}/scan_results"
 #]====================================================================================================================]
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.8...3.10)
 
 project(minitest_box
 	VERSION 0.0.0.0

@@ -1,0 +1,32 @@
+include <ccore.cnd>
+
+lib @stdc:{
+compeval def int @__STDC_VERSION_STDDEF_H__ : 202311L;
+
+` signed integer type returned when subtracting two pointers
+using ptrdiff_t = decltype(nullptr - nullptr);
+
+` the type of the predefined null pointer constant nullptr
+using nullptr_t = decltype(nullptr);
+
+` unsigned integer type returned by the sizeof operator
+using size_t = decltype(sizeof(nullptr));
+
+` ????
+using rsize_t = ;
+
+` a type with alignment requirement as great as any other scalar type
+using max_align_t = decltype(sizeof(double)); ` alingment 4 - currently double or long is the largest provided type
+
+` implementation-defined null pointer constant	
+compeval def nullptr_t @NULL : nullptr;
+
+compeval fn@unreachable():{
+	return csl::core::unreachable();
+} 
+
+compeval fn@offsetof(p,d):{
+	return csl::core::offsetof(p,d);
+} 
+
+}

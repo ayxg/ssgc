@@ -642,6 +642,7 @@ constexpr eTk GetTkFromKeyword(StrView kw) noexcept {
   CND_MM_LOCAL_CASE(KwLib, "lib");
   CND_MM_LOCAL_CASE(KwDll, "dll");
   CND_MM_LOCAL_CASE(KwEnum, "enum");
+  CND_MM_LOCAL_CASE(KwProc, "proc");
 
   // Control
   CND_MM_LOCAL_CASE(KwIf, "if");

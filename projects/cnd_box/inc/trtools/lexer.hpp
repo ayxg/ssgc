@@ -533,7 +533,7 @@ constexpr Vec<Tk> Lexer::Sanitize(const Vec<Tk>& output_tokens) noexcept {
   return [&]() constexpr {
     Vec<Tk> new_output;
     for (auto i = output_tokens.cbegin(); i != output_tokens.cend(); ++i) {
-      const std::initializer_list<eTk> REDUNDANT_TOKEN_KINDS{eTk::kLineComment, eTk::kBlockComment,eTk::kLineComment,eTk::kWhitespace};
+      const std::initializer_list<eTk> REDUNDANT_TOKEN_KINDS{eTk::kLineComment, eTk::kBlockComment,eTk::kLineComment,eTk::kWhitespace,eTk::kNewline};
 
       if (std::any_of(REDUNDANT_TOKEN_KINDS.begin(), REDUNDANT_TOKEN_KINDS.end(),
                       [i](eTk match) { return match == i->Type(); })) {

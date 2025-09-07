@@ -30,6 +30,9 @@ endif()
 # when compiling with PCH enabled
 SET(CMAKE_CXX_EXTENSIONS OFF)
 
+# Testing enabled?
+enable_testing()
+
 #[============================================================================[
   Internal Projects
 #]============================================================================]
@@ -95,18 +98,18 @@ ssg_gitpkg_nlohmanjson()
 #]============================================================================]
 
 #find_package(minitest_box REQUIRED CONFIG)
-find_package(mta_box REQUIRED CONFIG)
+#find_package(mta_box REQUIRED CONFIG)
 #find_package(cxxx_box REQUIRED CONFIG)
 #find_package(wpl_box REQUIRED CONFIG)
 find_package(cnd_box REQUIRED CONFIG)
-set(TETS_RUN_DEBUG "")
+find_package(cide_box REQUIRED CONFIG)
 
 
 #[============================================================================[
 Copyright 2025 Anton Yashchenko
 Licensed under the GNU Affero General Public License, Version 3.
 ===============================================================================
-@project: [MTA] Meta Template Archive
+@project: SSG Compiler Monorepo Package
 @author(s): Anton Yashchenko
 @website: https://www.acpp.dev
 #]============================================================================]

@@ -1,0 +1,78 @@
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/
+
+/`
+@project: C& Compiler Test Code
+@file: RandomStatements
+@brief 
+`/
+
+proc @root:{
+  main:{
+	  ` Literal value definitions.
+	  1;
+	  1.1;
+	  "\"string literal\"";
+	  "\"\\\\\"";
+	  1b;
+	  1B;
+	  1u;
+	  none;
+	  
+	  ` Unlike C/C++. An expression statement which returns
+	  ` a value (non-void) will store the result in the C& RValue Register.
+	  ` Each following temporary result will overrwite the previous.
+	  ` This can be retrieved using the underscore `_` identifier.
+	  1;
+	  _ + 1;
+	  def @foo_from_temp_reg:_;
+	  
+	  ` Simple variable definitons
+	  ` When no type is specificed. Auto-deduction occurs.
+	  def @i32foo:1;                          ` i32
+	  def @f32foo:1.1;                        ` f64
+	  def @cstrfoo:"string literal";      	  ` cstr
+	  def @cstrbar:"\"\\\\\"";                ` cstr
+	  def @u1foo = 1b;                        ` u1 (bool)
+	  def @u8foo = 1B;                        ` u8
+	  def @u32foo:1u;                         ` u32
+	  def @nonefoo:none;                      ` none_t
+	  
+	  ` Binary Arithmetic Operations
+	  def i32 @foo:0;
+	  foo = 2 + 2;  												` add
+	  foo = 2 + 2 - 2; 												` sub
+	  foo = 2 + 2 - 2 * 2;  										` mul
+	  foo = 2 + 2 - 2 * 2 / 2;  									` div
+	  foo = 2 + 2 - 2 * 2 / 2 & 2;   								` bit and
+	  foo = 2 + 2 - 2 * 2 / 2 & 2 | 2; 								` bit or	   
+	  foo = 2 + 2 - 2 * 2 / 2 & 2 | 2 % 2; 							` mod  
+	  foo = 2 + 2 - 2 * 2 / 2 & 2 | 2 % 2 ^ 2;						` bit xor
+	  foo = 2 + 2 - 2 * 2 / 2 & 2 | 2 % 2 ^ 2 << 2;					` shl
+	  foo = 2 + 2 - 2 * 2 / 2 & 2 | 2 % 2 ^ 2 << 2 >> 2;			` shr 
+	  foo = 2 + 2 - 2 * 2 / 2 & 2 | 2 % 2 ^ 2 << 2 >> 2 && 2;		` logic and 
+	  foo = 2 + 2 - 2 * 2 / 2 & 2 | 2 % 2 ^ 2 << 2 >> 2 && 2 || 2;	` logic or 
+	  	  
+	  ` Unary Arithmetic Operations
+	  foo = ~foo;  ` bit not
+	  foo = !foo;  ` logic not
+	  foo = -foo;  ` negative sign
+	  foo = +foo;  ` positive sign
+	  
+	  ` Inline Unary Arithmetic Operations
+	  ` Inline operations apply to a value or variable and store the result in the same address.
+	  foo++; ` inc
+	  foo--; ` dec
+	  ++foo; ` preinc
+	  --foo; ` predec
+	  
+  }
+
+}
+	
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/

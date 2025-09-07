@@ -90,6 +90,54 @@ ApiRes<string> GetOsProgramDataPath() {
   return buff;
 }
 
+ApiRes<string> GetOsUserDataPath() {
+  string buff;
+  buff.reserve(MAX_PATH + 1);
+  if (::SHGetFolderPathA(NULL, CSIDL_APPDATA, NULL, 0, buff.data()) != S_OK) return ApiFail{eApiErr::kUnknown};
+  return buff;
+}
+
+ApiRes<string> GetCurrentUserId() {
+  HANDLE hToken = nullptr;
+  DWORD dwSize = 0;
+  std::vector<BYTE> buffer{};
+  PTOKEN_USER pTokenUser = nullptr;
+  LPSTR pszSID = nullptr;
+  std::string result{};
+
+  // Open process token
+  if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) 
+    return ApiFail{eApiErr::kUnknown};
+  
+
+  // Get required buffer size
+  GetTokenInformation(hToken, TokenUser, NULL, 0, &dwSize);
+  if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
+    CloseHandle(hToken);
+    return ApiFail{eApiErr::kUnknown};
+  }
+
+  // Allocate buffer and get token information
+  buffer.resize(dwSize);
+  pTokenUser = reinterpret_cast<PTOKEN_USER>(buffer.data());
+  if (!GetTokenInformation(hToken, TokenUser, pTokenUser, dwSize, &dwSize)) {
+    CloseHandle(hToken);
+    return ApiFail{eApiErr::kUnknown};
+  }
+
+  // Convert SID to string
+  // @requires #include <sddl.h>
+  if (!ConvertSidToStringSid(pTokenUser->User.Sid, &pszSID)) {
+    CloseHandle(hToken);
+    return ApiFail{eApiErr::kUnknown};
+  }
+
+  result = pszSID;
+  LocalFree(pszSID);
+  CloseHandle(hToken);
+  return result;
+}
+
 win32::Str OpenFileDlg() {
   OPENFILENAME ofn;     // common dialog box structure
   char szFile[260];  // buffer for file name

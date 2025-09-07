@@ -10,7 +10,7 @@ Licensed under the GNU Affero General Public License, Version 3.
 @ingroup
 @brief 
 #]============================================================================]
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.8...3.10)
 
 project(cgui_box
 	VERSION 0.0.0.0
@@ -25,6 +25,12 @@ project(cgui_box
 find_package(ssgmono_box REQUIRED CONFIG)
 find_package(imgui-sfml REQUIRED)
 
+find_package(imgui-sfml REQUIRED)
+find_package(nlohmanjson REQUIRED)
+
+find_package(mta_box REQUIRED CONFIG)
+find_package(cxxx_box REQUIRED CONFIG)
+find_package(caf_box REQUIRED CONFIG)
 #[============================================================================[
   Project Init
 #]============================================================================]
@@ -38,7 +44,7 @@ ssg_setup_standard_project_vars()
 set(CGUI_LIBRARY_HEADERS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 set(CGUI_LIBRARY_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-add_library(cgui_library 
+add_library(cgui_library STATIC
   "${CGUI_LIBRARY_SOURCES_DIR}/cgui.cpp"
 )
 target_include_directories(cgui_library PUBLIC "${CGUI_LIBRARY_HEADERS_DIR}")
@@ -46,7 +52,13 @@ target_sources(cgui_library
   INTERFACE 
   "${CGUI_LIBRARY_HEADERS_DIR}/cgui.hpp"
 )
-target_link_libraries(cgui_library PUBLIC ImGui-SFML::ImGui-SFML)
+target_link_libraries(cgui_library PUBLIC     
+            mta_box::mta_library
+            cxxx_box::cxxx_library
+            ImGui-SFML::ImGui-SFML
+            nlohmann_json::nlohmann_json
+            caf_box::caf_library
+)
 
 set_target_properties(cgui_library 
   PROPERTIES  CMAKE_CXX_STANDARD 20

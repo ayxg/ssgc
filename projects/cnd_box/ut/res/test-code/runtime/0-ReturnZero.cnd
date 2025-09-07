@@ -1,0 +1,26 @@
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/
+
+/`
+@project: C& Compiler Test Code
+@file: ReturnZero
+@brief Demonstrates the mimimum C& code required to compile an executable file.
+
+@note: A syntatic feature: a brace({}) following a declaration may be ommited if 
+  the description is a single enitity. In this case procedure root has a single 
+  main function with a single return statement.
+`/
+
+` Define a procedure named root.
+` Defines the main function. There must only be one per procedure.
+` Implicitly the return type of main is 'int'.
+proc @root:
+  main:
+    return 0;
+	
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/

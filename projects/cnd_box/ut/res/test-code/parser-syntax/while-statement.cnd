@@ -1,0 +1,10 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax - while statement
+
+while(foo < 42) foo++;
+
+while(foo < 42){
+	foo++;
+}
