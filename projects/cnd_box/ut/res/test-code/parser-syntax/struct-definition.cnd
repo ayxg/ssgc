@@ -1,0 +1,13 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax - Struct Definition
+
+` struct declaration
+struct @Foo;
+
+` struct definition
+` Note, unlike C++, C& structs cannot have member functions.
+struct @Foo: {
+	def @Bar: "Grok!";
+}

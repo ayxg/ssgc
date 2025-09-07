@@ -1,0 +1,15 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax - Struct Definition
+
+` class declaration
+class @Foo;
+
+` class definition
+class @Foo: {
+	def @Bar: "Grok!";
+	fn@Xim:{
+		return Bar;
+	}
+}

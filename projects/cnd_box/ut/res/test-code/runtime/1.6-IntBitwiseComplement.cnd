@@ -1,0 +1,28 @@
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/
+
+/`
+@project: C& Compiler Test Code
+@file: IntBitwiseComplement
+@brief When we apply complement operation, on any bit, it becomes 0, 1 and becomes 1, 0
+
+Suppose we have a variable named 'a' whose value is
+a = -9;
+This result is obtained by converting the value 8 in the variable a to binary.
+a = 0111
+When we apply bitwise complement operator in the operand, the output will be:
+Result = 1000 (8)
+`/
+
+proc @root:
+  main:{
+	def @a:-9;
+	return ~a;
+  }
+	
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/

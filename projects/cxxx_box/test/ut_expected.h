@@ -1,0 +1,127 @@
+///////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+// Licensed under the GNU Affero General Public License, Version 3.
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup unittest0_cppextended
+/// @brief BoolError, Expected and PartialExpected Unit Tests
+///////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup unittest0_cppextended
+/// @{
+#ifndef HEADER_GUARD_CAOCO_UNIT_TESTS_UT0_EXPECTED_H
+#define HEADER_GUARD_CAOCO_UNIT_TESTS_UT0_EXPECTED_H
+// Includes:
+#include "cxxx.hpp"
+#include "minitest.hpp"
+
+TEST(CxxExpected, Expected) {
+  using ExpectedString = cxx::Expected<std::string>;
+  ExpectedString e_good = ExpectedString::Success("42");
+  ExpectedString e_bad = ExpectedString::Failure("42");
+  std::string compare = "42";
+  EXPECT_TRUE(e_good.Valid());
+  EXPECT_FALSE(e_bad.Valid());
+  EXPECT_EQ(e_good.Value(), compare);
+  EXPECT_EQ(e_bad.Error(), compare);
+
+  // Good should be invalid after extraction of value.
+  std::string value = e_good.Extract();
+  EXPECT_FALSE(e_good.Valid());
+  EXPECT_EQ(e_good.Error(), "Value has been moved out of the expected object.");
+
+  // Implicit conversion to boolean to conditional expressions.
+  // EXPECT_FALSE(e_err);
+  EXPECT_FALSE(e_good);
+  EXPECT_FALSE(e_bad);
+}
+
+TEST(CxxExpected, PartialExpectedConstrtuct) {
+  using PartialExpectedString = cxx::PartialExpected<std::string, std::string>;
+  PartialExpectedString e_good =
+      PartialExpectedString::Success("Always", "Good");
+  PartialExpectedString e_bad = PartialExpectedString::Failure("Always", "Bad");
+  EXPECT_TRUE(e_good.Valid());
+  EXPECT_FALSE(e_bad.Valid());
+  EXPECT_EQ(e_good.Always(), "Always");
+  EXPECT_EQ(e_bad.Always(), "Always");
+  EXPECT_EQ(e_good.Value(), "Good");
+  EXPECT_EQ(e_bad.Error(), "Bad");
+
+  // Good should be invalid after extraction of value.
+  std::string value = e_good.Extract();
+  EXPECT_FALSE(e_good.Valid());
+  EXPECT_EQ(e_good.Error(), "Value has been moved out of the expected object.");
+
+  // //- Chaining Errors properly preserves order of errors.
+  // //- Chaining errors seperates error messages by a single newline character.
+  // //- Test Case: e_bad is a recieved error.
+  // //             e_err is the chain error returned by the reciever.
+  // //ChainFailure is NOT provided with a new always value.
+  // //     -> Old value is passed.
+  // PartialExpectedString e_err = e_bad.ChainFailure("Error 2: Bad was
+  // caught!"); EXPECT_FALSE(e_err.Valid()); EXPECT_EQ(e_err.Error(),
+  // "Bad\nError 2: Bad was caught!"); EXPECT_EQ(e_err.Always(),
+  // e_bad.Always());
+  //
+  //// ChainFailure is NOT provided with a new always value.
+  ////      -> Old value is passed.
+  // PartialExpectedString e_err_new_always =
+  // PartialExpectedString::ChainFailure(
+  //     e_bad, "VeryBad", "Error 2: Bad was caught!");
+  // EXPECT_FALSE(e_err_new_always.Valid());
+  // EXPECT_EQ(e_err_new_always.Error(), "Bad\nError 2: Bad was caught!");
+  // EXPECT_NE(e_err_new_always.Always(), e_bad.Always());
+  // EXPECT_EQ(e_err_new_always.Always(), "VeryBad");
+  // Implicit conversion to boolean to conditional expressions.
+  // EXPECT_FALSE(e_err);
+  EXPECT_FALSE(e_good);
+  EXPECT_FALSE(e_bad);
+}
+
+TEST(CxxExpected, BoolError) {
+  using BoolError = cxx::BoolError;
+  BoolError bool_err = BoolError("Error");
+  BoolError bool_good = BoolError(true);
+  BoolError bool_bad = BoolError(false);
+  // bool_err is not valid.
+  // bool_good is valid.
+  // bool_bad is not valid.
+  EXPECT_FALSE(bool_err.Valid());
+  EXPECT_TRUE(bool_good.Valid());
+  EXPECT_FALSE(bool_bad.Valid());
+  //
+  // EXPECT_EQ(bool_err.Error(), "Error");
+  // EXPECT_EQ(bool_bad.Error(), "BoolError: Unspecified false error.");
+  //
+  //// Implicit conversion to boolean to conditional expressions.
+  // EXPECT_FALSE(bool_err);
+  EXPECT_TRUE(bool_good);
+  EXPECT_FALSE(bool_bad);
+}
+
+#endif HEADER_GUARD_CAOCO_UNIT_TESTS_UT0_EXPECTED_H
+/// @} // end of unittest0_cppextended
+///////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language Environment
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+//
+// Licensed under the GNU Affero General Public License, Version 3.
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+///////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,36 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax - Enum Definition
+
+` basic enum
+enum @eResult:{
+	@Good;
+	@Bad;
+}
+
+` enum with value definitions
+enum @eResult:{
+	@Good:0;
+	@Bad:1;
+}
+
+` enum with positional associated value
+enum @eResult:str:{
+	@Good:1:"Good";
+	@Bad:2:"Bad";
+}
+
+
+` enum with named associated value
+enum @eResult: str @EnumStr:{
+	@Good:1:"Good";
+	@Bad:2:"Bad";
+}
+
+` enum with named tagged entry
+enum @eResult:str @EnumStr:{
+	@Good:1:"Good";
+	tag @ErrorState:
+		@Bad:1:"Bad";
+}

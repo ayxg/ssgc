@@ -1,0 +1,24 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax - Use Statement
+`
+` Similar to 'using' from C++.
+
+` As a type-def
+use @MyInteger: int;
+
+` To include a library's namespace.
+use lib my_math_lib;
+
+` To use a namespace
+use namespace my_ns;
+use my_ns::Foo;
+use @MyFooType: my_ns::Foo;
+	
+` to use a specific object from a 
+` library or namespace.
+use lib my_math_lib::add;
+use @MyAddMethodImpl: lib my_math_lib::add;
+	
+	

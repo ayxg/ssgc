@@ -1,0 +1,120 @@
+/*******************************************************************/
+/* @license Copyright 2025 Anton Yashchenko */
+/* @project C& Programming Language */
+/* @author(s) Anton Yashchenko */
+/* @website https://www.acpp.dev */
+/*******************************************************************/
+/* @file cand-primary-expr.cfg */
+/* @ingroup cnd_docs */
+/* @brief C& EBNF Grammar for EBNF playground */
+/*******************************************************************/
+
+/*******************************************************************/
+/* C& Syntax */
+/*******************************************************************/
+<syntax> ::= <expr> ";"
+			| <vardef>
+
+<vardef> ::= "def" <expr> "@" <expr> ";"
+		   | "def" <expr> "@" <expr> <colon_symbol> <expr> ";"
+           | "def" "@" <expr> <colon_symbol> <expr> ";"
+           | "def" "@" <expr> ";"
+
+<fndef> ::= "fn" "@" <expr> ";"
+		  | "fn" "@" <expr> "(" ")" <greater_symbol> <expr> ";"
+/*******************************************************************/
+/* Primary Expression */
+/*******************************************************************/
+<expr> ::= "(" <expr> ")" | <list_fold>
+/* 17 : a,b */
+<list_fold> ::= <assignment> ("," <assignment>)*
+/* 16 : a = b */
+<assignment> ::= (<logical_or> <assign_symbol>)* <logical_or>
+/* 15 : a || b */
+<logical_or> ::= <logical_and> (<logical_or_symbol> <logical_and>)*
+/* 14 : a && b */
+<logical_and> ::= <bitwise_or> (<logical_and_symbol> <bitwise_or>)*
+/* 13 : a | b */
+<bitwise_or> ::= <bitwise_xor> (<bit_or_symbol> <bitwise_xor>)*
+/* 12 : a ^ b */
+<bitwise_xor> ::= <bitwise_and> (<circumflex_symbol> <bitwise_and>)*
+/* 11 : a & b */
+<bitwise_and> ::= <equality> (<bit_and_symbol> <equality>)*
+/* 10 : a == b */
+/*		a != b */
+<equality> ::= <relational> (<equal_symbol> <relational>)*
+			  | <relational> (<not_equal_symbol> <relational>)*
+/* 8 */
+<relational> ::= <three_way_equality> (<greater_symbol> <three_way_equality>)*
+			  | <three_way_equality> (<lesser_symbol> <three_way_equality>)*
+			  | <three_way_equality> (<greater_equal_symbol> <three_way_equality>)*
+			  | <three_way_equality> (<lesser_equal_symbol> <three_way_equality>)*
+
+/* Three-Way-Equality : 8 : Left-to-right-> */
+<three_way_equality> ::= <bitwise_shift> (<spaceship_symbol> <bitwise_shift>)*
+/* Bitwise shift : 7 : Left-to-right-> */
+<bitwise_shift> ::= <summation> (<right_shift_symbol> <summation>)*
+			  	  | <summation> (<left_shift_symbol> <summation>)*
+
+/* 6 : a + b */
+<summation> ::= <production> (<plus_symbol> <production>)*
+/* 5 : a * b */
+<production> ::= <prefix> ("*" <prefix>)*
+
+/* Prefix: 4 : Right-to-left-> */
+<prefix> ::= <increment_symbol>* <access>
+			| <decrement_symbol>* <access>
+            | <not_symbol>* <access>
+
+/* Access: 3 : Left-to-right-> */
+<access> ::= <postfix> ("." <postfix>)*
+
+/* Postfix: 2 : Left-to-right-> */
+<postfix> ::= <resolution> <increment_symbol>*
+			 | <resolution> <decrement_symbol>*
+/* Resolution: 1 : Left-to-right-> */
+<resolution> ::= <op> (<resolve_symbol> <op>)*
+
+<op> ::= "a" | "b" | "c"
+
+/*******************************************************************/
+/* Compound Terminals (Lex) */
+/*******************************************************************/
+/* || */
+<logical_or_symbol> ::= <bit_or_symbol> <bit_or_symbol>
+/* && */
+<logical_and_symbol> ::= <bit_and_symbol> <bit_and_symbol>
+/* == */
+<equal_symbol> ::= <assign_symbol> <assign_symbol>
+/* != */
+<not_equal_symbol> ::= <not_symbol> <assign_symbol>
+/* >= */
+<greater_equal_symbol> ::= <greater_symbol> <assign_symbol>
+/* <= */
+<lesser_equal_symbol> ::= <lesser_symbol> <assign_symbol>
+/* <=> */
+<spaceship_symbol> ::= <lesser_equal_symbol> <greater_symbol>
+/* >> */
+<right_shift_symbol> ::= <greater_symbol> <greater_symbol>
+/* << */
+<left_shift_symbol> ::= <lesser_symbol> <lesser_symbol>
+/* -- */
+<decrement_symbol> ::= <minus_symbol> <minus_symbol>
+/* ++ */
+<increment_symbol> ::= <plus_symbol> <plus_symbol>
+/* Resolve : "::" */
+<resolve_symbol> ::= <colon_symbol> <colon_symbol>
+
+/*******************************************************************/
+/* Terminals (Input) */
+/*******************************************************************/
+<bit_or_symbol> ::= "|"
+<bit_and_symbol> ::= "&"
+<assign_symbol> ::= "="
+<not_symbol> ::= "!"
+<circumflex_symbol> ::= "^"
+<greater_symbol> ::= ">"
+<lesser_symbol> ::= "<"
+<minus_symbol> ::= "-"
+<plus_symbol> ::= "+"
+<colon_symbol> ::= ":"

@@ -1,0 +1,34 @@
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/
+
+/`
+@project: C& Compiler Test Code
+@file: IntBitwiseAnd
+@brief The Bitwise AND operator returns 1 in the result if both bits have a 
+	   value of 1 or if both bits does not have a value of 1, then it always
+	   returns 0 in the result.
+	   
+12 = 00001100 (In Binary)
+25 = 00011001 (In Binary)
+
+Bit Operation of 12 and 25
+ 
+  00001100
+& 00011001
+  ________
+  00001000 = 8 (In decimal)
+`/
+
+proc @root:
+  main:{
+	def @a:12;
+	def @b:25;
+	return a & b;
+  }
+	
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/

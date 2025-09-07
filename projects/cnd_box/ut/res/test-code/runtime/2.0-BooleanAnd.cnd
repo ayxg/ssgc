@@ -1,0 +1,21 @@
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/
+
+/`
+@project: C& Compiler Test Code
+@file: BooleanOr
+`/
+
+proc @root:
+  main:{
+	def @a:true;
+	def @b:false;
+	return a && b;
+  }
+	
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/
