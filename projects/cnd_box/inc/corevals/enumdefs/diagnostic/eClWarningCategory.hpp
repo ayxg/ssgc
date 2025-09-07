@@ -1,0 +1,83 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+// Licensed under the Apache License, Version 2.0(the "License");
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cnd_compiler_corevals
+/// @brief eClWarningCategory enum definition.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+// clang-format off
+#include "use_ccapi.hpp"
+#include "corevals/reflected_meta_enum.hpp"
+// clang-format on
+
+/// @addtogroup cnd_compiler_corevals
+/// @{
+
+namespace cnd::corevals::diagnostic {
+
+enum class eClWarningCategory {
+  kNone,
+  kCompilerDeveloper,
+  kCommandLine,
+  kGeneral,
+  kScanner,
+  kLexer,
+  kParser,
+  kPreprocessor,
+  kConstEval,
+  COUNT
+};
+
+// Define the enum to cstr conversion.
+constexpr CStr eClWarningCategoryToCStr(eClWarningCategory e) {
+  using enum eClWarningCategory;
+  switch (e) {
+    case kNone:
+      return "kNone";
+    case kCompilerDeveloper:
+      return "kCompilerDeveloper";
+    case kCommandLine:
+      return "kCommandLine";
+    case kGeneral:
+      return "kGeneral";
+    case kScanner:
+      return "kScanner";
+    case kLexer:
+      return "kLexer";
+    case kParser:
+      return "kParser";
+    case kPreprocessor:
+      return "kPreprocessor";
+    case kConstEval:
+      return "kConstEval";
+    case COUNT:
+      return "COUNT";
+    default:
+      return "<invalid>";
+  }
+}
+}  // namespace cnd::corevals::diagnostic
+
+/// @} // end of cnd_compiler_corevals
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+//
+// Licensed under the Apache License, Version 2.0(the "License"); you may not use this file except in compliance with
+// the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+// an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+// specific language governing permissions and limitations under the License.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

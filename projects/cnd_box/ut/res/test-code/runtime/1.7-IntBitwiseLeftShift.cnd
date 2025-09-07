@@ -1,0 +1,30 @@
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/
+
+/`
+@project: C& Compiler Test Code
+@file: IntBitwiseLeftShift
+@brief The left-shift operator shifts the number of bits to the left.
+
+Suppose we have this statement
+	int a = 5;
+By representing the value of a in binary,
+	a = 00000101
+If we want to left-shift the above representation by 2, then the statement would be:
+	a<<2;
+Result: 00000101<<2 = 00010100
+`/
+
+proc @root:
+  main:{
+	def @a:5;
+	def @b:2;
+	return a << b; ` 20
+  }
+	
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/

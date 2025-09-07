@@ -1,0 +1,16 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax - Namespace
+`
+
+namespace @Foo:{
+	namespace @Bar:{
+		def @Grok : 42;
+	}
+	
+	def @Grok : Bar::Grok;
+}
+
+def @Grok : Foo::Bar::Grok;	
+	

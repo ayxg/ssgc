@@ -1,0 +1,11 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax - for statement
+
+for(@i:0; i < 42; i++)
+	foo();
+	
+for(@i:0; i < 42; i++){
+	foo();
+}

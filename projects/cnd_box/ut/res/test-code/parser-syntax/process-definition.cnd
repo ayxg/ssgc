@@ -1,0 +1,20 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax_ProcessDefinition
+`
+` <process> ::= <process_decl> | <process_def>
+` <process_decl> ::= <KW_PROC> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <SEMICOLON>
+` <process_def> ::= <KW_PROC> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> <process_block>
+` <process_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <process_stmt_list> <IGNORED> <RIGHT_CURLY_BRACKET>
+` <process_stmt_list> ::= <process_stmt>*
+` <process_stmt> ::= <import> | <main> | <pragma> | <primary> | <variable> | <function> | <struct>
+` 				 | <namespace> | <using> | <enum>
+
+` Process declaration
+proc @Foo;
+
+` Process definition
+proc @Foo:{
+	` definition is allowed to be empty.
+}

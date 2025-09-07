@@ -1,0 +1,13 @@
+include <ccore.cnd>
+
+lib @stdc:{
+
+if (__STDC_VERSION__ < 202311){
+	` 'bool' type is always implicitly provided by the C& language core.
+	compeval def @true = 1;
+	compeval def @false = 0;
+}
+ 
+compeval def bool @__bool_true_false_are_defined : 1;
+
+}
