@@ -7,58 +7,56 @@
 // @website: https://www.acpp.dev
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file
-/// @ingroup coreappfw
+/// @ingroup core_app_framework
 /// @brief [HEADER]
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// @addtogroup coreappfw
+/// @addtogroup core_app_framework
 /// @{
 
 // clang-format off
 #pragma once
-#include <filesystem>
 #include "cxxx.hpp"
-
+#include "CAF/PreConfig.hpp"
 // clang-format on
 
 namespace caf {
-namespace stdfs = std::filesystem;
-template <class T>
-struct CacheFile {
-  using PathType = stdfs::path;
-  using DataType = T;
-  PathType data{};
-  DataType path{};
 
-  bool Load() {
-    if (!stdfs::exists(path)) return false;
-    std::ifstream cache_file(path);
-    if (!cache_file.is_open()) return false;
-    try {
-      data = DataType::FromJson(nlohmann::json::parse(cache_file));
-    } catch (nlohmann::json::parse_error& err) {
-      return false;
-    }
-  };
+/// Standard set of parameters passable to an OpenGL capable window upon creation. Its up to the 'Window' class
+/// implementation how to use these parameters - based on the underlying window type eg. sf::Window, GLFW, SDL, etc.
+struct GLWindowHints {
+  std::optional<int> RequestFocus{std::nullopt};      // Request focus
+  std::optional<int> Hidden{std::nullopt};            // Window is hidden
+  std::optional<int> Fullscreen{std::nullopt};        // Fullscreen window
+  std::optional<int> NoTitleBar{std::nullopt};        // No title bar
+  std::optional<int> NoResize{std::nullopt};          // Window is resizable
+  std::optional<int> NoCloseButton{std::nullopt};     // Show close button
+  std::optional<int> InitialWidth{std::nullopt};      // Initial window width
+  std::optional<int> InitialHeight{std::nullopt};     // Initial window height
+  std::optional<int> InitialPositionX{std::nullopt};  // Initial window width
+  std::optional<int> InitialPositionY{std::nullopt};  // Initial window height
+  std::optional<int> FrameLimit{std::nullopt};        // default is FalseInt; which means no limit
+  std::optional<int> EnableVsync{std::nullopt};       // Enable vertical sync
 
-  bool Save() const {
-    std::ofstream cache_file(path);
-    if (!cache_file.is_open()) return false;
-    cache_file << DataType::ToJson(data).dump();
-    cache_file.close();
-    return true;
-  };
+  std::optional<int> GlDepthBits{std::nullopt};
+  std::optional<int> GlAntialiasingLevel{std::nullopt};
+  std::optional<int> GlStencilBits{std::nullopt};
+  std::optional<int> GlMajorVersion{std::nullopt};
+  std::optional<int> GlMinorVersion{std::nullopt};
+  std::optional<int> GlAttributeFlags{std::nullopt};  // One of sf::ContextSettings::AttributeFlags
+  std::optional<int> GlsRgbCapable{std::nullopt};
+
+  std::optional<std::string_view> InitialTitle{std::nullopt};
 };
-
 }  // namespace caf
 
-/// @} // end of coreappfw
+/// @} // end of core_app_framework
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // @project: [CAF] Core Application Framework
 // @author(s): Anton Yashchenko
 // @website: https://www.acpp.dev
-// @created: 2025/05/16
+// @created: 2025/07/25
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright 2025 Anton Yashchenko
 //

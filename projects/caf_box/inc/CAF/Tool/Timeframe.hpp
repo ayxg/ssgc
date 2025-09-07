@@ -77,6 +77,7 @@ class Timeframe {
   TimePointType epoch_;
   TimePointType prev_frame_;
   TimePointType frame_start_;
+  MicroDurationType accum_delta_;
   MicroDurationType target_delta_;
   bool should_update_{true};
   bool is_init_{false};

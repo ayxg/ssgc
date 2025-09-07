@@ -8,7 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file
 /// @ingroup coreappfw
-/// @brief [HEADER] Basic usage examples.
+/// @brief [HEADER] Entity system.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// @addtogroup coreappfw
@@ -16,21 +16,21 @@
 
 // clang-format off
 #pragma once
+#include <concepts>
 #include "cxxx.hpp"
-#include "caf.hpp"
+#include "CAF/System/Entity.hpp"
+#include "CAF/System/GlWindow.hpp"
 // clang-format on
 
+namespace caf {
 
-namespace caf::demo {
-int ExWindowHandling();
-int ExAnimatedSquare();
-int ExBasicUserInterface();
-int ExBasicErrorModal();
-int ExAdvancedErrorModal();
-int ExLoadingBanner();
-int ExImGuiTheme();
-int ExUsingEntities();
-}  // namespace caf::demo
+struct TGUIApp {
+//  using AppType = GUIApp;
+
+ // GUIApp app;
+};
+
+}  // namespace caf
 
 /// @} // end of coreappfw
 
@@ -38,7 +38,7 @@ int ExUsingEntities();
 // @project: [CAF] Core Application Framework
 // @author(s): Anton Yashchenko
 // @website: https://www.acpp.dev
-// @created: 2025/07/13
+// @created: 2025/07/25
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright 2025 Anton Yashchenko
 //

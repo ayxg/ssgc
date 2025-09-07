@@ -16,33 +16,27 @@
 
 // clang-format off
 #pragma once
+#include "CAF/PreConfig.hpp"
+#include <nlohmann/json.hpp>
 #include "cxxx.hpp"
+
 // clang-format on
 
 namespace caf {
 
 // JSON Serialization
 namespace jsonlib = nlohmann;
-using JsonObj = jsonlib::json;
+using JsonObject = jsonlib::json;
 
 template <class T>
-concept JsonConvertible = requires(const T& t, const JsonObj& o) {
-  { T::ToJson(t) } -> std::same_as<JsonObj>;
+concept JsonConvertible = requires(const T& t, const JsonObject& o) {
+  { T::ToJson(t) } -> std::same_as<JsonObject>;
   { T::FromJson(o) } -> std::same_as<T>;
 };
 
-static JsonObj ToJson(const JsonConvertible auto& obj) { return std::decay_t<decltype(obj)>::ToJson(obj); }
+static JsonObject ToJson(const JsonConvertible auto& obj) { return std::decay_t<decltype(obj)>::ToJson(obj); }
 
-static JsonObj ToJson(const ImVec2& obj) { return JsonObj{{obj.x, obj.y}}; }
-
-static void FromJson(ImVec2& obj, const JsonObj& json) { obj = {json.at(0).get<float>(), json.at(1).get<float>()}; }
-static JsonObj ToJson(const ImVec4& obj) { return JsonObj{{obj.x, obj.y, obj.z, obj.w}}; }
-
-static void FromJson(ImVec4& obj, const JsonObj& json) {
-  obj = {json.at(0).get<float>(), json.at(1).get<float>(), json.at(2).get<float>(), json.at(3).get<float>()};
-}
-
-static auto FromJson(const JsonConvertible auto& obj, const JsonObj& json) -> std::decay_t<decltype(obj)> {
+static auto FromJson(const JsonConvertible auto& obj, const JsonObject& json) -> std::decay_t<decltype(obj)> {
   return std::decay_t<decltype(obj)>::FromJson(json);
 }
 }  // namespace caf

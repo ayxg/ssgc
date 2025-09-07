@@ -707,7 +707,7 @@ struct list_node_base {
   /// Does this node have any branches?
   bool is_leaf() const noexcept { return node_base_branches__.empty(); }
 
-  /// Is this the root-node in the tree?
+  /// Is this the root-most node in the tree?
   bool is_trunk() const noexcept { return !node_base_stem__; }
 
   /// Get the direct parent of this node. Returns nullptr if no parent exists.
