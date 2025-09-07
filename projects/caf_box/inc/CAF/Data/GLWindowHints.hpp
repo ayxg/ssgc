@@ -7,47 +7,56 @@
 // @website: https://www.acpp.dev
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file
-/// @ingroup coreappfw
-/// @brief [HEADER] 
+/// @ingroup core_app_framework
+/// @brief [HEADER]
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// @addtogroup coreappfw
+/// @addtogroup core_app_framework
 /// @{
 
 // clang-format off
 #pragma once
-#include "CAF/PreConfig.hpp"
-#include <nlohmann/json.hpp>
 #include "cxxx.hpp"
-
+#include "CAF/PreConfig.hpp"
 // clang-format on
 
 namespace caf {
 
-// JSON Serialization
-namespace jsonlib = nlohmann;
-using JsonObject = jsonlib::json;
+/// Standard set of parameters passable to an OpenGL capable window upon creation. Its up to the 'Window' class
+/// implementation how to use these parameters - based on the underlying window type eg. sf::Window, GLFW, SDL, etc.
+struct GLWindowHints {
+  std::optional<int> RequestFocus{std::nullopt};      // Request focus
+  std::optional<int> Hidden{std::nullopt};            // Window is hidden
+  std::optional<int> Fullscreen{std::nullopt};        // Fullscreen window
+  std::optional<int> NoTitleBar{std::nullopt};        // No title bar
+  std::optional<int> NoResize{std::nullopt};          // Window is resizable
+  std::optional<int> NoCloseButton{std::nullopt};     // Show close button
+  std::optional<int> InitialWidth{std::nullopt};      // Initial window width
+  std::optional<int> InitialHeight{std::nullopt};     // Initial window height
+  std::optional<int> InitialPositionX{std::nullopt};  // Initial window width
+  std::optional<int> InitialPositionY{std::nullopt};  // Initial window height
+  std::optional<int> FrameLimit{std::nullopt};        // default is FalseInt; which means no limit
+  std::optional<int> EnableVsync{std::nullopt};       // Enable vertical sync
 
-template <class T>
-concept JsonConvertible = requires(const T& t, const JsonObject& o) {
-  { T::ToJson(t) } -> std::same_as<JsonObject>;
-  { T::FromJson(o) } -> std::same_as<T>;
+  std::optional<int> GlDepthBits{std::nullopt};
+  std::optional<int> GlAntialiasingLevel{std::nullopt};
+  std::optional<int> GlStencilBits{std::nullopt};
+  std::optional<int> GlMajorVersion{std::nullopt};
+  std::optional<int> GlMinorVersion{std::nullopt};
+  std::optional<int> GlAttributeFlags{std::nullopt};  // One of sf::ContextSettings::AttributeFlags
+  std::optional<int> GlsRgbCapable{std::nullopt};
+
+  std::optional<std::string_view> InitialTitle{std::nullopt};
 };
-
-static JsonObject ToJson(const JsonConvertible auto& obj) { return std::decay_t<decltype(obj)>::ToJson(obj); }
-
-static auto FromJson(const JsonConvertible auto& obj, const JsonObject& json) -> std::decay_t<decltype(obj)> {
-  return std::decay_t<decltype(obj)>::FromJson(json);
-}
 }  // namespace caf
 
-/// @} // end of coreappfw
+/// @} // end of core_app_framework
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // @project: [CAF] Core Application Framework
 // @author(s): Anton Yashchenko
 // @website: https://www.acpp.dev
-// @created: 2025/05/15
+// @created: 2025/07/25
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright 2025 Anton Yashchenko
 //

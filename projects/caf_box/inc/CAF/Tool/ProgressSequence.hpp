@@ -84,7 +84,7 @@ struct ProgressStep {
   virtual void Load(float& prog, std::string_view& lbl) = 0;
 
  protected:
-  LoadingStep& operator()(float& prog, std::string_view& lbl) {
+  ProgressStep& operator()(float& prog, std::string_view& lbl) {
     prog = std::clamp(prog, min_progress, max_progress);
     lbl = start_label;
     Load(prog, lbl);

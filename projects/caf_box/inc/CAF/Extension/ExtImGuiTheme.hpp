@@ -32,9 +32,10 @@ namespace caf::imgui {
 
 /// Object representation of a UI theme.
 class Theme {
-  using StyleT = ImGuiStyle;
+ public:
+  using StyleType = ImGuiStyle; 
   /// This structure is huge so better store it on the heap. After applying the theme. Object can be destroyed.
-  std::unique_ptr<StyleT> style{nullptr};
+  std::unique_ptr<StyleType> style{nullptr};
   std::string font_path{""};  ///< Path to a TTF font file. If empty, default font will be used.
   std::string font_name{""};
   int font_size{0};  ///< Font size. If zero, default font size will be used.
@@ -43,7 +44,7 @@ class Theme {
   Theme() = default;
 
  public:
-  Theme(const StyleT& s) : style(std::make_unique<StyleT>(s)), font_path("") {}
+  Theme(const StyleType& s) : style(std::make_unique<StyleType>(s)), font_path("") {}
 
   /// Returns true if theme is empty (not initialized). Uninitialized themes may be a result of loading a json theme
   /// from file that does not exist or is empty.
@@ -52,13 +53,15 @@ class Theme {
   void Clear() noexcept;
 
   /// Apply the theme to the target UI. Retrieve the current style using ImGui::GetStyle().
-  void Apply(StyleT& curr_style) noexcept;
+  void Apply(StyleType& curr_style) noexcept;
 
-  void Copy(const StyleT& curr_style) noexcept;
+  void Copy(const StyleType& curr_style) noexcept;
 
-  static caf::JsonObj ToJson(const Theme& obj) noexcept;
+  void Copy(const Theme& other_theme) noexcept;
 
-  static Theme FromJson(const caf::JsonObj& obj) noexcept;
+  static caf::JsonObject ToJson(const Theme& obj) noexcept;
+
+  static Theme FromJson(const caf::JsonObject& obj) noexcept;
 
   // Generates default underlying UI framework theme.
   static Theme Default() noexcept;
