@@ -46,7 +46,6 @@ struct ExpectedTypeInterface : public Ex<T, CompilerProcessError> {
   constexpr T& Value() noexcept { return this->value(); }
   constexpr const CompilerProcessError& Error() const noexcept { return this->error(); }
   constexpr const T& Value() const noexcept { return this->value(); }
-
 };
 
 using cldev::clmsg::ClMsgBuffer;

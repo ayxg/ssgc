@@ -1,0 +1,10 @@
+include <ccore.cnd>
+
+lib @stdc:{
+if (__STDC_VERSION__ < 202311){
+	` alignas is provided by the C& language core.
+	` alignof is provided by the C& language core.
+	compeval def bool @__alignas_is_defined : 1;
+	compeval def bool @__alignof_is_defined : 1;
+}
+}

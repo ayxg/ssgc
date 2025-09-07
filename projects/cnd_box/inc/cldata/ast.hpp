@@ -18,7 +18,7 @@
 #include "use_ccapi.hpp"
 #include "use_corevals.hpp"
 #include "cldata/tk.hpp"
-#include "trtools/token_cursor.hpp"
+#include "trtools/TkCursor.hpp"
 // clang-format on
 
 namespace cnd {
@@ -133,7 +133,28 @@ struct Ast {
         return false;
     }
   }
-
+  constexpr bool IsLiteralSignificant() const noexcept {
+    switch (type) {
+      using enum eAst;
+      // Literal terminals
+      case kLitCstr:
+      case kLitInt:
+      case kLitUint:
+      case kLitBool:
+      case kLitReal:
+      case kLitChar:
+      case kLitByte:
+      case kKwNone:
+      case kKwTrue:
+      case kKwFalse:
+      case kIdent:
+      // Intermediates which store a literal value
+      case kEnumEntry:
+        return true;
+      default:
+        return false;
+    }
+  }
   constexpr Str GetLiteral() const noexcept {
     if (src_begin != src_end) {
       Str ret;
@@ -149,6 +170,8 @@ struct Ast {
   constexpr void PushBack(const Ast& ast) { children.push_back(ast); }
   constexpr void PushFront(Ast&& ast) { children.insert(children.begin(), ast); }
   constexpr void PushFront(const Ast& ast) { children.insert(children.begin(), ast); }
+  constexpr Ast& At(std::size_t i) { return children[i]; }
+  constexpr const Ast& At(std::size_t i) const { return children[i]; }
 
   constexpr void Append(std::same_as<Ast> auto&&... ast) { children.append_range(Vec<Ast>{std::forward<Ast>(ast)...}); }
 };

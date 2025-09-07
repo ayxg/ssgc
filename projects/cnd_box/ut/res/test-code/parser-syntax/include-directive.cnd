@@ -1,0 +1,17 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax_IncludeDirective
+
+` Both versions of the include directive search all possible include 
+` directories for the file. A quoted include directive searches local 
+` include directories first. Starting from this file's directory. An 
+` angled include directive searches system include directories first.
+
+` Local include directive
+include "iq_char_sequence";
+
+` System include directive
+` Includes a file searching system include directories first.
+include <ia_char_sequence>;
+

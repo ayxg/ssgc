@@ -1,0 +1,30 @@
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/
+
+/`
+@project: C& Compiler Test Code
+@file: IntBitwiseRightShift
+@brief The right-shift operator shifts the number of bits to the right.
+
+Suppose we have this statement
+	int a = 7;
+By representing the value of a in binary,
+	a = 00000111
+If we want to right-shift the above representation by 2, then the statement would be:
+	a>>2;
+Result: 00000101>>2 = 0000 0001
+`/
+
+proc @root:
+  main:{
+	def @a:7;
+	def @b:2;
+	return a >> b; ` 1
+  }
+	
+/`
+  MIT License 
+  Copyright 2024 Anton Yashchenko
+`/

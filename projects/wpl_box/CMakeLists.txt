@@ -10,7 +10,7 @@ Licensed under the Apache License, Version 2.0(the "License");
 @ingroup
 @brief 
 #]============================================================================]
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.8...3.10)
 
 project(wpl_box
 	VERSION 0.0.0.0
@@ -39,7 +39,7 @@ ssg_setup_standard_project_vars()
 set(WPL_LIBRARY_HEADERS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 set(WPL_LIBRARY_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-add_library(wpl_library "${WPL_LIBRARY_SOURCES_DIR}/wpl_core.cpp")
+add_library(wpl_library STATIC "${WPL_LIBRARY_SOURCES_DIR}/wpl_core.cpp")
 target_include_directories(wpl_library PUBLIC "${WPL_LIBRARY_HEADERS_DIR}")
 target_sources(wpl_library 
   INTERFACE 

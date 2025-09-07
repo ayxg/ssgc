@@ -1,0 +1,21 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax_LibraryDefinition
+`
+` <library> ::= <library_decl> | <library_def>
+` <library_decl> ::= <KW_LIB> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <SEMICOLON>
+` <library_def> ::= <KW_LIB> <IGNORED> <AT_SIGN> <IDENTIFIER> <IGNORED> <COLON> <IGNORED> <library_block>
+` <library_block> ::= <LEFT_CURLY_BRACKET> <IGNORED> <library_stmt_list> <IGNORED> <RIGHT_CURLY_BRACKET>
+` <library_stmt_list> ::= <library_stmt>*
+` <library_stmt> ::= <import> | <pragma> | <primary> | <variable> | <function> | <struct> | <namespace>
+` 				 | <using> | <import> | <enum> | <if> | <switch> | <while> | <for> | <return>
+
+` Unnamed library must be defined inline
+lib:{};
+
+` Named library declaration.
+lib @math_lib;
+
+` Named library with an inline definition.
+lib @math_lib:{};

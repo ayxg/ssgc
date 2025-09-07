@@ -1,0 +1,4 @@
+include <ccore.cnd>
+
+` 'noreturn' specifies that the function does not return to its point of invocation
+` 'noreturn' is defined by the C& language core.

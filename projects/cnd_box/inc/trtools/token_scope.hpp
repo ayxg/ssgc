@@ -20,7 +20,7 @@
 #include "use_clmsg.hpp"
 #include "cldata/tk.hpp"
 #include "cldata/ast.hpp"
-#include "trtools/token_cursor.hpp"
+#include "trtools/TkCursor.hpp"
 // clang-format on
 
 namespace cnd {

@@ -89,6 +89,7 @@ namespace cnd::corevals::grammar {
   sep m(KwType)                                \
   sep m(KwValue)                               \
   sep m(KwTemplate)                            \
+  sep m(KwProc)\
   sep m(Hash)                                  \
   sep m(Add)                                   \
   sep m(Sub)                                   \

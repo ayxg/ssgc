@@ -1,0 +1,17 @@
+` MIT License 
+` Copyright 2024 Anton Yashchenko
+` @project C& Compiler Test Code
+` @file Syntax_PragmaDirective
+
+` <pragma_escaped> ::= <KW_PRAGMA> <STRING_LITERAL> <SEMICOLON>
+pragma "string_literal";
+
+` <pragma_raw> ::= <KW_PRAGMA> <RAW_STRING_LITERAL> <SEMICOLON>
+pragma R"(raw_string_literal)";
+
+` <pragma_functional> ::= <KW_PRAGMA> <LEFT_PARENTHESIS> <pp_char_sequence> <RIGHT_PARENTHESIS> <SEMICOLON>
+pragma(pp_char_sequence);
+
+` <pragma_named> ::= <KW_PRAGMA> <IDENTIFIER> <SEMICOLON>
+pragma identifier;
+

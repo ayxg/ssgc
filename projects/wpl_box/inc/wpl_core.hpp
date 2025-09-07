@@ -19,6 +19,7 @@
 #include <Windows.h>
 #include <process.h>
 #include <shlobj_core.h> // SHGetFolderPath
+#include <sddl.h> // ConvertSidToStringSid 
 // stl
 #include <array>
 #include <cassert>
@@ -187,6 +188,9 @@ vector<string> GetCmdLines(const string &lines);
 
 ApiRes<string> GetOsTempPath();
 ApiRes<string> GetOsProgramDataPath();
+ApiRes<string> GetOsUserDataPath();
+ApiRes<string> GetCurrentUserId();
+
 win32::Str OpenFileDlg();
 win32::Str OpenFolderDlg();
 win32::Str SaveFileDlg();
