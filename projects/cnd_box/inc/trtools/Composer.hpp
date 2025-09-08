@@ -28,6 +28,8 @@
 #include "TrOutput.hpp"
 #include "TrUnit.hpp"
 
+//#include "CLangCodeModel.hpp"
+
 //#include "VirtualMachine.hpp"
 //#include "IrGenerator.hpp"
 // clang-format on
@@ -62,32 +64,42 @@ class Composer {
   TrInput tr_input_;
   TrOutput tr_output_;
   TrUnit tr_unit_;
-
+//  std::unique_ptr<clang::codegen::CodeModel> clang_model_ = nullptr;
   void GenerateBaseCodeModel();
   void ProcessSourceCode(Ast ast);
   void ProcessSourceFile(StrView fp);
 
  public:
-  //CompilerProcessResult<int> Compose() {
-  //  GenerateBaseCodeModel();
+  CompilerProcessResult<int> Compose(const TrInput & tr_in) {
+    //// Create base output C code model
+    //clang_model_ = std::make_unique<CLangCodeModel>(); 
 
-  //  // Set the initial exit code and return value to 0(EXIT_SUCCESS) before processing.
-  //  tr_output_.exit_code = EXIT_SUCCESS;
-  //  tr_output_.return_value = EXIT_SUCCESS;
+    //// Set the initial exit code and return value to 0(EXIT_SUCCESS) before processing.
+    //tr_output_.exit_code = EXIT_SUCCESS;
+    //tr_output_.return_value = EXIT_SUCCESS;
 
-  //  // Process all input source files in order. 
-  //  for (auto src_file_it = tr_input_.src_files.cbegin(); src_file_it != tr_input_.src_files.cend(); src_file_it++) {
-  //    // If a file was processed through an 'include' directive inside a previous source file, skip processing.
-  //    if (tr_unit_.processed_sources.contains(*src_file_it)) continue;
-  //    auto parse_res = ParseFile(*src_file_it);
-  //    if (!parse_res) return parse_res.error(); // Parsing failure.
+    //// Process all input source files in order. 
+    //for (auto src_file_it = tr_input_.src_files.cbegin(); src_file_it != tr_input_.src_files.cend(); src_file_it++) {
+    //  if (tr_unit_.processed_sources.contains(*src_file_it)) continue;
+    //  auto parse_res = ParseFile(*src_file_it);
+    //  if (!parse_res) return CompilerProcessResult<int>::Failure(parse_res.error()); 
 
-  //    //auto compeval_res = Evaluate(*parse_res,tr_unit_, tr_output_);
-  //    //if (!compeval_res) return compeval_res.error();  // Compeval failure.
-  //  }
-  //
-  //  return tr_output_.exit_code;
-  //};
+    //  //auto compeval_res = Evaluate(*parse_res,tr_unit_, tr_output_);
+    //  //if (!compeval_res) return compeval_res.error();  // Compeval failure.
+
+    //  auto codegen_res = clang_model_->AppendAst(*parse_res);
+    //  if (!codegen_res) return CompilerProcessResult<int>::Failure(codegen_res.error());
+    //}
+    //Vec<Pair<Str,Str>> outfiles = clang_model_->Codegen();
+    //tr_output_.output_files.reserve(outfiles.size());
+    //for (const auto& [filename, content] : outfiles) {
+    //  std::ofstream this_file(filename);
+    //  if (!this_file.is_open()) throw "Could not open file for writing.";
+    //  this_file << content;
+    //  tr_output_.output_files.push_back(filename);
+    //}
+    return tr_output_.exit_code;
+  };
 
   CompilerProcessResult<int> Compose() {
     auto& root_file = tr_input_.src_files.front();
