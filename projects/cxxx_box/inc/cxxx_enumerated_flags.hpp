@@ -47,6 +47,14 @@ class EnumeratedFlags {
     return flags_ & inflags;
   }
 
+    /// Append a single flag.
+  constexpr void Append(int flags) { flags_ |= flags; }
+  /// Append a list of flags, applied using bitwise OR.
+  constexpr void Append(int flags, std::same_as<int> auto... other_flags) {
+    flags_ |= flags;
+    (..., (flags_ |= other_flags));
+  }
+
   /// Append a single flag.
   constexpr void Append(EnumT flags) { flags_ |= std::to_underlying(flags); }
 
