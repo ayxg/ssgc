@@ -19,11 +19,15 @@
 
 #include "cxxx.hpp"
 #include "caf.hpp"
+#include "CAF/Tools/Trigger.hpp"
+#include "CAF/Tools/Timer.hpp"
+#include "CAF/Tools/Timeframe.hpp"
+#include "CAF/Tools/Timeline.hpp"
 #include "cgui.hpp"
 
-#include "CIDR/Common.hpp"
-#include "CIDR/Backend.hpp"
-#include "CIDR/UserInterface.hpp"
+//#include "CIDR/Common.hpp"
+//#include "CIDR/Backend.hpp"
+//#include "CIDR/UserInterface.hpp"
 
 // Unit Testing Framework
 // Makes mini-test record all test results, even if they pass.
@@ -31,8 +35,8 @@
 #define MINITEST_CONFIG_RECORD_ALL
 #include "minitest.hpp"
 // clang-format on
-
-
+#include <mutex>
+#include <thread>
 // !TEMPORARY FIX!
 // Weird Glitch with ImGui.
 // When moving around the window, the updated imgui.ini will cause a crash
@@ -47,170 +51,352 @@
 //  return 0;
 //}();
 
+static std::array<std::string_view, 5> kLoadingLabels = {
+    "Locating launch_paths.json", "Reading launch_paths.json", "Loading resources",
+    "Loading program data",       "Loading user data",
+};
+
+namespace caf::demo {
+
+}  // namespace caf::demo
+
 namespace cidr {
+
+/// @brief
+/// @param argc
+/// @param argv
 int MainGui(int argc, char** argv) {
-  caf::WinHints hints;
-  hints.EnableImGui = 1;
-  hints.FrameLimit = 60;
+  return 0;
+  // sf::Clock clock{};
+  // sf::Time run_time = sf::seconds(10);
+  // sf::Time frame_delta_lock = sf::seconds(1.f / 60.f);
+  
+  //// Benchmarking stopwatch.
+  // Stopwatch stopwatch{};
+  //// Recorded times...
+  // int app_run_timer = stopwatch.Start("App Run");
+  // int app_construct_timer = stopwatch.Start("App Construct");
+  // int window_init_timer = stopwatch.Start("Window Init");
+  // int context_frame_timer = Stopwatch::kNullEntryId;
 
-  caf::Context context;
-  auto& window = context.MakeWindow("CIDE", hints);
+  //// Construct application.
+  // ui::UserInterface user_interface{};
+  // ui::Theme theme{ui::Theme::DefaultCidr()};  // UI theme. Theme must be applied to each window after creation.
+  // stopwatch.Stop(app_construct_timer);
 
-  cidr::backend::IdeModel ide_model;
-  auto ide_model_init = ide_model.Init();
-  if (!ide_model_init) {
-    std::cout << "Failed to load ide params." << std::endl;
-    return EXIT_FAILURE;
-  }
+  //// Setup model loading sequence.
+  // backend::eIsFirstLaunch is_first_launch{false};
+  // backend::CacheFile2<data::LaunchPaths> launch_paths_cache{};
+  // LoadingSequence init_load_seq{
+  //     {
+  //     // 1. Decide if this is the first launch.
+  //     [&is_first_launch](float& prog, std::string_view& lbl) {
+  //        is_first_launch = backend::IsFirstLaunch();
+  //        lbl = kLoadingLabels[0];
+  //        prog = 0.2f;
+  //      },
+  //      // 2. Load launch paths if they exist - or open the ui::FirstLaunchWizard.
+  //      //    If this is a new user on the device with existing launch paths, open the ui::UserFirstLaunchWizard.
+  //      [&is_first_launch, &launch_paths_cache](float& prog, std::string_view& lbl) {
+  //        if (is_first_launch == backend::eIsFirstLaunch::kFirstLaunch) {
+  //          lbl = kLoadingLabels[1];
+  //          prog = LoadingSequence::kLoadingDone;
+  //        } else if (is_first_launch == backend::eIsFirstLaunch::kFirstLaunchNewUser) {
+  //          // Load existing launch paths, open new user first launch wizard.
 
-  // The HUD is tightly linked to the GFX context. And may control multiple
-  // windows.
-  cidr::ui::HUD hud{context};
+  //         lbl = kLoadingLabels[1];
+  //         prog = LoadingSequence::kLoadingDone;
+  //       }
+  //       // else -> backend::eIsFirstLaunch::kNotFirstLaunch
+  //       else {
+  //         stdfs::path this_launch_paths = backend::FindLaunchPathsFile();
+  //         assert(
+  //             !this_launch_paths.empty() &&
+  //             "You should have confirmed the launch paths exist in a valid directory before running this load
+  //             step.");
+  //         launch_paths_cache.path = this_launch_paths;
+  //         if (!launch_paths_cache.Load()) {
+  //           prog = LoadingSequence::kLoadingError;
+  //           lbl = "Failed to load launch paths. Potentially corrupt program data.";
+  //           return;
+  //         }
+  //         lbl = "Loading launch paths.";
+  //         prog = 0.4f;
+  //       }
+  //     },
+  //     // 3. Launch paths are loaded. Full load program data.
+  //     [](float& prog, std::string_view& lbl) {
+  //       // Load resources from the resource paths.
+  //       std::this_thread::sleep_for(std::chrono::seconds(2));
+  //       lbl = kLoadingLabels[2];
+  //       prog = 0.6f;
+  //     },
+  //     [](float& prog, std::string_view& lbl) {
+  //       // Load program data from the program paths.
+  //       std::this_thread::sleep_for(std::chrono::seconds(2));
+  //       lbl = kLoadingLabels[3];
+  //       prog = 0.8f;
+  //     },
+  //     [](float& prog, std::string_view& lbl) {
+  //       // Load user data from the user paths.
+  //       std::this_thread::sleep_for(std::chrono::seconds(2));
+  //       lbl = kLoadingLabels[4];
+  //       prog = LoadingSequence::kLoadingDone;
+  //     }}};
 
-  // The IDE model is loosely linked to the ui callback methods.
-  // Link backend to HUD:
-  hud.repo_explorer.root_dir = ide_model.active_repo_.solution_path;
+  //// Start loading before the window is created, on a separate thread.
+  // std::unique_ptr<std::thread> loading_thread{init_load_seq.Dispatch()};
 
-  hud.main_menu.cb_action_generate = [&ide_model] { ide_model.ExtCallGenerationStep(); };
-  hud.main_menu.cb_action_build = [&ide_model] { ide_model.ExtCallBuildStep(); };
-  hud.main_menu.cb_action_run = [&ide_model] { ide_model.ExtCallRunStep(); };
+  //// Create the loading screen window.
+  // caf::WinHints hints{};
+  // hints.InitialWidth = 320;
+  // hints.InitialHeight = 146;
+  // hints.NoTitleBar = true;
+  // hints.EnableImGui = true;
+  // hints.FrameLimit = 60;
+  // user_interface.ctx.push_back(caf::Window{"C.I.D.R. Loading...", hints});
+  // user_interface.ctx.back().SetPos(
+  //     (sf::VideoMode::getDesktopMode().width / 2) - (user_interface.ctx.back().Underlying().getSize().x / 2),
+  //     (sf::VideoMode::getDesktopMode().height / 2) - (user_interface.ctx.back().Underlying().getSize().y / 2));
+  // theme.Apply(ImGui::GetStyle());
+  //// Create the loading screen ui.
+  // ui::LoadingScreen loading_screen{};
 
-  hud.repo_explorer.cb_update_root_dir = [&ide_model](std::filesystem::path& path) {
-    ide_model.RefreshCurrentRepoRootDir(path);
-  };
+  //// Link the ui to the backend.
+  // loading_screen.cbGetLoadingProgress = [&init_load_seq]() -> float { return init_load_seq.progress.load(); };
+  // loading_screen.cbGetLoadingLabel = [&init_load_seq]() -> std::string_view { return init_load_seq.label.load(); };
 
-  hud.main_menu.cb_file_new_solution = [&ide_model](const std::string& dir, const std::string& name) {
-    return ide_model.NewRepo(dir, name);
-  };
+  //// Add the frame handler to the loading window.
+  // user_interface.ctx.back().EmplaceFrameHandler(
+  //     [&loading_thread, &init_load_seq, &loading_screen](caf::Window& win, const sf::Time& dt) {
+  //       loading_screen.Display(win, dt);
+  //       if (loading_thread->joinable() && init_load_seq.IsDone()) loading_thread->join();
+  //     });
 
-  //// Add another window
-  // auto& launcher_window = context.MakeWindow("CIDE Launcher", hints);
+  // stopwatch.Stop(window_init_timer);
 
-  // host_params.Load();
-  // cidr::ui::Launcher cide_launcher_ui;
-  // cidr::ui::Launcher::SettingsTableData host_table_data;
-  // for (auto i = 0; i < host_params.ParamCount(); i++) {
-  //   host_table_data.push_back(
-  //       {cidr::backend::HostParams::eHostVarToOptStr(
-  //            static_cast<cidr::backend::eHostVar>(i)),
-  //        host_params.ViewParam(static_cast<cidr::backend::eHostVar>(i))});
+  //// Main loop
+  // sf::Clock run_clock{};
+  // while (run_clock.getElapsedTime() < run_time) {
+  //   context_frame_timer == Stopwatch::kNullEntryId ? context_frame_timer = stopwatch.Start("Context Frame")
+  //                                                  : context_frame_timer = stopwatch.Start(context_frame_timer);
+  //   user_interface.ctx.NextFrame(frame_delta_lock);
+  //   stopwatch.Stop(context_frame_timer);
   // }
-  // cide_launcher_ui.callback_get_general_settings = [&host_table_data] {
-  //   return host_table_data;
+
+  // stopwatch.Stop(app_run_timer);
+  // std::cout << stopwatch.DebugStr();
+  // return EXIT_SUCCESS;
+
+  // caf::Context context{};  // -THE- Window & Graphics Context : singleton context for the entire app.
+  // ui::HUD hud{context};  // The HUD is tightly linked to the GFX context. And may control multiple windows.
+  // backend::AppModel model{};
+  //
+  // model.StartUp();
+  // hud.Link(model);
+
+  // model.TurnOn();
+  // hud.Activate();
+  // while (model.IsOn()) {
+  //   hud.Update();
+  //   model.Step();
+  // }
+
+  // model.ShutDown();
+  // return model.ExitCode();
+
+  // backend::AppModel model{};
+  // cidr::ui::HUD hud{context,model};  // The HUD is tightly linked to the GFX context. And may control multiple
+  // windows.
+
+  // model.StateInit();
+  // hud.FastLoad();
+  // while (model.CurrentState() != backend::AppModel::eAppState::kShutdown) {
+  //   model.Step();
+  //   hud.Display();
+  // }
+  // model.StateShutDown();
+
+  // if (model.CurrentState() == backend::AppModel::eAppState::kFirstInit) {
+  //   // Display first time initialization dialog.
+  // } else if (model.CurrentState() == backend::AppModel::eAppState::kFastLoad) {
+  //   model.StateFastLoad();
+  //   if (model.CurrentState() == backend::AppModel::eAppState::kError)
+  //     ;
+  //   else {
+  //     model.RequestState(backend::AppModel::eAppState::kLoad);
+  //     model.Step();
+  //   }
+  // } else {
+  //   // Some error occured
+  // }
+  // if (model.CurrentState() == backend::AppModel::eAppState::kLauncher) {
+  // }
+
+  // caf::Context context{};                     // -THE- Window & Graphics Context : singleton context for the entire
+  // app. ui::Theme theme{ui::Theme::DefaultCidr()};  // UI theme. Theme must be applied to each window after
+  // creation.
+
+  // caf::WinHints hints{};  // Window initialization hints.
+  // hints.EnableImGui = true;
+  // hints.FrameLimit = 60;
+  // hints.Hidden = true;
+  //// Create the root window. This is also the main window of the application. If this window is closed then all
+  /// other / windows will be closed as well. -THE- Context will exit. Kept invisible until after the launcher window
+  /// has
+  /// exited.
+  // sf::RenderWindow& window = context.MakeWindow("CIDE", hints);
+  // theme.Apply(ImGui::GetStyle());
+
+  // cidr::backend::IdeModel ide_model;
+  // auto ide_model_init = ide_model.Init();
+  // if (!ide_model_init) {
+  //   std::cout << "Failed to load ide params." << std::endl;
+  //   return EXIT_FAILURE;
+  // }
+
+  //// The HUD is tightly linked to the GFX context. And may control multiple
+  //// windows.
+  // cidr::ui::HUD hud{context};
+
+  //// The IDE model is loosely linked to the ui callback methods.
+  //// Link backend to HUD:
+  // hud.repo_explorer.root_dir = ide_model.active_repo_.solution_path;
+
+  // hud.main_menu.cb_action_generate = [&ide_model] { ide_model.ExtCallGenerationStep(); };
+  // hud.main_menu.cb_action_build = [&ide_model] { ide_model.ExtCallBuildStep(); };
+  // hud.main_menu.cb_action_run = [&ide_model] { ide_model.ExtCallRunStep(); };
+
+  // hud.repo_explorer.cb_update_root_dir = [&ide_model](std::filesystem::path& path) {
+  //   ide_model.RefreshCurrentRepoRootDir(path);
   // };
 
-  //  // Setup Imgui Fonts
-  // #define FONT_MATERIALDESIGN_ICON_MIN 0xe000
-  // #define FONT_MATERIALDESIGN_ICON_MAX 0xf8ff
-  //  static const ImWchar glyph_ranges[] = {FONT_MATERIALDESIGN_ICON_MIN,
-  //                                         FONT_MATERIALDESIGN_ICON_MAX, 0};
-  //  ImFontConfig config;
-  //  // config.MergeMode = true;
-  //  ImGuiIO& io = ImGui::GetIO();
-  //  io.Fonts->Clear();  // clear fonts if you loaded some before (even if only
-  //                      // default one was loaded)
-  //  // io.Fonts->AddFontDefault();  // this will load default font as well
-  //  io.Fonts->AddFontFromFileTTF("font/Cascadia.ttf", 16.f); // Direct from
-  //  TTF
-  //
-  //  ImGui::SFML::UpdateFontTexture();  // important call: updates font texture
+  // hud.main_menu.cb_file_new_solution = [&ide_model](const std::string& dir, const std::string& name) {
+  //   return ide_model.NewRepo(dir, name);
+  // };
 
-  // Setup CIDE backend.
-  // cidr::backend::IdeSettings ide_settings;
-  // ide_settings.Load();
-  // std::cout << ide_settings.ViewBinaryPath() << std::endl;
-  // std::cout << ide_settings.ViewRepoPath() << std::endl;
-  // ide_settings.CacheSolution("testingcache");
-  // ide_settings.Save();
+  //// Add another window
+  // hints.InitialWidth = 800;
+  // hints.InitialHeight = 600;
+  // hints.NoTitleBar = true;
+  // hints.Hidden = false;
+  // auto& launcher_window = context.MakeWindow("CIDE Launcher", hints);
+  // launcher_window.setPosition(
+  //     sf::Vector2i{static_cast<int>((sf::VideoMode::getDesktopMode().width / 2) - (launcher_window.getSize().x /
+  //     2)),
+  //                  static_cast<int>((sf::VideoMode::getDesktopMode().height / 2) - (launcher_window.getSize().y /
+  //                  2))});
+  // theme.Apply(ImGui::GetStyle());  // Theme should be applied to each window.
 
-  cidr::ui::CideTestExplorerInterface cide_test_explorer;
-  // cidr::ui::AstExplorerInterface ast_explorer;
-  //  cidr::ui::Launcher cide_launcher_ui;
+  // cidr::backend::ToolchainParams toolchain_params;
+  // toolchain_params.Load();
+  // cidr::ui::Launcher cide_launcher_ui;
+  // cidr::ui::Launcher::SettingsTableData host_table_data;
+  // for (auto i = 0; i < toolchain_params.Size(); i++) {
+  //   host_table_data.push_back({cidr::backend::eToolchainParamToSysStr(static_cast<cidr::backend::eToolchainParam>(i)),
+  //                              toolchain_params.ViewParam(static_cast<cidr::backend::eToolchainParam>(i)).at(0)});
+  // }
+  // cide_launcher_ui.cb_get_general_settings = [&host_table_data] { return host_table_data; };
 
-  // Register Test Modules
-  // cppstandard extended
-  //cide_test_explorer.RegisterTestCase(MINITEST_FUNCTOR_RUN_INLINE(Test_CxxExpected), "UT_EXPECTED_H");
+  //// Setup CIDE backend.
+  //// cidr::backend::IdeSettings ide_settings;
+  //// ide_settings.Load();
+  //// std::cout << ide_settings.ViewBinaryPath() << std::endl;
+  //// std::cout << ide_settings.ViewRepoPath() << std::endl;
+  //// ide_settings.CacheSolution("testingcache");
+  //// ide_settings.Save();
 
-  //// cand compiler
-  //cide_test_explorer.RegisterTestCase(MINITEST_FUNCTOR_RUN_INLINE(Test_Lexer), "UT_LEXER_H");
+  //// cidr::ui::CideTestExplorerInterface cide_test_explorer;
+  //// cidr::ui::AstExplorerInterface ast_explorer;
+  ////  cidr::ui::Launcher cide_launcher_ui;
 
-  //cide_test_explorer.RegisterTestCase(MINITEST_FUNCTOR_RUN_INLINE(Test_TkScope), "UT_TOKENSCOPE_H");
-  //cide_test_explorer.RegisterTestCase(MINITEST_FUNCTOR_RUN_INLINE(Test_ParserBasics), "UT_PARSER_H");
-  //cide_test_explorer.RegisterTestCase(MINITEST_FUNCTOR_RUN_INLINE(Test_Build), "UT_BUILD_H");
+  //// Register Test Modules
+  //// cppstandard extended
+  //// cide_test_explorer.RegisterTestCase(MINITEST_FUNCTOR_RUN_INLINE(Test_CxxExpected), "UT_EXPECTED_H");
 
-  // Setup text editor.
-  cidr::ui::TextEditor editor;
-  editor.SetLanguageDefinition(cidr::ui::TextEditor::LanguageDefinition::CPlusPlus());
+  ////// cand compiler
+  //// cide_test_explorer.RegisterTestCase(MINITEST_FUNCTOR_RUN_INLINE(Test_Lexer), "UT_LEXER_H");
 
-  // Main Loop
-  sf::Clock deltaClock;
-  while (window.isOpen()) {
-    // Process events
-    context.ProcessEvents(window, [&window](const sf::Event& e) {
-      if (e.type == sf::Event::KeyReleased) {
-        if (e.key.code == sf::Keyboard::T) {
-          // Do stuff...
-        }
-      }
+  //// cide_test_explorer.RegisterTestCase(MINITEST_FUNCTOR_RUN_INLINE(Test_TkScope), "UT_TOKENSCOPE_H");
+  //// cide_test_explorer.RegisterTestCase(MINITEST_FUNCTOR_RUN_INLINE(Test_ParserBasics), "UT_PARSER_H");
+  //// cide_test_explorer.RegisterTestCase(MINITEST_FUNCTOR_RUN_INLINE(Test_Build), "UT_BUILD_H");
 
-      if (e.type == sf::Event::Closed) {
-        window.close();
-        ImGui::SFML::Shutdown(window);
-      }
-    });
+  //// Setup text editor.
+  // cidr::ui::TextEditor editor;
+  // editor.SetLanguageDefinition(cidr::ui::TextEditor::LanguageDefinition::CPlusPlus());
 
-    // context.ProcessEvents(launcher_window,
-    //                       [&launcher_window](const sf::Event& e) {
-    //                         if (e.type == sf::Event::KeyReleased) {
-    //                           if (e.key.code == sf::Keyboard::T) {
-    //                             // Do stuff...
-    //                           }
-    //                         }
+  //// Main Loop
+  // sf::Clock deltaClock;
+  // while (window.isOpen()) {
+  //   // Process events
+  //   context.ProcessEvents(window, [&window](const sf::Event& e) {
+  //     if (e.type == sf::Event::KeyReleased) {
+  //       if (e.key.code == sf::Keyboard::T) {
+  //         // Do stuff...
+  //       }
+  //     }
 
-    //                        if (e.type == sf::Event::Closed) {
-    //                          launcher_window.close();
-    //                          ImGui::SFML::Shutdown(launcher_window);
-    //                        }
-    //                      });
+  //    if (e.type == sf::Event::Closed) {
+  //      window.close();
+  //      ImGui::SFML::Shutdown(window);
+  //    }
+  //  });
 
-    // We must check in-case the main window was closed above.
-    if (window.isOpen()) {
-      context.UpdateFrame(window, deltaClock.restart(),
-                          [&editor, &hud, &cide_test_explorer](sf::RenderWindow& window, const sf::Time& delta) {
-                            // Do stuff...
-                            // editor.Render("Testing");
-                            // ImGui::ShowDemoWindow();
-                            auto win_size = window.getSize();
-                            hud.Display(win_size.x, win_size.y);
-                            // ast_explorer.Display();
-                            // cide_test_explorer.Display();
-                            window.clear();
-                            ImGui::SFML::Render(window);
-                            window.display();
-                            return caf::eAPIError::kNone;
-                          });
-    }
+  //  context.ProcessEvents(launcher_window, [&launcher_window](const sf::Event& e) {
+  //    if (e.type == sf::Event::KeyReleased) {
+  //      if (e.key.code == sf::Keyboard::T) {
+  //        // Do stuff...
+  //      }
+  //    }
 
-    // if (launcher_window.isOpen()) {
-    //   context.UpdateFrame(launcher_window, deltaClock.restart(),
-    //                       [&](sf::RenderWindow& window, const sf::Time&
-    //                       delta) {
-    //                         // Do stuff...
-    //                         ImGui::ShowDemoWindow();
-    //                         cide_launcher_ui.Display(launcher_window);
-    //                         window.clear();
-    //                         ImGui::SFML::Render(window);
-    //                         window.display();
-    //                         return caf::eAPIError::kNone;
-    //                       });
-    // }
+  //    if (e.type == sf::Event::Closed) {
+  //      // Store current theme on exit.
+  //      // cxx::SaveStrToFile("CidrCurrentTheme.json", backend::ToJson(ui::Theme(ImGui::GetStyle())).dump());
 
-    context.CleanupContextFrame();
-  }
-  ImGui::SFML::Shutdown();
+  //      launcher_window.close();
+  //      ImGui::SFML::Shutdown(launcher_window);
+  //    }
+  //  });
+
+  //  // We must check in-case the main window was closed above.
+  //  if (window.isOpen()) {
+  //    context.UpdateFrame(window, deltaClock.restart(),
+  //                        [&editor, &hud /*, &cide_test_explorer*/](sf::RenderWindow& window, const sf::Time& delta)
+  //                        {
+  //                          // Do stuff...
+  //                          // editor.Render("Testing");
+  //                          // ImGui::ShowDemoWindow();
+  //                          auto win_size = window.getSize();
+  //                          hud.Display(win_size.x, win_size.y);
+  //                          // ast_explorer.Display();
+  //                          // cide_test_explorer.Display();
+  //                          window.clear();
+  //                          ImGui::SFML::Render(window);
+  //                          window.display();
+  //                          return caf::eAPIError::kNone;
+  //                        });
+  //  }
+
+  //  if (launcher_window.isOpen()) {
+  //    context.UpdateFrame(launcher_window, deltaClock.restart(), [&](sf::RenderWindow& window, const sf::Time&
+  //    delta)
+  //    {
+  //      // Do stuff...
+
+  //      cide_launcher_ui.Display(launcher_window);
+  //      ImGui::ShowDemoWindow();
+  //      window.clear();
+  //      ImGui::SFML::Render(window);
+  //      window.display();
+  //      return caf::eAPIError::kNone;
+  //    });
+  //  }
+
+  //  context.CleanupContextFrame();
+  //}
+  // ImGui::SFML::Shutdown();
 }
 }  // namespace cidr
-
 
 /// @} // end of cidrlib
 

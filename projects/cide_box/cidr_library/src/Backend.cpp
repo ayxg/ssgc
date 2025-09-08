@@ -28,65 +28,65 @@ static constexpr ApiFail MakeApiFail(eApiErr err, cstring data) {
 
 static constexpr ApiFail MakeApiFail(ApiErr fail) { return ApiFail{fail}; }
 
-/// Returns the system environment variable name for the given host variable.
-static constexpr string_view eToolchainParamToSysStr(eToolchainParam v) {
-  switch (v) {
-    case eToolchainParam::kCmakePath:
-      return "_CandLang_CmakePath";
-    case eToolchainParam::kCppCompilerPath:
-      return "_CandLang_CppCompilerPath";
-    case eToolchainParam::kCppLinkerPath:
-      return "_CandLang_CppLinkerPath";
-    case eToolchainParam::kOsTempPath:
-      return "_CandLang_OsTempPath";
-    case eToolchainParam::kOsProgramDataPath:
-      return "_CandLang_OsProgramDataPath";
-    case eToolchainParam::kOsCliPath:
-      return "_CandLang_OsCliPath";
-    case eToolchainParam::kWin32ProgramFilesDir:
-      return "_CandLang_Win32ProgramFilesDir";
-    case eToolchainParam::kWin32VswherePath:
-      return "_CandLang_Win32VswherePath";
-    case eToolchainParam::kWin32MsvsPath:
-      return "_CandLang_Win32MsvsPath";
-    case eToolchainParam::kWin32MsvsInstallerPath:
-      return "_CandLang_Win32MsvsInstallerPath";
-    case eToolchainParam::kWin32VsdevcmdPath:
-      return "_CandLang_Win32VsdevcmdPath";
-    default:
-      return "_CandLang_UNKNOWN";
-  }
-}
-
-/// Returns the pretty name of the host variable.
-static constexpr string_view eToolchainParamToOptStr(eToolchainParam v) {
-  switch (v) {
-    case eToolchainParam::kCmakePath:
-      return "CMake Path";
-    case eToolchainParam::kCppCompilerPath:
-      return "C++ Compiler Path";
-    case eToolchainParam::kCppLinkerPath:
-      return "C++ Linker Path";
-    case eToolchainParam::kOsTempPath:
-      return "OS Temp Path";
-    case eToolchainParam::kOsProgramDataPath:
-      return "OS Local Appdata Path";
-    case eToolchainParam::kOsCliPath:
-      return "OS CLI Path";
-    case eToolchainParam::kWin32ProgramFilesDir:
-      return "Win32 Program Files Dir";
-    case eToolchainParam::kWin32VswherePath:
-      return "Win32 Vswhere Path";
-    case eToolchainParam::kWin32MsvsPath:
-      return "Win32 MSVS Path";
-    case eToolchainParam::kWin32MsvsInstallerPath:
-      return "Win32 MSVS Installer Path";
-    case eToolchainParam::kWin32VsdevcmdPath:
-      return "Win32 VsDevCmd Path";
-    default:
-      return "UNKNOWN";
-  }
-}
+///// Returns the system environment variable name for the given host variable.
+//static constexpr string_view eToolchainParamToSysStr(eToolchainParam v) {
+//  switch (v) {
+//    case eToolchainParam::kCmakePath:
+//      return "_CandLang_CmakePath";
+//    case eToolchainParam::kCppCompilerPath:
+//      return "_CandLang_CppCompilerPath";
+//    case eToolchainParam::kCppLinkerPath:
+//      return "_CandLang_CppLinkerPath";
+//    case eToolchainParam::kOsTempPath:
+//      return "_CandLang_OsTempPath";
+//    case eToolchainParam::kOsProgramDataPath:
+//      return "_CandLang_OsProgramDataPath";
+//    case eToolchainParam::kOsCliPath:
+//      return "_CandLang_OsCliPath";
+//    case eToolchainParam::kWin32ProgramFilesDir:
+//      return "_CandLang_Win32ProgramFilesDir";
+//    case eToolchainParam::kWin32VswherePath:
+//      return "_CandLang_Win32VswherePath";
+//    case eToolchainParam::kWin32MsvsPath:
+//      return "_CandLang_Win32MsvsPath";
+//    case eToolchainParam::kWin32MsvsInstallerPath:
+//      return "_CandLang_Win32MsvsInstallerPath";
+//    case eToolchainParam::kWin32VsdevcmdPath:
+//      return "_CandLang_Win32VsdevcmdPath";
+//    default:
+//      return "_CandLang_UNKNOWN";
+//  }
+//}
+//
+///// Returns the pretty name of the host variable.
+//static constexpr string_view eToolchainParamToOptStr(eToolchainParam v) {
+//  switch (v) {
+//    case eToolchainParam::kCmakePath:
+//      return "CMake Path";
+//    case eToolchainParam::kCppCompilerPath:
+//      return "C++ Compiler Path";
+//    case eToolchainParam::kCppLinkerPath:
+//      return "C++ Linker Path";
+//    case eToolchainParam::kOsTempPath:
+//      return "OS Temp Path";
+//    case eToolchainParam::kOsProgramDataPath:
+//      return "OS Local Appdata Path";
+//    case eToolchainParam::kOsCliPath:
+//      return "OS CLI Path";
+//    case eToolchainParam::kWin32ProgramFilesDir:
+//      return "Win32 Program Files Dir";
+//    case eToolchainParam::kWin32VswherePath:
+//      return "Win32 Vswhere Path";
+//    case eToolchainParam::kWin32MsvsPath:
+//      return "Win32 MSVS Path";
+//    case eToolchainParam::kWin32MsvsInstallerPath:
+//      return "Win32 MSVS Installer Path";
+//    case eToolchainParam::kWin32VsdevcmdPath:
+//      return "Win32 VsDevCmd Path";
+//    default:
+//      return "UNKNOWN";
+//  }
+//}
 
 constexpr const char* IdeParam::ToStr() const {
   return IdeParamContigEnum::assoc<0>(val);

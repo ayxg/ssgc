@@ -41,7 +41,6 @@ find_package(cgui_box REQUIRED CONFIG)
 include(SsgProjectBase)
 ssg_setup_standard_project_vars()
 
-
 #[============================================================================[
   Source Targets
 #]============================================================================]
@@ -52,13 +51,36 @@ ssg_setup_standard_project_vars()
 set(cidr_library_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cidr_library)
 set(cidr_library_HEADERS_DIR ${cidr_library_BASE_DIR}/inc)
 set(cidr_library_SOURCES_DIR ${cidr_library_BASE_DIR}/src)
+set(cidr_library_RESOURCES_DIR ${cidr_library_BASE_DIR}/res)
+
+# Embed the bare minimum required resources into the binary: Default font, app icon.
+# The rest will be loaded from the file system at runtime depending on launch paths. 
+# @see LaunchPaths.hpp for details on the initial loading proccess.
+include(SsgEmbedFiles)
+set(cidr_library_CODEGEN_INPUT_DIR "${cidr_library_BASE_DIR}/cg")
+set(cidr_library_CODEGEN_HEADERS_DIR "${CMAKE_CURRENT_BINARY_DIR}/CMakeGeneratedHeaders")
+set(cidr_library_CODEGEN_SOURCES_DIR "${CMAKE_CURRENT_BINARY_DIR}/CMakeGeneratedSources")
+set(cidr_library_CODEGEN_HEADERS_OUTPUT_DIR "${cidr_library_CODEGEN_HEADERS_DIR}/CIDR-CG")
+set(cidr_library_CODEGEN_SOURCES_OUTPUT_DIR "${cidr_library_CODEGEN_SOURCES_DIR}/CIDR-CG")
+
+ssg_embed_files(
+  FILES "${cidr_library_RESOURCES_DIR}/font/DroidSans/DroidSans.ttf"
+        "${cidr_library_RESOURCES_DIR}/img/AppLogo-64x64.png"
+        "${cidr_library_RESOURCES_DIR}/img/AppLogo-128x128.png"
+  NAMES kDefaultFont 
+        kAppLogo64x64
+        kAppLogo128x128
+  INPUT "${cidr_library_CODEGEN_INPUT_DIR}/CMakeEmbeddedData.hpp.config.in"
+  OUTPUT "${cidr_library_CODEGEN_HEADERS_OUTPUT_DIR}/CMakeEmbeddedData.hpp"
+)
 
 add_library(cidr_library STATIC
   "${cidr_library_SOURCES_DIR}/Main.cpp"
   "${cidr_library_SOURCES_DIR}/Backend.cpp"
+  "${cidr_library_SOURCES_DIR}/UserInterface/Theme.cpp"
   "${cidr_library_SOURCES_DIR}/UserInterface/TextEditor.cpp"
 )
-target_include_directories(cidr_library PUBLIC "${cidr_library_HEADERS_DIR}")
+target_include_directories(cidr_library PUBLIC "${cidr_library_HEADERS_DIR}" "${cidr_library_CODEGEN_HEADERS_DIR}")
 target_sources(cidr_library 
   INTERFACE 
   "${cidr_library_HEADERS_DIR}/CIDR.hpp"
@@ -70,6 +92,8 @@ target_sources(cidr_library
   "${cidr_library_HEADERS_DIR}/CIDR/UserInterface/CppTestExplorer.hpp"
   "${cidr_library_HEADERS_DIR}/CIDR/UserInterface/Launcher.hpp"
   "${cidr_library_HEADERS_DIR}/CIDR/UserInterface/TextEditor.hpp"
+  # Generated headers
+  "${cidr_library_CODEGEN_HEADERS_OUTPUT_DIR}/CMakeEmbeddedData.hpp"
 )
 target_link_libraries(cidr_library    
   PUBLIC
