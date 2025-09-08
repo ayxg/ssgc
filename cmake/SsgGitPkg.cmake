@@ -37,6 +37,10 @@ macro(ssg_gitpkg_imgui_sfml)
     GIT_TAG de565ac8f2b795dedc0307b60830cb006afd2ecd # 2.6
     OVERRIDE_FIND_PACKAGE
   )
+  
+  
+  # Build SFML libraries as static ones
+  set(BUILD_SHARED_LIBS OFF)
 
   FetchContent_MakeAvailable(SFML imgui)
   set(IMGUI_DIR ${imgui_SOURCE_DIR}) # pass our imgui source dir to imgui-sfml (mandatory)
