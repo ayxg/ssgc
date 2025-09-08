@@ -12,7 +12,7 @@ The C& complier may be used directly from the command line to build and execute 
 | **MINT** : Minimal C++ Testing Framework | Used to unit test other project submodules.|
 
 # The C& Programming Language
-Pronunciation: ‚Äú**candy**‚Äù or ‚Äú**see-and**‚Äù.
+Pronunciation: ì**candy**î or ì**see-and**î.
 
 First of, I will let the code do the talking. Have a taste of C&:
 
@@ -25,8 +25,8 @@ First of, I will let the code do the talking. Have a taste of C&:
 ### Goals 
 1. Quick and easy **deployment of a minimum viable product** with the **ability to scale and stay maintainable** by opting in to **type and logic safety** incrementally.
 2. Low cognitive load on the programmer with **legible self-explanatory syntax** that is **familiar in logic to mainstream C-like languages**. (C/C++)    
-3. **Plug and play** on top of any C++ environment and call native C++ methods from C&. **#include ‚Äúcandi.h‚Äù is all you need.**  
+3. **Plug and play** on top of any C++ environment and call native C++ methods from C&. **#include ìcandi.hî is all you need.**  
 
 ### Design Philosophies 
-1. ‚ÄúWhen there is a right way, there should be one choice. When there is no right way, there should be as many choices as possible.‚Äù 
-2. ‚ÄúIf it can happen at compile time it should happen at compile time,  unless it must happen at run time.‚Äù 
+1. ìWhen there is a right way, there should be one choice. When there is no right way, there should be as many choices as possible.î 
+2. ìIf it can happen at compile time it should happen at compile time,  unless it must happen at run time.î 
