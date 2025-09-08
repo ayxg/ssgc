@@ -69,7 +69,7 @@ cxx::BoolError BconObject::ReplaceLinesByTag(const std::string& tag, const std::
 }
 
 cxx::BoolError BconObject::ReplaceLineByTagAndIndex(const std::string& tag, std::size_t index,
-                                                    const std::string& new_line) {
+                                                   const std::string& new_line) {
   if (live_cache.contains(tag)) {
     if (index < live_cache[tag].size()) {
       live_cache[tag][index] = new_line;
