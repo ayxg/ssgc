@@ -29,6 +29,9 @@
 // Filesystem utilities
 #include "cxxx_fsys.hpp"
 
+// Data Structures
+#include "cxxx_tree.hpp"
+
 namespace cxx {
 constexpr auto AdvanceIt(auto&& iter, size_t i) {
   std::advance(iter, i);
@@ -166,6 +169,70 @@ struct StrLiteral {
   constexpr size_t size() const { return Footprint - 1; }
   constexpr StrLiteral(const char (&init)[Footprint]) { std::copy_n(init, Footprint, data); }
 };
+
+static std::string ReadFile(const char * fp) {
+  std::ifstream file(fp, std::ios::binary | std::ios::ate);
+  if (!file.is_open()) throw std::runtime_error(std::format("Failed to open file: {}",fp));
+  std::size_t fileSize = std::filesystem::file_size(fp);
+  std::string content(fileSize, '\0');  // Pre-allocate space
+  file.seekg(0);
+  file.read(&content[0], fileSize);
+  return content;
+}
+
+
+constexpr std::string_view Dedent(std::string_view input) {
+  if (input.empty()) return input;
+
+  // Skip the first newline if it exists
+  size_t start_pos = (input[0] == '\n') ? 1 : 0;
+  if (start_pos >= input.size()) return "";
+
+  // Split into lines (at compile time)
+  std::vector<std::string_view> lines;
+  size_t line_start = start_pos;
+  while (line_start < input.size()) {
+    size_t line_end = input.find('\n', line_start);
+    if (line_end == std::string_view::npos) line_end = input.size();
+    lines.push_back(input.substr(line_start, line_end - line_start));
+    line_start = line_end + 1;
+  }
+
+  // Find the minimum leading whitespace
+  size_t min_whitespace = std::string_view::npos;
+  for (const auto& line : lines) {
+    if (line.empty()) continue;  // Skip empty lines
+    size_t leading_ws = line.find_first_not_of(" \t");
+    if (leading_ws != std::string_view::npos) {
+      if (min_whitespace == std::string_view::npos || leading_ws < min_whitespace) {
+        min_whitespace = leading_ws;
+      }
+    }
+  }
+
+  // If no uniform whitespace, return as-is
+  if (min_whitespace == 0 || min_whitespace == std::string_view::npos) {
+    return input.substr(start_pos);
+  }
+
+  // Compute the new start and length
+  size_t new_start = start_pos;
+  size_t new_length = 0;
+
+  for (const auto& line : lines) {
+    if (line.size() > min_whitespace) {
+      new_length += line.size() - min_whitespace;
+    } else {
+      new_length += line.size();
+    }
+    new_length += 1;  // For '\n'
+  }
+
+  if (new_length > 0) new_length -= 1;  // Remove last '\n'
+
+  // Return a substring view (no allocation)
+  return input.substr(new_start, new_length);
+}
 
 }  // namespace cxx
 
