@@ -8,8 +8,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file
 /// @ingroup cnd_unit_test
-/// @brief Tests parsing primary expressions in isolation. 
-/// 
+/// @brief Tests parsing primary expressions in isolation.
+///
 /// This is arguably the hardest part of the parser to develop. These tests provide some sanity and prevent regression.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -38,51 +38,29 @@ using namespace cnd::trtools::parser;
 /* UtParserPrimaryExprOperands : Validate parsing singular terminals.                                                */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TEST(UtParserPrimaryExprOperands, WholeNumber) {
-  TestParsingMethod("1", ParseOperand, Sast{kLitInt, "1"});
-}
+TEST(UtParserPrimaryExprOperands, WholeNumber) { TestParsingMethod("1", ParseOperand, Sast{kLitInt, "1"}); }
 
-TEST(UtParserPrimaryExprOperands, RealNumber) {
-  
-  TestParsingMethod("1.1", ParseOperand, Sast{kLitReal, "1.1"});
-}
+TEST(UtParserPrimaryExprOperands, RealNumber) { TestParsingMethod("1.1", ParseOperand, Sast{kLitReal, "1.1"}); }
 
 TEST(UtParserPrimaryExprOperands, CString) {
-  
-  TestParsingMethod("\"string literal\"", ParseOperand,
-                               Sast{kLitCstr, "\"string literal\""});
+  TestParsingMethod("\"string literal\"", ParseOperand, Sast{kLitCstr, "\"string literal\""});
   TestParsingMethod("\"\\\\\"", ParseOperand, Sast{kLitCstr, "\"\\\\\""});
 }
 
-TEST(UtParserPrimaryExprOperands, Alnumus) {
-  
-  TestParsingMethod("alnumus", ParseOperand, Sast{kIdent, "alnumus"});
-}
+TEST(UtParserPrimaryExprOperands, Alnumus) { TestParsingMethod("alnumus", ParseOperand, Sast{kIdent, "alnumus"}); }
 
-TEST(UtParserPrimaryExprOperands, ByteLiteral) {
-  
-  TestParsingMethod("1c", ParseOperand, Sast{kLitByte, "1c"});
-}
+TEST(UtParserPrimaryExprOperands, ByteLiteral) { TestParsingMethod("1c", ParseOperand, Sast{kLitByte, "1c"}); }
 
-TEST(UtParserPrimaryExprOperands, BoolLiteral) {
-  
-  TestParsingMethod("1b", ParseOperand, Sast{kLitBool, "1b"});
-}
+TEST(UtParserPrimaryExprOperands, BoolLiteral) { TestParsingMethod("1b", ParseOperand, Sast{kLitBool, "1b"}); }
 
-TEST(UtParserPrimaryExprOperands, UnsignedLiteral) {
-  
-  TestParsingMethod("1u", ParseOperand, Sast{kLitUint, "1u"});
-}
+TEST(UtParserPrimaryExprOperands, UnsignedLiteral) { TestParsingMethod("1u", ParseOperand, Sast{kLitUint, "1u"}); }
 
-TEST(UtParserPrimaryExprOperands, NoneKeyword) {
-  
-  TestParsingMethod("none", ParseOperand, Sast{kKwNone, "none"});
-}
+TEST(UtParserPrimaryExprOperands, NoneKeyword) { TestParsingMethod("none", ParseOperand, Sast{kKwNone, "none"}); }
 
 TEST(UtParserPrimaryExprOperands, AllSingularOperands) {
   // This test confirms proper advancement of the iterator after parsing an operand.
   using namespace cnd::trtools::literals;
-  
+
   using namespace cnd::trtools::parser;
   CND_CX auto src = "1 1.1 \"string literal\" \"\\\\\" alnumus 1c 1b 1u none "_cndTkLiteral;
   auto src_span = std::span{src.data(), src.size()};
@@ -150,152 +128,68 @@ TEST(UtParserPrimaryExprOperands, AllSingularOperands) {
 /* UtParserPrimaryExprTopDown : Validate primary expressions by calling the top-most ParsePrimaryExpr method.        */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TEST(UtParserPrimaryExprTopDown, WholeNumber) {
-  
-  
-  
-  
+TEST(UtParserPrimaryExprTopDown, WholeNumber) { TestParsingMethod("1", ParsePrimaryExpr, Sast(kLitInt, "1")); }
 
-  TestParsingMethod("1", ParsePrimaryExpr, Sast(kLitInt, "1"));
-}
-
-TEST(UtParserPrimaryExprTopDown, RealNumber) {
-  
-  
-  
-  
-  TestParsingMethod("1.1", ParsePrimaryExpr, Sast(kLitReal, "1.1"));
-}
+TEST(UtParserPrimaryExprTopDown, RealNumber) { TestParsingMethod("1.1", ParsePrimaryExpr, Sast(kLitReal, "1.1")); }
 
 TEST(UtParserPrimaryExprTopDown, CString) {
-  
-  
-  
-  
   TestParsingMethod("\"string literal\"", ParsePrimaryExpr, Sast(kLitCstr, "\"string literal\""));
 }
 
 TEST(UtParserPrimaryExprTopDown, CStringEscaped) {
-  
-  
-  
-  
   TestParsingMethod("\"\\\\\"", ParsePrimaryExpr, Sast(kLitCstr, "\"\\\\\""));
 }
 
-TEST(UtParserPrimaryExprTopDown, Alnumus) {
-  
-  
-  
-  
-  TestParsingMethod("alnumus", ParsePrimaryExpr, Sast(kIdent, "alnumus"));
-}
+TEST(UtParserPrimaryExprTopDown, Alnumus) { TestParsingMethod("alnumus", ParsePrimaryExpr, Sast(kIdent, "alnumus")); }
 
-TEST(UtParserPrimaryExprTopDown, ByteLiteral) {
-  
-  
-  
-  
-  TestParsingMethod("1c", ParsePrimaryExpr, Sast(kLitByte, "1c"));
-}
+TEST(UtParserPrimaryExprTopDown, ByteLiteral) { TestParsingMethod("1c", ParsePrimaryExpr, Sast(kLitByte, "1c")); }
 
-TEST(UtParserPrimaryExprTopDown, BoolLiteral) {
-  
-  
-  
-  
-  TestParsingMethod("1b", ParsePrimaryExpr, Sast(kLitBool, "1b"));
-}
+TEST(UtParserPrimaryExprTopDown, BoolLiteral) { TestParsingMethod("1b", ParsePrimaryExpr, Sast(kLitBool, "1b")); }
 
-TEST(UtParserPrimaryExprTopDown, UnsignedLiteral) {
-  
-  
-  
-  
-  TestParsingMethod("1u", ParsePrimaryExpr, Sast(kLitUint, "1u"));
-}
+TEST(UtParserPrimaryExprTopDown, UnsignedLiteral) { TestParsingMethod("1u", ParsePrimaryExpr, Sast(kLitUint, "1u")); }
 
-TEST(UtParserPrimaryExprTopDown, NoneKeyword) {
-  
-  
-  
-  
-  TestParsingMethod("none", ParsePrimaryExpr, Sast(kKwNone, "none"));
-}
+TEST(UtParserPrimaryExprTopDown, NoneKeyword) { TestParsingMethod("none", ParsePrimaryExpr, Sast(kKwNone, "none")); }
 
 TEST(UtParserPrimaryExprTopDown, OperandInParenthesis) {
-  
-  
-  
-  
   TestParsingMethod("(1)", ParsePrimaryExpr, Sast(kSubexpression, "(1)", Sast(kLitInt, "1")));
 }
 
 TEST(UtParserPrimaryExprTopDown, OperandInSquareBrackets) {
-  
-  
-  
-  
   TestParsingMethod("[1]", ParsePrimaryExpr, Sast(kSquareSubexpr, "[1]", Sast(kLitInt, "1")));
 }
 
 TEST(UtParserPrimaryExprTopDown, OperandInCurlyBraces) {
-  
-  
-  
-  
   TestParsingMethod("{1}", ParsePrimaryExpr, Sast(kCurlySubexpr, "{1}", Sast{kLitInt, "1"}));
 }
 
 TEST(UtParserPrimaryExprTopDown, BinarySum) {
-  
-  
-  
-  
   TestParsingMethod("1 + 1", ParsePrimaryExpr, Sast(kAdd, "1+1", Sast(kLitInt, "1"), Sast(kLitInt, "1")));
 }
 
 TEST(UtParserPrimaryExprTopDown, BinarySumThenTerm) {
-  
-  
-  
-  
   TestParsingMethod("1 + 2 * 3", ParsePrimaryExpr,
                     Sast(kAdd, "1+2*3", Sast(kLitInt, "1"), Sast(kMul, "2*3", Sast(kLitInt, "2"), Sast(kLitInt, "3"))));
 }
 
 TEST(UtParserPrimaryExprTopDown, BinaryTermThenSum) {
-  
-  
-  
-  
   TestParsingMethod("1 * 2 + 3", ParsePrimaryExpr,
                     Sast(kAdd, "1*2+3", Sast(kMul, "1*2", Sast(kLitInt, "1"), Sast(kLitInt, "2")), Sast(kLitInt, "3")));
 }
 
 TEST(UtParserPrimaryExprTopDown, BinarySumIsLeftAssociative) {
-  
-  
-  TestParsingMethod(
-      "1 + 2 - 3", ParsePrimaryExpr,
-      Sast(kSub, "1+2-3", Sast(kAdd, "1+2", Sast(kLitInt, "1"), Sast(kLitInt, "2")), Sast(kLitInt, "3")));
+  TestParsingMethod("1 + 2 - 3", ParsePrimaryExpr,
+                    Sast(kSub, "1+2-3", Sast(kAdd, "1+2", Sast(kLitInt, "1"), Sast(kLitInt, "2")), Sast(kLitInt, "3")));
 }
 
 TEST(UtParserPrimaryExprTopDown, BinaryMemberAccessIsLeftAssociative) {
-  
-  
-  TestParsingMethod(
-      "a.b.c.d", ParsePrimaryExpr,
-      Sast(kMemberAccess, "a.b.c.d",
-           Sast(kMemberAccess, "a.b.c", Sast(kMemberAccess, "a.b", Sast(kIdent, "a"), Sast(kIdent, "b")),
-                Sast(kIdent, "c")),
-           Sast(kIdent, "d")));
+  TestParsingMethod("a.b.c.d", ParsePrimaryExpr,
+                    Sast(kMemberAccess, "a.b.c.d",
+                         Sast(kMemberAccess, "a.b.c", Sast(kMemberAccess, "a.b", Sast(kIdent, "a"), Sast(kIdent, "b")),
+                              Sast(kIdent, "c")),
+                         Sast(kIdent, "d")));
 }
 
 TEST(UtParserPrimaryExprTopDown, ParenIsResolvedFirst) {
-  
-  
-  
   TestParsingMethod(
       "(1+2)*3", ParsePrimaryExpr,
       Sast(kMul, "(1+2)*3", Sast(kSubexpression, "(1+2)", Sast(kAdd, "1+2", Sast(kLitInt, "1"), Sast(kLitInt, "2"))),
@@ -303,18 +197,11 @@ TEST(UtParserPrimaryExprTopDown, ParenIsResolvedFirst) {
 }
 
 TEST(UtParserPrimaryExprTopDown, UnaryPrefix) {
-  
-  
-  
   TestParsingMethod("!a", ParsePrimaryExpr, Sast(kNot, "!a", Sast(kIdent, "a")));
 }
 
 TEST(UtParserPrimaryExprTopDown, RepeatedUnaryPrefix) {
-  
-  
-  
-  TestParsingMethod("!!a", ParsePrimaryExpr,
-                               Sast(kNot, "!!a", Sast(kNot, "!a", Sast(kIdent, "a"))));
+  TestParsingMethod("!!a", ParsePrimaryExpr, Sast(kNot, "!!a", Sast(kNot, "!a", Sast(kIdent, "a"))));
 }
 
 TEST(UtParserPrimaryExprTopDown, AssignmentIsRightAssociative) {
@@ -330,50 +217,30 @@ TEST(UtParserPrimaryExprTopDown, AssignmentIsRightAssociative) {
 }
 
 TEST(UtParserPrimaryExprTopDown, PrefixUnaryThenBinary) {
-  
-  
-  
   TestParsingMethod("!1+2", ParsePrimaryExpr,
-                               Sast(kAdd, "!1+2", Sast(kNot, "!1", Sast(kLitInt, "1")), Sast(kLitInt, "2")));
+                    Sast(kAdd, "!1+2", Sast(kNot, "!1", Sast(kLitInt, "1")), Sast(kLitInt, "2")));
 }
 
 TEST(UtParserPrimaryExprTopDown, PrefixUnaryThenMemberAccess) {
-  
-  
-  
   TestParsingMethod("!a.b", ParsePrimaryExpr,
-                               Sast(kNot, "!a.b", Sast(kMemberAccess, "a.b", Sast(kIdent, "a"), Sast(kIdent, "b"))));
+                    Sast(kNot, "!a.b", Sast(kMemberAccess, "a.b", Sast(kIdent, "a"), Sast(kIdent, "b"))));
 }
 
 TEST(UtParserPrimaryExprTopDown, PrefixUnaryAfterBinary) {
-  
-  
-  
   TestParsingMethod("1+!2", ParsePrimaryExpr,
-                               Sast(kAdd, "1+!2", Sast(kLitInt, "1"), Sast(kNot, "!2", Sast(kLitInt, "2"))));
+                    Sast(kAdd, "1+!2", Sast(kLitInt, "1"), Sast(kNot, "!2", Sast(kLitInt, "2"))));
 }
 
 TEST(UtParserPrimaryExprTopDown, EmptyFunctionCall) {
-  
-  
-  
-  TestParsingMethod("a()", ParsePrimaryExpr,
-                               Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()")));
+  TestParsingMethod("a()", ParsePrimaryExpr, Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()")));
 }
 
 TEST(UtParserPrimaryExprTopDown, PrefixUnaryThenFunctionCall) {
-  
-  
-  
-  TestParsingMethod(
-      "!a()", ParsePrimaryExpr,
-      Sast(kNot, "!a()", Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()"))));
+  TestParsingMethod("!a()", ParsePrimaryExpr,
+                    Sast(kNot, "!a()", Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()"))));
 }
 
 TEST(UtParserPrimaryExprTopDown, RepeatedUnaryThenRepeatedFunctionCall) {
-  
-  
-  
   TestParsingMethod(
       "!!a()()", ParsePrimaryExpr,
       Sast(kNot, "!!a()()",
@@ -383,63 +250,42 @@ TEST(UtParserPrimaryExprTopDown, RepeatedUnaryThenRepeatedFunctionCall) {
 }
 
 TEST(UtParserPrimaryExprTopDown, FunctionCallThenBinary) {
-  
-  
-  
   TestParsingMethod(
       "a()+2", ParsePrimaryExpr,
       Sast(kAdd, "a()+2", Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()")), Sast(kLitInt, "2")));
 }
 
 TEST(UtParserPrimaryExprTopDown, FunctionCallThenMemberAccess) {
-  
-  
-  
-  TestParsingMethod(
-      "a().b", ParsePrimaryExpr,
-      Sast(kMemberAccess, "a().b", Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()")),
-           Sast(kIdent, "b")));
+  TestParsingMethod("a().b", ParsePrimaryExpr,
+                    Sast(kMemberAccess, "a().b", Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()")),
+                         Sast(kIdent, "b")));
 }
 
 TEST(UtParserPrimaryExprTopDown, MemberAccessThenFunctionCall) {
-  
-  
-  
-  TestParsingMethod(
-      "a.b()", ParsePrimaryExpr,
-      Sast(kFunctionCall, "a.b()", Sast(kMemberAccess, "a.b", Sast(kIdent, "a"), Sast(kIdent, "b")),
-           Sast(kArguments, "()")));
+  TestParsingMethod("a.b()", ParsePrimaryExpr,
+                    Sast(kFunctionCall, "a.b()", Sast(kMemberAccess, "a.b", Sast(kIdent, "a"), Sast(kIdent, "b")),
+                         Sast(kArguments, "()")));
 }
 
 TEST(UtParserPrimaryExprTopDown, BinaryThenFunctionCall) {
-  
-  
-  
   TestParsingMethod(
       "1+a()", ParsePrimaryExpr,
       Sast(kAdd, "1+a()", Sast(kLitInt, "1"), Sast(kFunctionCall, "a()", Sast(kIdent, "a"), Sast(kArguments, "()"))));
 }
 
 TEST(UtParserPrimaryExprTopDown, InteleavedMemberAccessAndFunctionCall) {
-  
-  
-  
   // a.b().c is parsed as (a.b()).c and not as a.(b().c) because of left-to-right associativity of member access.
   // Source: cppreference.com
-  TestParsingMethod(
-      "a.b().c.d", ParsePrimaryExpr,
-      Sast(kMemberAccess, ".",
-           Sast(kMemberAccess, ".",
-                Sast(kFunctionCall, "", Sast(kMemberAccess, ".", Sast(kIdent, "a"), Sast(kIdent, "b")),
-                     Sast(kArguments, "")),
-                Sast(kIdent, "c")),
-           Sast(kIdent, "d")));
+  TestParsingMethod("a.b().c.d", ParsePrimaryExpr,
+                    Sast(kMemberAccess, ".",
+                         Sast(kMemberAccess, ".",
+                              Sast(kFunctionCall, "", Sast(kMemberAccess, ".", Sast(kIdent, "a"), Sast(kIdent, "b")),
+                                   Sast(kArguments, "")),
+                              Sast(kIdent, "c")),
+                         Sast(kIdent, "d")));
 }
 
 TEST(UtParserPrimaryExprTopDown, ComplexExpr) {
-  
-  
-  
   TestParsingMethod(
       "foo.bar()*1+1", ParsePrimaryExpr,
       Sast(kAdd, "foo.bar()*1+1",
@@ -451,9 +297,6 @@ TEST(UtParserPrimaryExprTopDown, ComplexExpr) {
 }
 
 TEST(UtParserPrimaryExprTopDown, ComplexExpr2) {
-  
-  
-  
   TestParsingMethod(
       "(foo.bar() + 1) * 1", ParsePrimaryExpr,
       Sast(kMul, "(foo.bar()+1)*1",
@@ -465,18 +308,12 @@ TEST(UtParserPrimaryExprTopDown, ComplexExpr2) {
 }
 
 TEST(UtParserPrimaryExprTopDown, AssignmentExpression) {
-  
-  
-  
   TestParsingMethod(
       "foo = 1 + 2", ParsePrimaryExpr,
       Sast(kAssign, "foo=1+2", Sast(kIdent, "foo"), Sast(kAdd, "1+2", Sast(kLitInt, "1"), Sast(kLitInt, "2"))));
 }
 
 TEST(UtParserPrimaryExprTopDown, FunctionCallAfterBinaryLeftAssociative) {
-  
-  
-  
   TestParsingMethod(
       "a+b+c+d()", ParsePrimaryExpr,
       Sast(kAdd, "a+b+c+d()",
@@ -485,9 +322,6 @@ TEST(UtParserPrimaryExprTopDown, FunctionCallAfterBinaryLeftAssociative) {
 }
 
 TEST(UtParserPrimaryExprTopDown, FunctionCallWithArguments) {
-  
-  
-  
   TestParsingMethod(
       "foo(a, b, c)", ParsePrimaryExpr,
       Sast(kFunctionCall, "foo(a,b,c)", Sast(kIdent, "foo"),
@@ -496,9 +330,6 @@ TEST(UtParserPrimaryExprTopDown, FunctionCallWithArguments) {
 }
 
 TEST(UtParserPrimaryExprTopDown, IndexingCallWithArguments) {
-  
-  
-  
   TestParsingMethod(
       "foo[a, b, c]", ParsePrimaryExpr,
       Sast(kIndexOperator, "foo[a,b,c]", Sast(kIdent, "foo"),
@@ -507,9 +338,6 @@ TEST(UtParserPrimaryExprTopDown, IndexingCallWithArguments) {
 }
 
 TEST(UtParserPrimaryExprTopDown, ListingCallWithArguments) {
-  
-  
-  
   TestParsingMethod(
       "foo{a,b,c}", ParsePrimaryExpr,
       Sast(kListingOperator, "foo{a,b,c}", Sast(kIdent, "foo"),
@@ -518,56 +346,35 @@ TEST(UtParserPrimaryExprTopDown, ListingCallWithArguments) {
 }
 
 TEST(UtParserPrimaryExprTopDown, ResolutionOperator) {
-  
-  
-  
   TestParsingMethod("foo::bar", ParsePrimaryExpr,
-                               Sast(kResolutionOp, "foo::bar", Sast(kIdent, "foo"), Sast(kIdent, "bar")));
+                    Sast(kResolutionOp, "foo::bar", Sast(kIdent, "foo"), Sast(kIdent, "bar")));
 }
 
 TEST(UtParserPrimaryExprTopDown, UnaryMinusSingleOperand) {
-  
-  
-  
   TestParsingMethod("-1", ParsePrimaryExpr, Sast(kUnaryMinus, "-1", Sast(kLitInt, "1")));
 }
 
 TEST(UtParserPrimaryExprTopDown, UnaryMinusInExpr) {
-  
-  
-  
   TestParsingMethod("-1+2", ParsePrimaryExpr,
-                               Sast(kAdd, "-1+2", Sast(kUnaryMinus, "-1", Sast(kLitInt, "1")), Sast(kLitInt, "2")));
+                    Sast(kAdd, "-1+2", Sast(kUnaryMinus, "-1", Sast(kLitInt, "1")), Sast(kLitInt, "2")));
 }
 
 TEST(UtParserPrimaryExprTopDown, UnaryMinusInExprWithSubtraction) {
-  
-  
-  
   TestParsingMethod(
       "-1 - -1", ParsePrimaryExpr,
       Sast(kSub, "-1--1", Sast(kUnaryMinus, "-1", Sast(kLitInt, "1")), Sast(kUnaryMinus, "-1", Sast(kLitInt, "1"))));
 }
 
 TEST(UtParserPrimaryExprTopDown, UnaryPlusSingleOperand) {
-  
-  
-  
   TestParsingMethod("+1", ParsePrimaryExpr, Sast(kUnaryPlus, "+1", Sast(kLitInt, "1")));
 }
 
 TEST(UtParserPrimaryExprTopDown, UnaryPlusInExpr) {
-  
-  
-  
   TestParsingMethod("+1+2", ParsePrimaryExpr,
-                               Sast(kAdd, "+1+2", Sast(kUnaryPlus, "+1", Sast(kLitInt, "1")), Sast(kLitInt, "2")));
+                    Sast(kAdd, "+1+2", Sast(kUnaryPlus, "+1", Sast(kLitInt, "1")), Sast(kLitInt, "2")));
 }
 
 TEST(UtParserPrimaryExprTopDown, UnaryPlusInExprWithSubtraction) {
-  
-  
-  
   TestParsingMethod(
       "+1 + +1", ParsePrimaryExpr,
       Sast(kSub, "+1++1", Sast(kUnaryPlus, "+1", Sast(kLitInt, "1")), Sast(kUnaryPlus, "+1", Sast(kLitInt, "1"))));
