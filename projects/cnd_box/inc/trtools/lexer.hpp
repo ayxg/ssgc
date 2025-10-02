@@ -70,6 +70,7 @@ class Lexer {
   constexpr LexerResultT LexWhitespace(StrView src_str) noexcept;
   constexpr LexerResultT LexNewline(StrView src_str) noexcept;
   constexpr LexerResultT LexEscapedCharSequence(StrView src_str) noexcept;
+  constexpr LexerResultT LexLineComment(StrView src_str) noexcept;
   constexpr LexerResultT LexRecursiveTokenLiteral(StrView s) noexcept;
 
  private:  // Internal helper methods for tracking line and col count accross lexing methods.
@@ -443,6 +444,27 @@ constexpr Lexer::LexerResultT Lexer::LexEscapedCharSequence(StrView s) noexcept 
   if (*c == '"') c++;  // Advance past the closing quotation.
 
   return LexerCursor(eTk::kLitCstr, s, s.begin(), c);
+}
+
+constexpr Lexer::LexerResultT Lexer::LexLineComment(StrView s) noexcept {
+  using cldev::clmsg::ClMsgBuffer;
+  using cldev::clmsg::MakeClMsg;
+  using std::source_location;
+  auto c = s.begin();
+#if _DEBUG
+  if (!IsInRange(c, s))
+    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is eof.")};
+  if (*c != '`')
+    return LexerFailT{
+        MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is not a backtick.")};
+#endif
+  c++;
+  while (IsInRange(c, s) && !IsSrcCharNewline(*c)) {
+    c++;
+  }
+  c++;
+
+  return LexerCursor(eTk::kLineComment, s, s.begin(), c);
 }
 
 // format : T"[<delimiter-ident>]([<token-string>])[<delimiter-ident>]"
