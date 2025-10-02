@@ -534,13 +534,21 @@ constexpr Lexer::LexerOutputT Lexer::Process(StrView s) noexcept {
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
       // Unknown beggining of token...
-    } else if (IsSrcCharPunctuator(read_head_[0])) {
+    } 
+    else if (read_head_[0] == '`') { // Line Comment
+      auto res_buff = LexLineComment(read_head_);
+      if (!res_buff) return LexerFailT{res_buff.error()};
+      tokens.push_back({res_buff.value().processed_tk});
+      read_head_ = res_buff.value().read_head;
+    }    
+    else if (IsSrcCharPunctuator(read_head_[0])) {
       auto res_buff = LexPunctuator(read_head_);
       if (!res_buff) return LexerFailT{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
       // Quotations initial
-    } else {
+    } 
+    else {
       return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(
           CppSrcLocT{}, Str{"Unexpected codepoint encountered in source:"} + read_head_[0])};
     }
@@ -568,7 +576,6 @@ constexpr Vec<Tk> Lexer::Sanitize(const Vec<Tk>& output_tokens) noexcept {
     return new_output;
   }();  // Note: The lambda is immediately called.
 }
-
 
 namespace literals {
 
