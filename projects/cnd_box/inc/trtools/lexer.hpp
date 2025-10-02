@@ -71,6 +71,7 @@ class Lexer {
   constexpr LexerResultT LexNewline(StrView src_str) noexcept;
   constexpr LexerResultT LexEscapedCharSequence(StrView src_str) noexcept;
   constexpr LexerResultT LexLineComment(StrView src_str) noexcept;
+  constexpr LexerResultT LexBlockComment(StrView src_str) noexcept;
   constexpr LexerResultT LexRecursiveTokenLiteral(StrView s) noexcept;
 
  private:  // Internal helper methods for tracking line and col count accross lexing methods.
@@ -465,6 +466,44 @@ constexpr Lexer::LexerResultT Lexer::LexLineComment(StrView s) noexcept {
   c++;
 
   return LexerCursor(eTk::kLineComment, s, s.begin(), c);
+}
+
+constexpr Lexer::LexerResultT Lexer::LexBlockComment(StrView s) noexcept {
+  using cldev::clmsg::ClMsgBuffer;
+  using cldev::clmsg::MakeClMsg;
+  using std::source_location;
+  auto c = s.begin();
+#if _DEBUG
+  if (!IsInRange(c, s))
+    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is eof.")};
+  if (!IsInRange(next(c), s))
+    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is eof.")};
+  if (*c != '/')
+    return LexerFailT{
+        MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is not a forward slash.")};
+  if (*next(c) != '`')
+    return LexerFailT{
+        MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is not a backtick.")};
+#endif
+  std::advance(c,2); // pass "/`"
+  while (IsInRange(c, s)) {
+    // Check for end of block.
+    if (*c == '`') {
+      if (!IsInRange(next(c), s))
+        return LexerFailT{
+            MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), "Reached eof before end of block comment.")};
+
+      if (*next(c) == '/') {
+        std::advance(c, 3); // Advance past "`/" + one more to end.
+        return LexerCursor(eTk::kBlockComment, s, s.begin(), c);
+      }
+    } 
+    // cont.
+    c++;
+  }
+
+  return LexerFailT{
+      MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), "Reached eof before end of block comment.")};
 }
 
 // format : T"[<delimiter-ident>]([<token-string>])[<delimiter-ident>]"
