@@ -120,6 +120,9 @@ class Composer {
     std::span<const Tk> src_span = std::span{sanitized_src.data(), sanitized_src.size()};
     auto parse_res = cnd::trtools::parser::ParseSyntax({src_span.cbegin(), src_span.cend()});
     if (!parse_res) return CND_STDLOG.PrintErrForward(parse_res.error());
+    
+    // temp debug
+    std::cout << parse_res->ast.Format();
 
     tr_output_.exit_code = EXIT_SUCCESS;
     return EXIT_SUCCESS;
