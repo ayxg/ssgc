@@ -494,7 +494,7 @@ constexpr Lexer::LexerResultT Lexer::LexBlockComment(StrView s) noexcept {
             MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), "Reached eof before end of block comment.")};
 
       if (*next(c) == '/') {
-        std::advance(c, 3); // Advance past "`/" + one more to end.
+        std::advance(c, 2); // pass "`/" 
         return LexerCursor(eTk::kBlockComment, s, s.begin(), c);
       }
     } 
