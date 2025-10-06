@@ -70,6 +70,8 @@ class Lexer {
   constexpr LexerResultT LexWhitespace(StrView src_str) noexcept;
   constexpr LexerResultT LexNewline(StrView src_str) noexcept;
   constexpr LexerResultT LexEscapedCharSequence(StrView src_str) noexcept;
+  constexpr LexerResultT LexLineComment(StrView src_str) noexcept;
+  constexpr LexerResultT LexBlockComment(StrView src_str) noexcept;
   constexpr LexerResultT LexRecursiveTokenLiteral(StrView s) noexcept;
 
  private:  // Internal helper methods for tracking line and col count accross lexing methods.
@@ -445,6 +447,65 @@ constexpr Lexer::LexerResultT Lexer::LexEscapedCharSequence(StrView s) noexcept 
   return LexerCursor(eTk::kLitCstr, s, s.begin(), c);
 }
 
+constexpr Lexer::LexerResultT Lexer::LexLineComment(StrView s) noexcept {
+  using cldev::clmsg::ClMsgBuffer;
+  using cldev::clmsg::MakeClMsg;
+  using std::source_location;
+  auto c = s.begin();
+#if _DEBUG
+  if (!IsInRange(c, s))
+    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is eof.")};
+  if (*c != '`')
+    return LexerFailT{
+        MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is not a backtick.")};
+#endif
+  c++;
+  while (IsInRange(c, s) && !IsSrcCharNewline(*c)) {
+    c++;
+  }
+  c++;
+
+  return LexerCursor(eTk::kLineComment, s, s.begin(), c);
+}
+
+constexpr Lexer::LexerResultT Lexer::LexBlockComment(StrView s) noexcept {
+  using cldev::clmsg::ClMsgBuffer;
+  using cldev::clmsg::MakeClMsg;
+  using std::source_location;
+  auto c = s.begin();
+#if _DEBUG
+  if (!IsInRange(c, s))
+    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is eof.")};
+  if (!IsInRange(next(c), s))
+    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is eof.")};
+  if (*c != '/')
+    return LexerFailT{
+        MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is not a forward slash.")};
+  if (*next(c) != '`')
+    return LexerFailT{
+        MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is not a backtick.")};
+#endif
+  std::advance(c,2); // pass "/`"
+  while (IsInRange(c, s)) {
+    // Check for end of block.
+    if (*c == '`') {
+      if (!IsInRange(next(c), s))
+        return LexerFailT{
+            MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), "Reached eof before end of block comment.")};
+
+      if (*next(c) == '/') {
+        std::advance(c, 2); // pass "`/" 
+        return LexerCursor(eTk::kBlockComment, s, s.begin(), c);
+      }
+    } 
+    // cont.
+    c++;
+  }
+
+  return LexerFailT{
+      MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), "Reached eof before end of block comment.")};
+}
+
 // format : T"[<delimiter-ident>]([<token-string>])[<delimiter-ident>]"
 constexpr Lexer::LexerResultT Lexer::LexRecursiveTokenLiteral(StrView s) noexcept {
   using cldev::clmsg::ClMsgBuffer;
@@ -512,13 +573,27 @@ constexpr Lexer::LexerOutputT Lexer::Process(StrView s) noexcept {
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
       // Unknown beggining of token...
-    } else if (IsSrcCharPunctuator(read_head_[0])) {
+    } 
+    else if (read_head_[0] == '`') { // Line Comment
+      auto res_buff = LexLineComment(read_head_);
+      if (!res_buff) return LexerFailT{res_buff.error()};
+      tokens.push_back({res_buff.value().processed_tk});
+      read_head_ = res_buff.value().read_head;
+    } 
+    else if (read_head_[0] == '/' && read_head_.size() > 1 && read_head_[1] == '`') {
+      auto res_buff = LexBlockComment(read_head_);
+      if (!res_buff) return LexerFailT{res_buff.error()};
+      tokens.push_back({res_buff.value().processed_tk});
+      read_head_ = res_buff.value().read_head;
+    }
+    else if (IsSrcCharPunctuator(read_head_[0])) {
       auto res_buff = LexPunctuator(read_head_);
       if (!res_buff) return LexerFailT{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
       // Quotations initial
-    } else {
+    } 
+    else {
       return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(
           CppSrcLocT{}, Str{"Unexpected codepoint encountered in source:"} + read_head_[0])};
     }
@@ -546,7 +621,6 @@ constexpr Vec<Tk> Lexer::Sanitize(const Vec<Tk>& output_tokens) noexcept {
     return new_output;
   }();  // Note: The lambda is immediately called.
 }
-
 
 namespace literals {
 
