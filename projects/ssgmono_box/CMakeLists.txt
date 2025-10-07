@@ -37,6 +37,46 @@ ssg_export_subproject(
 	REDIRECT_FIND_PACKAGE
 )
 
+# Export
+if(PROJECT_IS_TOP_LEVEL)
+	include(GNUInstallDirs)
+	install(FILES
+            "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+						"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+					DESTINATION "${CMAKE_INSTALL_PREFIX}"
+	)
+  
+	install(FILES
+            "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SsgCMakeUtils.cmake"
+            "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SsgEmbedFiles.cmake"
+            "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SsgGitPkg.cmake"
+            "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SsgProjectBase.cmake"
+            "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SsgProjectPackageUtils.cmake"
+					DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake"
+	)
+
+  # Install SsgProjectPackageUtils module "subproject config input files"
+	install(FILES
+            "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SsgProjectPackageUtils/subproject-config-init.cmake.in"
+            "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SsgProjectPackageUtils/alias-targets-init.cmake.in"
+					DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake/SsgProjectPackageUtils"
+	)    
+
+	include(CMakePackageConfigHelpers)
+	configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+		INSTALL_DESTINATION "${CMAKE_INSTALL_PREFIX}"
+	)
+
+	write_basic_package_version_file(
+		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+		VERSION "${PROJECT_VERSION}"
+		COMPATIBILITY AnyNewerVersion
+	)
+	
+endif()
+
+
 #[============================================================================[
 Copyright 2025 Anton Yashchenko
 Licensed under the Apache License, Version 2.0(the "License");
