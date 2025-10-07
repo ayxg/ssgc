@@ -42,6 +42,7 @@ if(PROJECT_IS_TOP_LEVEL)
 	include(GNUInstallDirs)
 	install(FILES
             "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+						"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
 					DESTINATION "${CMAKE_INSTALL_PREFIX}"
 	)
   
@@ -65,6 +66,12 @@ if(PROJECT_IS_TOP_LEVEL)
 	configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
 		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
 		INSTALL_DESTINATION "${CMAKE_INSTALL_PREFIX}"
+	)
+
+	write_basic_package_version_file(
+		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+		VERSION "${PROJECT_VERSION}"
+		COMPATIBILITY AnyNewerVersion
 	)
 	
 endif()
