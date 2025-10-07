@@ -1,0 +1,5 @@
+@PACKAGE_INIT@
+
+list(APPEND CMAKE_MODULE_PATH "${PACKAGE_PREFIX_DIR}/cmake")
+
+check_required_components(${CMAKE_FIND_PACKAGE_NAME})
