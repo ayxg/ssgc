@@ -155,7 +155,7 @@ TEST(UtParserGrammarRules, ProcessDefWithStatements) {
 /* Library Declaration       */
 ///////////////////////////////////////
 TEST(UtParserGrammarRules, LibDecl) {
-  TestParsingMethod("lib @FooLibrary;", ParseProcDecl,
+  TestParsingMethod("lib @FooLibrary;", ParseLibDecl,
   Sast{kProcessDeclaration,"",
     Sast{kModifiers,""},
     Sast{kIdent,"FooLibrary"}
@@ -164,7 +164,7 @@ TEST(UtParserGrammarRules, LibDecl) {
 }
 
 TEST(UtParserGrammarRules, LibDef) {
-  TestParsingMethod("proc@FooProcess:{ };", ParseProcDecl);
+  TestParsingMethod("lib@FooProcess:{ };", ParseLibDecl);
 }
 
 TEST(UtParserGrammarRules, LibWithMod) {
