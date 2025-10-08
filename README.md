@@ -9,6 +9,8 @@ Mini-Test : C++ Unit Testing Framework {#caoco_docs_minitest}
 - Initially created as a quick replacement for GoogleTest. Suprisingly, it has served me well in the pass 2
   years developing and testing my personal projects. So, I have decided to continue improving this library
   rather than abandoning it for GoogleTest.
+- Include CMake module for declaring tests with CTest support. Support for Visual Studio's "Test Explorer" widget.
+  See [CMake Integration Docs](docs/user/guide_cmake_integration.md).
 
 ### **Example of a unit test:**
 ```C
