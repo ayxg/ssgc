@@ -1585,6 +1585,8 @@ CND_CX LLPrsResT ParseDirectiveDesc(TkCursorT c) CND_NX {
       return ParseClassDecl(decl_begin);
     case kKwLib:
       return ParseLibDecl(decl_begin);
+    case kKwProc:
+      return ParseProcDecl(decl_begin);
     case kKwUse:
     case kKwMain:
     case kKwImport:
