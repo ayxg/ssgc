@@ -1384,17 +1384,17 @@ CND_CX LLPrsResT ParseProcDecl(TkCursorT c) CND_NX {
     return LLParserResult(c, Ast(eAst::kProcessDeclaration, decl_begin, c.Iter(), {mod_node, def_result->ast}));
   }
 
-  // If there is a @ following the proc keyword, this is a named library.
+  // If there is a @ following the proc keyword, this is a named process.
   if (c.TypeIsnt(kCommercialAt)) DEBUG_FAIL("Expected '@' symbol after 'proc' keyword.");
   c.Advance();
   if (c.TypeIsnt(kIdent)) DEBUG_FAIL("Expected identifier after '@' symbol.");
   Ast ident_node{c};
   c.Advance();
 
-  // Library declaration
+  // Process declaration
   if (c.TypeIs(kSemicolon)) {
     c.Advance();
-    return LLParserResult(c, Ast(eAst::kLibraryDeclaration, decl_begin, c.Iter(), {mod_node, ident_node}));
+    return LLParserResult(c, Ast(eAst::kProcessDeclaration, decl_begin, c.Iter(), {mod_node, ident_node}));
   }
 
   if (c.TypeIsnt(kColon)) DEBUG_FAIL("Expected ':' symbol followed by process definition.");
@@ -1404,7 +1404,7 @@ CND_CX LLPrsResT ParseProcDecl(TkCursorT c) CND_NX {
   if (!def_result) return def_result;
   c.Advance(def_result->head);
   return LLParserResult(c,
-                        Ast(eAst::kLibraryDeclaration, decl_begin, c.Iter(), {mod_node, ident_node, def_result->ast}));
+                        Ast(eAst::kProcessDeclaration, decl_begin, c.Iter(), {mod_node, ident_node, def_result->ast}));
 }
 
 // <using> ::= <using_type_alias>
@@ -1585,6 +1585,8 @@ CND_CX LLPrsResT ParseDirectiveDesc(TkCursorT c) CND_NX {
       return ParseClassDecl(decl_begin);
     case kKwLib:
       return ParseLibDecl(decl_begin);
+    case kKwProc:
+      return ParseProcDecl(decl_begin);
     case kKwUse:
     case kKwMain:
     case kKwImport:
