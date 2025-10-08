@@ -54,22 +54,25 @@ option(MINITEST_BOX_ENABLE_CTEST_INTEGRATION
 #[============================================================================[
   Package Targets
 #]============================================================================]
+include(GNUInstallDirs)
 
 # minitest_box::minitest_library
 set(MINITEST_LIBRARY_HEADERS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 set(MINITEST_LIBRARY_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_library(minitest_library INTERFACE)
 target_include_directories(minitest_library 
-  INTERFACE "${MINITEST_LIBRARY_HEADERS_DIR}"
+  INTERFACE 
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 target_sources(minitest_library 
   INTERFACE 
-  "${MINITEST_LIBRARY_HEADERS_DIR}/common.hpp"
-  "${MINITEST_LIBRARY_HEADERS_DIR}/fixture.hpp"
-  "${MINITEST_LIBRARY_HEADERS_DIR}/form.hpp"
-  "${MINITEST_LIBRARY_HEADERS_DIR}/minitest.hpp"
-  "${MINITEST_LIBRARY_HEADERS_DIR}/test_framework.hpp"
-  "${MINITEST_LIBRARY_HEADERS_DIR}/unit_test.hpp"
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc/common.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc/fixture.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc/form.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc/minitest.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc/test_framework.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc/unit_test.hpp>
 )
 set_target_properties(minitest_library 
   PROPERTIES  CMAKE_CXX_STANDARD 14
@@ -147,6 +150,57 @@ ssg_export_subproject(
 	MODULE_PATHS "${MINITEST_LIBRARY_CMAKE_MODULES_DIR}"
 	REDIRECT_FIND_PACKAGE
 )
+
+#[============================================================================[
+  Install Package
+#]============================================================================]
+if(PROJECT_IS_TOP_LEVEL)
+	install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+    DESTINATION "${CMAKE_INSTALL_PREFIX}"
+	)
+  
+	install(FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/StdMake.cmake"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseMinitest.cmake"
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake"
+	)
+
+  install(FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/inc/common.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/inc/fixture.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/inc/form.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/inc/minitest.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/inc/test_framework.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/inc/unit_test.hpp"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+  )
+
+  install(TARGETS minitest_library
+    EXPORT minitest_box_targets
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  )
+
+  install(EXPORT minitest_box_targets
+    FILE minitest_box-targets.cmake
+    NAMESPACE minitest_box::
+    DESTINATION "${CMAKE_INSTALL_PREFIX}"
+  )
+
+  include(CMakePackageConfigHelpers)
+  configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/config.cmake.in
+	  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+	  INSTALL_DESTINATION "${CMAKE_INSTALL_PREFIX}"
+  )
+
+  write_basic_package_version_file(
+	  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+	  VERSION "${PROJECT_VERSION}"
+	  COMPATIBILITY AnyNewerVersion
+  )
+	
+endif()
 
 #[====================================================================================================================[
 Copyright 2025 Anton Yashchenko
