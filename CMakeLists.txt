@@ -102,7 +102,7 @@ ssg_gitpkg_nlohmanjson()
 #find_package(cxxx_box REQUIRED CONFIG)
 #find_package(wpl_box REQUIRED CONFIG)
 find_package(cnd_box REQUIRED CONFIG)
-find_package(cide_box REQUIRED CONFIG)
+#find_package(cide_box REQUIRED CONFIG)
 
 #[============================================================================[
 Copyright 2025 Anton Yashchenko
