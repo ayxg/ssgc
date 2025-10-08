@@ -54,13 +54,16 @@ option(MINITEST_BOX_ENABLE_CTEST_INTEGRATION
 #[============================================================================[
   Package Targets
 #]============================================================================]
+include(GNUInstallDirs)
 
 # minitest_box::minitest_library
 set(MINITEST_LIBRARY_HEADERS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 set(MINITEST_LIBRARY_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_library(minitest_library INTERFACE)
 target_include_directories(minitest_library 
-  INTERFACE "${MINITEST_LIBRARY_HEADERS_DIR}"
+  INTERFACE 
+    $<BUILD_INTERFACE:${MINITEST_LIBRARY_HEADERS_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 target_sources(minitest_library 
   INTERFACE 
@@ -147,6 +150,40 @@ ssg_export_subproject(
 	MODULE_PATHS "${MINITEST_LIBRARY_CMAKE_MODULES_DIR}"
 	REDIRECT_FIND_PACKAGE
 )
+
+#[============================================================================[
+  Install Package
+#]============================================================================]
+if(PROJECT_IS_TOP_LEVEL)
+	install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+    DESTINATION "${CMAKE_INSTALL_PREFIX}"
+	)
+  
+	install(FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/StdMake.cmake"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseMinitest.cmake"
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake"
+	)
+
+  install(TARGETS minitest_library
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  )
+
+  include(CMakePackageConfigHelpers)
+  configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/config.cmake.in
+	  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+	  INSTALL_DESTINATION "${CMAKE_INSTALL_PREFIX}"
+  )
+
+  write_basic_package_version_file(
+	  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+	  VERSION "${PROJECT_VERSION}"
+	  COMPATIBILITY AnyNewerVersion
+  )
+	
+endif()
 
 #[====================================================================================================================[
 Copyright 2025 Anton Yashchenko
