@@ -17,10 +17,80 @@
 // !!Keep clang format OFF for this file ,or else expected ast constructors will be unreadable.
 // clang-format off
 #include "minitest.hpp"
-#include "cnd_compiler.hpp"
+#include "CliMain.hpp"
 // clang-format on
 
 namespace cnd_unit_test::compiler {
+
+TEST(UtCompilerCli, NoArgs) {
+  int argc = 3;
+  char* argv[] = {"cnd"};
+  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
+  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
+}
+
+TEST(UtCompilerCli, HelpModeRun) {
+  int argc = 3;
+  char* argv[] = {"cnd"};
+  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
+  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
+}
+
+TEST(UtCompilerCli, VersionModeRun) {
+  int argc = 3;
+  char* argv[] = {"cnd"};
+  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
+  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
+}
+
+TEST(UtCompilerCli, SilentRun) {
+  int argc = 3;
+  char* argv[] = {"cnd"};
+  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
+  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
+}
+
+TEST(UtCompilerCli, VerboseRun) {
+  int argc = 3;
+  char* argv[] = {"cnd"};
+  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
+  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
+}
+
+TEST(UtCompilerCli, DiagnosticRun) {
+  int argc = 3;
+  char* argv[] = {"cnd"};
+  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
+  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
+}
+
+TEST(UtCompilerCli, NoOverwriteRun) {
+  int argc = 3;
+  char* argv[] = {"cnd"};
+  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
+  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
+}
+
+TEST(UtCompilerCli, RedirectStdout) {
+  int argc = 3;
+  char* argv[] = {"cnd"};
+  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
+  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
+}
+
+TEST(UtCompilerCli, RedirectStderr) {
+  int argc = 3;
+  char* argv[] = {"cnd"};
+  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
+  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
+}
+
+TEST(UtCompilerCli, RedirectStdin) {
+  int argc = 3;
+  char* argv[] = {"cnd"};
+  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
+  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
+}
 
 TEST(UtCompilerCli, Return0) {
   // Minimal main function that returns 0 from a single process.

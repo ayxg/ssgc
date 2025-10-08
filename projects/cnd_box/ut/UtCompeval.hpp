@@ -22,7 +22,7 @@
 
 namespace cnd_unit_test::compiler {
 
-TEST(UtCompilerCli, Return0) {
+TEST(UtCompeval, Return0) {
   int argc = 3;
   char* argv[] = {(char*)("cnd"), (char*)("comp"), (char*)("0-return-zero.cnd")};
   auto cl_out_res = cnd::CliMainInternal(argc, argv,nullptr);
@@ -32,7 +32,7 @@ TEST(UtCompilerCli, Return0) {
   ASSERT_TRUE(std::get<cnd::TrOutput>(*cl_out_res).exit_code == EXIT_SUCCESS);
 }
 
-TEST(UtCompilerCli, HelloWorld) {
+TEST(UtCompeval, HelloWorld) {
   int argc = 3;
   char* argv[] = {(char*)("cnd"), (char*)("comp"), (char*)("test-code/compeval/0-hello-world.cnd")};
   auto cl_out_res = cnd::CliMainInternal(argc, argv, nullptr);
@@ -42,7 +42,7 @@ TEST(UtCompilerCli, HelloWorld) {
   ASSERT_TRUE(std::get<cnd::TrOutput>(*cl_out_res).exit_code == EXIT_SUCCESS);
 }
 
-TEST(UtCompilerCli, FibSequence) {
+TEST(UtCompeval, FibSequence) {
   int argc = 3;
   char* argv[] = {(char*)("cnd"), (char*)("comp"), (char*)("test-code/compeval/0-fin-sequence.cnd")};
   auto cl_out_res = cnd::CliMainInternal(argc, argv, nullptr);

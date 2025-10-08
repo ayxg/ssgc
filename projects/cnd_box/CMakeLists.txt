@@ -101,6 +101,20 @@ minitest_from_headers(
   WORKING_DIRECTORY "${UT_COMPEVAL_TEST_CODE_BINARY_DIR}"
 )
 
+minitest_add_executable(
+  NAME                UtCompilerCli
+  INCLUDE_DIRECTORIES ut
+  LINK_LIBS           cnd_compiler_interface
+  TEST_HEADERS        UtCompilerCli.hpp
+)
+
+minitest_from_headers(
+  PREFIX UtCndFrontEnd
+  TARGET UtCompilerCli
+  HEADERS UtCompilerCli.hpp
+  WORKING_DIRECTORY "${UT_COMPEVAL_TEST_CODE_BINARY_DIR}"
+)
+
 unset(UT_COMPEVAL_TEST_CODE_SOURCE_DIR)
 unset(UT_COMPEVAL_TEST_CODE_BINARY_DIR)
 
