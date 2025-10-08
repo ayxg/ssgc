@@ -63,7 +63,7 @@ if(PROJECT_IS_TOP_LEVEL)
 	)    
 
 	include(CMakePackageConfigHelpers)
-	configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+	configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/config.cmake.in
 		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
 		INSTALL_DESTINATION "${CMAKE_INSTALL_PREFIX}"
 	)
