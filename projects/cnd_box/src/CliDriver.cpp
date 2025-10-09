@@ -403,13 +403,13 @@ void ConfigureCliArgsMode(CommandLineArguments& inargs) {
 ClResult<int> HandleCliArgsVersionMode(CommandLineArguments& inargs) {
   // Not implemented
   return cldev::util::gStdLog().PrintErrForward(
-      MakeClMsg<eClErr::kCompilerDevDebugError>(std::source_location{}, "cnd::cli::HandleCliArgsVersionMode"));
+      MakeClMsg<eClErr::kCompilerDevDebugError>(std::source_location::current(), "cnd::cli::HandleCliArgsVersionMode  is not implemented yet."));
 };
 
 ClResult<int> HandleCliArgsHelpMode(CommandLineArguments& inargs) {
   // Not implemented
   return cldev::util::gStdLog().PrintErrForward(
-      MakeClMsg<eClErr::kCompilerDevDebugError>(std::source_location{}, "cnd::cli::HandleCliArgsHelpMode"));
+      MakeClMsg<eClErr::kCompilerDevDebugError>(std::source_location::current(), "cnd::cli::HandleCliArgsHelpMode is not implemented yet."));
 };
 
 // - Working directory is set first.
