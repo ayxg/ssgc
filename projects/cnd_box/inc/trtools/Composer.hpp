@@ -28,10 +28,10 @@
 #include "TrOutput.hpp"
 #include "TrUnit.hpp"
 
-//#include "CLangCodeModel.hpp"
-
-//#include "VirtualMachine.hpp"
-//#include "IrGenerator.hpp"
+#include "CLangCodeModel.hpp"
+#include "CLangCodegen.hpp"
+#include "VirtualMachine.hpp"
+#include "IrGenerator.hpp"
 // clang-format on
 
 namespace cnd {
@@ -60,72 +60,77 @@ CompilerProcessResult<Vec<SourceCharT>> LoadSourceFile(FilePathT fp) {
   return temp_file_buffer;
 }
 
+
 class Composer {
   TrInput tr_input_;
   TrOutput tr_output_;
   TrUnit tr_unit_;
-//  std::unique_ptr<clang::codegen::CodeModel> clang_model_ = nullptr;
+  std::unique_ptr<CLangCodeModel> clang_model_ = nullptr;
+
+
   void GenerateBaseCodeModel();
   void ProcessSourceCode(Ast ast);
   void ProcessSourceFile(StrView fp);
 
  public:
-  CompilerProcessResult<int> Compose(const TrInput & tr_in) {
-    //// Create base output C code model
-    //clang_model_ = std::make_unique<CLangCodeModel>(); 
-
-    //// Set the initial exit code and return value to 0(EXIT_SUCCESS) before processing.
-    //tr_output_.exit_code = EXIT_SUCCESS;
-    //tr_output_.return_value = EXIT_SUCCESS;
-
-    //// Process all input source files in order. 
-    //for (auto src_file_it = tr_input_.src_files.cbegin(); src_file_it != tr_input_.src_files.cend(); src_file_it++) {
-    //  if (tr_unit_.processed_sources.contains(*src_file_it)) continue;
-    //  auto parse_res = ParseFile(*src_file_it);
-    //  if (!parse_res) return CompilerProcessResult<int>::Failure(parse_res.error()); 
-
-    //  //auto compeval_res = Evaluate(*parse_res,tr_unit_, tr_output_);
-    //  //if (!compeval_res) return compeval_res.error();  // Compeval failure.
-
-    //  auto codegen_res = clang_model_->AppendAst(*parse_res);
-    //  if (!codegen_res) return CompilerProcessResult<int>::Failure(codegen_res.error());
-    //}
-    //Vec<Pair<Str,Str>> outfiles = clang_model_->Codegen();
-    //tr_output_.output_files.reserve(outfiles.size());
-    //for (const auto& [filename, content] : outfiles) {
-    //  std::ofstream this_file(filename);
-    //  if (!this_file.is_open()) throw "Could not open file for writing.";
-    //  this_file << content;
-    //  tr_output_.output_files.push_back(filename);
-    //}
-    return tr_output_.exit_code;
-  };
-
-  CompilerProcessResult<int> Compose() {
-    auto& root_file = tr_input_.src_files.front();
-
-    CND_STDLOG.PrintDiagnostic("[" __FUNCTION__ "][Loading first source file characters.] File: ", root_file.filename(),
-                               "\n");
-    auto loaded_src = LoadSourceFile<char>(root_file.string());
+  // Read the input source file and syntactically parse into a single ast(translation fragment).
+  //
+  // Further, source inclusion is triggered at the C& compeval stage. This method may be called multiple times during
+  // composition.
+  CompilerProcessResult<int> ParseSourceFile(StrView fp) {
+    Path src{fp};
+    CND_STDLOG.PrintDiagnostic("- Parsing source file: ", src.filename());
+    CND_STDLOG.PrintDiagnostic("    - Reading characters into memory.");
+    auto loaded_src = LoadSourceFile<char>(src.string());
     if (!loaded_src) return CND_STDLOG.PrintErrForward(loaded_src.error());
     StrView src_view = {loaded_src.value().begin(), loaded_src.value().end()};
 
-    CND_STDLOG.PrintDiagnostic("[" __FUNCTION__ "][Tokenizing first source file.] File: ", root_file.filename(), "\n");
-
+    CND_STDLOG.PrintDiagnostic("    - Lexing.");
     auto lex_res = trtools::Lexer::Lex(src_view);
     if (!lex_res) return CND_STDLOG.PrintErrForward(lex_res.error());
 
-    CND_STDLOG.PrintDiagnostic("[" __FUNCTION__ "][Dumping lexed tokens.] File: ", root_file.filename(), "\n");
+    CND_STDLOG.PrintDiagnostic("    - Parsing.");
     auto sanitized_src = trtools::Lexer::Sanitize(lex_res.value());
     std::span<const Tk> src_span = std::span{sanitized_src.data(), sanitized_src.size()};
     auto parse_res = cnd::trtools::parser::ParseSyntax({src_span.cbegin(), src_span.cend()});
     if (!parse_res) return CND_STDLOG.PrintErrForward(parse_res.error());
-    
-    // temp debug
-    std::cout << parse_res->ast.Format();
 
+    if (tr_input_.debug_dump_tokens) CND_STDLOG.PrintDiagnostic("    - Dumping ast.\n", parse_res->ast.Format());
+  }
+
+  CompilerProcessResult<int> GenerateBaseCodeModel() {}
+
+  CompilerProcessResult<int> Compose() {
+    ParseSourceFile(tr_input_.src_files.front());
+
+    // Create base output C code model based on tr input parameters.
+    clang_model_ = std::make_unique<CLangCodeModel>();
+
+    // Set the initial exit code and return value to 0(EXIT_SUCCESS) before processing.
     tr_output_.exit_code = EXIT_SUCCESS;
-    return EXIT_SUCCESS;
+    tr_output_.return_value = EXIT_SUCCESS;
+
+    // Process all input source files in order.
+    for (auto src_file_it = tr_input_.src_files.cbegin(); src_file_it != tr_input_.src_files.cend(); src_file_it++) {
+      if (tr_unit_.processed_sources.contains(*src_file_it)) continue;
+      auto parse_res = ParseFile(*src_file_it);
+      if (!parse_res) return CompilerProcessResult<int>::Failure(parse_res.error());
+
+       auto compeval_res = Evaluate(*parse_res,tr_unit_, tr_output_);
+       if (!compeval_res) return compeval_res.error();  // Compeval failure.
+
+      auto codegen_res = clang_model_->AppendAst(*parse_res);
+      if (!codegen_res) return CompilerProcessResult<int>::Failure(codegen_res.error());
+    }
+    Vec<Pair<Str, Str>> outfiles = clang_model_->Codegen();
+    tr_output_.output_files.reserve(outfiles.size());
+    for (const auto& [filename, content] : outfiles) {
+      std::ofstream this_file(filename);
+      if (!this_file.is_open()) throw "Could not open file for writing.";
+      this_file << content;
+      tr_output_.output_files.push_back(filename);
+    }
+    return tr_output_.exit_code;
   };
   void SetInput(TrInput input) { tr_input_ = input; };
   const TrOutput& GetTranslationOutput() const { return tr_output_; };

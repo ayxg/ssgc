@@ -68,11 +68,11 @@ struct Primitive {
 enum class ePrimitive {
   // The comments below indicate which [indices] will be used in format of output.
   // '[n]' is the index. '...' indicates one or more. '?...' indicates zero or more.
-  eValue,             // [0]
-  ePre,               // ([1][0])
-  ePost,              // ([0][1])
-  eBinary,            // ([-1] [0] [1])
-  eCall,              // [0] ( [?...] )
+  eValue,   // [0]
+  ePre,     // ([1][0])
+  ePost,    // ([0][1])
+  eBinary,  // ([-1] [0] [1])
+  eCall,    // [0] ( [?...] )
 };
 
 struct ValueExpression {
@@ -114,15 +114,13 @@ struct ValueExpression {
         }
         out += ")";
         return out;  // No need to continue, we are done with the call.
-
+      }
     }
-  }
-
   };
 
-  _scxin string GenerateExprList(const vector<string>& exprs, const string& separator = kCommaSeparator,
-                                 bool separator_after_last = false, const string& open_with = "",
-                                 const string& close_with = "", const string& prefix = "") {
+  static constexpr string GenerateExprList(const vector<string>& exprs, const string& separator = kCommaSeparator,
+                                           bool separator_after_last = false, const string& open_with = "",
+                                           const string& close_with = "", const string& prefix = "") {
     string ret = open_with;
     if (exprs.size() > 1) {
       for (auto arg_iter = exprs.cbegin(); arg_iter != std::prev(exprs.cend()); arg_iter++) {
@@ -135,10 +133,10 @@ struct ValueExpression {
     return ret + (separator_after_last ? separator : "") + close_with;
   }
 
-  _scxin string GenerateExprList(const vector<std::reference_wrapper<const string>>& exprs,
-                                 const string& separator = kCommaSeparator, bool separator_after_last = false,
-                                 const string& open_with = "", const string& close_with = "",
-                                 const string& prefix = "") {
+  static constexpr string GenerateExprList(const vector<std::reference_wrapper<const string>>& exprs,
+                                           const string& separator = kCommaSeparator, bool separator_after_last = false,
+                                           const string& open_with = "", const string& close_with = "",
+                                           const string& prefix = "") {
     string ret = open_with;
     if (exprs.size() > 1) {
       for (auto arg_iter = exprs.cbegin(); arg_iter != std::prev(exprs.cend()); arg_iter++) {
@@ -153,9 +151,9 @@ struct ValueExpression {
 
   template <class T>
     requires iCodeGenerator<T>
-  _scxin string GenerateExprList(const vector<T>& exprs, const string& separator = kCommaSeparator,
-                                 bool separator_after_last = false, const string& open_with = "",
-                                 const string& close_with = "", const string& prefix = "") {
+  static constexpr string GenerateExprList(const vector<T>& exprs, const string& separator = kCommaSeparator,
+                                           bool separator_after_last = false, const string& open_with = "",
+                                           const string& close_with = "", const string& prefix = "") {
     string ret = open_with;
     if (exprs.size() > 1) {
       for (auto arg_iter = exprs.cbegin(); arg_iter != std::prev(exprs.cend()); arg_iter++) {
@@ -167,354 +165,355 @@ struct ValueExpression {
     }
     return ret + (separator_after_last ? separator : "") + close_with;
   }
+};
 
-  struct IncludeDirective {
-    enum class IncludeType {
-      Quotes,        ///< Use quotes for the include directive.
-      AngleBrackets  ///< Use angle brackets for the include directive.
-    };
+struct IncludeDirective {
+  enum class IncludeType {
+    Quotes,        ///< Use quotes for the include directive.
+    AngleBrackets  ///< Use angle brackets for the include directive.
+  };
 
-    string header{};                        ///< The header to include.
-    IncludeType type{IncludeType::Quotes};  ///< The type of include directive
-                                            ///< (Quotes or AngleBrackets).
+  string header{};                        ///< The header to include.
+  IncludeType type{IncludeType::Quotes};  ///< The type of include directive
+                                          ///< (Quotes or AngleBrackets).
 
-    /// @brief Code generation method.
-    ///
-    /// @return Generated include directive string.
-    _cx string Codegen() const {
-      if (type == IncludeType::Quotes)
-        return "#include \"" + header + "\"\n";
+  /// @brief Code generation method.
+  ///
+  /// @return Generated include directive string.
+  CND_CX string Codegen() const {
+    if (type == IncludeType::Quotes)
+      return "#include \"" + header + "\"\n";
+    else
+      return "#include <" + header + ">\n";
+  }
+};
+
+/// @brief Generates a #define macro.
+struct MacroDefine {
+  enum class eMacroType : bool { Definition = true, Functional = false };
+  eMacroType macro_type{eMacroType::Definition};
+  string ident{""};  /// @brief Name of the macro. Not checked to be unique.
+  string def{""};    /// @brief Definition to give the macro. Make sure to
+                     ///        use the '\' character before newlines in the
+                     ///        macro definition to output correct C++ code.
+  vector<string> args{""};
+
+  CND_CX string Codegen() const {
+    if (macro_type == eMacroType::Definition) {
+      return "#define " + ident + " " + def + "\n";
+    } else {
+      return GenerateExprList(args, kCommaSeparator, false, "#define " + ident + "(", ") " + def + "\n");
+    }
+  }
+};
+
+/// @brief Represents a template parameter (either a class or a specific type).
+struct TemplateTypeParam {
+  enum class eTemplateType : bool { Type = true, Value = false };
+  string name{""};  ///> Name of the template parameter.
+  eTemplateType template_type{eTemplateType::Type};
+  string type{""};      ///> The type if this is a value template.
+  bool is_pack{false};  ///> True is this is a pack eg. <class...T>
+  CND_CX string Codegen() const {
+    if (template_type == eTemplateType::Type)
+      if (is_pack)
+        return "class ... " + name;
       else
-        return "#include <" + header + ">\n";
+        return "class " + name;
+    else {  // eTemplateType::Value
+      if (is_pack)
+        return type + " ... " + name;
+      else
+        return type + " " + name;
     }
+  }
+};
+
+/// @brief Generates a template signature, e.g., template<class T>
+/// This does not include any 'requires' clause or declaration following
+/// the template.When passed an empty param list - an empty template
+/// signature is generated: "template<>\n".
+struct TemplateSignature {
+  vector<TemplateTypeParam> params{};
+  CND_CX string Codegen() const { return GenerateExprList(params, kCommaSeparator, false, "template<", ">"); }
+};
+
+/// @brief Generates a template specialization, e.g., NAME<TYPE_LIST>
+struct TemplateSpecialization {
+  string name;            /// @brief The name of the template being specialized
+  vector<string> params;  /// @brief List of types for specialization
+  CND_CX string Codegen() const { return GenerateExprList(params, kCommaSeparator, false, "template<", ">"); }
+};
+
+/// @brief Generates a variable declaration eg. int foo = 42;
+struct VariableDecl {
+  enum class eInitType {
+    Declaration,  ///> No initializer will be generated. Variable declaration.
+    BracketInit,  ///> Init will be placed in brackets. eg. int foo(42);
+    BraceInit,    ///> Init will be placed in braces. eg. int foo{42};
+    Assignment    ///> Init will be assigned by '=' operator. eg. int foo = 42;
   };
+  eInitType init_type{eInitType::Declaration};  ///@brief The type of initializer to use
+                                                /// for this declaration.
+  string ident{""};                             /// @brief Name of the variable.
+  string type{""};                              /// @brief Type of the variable.
+  string init{""};                              /// @brief Primary expression to emplace in the
+                                                ///        variable initializer. Based on init type.
+                                                ///        Ignore if init_type is eInitType::Declaration.
+                                                ///        This primary expression must not end with a
+                                                ///        semicolon, codegen will insert a ';' if necessary.
 
-  /// @brief Generates a #define macro.
-  struct MacroDefine {
-    enum class eMacroType : bool { Definition = true, Functional = false };
-    eMacroType macro_type{eMacroType::Definition};
-    string ident{""};  /// @brief Name of the macro. Not checked to be unique.
-    string def{""};    /// @brief Definition to give the macro. Make sure to
-                       ///        use the '\' character before newlines in the
-                       ///        macro definition to output correct C++ code.
-    vector<string> args{""};
-
-    _cx string Codegen() const {
-      if (macro_type == eMacroType::Definition) {
-        return "#define " + ident + " " + def + "\n";
-      } else {
-        return GenerateExprList(args, kCommaSeparator, false, "#define " + ident + "(", ") " + def + "\n");
-      }
+  CND_CX string Codegen() const {
+    switch (init_type) {
+      case eInitType::Declaration:
+        return type + " " + ident + ";\n";
+      case eInitType::BracketInit:
+        return type + " " + ident + "(" + init + ");\n";
+      case eInitType::BraceInit:
+        return type + " " + ident + "{" + init + "};\n";
+      case eInitType::Assignment:
+        return type + " " + ident + " = " + init + ";\n";
+      default:
+        throw cxx::UnknownEnumEntry<eInitType>();
     }
-  };
+  }
+};
 
-  /// @brief Represents a template parameter (either a class or a specific type).
-  struct TemplateTypeParam {
-    enum class eTemplateType : bool { Type = true, Value = false };
-    string name{""};  ///> Name of the template parameter.
-    eTemplateType template_type{eTemplateType::Type};
-    string type{""};      ///> The type if this is a value template.
-    bool is_pack{false};  ///> True is this is a pack eg. <class...T>
-    _cx string Codegen() const {
-      if (template_type == eTemplateType::Type)
-        if (is_pack)
-          return "class ... " + name;
-        else
-          return "class " + name;
-      else {  // eTemplateType::Value
-        if (is_pack)
-          return type + " ... " + name;
-        else
-          return type + " " + name;
-      }
+/// @brief Generates a using declaration eg. using Int = int;
+struct UsingDecl {
+  enum class eTypedefType { Typealias, NamespaceExposition, DeclarationExposition };
+
+  eTypedefType init_type;  ///@brief The category typedef.
+  string ident{""};        /// @brief Name of the typedef.
+  string init{""};         /// @brief Primary expression to emplace in the type alias.
+                           ///        Based on init type. Ignore if init_type is
+                           ///        eTypedefType::NamespaceExposition or
+                           ///        eTypedefType::DeclarationExposition. This primary
+                           ///        expression must not end with a semicolon, codegen
+                           ///        will insert a ';' if necessary.
+
+  CND_CX string Codegen() const {
+    switch (init_type) {
+      case eTypedefType::Typealias:
+        return "using " + ident + " = " + init + ";\n";
+      case eTypedefType::NamespaceExposition:
+        return "using namespace " + ident + ";\n";
+      case eTypedefType::DeclarationExposition:
+        return "using " + ident + ";\n";
+      default:
+        throw cxx::UnknownEnumEntry<eTypedefType>();
     }
-  };
+  }
+};
 
-  /// @brief Generates a template signature, e.g., template<class T>
-  /// This does not include any 'requires' clause or declaration following
-  /// the template.When passed an empty param list - an empty template
-  /// signature is generated: "template<>\n".
-  struct TemplateSignature {
-    vector<TemplateTypeParam> params{};
-    _cx string Codegen() const { return GenerateExprList(params, kCommaSeparator, false, "template<", ">"); }
-  };
+struct EnumEntry {
+  string name;             ///< Name of the enum entry.
+  optional<string> value;  ///< Optional default value for the enum entry.
 
-  /// @brief Generates a template specialization, e.g., NAME<TYPE_LIST>
-  struct TemplateSpecialization {
-    string name;            /// @brief The name of the template being specialized
-    vector<string> params;  /// @brief List of types for specialization
-    _cx string Codegen() const { return GenerateExprList(params, kCommaSeparator, false, "template<", ">"); }
-  };
+  /// @brief Constructor.
+  ///
+  /// @param name Name of the enum entry.
+  /// @param value Optional default value for the enum entry.
+  EnumEntry(const string& name, optional<string> value = std::nullopt) : name(name), value(value) {}
 
-  /// @brief Generates a variable declaration eg. int foo = 42;
-  struct VariableDecl {
-    enum class eInitType {
-      Declaration,  ///> No initializer will be generated. Variable declaration.
-      BracketInit,  ///> Init will be placed in brackets. eg. int foo(42);
-      BraceInit,    ///> Init will be placed in braces. eg. int foo{42};
-      Assignment    ///> Init will be assigned by '=' operator. eg. int foo = 42;
-    };
-    eInitType init_type{eInitType::Declaration};  ///@brief The type of initializer to use
-                                                  /// for this declaration.
-    string ident{""};                             /// @brief Name of the variable.
-    string type{""};                              /// @brief Type of the variable.
-    string init{""};                              /// @brief Primary expression to emplace in the
-                                                  ///        variable initializer. Based on init type.
-                                                  ///        Ignore if init_type is eInitType::Declaration.
-                                                  ///        This primary expression must not end with a
-                                                  ///        semicolon, codegen will insert a ';' if necessary.
+  /// @brief Code generation method.
+  ///
+  /// @return Generated enum entry string.
+  string Codegen() const {
+    assert(!name.empty() && "Enum entry name cannot be empty.");
 
-    _cx string Codegen() const {
-      switch (init_type) {
-        case eInitType::Declaration:
-          return type + " " + ident + ";\n";
-        case eInitType::BracketInit:
-          return type + " " + ident + "(" + init + ");\n";
-        case eInitType::BraceInit:
-          return type + " " + ident + "{" + init + "};\n";
-        case eInitType::Assignment:
-          return type + " " + ident + " = " + init + ";\n";
-        default:
-          throw cxx::UnknownEnumEntry<eInitType>();
-      }
+    if (value.has_value()) {
+      return name + " = " + value.value();
+    } else {
+      return name;
     }
-  };
+  }
+};
 
-  /// @brief Generates a using declaration eg. using Int = int;
-  struct UsingDecl {
-    enum class eTypedefType { Typealias, NamespaceExposition, DeclarationExposition };
+/// @brief Generates an enum declaration.
+struct EnumDecl {
+  string name;
+  string type;                    /// @brief Type of the enum. Unspecified if none.
+  bool is_scoped = false;         /// @brief If true, generate a scoped enum (enum class).
+  vector<EnumEntry> enumerators;  /// @brief List of enumerators.
+  CND_CX string GetEnumDecl() const {
+    return (is_scoped ? "enum class " + name + " : " + type : "enum " + name + " : " + type);
+  }
 
-    eTypedefType init_type;  ///@brief The category typedef.
-    string ident{""};        /// @brief Name of the typedef.
-    string init{""};         /// @brief Primary expression to emplace in the type alias.
-                             ///        Based on init type. Ignore if init_type is
-                             ///        eTypedefType::NamespaceExposition or
-                             ///        eTypedefType::DeclarationExposition. This primary
-                             ///        expression must not end with a semicolon, codegen
-                             ///        will insert a ';' if necessary.
+  CND_CX string Codegen() const {
+    if (enumerators.empty())
+      return GetEnumDecl() + ";\n";
+    else
+      return GenerateExprList(enumerators, ",\n  ", false, GetEnumDecl() + " {\n  ", "\n};\n\n");
+  }
+};
 
-    _cx string Codegen() const {
-      switch (init_type) {
-        case eTypedefType::Typealias:
-          return "using " + ident + " = " + init + ";\n";
-        case eTypedefType::NamespaceExposition:
-          return "using namespace " + ident + ";\n";
-        case eTypedefType::DeclarationExposition:
-          return "using " + ident + ";\n";
-        default:
-          throw cxx::UnknownEnumEntry<eTypedefType>();
-      }
+struct MethodDecl;
+
+struct UnionMember {
+  string type{};
+  string name{};
+  optional<string> default_init{std::nullopt};
+  CND_CX string Codegen() const { return type + " " + name + (default_init ? "{" + default_init.value() + "}" : ""); }
+};
+
+/// @brief Generates a method parameter.
+struct MethodParameter {
+  string type;                          /// @brief Type of the parameter.
+  string name;                          /// @brief Name of the parameter.
+  std::optional<string> default_value;  /// @brief Default value initializer.
+  bool is_pack = false;                 /// @brief If true, the parameter is a variadic pack.
+
+  CND_CX string Codegen() const {
+    string result = type + " ";
+    if (is_pack) {
+      result += "... ";
     }
-  };
+    result += name;
 
-  struct EnumEntry {
-    string name;             ///< Name of the enum entry.
-    optional<string> value;  ///< Optional default value for the enum entry.
+    if (default_value.has_value()) {
+      result += " = " + default_value.value();
+    }
 
-    /// @brief Constructor.
-    ///
-    /// @param name Name of the enum entry.
-    /// @param value Optional default value for the enum entry.
-    EnumEntry(const string& name, optional<string> value = std::nullopt) : name(name), value(value) {}
+    return result;
+  }
+};
 
-    /// @brief Code generation method.
-    ///
-    /// @return Generated enum entry string.
+struct MethodDeclModifiers {
+  bool is_constexpr{false};
+  bool is_static{false};
+  bool is_inline{false};
+  bool is_noexcept{false};
+  bool is_const{false};
+
+  CND_CX string GenPrefixMods() const {
+    string ret = (is_static ? "static " : "");
+    ret += (is_constexpr ? "constexpr " : "");
+    ret += (is_inline ? "inline " : "");
+    return ret;
+  }
+
+  CND_CX string GenPostfixMods() const {
+    string ret = (is_const ? "const " : "");
+    ret += (is_noexcept ? "noexcept " : "");
+    return ret;
+  }
+};
+static constexpr MethodDeclModifiers kScxinMods = {true, true, true, false, false};
+static constexpr MethodDeclModifiers kCxinMods = {true, false, true, false, false};
+
+struct MethodPostInitializer {
+  string member{};
+  string expr{};
+  string Codegen() const { return member + "(" + expr + ")"; }
+};
+
+/// @brief Represents a method declaration and optionally its definition.
+struct MethodDecl {
+  string name;                     /// @brief Name of the method.
+  string return_type{"void"};      /// @brief Return type of the method.
+  MethodDeclModifiers mods;        /// @brief If true, the method is static.
+  vector<MethodParameter> params;  /// @brief List of parameters in the method.
+  optional<string> definition;     /// @brief Optional method definition.
+  optional<TemplateSignature> template_signature;
+  optional<std::vector<string>> template_specialization;
+  optional<string> equal_to;                       // When set, will make the method assigned to
+                                                   // string. Definition will be ignored.
+  vector<MethodPostInitializer> post_initializer;  // for constructors, generated when not empty.
+
+  optional<string> comment_before;
+  optional<string> comment_after;
+  CND_CX string Codegen() const {
+    return GenerateExprList(
+        params, kCommaSeparator, false,
+        [=]() {
+          return comment_before.value_or("") + (template_signature ? template_signature.value().Codegen() + "\n" : "") +
+                 mods.GenPrefixMods() +
+                 (template_specialization
+                      ? (return_type + " " + name +
+                         GenerateExprList(template_specialization.value(), kCommaSeparator, false, "<", ">("))
+                      : (return_type + " " + name + "("));
+        }(),
+        [=] {
+          string ret = ")" + mods.GenPostfixMods();
+          if (equal_to) {
+            ret += " = " + equal_to.value() + ";" + comment_after.value_or("") + "\n\n";
+            return ret;
+          } else {
+            if (not post_initializer.empty()) ret += GenerateExprList(post_initializer, kCommaSeparator, false, " : ");
+            if (definition)
+              ret += "{" + definition.value() + "}" + comment_after.value_or("") + "\n\n";
+            else
+              ret += ";\n";
+            return ret;
+          }
+        }());
+  }
+};
+
+/// @brief Generates a union declaration.
+struct UnionDecl {
+  struct UnionMemberVariant {
+    std::variant<std::reference_wrapper<const UnionMember>, std::reference_wrapper<const MethodDecl>> member;
     string Codegen() const {
-      assert(!name.empty() && "Enum entry name cannot be empty.");
+      return std::visit([](const auto& m) { return m.get().Codegen(); }, member);
+    }
+  };
 
-      if (value.has_value()) {
-        return name + " = " + value.value();
-      } else {
-        return name;
+ public:
+  string name;                  /// @brief Name of the union.
+  vector<UnionMember> members;  /// @brief List of members in the union.
+  vector<MethodDecl> methods;   ///@brief List of methods.
+
+  CND_CX string Codegen() const {
+    if (members.empty())
+      return "union " + name + ";\n";
+    else {
+      std::vector<UnionMemberVariant> all_members;
+      all_members.reserve(members.size() + methods.size());
+      for (const auto& m : members) {
+        all_members.push_back(UnionMemberVariant{std::ref(m)});
       }
-    }
-  };
-
-  /// @brief Generates an enum declaration.
-  struct EnumDecl {
-    string name;
-    string type;                    /// @brief Type of the enum. Unspecified if none.
-    bool is_scoped = false;         /// @brief If true, generate a scoped enum (enum class).
-    vector<EnumEntry> enumerators;  /// @brief List of enumerators.
-    _cx string GetEnumDecl() const {
-      return (is_scoped ? "enum class " + name + " : " + type : "enum " + name + " : " + type);
-    }
-
-    _cx string Codegen() const {
-      if (enumerators.empty())
-        return GetEnumDecl() + ";\n";
-      else
-        return GenerateExprList(enumerators, ",\n  ", false, GetEnumDecl() + " {\n  ", "\n};\n\n");
-    }
-  };
-
-  struct MethodDecl;
-
-  struct UnionMember {
-    string type{};
-    string name{};
-    optional<string> default_init{std::nullopt};
-    _cx string Codegen() const { return type + " " + name + (default_init ? "{" + default_init.value() + "}" : ""); }
-  };
-
-  /// @brief Generates a method parameter.
-  struct MethodParameter {
-    string type;                          /// @brief Type of the parameter.
-    string name;                          /// @brief Name of the parameter.
-    std::optional<string> default_value;  /// @brief Default value initializer.
-    bool is_pack = false;                 /// @brief If true, the parameter is a variadic pack.
-
-    _cx string Codegen() const {
-      string result = type + " ";
-      if (is_pack) {
-        result += "... ";
+      for (const auto& m : methods) {
+        all_members.push_back(UnionMemberVariant{std::ref(m)});
       }
-      result += name;
-
-      if (default_value.has_value()) {
-        result += " = " + default_value.value();
-      }
-
-      return result;
+      return GenerateExprList(all_members, ";\n", true, "union " + name + " {\n", "};\n", "  ");
     }
-  };
+  }
+};
 
-  struct MethodDeclModifiers {
-    bool is_constexpr{false};
-    bool is_static{false};
-    bool is_inline{false};
-    bool is_noexcept{false};
-    bool is_const{false};
+/// @brief Represents a class declaration.
+struct ClassDecl {
+  string name;                      /// @brief Name of the class.
+  optional<string> base_class;      /// @brief Optional base class of the class.
+  vector<MethodDecl> methods;       /// @brief List of methods in the class.
+  vector<string> member_variables;  /// @brief List of member variables in the class.
 
-    _cxin string GenPrefixMods() const {
-      string ret = (is_static ? "static " : "");
-      ret += (is_constexpr ? "constexpr " : "");
-      ret += (is_inline ? "inline " : "");
-      return ret;
+  CND_CX string Codegen() const {
+    string result = "class " + name;
+
+    if (base_class.has_value()) {
+      result += " : public " + base_class.value();
     }
 
-    _cxin string GenPostfixMods() const {
-      string ret = (is_const ? "const " : "");
-      ret += (is_noexcept ? "noexcept " : "");
-      return ret;
+    result += " {\npublic:\n";
+
+    // Generate member variables
+    for (const auto& member : member_variables) {
+      result += "    " + member + ";\n";
     }
-  };
-  constexpr MethodDeclModifiers kScxinMods = {true, true, true, false, false};
-  constexpr MethodDeclModifiers kCxinMods = {true, false, true, false, false};
 
-  struct MethodPostInitializer {
-    string member{};
-    string expr{};
-    string Codegen() const { return member + "(" + expr + ")"; }
-  };
-  /// @brief Represents a method declaration and optionally its definition.
-  struct MethodDecl {
-    string name;                     /// @brief Name of the method.
-    string return_type{"void"};      /// @brief Return type of the method.
-    MethodDeclModifiers mods;        /// @brief If true, the method is static.
-    vector<MethodParameter> params;  /// @brief List of parameters in the method.
-    optional<string> definition;     /// @brief Optional method definition.
-    optional<TemplateSignature> template_signature;
-    optional<std::vector<string>> template_specialization;
-    optional<string> equal_to;                       // When set, will make the method assigned to
-                                                     // string. Definition will be ignored.
-    vector<MethodPostInitializer> post_initializer;  // for constructors, generated when not empty.
-
-    optional<string> comment_before;
-    optional<string> comment_after;
-    _cx string Codegen() const {
-      return GenerateExprList(
-          params, kCommaSeparator, false,
-          [=]() {
-            return comment_before.value_or("") +
-                   (template_signature ? template_signature.value().Codegen() + "\n" : "") + mods.GenPrefixMods() +
-                   (template_specialization
-                        ? (return_type + " " + name +
-                           GenerateExprList(template_specialization.value(), kCommaSeparator, false, "<", ">("))
-                        : (return_type + " " + name + "("));
-          }(),
-          [=] {
-            string ret = ")" + mods.GenPostfixMods();
-            if (equal_to) {
-              ret += " = " + equal_to.value() + ";" + comment_after.value_or("") + "\n\n";
-              return ret;
-            } else {
-              if (not post_initializer.empty())
-                ret += GenerateExprList(post_initializer, kCommaSeparator, false, " : ");
-              if (definition)
-                ret += "{" + definition.value() + "}" + comment_after.value_or("") + "\n\n";
-              else
-                ret += ";\n";
-              return ret;
-            }
-          }());
+    // Generate methods
+    for (const auto& method : methods) {
+      result += "    " + method.Codegen() + ";\n";
     }
-  };
 
-  /// @brief Generates a union declaration.
-  struct UnionDecl {
-    struct UnionMemberVariant {
-      std::variant<std::reference_wrapper<const UnionMember>, std::reference_wrapper<const MethodDecl>> member;
-      string Codegen() const {
-        return std::visit([](const auto& m) { return m.get().Codegen(); }, member);
-      }
-    };
+    result += "};\n";
 
-   public:
-    string name;                  /// @brief Name of the union.
-    vector<UnionMember> members;  /// @brief List of members in the union.
-    vector<MethodDecl> methods;   ///@brief List of methods.
-
-    _cx string Codegen() const {
-      if (members.empty())
-        return "union " + name + ";\n";
-      else {
-        std::vector<UnionMemberVariant> all_members;
-        all_members.reserve(members.size() + methods.size());
-        for (const auto& m : members) {
-          all_members.push_back(UnionMemberVariant{std::ref(m)});
-        }
-        for (const auto& m : methods) {
-          all_members.push_back(UnionMemberVariant{std::ref(m)});
-        }
-        return GenerateExprList(all_members, ";\n", true, "union " + name + " {\n", "};\n", "  ");
-      }
-    }
-  };
-
-  /// @brief Represents a class declaration.
-  struct ClassDecl {
-    string name;                      /// @brief Name of the class.
-    optional<string> base_class;      /// @brief Optional base class of the class.
-    vector<MethodDecl> methods;       /// @brief List of methods in the class.
-    vector<string> member_variables;  /// @brief List of member variables in the class.
-
-    _cx string Codegen() const {
-      string result = "class " + name;
-
-      if (base_class.has_value()) {
-        result += " : public " + base_class.value();
-      }
-
-      result += " {\npublic:\n";
-
-      // Generate member variables
-      for (const auto& member : member_variables) {
-        result += "    " + member + ";\n";
-      }
-
-      // Generate methods
-      for (const auto& method : methods) {
-        result += "    " + method.Codegen() + ";\n";
-      }
-
-      result += "};\n";
-
-      return result;
-    }
-  };
-}  // namespace cnd
+    return result;
+  }
+};
+}  // namespace cnd::clang::codegen
 
 /// @} // end of cnd_compiler_cli
 

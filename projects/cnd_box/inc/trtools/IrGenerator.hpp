@@ -103,90 +103,90 @@ struct IrLine {
   vector<IrArgVariant> args;  // arguments for the operation.
 };
 
-struct IrCode {
-  std::list<IrLine> lines;
-  const TrUnit & tr_unit;  // Translation unit this IR belongs to.
-  std::list<IrLine>::iterator AddLine(std::size_t line_index, eIrOp op, std::vector<IrArgVariant> args) {
-    lines.push_back(IrLine{0,0,line_index, op, args});
+struct IrBlock {
+  const TrUnit& tr_unit;  ///> Translation unit this IR belongs to.
+  List<IrLine> lines;
+  List<std::pair<IrBlock, Size>> preds;  ///> Predecessors, and the line which triggered the exit in the pred block.
+  List<std::pair<IrBlock, Size>> succs;  ///> Successors, and the line which triggers the exit of this block.
+
+  // Use lines member directly if you wish to push a pre-built IrLine.
+  std::list<IrLine>::iterator PushLine(std::size_t line_index, eIrOp op, std::vector<IrArgVariant> args) {
+    lines.push_back(IrLine{0, 0, line_index, op, args});
     return lines.end()--;
   }
 
-  IrLine& AddLine(IrLine line) {
-    lines.push_back(line);
-    return lines.back();
-  }
-  void AddLines(std::list<IrLine> lines_vec) {
-    for (const auto& line : lines_vec) {
-      lines.push_back(line);
-    }
-  }
-  const std::list<IrLine>& GetLines() { return lines; }
-
-  bool isAborted() {
-    if (lines.back().op == eIrOp::ABORT_AND_ERROR) {
+  bool IsError() {
+    if (lines.back().op == eIrOp::ABORT_AND_ERROR)
       return true;
-    } else {
+    else
       return false;
-    }
   }
 
-  void PrintDisassembly() {
+  void Format() {
+    std::string out{};
+    // Small optimization, we can assume there will be atleast "some" lines. Shrink to fit at end.
+    out.reserve(256);
     for (const auto& line : lines) {
-      std::cout << "Line " << line.line_idx << ": ";
+      out += "Line ";
+      out += line.line_idx;
+      out += ": ";
       switch (line.op) {
         case eIrOp::ENTER_PROGRAM_DEFINITION:
-          std::cout << "ENTER_PROGRAM_DEFINITION";
+          out += "ENTER_PROGRAM_DEFINITION";
           break;
         case eIrOp::ABORT_AND_ERROR:
-          std::cout << "ABORT_AND_ERROR";
+          out += "ABORT_AND_ERROR";
           break;
         case eIrOp::ALLOCATE_LITERAL:
-          std::cout << "ALLOCATE_LITERAL";
+          out += "ALLOCATE_LITERAL";
           break;
         case eIrOp::ALLOCATE_STACK_VALUE:
-          std::cout << "ALLOCATE_STACK_VALUE";
+          out += "ALLOCATE_STACK_VALUE";
           break;
         case eIrOp::DECLARE_VARIABLE:
-          std::cout << "DECLARE_VARIABLE";
+          out += "DECLARE_VARIABLE";
           break;
         case eIrOp::DEFINE_VARIABLE:
-          std::cout << "DEFINE_VARIABLE";
+          out += "DEFINE_VARIABLE";
           break;
         case eIrOp::BINARY_ADD:
-          std::cout << "BINARY_ADD";
+          out += "BINARY_ADD";
           break;
         case eIrOp::BINARY_SUB:
-          std::cout << "BINARY_SUB";
+          out += "BINARY_SUB";
           break;
         case eIrOp::BINARY_MUL:
-          std::cout << "BINARY_MUL";
+          out += "BINARY_MUL";
           break;
         case eIrOp::BINARY_DIV:
-          std::cout << "BINARY_DIV";
+          out += "BINARY_DIV";
           break;
         case eIrOp::BINARY_MOD:
-          std::cout << "BINARY_MOD";
+          out += "BINARY_MOD";
           break;
       }
-      std::cout << " Args: ";
+      out += " Args: ";
       for (const auto& arg : line.args) {
         std::visit(
-            [](auto&& arg) {
+            [&out](auto&& arg) {
               using T = std::decay_t<decltype(arg)>;
-              if constexpr (std::is_same_v<T, int>) {
-                std::cout << arg << " ";
-              } else if constexpr (std::is_same_v<T, double>) {
-                std::cout << arg << " ";
+              if constexpr (std::is_same_v<T, int> || std::is_same_v<T, double>) {
+                out += std::to_string(arg);
+                out += " ";
               } else if constexpr (std::is_same_v<T, std::string_view>) {
-                std::cout << arg << " ";
+                out += arg;
+                out += " ";
               }
             },
             arg);
       }
-      std::cout << std::endl;
+      out += "\n";
     }
+    out.shrink_to_fit();
   }
 };
+
+struct IrModule {};
 
 class IrGen {
   using IrLineList = std::list<IrLine>;
@@ -293,11 +293,11 @@ class IrGen {
       GenLiteral(ast);
     }
     // Handle identifiers.
-    // What type of identifier?  
+    // What type of identifier?
     //  ? Named Value -> Find address based on label.
     //  ? Literal -> Allocate literal into new register.
-    //  ? Register  
-    // 
+    //  ? Register
+    //
     // Handle binary operations
     else if (ast.IsArithmeticBinaryOp()) {
       GenBinaryExpr(ast);
@@ -415,15 +415,12 @@ class IrGen {
     return ir;
   }
 
-
-
-  IrCode GenerateUnit(const Ast & ast) {
+  IrCode GenerateUnit(const Ast& ast) {
     // If this is the first call to generate code for this translation unit, initial configuration must be setup.
     if (ast.children.empty()) return IrCode{};  // No AST to generate code from.
-    
+
     // Choose generation method based on ast type.
     if (IsAstPrimary(ast.type)) GenPrimaryExpr(ast);
-
   }
 };
 
