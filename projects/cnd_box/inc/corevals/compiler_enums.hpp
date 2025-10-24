@@ -32,6 +32,7 @@
 #include "corevals/enumdefs/driver/eDriverFlagInterp.hpp"
 #include "corevals/enumdefs/driver/eDriverValueType.hpp"
 #include "corevals/enumdefs/driver/eDriverVerbosity.hpp"
+#include "corevals/enumdefs/driver/eDriverCommand.hpp"
 
 // cnd::grammar
 #include "corevals/enumdefs/grammar/eAssoc.hpp"
