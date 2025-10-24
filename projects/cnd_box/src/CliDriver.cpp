@@ -46,7 +46,8 @@ cldev::util::Logger CreateConfiguredLogger(const IOConfig& init_params) {
 namespace cliparser {
 
 /// Format: [flag_str][space][value]
-ClResult<ParsedFlagOffset> ParseSingleArgFlag(ArgsBufferIter args_it, ArgsBufferIter args_end, Size flag_offset) {
+ClResult<ParsedFlagOffset> ParseSingleArgFlag(ArgsBufferConstIter args_it, ArgsBufferConstIter args_end,
+                                              Size flag_offset) {
   if (args_it == args_end)  // No value to parse
     return ClFail(MakeClMsg<eClErr::kDriverFlagExpectedArgs>("", "<args-end>"));
 
@@ -88,7 +89,8 @@ ClResult<ParsedFlagOffset> ParseSingleArgFlag(ArgsBufferIter args_it, ArgsBuffer
 };
 
 /// Format: [flag_str][space][whitespace separated args]...
-ClResult<ParsedFlagOffset> ParseMultiArgFlag(ArgsBufferIter args_it, ArgsBufferIter args_end, Size flag_offset) {
+ClResult<ParsedFlagOffset> ParseMultiArgFlag(ArgsBufferConstIter args_it, ArgsBufferConstIter args_end,
+                                             Size flag_offset) {
   using std::make_unique;
 
   // Multi value must have at-least one arg.
@@ -122,8 +124,8 @@ ClResult<ParsedFlagOffset> ParseMultiArgFlag(ArgsBufferIter args_it, ArgsBufferI
 };
 
 // Dispatches to the appropriate flag parsing method based on the flag interp type.
-ClResult<ParsedFlagOffset> ParseDriverFlagValue(eDriverFlagInterp interp, ArgsBufferIter args_it,
-                                                ArgsBufferIter args_end, Size arg_offset) {
+ClResult<ParsedFlagOffset> ParseDriverFlagValue(eDriverFlagInterp interp, ArgsBufferConstIter args_it,
+                                                ArgsBufferConstIter args_end, Size arg_offset) {
   switch (interp) {
     case eDriverFlagInterp::kOnOff:
       return {{ArgsBuffer{}, cxx::AdvanceIt(args_it, 1)}};
@@ -157,37 +159,44 @@ ClResult<ParsedFlagOffset> ParseDriverFlagValue(eDriverFlagInterp interp, ArgsBu
 ///   - '--silent' mode is enabled.   -> No output. Help or version flag wont print.
 ///
 /// @see cnd::cli::IOConfig
-Ex<IOConfig, int> HandleInitialCliArgs(int argc, char* argv[]) {
-  using std::to_underlying;
-  // No arguments -> Print header and brief help to stdout and exit.
-  if (argc == 1) {
+Ex<IOConfig, int> HandleInitialCliArgs(ArgsBufferConstIter beg, ArgsBufferConstIter end) {
+  // No args.
+  if (beg == end || beg++ == end) {  // Skip the program name arg if it exists.
     std::cout << messages::kMainHeader << std::endl;
     std::cout << messages::kBriefHelp << std::endl;
     return Unex<int>{EXIT_SUCCESS};
-  }
+  } 
 
-  // Handle early special cases for cli args first, where a full parse is not necessary.
-  // We make a single pass across all the args to determine special cases.
-  ArgsBuffer cli_args(argv + 1, argv + argc);
+  // Set defaults.
   eDriverVerbosity verbosity_level = eDriverVerbosity::kStd;
   bool is_help_run = false;
   bool is_version_run = false;
   bool is_overwrite_files = true;
-  Opt<ArgsBufferIter> opt_redir_out = std::nullopt;
-  Opt<ArgsBufferIter> opt_redir_err = std::nullopt;
-  Opt<ArgsBufferIter> opt_redir_in = std::nullopt;
-  if (cli_args.front() == "help") is_help_run = true;
-  if (cli_args.front() == "ver") is_version_run = true;
-  for (auto it = cli_args.begin(); it != cli_args.end(); ++it) {
-    if (*it == "-h" || *it == "--help") is_help_run = true;
-    if (*it == "--silent") verbosity_level = eDriverVerbosity::kSilent;
-    if (*it == "--verbose") verbosity_level = eDriverVerbosity::kVerbose;
-    if (*it == "--diagnostic") verbosity_level = eDriverVerbosity::kDebug;
-    if (*it == "--no_overwrite") is_overwrite_files = false;
-    if (*it == "--stdout_redir") opt_redir_out = it;
-    if (*it == "--stderr_redir") opt_redir_err = it;
-    if (*it == "--stdin_redir") opt_redir_in = it;
-    if (*it == "--version") is_version_run = true;
+  Opt<ArgsBufferConstIter> opt_redir_out = std::nullopt;
+  Opt<ArgsBufferConstIter> opt_redir_err = std::nullopt;
+  Opt<ArgsBufferConstIter> opt_redir_in = std::nullopt;
+
+  for (auto it = beg; it != end; ++it) {
+    if (*it == "-h" || *it == "--help")
+      is_help_run = true;
+    else if (*it == "--silent")
+      verbosity_level = eDriverVerbosity::kSilent;
+    else if (*it == "--verbose")
+      verbosity_level = eDriverVerbosity::kVerbose;
+    else if (*it == "--diagnostic")
+      verbosity_level = eDriverVerbosity::kDebug;
+    else if (*it == "--no_overwrite")
+      is_overwrite_files = false;
+    else if (*it == "--stdout_redir")
+      opt_redir_out = it;
+    else if (*it == "--stderr_redir")
+      opt_redir_err = it;
+    else if (*it == "--stdin_redir")
+      opt_redir_in = it;
+    else if (*it == "--version")
+      is_version_run = true;
+    else
+      continue;
   }
 
   // If silent is option appears on a help or version run, we assume the user made a logical error.
@@ -198,9 +207,9 @@ Ex<IOConfig, int> HandleInitialCliArgs(int argc, char* argv[]) {
   UPtr<std::ostream> redir_out_stream = nullptr;
   UPtr<std::ostream> redir_err_stream = nullptr;
   UPtr<std::istream> redir_in_stream = nullptr;
-  LAMBDA xValidateRedirPath = [&cli_args, &verbosity_level, &is_overwrite_files](
-                                  StrView redir_flag, ArgsBufferIter redir_arg_it) -> Ex<void, int> {
-    if (redir_arg_it == cli_args.cend()) {
+  LAMBDA xValidateRedirPath = [&end, &verbosity_level, &is_overwrite_files](
+                                  StrView redir_flag, ArgsBufferConstIter redir_arg_it) -> Ex<void, int> {
+    if (redir_arg_it == end) {
       auto this_error = MakeClMsg<eClErr::kDriverFlagExpectedArgs>(redir_flag, "<file-path>");
       if (verbosity_level != eDriverVerbosity::kSilent) std::cerr << this_error.Format() << std::endl;
       return Unex<int>{this_error.GetLastMessageCode()};
@@ -390,26 +399,26 @@ void ConfigureCliArgsMode(CommandLineArguments& inargs) {
     }
   }
   // If there is no matching first positional. Find the mode flag, first found decides mode.
-    auto mode_found = std::find_if(inargs.flags.cbegin(), inargs.flags.cend(), [&inargs](const auto& flag) {
-      return flag.first == eDriverFlag::kModeComp || flag.first == eDriverFlag::kModeDev ||
-             flag.first == eDriverFlag::kModeVersion || flag.first == eDriverFlag::kModeHelp;
-    });
-    if (mode_found != inargs.flags.cend()) {
-      inargs.mode = mode_found->first;
-    } else
-      inargs.mode = eDriverFlag::kModeHelp;  // No mode flag found, default to help mode.
+  auto mode_found = std::find_if(inargs.flags.cbegin(), inargs.flags.cend(), [&inargs](const auto& flag) {
+    return flag.first == eDriverFlag::kModeComp || flag.first == eDriverFlag::kModeDev ||
+           flag.first == eDriverFlag::kModeVersion || flag.first == eDriverFlag::kModeHelp;
+  });
+  if (mode_found != inargs.flags.cend()) {
+    inargs.mode = mode_found->first;
+  } else
+    inargs.mode = eDriverFlag::kModeHelp;  // No mode flag found, default to help mode.
 }
 
 ClResult<int> HandleCliArgsVersionMode(CommandLineArguments& inargs) {
   // Not implemented
-  return cldev::util::gStdLog().PrintErrForward(
-      MakeClMsg<eClErr::kCompilerDevDebugError>(std::source_location::current(), "cnd::cli::HandleCliArgsVersionMode  is not implemented yet."));
+  return cldev::util::gStdLog().PrintErrForward(MakeClMsg<eClErr::kCompilerDevDebugError>(
+      std::source_location::current(), "cnd::cli::HandleCliArgsVersionMode  is not implemented yet."));
 };
 
 ClResult<int> HandleCliArgsHelpMode(CommandLineArguments& inargs) {
   // Not implemented
-  return cldev::util::gStdLog().PrintErrForward(
-      MakeClMsg<eClErr::kCompilerDevDebugError>(std::source_location::current(), "cnd::cli::HandleCliArgsHelpMode is not implemented yet."));
+  return cldev::util::gStdLog().PrintErrForward(MakeClMsg<eClErr::kCompilerDevDebugError>(
+      std::source_location::current(), "cnd::cli::HandleCliArgsHelpMode is not implemented yet."));
 };
 
 // - Working directory is set first.

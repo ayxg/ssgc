@@ -75,7 +75,8 @@ using cldev::util::Logger;
 
 // Data format of arguments which the driver command line interface processes.
 using ArgsBuffer = Vec<Str>;
-using ArgsBufferIter = ArgsBuffer::const_iterator;
+using ArgsBufferIter = ArgsBuffer::iterator;
+using ArgsBufferConstIter = ArgsBuffer::const_iterator;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* decls */
@@ -98,7 +99,7 @@ struct CommandLineArguments;  ///> Fully parsed cli args data. Flags are stored 
 ///   - '--silent' mode is enabled.   -> No output. Help or version flag wont print.
 ///
 /// @see cnd::cli::IOConfig
-Ex<IOConfig, int> HandleInitialCliArgs(int argc, char* argv[]);
+Ex<IOConfig, int> HandleInitialCliArgs(ArgsBufferConstIter beg, ArgsBufferConstIter end);
 
 /// @brief Creates a new logger to pass to other translation tools based on driver IOConfig parameters.
 /// @param init_params IOConfig struct created using by HandleInitialCliArgs.
@@ -175,7 +176,7 @@ struct CommandLineArguments {
 namespace cliparser {
 struct ParsedFlagOffset {
   Vec<Str> args;            // Parsed args.
-  ArgsBufferIter next_arg;  // Next arg to continue from.
+  ArgsBufferConstIter next_arg;  // Next arg to continue from.
   Size arg_offset;          // Index offset within the arg to continue from.
 };
 }  // namespace cliparser

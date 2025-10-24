@@ -74,8 +74,10 @@ CompilerProcessResult<std::variant<int,TrOutput>> CliMainInternal(int argc, char
 /// @return Translation process result. 0 if successful. Error otherwise.
 /// 
 int CliMain(int argc, char* argv[], char* envp[]) {
-  Ex<driver::IOConfig, int> io_init_res = driver::HandleInitialCliArgs(argc, argv);
+  Vec<Str> args{argv, argv + argc};
+  Ex<driver::IOConfig, int> io_init_res = driver::HandleInitialCliArgs(args.cbegin(),args.cend());
   if (!io_init_res) return io_init_res.error();  // Early exit.
+
   cldev::util::Logger& log = cldev::util::gStdLog();
   log = {driver::CreateConfiguredLogger(io_init_res.value())};
   CompilerProcessResult<driver::CommandLineArguments> parsed_cli_args_res =
