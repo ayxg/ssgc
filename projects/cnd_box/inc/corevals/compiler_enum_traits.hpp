@@ -22,56 +22,56 @@
 ///////////////////////////////////////////////////////////
 
 // cnd::toolset
-#include "corevals/enumdefs/toolset/eCharEncoding.hpp"
-#include "corevals/enumdefs/toolset/eOpSys.hpp"
-#include "corevals/enumdefs/toolset/eProcArch.hpp"
-#include "corevals/enumdefs/toolset/eProgLang.hpp"
-#include "corevals/enumdefs/toolset/eToolChain.hpp"
+#include "toolset/eCharEncoding.hpp"
+#include "toolset/eOpSys.hpp"
+#include "toolset/eProcArch.hpp"
+#include "toolset/eProgLang.hpp"
+#include "toolset/eToolChain.hpp"
 
 // cnd::driver
-#include "corevals/enumdefs/driver/eDriverFlag.hpp"
-#include "corevals/enumdefs/driver/eDriverFlagInterp.hpp"
-#include "corevals/enumdefs/driver/eDriverValueType.hpp"
-#include "corevals/enumdefs/driver/eDriverVerbosity.hpp"
+#include "driver/eDriverFlag.hpp"
+#include "driver/eDriverFlagInterp.hpp"
+#include "driver/eDriverValueType.hpp"
+#include "driver/eDriverVerbosity.hpp"
 
 // cnd::grammar
-#include "corevals/enumdefs/grammar/eAssoc.hpp"
-#include "corevals/enumdefs/grammar/eAst.hpp"
-#include "corevals/enumdefs/grammar/eOperation.hpp"
-#include "corevals/enumdefs/grammar/ePriority.hpp"
-#include "corevals/enumdefs/grammar/eSrcChar.hpp"
-#include "corevals/enumdefs/grammar/eTk.hpp"
+#include "grammar/eAssoc.hpp"
+#include "grammar/eAst.hpp"
+#include "grammar/eOperation.hpp"
+#include "grammar/ePriority.hpp"
+#include "grammar/eSrcChar.hpp"
+#include "grammar/eTk.hpp"
 
 // cnd::diagnostic
-#include "corevals/enumdefs/diagnostic/eClDiagnostic.hpp"
-#include "corevals/enumdefs/diagnostic/eClDiagnosticCategory.hpp"
-#include "corevals/enumdefs/diagnostic/eClErr.hpp"
-#include "corevals/enumdefs/diagnostic/eClErrCategory.hpp"
-#include "corevals/enumdefs/diagnostic/eClGuide.hpp"
-#include "corevals/enumdefs/diagnostic/eClGuideCategory.hpp"
-#include "corevals/enumdefs/diagnostic/eClMsg.hpp"
-#include "corevals/enumdefs/diagnostic/eClMsgType.hpp"
-#include "corevals/enumdefs/diagnostic/eClWarning.hpp"
-#include "corevals/enumdefs/diagnostic/eClWarningCategory.hpp"
+#include "diagnostic/eClDiagnostic.hpp"
+#include "diagnostic/eClDiagnosticCategory.hpp"
+#include "diagnostic/eClErr.hpp"
+#include "diagnostic/eClErrCategory.hpp"
+#include "diagnostic/eClGuide.hpp"
+#include "diagnostic/eClGuideCategory.hpp"
+#include "diagnostic/eClMsg.hpp"
+#include "diagnostic/eClMsgType.hpp"
+#include "diagnostic/eClWarning.hpp"
+#include "diagnostic/eClWarningCategory.hpp"
 
 ///////////////////////////////////////////////////////////
 /* Include enum traits headers. */
 ///////////////////////////////////////////////////////////
 
 // cnd::driver
-#include "corevals/enumtraits/driver/traitsof_eDriverFlag.hpp"
+#include "driver/traitsof_eDriverFlag.hpp"
 
 // cnd::grammar
-#include "corevals/enumtraits/grammar/traitsof_eSrcChar.hpp"
-#include "corevals/enumtraits/grammar/traitsof_eTk.hpp"
-#include "corevals/enumtraits/grammar/traitsof_eAst.hpp"
+#include "grammar/traitsof_eSrcChar.hpp"
+#include "grammar/traitsof_eTk.hpp"
+#include "grammar/traitsof_eAst.hpp"
 
 // cnd::diagnostic
-#include "corevals/enumtraits/diagnostic/traitsof_eClErr.hpp"
-#include "corevals/enumtraits/diagnostic/traitsof_eClWarning.hpp"
-#include "corevals/enumtraits/diagnostic/traitsof_eClGuide.hpp"
-#include "corevals/enumtraits/diagnostic/traitsof_eClDiagnostic.hpp"
-#include "corevals/enumtraits/diagnostic/traitsof_eClMsgType.hpp"
+#include "diagnostic/traitsof_eClErr.hpp"
+#include "diagnostic/traitsof_eClWarning.hpp"
+#include "diagnostic/traitsof_eClGuide.hpp"
+#include "diagnostic/traitsof_eClDiagnostic.hpp"
+#include "diagnostic/traitsof_eClMsgType.hpp"
 // clang-format on
 
 /// @section Compiler core enum traits.
