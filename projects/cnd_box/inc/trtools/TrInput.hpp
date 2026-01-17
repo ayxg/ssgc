@@ -22,7 +22,7 @@
 namespace cnd {
 struct TrInput {
   cldev::util::Logger* cli_stdio{&cldev::util::gStdLog()};       ///> Streams for CLI out/err/in at compile time.
-  eDriverVerbosity cli_verbosity_level{eDriverVerbosity::kStd};  ///> Verbosity level for CLI output.
+  driver::eVerbosity cli_verbosity_level{driver::eVerbosity::kStd};  ///> Verbosity level for CLI output.
   Bool is_overwrite_allowed{false};                              ///> Overwrite disabled by default.
   Vec<Pair<Str, Str>> predefs{};                                 ///> Predefined values from the CLI.
   Vec<Path> src_files{};                                         ///> Source files to compile.
