@@ -304,7 +304,7 @@ class Parser {
         // Expect a command, short circuit argument parsing if found.
         if (HasCommand()) {
           auto cmd_it = lookup_cmd_.find(*arg_it);
-          if (cmd_it == lookup_cmd_.cend()) return unexpected{format("Unknown command: '{}'.", *cmd_it)};
+          if (cmd_it == lookup_cmd_.cend()) return unexpected{format("Unknown command: '{}'.", *arg_it)};
           command_ = flags_[cmd_it->second].id;
           return arg_it + 1;  // Rest args
         } else                // Unparsed args are denied by default.
