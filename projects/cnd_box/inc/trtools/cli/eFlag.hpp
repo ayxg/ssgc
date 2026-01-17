@@ -31,6 +31,7 @@ namespace cnd::driver {
   CND_MM_AENUM_ENTRY(ModeDev, s, m)                  \
   CND_MM_AENUM_ENTRY(ModeHelp, s, m)                 \
   CND_MM_AENUM_ENTRY(ModeVersion, s, m)              \
+  CND_MM_AENUM_ENTRY(Sources, s, m)              \
   CND_MM_AENUM_ENTRY(Define, s, m)                   \
   CND_MM_AENUM_ENTRY(OutDir, s, m)                   \
   CND_MM_AENUM_ENTRY(AuxDir, s, m)                   \

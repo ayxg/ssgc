@@ -22,6 +22,8 @@
 
 namespace cnd {
 struct TrOutput {
+  TrOutput() {}
+  TrOutput(int exit_code) : exit_code(exit_code) {}
   int exit_code;
   int return_value;
   ClMsgBuffer errors{cldev::clmsg::MakeClMsg<eClErr::kNoError>()};

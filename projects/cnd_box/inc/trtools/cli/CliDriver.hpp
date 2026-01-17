@@ -434,10 +434,6 @@ ClRes<TrOutput> CliMain(int argc, char* argv[], char* envp[] = nullptr) {
       CompModeCliParser comp_parser{};
       auto comp_parse_res = comp_parser.Parse(main_parse_res.value(), input_args.end(), parsed_flags);
       if (!comp_parse_res) return gStdLog().PrintErrForward(comp_parse_res.error(), EXIT_FAILURE);
-      for (const auto& f : parsed_flags) {
-        std::cout << eFlagToCStr(f.first) << ": " << std::get<StrView>(f.second) << std::endl;
-      }
-
       TrInput trin{};
       ClRes<void> trin_config_res = ConfigTranslationInput(trin, parsed_flags);
       if (!trin_config_res) return gStdLog().PrintErrForward(trin_config_res.error().Format(), EXIT_FAILURE);
