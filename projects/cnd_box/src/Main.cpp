@@ -23,7 +23,11 @@
 #include "trtools/cli/CliDriver.hpp" // testing the cli main.
 // clang-format on
 
-int main(int argc, char* argv[], char* envp[]) { return cnd::driver::CliMain(argc, argv, envp); }
+int main(int argc, char* argv[], char* envp[]) { 
+  auto cli_res = cnd::driver::CliMain(argc, argv, envp);
+  if (!cli_res) return EXIT_FAILURE;
+  return cli_res->exit_code; 
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // @project: C& Programming Language
