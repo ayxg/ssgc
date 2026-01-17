@@ -18,6 +18,7 @@
 #include "use_ccapi.hpp"
 #include "use_corevals.hpp"
 #include "use_clmsg.hpp"
+#include "trtools/cli/eVerbosity.hpp"
 // clang-format on
 
 namespace cnd {
@@ -44,7 +45,7 @@ struct Logger {
   }
 
   inline decltype(auto) PrintDiagnostic(iStreamOutputable auto&&... msg) {
-    if (std::to_underlying(verbosity) >= std::to_underlying(eDriverVerbosity::kDebug)) {
+    if (std::to_underlying(verbosity) >= std::to_underlying(driver::eVerbosity::kDebug)) {
       ((*out_stream << std::forward<decltype(msg)>(msg)), ...);
       return *out_stream;
     } else {
@@ -143,7 +144,7 @@ struct Logger {
   }
 
  public:
-  eDriverVerbosity verbosity{eDriverVerbosity::kStd};
+  driver::eVerbosity verbosity{driver::eVerbosity::kStd};
 
  private:
   std::ostream* out_stream{&std::cout};
