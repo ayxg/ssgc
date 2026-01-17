@@ -98,7 +98,7 @@ class FlagProperties {
   std::uint32_t bits_;
 };
 
-template<class FlagIdT>
+template <class FlagIdT>
 struct Flag {
   using FlagIdType = FlagIdT;
   using FlagMapType = FlagMap<FlagIdType>;
@@ -110,7 +110,6 @@ struct Flag {
   const char* desc{""};
   std::uint32_t properties{};
   bool (*validator)(const FlagMapType&, FlagIdType){nullptr};
-
 };
 
 template <auto& FLAG_ARRAY>
@@ -183,7 +182,7 @@ class Parser {
     std::array<size_t, PositionalCount()> ret{};
     size_t pos_index = 0;
     for (size_t i = 0; i < flags_.size(); ++i)
-      if (flags_[i].interp == eFlagInterp::kPositional) ret[pos_index++] = static_cast<size_t>(flags_[i].id);
+      if (flags_[i].interp == eFlagInterp::kPositional) ret[pos_index++] = i;
     return ret;
   }()};
 
@@ -259,7 +258,7 @@ class Parser {
     // Offset of the flag identifier to start parsing from for
     // eFlagInterp::kVariable flags.
     string_view::const_iterator ident_offset{};
-    size_t flag_idx{};  // Flag index in the `flags_` array.
+    size_t flag_idx{0};  // Flag index in the `flags_` array.
 
     ArgvConstIter arg_it = beg;
     for (; arg_it < end; arg_it++) {
@@ -363,9 +362,9 @@ class Parser {
   FlagIdType display_flag_{};
 };
 
-template <class FlagT,typename... Flags>
-constexpr auto GenParserFlags(const FlagT & flag,Flags... flags) {
+template <class FlagT, typename... Flags>
+constexpr auto GenParserFlags(const FlagT& flag, Flags... flags) {
   return std::array<FlagT, sizeof...(Flags) + 1>{flag, flags...};
 }
 
-}  // namespace gopt
+}  // namespace cnd::driver
