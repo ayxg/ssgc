@@ -35,7 +35,7 @@ namespace trtools {
 class Compiler {
  public:
   Compiler(const TrInput& tr_input) : tr_input(tr_input){}
-  ClRes<TrOutput> Translate(const TrInput& trin) noexcept {}
+  ClRes<TrOutput> Translate(const TrInput& trin) noexcept;
 
  private:
   // Loads, lexes, sanitizes and parses a C& source file. Stores result of operations into associated maps at file path

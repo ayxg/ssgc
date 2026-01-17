@@ -408,8 +408,10 @@ void ConfigLoggerVerbosity(cldev::util::Logger& log, const FlagMeta::FlagMapType
   else
     log.verbosity = eVerbosity::kStd;
 }
-CompilerProcessResult<void> ConfigTranslationInput(TrInput& trin, const FlagMeta::FlagMapType& flags);
-CompilerProcessResult<void> HandlePostComplation(const TrOutput& tr_out, const FlagMeta::FlagMapType& flags);
+ClRes<void> ConfigTranslationInput(TrInput& trin, const FlagMeta::FlagMapType& flags) { return ClRes<void>{}; };
+CompilerProcessResult<void> HandlePostComplation(const TrOutput& tr_out, const FlagMeta::FlagMapType& flags) {
+  return ClRes<void>{};
+};
 
 int CliMain(int argc, char* argv[], char* envp[]) {
   using cldev::util::gStdLog;
@@ -435,8 +437,8 @@ int CliMain(int argc, char* argv[], char* envp[]) {
       CompilerProcessResult<void> trin_config_res = ConfigTranslationInput(trin, parsed_flags);
       if (!trin_config_res) return gStdLog().PrintErrForward(trin_config_res.error().Format(), EXIT_FAILURE);
 
-      trtools::Compiler compiler{};
-      CompilerProcessResult<TrOutput> tr_res = Translate(trin);
+      trtools::Compiler compiler{trin};
+      CompilerProcessResult<TrOutput> tr_res = compiler.Translate(trin);
       if (!tr_res) return gStdLog().PrintErrForward(tr_res.error().Format(), EXIT_FAILURE);
 
       CompilerProcessResult<void> post_res = HandlePostComplation(tr_res.value(), parsed_flags);
