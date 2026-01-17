@@ -409,7 +409,7 @@ void ConfigLoggerVerbosity(cldev::util::Logger& log, const FlagMeta::FlagMapType
     log.verbosity = eVerbosity::kStd;
 }
 ClRes<void> ConfigTranslationInput(TrInput& trin, const FlagMeta::FlagMapType& flags) { return ClRes<void>{}; };
-CompilerProcessResult<void> HandlePostComplation(const TrOutput& tr_out, const FlagMeta::FlagMapType& flags) {
+ClRes<void> HandlePostComplation(const TrOutput& tr_out, const FlagMeta::FlagMapType& flags) {
   return ClRes<void>{};
 };
 
@@ -434,18 +434,18 @@ ClRes<TrOutput> CliMain(int argc, char* argv[], char* envp[] = nullptr) {
       if (!comp_parse_res) return gStdLog().PrintErrForward(comp_parse_res.error(), EXIT_FAILURE);
 
       TrInput trin{};
-      CompilerProcessResult<void> trin_config_res = ConfigTranslationInput(trin, parsed_flags);
+      ClRes<void> trin_config_res = ConfigTranslationInput(trin, parsed_flags);
       if (!trin_config_res) return gStdLog().PrintErrForward(trin_config_res.error().Format(), EXIT_FAILURE);
 
       trtools::Compiler compiler{trin};
-      CompilerProcessResult<TrOutput> tr_res = compiler.Translate(trin);
+      ClRes<TrOutput> tr_res = compiler.Translate(trin);
       if (!tr_res) return gStdLog().PrintErrForward(tr_res.error().Format(), EXIT_FAILURE);
 
-      CompilerProcessResult<void> post_res = HandlePostComplation(tr_res.value(), parsed_flags);
+      ClRes<void> post_res = HandlePostComplation(tr_res.value(), parsed_flags);
       if (!post_res) return gStdLog().PrintErrForward(post_res.error().Format(), EXIT_FAILURE);
     } break;
     default:
-      return gStdLog().PrintErrForward("", EXIT_FAILURE);
+      return gStdLog().PrintErrForward("No command provided.", EXIT_FAILURE);
   }
 
   return EXIT_SUCCESS;
@@ -458,7 +458,7 @@ ClRes<TrOutput> CliMain(int argc, char* argv[], char* envp[] = nullptr) {
 //// Uses compiler common error value
 // using ClFail = CompilerProcessFailure;  ///> Driver failure result holds a ClMsgBuffer.
 // template <class T>
-// using ClResult = CompilerProcessResult<T>;
+// using ClResult = ClRes<T>;
 // using cldev::clmsg::MakeClMsg;
 //
 //// Uses dev logger.
