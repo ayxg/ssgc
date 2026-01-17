@@ -413,7 +413,7 @@ CompilerProcessResult<void> HandlePostComplation(const TrOutput& tr_out, const F
   return ClRes<void>{};
 };
 
-int CliMain(int argc, char* argv[], char* envp[]) {
+ClRes<TrOutput> CliMain(int argc, char* argv[], char* envp[] = nullptr) {
   using cldev::util::gStdLog;
   using parsers::MainCliParser;
   using parsers::CompModeCliParser;
@@ -422,7 +422,7 @@ int CliMain(int argc, char* argv[], char* envp[]) {
   Vec<StrView> input_args{argv, argv + argc};
   MainCliParser::FlagMapType parsed_flags{};
   MainCliParser main_parser{};
-  auto main_parse_res = main_parser.Parse(input_args.begin(), input_args.end(), parsed_flags);
+  auto main_parse_res = main_parser.Parse(input_args.begin() + 1, input_args.end(), parsed_flags);
   ConfigLoggerVerbosity(gStdLog(), parsed_flags);  // Config log before possible error, in-case of '--silent'.
   if (!main_parse_res) return gStdLog().PrintErrForward(main_parse_res.error(), EXIT_FAILURE);
 
