@@ -97,6 +97,7 @@ constexpr eFlagInterp GetFlagInterp(eFlag flag) noexcept {
     CND_MM_LOCAL_CASE(ModeDev, Cmd);
     CND_MM_LOCAL_CASE(ModeHelp, Cmd);
     CND_MM_LOCAL_CASE(ModeVersion, Cmd);
+    CND_MM_LOCAL_CASE(Sources, Positional);    
     CND_MM_LOCAL_CASE(Define, VarDef);
     CND_MM_LOCAL_CASE(OutDir, Single);
     CND_MM_LOCAL_CASE(AuxDir, Single);
@@ -385,7 +386,8 @@ static constexpr auto kMainParserFlags = GenParserFlags(
 
 static constexpr auto kCompModeFlags = GenParserFlags(
   DefFlag(kOutDir),                                                   
-  DefFlag(kAuxDir),                                                    
+  DefFlag(kAuxDir),
+  DefFlag(kSources,FlagProperties{}.Repeatable()),
   DefFlag(kDefine)    
 );
 
@@ -430,8 +432,11 @@ ClRes<TrOutput> CliMain(int argc, char* argv[], char* envp[] = nullptr) {
   switch (main_parser.GetCommand()) {
     case eFlag::kModeComp: {
       CompModeCliParser comp_parser{};
-      auto comp_parse_res = main_parser.Parse(main_parse_res.value(), input_args.end(), parsed_flags);
+      auto comp_parse_res = comp_parser.Parse(main_parse_res.value(), input_args.end(), parsed_flags);
       if (!comp_parse_res) return gStdLog().PrintErrForward(comp_parse_res.error(), EXIT_FAILURE);
+      for (const auto& f : parsed_flags) {
+        std::cout << eFlagToCStr(f.first) << ": " << std::get<StrView>(f.second) << std::endl;
+      }
 
       TrInput trin{};
       ClRes<void> trin_config_res = ConfigTranslationInput(trin, parsed_flags);
