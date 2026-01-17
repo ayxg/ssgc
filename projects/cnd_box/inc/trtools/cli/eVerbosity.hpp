@@ -14,34 +14,29 @@
 #pragma once
 // clang-format off
 #include "use_ccapi.hpp"
-#include "corevals/reflected_meta_enum.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals
 /// @{
 
-namespace cnd::corevals::driver {
-enum class eDriverFlagInterp {kNONE, kOnOff, kModeSwitch, kVarDef, kSingleArg, kTwoArg, kMultiArg,kBoolean, COUNT };
+namespace cnd::driver {
+enum class eVerbosity { kNONE, kStd, kSilent, kVerbose, kDebug, kTrace, COUNT };
 
-constexpr CStr eDriverFlagInterpToCStr(eDriverFlagInterp e) noexcept {
-  using enum eDriverFlagInterp;
+constexpr CStr eDriverVerbosityToCStr(eVerbosity e) noexcept {
+  using enum eVerbosity;
   switch (e) {
     case kNONE:
       return "kNONE";
-    case kOnOff:
-      return "kOnOff";
-    case kModeSwitch:
-      return "kModeSwitch";
-    case kVarDef:
-      return "kVarDef";
-    case kSingleArg:
-      return "kSingleArg";
-    case kTwoArg:
-      return "kTwoArg";
-    case kMultiArg:
-      return "kMultiArg";
-    case kBoolean:
-      return "kBoolean";
+    case kStd:
+      return "kStd";
+    case kSilent:
+      return "kSilent";
+    case kVerbose:
+      return "kVerbose";
+    case kDebug:
+      return "kDebug";
+    case kTrace:
+      return "kTrace";
     case COUNT:
       return "COUNT";
     default:

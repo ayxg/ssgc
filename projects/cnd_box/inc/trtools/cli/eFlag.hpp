@@ -20,11 +20,11 @@
 /// @addtogroup cnd_compiler_corevals
 /// @{
 
-namespace cnd::corevals::driver {
+namespace cnd::driver {
 #define CND_MM_AENUM_ENTRY(s, p, m) p m(s)
 
-/// Define applied enum cnd::corevals::diagnostic::eDriverFlag
-#define CND_APPLIED_ENUM_eDriverFlag(m, s, p, l)     \
+/// Define applied enum cnd::driver::eFlag
+#define CND_APPLIED_ENUM_eFlag(m, s, p, l)     \
   CND_MM_AENUM_ENTRY(INVALID, p, m)                  \
   CND_MM_AENUM_ENTRY(NONE, s, m)                     \
   CND_MM_AENUM_ENTRY(ModeComp, s, m)                 \
@@ -99,20 +99,20 @@ namespace cnd::corevals::driver {
   l
 
 // Define the enum.
-CND_MM_CREATE_ENUM_FROM_APPLIED_ENUM_UNTYPED(eDriverFlag, eDriverFlag);
+CND_MM_CREATE_ENUM_FROM_APPLIED_ENUM_UNTYPED(eFlag, eFlag);
 
 // Define the enum to cstr conversion.
-CND_MM_CREATE_ENUMTOCSTR_FROM_ENUM_LIST(eDriverFlagToCStr, eDriverFlag, eDriverFlag);
+CND_MM_CREATE_ENUMTOCSTR_FROM_ENUM_LIST(eFlagToCStr, eFlag, eFlag);
 
 // Assert enum to cstr conversion.
-#define CND_STATIC_ASSERT_ENUM_TO_CSTR_eDriverFlag(x) \
-  CND_MM_STATIC_ASSERT_ENUM_TO_CSTR(x, eDriverFlag, eDriverFlagToCStr)
+#define CND_STATIC_ASSERT_ENUM_TO_CSTR_eFlag(x) \
+  CND_MM_STATIC_ASSERT_ENUM_TO_CSTR(x, eFlag, eFlagToCStr)
 
-CND_APPLIED_ENUM_eDriverFlag(CND_STATIC_ASSERT_ENUM_TO_CSTR_eDriverFlag, , , );
-static_assert(cxx::StrEq(eDriverFlagToCStr(eDriverFlag::COUNT), "COUNT"));
+CND_APPLIED_ENUM_eFlag(CND_STATIC_ASSERT_ENUM_TO_CSTR_eFlag, , , );
+static_assert(cxx::StrEq(eFlagToCStr(eFlag::COUNT), "COUNT"));
 
 #undef CND_STATIC_ASSERT_ENUM_TO_CSTR_eClCliFlag
-}  // namespace cnd::corevals::driver
+}  // namespace cnd::driver
 
 /// @} // end of cnd_compiler_corevals
 
