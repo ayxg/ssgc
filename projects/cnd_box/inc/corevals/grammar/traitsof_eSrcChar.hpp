@@ -14,7 +14,7 @@
 #pragma once
 // clang-format off
 #include "use_ccapi.hpp"
-#include "corevals/enumdefs/grammar/eSrcChar.hpp"
+#include "corevals/grammar/eSrcChar.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals

@@ -14,9 +14,9 @@
 #pragma once
 // clang-format off
 #include "use_ccapi.hpp"
-#include "corevals/enumdefs/diagnostic/eClDiagnostic.hpp"
-#include "corevals/enumdefs/diagnostic/eClDiagnosticCategory.hpp"
-#include "corevals/enumdefs/diagnostic/eClMsgType.hpp"
+#include "corevals/diagnostic/eClDiagnostic.hpp"
+#include "corevals/diagnostic/eClDiagnosticCategory.hpp"
+#include "corevals/diagnostic/eClMsgType.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals

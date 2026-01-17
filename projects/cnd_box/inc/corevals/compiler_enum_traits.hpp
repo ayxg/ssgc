@@ -29,10 +29,10 @@
 #include "toolset/eToolChain.hpp"
 
 // cnd::driver
-#include "driver/eDriverFlag.hpp"
-#include "driver/eDriverFlagInterp.hpp"
-#include "driver/eDriverValueType.hpp"
-#include "driver/eDriverVerbosity.hpp"
+//#include "driver/eDriverFlag.hpp"
+//#include "driver/eDriverFlagInterp.hpp"
+//#include "driver/eDriverValueType.hpp"
+//#include "driver/eDriverVerbosity.hpp"
 
 // cnd::grammar
 #include "grammar/eAssoc.hpp"
@@ -59,7 +59,7 @@
 ///////////////////////////////////////////////////////////
 
 // cnd::driver
-#include "driver/traitsof_eDriverFlag.hpp"
+//#include "driver/traitsof_eDriverFlag.hpp"
 
 // cnd::grammar
 #include "grammar/traitsof_eSrcChar.hpp"
@@ -90,16 +90,16 @@ using corevals::toolset::eToolchainToCStr;
 //// CLI Driver : Enums which describe an aspect of the command line interface abstraction layer.
 
 // eClCliFlag
-using corevals::driver::eDriverFlagToCStr;
-using corevals::driver::GetDriverFlagInterp;
-using corevals::driver::GetDriverFlagShortSymbol;
-using corevals::driver::GetDriverFlagLongSymbol;
-using corevals::driver::GetDriverFlagFromStr;
-using corevals::driver::GetDriverFlagFromChar;
-
-using corevals::driver::eDriverFlagInterpToCStr;
-using corevals::driver::eDriverValueTypeToCStr;
-using corevals::driver::eDriverVerbosityToCStr;
+//using corevals::driver::eDriverFlagToCStr;
+//using corevals::driver::GetDriverFlagInterp;
+//using corevals::driver::GetDriverFlagShortSymbol;
+//using corevals::driver::GetDriverFlagLongSymbol;
+//using corevals::driver::GetDriverFlagFromStr;
+//using corevals::driver::GetDriverFlagFromChar;
+//
+//using corevals::driver::eDriverFlagInterpToCStr;
+//using corevals::driver::eDriverValueTypeToCStr;
+//using corevals::driver::eDriverVerbosityToCStr;
 
 //// C& Grammar : Enums which describe an aspect of the C& grammar.
 

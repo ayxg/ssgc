@@ -12,17 +12,17 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "corevals/enumtraits/grammar/traitsof_eAst.hpp"
+#include "corevals/grammar/traitsof_eAst.hpp"
 
 // clang-format off
 #include "use_ccapi.hpp"
-#include "corevals/enumdefs/grammar/eTk.hpp"
-#include "corevals/enumdefs/grammar/eAssoc.hpp"
-#include "corevals/enumdefs/grammar/eOperation.hpp"
-#include "corevals/enumdefs/grammar/ePriority.hpp"
-#include "corevals/enumdefs/grammar/eAst.hpp"
+#include "corevals/grammar/eTk.hpp"
+#include "corevals/grammar/eAssoc.hpp"
+#include "corevals/grammar/eOperation.hpp"
+#include "corevals/grammar/ePriority.hpp"
+#include "corevals/grammar/eAst.hpp"
 
-#include "corevals/enumtraits/grammar/traitsof_eTk.hpp"
+#include "corevals/grammar/traitsof_eTk.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals

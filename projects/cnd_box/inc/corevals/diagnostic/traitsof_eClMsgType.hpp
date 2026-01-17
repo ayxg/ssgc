@@ -14,12 +14,12 @@
 #pragma once
 // clang-format off
 #include "use_ccapi.hpp"
-#include "corevals/enumdefs/diagnostic/eClDiagnostic.hpp"
-#include "corevals/enumdefs/diagnostic/eClErr.hpp"
-#include "corevals/enumdefs/diagnostic/eClWarning.hpp"
-#include "corevals/enumdefs/diagnostic/eClGuide.hpp"
-#include "corevals/enumdefs/diagnostic/eClMsg.hpp"
-#include "corevals/enumdefs/diagnostic/eClMsgType.hpp"
+#include "corevals/diagnostic/eClDiagnostic.hpp"
+#include "corevals/diagnostic/eClErr.hpp"
+#include "corevals/diagnostic/eClWarning.hpp"
+#include "corevals/diagnostic/eClGuide.hpp"
+#include "corevals/diagnostic/eClMsg.hpp"
+#include "corevals/diagnostic/eClMsgType.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals

@@ -15,7 +15,7 @@
 // clang-format off
 #include "use_ccapi.hpp"
 #include "corevals/reflected_meta_enum.hpp"
-#include "corevals/enumdefs/grammar/eTk.hpp"
+#include "corevals/grammar/eTk.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals

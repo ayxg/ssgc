@@ -14,11 +14,11 @@
 #pragma once
 // clang-format off
 #include "use_ccapi.hpp"
-#include "corevals/enumdefs/grammar/eTk.hpp"
-#include "corevals/enumdefs/grammar/eAssoc.hpp"
-#include "corevals/enumdefs/grammar/eOperation.hpp"
-#include "corevals/enumdefs/grammar/ePriority.hpp"
-#include "corevals/enumdefs/grammar/eAst.hpp"
+#include "corevals/grammar/eTk.hpp"
+#include "corevals/grammar/eAssoc.hpp"
+#include "corevals/grammar/eOperation.hpp"
+#include "corevals/grammar/ePriority.hpp"
+#include "corevals/grammar/eAst.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals
@@ -42,7 +42,7 @@ constexpr bool IsAstPragmatic(eAst t) noexcept;
 constexpr eAst GetAstFromTk(eTk t) noexcept;
 }  // namespace cnd::corevals::grammar
 
-#include "corevals/enumtraits/grammar/traitsof_eAst.tpp"
+#include "corevals/grammar/traitsof_eAst.tpp"
 
 /// @} // end of cnd_compiler_corevals
 

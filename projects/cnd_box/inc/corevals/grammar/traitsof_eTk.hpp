@@ -14,10 +14,10 @@
 #pragma once
 // clang-format off
 #include "use_ccapi.hpp"
-#include "corevals/enumdefs/grammar/eTk.hpp"
-#include "corevals/enumdefs/grammar/eAssoc.hpp"
-#include "corevals/enumdefs/grammar/eOperation.hpp"
-#include "corevals/enumdefs/grammar/ePriority.hpp"
+#include "corevals/grammar/eTk.hpp"
+#include "corevals/grammar/eAssoc.hpp"
+#include "corevals/grammar/eOperation.hpp"
+#include "corevals/grammar/ePriority.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals
@@ -42,7 +42,7 @@ constexpr eTk GetTkFromKeyword(StrView kw) noexcept;
 }  // namespace cnd::corevals::grammar
 
 #define CND_FILE_LOCK_COREVALS_TRAITSOF_ETK_HPP
-#include "corevals/enumtraits/grammar/traitsof_eTk.tpp"
+#include "corevals/grammar/traitsof_eTk.tpp"
 #undef CND_FILE_LOCK_COREVALS_TRAITSOF_ETK_HPP
 
 /// @} // end of cnd_compiler_corevals

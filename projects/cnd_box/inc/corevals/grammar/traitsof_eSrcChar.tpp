@@ -11,11 +11,11 @@
 /// @brief Traits of eSrcChar
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "corevals/enumtraits/grammar/traitsof_eSrcChar.hpp"
+#include "corevals/grammar/traitsof_eSrcChar.hpp"
 
 // clang-format off
 #include "use_ccapi.hpp"
-#include "corevals/enumdefs/grammar/eSrcChar.hpp"
+#include "corevals/grammar/eSrcChar.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals
