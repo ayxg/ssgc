@@ -16,11 +16,11 @@
 
 #pragma once
 // clang-format off
-#include "trtools/CliDriver.hpp"
+#include "trtools/cli/CliDriver.hpp"
 // clang-format on
 namespace cnd {
-CompilerProcessResult<std::variant<int, TrOutput>> CliMainInternal(int argc, char* argv[], char* envp[]);
-int CliMain(int argc, char* argv[], char* envp[]);
+//CompilerProcessResult<std::variant<int, TrOutput>> CliMainInternal(int argc, char* argv[], char* envp[]);
+//int CliMain(int argc, char* argv[], char* envp[]);
 }
 
 /// @} // end of cnd_compiler_cli

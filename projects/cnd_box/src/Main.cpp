@@ -20,10 +20,10 @@
 #include "trtools/Lexer.hpp"
 #include "trtools/Parser.hpp"
 
-#include "CliMain.hpp" // testing the cli main.
+#include "trtools/cli/CliDriver.hpp" // testing the cli main.
 // clang-format on
 
-int main(int argc, char* argv[], char* envp[]) { return cnd::CliMain(argc, argv,nullptr); }
+int main(int argc, char* argv[], char* envp[]) { return cnd::driver::CliMain(argc, argv, envp); }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // @project: C& Programming Language
