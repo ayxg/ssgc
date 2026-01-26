@@ -49,17 +49,19 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "cldev/clmsg.hpp"
-#include "cldev/dev_logger.hpp"
-#include "corevals/reflected_meta_enum.hpp" 
-#include "trtools/cli/CliParser.hpp"
-#include "trtools/cli/eFlag.hpp"
-#include "trtools/cli/eVerbosity.hpp"
+#include "ccapi/CommonCppApi.hpp"
 
-#include "trtools/TrInput.hpp"
-#include "trtools/TrOutput.hpp"
-#include "trtools/Compiler.hpp"
+#include "compiler_utils/CompilerProcessResult.hpp"
+#include "compiler_utils/DevLogger.hpp"
+#include "compiler_utils/ReflectedMetaEnum.hpp" 
+
+#include "cli/CliParser.hpp"
+#include "cli/eFlag.hpp"
+#include "cli/eVerbosity.hpp"
+
+#include "compiler/TranslationInput.hpp"
+#include "compiler/TranslationOutput.hpp"
+#include "compiler/Compiler.hpp"
 // clang-format on
 
 namespace cnd::driver {
@@ -410,8 +412,18 @@ void ConfigLoggerVerbosity(cldev::util::Logger& log, const FlagMeta::FlagMapType
   else
     log.verbosity = eVerbosity::kStd;
 }
-ClRes<void> ConfigTranslationInput(TrInput& trin, const FlagMeta::FlagMapType& flags) { return ClRes<void>{}; };
+ClRes<void> ConfigTranslationInput(TrInput& trin, const FlagMeta::FlagMapType& flags) { 
+  auto src_files = flags.equal_range(eFlag::kSources);
+  for (auto it = src_files.first; it != src_files.second; it++) {
+    trin.src_files.push_back(std::get<StrView>(it->second));
+  }
+
+  return ClRes<void>{}; 
+};
+
 ClRes<void> HandlePostComplation(const TrOutput& tr_out, const FlagMeta::FlagMapType& flags) {
+  // Print exit code for debugging.
+  std::cout << "Evaluation return value:" << tr_out.return_value << std::endl;
   return ClRes<void>{};
 };
 
@@ -439,7 +451,7 @@ ClRes<TrOutput> CliMain(int argc, char* argv[], char* envp[] = nullptr) {
       if (!trin_config_res) return gStdLog().PrintErrForward(trin_config_res.error().Format(), EXIT_FAILURE);
 
       trtools::Compiler compiler{trin};
-      ClRes<TrOutput> tr_res = compiler.Translate(trin);
+      ClRes<TrOutput> tr_res = compiler.Translate();
       if (!tr_res) return gStdLog().PrintErrForward(tr_res.error().Format(), EXIT_FAILURE);
 
       ClRes<void> post_res = HandlePostComplation(tr_res.value(), parsed_flags);
