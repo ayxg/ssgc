@@ -295,7 +295,8 @@ class Parser {
         if (HasPositional() && current_positional < PositionalCount()) {
           if (!ValidateFlag(lookup_pos_[current_positional], out))
             return unexpected{format("Failed to validate postional argument {}.", current_positional)};
-          positional_.push_back(*arg_it);
+          // Fill positional in flag map.
+          out.insert({flags_.at(lookup_pos_[current_positional]).id, *arg_it});
           current_positional++;
           continue;
         }
