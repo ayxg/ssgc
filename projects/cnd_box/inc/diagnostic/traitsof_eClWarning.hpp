@@ -13,10 +13,10 @@
 
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "corevals/diagnostic/eClWarning.hpp"
-#include "corevals/diagnostic/eClWarningCategory.hpp"
-#include "corevals/diagnostic/eClMsgType.hpp"
+#include "ccapi/CommonCppApi.hpp"
+#include "diagnostic/eClWarning.hpp"
+#include "diagnostic/eClWarningCategory.hpp"
+#include "diagnostic/eClMsgType.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals

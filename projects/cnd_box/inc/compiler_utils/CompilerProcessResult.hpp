@@ -15,13 +15,12 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "use_corevals.hpp"
-#include "compiler_message_base.hpp"
-#include "error_messages.hpp"
-#include "warning_messages.hpp"
-#include "diagnostic_messages.hpp"
-#include "guideline_messages.hpp"
+#include "ccapi/CommonCppApi.hpp"
+#include "compiler_utils/CompilerMessageBase.hpp"
+#include "diagnostic/error_messages.hpp"
+#include "diagnostic/warning_messages.hpp"
+#include "diagnostic/diagnostic_messages.hpp"
+#include "diagnostic/guideline_messages.hpp"
 // clang-format on
 
 namespace cnd {

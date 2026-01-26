@@ -28,12 +28,12 @@
 
 // Define conventional macros used throughout the code base.
 // @see cnd_ccapi_macroconfig.hpp
-#include "macroconfig.hpp"
+#include "ccapi/MacroConfig.hpp"
 
 // Configure C& compiler standard library symbols based on C++ triplet parameters.
 // Define common macros ,and typedefs in the cnd namespace.
 // @note: When std lib does not provide a required type, cxx implementation is used(if available).
-#include "cppconfig.hpp"
+#include "ccapi/CppConfig.hpp"
 
 // Bring the "Common C++ API" into the global cnd namespace.
 namespace cnd {

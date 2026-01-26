@@ -14,7 +14,7 @@
 /// @addtogroup cnd_compiler_cli
 /// @{
 #pragma once
-#include "use_ccapi.hpp"
+#include "ccapi/CommonCppApi.hpp"
 
 namespace cnd::driver::messages {
 constexpr StrView kMainHeader = R"(

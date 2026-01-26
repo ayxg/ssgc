@@ -15,23 +15,24 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
+#include "ccapi/CommonCppApi.hpp"
 #include "use_corevals.hpp"
-#include "use_clmsg.hpp"
-#include "cldata/tk.hpp"
-#include "cldata/ast.hpp"
-#include "cldata/synth_ast.hpp"
-#include "TkCursor.hpp"
-#include "token_scope.hpp"
+#include "compiler_utils/CompilerProcessResult.hpp"
+#include "frontend/tk.hpp"
+#include "frontend/ast.hpp"
+#include "frontend/synth_ast.hpp"
+#include "frontend/TkCursor.hpp"
+#include "frontend/token_scope.hpp"
 
-#include "Lexer.hpp"
-#include "CompilerIO.hpp"
+#include "frontend/Lexer.hpp"
+#include "compiler_utils/LoadSourceFile.hpp"
 // clang-format on
 
 /// File local macro, returns a debug error for creating and debugging compiler errors on the fly.
 #define DEBUG_FAIL(msg) \
-  CompilerProcessFailure(MakeClMsg<eClErr::kCompilerDevDebugError>(source_location::current(), msg))
-#define DEBUG_MSG(msg) MakeClMsg<eClErr::kCompilerDevDebugError>(source_location::current(), msg)
+  CompilerProcessFailure( \
+      cldev::clmsg::MakeClMsg<corevals::diagnostic::eClErr::kCompilerDevDebugError>(std::source_location::current(), msg))
+#define DEBUG_MSG(msg) MakeClMsg<eClErr::kCompilerDevDebugError>(std::source_location::current(), msg)
 
 #ifdef _DEBUG
 #define CND_CLDEV_DEBUG_MODE 1

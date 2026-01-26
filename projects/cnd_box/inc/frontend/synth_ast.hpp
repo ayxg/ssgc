@@ -15,11 +15,10 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "use_corevals.hpp"
-#include "cldata/tk.hpp"
-#include "cldata/ast.hpp"
-#include "trtools/TkCursor.hpp"
+#include "ccapi/CommonCppApi.hpp"
+#include "frontend/tk.hpp"
+#include "frontend/ast.hpp"
+#include "frontend/TkCursor.hpp"
 // clang-format on
 
 namespace cnd {

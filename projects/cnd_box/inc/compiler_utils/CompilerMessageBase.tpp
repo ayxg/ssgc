@@ -14,10 +14,9 @@
 /// @addtogroup cnd_compiler_cldev
 /// @{
 #pragma once
-#include "compiler_message_base.hpp"
+#include "CompilerMessageBase.hpp"
 // clang-format off
-#include "use_ccapi.hpp"
-#include "use_corevals.hpp"
+#include "ccapi/CommonCppApi.hpp"
 // clang-format on
 
 namespace cnd {

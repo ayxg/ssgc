@@ -13,9 +13,9 @@
 
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "corevals/reflected_meta_enum.hpp"
-#include "corevals/grammar/eTk.hpp"
+#include "ccapi/CommonCppApi.hpp"
+#include "compiler_utils/ReflectedMetaEnum.hpp"
+#include "grammar/eTk.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals

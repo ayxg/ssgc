@@ -13,8 +13,8 @@
 
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "corevals/grammar/eSrcChar.hpp"
+#include "ccapi/CommonCppApi.hpp"
+#include "grammar/eSrcChar.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals

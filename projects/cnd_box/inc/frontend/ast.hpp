@@ -15,10 +15,9 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "use_corevals.hpp"
-#include "cldata/tk.hpp"
-#include "trtools/TkCursor.hpp"
+#include "ccapi/CommonCppApi.hpp"
+#include "frontend/tk.hpp"
+#include "frontend/TkCursor.hpp"
 // clang-format on
 
 namespace cnd {
@@ -164,6 +163,10 @@ struct Ast {
       return ret;
     }
     return "";
+  }
+
+  constexpr StrView RawLiteral() const noexcept { 
+    return src_begin->literal_;
   }
 
   constexpr void PushBack(Ast&& ast) { children.push_back(ast); }

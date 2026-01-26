@@ -15,7 +15,7 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
+#include "ccapi/CommonCppApi.hpp"
 #include "corevals/compiler_enums.hpp"
 #include "corevals/compiler_enum_traits.hpp"
 // clang-format on

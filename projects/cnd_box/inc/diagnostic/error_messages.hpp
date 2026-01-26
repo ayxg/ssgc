@@ -15,9 +15,9 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "use_corevals.hpp"
-#include "compiler_message_base.hpp"
+#include "ccapi/CommonCppApi.hpp"
+#include "compiler_utils/CompilerMessageBase.hpp"
+#include "diagnostic/eClErr.hpp"
 // clang-format on
 
 #define CND_MM_CLMSG_MAKE_RETURN(...)                  \
@@ -31,7 +31,7 @@ namespace clmsg {
 using std::get;                // For ClMsgDataUnionT accessing std::variant.
 using std::holds_alternative;  // For ClMsgDataUnionT accessing std::variant.
 using std::to_underlying;      // To get the diagnostic enum's underlying value.
-
+using corevals::diagnostic::eClErr;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* kCompilerDevDebugError */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

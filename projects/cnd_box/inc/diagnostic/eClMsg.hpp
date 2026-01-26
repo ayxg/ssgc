@@ -13,12 +13,12 @@
 
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "corevals/reflected_meta_enum.hpp"
-#include "corevals/diagnostic/eClErr.hpp"
-#include "corevals/diagnostic/eClWarning.hpp"
-#include "corevals/diagnostic/eClGuide.hpp"
-#include "corevals/diagnostic/eClDiagnostic.hpp"
+#include "ccapi/CommonCppApi.hpp"
+#include "compiler_utils/ReflectedMetaEnum.hpp"
+#include "diagnostic/eClErr.hpp"
+#include "diagnostic/eClWarning.hpp"
+#include "diagnostic/eClGuide.hpp"
+#include "diagnostic/eClDiagnostic.hpp"
 // clang-format on
 
 #ifndef CND_APPLIED_ENUM_eClErr

@@ -13,8 +13,8 @@
 
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "corevals/reflected_meta_enum.hpp"
+#include "ccapi/CommonCppApi.hpp"
+#include "compiler_utils/ReflectedMetaEnum.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals

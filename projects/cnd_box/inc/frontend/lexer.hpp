@@ -15,10 +15,10 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "use_corevals.hpp"
-#include "use_clmsg.hpp"
-#include "cldata/tk.hpp"
+#include "ccapi/CommonCppApi.hpp"
+#include "compiler_utils/CompilerProcessResult.hpp"
+#include "grammar/eTk.hpp"
+#include "frontend/tk.hpp"
 // clang-format on
 
 /// Set true to enable inline static unit tests during compiler development.

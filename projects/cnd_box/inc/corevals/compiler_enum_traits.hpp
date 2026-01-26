@@ -15,7 +15,7 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
+#include "ccapi/CommonCppApi.hpp"
 
 ///////////////////////////////////////////////////////////
 /* Include enum implementation headers. */

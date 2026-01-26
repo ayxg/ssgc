@@ -14,7 +14,7 @@
 /// @addtogroup cnd_compiler_corevals
 /// @{
 #pragma once
-#include "use_ccapi.hpp"
+#include "ccapi/CommonCppApi.hpp"
 
 ///////////////////////////////////////////////////////////
 /* Include enum implementation headers. */

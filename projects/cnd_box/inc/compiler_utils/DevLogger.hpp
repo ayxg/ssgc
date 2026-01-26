@@ -15,10 +15,8 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "use_corevals.hpp"
-#include "use_clmsg.hpp"
-#include "trtools/cli/eVerbosity.hpp"
+#include "ccapi/CommonCppApi.hpp"
+#include "cli/eVerbosity.hpp"
 // clang-format on
 
 namespace cnd {

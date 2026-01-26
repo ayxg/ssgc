@@ -15,9 +15,7 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "use_corevals.hpp"
-#include "use_clmsg.hpp"
+#include "ccapi/CommonCppApi.hpp"
 
 namespace cnd {
 namespace trtools {

@@ -15,13 +15,30 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "use_corevals.hpp"
+#include "ccapi/CommonCppApi.hpp"
+#include "diagnostic/eClErr.hpp"
+#include "diagnostic/eClWarning.hpp"
+#include "diagnostic/eClGuide.hpp"
+#include "diagnostic/eClDiagnostic.hpp"
+#include "diagnostic/eClMsgType.hpp"
+#include "diagnostic/eClMsg.hpp"
+#include "diagnostic/traitsof_eClDiagnostic.hpp"
+#include "diagnostic/traitsof_eClErr.hpp"
+#include "diagnostic/traitsof_eClWarning.hpp"
+#include "diagnostic/traitsof_eClGuide.hpp"
+#include "diagnostic/traitsof_eClMsgType.hpp"
 // clang-format on
 
 namespace cnd {
 namespace cldev {
 namespace clmsg {
+using corevals::diagnostic::eClDiagnostic;
+using corevals::diagnostic::eClErr;
+using corevals::diagnostic::eClGuide;
+using corevals::diagnostic::eClWarning;
+using corevals::diagnostic::eClMsgType;
+using corevals::diagnostic::eClMsg;
+using corevals::diagnostic::GetClMsgType;
 
 using std::get;                // For ClMsgDataUnionT accessing std::variant.
 using std::holds_alternative;  // For ClMsgDataUnionT accessing std::variant.
@@ -390,7 +407,7 @@ constexpr Str FormatCppSourceLocationClMsgData(const ClMsgDataBufferT& data) {
 /////////////////////////////////////////////////////////
 /* Implement ClMsgChain, ClMsgUnion, and ClMsg classes */
 /////////////////////////////////////////////////////////
-#include "compiler_message_base.tpp"
+#include "CompilerMessageBase.tpp"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* Define user-space macros to generate the correct template specializations for a given diagnostic enum entry */
@@ -503,11 +520,6 @@ static_assert(FormatClMsg<eClDiagnostic::kNoDiagnostic>(MakeClMsg<eClDiagnostic:
 
 }  // namespace clmsg
 }  // namespace cldev
-
-// template <class T>
-// using CompilerProcessResult = Ex<T, CompilerMessageBuffer>;
-// using CompilerProcessFailure = CompilerProcessResult<CompilerMessageBuffer>;
-
 }  // namespace cnd
 
 /// @} // end of cnd_compiler_cldev

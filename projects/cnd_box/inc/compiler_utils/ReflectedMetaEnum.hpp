@@ -91,7 +91,7 @@
 #pragma once
 
 // clang-format off
-#include "use_ccapi.hpp"
+#include "ccapi/CommonCppApi.hpp"
 
 // Some local utility macros to perform all the dark magic.
 #define CND_MM_EXPAND(x) x          ///> @warning Internal macro, do not use.
