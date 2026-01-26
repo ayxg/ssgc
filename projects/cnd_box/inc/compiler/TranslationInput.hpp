@@ -15,8 +15,7 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "use_corevals.hpp"
+#include "ccapi/CommonCppApi.hpp"
 // clang-format on
 
 namespace cnd {

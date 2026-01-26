@@ -13,7 +13,7 @@
 
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
+#include "ccapi/CommonCppApi.hpp"
 // clang-format on
 
 /// @addtogroup cnd_compiler_corevals
