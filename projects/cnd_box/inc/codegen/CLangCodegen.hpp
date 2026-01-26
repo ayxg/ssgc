@@ -16,7 +16,7 @@
 
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
+#include "ccapi/CommonCppApi.hpp"
 // clang-format on
 namespace cnd::clang::codegen {
 

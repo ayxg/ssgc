@@ -15,21 +15,14 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
-#include "use_corevals.hpp"
-#include "use_clmsg.hpp"
+#include "ccapi/CommonCppApi.hpp"
 
-#include "cldata/tk.hpp"
-#include "trtools/Lexer.hpp"
-#include "trtools/Parser.hpp"
-//#include "trtools/Compeval.hpp"
+#include "frontend/Tk.hpp"
+#include "frontend/Lexer.hpp"
+#include "frontend/Parser.hpp"
 
-#include "TrInput.hpp"
-#include "TrOutput.hpp"
-#include "TrUnit.hpp"
-
-//#include "VirtualMachine.hpp"
-//#include "IrGenerator.hpp"
+#include "compiler/TrInput.hpp"
+#include "compiler/TrOutput.hpp"
 // clang-format on
 
 namespace cnd {
