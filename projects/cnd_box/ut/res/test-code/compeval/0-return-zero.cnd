@@ -1,1 +1,3 @@
-return 0;
+def int @foo : 42;
+def int @bar : 100;
+return foo + bar % 20;
