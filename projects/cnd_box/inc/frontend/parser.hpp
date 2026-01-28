@@ -570,37 +570,46 @@ CND_CX LLPrsResT ParseWhileDecl(TkCursorT c) CND_NX {
 }
 
 CND_CX LLPrsResT ParseForDecl(TkCursorT c) CND_NX {
+  using namespace detail;
   if (c.TypeIsnt(eTk::kKwFor)) return DEBUG_FAIL("Expected for.");
   auto stmt_begin = c.Iter();
   c.Advance();
-  ScopePrsResT cond_scope = FindParen(c);
-  if (!cond_scope) return LLPrsResT::Failure(move(cond_scope.error()));
 
-  SepScopePrsResT cond_scopes = FindSeperatedParen(c.Iter(), c.End(), eTk::kSemicolon);
-  if (cond_scopes.value().size() > 3)
-    return DEBUG_FAIL("InvalidForLoopSyntax. For condition may have a maximum of 3 statements.");
-  auto init_var_res = ParseVariableDecl({cond_scopes.value()[0].ContainedBegin(), c.End()});
-  if (!init_var_res) return init_var_res;
+  if (c.TypeIsnt(eTk::kLParen)) return DEBUG_FAIL("Expected opening parenthesis '(' after 'for' keyword.");
+  c.Advance();
 
-  auto cond_res = ParsePrimaryStatement({cond_scopes.value()[1].ContainedBegin(), c.End()});
-  if (!cond_res) return cond_res;
+  Ast node{};
+  node.src_begin = stmt_begin;
 
-  auto inc_res = ParsePrimaryExpr({cond_scopes.value()[2].ContainedBegin(), c.End()});
-  if (!inc_res) return LLPrsResT::Failure(move(inc_res.error()));
-  c.Advance(cond_scope.value().End());
+  // Optional loop local variable definition.
+  if (c.TypeIs(eTk::kKwDef)) {
+    auto init_var_res = ParseVariableDecl(c);
+    if (!init_var_res) return init_var_res;
+    ExtractAndAdvance(c, node, init_var_res);
+  }
+
+  // Required conditional expression.
+  auto cond_res = ParsePrimaryExpr(c);
+  if (!cond_res.has_value()) return cond_res;
+  ExtractAndAdvance(c, node, cond_res);
+
+  // Optional increment expression.
+  if (c.TypeIs(eTk::kSemicolon)) {
+    c.Advance();
+    auto inc_res = ParsePrimaryExpr(c);
+    if (!inc_res) return inc_res;
+    ExtractAndAdvance(c, node, inc_res);
+  }
+
+  if (c.TypeIsnt(eTk::kRParen)) return DEBUG_FAIL("Expected closing parenthesis ')' after 'for' condition.");
+  c.Advance();
 
   auto body_res = ParseMethodDef(c);
   if (!body_res) return body_res;
-  c.Advance(body_res.value().head.Iter());
+  ExtractAndAdvance(c, node, body_res);
 
-  auto stmt_end = body_res.value().head.Iter();
-  if (c.TypeIs(eTk::kSemicolon)) {
-    c.Advance();
-    std::advance(stmt_end, 1);
-  }
-  Ast ret = {eAst::kKwFor, stmt_begin, stmt_end};
-  ret.Append(init_var_res.Extract().ast, cond_res.Extract().ast, inc_res.Extract().ast, body_res.Extract().ast);
-  return LLParserResult{c, ret};
+  node.src_end = c.Iter();
+  return LLParserResult{c, node};
 }
 
 CND_CX LLPrsResT ParseVariableDecl(TkCursorT c) CND_NX {
@@ -1067,11 +1076,10 @@ CND_CX LLPrsResT ParseMethodSignature(TkCursorT c) CND_NX {
 CND_CX LLPrsResT ParseMethodDef(TkCursorT c) CND_NX {
   using namespace detail;
   Ast node{eAst::kMethodDefinition};
-  auto stmt = FindBrace(c);
-  if (!stmt) return LLPrsResT::Failure(stmt.error());
+  if (c.TypeIsnt(eTk::kLBrace)) return DEBUG_FAIL("Expected opening brace '{'.");
   c.Advance();
 
-  while (c.Iter() != stmt.value().ContainedEnd()) {
+  while (!c.TypeIs(eTk::kRBrace)) {
     if (c.IsPragmatic()) {
       auto decl = ParseFunctionalStmt(c);
       if (!decl) return decl;
