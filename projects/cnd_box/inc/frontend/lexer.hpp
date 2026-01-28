@@ -463,7 +463,6 @@ constexpr Lexer::LexerResultT Lexer::LexLineComment(StrView s) noexcept {
   while (IsInRange(c, s) && !IsSrcCharNewline(*c)) {
     c++;
   }
-  c++;
 
   return LexerCursor(eTk::kLineComment, s, s.begin(), c);
 }
