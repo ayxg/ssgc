@@ -2,16 +2,14 @@
 // First pass constant evaluation. Acts like a 'calculator'.
 // Performs reductions on literal and constant expressions in the AST.
 #include "ccapi/CommonCppApi.hpp"
+#include "compiler/TranslationInput.hpp"
+#include "compiler/TranslationOutput.hpp"
 #include "compiler_utils/CompilerProcessResult.hpp"
-
 #include "frontend/Ast.hpp"
 #include "frontend/Lexer.hpp"
 #include "frontend/Parser.hpp"
-
-#include "compiler/TranslationInput.hpp"
-#include "compiler/TranslationOutput.hpp"
-
 #include "hir/AnyValue.hpp"
+#include "hir/HirOp.hpp"
 
 namespace cnd {
 
@@ -20,6 +18,7 @@ namespace hir {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Intermediate Representation Objects
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+enum class eValCat : unsigned char { Value, Mut, Imut, Ref, Cref, IRef, Owned, Shared, View, __count__ };
 
 // Translation Units
 struct TrUnit;
@@ -28,15 +27,42 @@ struct TrUnit;
 struct Namespace;
 struct Variable;
 struct PrimaryExpr;
+struct FunctionParameter;
+struct FunctionDefinition;
 
 struct Namespace {
   Namespace* parent{nullptr};
   StrView ident{};
   std::unordered_map<StrView, Namespace> subspaces;
   std::unordered_map<StrView, AV> vars;
-
+  std::unordered_map<StrView, FunctionDefinition> funcs;
   ClRes<std::reference_wrapper<AV>> ResolveVariable(StrView ident);
+  ClRes<std::reference_wrapper<const FunctionDefinition>> ResolveFunction(StrView ident);
   bool ContainsLocalVariable(StrView ident) const { return vars.contains(ident); }
+};
+
+struct FunctionArgument {
+  AnyValue* data;
+  eValCat valcat;
+};
+
+struct FunctionParameter {
+  StrView name;
+  eTypeIndex type;
+  eValCat valcat;
+};
+
+struct FunctionDefinition {
+  StrView name;
+  std::vector<FunctionParameter> params;
+  std::map<StrView, std::size_t> lookup_params;
+  eTypeIndex return_type;
+  std::vector<HirOp> impl;
+};
+
+struct FunctionCall {
+  const FunctionDefinition& definition;
+  std::vector<FunctionArgument> args;
 };
 
 struct TrUnit {
@@ -53,21 +79,22 @@ struct TrUnit {
   std::unordered_map<StrView, Ast> trees{};
   Namespace global{.parent = nullptr, .ident = kGlobalNamespaceName};
 
-  ClRes<std::reference_wrapper<Ast>> ParseSourceFile(StrView fp) noexcept;
-  ClRes<StrView> ReadSourceFile(StrView fp) noexcept;
+  ClRes<std::unordered_map<StrView, Ast>::iterator> ParseSourceFile(StrView fp) noexcept;
+  ClRes<std::unordered_map<Str, Vec<char>>::iterator> ReadSourceFile(StrView fp) noexcept;
 
   ClRes<void> Evaluate();
   ClRes<bool> EvalSourceFile(StrView fp) noexcept;
   ClRes<void> EvalPragmaticReturnStmt(const Ast& ast, Namespace& ns) noexcept;
   ClRes<void> EvalPragmaticVariableDefinition(const Ast& ast, Namespace& ns) noexcept;
+  ClRes<void> EvalPragmaticFunctionDefinition(const Ast& ast, Namespace& ns) noexcept;
   ClRes<AV> EvalPrimaryExpr(const Ast& ast, Namespace& ns) noexcept;
-  ClRes<AV> ComputeBinop(const Ast& lhs, const Ast& rhs, Namespace& ns,
-                                    AV (*binop)(const AV&, const AV&));
+  ClRes<AV> EvaluateFunctionCall(const FunctionCall& call, Namespace& caller_ns) noexcept;
+  ClRes<AV> ComputeBinop(const Ast& lhs, const Ast& rhs, Namespace& ns, AV (*binop)(const AV&, const AV&));
 };
 
 // Loads source file at given path and stores in 'sources' at file path key. Currently only used  internally by
 // 'LoadSourceFile' method.
-ClRes<StrView> TrUnit::ReadSourceFile(StrView fp) noexcept {
+ClRes<std::unordered_map<Str, Vec<char>>::iterator> TrUnit::ReadSourceFile(StrView fp) noexcept {
   if (!stdfs::exists(fp)) return ClFail(MakeClMsg<eClErr::kFailedToReadFile>(fp, "Does not exist"));
 
   if (!stdfs::is_regular_file(fp)) return ClFail(MakeClMsg<eClErr::kFailedToReadFile>(fp, "Not a regular file."));
@@ -81,45 +108,49 @@ ClRes<StrView> TrUnit::ReadSourceFile(StrView fp) noexcept {
 
   // Add \0 if not already at end.
   if (temp_file_buffer.back() != '\0') temp_file_buffer.push_back('\0');
+  
+  auto new_key = std::string{fp.begin(), fp.end()};
+  sources[new_key] = temp_file_buffer;
 
-  sources[fp.data()] = temp_file_buffer;
-
-  return fp;
+  return sources.find(new_key);
 }
 
 // Loads, lexes, sanitizes and parses a C& source file. Stores result of operations into associated maps at file path
 // key. Assert a file has not been already loaded for this compiler instance before calling this method on a given
 // path.
-ClRes<std::reference_wrapper<Ast>> TrUnit::ParseSourceFile(StrView fp) noexcept {
+ClRes<std::unordered_map<StrView, Ast>::iterator> TrUnit::ParseSourceFile(StrView fp) noexcept {
   // Load file data.
   auto src_read = ReadSourceFile(fp);
   if (!src_read) return ClFail(src_read.error());
+  StrView src_key = src_read.value()->first;
+  const auto & src_data = src_read.value()->second;
 
   // Lex and store tokens.
-  StrView src_view = {sources[fp.data()].cbegin(), sources[fp.data()].cend()};
+  StrView src_view = {src_data.cbegin(), src_data.cend()};
   auto lex_res = trtools::Lexer::Lex(src_view);
   if (!lex_res) return ClFail(lex_res.error());
-  tokens[fp] = lex_res.value();
+  tokens[src_key] = lex_res.value();
 
   // Sanitize and store sanitized tokens.
-  sanitized_tokens[fp] = trtools::Lexer::Sanitize(tokens[fp]);
-  span_tokens[fp] = Span{sanitized_tokens[fp].data(), sanitized_tokens[fp].size()};
+  sanitized_tokens[src_key] = trtools::Lexer::Sanitize(tokens[src_key]);
+  span_tokens[src_key] = Span{sanitized_tokens[src_key].data(), sanitized_tokens[src_key].size()};
 
   // Parse and store abstract syntax tree.
-  auto parse_res = trtools::parser::ParseSyntax({span_tokens[fp].cbegin(), span_tokens[fp].cend()});
+  auto parse_res = trtools::parser::ParseSyntax({span_tokens[src_key].cbegin(), span_tokens[src_key].cend()});
   if (!parse_res) return ClFail(parse_res.error());
-  trees[fp] = parse_res.Extract().ast;
+  trees[src_key] = parse_res.Extract().ast;
 
-  return std::ref(trees[fp]);
+  return trees.find(src_key);
 }
 
 ClRes<void> TrUnit::Evaluate() {
   // Process all input source files in order.
   for (auto src_file_it = input_.src_files.cbegin(); src_file_it != input_.src_files.cend(); src_file_it++) {
+    
     auto parse_res = ParseSourceFile(src_file_it->string());
     if (!parse_res) return ClFail(parse_res.error());
 
-    auto eval_res = EvalSourceFile(src_file_it->string());
+    auto eval_res = EvalSourceFile(parse_res.value()->first);
     if (!eval_res) return ClFail(eval_res.error());
     if (*eval_res) return ClRes<void>{};  // Check if evaluation was terminated early by the source.
   }
@@ -193,15 +224,15 @@ ClRes<AV> EvalLiteral(const Ast& ast) {
 }
 
 ClRes<AV> TrUnit::ComputeBinop(const Ast& lhs_ast, const Ast& rhs_ast, Namespace& ns,
-                                          AV (*binop)(const AV&, const AV&)) {
+                               AV (*binop)(const AV&, const AV&)) {
   auto lhs = EvalPrimaryExpr(lhs_ast, ns);
   auto rhs = EvalPrimaryExpr(rhs_ast, ns);
   if (!lhs) return ClFail(lhs.error());
   if (!rhs) return ClFail(rhs.error());
   auto opres = binop(*lhs, *rhs);
   if (AV::Is<Error>(opres))
-    return ClFail(MakeClMsg<eClErr::kCompilerDevDebugError>(std::source_location::current(),
-                                                            AV::CppRef<Error>(opres).data));
+    return ClFail(
+        MakeClMsg<eClErr::kCompilerDevDebugError>(std::source_location::current(), AV::CppRef<Error>(opres).data));
   return opres;
 }
 
@@ -216,7 +247,7 @@ ClRes<AV> TrUnit::EvalPrimaryExpr(const Ast& ast, Namespace& ns) noexcept {
       return EvalLiteral<I32>(ast);
     case eAst::kLitCstr:
       return EvalLiteral<CStr>(ast);
-    
+
     // Arithmetic Binary Operations
     case eAst::kAdd:
       return ComputeBinop(ast.At(0), ast.At(1), ns, AV::Add);
@@ -252,8 +283,8 @@ ClRes<AV> TrUnit::EvalPrimaryExpr(const Ast& ast, Namespace& ns) noexcept {
       return ComputeBinop(ast.At(0), ast.At(1), ns, AV::Gte);
 
     //// Arithmeric Unary Operators
-    //case eAst::kNot:
-    //  return ComputeBinop(ast.At(0), ast.At(1), ns, AV::Not);
+    // case eAst::kNot:
+    //   return ComputeBinop(ast.At(0), ast.At(1), ns, AV::Not);
 
     // Inline Binary Operations (Assignments)
     case eAst::kAssign:
@@ -291,6 +322,25 @@ ClRes<std::reference_wrapper<AV>> Namespace::ResolveVariable(StrView ident) {
     return DEBUG_FAIL("Cannot resolve variable value.");
 }
 
+ClRes<std::reference_wrapper<const FunctionDefinition>> Namespace::ResolveFunction(StrView ident) {
+  if (funcs.contains(ident))
+    return funcs[ident];
+  else if (parent != nullptr)
+    return parent->ResolveFunction(ident);
+  else
+    return DEBUG_FAIL(std::format("Cannot resolve function {}.", ident));
+}
+
+ClRes<AV> EvaluateFunctionCall(StrView name, std::vector<FunctionArgument> args, Namespace& ns) noexcept {
+  auto resolution_res = ns.ResolveFunction(name);
+  if (!resolution_res) return ClFail(resolution_res.Error());
+  const FunctionDefinition& def = resolution_res->get();
+  if (def.params.size() != args.size())
+    return DEBUG_FAIL(std::format("Function '{}' expects {} arguments but {} were provided.", def.name,
+                                  def.params.size(), args.size()));
+
+
+}
 // using cxx::Expected;
 //
 // enum eValCategory { Native, Owned, Borrowed, Reference, View, ConstReference };

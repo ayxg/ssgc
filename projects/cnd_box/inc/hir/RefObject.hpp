@@ -177,43 +177,43 @@ class RefObject {
   }
 
  public:
-  // Copy constructor. Does not increment the reference count.
-   constexpr inline RefObject(const RefObject& other) noexcept
-       : is_deleted(other.is_deleted),
-         count(other.count),
-         ptr(other.ptr) {}
+  //// Copy constructor. Does not increment the reference count.
+  // constexpr inline RefObject(const RefObject& other) noexcept
+  //     : is_deleted(other.is_deleted),
+  //       count(other.count),
+  //       ptr(other.ptr) {}
 
-  // Move constructor. Does not increment the reference count.
-   constexpr inline RefObject(RefObject&& other) noexcept
-       : is_deleted(other.is_deleted),
-         count(other.count),
-         ptr(other.ptr) {
-     other.is_deleted = true;
-   }
+  //// Move constructor. Does not increment the reference count.
+  // constexpr inline RefObject(RefObject&& other) noexcept
+  //     : is_deleted(other.is_deleted),
+  //       count(other.count),
+  //       ptr(other.ptr) {
+  //   other.is_deleted = true;
+  // }
 
-  // Copy assignment. Does not increment the reference count.
-   constexpr inline RefObject& operator=(const RefObject& other) noexcept {
-     if (this != &other) {
-       is_deleted = other.is_deleted;
-       count = other.count;
-       ptr = other.ptr;
-     }
-     return *this;
-   }
+  //// Copy assignment. Does not increment the reference count.
+  // constexpr inline RefObject& operator=(const RefObject& other) noexcept {
+  //   if (this != &other) {
+  //     is_deleted = other.is_deleted;
+  //     count = other.count;
+  //     ptr = other.ptr;
+  //   }
+  //   return *this;
+  // }
 
-  // Move assignment. Does not increment the reference count.
-   constexpr inline RefObject& operator=(RefObject&& other) noexcept {
-     if (this != &other) {
-       is_deleted = other.is_deleted;
-       count = other.count;
-       ptr = other.ptr;
-       other.is_deleted = true;
-     }
-     return *this;
-   }
+  //// Move assignment. Does not increment the reference count.
+  // constexpr inline RefObject& operator=(RefObject&& other) noexcept {
+  //   if (this != &other) {
+  //     is_deleted = other.is_deleted;
+  //     count = other.count;
+  //     ptr = other.ptr;
+  //     other.is_deleted = true;
+  //   }
+  //   return *this;
+  // }
 
-  // Default constructor creates a deleted object.
-   constexpr inline RefObject() noexcept = default;
+  //// Default constructor creates a deleted object.
+  // constexpr inline RefObject() noexcept = default;
 
   // Performs 3 checks in order before deleting the object:
   // 1. Was the object moved/already deleted ?
