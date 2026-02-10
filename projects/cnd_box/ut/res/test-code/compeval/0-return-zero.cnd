@@ -1,1 +1,16 @@
-return 0;
+fn@fibb(const int @n)>const int:{
+  if (n <= 1) {
+    return n;
+  };
+
+  def int @a:1;
+  def int @b:2;
+
+  for(def int @i : 2; i <= n; i++) {
+      def int @c : a + b;
+      a = b;
+      b = c;
+  }
+  return b;
+};
+`return fib(10);

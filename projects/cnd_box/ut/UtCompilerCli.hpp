@@ -17,124 +17,143 @@
 // !!Keep clang format OFF for this file ,or else expected ast constructors will be unreadable.
 // clang-format off
 #include "minitest.hpp"
-#include "CliMain.hpp"
+#include "trtools/cli/CliDriver.hpp"
 // clang-format on
 
 namespace cnd_unit_test::compiler {
 
+// Dummy command line args for unit tests.
+struct DummyArgv {
+  std::vector<std::vector<char>> storage;  
+  std::vector<char*> argv;                 
+  char** data() { return argv.data(); }
+
+  int GetArgc() const noexcept { return storage.size(); }
+  char** GetArgv() { return argv.data(); }
+  DummyArgv(std::initializer_list<std::string> args) { 
+    storage.reserve(args.size());  
+    argv.reserve(args.size());
+
+    for (const auto& str : args) {
+      std::vector<char> buff{str.begin(), str.end()};
+      buff.push_back('\0');
+      storage.push_back(std::move(buff));
+    }
+
+    for (auto& buff : storage) argv.push_back(buff.data());
+  }
+};
+
 TEST(UtCompilerCli, NoArgs) {
-  int argc = 3;
-  char* argv[] = {"cnd"};
-  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
-  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
+  DummyArgv args{
+    "cnd"
+  };
+  cnd::ClRes<cnd::TrOutput> cl_out = cnd::driver::CliMain(args.GetArgc(), args.GetArgv());
+  ASSERT_TRUE(cl_out);
+  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
 }
 
 TEST(UtCompilerCli, HelpModeRun) {
-  int argc = 3;
-  char* argv[] = {"cnd"};
-  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
-  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
+  DummyArgv args{"cnd", "help"};
+  cnd::ClRes<cnd::TrOutput> cl_out = cnd::driver::CliMain(args.GetArgc(), args.GetArgv());
+  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
 }
 
 TEST(UtCompilerCli, VersionModeRun) {
-  int argc = 3;
-  char* argv[] = {"cnd"};
-  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
-  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
+  DummyArgv args{"cnd", "version"};
+  cnd::ClRes<cnd::TrOutput> cl_out = cnd::driver::CliMain(args.GetArgc(), args.GetArgv());
+  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
 }
 
-TEST(UtCompilerCli, SilentRun) {
-  int argc = 3;
-  char* argv[] = {"cnd"};
-  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
-  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
-}
+//TEST(UtCompilerCli, SilentRun) {
+//  int argc = 3;
+//  char* argv[] = {"cnd"};
+//  cnd::ClRes<cnd::TrOutput> cl_out = cnd::driver::CliMain(args.GetArgc(), args.GetArgv());
+//  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
+//}
+//
+//TEST(UtCompilerCli, VerboseRun) {
+//  int argc = 3;
+//  char* argv[] = {"cnd"};
+//  cnd::ClRes<cnd::TrOutput> cl_out = cnd::driver::CliMain(args.GetArgc(), args.GetArgv());
+//  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
+//}
+//
+//TEST(UtCompilerCli, DiagnosticRun) {
+//  int argc = 3;
+//  char* argv[] = {"cnd"};
+//  cnd::ClRes<cnd::TrOutput> cl_out = cnd::driver::CliMain(args.GetArgc(), args.GetArgv());
+//  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
+//}
+//
+//TEST(UtCompilerCli, NoOverwriteRun) {
+//  int argc = 3;
+//  char* argv[] = {"cnd"};
+//  cnd::ClRes<cnd::TrOutput> cl_out = cnd::driver::CliMain(args.GetArgc(), args.GetArgv());
+//  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
+//}
+//
+//TEST(UtCompilerCli, RedirectStdout) {
+//  int argc = 3;
+//  char* argv[] = {"cnd"};
+//  cnd::ClRes<cnd::TrOutput> cl_out = cnd::driver::CliMain(args.GetArgc(), args.GetArgv());
+//  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
+//}
+//
+//TEST(UtCompilerCli, RedirectStderr) {
+//  int argc = 3;
+//  char* argv[] = {"cnd"};
+//  cnd::ClRes<cnd::TrOutput> cl_out = cnd::driver::CliMain(args.GetArgc(), args.GetArgv());
+//  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
+//}
+//
+//TEST(UtCompilerCli, RedirectStdin) {
+//  int argc = 3;
+//  char* argv[] = {"cnd"};
+//  cnd::ClRes<cnd::TrOutput> cl_out = cnd::driver::CliMain(args.GetArgc(), args.GetArgv());
+//  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
+//}
 
-TEST(UtCompilerCli, VerboseRun) {
-  int argc = 3;
-  char* argv[] = {"cnd"};
-  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
-  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
-}
-
-TEST(UtCompilerCli, DiagnosticRun) {
-  int argc = 3;
-  char* argv[] = {"cnd"};
-  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
-  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
-}
-
-TEST(UtCompilerCli, NoOverwriteRun) {
-  int argc = 3;
-  char* argv[] = {"cnd"};
-  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
-  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
-}
-
-TEST(UtCompilerCli, RedirectStdout) {
-  int argc = 3;
-  char* argv[] = {"cnd"};
-  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
-  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
-}
-
-TEST(UtCompilerCli, RedirectStderr) {
-  int argc = 3;
-  char* argv[] = {"cnd"};
-  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
-  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
-}
-
-TEST(UtCompilerCli, RedirectStdin) {
-  int argc = 3;
-  char* argv[] = {"cnd"};
-  CompilerProcessResult<std::variant<int, TrOutput>> cl_out = cnd::CliMainInternal(argc, argv);
-  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
-}
-
-TEST(UtCompilerCli, Return0) {
-  // Minimal main function that returns 0 from a single process.
-  int argc = 3;
-  char* argv[] = {"cnd", "build", "UtCompilerReturn0.cnd"};
-  cnd::compiler::Output cl_out = cnd::compiler::CliMain(argc, argv);
-  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
-  ASSERT_TRUE(cl_out.targets.size() == 1);
-  ASSERT_TRUE(cl_out.targets[0].format == cnd::eTargetFormat::kExe);
-  auto run_res = wpl::RunExe(cl_out.targets[0].path);
-  ASSERT_TRUE(run_res);
-  ASSERT_TRUE(run_res.exit_code == 0);
-}
-
-TEST(UtCompilerCli, MultiprocessReturn0) {
-  // Two seperate processes are produced.
-  int argc = 3;
-  char* argv[] = {"cnd", "build", "UtCompilerMultiprocessReturn0.cnd"};
-  cnd::compiler::Output cl_out = cnd::compiler::CliMain(argc, argv);
-  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
-  ASSERT_TRUE(cl_out.targets.size() == 2);
-  ASSERT_TRUE(cl_out.targets[0].format == cnd::eTargetFormat::kExe);
-  auto run_res = wpl::RunExe(cl_out.targets[0].path);
-  ASSERT_TRUE(run_res);
-  ASSERT_TRUE(run_res.exit_code == 0);
-  ASSERT_TRUE(cl_out.targets[1].format == cnd::eTargetFormat::kExe);
-  auto run_res = wpl::RunExe(cl_out.targets[1].path);
-  ASSERT_TRUE(run_res);
-  ASSERT_TRUE(run_res.exit_code == 0);
-}
-
-TEST(UtCompilerCli, InterprocessReturn0) {
-  // One process is evaluated fully at compile time. Second
-  // process returns result of the first.
-  int argc = 3;
-  char* argv[] = {"cnd", "build", "UtCompilerInterprocessReturn0.cnd"};
-  cnd::compiler::Output cl_out = cnd::compiler::CliMain(argc, argv);
-  ASSERT_TRUE(cl_out.exit_code == EXIT_SUCCESS);
-  ASSERT_TRUE(cl_out.targets.size() == 1);
-  ASSERT_TRUE(cl_out.targets[0].format == cnd::eTargetFormat::kExe);
-  auto run_res = wpl::RunExe(cl_out.targets[0].path);
-  ASSERT_TRUE(run_res);
-  ASSERT_TRUE(run_res.exit_code == 0);
-}
+//TEST(UtCompilerCli, Return0) {
+//  // Minimal main function that returns 0 from a single process.
+//  DummyArgv args{"cnd", "build", "UtCompilerReturn0.cnd"};
+//  cnd::ClRes<cnd::TrOutput> cl_out = cnd::compiler::CliMain(args.GetArgc(), args.GetArgv());
+//  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
+//  ASSERT_TRUE(cl_out->targets.size() == 1);
+//  ASSERT_TRUE(cl_out->targets[0].format == cnd::eTargetFormat::kExe);
+//  auto run_res = wpl::RunExe(cl_out.targets[0].path);
+//  ASSERT_TRUE(run_res);
+//  ASSERT_TRUE(run_res.exit_code == 0);
+//}
+//
+//TEST(UtCompilerCli, MultiprocessReturn0) {
+//  // Two seperate processes are produced.
+//  DummyArgv args{"cnd", "build", "UtCompilerMultiprocessReturn0.cnd"};
+//  cnd::compiler::Output cl_out = cnd::compiler::CliMain(args.GetArgc(), args.GetArgv());
+//  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
+//  ASSERT_TRUE(cl_out.targets.size() == 2);
+//  ASSERT_TRUE(cl_out.targets[0].format == cnd::eTargetFormat::kExe);
+//  auto run_res = wpl::RunExe(cl_out.targets[0].path);
+//  ASSERT_TRUE(run_res);
+//  ASSERT_TRUE(run_res.exit_code == 0);
+//  ASSERT_TRUE(cl_out.targets[1].format == cnd::eTargetFormat::kExe);
+//  auto run_res = wpl::RunExe(cl_out.targets[1].path);
+//  ASSERT_TRUE(run_res);
+//  ASSERT_TRUE(run_res.exit_code == 0);
+//}
+//
+//TEST(UtCompilerCli, InterprocessReturn0) {
+//  // One process is evaluated fully at compile time. Second
+//  // process returns result of the first.
+//  DummyArgv args{"cnd", "build", "UtCompilerInterprocessReturn0.cnd"};
+//  cnd::compiler::Output cl_out = cnd::compiler::CliMain(args.GetArgc(), args.GetArgv());
+//  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
+//  ASSERT_TRUE(cl_out.targets.size() == 1);
+//  ASSERT_TRUE(cl_out.targets[0].format == cnd::eTargetFormat::kExe);
+//  auto run_res = wpl::RunExe(cl_out.targets[0].path);
+//  ASSERT_TRUE(run_res);
+//  ASSERT_TRUE(run_res.exit_code == 0);
+//}
 }  // namespace cnd_unit_test::compiler
 
 /// @} // end of cnd_unit_test

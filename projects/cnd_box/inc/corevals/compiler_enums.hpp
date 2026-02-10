@@ -14,44 +14,45 @@
 /// @addtogroup cnd_compiler_corevals
 /// @{
 #pragma once
-#include "use_ccapi.hpp"
+#include "ccapi/CommonCppApi.hpp"
 
 ///////////////////////////////////////////////////////////
 /* Include enum implementation headers. */
 ///////////////////////////////////////////////////////////
 
 // cnd::toolset
-#include "corevals/enumdefs/toolset/eCharEncoding.hpp"
-#include "corevals/enumdefs/toolset/eOpSys.hpp"
-#include "corevals/enumdefs/toolset/eProcArch.hpp"
-#include "corevals/enumdefs/toolset/eProgLang.hpp"
-#include "corevals/enumdefs/toolset/eToolChain.hpp"
+#include "toolset/eCharEncoding.hpp"
+#include "toolset/eOpSys.hpp"
+#include "toolset/eProcArch.hpp"
+#include "toolset/eProgLang.hpp"
+#include "toolset/eToolChain.hpp"
 
 // cnd::driver
-#include "corevals/enumdefs/driver/eDriverFlag.hpp"
-#include "corevals/enumdefs/driver/eDriverFlagInterp.hpp"
-#include "corevals/enumdefs/driver/eDriverValueType.hpp"
-#include "corevals/enumdefs/driver/eDriverVerbosity.hpp"
+//#include "driver/eDriverFlag.hpp"
+//#include "driver/eDriverFlagInterp.hpp"
+//#include "driver/eDriverValueType.hpp"
+//#include "driver/eDriverVerbosity.hpp"
+//#include "driver/eDriverCommand.hpp"
 
 // cnd::grammar
-#include "corevals/enumdefs/grammar/eAssoc.hpp"
-#include "corevals/enumdefs/grammar/eAst.hpp"
-#include "corevals/enumdefs/grammar/eOperation.hpp"
-#include "corevals/enumdefs/grammar/ePriority.hpp"
-#include "corevals/enumdefs/grammar/eSrcChar.hpp"
-#include "corevals/enumdefs/grammar/eTk.hpp"
+#include "grammar/eAssoc.hpp"
+#include "grammar/eAst.hpp"
+#include "grammar/eOperation.hpp"
+#include "grammar/ePriority.hpp"
+#include "grammar/eSrcChar.hpp"
+#include "grammar/eTk.hpp"
 
 // cnd::diagnostic
-#include "corevals/enumdefs/diagnostic/eClDiagnostic.hpp"
-#include "corevals/enumdefs/diagnostic/eClDiagnosticCategory.hpp"
-#include "corevals/enumdefs/diagnostic/eClErr.hpp"
-#include "corevals/enumdefs/diagnostic/eClErrCategory.hpp"
-#include "corevals/enumdefs/diagnostic/eClGuide.hpp"
-#include "corevals/enumdefs/diagnostic/eClGuideCategory.hpp"
-#include "corevals/enumdefs/diagnostic/eClMsg.hpp"
-#include "corevals/enumdefs/diagnostic/eClMsgType.hpp"
-#include "corevals/enumdefs/diagnostic/eClWarning.hpp"
-#include "corevals/enumdefs/diagnostic/eClWarningCategory.hpp"
+#include "diagnostic/eClDiagnostic.hpp"
+#include "diagnostic/eClDiagnosticCategory.hpp"
+#include "diagnostic/eClErr.hpp"
+#include "diagnostic/eClErrCategory.hpp"
+#include "diagnostic/eClGuide.hpp"
+#include "diagnostic/eClGuideCategory.hpp"
+#include "diagnostic/eClMsg.hpp"
+#include "diagnostic/eClMsgType.hpp"
+#include "diagnostic/eClWarning.hpp"
+#include "diagnostic/eClWarningCategory.hpp"
 
 /// @section Compiler core enum definitions.
 ///
@@ -76,15 +77,15 @@ using corevals::toolset::eProgLangToCStr;
 using corevals::toolset::eToolchainToCStr;
 
 // CLI Driver : Enums which describe an aspect of the command line interface abstraction layer.
-using corevals::driver::eDriverFlag;
-using corevals::driver::eDriverFlagInterp;
-using corevals::driver::eDriverValueType;
-using corevals::driver::eDriverVerbosity;
-
-using corevals::driver::eDriverFlagInterpToCStr;
-using corevals::driver::eDriverFlagToCStr;
-using corevals::driver::eDriverValueTypeToCStr;
-using corevals::driver::eDriverVerbosityToCStr;
+//using corevals::driver::eDriverFlag;
+//using corevals::driver::eDriverFlagInterp;
+//using corevals::driver::eDriverValueType;
+//using corevals::driver::eDriverVerbosity;
+//
+//using corevals::driver::eDriverFlagInterpToCStr;
+//using corevals::driver::eDriverFlagToCStr;
+//using corevals::driver::eDriverValueTypeToCStr;
+//using corevals::driver::eDriverVerbosityToCStr;
 
 // C& Grammar : Enums which describe an aspect of the C& grammar.
 using corevals::grammar::eAssoc;

@@ -46,10 +46,10 @@ add_library(cnd_compiler_interface INTERFACE)
 target_include_directories(cnd_compiler_interface 
   INTERFACE "${cnd_compiler_interface_HEADERS_DIR}"
 )
-target_sources(cnd_compiler_interface INTERFACE
-  "${cnd_compiler_interface_SOURCES_DIR}/CliMain.cpp" # SsgcCliMain.hpp
-  "${cnd_compiler_interface_SOURCES_DIR}/CliDriver.cpp" # SsgcDriver.hpp
-)
+#target_sources(cnd_compiler_interface INTERFACE
+#  "${cnd_compiler_interface_SOURCES_DIR}/CliMain.cpp" # SsgcCliMain.hpp
+#  "${cnd_compiler_interface_SOURCES_DIR}/CliDriver.cpp" # SsgcDriver.hpp
+#)
 target_link_libraries(cnd_compiler_interface 
   INTERFACE mta_box::mta_library
             cxxx_box::cxxx_library

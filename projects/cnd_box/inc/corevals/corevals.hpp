@@ -15,15 +15,10 @@
 /// @{
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
+#include "ccapi/CommonCppApi.hpp"
 #include "corevals/compiler_enums.hpp"
 #include "corevals/compiler_enum_traits.hpp"
 // clang-format on
-
-// constexpr std::string_view WhiteSpaceChars = " \t\n\r\f\v";
-// constexpr std::string_view NumericCharsMinus = "-1234567890";
-// constexpr std::string_view AlphaNumericChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-
 
 /// @} // end of cnd_corevals
 

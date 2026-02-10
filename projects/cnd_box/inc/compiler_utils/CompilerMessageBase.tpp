@@ -1,0 +1,65 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+// Licensed under the GNU Affero General Public License, Version 3.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup cnd_corevals
+/// @brief Compiler Diagnostic Message Base Implementation Header
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cnd_compiler_cldev
+/// @{
+#pragma once
+#include "CompilerMessageBase.hpp"
+// clang-format off
+#include "ccapi/CommonCppApi.hpp"
+// clang-format on
+
+namespace cnd {
+namespace cldev {
+namespace clmsg {
+
+using std::get;                // For ClMsgDataUnionT accessing std::variant.
+using std::holds_alternative;  // For ClMsgDataUnionT accessing std::variant.
+using std::to_underlying;      // To get the diagnostic enum's underlying value.
+
+/////////////////////////////////////////////////////////
+/* Implement ClMsgChain, ClMsgUnion, and ClMsg classes */
+/////////////////////////////////////////////////////////
+
+
+}  // namespace clmsg
+}  // namespace cldev
+
+// template <class T>
+// using CompilerProcessResult = Ex<T, CompilerMessageBuffer>;
+// using CompilerProcessFailure = CompilerProcessResult<CompilerMessageBuffer>;
+
+}  // namespace cnd
+
+/// @} // end of cnd_compiler_cldev
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+//
+// This program is free software : you can redistribute it and / or modify it
+// under the terms of the GNU Affero General Public License as published by the
+// Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

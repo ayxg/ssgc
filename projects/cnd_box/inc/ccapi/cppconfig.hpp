@@ -23,7 +23,7 @@
 // clang-format off
 #include "mta.hpp"   // Meta Template Archive
 #include "cxxx.hpp"  // C++Extended Standard Library
-#include "macroconfig.hpp"
+#include "ccapi/MacroConfig.hpp"
 // clang-format on
 
 namespace cnd::ccapi {

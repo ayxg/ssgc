@@ -16,7 +16,7 @@
 
 #pragma once
 // clang-format off
-#include "use_ccapi.hpp"
+#include "ccapi/CommonCppApi.hpp"
 #include "use_corevals.hpp"
 #include "use_clmsg.hpp"
 #include "cldata/tk.hpp"

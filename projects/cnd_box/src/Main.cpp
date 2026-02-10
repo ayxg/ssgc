@@ -12,18 +12,15 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // clang-format off
-#include "use_ccapi.hpp"
-#include "use_corevals.hpp"
-#include "cldev/compiler_message_base.hpp"
-#include "cldev/error_messages.hpp"
-#include "cldata/tk.hpp"
-#include "trtools/Lexer.hpp"
-#include "trtools/Parser.hpp"
-
-#include "CliMain.hpp" // testing the cli main.
+#include "ccapi/CommonCppApi.hpp"
+#include "cli/CliDriver.hpp" // testing the cli main.
 // clang-format on
 
-int main(int argc, char* argv[], char* envp[]) { return cnd::CliMain(argc, argv,nullptr); }
+int main(int argc, char* argv[], char* envp[]) { 
+  auto cli_res = cnd::driver::CliMain(argc, argv, envp);
+  if (!cli_res) return EXIT_FAILURE;
+  return cli_res->exit_code; 
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // @project: C& Programming Language
