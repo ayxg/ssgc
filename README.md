@@ -1,7 +1,9 @@
 # C& Programming Language Full Environment Package
 A complete package with minimal external dependencies for creating and deploying C& programs and libraries.
 
-The C& complier may be used directly from the command line to build and execute files or as a library included in your C++ code. A rudimentary IDE with a user interface is provided to ease the learning curve and enourage use of the language. Currently the IDE uses ImGui-SFML to generate the user interface - the end goal is to only depend on VulkanAPI and embed the IDE into a browser to allow writing C& program from the browser.
+The C& complier may be used directly from the command line to build and execute files or as a library included in your C++ code. A rudimentary IDE with a user interface 
+is provided to ease the learning curve and enourage use of the language. Currently the IDE uses ImGui-SFML to generate the user interface - the end goal is to only depend
+on VulkanAPI and embed the IDE into a browser to allow writing C& program from the browser.
 
 | **Includes** | **Description** |
 |--|--|
@@ -11,22 +13,25 @@ The C& complier may be used directly from the command line to build and execute 
 | **MTA** : C++ Meta Template Archive | Variety of meta template methods and structures , for more ergonomic metaprogramming.|
 | **MINT** : Minimal C++ Testing Framework | Used to unit test other project submodules.|
 
-# The C& Programming Language
-Pronunciation: ì**candy**î or ì**see-and**î.
+# C& : Compiled and Interpreted Programming Language
+Pronunciation: ‚Äú**candy**‚Äù or ‚Äú**see-and**‚Äù.
 
-First of, I will let the code do the talking. Have a taste of C&:
+### Core Unique Features:
+- Non-deterministic compile time evaluation. Compile time code is evaluated and run on the host machine to generate a final translation input for a target machine.
+- Multiple process and library definitions within a single codebase. Explicitly define and compile multiple executables and libraries from a single project.
 
+### Syntax Examples
 **Example#1: Unrelated animal types which all make sounds, displays use of dynamic types.**
  ![ex1](https://i.imgur.com/BJbjYaK.png)
  
 **Example#2: The Husky which makes diffrent sounds based on it's mood, displays use of template metaprogramming.**
  ![](https://i.imgur.com/xgGejGT.png)
 
-### Goals 
+### End Goals 
 1. Quick and easy **deployment of a minimum viable product** with the **ability to scale and stay maintainable** by opting in to **type and logic safety** incrementally.
 2. Low cognitive load on the programmer with **legible self-explanatory syntax** that is **familiar in logic to mainstream C-like languages**. (C/C++)    
-3. **Plug and play** on top of any C++ environment and call native C++ methods from C&. **#include ìcandi.hî is all you need.**  
+3. **Plug and play** on top of any C++ environment and call native C++ methods from C&. **#include ‚Äúcandi.h‚Äù is all you need.**  
 
 ### Design Philosophies 
-1. ìWhen there is a right way, there should be one choice. When there is no right way, there should be as many choices as possible.î 
-2. ìIf it can happen at compile time it should happen at compile time,  unless it must happen at run time.î 
+1. ‚ÄúWhen there is a right way, there should be one choice. When there is no right way, there should be as many choices as possible.‚Äù 
+2. ‚ÄúIf it can happen at compile time it should happen at compile time,  unless it must happen at run time.‚Äù 
