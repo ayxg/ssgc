@@ -42,13 +42,13 @@ struct LexerCursor {
   Tk processed_tk{eTk::kNONE};
   StrView read_head{""};
 
-  constexpr LexerCursor() noexcept;
-  constexpr LexerCursor(StrView read_head, eTk tk, StrView literal) noexcept;
-  constexpr LexerCursor(StrView read_head) noexcept;
-  constexpr LexerCursor(StrView read_head, eTk tk) noexcept;
-  constexpr LexerCursor(eTk tk, const StrView& src, SrcViewConstIter lit_begin, SrcViewConstIter lit_end);
+  // constexpr LexerCursor() noexcept;
+  // constexpr LexerCursor(StrView read_head, eTk tk, StrView literal) noexcept;
+  // constexpr LexerCursor(StrView read_head) noexcept;
+  // constexpr LexerCursor(StrView read_head, eTk tk) noexcept;
+  constexpr LexerCursor(eTk tk, const StrView& src, SrcViewConstIter lit_begin, SrcViewConstIter lit_end) noexcept;
   constexpr LexerCursor(eTk tk, const StrView& src, SrcViewConstIter lit_begin, SrcViewConstIter lit_end, Size beg_line,
-                        Size beg_col, Size end_line, Size end_col);
+                        Size beg_col, Size end_line, Size end_col) noexcept;
 };
 
 class Lexer {
@@ -77,7 +77,10 @@ class Lexer {
  private:  // Internal helper methods for tracking line and col count accross lexing methods.
   constexpr Size& AdvanceLine(const StrView::const_iterator& from, const StrView::const_iterator& to) noexcept;
   constexpr Size& AdvanceCol(const StrView::const_iterator& from, const StrView::const_iterator& to) noexcept;
-
+  constexpr LexerCursor ProduceToken(eTk token_type, SrcView source, const SrcViewConstIter& from,
+                                            const SrcViewConstIter& to) noexcept {
+    return LexerCursor(eTk::kIdent, source, from, to, curr_line_, curr_col_, AdvanceCol(from, to), curr_line_);
+  }
  private:
   Size curr_line_{0};      ///> Used to maintain line count across intermediate lexing methods.
   Size curr_col_{0};       ///> Used to maintain column count across intermediate lexing methods.
@@ -132,15 +135,15 @@ constexpr Lexer::LexerOutputT Lexer::Lex(StrView s) noexcept {
   return lx.Process(s);
 }
 
-constexpr LexerCursor::LexerCursor(StrView read_head, eTk tk, StrView literal) noexcept
-    : read_head(read_head), processed_tk(tk, literal) {}
-
-constexpr LexerCursor::LexerCursor(StrView read_head) noexcept
-    : read_head(read_head), processed_tk(eTk::kNONE, read_head.substr(0, 0)) {}
-
-constexpr LexerCursor::LexerCursor(StrView read_head, eTk tk) noexcept
-    : read_head(read_head), processed_tk(tk, read_head.substr(0, 0)) {}
-
+//constexpr LexerCursor::LexerCursor(StrView read_head, eTk tk, StrView literal) noexcept
+//    : read_head(read_head), processed_tk(tk, literal) {}
+//
+//constexpr LexerCursor::LexerCursor(StrView read_head) noexcept
+//    : read_head(read_head), processed_tk(eTk::kNONE, read_head.substr(0, 0)) {}
+//
+//constexpr LexerCursor::LexerCursor(StrView read_head, eTk tk) noexcept
+//    : read_head(read_head), processed_tk(tk, read_head.substr(0, 0)) {}
+//
 constexpr LexerCursor::LexerCursor(eTk tk, const StrView& s, StrView::const_iterator lit_begin,
                                    StrView::const_iterator lit_end)
     : processed_tk(tk, StrView{s.data() + std::distance(s.begin(), lit_begin),
@@ -156,7 +159,7 @@ constexpr LexerCursor::LexerCursor(eTk tk, const StrView& s, StrView::const_iter
           beg_line, beg_col, end_line, end_col),
       read_head(StrView{s.data() + std::distance(s.begin(), lit_end)}) {}
 
-constexpr LexerCursor::LexerCursor() noexcept = default;
+// constexpr LexerCursor::LexerCursor() noexcept = default;
 
 constexpr Size& Lexer::AdvanceLine(const StrView::const_iterator& from, const StrView::const_iterator& to) noexcept {
   curr_line_ += std::distance(from, to);
@@ -197,7 +200,6 @@ constexpr Lexer::LexerResultT Lexer::LexNumber(StrView s) noexcept {
 
   if ((IsInRange(c, s) && *c == '.') && (IsInRange(next(c), s) && *next(c) == '.') &&
       (IsInRange(next(c, 2), s) && *next(c, 2) == '.'))  // If decimal is followed by ellipsis('...'),
-
     return LexerCursor(eTk::kLitInt, s, beg, c, curr_line_, curr_col_, AdvanceCol(beg, c),
                        curr_line_);  // return as a signed int early.
 
@@ -223,42 +225,30 @@ constexpr Lexer::LexerResultT Lexer::LexNumber(StrView s) noexcept {
                      curr_line_);  // Signed int.
 }
 
-constexpr Lexer::LexerResultT Lexer::LexIdentifier(StrView s) noexcept {
-  using std::distance;
-  auto c = s.begin();
-  while (IsInRange(c, s) && IsSrcCharAlnumus(*c)) c++;
+constexpr Lexer::LexerResultT Lexer::LexIdentifier(StrView src) noexcept {
+  auto beg = src.begin();
+  auto curr = beg;
 
-  // Todo: optimization, if id_size is not any of keyword sizes, can skip
-  // keyword check.
-  eTk etk = GetTkFromKeyword(s.substr(0, static_cast<Size>(distance(s.begin(), c))));
+#if _DEBUG
+  if (!IsInRange(curr, src))
+    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, "Opening char is eof.")};
+  if (!IsSrcCharAlnumus(*curr))
+    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, "Opening char is not an alnumus.")};
+#endif
 
-  if (etk != eTk::kNONE) return LexerCursor(etk, s, s.begin(), c);
+  while (IsInRange(curr, src) && IsSrcCharAlnumus(*curr)) curr++;
 
-  //// Check for string literal operator.
-  // if (crsr.Get() == eSrcChar::kQuotation) {
-  //   crsr.Advance();
-  //   while (true) {
-  //     if (crsr.Get() == eSrcChar::kQuotation && crsr.Next().FindForward(id)) {
-  //         //end of literal
-  //         break;
-  //     }
-  //     crsr.Advance();
-  //     if (crsr.AtEof())
-  //       return ClFail(MakeClErr<kUnterminatedStringLiteral>());
-  //   }
+  // Check for matching keyword.
+  eTk etk = GetTkFromKeyword(src.substr(0, static_cast<Size>(distance(beg, curr))));
+  if (etk != eTk::kNONE) return ProduceToken(etk, src, beg, curr);
 
-  //  Tk tk = eTk::kLitCstr;
-  //  tk.SetBeginLoc(id_beg);
-  //  tk.SetEndLoc(crsr);
-  //  return OffsetLexRes{tk, crsr};
-  //}
-
-  return LexerCursor(eTk::kIdent, s, s.begin(), c);
+  return ProduceToken(eTk::kIdent, src, beg, curr);
 }
 
 constexpr Lexer::LexerResultT Lexer::LexPunctuator(StrView s) noexcept {
   using std::distance;
   auto c = s.begin();
+
 #if _DEBUG
   if (!IsInRange(c, s))
     return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, "Opening char is eof.")};
