@@ -32,9 +32,15 @@ using std::get;                // For ClMsgDataUnionT accessing std::variant.
 using std::holds_alternative;  // For ClMsgDataUnionT accessing std::variant.
 using std::to_underlying;      // To get the diagnostic enum's underlying value.
 using corevals::diagnostic::eClErr;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* kCompilerDevDebugError */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// Developer debug error. Has to be a macro to pass current source location at call site.
+#define CND_ERROR_DEV_DEBUG(msg)                                                       \
+  cnd::cldev::clmsg::MakeClMsg<cnd::corevals::diagnostic::eClErr::kCompilerDevDebugError>(std::source_location{}.current(), \
+                                                                                    ##msg)
 
 CND_MM_CLMSG_MAKE_FNSIG(eClErr, kCompilerDevDebugError, const std::source_location & cpp_loc, const Str& message) {
   ClMsgDataBufferT data = ConvertCppSourceLocationToClMsgData(cpp_loc);
