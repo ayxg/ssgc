@@ -63,6 +63,7 @@ class Lexer {
   constexpr LexerOutputT Process(StrView src_str) noexcept;
   static constexpr LexerOutputT Lex(StrView s) noexcept;
   static constexpr Vec<Tk> Sanitize(const Vec<Tk>& output_tokens) noexcept;
+
  public:  // Intermediate lexing methods. Only access for testing or exceptional cases.
   constexpr LexerResultT LexNumber(StrView src_str) noexcept;
   constexpr LexerResultT LexIdentifier(StrView src_str) noexcept;
@@ -78,16 +79,15 @@ class Lexer {
   constexpr Size& AdvanceLine(const StrView::const_iterator& from, const StrView::const_iterator& to) noexcept;
   constexpr Size& AdvanceCol(const StrView::const_iterator& from, const StrView::const_iterator& to) noexcept;
   constexpr LexerCursor ProduceToken(eTk token_type, SrcView source, const SrcViewConstIter& from,
-                                            const SrcViewConstIter& to) noexcept {
+                                     const SrcViewConstIter& to) noexcept {
     return LexerCursor(eTk::kIdent, source, from, to, curr_line_, curr_col_, AdvanceCol(from, to), curr_line_);
   }
+
  private:
   Size curr_line_{0};      ///> Used to maintain line count across intermediate lexing methods.
   Size curr_col_{0};       ///> Used to maintain column count across intermediate lexing methods.
   StrView read_head_{""};  ///> Next read location where a token opening pattern is searched from.
 };
-
-
 
 // String literal token operator.
 namespace literals {
@@ -135,14 +135,14 @@ constexpr Lexer::LexerOutputT Lexer::Lex(StrView s) noexcept {
   return lx.Process(s);
 }
 
-//constexpr LexerCursor::LexerCursor(StrView read_head, eTk tk, StrView literal) noexcept
-//    : read_head(read_head), processed_tk(tk, literal) {}
+// constexpr LexerCursor::LexerCursor(StrView read_head, eTk tk, StrView literal) noexcept
+//     : read_head(read_head), processed_tk(tk, literal) {}
 //
-//constexpr LexerCursor::LexerCursor(StrView read_head) noexcept
-//    : read_head(read_head), processed_tk(eTk::kNONE, read_head.substr(0, 0)) {}
+// constexpr LexerCursor::LexerCursor(StrView read_head) noexcept
+//     : read_head(read_head), processed_tk(eTk::kNONE, read_head.substr(0, 0)) {}
 //
-//constexpr LexerCursor::LexerCursor(StrView read_head, eTk tk) noexcept
-//    : read_head(read_head), processed_tk(tk, read_head.substr(0, 0)) {}
+// constexpr LexerCursor::LexerCursor(StrView read_head, eTk tk) noexcept
+//     : read_head(read_head), processed_tk(tk, read_head.substr(0, 0)) {}
 //
 constexpr LexerCursor::LexerCursor(eTk tk, const StrView& s, StrView::const_iterator lit_begin,
                                    StrView::const_iterator lit_end)
@@ -174,55 +174,51 @@ constexpr Size& Lexer::AdvanceCol(const StrView::const_iterator& from, const Str
 constexpr Lexer::LexerResultT Lexer::LexNumber(StrView s) noexcept {
   using std::next;
   auto beg = s.begin();
-  auto c = s.begin();
+  auto curr = s.begin();
+
 #if _DEBUG
-  if (!IsInRange(c, s))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, " Opening char is eof.")};
-  if (!IsSrcCharNumeric(*c))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, " Opening char is not numeric.")};
+  if (!IsInRange(curr, s)) return LexerFailT{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
+  if (!IsSrcCharNumeric(*curr)) return LexerFailT{CND_ERROR_DEV_DEBUG("Opening char is not numeric.")};
 #endif
-  if (*c == '1' || *c == '0')  // Check for a bit literal '0b' or '1b'.
-    if (IsInRange(next(c), s) && *next(c) == 'b')
-      return LexerCursor(eTk::kLitBool, s, c, next(c, 2), curr_line_, curr_col_, curr_line_, AdvanceCol(c, next(c, 2)));
 
-  while (IsInRange(c, s) && IsSrcCharNumeric(*c)) c++;  // Consume the decimal digits.
+  // Check for a bit literal '0b' or '1b'.
+  if (*curr == '1' || *curr == '0')
+    if (IsInRange(next(curr), s) && *next(curr) == 'b') return ProduceToken(eTk::kLitBool, s, curr, next(curr, 2));
 
-  if (!IsInRange(c, s))  // Unlikely. If at eof and return int.
-    return LexerCursor(eTk::kLitInt, s, beg, c, curr_line_, curr_col_, curr_line_, AdvanceCol(beg, c));
+  // Consume the decimal digits.
+  while (IsInRange(curr, s) && IsSrcCharNumeric(*curr)) curr++;
 
-  if (IsInRange(c, s) && *c == 'u')
-    return LexerCursor(eTk::kLitUint, s, beg, ++c, curr_line_, curr_col_, AdvanceCol(beg, c),
-                       curr_line_);  // Unsigned int.
+  // Unlikely but just in case. If at eof and return int.
+  if (!IsInRange(curr, s)) ProduceToken(eTk::kLitInt, s, beg, curr);
 
-  if (IsInRange(c, s) && *c == 'c')
-    return LexerCursor(eTk::kLitByte, s, beg, ++c, curr_line_, curr_col_, AdvanceCol(beg, c),
-                       curr_line_);  // Unsigned byte.
+  // Unsigned int.
+  if (IsInRange(curr, s) && *curr == 'u') return ProduceToken(eTk::kLitUint, s, beg, ++curr);
 
-  if ((IsInRange(c, s) && *c == '.') && (IsInRange(next(c), s) && *next(c) == '.') &&
-      (IsInRange(next(c, 2), s) && *next(c, 2) == '.'))  // If decimal is followed by ellipsis('...'),
-    return LexerCursor(eTk::kLitInt, s, beg, c, curr_line_, curr_col_, AdvanceCol(beg, c),
-                       curr_line_);  // return as a signed int early.
+  // Unsigned byte.
+  if (IsInRange(curr, s) && *curr == 'c') return ProduceToken(eTk::kLitByte, s, beg, ++curr);
 
-  if ((IsInRange(c, s) && *c == '.')) {                   // Read in decimal digits if a period is found.
-    c++;                                                  // Skip '.'
-    while (IsInRange(c, s) && IsSrcCharNumeric(*c)) c++;  // Consume the fractional digits.
+  // If decimal is followed by ellipsis('...'), return as a signed int early.
+  if ((IsInRange(curr, s) && *curr == '.') && (IsInRange(next(curr), s) && *next(curr) == '.') &&
+      (IsInRange(next(curr, 2), s) && *next(curr, 2) == '.'))
+    return ProduceToken(eTk::kLitInt, s, beg, curr);
 
-    if (IsInRange(c, s) && *c == 'f') {
-      return LexerCursor(eTk::kLitReal, s, beg, ++c, curr_line_, curr_col_, AdvanceCol(beg, c),
-                         curr_line_);  // 42.f -> Float
+  // Else it's a floating point literal. Read in decimal digits if a period is found.
+  if ((IsInRange(curr, s) && *curr == '.')) {
+    curr++;                                                        // Skip '.'
+    while (IsInRange(curr, s) && IsSrcCharNumeric(*curr)) curr++;  // Consume the fractional digits.
+
+    if (IsInRange(curr, s) && *curr == 'f') {
+      return ProduceToken(eTk::kLitReal, s, beg, ++curr);  // 42.f -> Float
     }
 
-    if (IsInRange(c, s) && *c == 'r') {
-      return LexerCursor(eTk::kLitReal, s, beg, ++c, curr_line_, curr_col_, AdvanceCol(beg, c),
-                         curr_line_);  // 42.r -> Real
+    if (IsInRange(curr, s) && *curr == 'r') {
+      return ProduceToken(eTk::kLitReal, s, beg, ++curr);  // 42.r -> Real
     }
 
-    return LexerCursor(eTk::kLitReal, s, beg, c, curr_line_, curr_col_, AdvanceCol(beg, c),
-                       curr_line_);  // 40. -> Double.
+    return ProduceToken(eTk::kLitReal, s, beg, curr);  // 40. -> Double.
   }
 
-  return LexerCursor(eTk::kLitInt, s, beg, c, curr_line_, curr_col_, AdvanceCol(beg, c),
-                     curr_line_);  // Signed int.
+  return ProduceToken(eTk::kLitInt, s, beg, curr);  // Signed int.
 }
 
 constexpr Lexer::LexerResultT Lexer::LexIdentifier(StrView src) noexcept {
@@ -230,10 +226,8 @@ constexpr Lexer::LexerResultT Lexer::LexIdentifier(StrView src) noexcept {
   auto curr = beg;
 
 #if _DEBUG
-  if (!IsInRange(curr, src))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, "Opening char is eof.")};
-  if (!IsSrcCharAlnumus(*curr))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, "Opening char is not an alnumus.")};
+  if (!IsInRange(curr, src)) return LexerFailT{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
+  if (!IsSrcCharAlnumus(*curr)) return LexerFailT{CND_ERROR_DEV_DEBUG("Opening char is not an alnumus.")};
 #endif
 
   while (IsInRange(curr, src) && IsSrcCharAlnumus(*curr)) curr++;
@@ -350,7 +344,7 @@ constexpr Lexer::LexerResultT Lexer::LexPunctuator(StrView s) noexcept {
     if (IsInRange(next(c), s) && *next(c) == ':')
       return LexerCursor(eTk::kDoubleColon, s, c, next(c, 2));
     else
-    return LexerCursor(eTk::kColon, s, c, next(c));
+      return LexerCursor(eTk::kColon, s, c, next(c));
   } else if (*c == ';') {
     return LexerCursor(eTk::kSemicolon, s, c, next(c));
   } else if (*c == ',') {
@@ -474,19 +468,19 @@ constexpr Lexer::LexerResultT Lexer::LexBlockComment(StrView s) noexcept {
     return LexerFailT{
         MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is not a backtick.")};
 #endif
-  std::advance(c,2); // pass "/`"
+  std::advance(c, 2);  // pass "/`"
   while (IsInRange(c, s)) {
     // Check for end of block.
     if (*c == '`') {
       if (!IsInRange(next(c), s))
-        return LexerFailT{
-            MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), "Reached eof before end of block comment.")};
+        return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(),
+                                                                    "Reached eof before end of block comment.")};
 
       if (*next(c) == '/') {
-        std::advance(c, 2); // pass "`/" 
+        std::advance(c, 2);  // pass "`/"
         return LexerCursor(eTk::kBlockComment, s, s.begin(), c);
       }
-    } 
+    }
     // cont.
     c++;
   }
@@ -562,27 +556,23 @@ constexpr Lexer::LexerOutputT Lexer::Process(StrView s) noexcept {
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
       // Unknown beggining of token...
-    } 
-    else if (read_head_[0] == '`') { // Line Comment
+    } else if (read_head_[0] == '`') {  // Line Comment
       auto res_buff = LexLineComment(read_head_);
       if (!res_buff) return LexerFailT{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
-    } 
-    else if (read_head_[0] == '/' && read_head_.size() > 1 && read_head_[1] == '`') {
+    } else if (read_head_[0] == '/' && read_head_.size() > 1 && read_head_[1] == '`') {
       auto res_buff = LexBlockComment(read_head_);
       if (!res_buff) return LexerFailT{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
-    }
-    else if (IsSrcCharPunctuator(read_head_[0])) {
+    } else if (IsSrcCharPunctuator(read_head_[0])) {
       auto res_buff = LexPunctuator(read_head_);
       if (!res_buff) return LexerFailT{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
       // Quotations initial
-    } 
-    else {
+    } else {
       return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(
           CppSrcLocT{}, Str{"Unexpected codepoint encountered in source:"} + read_head_[0])};
     }
@@ -597,11 +587,12 @@ constexpr Vec<Tk> Lexer::Sanitize(const Vec<Tk>& output_tokens) noexcept {
   return [&]() constexpr {
     Vec<Tk> new_output;
     for (auto i = output_tokens.cbegin(); i != output_tokens.cend(); ++i) {
-      const std::initializer_list<eTk> REDUNDANT_TOKEN_KINDS{eTk::kLineComment, eTk::kBlockComment,eTk::kLineComment,eTk::kWhitespace,eTk::kNewline};
+      const std::initializer_list<eTk> REDUNDANT_TOKEN_KINDS{eTk::kLineComment, eTk::kBlockComment, eTk::kLineComment,
+                                                             eTk::kWhitespace, eTk::kNewline};
 
       if (std::any_of(REDUNDANT_TOKEN_KINDS.begin(), REDUNDANT_TOKEN_KINDS.end(),
                       [i](eTk match) { return match == i->Type(); })) {
-        //new_output.push_back(eTk::kWhitespace);
+        // new_output.push_back(eTk::kWhitespace);
         continue;
       } else {  // Push back non-redundant tokens
         new_output.push_back(*i);
