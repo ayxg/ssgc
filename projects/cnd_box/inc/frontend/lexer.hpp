@@ -74,6 +74,15 @@ class Lexer {
  private:  // Internal helper methods for tracking line and col count accross lexing methods.
   constexpr Size& AdvanceLine(const StrView::const_iterator& from, const StrView::const_iterator& to) noexcept;
   constexpr Size& AdvanceCol(const StrView::const_iterator& from, const StrView::const_iterator& to) noexcept;
+  constexpr void AdvanceSourceLocation(SrcView source, SrcViewConstIter passed_char) noexcept {
+    if (CheckChar(source, passed_char, IsSrcCharNewline<char>)) {
+      // Handle Windows-style CRLF newlines as a single newline. Skip line advance.
+      if (!(*passed_char == '\r' && CheckChar(source, next(passed_char), '\n'))) curr_line_++;
+      curr_col_ = 1;
+    } else {
+      curr_col_++;
+    }
+  }
   constexpr LexerCursor ProduceToken(eTk token_type, SrcView source, const SrcViewConstIter& from,
                                      const SrcViewConstIter& to) noexcept {
     return LexerCursor(eTk::kIdent, source, from, to, curr_line_, curr_col_, AdvanceCol(from, to), curr_line_);
