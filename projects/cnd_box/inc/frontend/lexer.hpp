@@ -158,6 +158,7 @@ constexpr LexerCursor::LexerCursor(eTk tk, const StrView& s, StrView::const_iter
 
 constexpr Size& Lexer::AdvanceLine(const StrView::const_iterator& from, const StrView::const_iterator& to) noexcept {
   curr_line_ += std::distance(from, to);
+  curr_col_ = 1;
   return curr_line_;
 }
 
