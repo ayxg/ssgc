@@ -135,6 +135,10 @@ void TestCheckLexerErrorCode(SrcView source, cnd::cldev::clmsg::eClErr expected_
                   lex_result.error().GetLastMessageId().code));
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Numeric literals.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 TEST(LexerTokens, LiteralU1) {
   TestSingleToken("1b", eTk::kLitU1);
   TestSingleToken("0b", eTk::kLitU1);
@@ -211,12 +215,9 @@ TEST(LexerTokens, LiteralReal) {
   TestSingleToken("123.456r", eTk::kLitReal);
 }
 
-TEST(LexerTokens, Ident) {
-  TestSingleToken("foo", eTk::kIdent);
-  TestSingleToken("foo_", eTk::kIdent);
-  TestSingleToken("foo_123", eTk::kIdent);
-  TestSingleToken("_foo_123", eTk::kIdent);
-}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Punctuators.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TEST(LexerTokens, Hash) { TestSingleToken("#", eTk::kHash); }
 
@@ -322,6 +323,10 @@ TEST(LexerTokens, Backlash) { TestSingleToken("\\", eTk::kBacklash); }
 
 TEST(LexerTokens, Question) { TestSingleToken("?", eTk::kQuestion); }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Whitespace/comments.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 TEST(LexerTokens, Whitespace) {
   TestSingleToken(" ", eTk::kWhitespace);
   TestSingleToken("\t", eTk::kWhitespace);
@@ -349,63 +354,9 @@ TEST(LexerTokens, BlockComment) {
   TestSingleToken("/` comment \n`/", eTk::kBlockComment, 1, 3, 1, 2);
 }
 
-TEST(LexerTokens, Keywords) {
-  TestSingleToken("def", eTk::kKwDef);
-  TestSingleToken("fn", eTk::kKwFn);
-  TestSingleToken("class", eTk::kKwClass);
-  TestSingleToken("main", eTk::kKwMain);
-  TestSingleToken("import", eTk::kKwImport);
-  TestSingleToken("namespace", eTk::kKwNamespace);
-  TestSingleToken("using", eTk::kKwUse);
-  TestSingleToken("lib", eTk::kKwLib);
-  TestSingleToken("dll", eTk::kKwDll);
-  TestSingleToken("enum", eTk::kKwEnum);
-  TestSingleToken("if", eTk::kKwIf);
-  TestSingleToken("elif", eTk::kKwElif);
-  TestSingleToken("else", eTk::kKwElse);
-  TestSingleToken("cxif", eTk::kKwCxif);
-  TestSingleToken("cxelif", eTk::kKwCxelif);
-  TestSingleToken("cxelse", eTk::kKwCxelse);
-  TestSingleToken("switch", eTk::kKwSwitch);
-  TestSingleToken("case", eTk::kKwCase);
-  TestSingleToken("default", eTk::kKwDefault);
-  TestSingleToken("while", eTk::kKwWhile);
-  TestSingleToken("for", eTk::kKwFor);
-  TestSingleToken("return", eTk::kKwReturn);
-  TestSingleToken("break", eTk::kKwBreak);
-  TestSingleToken("continue", eTk::kKwContinue);
-  TestSingleToken("int", eTk::kKwInt);
-  TestSingleToken("uint", eTk::kKwUint);
-  TestSingleToken("real", eTk::kKwReal);
-  TestSingleToken("bool", eTk::kKwBool);
-  TestSingleToken("char", eTk::kKwChar);
-  TestSingleToken("byte", eTk::kKwByte);
-  TestSingleToken("cstr", eTk::kKwCstr);
-  TestSingleToken("str", eTk::kKwStr);
-  TestSingleToken("ptr", eTk::kKwPtr);
-  TestSingleToken("list", eTk::kKwList);
-  TestSingleToken("array", eTk::kKwArray);
-  TestSingleToken("true", eTk::kKwTrue);
-  TestSingleToken("false", eTk::kKwFalse);
-  TestSingleToken("none", eTk::kKwNone);
-  TestSingleToken("void", eTk::kKwVoid);
-  TestSingleToken("in", eTk::kKwIn);
-  TestSingleToken("as", eTk::kKwAs);
-  TestSingleToken("cin", eTk::kKwCin);
-  TestSingleToken("cout", eTk::kKwCout);
-  TestSingleToken("native", eTk::kKwNative);
-  TestSingleToken("const", eTk::kKwConst);
-  TestSingleToken("ref", eTk::kKwRef);
-  TestSingleToken("private", eTk::kKwPrivate);
-  TestSingleToken("public", eTk::kKwPublic);
-  TestSingleToken("static", eTk::kKwStatic);
-  TestSingleToken("any", eTk::kKwAny);
-  TestSingleToken("auto", eTk::kKwAuto);
-  TestSingleToken("type", eTk::kKwType);
-  TestSingleToken("value", eTk::kKwValue);
-  TestSingleToken("template", eTk::kKwTemplate);
-  TestSingleToken("proc", eTk::kKwProc);
-}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Character sequences.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TEST(LexerTokens, EscapedCharSequence) {
   TestSingleToken("\"Hello World\"", eTk::kLitCstr);
@@ -445,6 +396,85 @@ TEST(LexerTokens, CharacterLiteralError) {
   // Empty char literal.
   TestCheckLexerErrorCode("''", cnd::eClErr::kLexerEmptyCharacterLiteral);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Identifier and keywords.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+TEST(LexerTokens, Ident) {
+  TestSingleToken("foo", eTk::kIdent);
+  TestSingleToken("foo_", eTk::kIdent);
+  TestSingleToken("foo_123", eTk::kIdent);
+  TestSingleToken("_foo_123", eTk::kIdent);
+}
+
+TEST(LexerTokens, KeywordDef) { TestSingleToken("def", eTk::kKwDef); }
+TEST(LexerTokens, KeywordFn) { TestSingleToken("fn", eTk::kKwFn); }
+TEST(LexerTokens, KeywordClass) { TestSingleToken("class", eTk::kKwClass); }
+TEST(LexerTokens, KeywordMain) { TestSingleToken("main", eTk::kKwMain); }
+TEST(LexerTokens, KeywordImport) { TestSingleToken("import", eTk::kKwImport); }
+TEST(LexerTokens, KeywordNamespace) { TestSingleToken("namespace", eTk::kKwNamespace); }
+TEST(LexerTokens, KeywordUse) { TestSingleToken("using", eTk::kKwUse); }
+TEST(LexerTokens, KeywordLib) { TestSingleToken("lib", eTk::kKwLib); }
+TEST(LexerTokens, KeywordDll) { TestSingleToken("dll", eTk::kKwDll); }
+TEST(LexerTokens, KeywordEnum) { TestSingleToken("enum", eTk::kKwEnum); }
+
+TEST(LexerTokens, KeywordIf) { TestSingleToken("if", eTk::kKwIf); }
+TEST(LexerTokens, KeywordElif) { TestSingleToken("elif", eTk::kKwElif); }
+TEST(LexerTokens, KeywordElse) { TestSingleToken("else", eTk::kKwElse); }
+TEST(LexerTokens, KeywordCxif) { TestSingleToken("cxif", eTk::kKwCxif); }
+TEST(LexerTokens, KeywordCxelif) { TestSingleToken("cxelif", eTk::kKwCxelif); }
+TEST(LexerTokens, KeywordCxelse) { TestSingleToken("cxelse", eTk::kKwCxelse); }
+
+TEST(LexerTokens, KeywordSwitch) { TestSingleToken("switch", eTk::kKwSwitch); }
+TEST(LexerTokens, KeywordCase) { TestSingleToken("case", eTk::kKwCase); }
+TEST(LexerTokens, KeywordDefault) { TestSingleToken("default", eTk::kKwDefault); }
+
+TEST(LexerTokens, KeywordWhile) { TestSingleToken("while", eTk::kKwWhile); }
+TEST(LexerTokens, KeywordFor) { TestSingleToken("for", eTk::kKwFor); }
+
+TEST(LexerTokens, KeywordReturn) { TestSingleToken("return", eTk::kKwReturn); }
+TEST(LexerTokens, KeywordBreak) { TestSingleToken("break", eTk::kKwBreak); }
+TEST(LexerTokens, KeywordContinue) { TestSingleToken("continue", eTk::kKwContinue); }
+
+TEST(LexerTokens, KeywordInt) { TestSingleToken("int", eTk::kKwInt); }
+TEST(LexerTokens, KeywordUint) { TestSingleToken("uint", eTk::kKwUint); }
+TEST(LexerTokens, KeywordReal) { TestSingleToken("real", eTk::kKwReal); }
+TEST(LexerTokens, KeywordBool) { TestSingleToken("bool", eTk::kKwBool); }
+TEST(LexerTokens, KeywordChar) { TestSingleToken("char", eTk::kKwChar); }
+TEST(LexerTokens, KeywordByte) { TestSingleToken("byte", eTk::kKwByte); }
+TEST(LexerTokens, KeywordCstr) { TestSingleToken("cstr", eTk::kKwCstr); }
+TEST(LexerTokens, KeywordStr) { TestSingleToken("str", eTk::kKwStr); }
+TEST(LexerTokens, KeywordPtr) { TestSingleToken("ptr", eTk::kKwPtr); }
+TEST(LexerTokens, KeywordList) { TestSingleToken("list", eTk::kKwList); }
+TEST(LexerTokens, KeywordArray) { TestSingleToken("array", eTk::kKwArray); }
+
+TEST(LexerTokens, KeywordTrue) { TestSingleToken("true", eTk::kKwTrue); }
+TEST(LexerTokens, KeywordFalse) { TestSingleToken("false", eTk::kKwFalse); }
+TEST(LexerTokens, KeywordNone) { TestSingleToken("none", eTk::kKwNone); }
+TEST(LexerTokens, KeywordVoid) { TestSingleToken("void", eTk::kKwVoid); }
+
+TEST(LexerTokens, KeywordIn) { TestSingleToken("in", eTk::kKwIn); }
+TEST(LexerTokens, KeywordAs) { TestSingleToken("as", eTk::kKwAs); }
+
+TEST(LexerTokens, KeywordCin) { TestSingleToken("cin", eTk::kKwCin); }
+TEST(LexerTokens, KeywordCout) { TestSingleToken("cout", eTk::kKwCout); }
+
+TEST(LexerTokens, KeywordNative) { TestSingleToken("native", eTk::kKwNative); }
+TEST(LexerTokens, KeywordConst) { TestSingleToken("const", eTk::kKwConst); }
+TEST(LexerTokens, KeywordRef) { TestSingleToken("ref", eTk::kKwRef); }
+
+TEST(LexerTokens, KeywordPrivate) { TestSingleToken("private", eTk::kKwPrivate); }
+TEST(LexerTokens, KeywordPublic) { TestSingleToken("public", eTk::kKwPublic); }
+TEST(LexerTokens, KeywordStatic) { TestSingleToken("static", eTk::kKwStatic); }
+
+TEST(LexerTokens, KeywordAny) { TestSingleToken("any", eTk::kKwAny); }
+TEST(LexerTokens, KeywordAuto) { TestSingleToken("auto", eTk::kKwAuto); }
+TEST(LexerTokens, KeywordType) { TestSingleToken("type", eTk::kKwType); }
+TEST(LexerTokens, KeywordValue) { TestSingleToken("value", eTk::kKwValue); }
+
+TEST(LexerTokens, KeywordTemplate) { TestSingleToken("template", eTk::kKwTemplate); }
+TEST(LexerTokens, KeywordProc) { TestSingleToken("proc", eTk::kKwProc); }
 
 }  // namespace cnd_unit_test::frontend::lexer
 /// @} // end of cnd_unit_test
