@@ -412,9 +412,6 @@ constexpr Lexer::LexerResultT Lexer::LexWhitespace(StrView s) noexcept {
 }
 
 constexpr Lexer::LexerResultT Lexer::LexNewline(StrView s) noexcept {
-  using cldev::clmsg::ClMsgBuffer;
-  using cldev::clmsg::MakeClMsg;
-  using std::source_location;
   auto c = s.begin();
 #if _DEBUG
   if (!IsInRange(c, s)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
@@ -433,36 +430,42 @@ constexpr Lexer::LexerResultT Lexer::LexNewline(StrView s) noexcept {
 }
 
 constexpr Lexer::LexerResultT Lexer::LexEscapedCharSequence(StrView s) noexcept {
-  using cldev::clmsg::ClMsgBuffer;
-  using cldev::clmsg::MakeClMsg;
-  using std::source_location;
   auto c = s.begin();
+
 #if _DEBUG
-  if (!IsInRange(c, s))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, " Opening char is eof.")};
-  if (*c != '"')
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, " Opening char is not a quotation.")};
+  if (!IsInRange(c, s)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
+  if (*c != '"') return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not a quotation.")};
 #endif
+  bool is_escape = false;
+  auto begin_col = curr_col_;
+  auto begin_line = curr_line_;
 
-  c++;  // advance past the opening quotation so we are not out of begin range in the loop.
-  while (!(IsInRange(c, s) && *c == '"' && *next(c, -1) != '\\')) {
-    c++;
-    // Special case '\\'. If there are two backslashes, then it is an escaped
-    // backslash. If next is quotation -> escape. Else continue.
-    // @note: No IsInRange because we are guaranteed to be at least on the 3rd index here.
-    if (*c == '"' && *next(c, -1) == '\\' && *next(c, -2) == '\\') {
-      break;
+  c++;  // Pass opening quote.
+  curr_col_++;
+  while (IsInRange(c, s)) {
+    if (!is_escape) {
+      if (*c == '\\')
+        is_escape = true;
+      else if (*c == '\"' || IsSrcCharNewline(*c))
+        break;  // End of string. Quote or newline.
+    } else {
+      is_escape = false;  // Reset escape.
     }
-  }
-  if (*c == '"') c++;  // Advance past the closing quotation.
+    c++;
+    AdvanceSourceLocation(s, c);
+    }
 
-  return LexerCursor(eTk::kLitCstr, s, s.begin(), c);
+  // Check if ended with a quote.
+  if (IsInRange(c, s) && *c == '"') {
+    c++;  // Advance past the closing quotation.
+    curr_col_++;
+  } else
+    return ClFail{MakeClMsg<eClErr::kLexerUnclosedStringLiteral>()};
+
+  return LexerCursor(eTk::kLitCstr, s, s.begin(), c, begin_line, begin_col, curr_line_, curr_col_);
 }
 
 constexpr Lexer::LexerResultT Lexer::LexLineComment(StrView s) noexcept {
-  using cldev::clmsg::ClMsgBuffer;
-  using cldev::clmsg::MakeClMsg;
-  using std::source_location;
   auto c = s.begin();
 #if _DEBUG
   if (!IsInRange(c, s))
@@ -473,11 +476,11 @@ constexpr Lexer::LexerResultT Lexer::LexLineComment(StrView s) noexcept {
 #endif
   c++;
   while (IsInRange(c, s) && !IsSrcCharNewline(*c)) {
-    c++;
+  c++;
   }
 
   return LexerCursor(eTk::kLineComment, s, s.begin(), c);
-}
+  }
 
 constexpr Lexer::LexerResultT Lexer::LexBlockComment(StrView s) noexcept {
   using cldev::clmsg::ClMsgBuffer;
