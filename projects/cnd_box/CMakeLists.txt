@@ -124,6 +124,19 @@ unset(UT_COMPEVAL_TEST_CODE_BINARY_DIR)
 #]====================================]
 
 minitest_add_executable(
+  NAME                UtCndLexerTokens
+  INCLUDE_DIRECTORIES ut
+  LINK_LIBS           cnd_compiler_interface
+  TEST_HEADERS        UtLexerTokens.hpp
+)
+
+minitest_from_headers(
+  PREFIX UtCndFrontEnd
+  TARGET UtCndLexerTokens
+  HEADERS UtLexerTokens.hpp
+)
+
+minitest_add_executable(
   NAME                UtCndParserPrimaryExpr
   INCLUDE_DIRECTORIES ut
   LINK_LIBS           cnd_compiler_interface
