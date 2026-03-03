@@ -42,10 +42,6 @@ struct LexerCursor {
   Tk processed_tk{eTk::kNONE};
   StrView read_head{""};
 
-  // constexpr LexerCursor() noexcept;
-  // constexpr LexerCursor(StrView read_head, eTk tk, StrView literal) noexcept;
-  // constexpr LexerCursor(StrView read_head) noexcept;
-  // constexpr LexerCursor(StrView read_head, eTk tk) noexcept;
   constexpr LexerCursor(eTk tk, const StrView& src, SrcViewConstIter lit_begin, SrcViewConstIter lit_end) noexcept;
   constexpr LexerCursor(eTk tk, const StrView& src, SrcViewConstIter lit_begin, SrcViewConstIter lit_end, Size beg_line,
                         Size beg_col, Size end_line, Size end_col) noexcept;
