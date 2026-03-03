@@ -265,133 +265,138 @@ constexpr Lexer::LexerResultT Lexer::LexPunctuator(StrView s) noexcept {
   auto c = s.begin();
 
 #if _DEBUG
-  if (!IsInRange(c, s))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, "Opening char is eof.")};
-  if (!IsSrcCharPunctuator(*c))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, "Opening char is not a punctuator.")};
+  if (!IsInRange(c, s)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
+  if (!IsSrcCharPunctuator(*c)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not a punctuator.")};
 #endif
 
   // Switch over all valid initial punctuators which may form a symbol token.
   // The maximum length of any punctuator is 3.
   if (*c == '=') {
-    if (IsInRange(next(c), s) && *next(c) == '=')
-      return LexerCursor(eTk::kEq, s, c, next(c, 2));
+    if (CheckChar(s, next(c), '='))
+      return ProduceToken(eTk::kEq, s, c, next(c, 2));
     else
-      return LexerCursor(eTk::kAssign, s, c, next(c));
+      return ProduceToken(eTk::kAssign, s, c, next(c));
   } else if (*c == '+') {
-    if (IsInRange(next(c), s) && *next(c) == '+')
-      return LexerCursor(eTk::kInc, s, c, next(c, 2));
-    else if (*next(c) == '=')
-      return LexerCursor(eTk::kAddAssign, s, c, next(c, 2));
+    if (CheckChar(s, next(c), '+'))
+      return ProduceToken(eTk::kInc, s, c, next(c, 2));
+    else if (CheckChar(s, next(c), '='))
+      return ProduceToken(eTk::kAddAssign, s, c, next(c, 2));
     else
-      return LexerCursor(eTk::kAdd, s, c, next(c));
+      return ProduceToken(eTk::kAdd, s, c, next(c));
   } else if (*c == '-') {
-    if (IsInRange(next(c), s) && *next(c) == '-')
-      return LexerCursor(eTk::kDec, s, c, next(c, 2));
-    else if (*next(c) == '=')
-      return LexerCursor(eTk::kSubAssign, s, c, next(c, 2));
+    if (CheckChar(s, next(c), '-'))
+      return ProduceToken(eTk::kDec, s, c, next(c, 2));
+    else if (CheckChar(s, next(c), '='))
+      return ProduceToken(eTk::kSubAssign, s, c, next(c, 2));
     else
-      return LexerCursor(eTk::kSub, s, c, next(c));
+      return ProduceToken(eTk::kSub, s, c, next(c));
   } else if (*c == '*') {
-    if (IsInRange(next(c), s) && *next(c) == '=')
-      return LexerCursor(eTk::kMulAssign, s, c, next(c, 2));
+    if (CheckChar(s, next(c), '='))
+      return ProduceToken(eTk::kMulAssign, s, c, next(c, 2));
     else
-      return LexerCursor(eTk::kMul, s, c, next(c));
+      return ProduceToken(eTk::kMul, s, c, next(c));
   } else if (*c == '/') {
-    if (IsInRange(next(c), s) && *next(c) == '=')
-      return LexerCursor(eTk::kDivAssign, s, c, next(c, 2));
+    if (CheckChar(s, next(c), '='))
+      return ProduceToken(eTk::kDivAssign, s, c, next(c, 2));
     else
-      return LexerCursor(eTk::kDiv, s, c, next(c));
+      return ProduceToken(eTk::kDiv, s, c, next(c));
   } else if (*c == '%') {
-    if (IsInRange(next(c), s) && *next(c) == '=')
-      return LexerCursor(eTk::kModAssign, s, c, next(c, 2));
+    if (CheckChar(s, next(c), '='))
+      return ProduceToken(eTk::kModAssign, s, c, next(c, 2));
     else
-      return LexerCursor(eTk::kMod, s, c, next(c));
+      return ProduceToken(eTk::kMod, s, c, next(c));
   } else if (*c == '&') {
-    if (IsInRange(next(c), s) && *next(c) == '=')
-      return LexerCursor(eTk::kAndAssign, s, c, next(c, 2));
-    else if (*next(c) == '&')
-      return LexerCursor(eTk::kAnd, s, c, next(c, 2));
+    if (CheckChar(s, next(c), '='))
+      return ProduceToken(eTk::kAndAssign, s, c, next(c, 2));
+    else if (CheckChar(s, next(c), '&'))
+      return ProduceToken(eTk::kAnd, s, c, next(c, 2));
     else
-      return LexerCursor(eTk::kBand, s, c, next(c));
+      return ProduceToken(eTk::kBand, s, c, next(c));
   } else if (*c == '|') {
-    if (IsInRange(next(c), s) && *next(c) == '=')
-      return LexerCursor(eTk::kOrAssign, s, c, next(c, 2));
-    else if (*next(c) == '|')
-      return LexerCursor(eTk::kOr, s, c, next(c, 2));
+    if (CheckChar(s, next(c), '='))
+      return ProduceToken(eTk::kOrAssign, s, c, next(c, 2));
+    else if (CheckChar(s, next(c), '|'))
+      return ProduceToken(eTk::kOr, s, c, next(c, 2));
     else
-      return LexerCursor(eTk::kBor, s, c, next(c));
+      return ProduceToken(eTk::kBor, s, c, next(c));
   } else if (*c == '^') {
-    if (IsInRange(next(c), s) && *next(c) == '=')
-      return LexerCursor(eTk::kXorAssign, s, c, next(c, 2));
+    if (CheckChar(s, next(c), '='))
+      return ProduceToken(eTk::kXorAssign, s, c, next(c, 2));
     else
-      return LexerCursor(eTk::kXor, s, c, next(c));
+      return ProduceToken(eTk::kXor, s, c, next(c));
   } else if (*c == '<') {
-    if (IsInRange(next(c), s) && *next(c) == '<') {
-      if (IsInRange(next(c), s) && *next(c, 2) == '=')
-        return LexerCursor(eTk::kLshAssign, s, c, next(c, 3));
+    if (CheckChar(s, next(c), '<')) {
+      if (CheckChar(s, next(c, 2), '='))
+        return ProduceToken(eTk::kLshAssign, s, c, next(c, 3));
       else
-        return LexerCursor(eTk::kLsh, s, c, next(c, 2));
-    } else if (*next(c) == '=')
-      return LexerCursor(eTk::kLte, s, c, next(c, 2));
+        return ProduceToken(eTk::kLsh, s, c, next(c, 2));
+    } else if (CheckChar(s, next(c), '=')) {
+      if (CheckChar(s, next(c, 2), '>'))
+        return ProduceToken(eTk::kSpaceship, s, c, next(c, 3));
     else
-      return LexerCursor(eTk::kLt, s, c, next(c));
+        return ProduceToken(eTk::kLte, s, c, next(c, 2));
+    } else
+      return ProduceToken(eTk::kLt, s, c, next(c));
   } else if (*c == '>') {
-    if (IsInRange(next(c), s) && *next(c) == '>') {
-      if (IsInRange(next(c), s) && *next(c) == '=')
-        return LexerCursor(eTk::kRshAssign, s, c, next(c, 3));
+    if (CheckChar(s, next(c), '>')) {
+      if (CheckChar(s, next(c, 2), '='))
+        return ProduceToken(eTk::kRshAssign, s, c, next(c, 3));
       else
-        return LexerCursor(eTk::kRsh, s, c, next(c, 2));
-    } else if (*next(c) == '=')
-      return LexerCursor(eTk::kGte, s, c, next(c, 2));
+        return ProduceToken(eTk::kRsh, s, c, next(c, 2));
+    } else if (CheckChar(s, next(c), '='))
+      return ProduceToken(eTk::kGte, s, c, next(c, 2));
     else
-      return LexerCursor(eTk::kGt, s, c, next(c));
+      return ProduceToken(eTk::kGt, s, c, next(c));
   } else if (*c == '!') {
-    if (IsInRange(next(c), s) && *next(c) == '=')
-      return LexerCursor(eTk::kNeq, s, c, next(c, 2));
+    if (CheckChar(s, next(c), '='))
+      return ProduceToken(eTk::kNeq, s, c, next(c, 2));
     else
-      return LexerCursor(eTk::kNot, s, c, next(c));
+      return ProduceToken(eTk::kNot, s, c, next(c));
   } else if (*c == '~') {
-    return LexerCursor(eTk::kBnot, s, c, next(c));
+    return ProduceToken(eTk::kBnot, s, c, next(c));
   } else if (*c == '@') {
-    return LexerCursor(eTk::kCommercialAt, s, c, next(c));
+    return ProduceToken(eTk::kCommercialAt, s, c, next(c));
   } else if (*c == '#') {
-    return LexerCursor(eTk::kHash, s, c, next(c));
+    return ProduceToken(eTk::kHash, s, c, next(c));
   } else if (*c == '$') {
-    return LexerCursor(eTk::kDollar, s, c, next(c));
+    return ProduceToken(eTk::kDollar, s, c, next(c));
   } else if (*c == '?') {
-    return LexerCursor(eTk::kQuestion, s, c, next(c));
+    return ProduceToken(eTk::kQuestion, s, c, next(c));
   } else if (*c == ':') {
-    if (IsInRange(next(c), s) && *next(c) == ':')
-      return LexerCursor(eTk::kDoubleColon, s, c, next(c, 2));
+    if (CheckChar(s, next(c), ':'))
+      return ProduceToken(eTk::kDoubleColon, s, c, next(c, 2));
+    else if (CheckChar(s, next(c), '='))
+      return ProduceToken(eTk::kNewAssign, s, c, next(c, 2));
     else
-      return LexerCursor(eTk::kColon, s, c, next(c));
+      return ProduceToken(eTk::kColon, s, c, next(c));
   } else if (*c == ';') {
-    return LexerCursor(eTk::kSemicolon, s, c, next(c));
+    return ProduceToken(eTk::kSemicolon, s, c, next(c));
   } else if (*c == ',') {
-    return LexerCursor(eTk::kComma, s, c, next(c));
+    return ProduceToken(eTk::kComma, s, c, next(c));
   } else if (*c == '.') {
-    return LexerCursor(eTk::kPeriod, s, c, next(c));
+    if (CheckChar(s, next(c), '.') && CheckChar(s, next(c, 2), '.'))
+      return ProduceToken(eTk::kEllipsis, s, c, next(c, 3));
+    return ProduceToken(eTk::kPeriod, s, c, next(c));
   } else if (*c == '(') {
-    return LexerCursor(eTk::kLParen, s, c, next(c));
+    return ProduceToken(eTk::kLParen, s, c, next(c));
   } else if (*c == ')') {
-    return LexerCursor(eTk::kRParen, s, c, next(c));
+    return ProduceToken(eTk::kRParen, s, c, next(c));
   } else if (*c == '[') {
-    return LexerCursor(eTk::kLBracket, s, c, next(c));
+    return ProduceToken(eTk::kLBracket, s, c, next(c));
   } else if (*c == ']') {
-    return LexerCursor(eTk::kRBracket, s, c, next(c));
+    return ProduceToken(eTk::kRBracket, s, c, next(c));
   } else if (*c == '{') {
-    return LexerCursor(eTk::kLBrace, s, c, next(c));
+    return ProduceToken(eTk::kLBrace, s, c, next(c));
   } else if (*c == '}') {
-    return LexerCursor(eTk::kRBrace, s, c, next(c));
+    return ProduceToken(eTk::kRBrace, s, c, next(c));
+  } else if (*c == '\\') {
+    return ProduceToken(eTk::kBacklash, s, c, next(c));
   } else {
     // This should never happen.
-    return LexerFailT{
-        MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, " Unexpected compiler program location reached.")};
+    return ClFail{CND_ERROR_DEV_DEBUG("Unexpected compiler program location reached. Invalid punctuator.")};
   }
   // This should never happen.
-  return LexerFailT{
-      MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, " Unexpected compiler program location reached.")};
+  return ClFail{CND_ERROR_DEV_DEBUG("Unexpected compiler program location reached. Invalid punctuator.")};
 }
 
 constexpr Lexer::LexerResultT Lexer::LexWhitespace(StrView s) noexcept {
