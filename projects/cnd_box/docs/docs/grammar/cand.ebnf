@@ -309,7 +309,9 @@
 #---------------------------------------------------------------------------------------------------------------------#
 <IDENTIFIER> ::= <ALPHA> <ALPHA_DIGIT_LOW_LINE>*
 <NUMBER> ::= <DIGIT>+
-<REAL> ::= <NUMBER> <FULL_STOP> <NUMBER>
+<REAL> ::= <NUMBER> <FULL_STOP> <NUMBER> <SMALL_LETTER_R>
+<F32_LITERAL> ::= <NUMBER> <FULL_STOP> <NUMBER> <SMALL_LETTER_F>
+<F64_LITERAL> ::= <NUMBER> <FULL_STOP> <NUMBER>
 <UNSIGNED_LITERAL> ::= <NUMBER> <SMALL_LETTER_U>
 <BIT_LITERAL> ::= <DIGIT_ZERO> <CAPITAL_LETTER_B> | <DIGIT_ONE> <CAPITAL_LETTER_B>
 <BYTE_LITERAL> ::= <NUMBER> <SMALL_LETTER_B> | <NUMBER> <SMALL_LETTER_B>
@@ -411,7 +413,7 @@
 
 # Primary expr valid initial terms,  aka. the 'First Set'.
 <primary_specifier> ::= <IDENTIFIER> 											# -> <identity_operand>
-					| <NUMBER> | <REAL> | <UNSIGNED_LITERAL>
+					| <NUMBER> | <F64_LITERAL> | <UNSIGNED_LITERAL>
 					| <BIT_LITERAL> | <BYTE_LITERAL> | <BOOL_LITERAL>			# -> <value_operand>
 					| <STRING_LITERAL> | <CHAR_LITERAL> | <RAW_STRING_LITERAL>
 					| <KW_NONE> | <KW_TRUE> | <KW_FALSE>
@@ -424,7 +426,7 @@
 <primary_operand> ::= <identity_operand> | <value_operand> | <operand_set>
 <operand_set> ::= <paren_subexpr> | <square_subexpr> | <curly_subexpr>
 <identity_operand> ::= <IDENTIFIER>
-<value_operand> ::= <NUMBER> | <REAL> | <UNSIGNED_LITERAL> | <BIT_LITERAL> | <BYTE_LITERAL> | <BOOL_LITERAL>
+<value_operand> ::= <NUMBER> | <F64_LITERAL> | <UNSIGNED_LITERAL> | <BIT_LITERAL> | <BYTE_LITERAL> | <BOOL_LITERAL>
 			| <STRING_LITERAL> | <CHAR_LITERAL> | <RAW_STRING_LITERAL>
 
 <paren_subexpr> ::= <LEFT_PARENTHESIS> <primary_expr> <RIGHT_PARENTHESIS>
