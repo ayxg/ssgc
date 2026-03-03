@@ -89,6 +89,14 @@ class Lexer {
     return LexerCursor(token_type, source, from, to, curr_line_, prev_col, curr_line_, AdvanceCol(from, to));
   }
 
+  constexpr bool CheckChar(SrcView source, SrcViewConstIter where, SrcChar what) noexcept {
+    return IsInRange(where, source) && *where == what;
+  }
+
+  constexpr bool CheckChar(SrcView source, SrcViewConstIter where, const std::function<bool(char)>& pred) noexcept {
+    return IsInRange(where, source) && pred(*where);
+  }
+
  private:
   Size curr_line_{0};      ///> Used to maintain line count across intermediate lexing methods.
   Size curr_col_{0};       ///> Used to maintain column count across intermediate lexing methods.
@@ -173,48 +181,62 @@ constexpr Lexer::LexerResultT Lexer::LexNumber(StrView s) noexcept {
   auto curr = s.begin();
 
 #if _DEBUG
-  if (!IsInRange(curr, s)) return LexerFailT{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
-  if (!IsSrcCharNumeric(*curr)) return LexerFailT{CND_ERROR_DEV_DEBUG("Opening char is not numeric.")};
+  if (!IsInRange(curr, s)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
+  if (!IsSrcCharNumeric(*curr)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not numeric.")};
 #endif
-
-  // Check for a bit literal '0b' or '1b'.
-  if (*curr == '1' || *curr == '0')
-    if (IsInRange(next(curr), s) && *next(curr) == 'b') return ProduceToken(eTk::kLitBool, s, curr, next(curr, 2));
 
   // Consume the decimal digits.
   while (IsInRange(curr, s) && IsSrcCharNumeric(*curr)) curr++;
 
-  // Unlikely but just in case. If at eof and return int.
-  if (!IsInRange(curr, s)) ProduceToken(eTk::kLitInt, s, beg, curr);
+  // If at eof and return i32 early. Unlikely but just in case.
+  if (!IsInRange(curr, s)) return ProduceToken(eTk::kLitI32, s, beg, curr);
 
-  // Unsigned int.
-  if (IsInRange(curr, s) && *curr == 'u') return ProduceToken(eTk::kLitUint, s, beg, ++curr);
-
-  // Unsigned byte.
-  if (IsInRange(curr, s) && *curr == 'c') return ProduceToken(eTk::kLitByte, s, beg, ++curr);
-
-  // If decimal is followed by ellipsis('...'), return as a signed int early.
+  // If followed by ellipsis('...'), return as i32 early. Avoids ambiguity with floating point processing below.
   if ((IsInRange(curr, s) && *curr == '.') && (IsInRange(next(curr), s) && *next(curr) == '.') &&
       (IsInRange(next(curr, 2), s) && *next(curr, 2) == '.'))
-    return ProduceToken(eTk::kLitInt, s, beg, curr);
+    return ProduceToken(eTk::kLitI32, s, beg, curr);
 
-  // Else it's a floating point literal. Read in decimal digits if a period is found.
+  // Check if it's a floating point literal. Read in decimal digits if a period is found.
   if ((IsInRange(curr, s) && *curr == '.')) {
     curr++;                                                        // Skip '.'
     while (IsInRange(curr, s) && IsSrcCharNumeric(*curr)) curr++;  // Consume the fractional digits.
 
-    if (IsInRange(curr, s) && *curr == 'f') {
-      return ProduceToken(eTk::kLitReal, s, beg, ++curr);  // 42.f -> Float
+    if (IsInRange(curr, s) && *curr == 'f') return ProduceToken(eTk::kLitF32, s, beg, ++curr);  // 42.f -> F32
+
+    if (IsInRange(curr, s) && *curr == 'r') return ProduceToken(eTk::kLitReal, s, beg, ++curr);  // 42.r -> Real
+
+    return ProduceToken(eTk::kLitF64, s, beg, curr);  // 40. -> F64.
     }
 
-    if (IsInRange(curr, s) && *curr == 'r') {
-      return ProduceToken(eTk::kLitReal, s, beg, ++curr);  // 42.r -> Real
-    }
+  // Check for sized scalar literal suffixes if followed by alpha.
+  if (CheckChar(s, curr, IsSrcCharAlpha<char>)) {
+    auto suffix_end = curr;
+    while (CheckChar(s, suffix_end, IsSrcCharAlnumus<char>)) suffix_end++;
+    auto suffix = StrView{&*curr, static_cast<Size>(std::distance(curr, suffix_end))};
 
-    return ProduceToken(eTk::kLitReal, s, beg, curr);  // 40. -> Double.
+    if (suffix == "b" || suffix == "u1")  // U1
+      return ProduceToken(eTk::kLitU1, s, beg, suffix_end);
+    else if (suffix == "B" || suffix == "u8")  // U8
+      return ProduceToken(eTk::kLitU8, s, beg, suffix_end);
+    else if (suffix == "u16")  // U16
+      return ProduceToken(eTk::kLitU16, s, beg, suffix_end);
+    else if (suffix == "u" || suffix == "u32")  // U32
+      return ProduceToken(eTk::kLitU32, s, beg, suffix_end);
+    else if (suffix == "U" || suffix == "u64")  // U64
+      return ProduceToken(eTk::kLitU64, s, beg, suffix_end);
+    else if (suffix == "c" || suffix == "i8")  // I8
+      return ProduceToken(eTk::kLitI8, s, beg, suffix_end);
+    else if (suffix == "i16")  // I16
+      return ProduceToken(eTk::kLitI16, s, beg, suffix_end);
+    else if (suffix == "i32")  // I32
+      return ProduceToken(eTk::kLitI32, s, beg, suffix_end);
+    else if (suffix == "L" || suffix == "i64")  // I64
+      return ProduceToken(eTk::kLitI64, s, beg, suffix_end);
+    else  // Error for now, change in future if decided to allow user-defined suffixes.
+      return ClFail{MakeClMsg<eClErr::kLexerUnknownScalarSuffix>(suffix)};
   }
 
-  return ProduceToken(eTk::kLitInt, s, beg, curr);  // Signed int.
+  return ProduceToken(eTk::kLitInt, s, beg, curr);  // I32 by default.
 }
 
 constexpr Lexer::LexerResultT Lexer::LexIdentifier(StrView src) noexcept {
