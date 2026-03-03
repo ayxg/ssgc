@@ -48,32 +48,44 @@ template <class R, class F, class... Args>
 using iIsInvokable = std::_Is_invocable_r<R, F, Args...>;
 
 template <class R, class F, class... Args>
-static constexpr bool iIsInvokableV =
-    std::_Is_invocable_r<R, F, Args...>::value;
+static constexpr bool iIsInvokableV = std::_Is_invocable_r<R, F, Args...>::value;
 
 /// Concept to check if a type is streamable.
 /// Non-streamable objects are output as their pointer address.
 /// @see iStreamableV
 template <typename T>
 struct iStreamable {
-  static constexpr bool value = std::is_same<
-      ostream&,
-      // Here we are removing const and reference then re-adding lv-ref to make
-      // sure result of stream is always decayed to a reference.
-      std::add_lvalue_reference_t<std::remove_const_t<std::remove_reference_t<
-          decltype(std::declval<ostream>()
-                   << std::declval<std::decay_t<T>>())>>>>::value;
+  template <typename U>
+  static constexpr decltype(std::declval<std::ostream&>() << std::declval<std::decay_t<U>>(), std::true_type{})
+  isStreamable(int) {
+    return {};
+  };
+
+  // Fallback overload
+  template <typename>
+  static constexpr std::false_type isStreamable(...) {
+    return {};
+  };
+
+  static const bool value = decltype(isStreamable<T>(0))::value;
 };
 
 template <typename T>
-static constexpr bool iStreamableV = iStreamable<int>::value;
+static constexpr bool iStreamableV = iStreamable<T>::value;
 
 // Some basic static validations for iStreamable.
-static_assert(iStreamable<int>::value,
-              "minitest::iStreamable implementation failure.");
+static_assert(iStreamable<int>::value, "minitest::iStreamable implementation failure.");
 
-static_assert(iStreamable<string>::value,
-              "minitest::iStreamable implementation failure.");
+static_assert(iStreamable<string>::value, "minitest::iStreamable implementation failure.");
+
+static_assert(!iStreamable<vector<int>>::value, "minitest::iStreamable implementation failure.");
+
+template <class T>
+static enable_if_t<!iStreamableV<T>, string> OverloadToString(T&& v) {
+  stringstream ss{};
+  ss << "[Address][" << &v << "]";
+  return ss.str();
+}
 
 /// Allows user to provide an overload for Minitest's internal to string
 /// functionality. Define a stringstream input operator for your type and
@@ -82,14 +94,6 @@ template <class T>
 static enable_if_t<iStreamableV<T>, string> OverloadToString(T&& v) {
   stringstream ss{};
   ss << std::forward<T>(v);
-  return ss.str();
-} 
-
-
-template <class T>
-static enable_if_t<!iStreamableV<T>, string> OverloadToString(T&& v) {
-  stringstream ss{};
-  ss << "[Address][" << &v << "]";
   return ss.str();
 }
 
