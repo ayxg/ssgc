@@ -98,9 +98,11 @@ class Lexer {
   }
 
  private:
-  Size curr_line_{0};      ///> Used to maintain line count across intermediate lexing methods.
-  Size curr_col_{0};       ///> Used to maintain column count across intermediate lexing methods.
-  StrView read_head_{""};  ///> Next read location where a token opening pattern is searched from.
+  SrcView file_{""};
+  Size curr_line_{1};      ///> Used to maintain line count across intermediate lexing methods.
+  Size curr_col_{1};       ///> Used to maintain column count across intermediate lexing methods.
+  SrcView read_head_{""};  ///> Next read location where a token opening pattern is searched from.
+  SrcView source_{""};
 };
 
 // String literal token operator.
