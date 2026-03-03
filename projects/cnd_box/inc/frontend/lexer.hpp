@@ -25,7 +25,7 @@
 #define CND_ENABLE_STATIC_TEST_MODULE_Lexer true
 
 namespace cnd {
-namespace trtools {
+namespace frontend {
 using cldev::clmsg::ClMsgBuffer;  //> Result of an error in an intermediate or final lex steps.
 using cldev::clmsg::MakeClMsg;
 using cxx::IsInRange;     ///> For bounds-checking iterator as the lexer reads forward.
@@ -51,7 +51,7 @@ class Lexer {
  public:
   using LexerCursorT = LexerCursor;
   using LexerOutputT = Ex<Vec<Tk>, ClMsgBuffer>;       ///> Final output of lexed source chars.
-  using LexerFailT = Unex<ClMsgBuffer>;                ///> Lexing failure value.
+  using ClFail = Unex<ClMsgBuffer>;                    ///> Lexing failure value.
   using LexerResultT = Ex<LexerCursorT, ClMsgBuffer>;  ///> Intermediate lex step result union.
   using CppSrcLocT = std::source_location;             ///> C++ source location.
 
@@ -131,31 +131,20 @@ constexpr Lexer::LexerOutputT Lexer::Lex(StrView s) noexcept {
   return lx.Process(s);
 }
 
-// constexpr LexerCursor::LexerCursor(StrView read_head, eTk tk, StrView literal) noexcept
-//     : read_head(read_head), processed_tk(tk, literal) {}
-//
-// constexpr LexerCursor::LexerCursor(StrView read_head) noexcept
-//     : read_head(read_head), processed_tk(eTk::kNONE, read_head.substr(0, 0)) {}
-//
-// constexpr LexerCursor::LexerCursor(StrView read_head, eTk tk) noexcept
-//     : read_head(read_head), processed_tk(tk, read_head.substr(0, 0)) {}
-//
 constexpr LexerCursor::LexerCursor(eTk tk, const StrView& s, StrView::const_iterator lit_begin,
-                                   StrView::const_iterator lit_end)
+                                   StrView::const_iterator lit_end) noexcept
     : processed_tk(tk, StrView{s.data() + std::distance(s.begin(), lit_begin),
                                static_cast<Size>(std::distance(s.begin(), lit_end))}),
       read_head(StrView{s.data() + std::distance(s.begin(), lit_end)}) {}
 
 constexpr LexerCursor::LexerCursor(eTk tk, const StrView& s, StrView::const_iterator lit_begin,
                                    StrView::const_iterator lit_end, Size beg_line, Size beg_col, Size end_line,
-                                   Size end_col)
+                                   Size end_col) noexcept
     : processed_tk(
           tk,
           StrView{s.data() + std::distance(s.begin(), lit_begin), static_cast<Size>(std::distance(s.begin(), lit_end))},
           beg_line, beg_col, end_line, end_col),
       read_head(StrView{s.data() + std::distance(s.begin(), lit_end)}) {}
-
-// constexpr LexerCursor::LexerCursor() noexcept = default;
 
 constexpr Size& Lexer::AdvanceLine(const StrView::const_iterator& from, const StrView::const_iterator& to) noexcept {
   curr_line_ += std::distance(from, to);
