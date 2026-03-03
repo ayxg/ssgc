@@ -246,8 +246,9 @@ constexpr Lexer::LexerResultT Lexer::LexIdentifier(StrView src) noexcept {
   auto curr = beg;
 
 #if _DEBUG
-  if (!IsInRange(curr, src)) return LexerFailT{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
-  if (!IsSrcCharAlnumus(*curr)) return LexerFailT{CND_ERROR_DEV_DEBUG("Opening char is not an alnumus.")};
+  if (!IsInRange(curr, src)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
+  if (!IsSrcCharAlphaUnderscore(*curr))
+    return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not an alpha or underscore.")};
 #endif
 
   while (IsInRange(curr, src) && IsSrcCharAlnumus(*curr)) curr++;
