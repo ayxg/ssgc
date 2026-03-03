@@ -126,6 +126,15 @@ void TestSingleToken(SrcView source, eTk expected_type = eTk::kNONE) {
                 std::format("Expected token end line '{}' but got '{}'.", 1, lex_result->front().EndLine()));
 }
 
+void TestCheckLexerErrorCode(SrcView source, cnd::cldev::clmsg::eClErr expected_code) {
+  auto lex_result = Lexer::Lex(source);
+  ASSERT_FALSE(lex_result);
+  EXPECT_EQ_LOG(
+      lex_result.error().GetLastMessageId().code, cnd::cldev::clmsg::GetClMsgIdOf(expected_code).code,
+      std::format("Expected error code '{}' but got '{}'.", cnd::cldev::clmsg::GetClMsgIdOf(expected_code).code,
+                  lex_result.error().GetLastMessageId().code));
+}
+
 TEST(LexerTokens, LiteralU1) {
   TestSingleToken("1b", eTk::kLitU1);
   TestSingleToken("0b", eTk::kLitU1);
@@ -410,32 +419,31 @@ TEST(LexerTokens, EscapedCharSequence) {
 
 TEST(LexerTokens, EscapedCharSequenceError) {
   // Unclosed string.
-  auto lex_result_0 = Lexer::Lex("\"Hello World\\\"");
-  if (EXPECT_FALSE(lex_result_0)) {
-    EXPECT_EQ_LOG(lex_result_0.error().GetLastMessageId().code,
-                  cnd::cldev::clmsg::GetClMsgIdOf(cnd::eClErr::kLexerUnclosedStringLiteral).code,
-                  std::format("Expected error message id '{}' but got '{}'.",
-                              cnd::cldev::clmsg::GetClMsgIdOf(cnd::eClErr::kLexerUnclosedStringLiteral).code,
-                              lex_result_0.error().GetLastMessageId().code));
-  }
+  TestCheckLexerErrorCode("\"Hello World\\\"", cnd::eClErr::kLexerUnclosedStringLiteral);
 
   // String ending in a lone backlash.
-  auto lex_result_1 = Lexer::Lex("\"Hello World\\");
-  if (EXPECT_FALSE(lex_result_1)) {
-    EXPECT_EQ_LOG(lex_result_1.error().GetLastMessageId().code,
-                  cnd::cldev::clmsg::GetClMsgIdOf(cnd::eClErr::kLexerUnclosedStringLiteral).code,
-                  std::format("Expected error message id '{}' but got '{}'.",
-                              cnd::cldev::clmsg::GetClMsgIdOf(cnd::eClErr::kLexerUnclosedStringLiteral).code,
-                              lex_result_1.error().GetLastMessageId().code));
-  }
+  TestCheckLexerErrorCode("\"Hello World\\", cnd::eClErr::kLexerUnclosedStringLiteral);
 }
 
-TEST(LexerTokens, CharacterLiterals) {
-  TestSingleToken("'a'", eTk::kLitChar);
-  TestSingleToken("'\\n'", eTk::kLitChar);
-  TestSingleToken("'\\''", eTk::kLitChar);
-  TestSingleToken("'\\\\'", eTk::kLitChar);
-  TestSingleToken("'\\t'", eTk::kLitChar);
+TEST(LexerTokens, CharacterLiteral) {
+  TestSingleToken("'a'", eTk::kLitI8);
+  TestSingleToken("'\\n'", eTk::kLitI8);
+  TestSingleToken("'\\''", eTk::kLitI8);
+  TestSingleToken("'\\\\'", eTk::kLitI8);
+  TestSingleToken("'\\t'", eTk::kLitI8);
+}
+
+TEST(LexerTokens, CharacterLiteralError) {
+  // Eof before closing quote.
+  TestCheckLexerErrorCode("'", cnd::eClErr::kLexerUnclosedStringLiteral);
+  // Newline in char literal.
+  TestCheckLexerErrorCode("'\n'", cnd::eClErr::kLexerUnclosedStringLiteral);
+  // Ending in a lone backlash.
+  TestCheckLexerErrorCode("'\\", cnd::eClErr::kLexerUnclosedStringLiteral);
+  // Unclosed char literal.
+  TestCheckLexerErrorCode("'a + unclosed", cnd::eClErr::kLexerUnclosedStringLiteral);
+  // Empty char literal.
+  TestCheckLexerErrorCode("''", cnd::eClErr::kLexerUnclosedStringLiteral);
 }
 
 }  // namespace cnd_unit_test::frontend::lexer
