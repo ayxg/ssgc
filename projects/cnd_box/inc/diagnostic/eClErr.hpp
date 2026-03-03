@@ -25,6 +25,8 @@ namespace cnd::corevals::diagnostic {
 #define CND_APPLIED_ENUM_eClErr(m, sep, pre, lst) \
   pre m(NoError)                                  \
   sep m(CompilerDevDebugError)                    \
+  sep m(LexerUnclosedStringLiteral)               \
+  sep m(LexerUnknownScalarSuffix)                 \
   sep m(FailedToReadFile)                         \
   sep m(ParserExpectedDeclaration)                \
   sep m(DriverInvalidArg)                         \

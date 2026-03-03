@@ -21,28 +21,30 @@
 // clang-format on
 
 #define CND_MM_CLMSG_MAKE_RETURN(...)                  \
-  return ClMsgUnion {                                \
-    ClMsgNode { GetClMsgIdOf(THIS_MESSAGE_ENUM), {__VA_ARGS__} } \
+  return ClMsgUnion {                                  \
+    ClMsgNode {                                        \
+      GetClMsgIdOf(THIS_MESSAGE_ENUM), { __VA_ARGS__ } \
+    }                                                  \
   }
 namespace cnd {
 namespace cldev {
 namespace clmsg {
 
+using corevals::diagnostic::eClErr;
 using std::get;                // For ClMsgDataUnionT accessing std::variant.
 using std::holds_alternative;  // For ClMsgDataUnionT accessing std::variant.
 using std::to_underlying;      // To get the diagnostic enum's underlying value.
-using corevals::diagnostic::eClErr;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* kCompilerDevDebugError */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// Developer debug error. Has to be a macro to pass current source location at call site.
-#define CND_ERROR_DEV_DEBUG(msg)                                                       \
-  cnd::cldev::clmsg::MakeClMsg<cnd::corevals::diagnostic::eClErr::kCompilerDevDebugError>(std::source_location{}.current(), \
-                                                                                    ##msg)
+#define CND_ERROR_DEV_DEBUG(msg)                                                           \
+  cnd::cldev::clmsg::MakeClMsg<cnd::corevals::diagnostic::eClErr::kCompilerDevDebugError>( \
+      std::source_location{}.current(), ##msg)
 
-CND_MM_CLMSG_MAKE_FNSIG(eClErr, kCompilerDevDebugError, const std::source_location & cpp_loc, const Str& message) {
+CND_MM_CLMSG_MAKE_FNSIG(eClErr, kCompilerDevDebugError, const std::source_location& cpp_loc, const Str& message) {
   ClMsgDataBufferT data = ConvertCppSourceLocationToClMsgData(cpp_loc);
   data.push_back(message);
   CND_MM_CLMSG_MAKE_RETURN(data);
@@ -57,6 +59,30 @@ CND_MM_CLMSG_FORMAT_FNSIG(eClErr, kCompilerDevDebugError) {
   // message (Str)
 
   return "[kCompilerDevDebugError]" + FormatCppSourceLocationClMsgData(data) + "[" + get<Str>(data[4]) + "]";
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/* kLexerUnclosedStringLiteral */
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CND_MM_CLMSG_MAKE_FNSIG(eClErr, kLexerUnclosedStringLiteral) {
+  return ClMsgUnion{ClMsgNode{GetClMsgIdOf(THIS_MESSAGE_ENUM), {}}};
+}
+
+CND_MM_CLMSG_FORMAT_FNSIG(eClErr, kLexerUnclosedStringLiteral) {
+  return "[kLexerUnclosedStringLiteral] String literal is not closed.";
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/* kLexerUnknownScalarSuffix */
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CND_MM_CLMSG_MAKE_FNSIG(eClErr, kLexerUnknownScalarSuffix, StrView suffix) {
+  return ClMsgUnion{ClMsgNode{GetClMsgIdOf(THIS_MESSAGE_ENUM), {Str{suffix}}}};
+}
+
+CND_MM_CLMSG_FORMAT_FNSIG(eClErr, kLexerUnknownScalarSuffix) {
+  return std::format("[kLexerUnclosedStringLiteral] Unknown scalar size suffix '{}'", get<Str>(data[0]));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
