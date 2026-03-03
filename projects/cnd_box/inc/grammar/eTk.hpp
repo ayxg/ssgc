@@ -89,7 +89,7 @@ namespace cnd::corevals::grammar {
   sep m(KwType)                                \
   sep m(KwValue)                               \
   sep m(KwTemplate)                            \
-  sep m(KwProc)\
+  sep m(KwProc)                                \
   sep m(Hash)                                  \
   sep m(Add)                                   \
   sep m(Sub)                                   \
@@ -123,7 +123,6 @@ namespace cnd::corevals::grammar {
   sep m(RshAssign)                             \
   sep m(Inc)                                   \
   sep m(Dec)                                   \
-  sep m(Dot)                                   \
   sep m(Bnot)                                  \
   sep m(Band)                                  \
   sep m(Bor)                                   \
@@ -140,22 +139,33 @@ namespace cnd::corevals::grammar {
   sep m(DoubleColon)                           \
   sep m(Ellipsis)                              \
   sep m(CommercialAt)                          \
+  sep m(Dollar)                                \
+  sep m(Backlash)                              \
+  sep m(Question)                              \
   sep m(LitInt)                                \
   sep m(LitUint)                               \
-  sep m(LitReal)                               \
   sep m(LitBool)                               \
   sep m(LitChar)                               \
   sep m(LitByte)                               \
   sep m(LitCstr)                               \
+  sep m(LitU1)                                 \
+  sep m(LitU8)                                 \
+  sep m(LitU16)                                \
+  sep m(LitU32)                                \
+  sep m(LitU64)                                \
+  sep m(LitI8)                                 \
+  sep m(LitI16)                                \
+  sep m(LitI32)                                \
+  sep m(LitI64)                                \
+  sep m(LitF32)                                \
+  sep m(LitF64)                                \
+  sep m(LitReal)                               \
   sep m(Ident)                                 \
-  sep m(Eofile)                                \
   sep m(Whitespace)                            \
   sep m(Newline)                               \
   sep m(BlockComment)                          \
   sep m(LineComment)                           \
-  sep m(Dollar)                                \
-  sep m(Backlash)                              \
-  sep m(Question)                              \
+  sep m(Eofile)                                \
   lst
 
 // Define the enum.

@@ -396,7 +396,6 @@ constexpr CStr GetTkSymbol(eTk t) noexcept {
     CND_MM_LOCAL_LITERAL_CASE_eTk(RshAssign, ">>=");
     CND_MM_LOCAL_LITERAL_CASE_eTk(Inc, "++");
     CND_MM_LOCAL_LITERAL_CASE_eTk(Dec, "--");
-    CND_MM_LOCAL_LITERAL_CASE_eTk(Dot, ".");
     CND_MM_LOCAL_LITERAL_CASE_eTk(Bnot, "~");
     CND_MM_LOCAL_LITERAL_CASE_eTk(Band, "&&");
     CND_MM_LOCAL_LITERAL_CASE_eTk(Bor, "||");
@@ -737,7 +736,6 @@ constexpr eTk GetTkFromKeyword(StrView kw) noexcept {
   CND_MM_LOCAL_CASE(RshAssign, ">>=");
   CND_MM_LOCAL_CASE(Inc, "++");
   CND_MM_LOCAL_CASE(Dec, "--");
-  CND_MM_LOCAL_CASE(Dot, ".");
   CND_MM_LOCAL_CASE(Bnot, "~");
   CND_MM_LOCAL_CASE(Band, "&&");
   CND_MM_LOCAL_CASE(Bor, "||");
