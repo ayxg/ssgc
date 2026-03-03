@@ -403,14 +403,12 @@ constexpr Lexer::LexerResultT Lexer::LexWhitespace(StrView s) noexcept {
   auto c = s.begin();
 
 #if _DEBUG
-  if (!IsInRange(c, s))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, " Opening char is eof.")};
-  if (!IsSrcCharWhitespace(*c))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, " Opening char is not whitespace.")};
+  if (!IsInRange(c, s)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
+  if (!IsSrcCharWhitespace(*c)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not whitespace.")};
 #endif
 
   while (IsInRange(c, s) && IsSrcCharWhitespace(*c)) c++;
-  return LexerCursor(eTk::kWhitespace, s, s.begin(), c);
+  return ProduceToken(eTk::kWhitespace, s, s.begin(), c);
 }
 
 constexpr Lexer::LexerResultT Lexer::LexNewline(StrView s) noexcept {
