@@ -467,6 +467,8 @@ constexpr Lexer::LexerResultT Lexer::LexEscapedCharSequence(StrView s) noexcept 
 }
 
 constexpr Lexer::LexerResultT Lexer::LexCharLiteral(StrView s) noexcept {
+  using cldev::clmsg::MakeClMsg;
+  using corevals::diagnostic::eClErr;
   auto c = s.begin();
 
 #if _DEBUG
@@ -476,26 +478,25 @@ constexpr Lexer::LexerResultT Lexer::LexCharLiteral(StrView s) noexcept {
   c++;  // Pass opening quote.
 
   if (CheckChar(s, c, IsSrcCharNewline<char>))
-    return ClFail{CND_ERROR_DEV_DEBUG("Unclosed char literal.")};  // TODO: add custom error for this.
+    return ClFail{MakeClMsg<eClErr::kLexerUnclosedCharacterLiteral>()};
   else if (CheckChar(s, c, '\\')) {
     c++;  // Pass escape char.
-    if (CheckChar(s, c, IsSrcCharNewline<char>))
-      return ClFail{CND_ERROR_DEV_DEBUG("Unclosed char literal.")};  // TODO: add custom error for this.
+    if (CheckChar(s, c, IsSrcCharNewline<char>)) return ClFail{MakeClMsg<eClErr::kLexerUnclosedCharacterLiteral>()};
 
-    if (!IsInRange(c, s)) return ClFail{CND_ERROR_DEV_DEBUG("Reached eof before end of char literal.")};
-    // Check for valid escape char?
+    if (!IsInRange(c, s)) return ClFail{MakeClMsg<eClErr::kLexerUnclosedCharacterLiteral>()};
+
+    // TODO: Check for valid escape char?
     c++;  // Pass escaped char.
   } else if (CheckChar(s, c, '\''))
-    return ClFail{CND_ERROR_DEV_DEBUG("Empty char literal.")};  // TODO: add custom error for this.
+    return ClFail{MakeClMsg<eClErr::kLexerEmptyCharacterLiteral>()};
   else if (IsInRange(c, s))
     c++;  // Pass char literal content.
   else
-    return ClFail{CND_ERROR_DEV_DEBUG("Unclosed char literal.")};
+    return ClFail{MakeClMsg<eClErr::kLexerUnclosedCharacterLiteral>()};
 
   // Expect closing quote after char literal content.
-  if (!CheckChar(s, c, '\''))
-    return ClFail{CND_ERROR_DEV_DEBUG("Unclosed char literal.")};  // TODO: add custom error for this.
-  c++;                                                             // Pass closing quote.
+  if (!CheckChar(s, c, '\'')) return ClFail{MakeClMsg<eClErr::kLexerUnclosedCharacterLiteral>()};
+  c++;  // Pass closing quote.
 
   return ProduceToken(eTk::kLitI8, s, s.begin(), c);
 }
