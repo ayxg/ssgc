@@ -16,10 +16,10 @@
 /// @addtogroup cnd_unit_test
 /// @{
 #pragma once
+#include "compiler_utils/LoadSourceFile.hpp"
 #include "cxxx_enumerated_flags.hpp"
+#include "frontend/parser.hpp"
 #include "minitest.hpp"
-#include "trtools/CompilerIO.hpp"
-#include "trtools/Parser.hpp"
 
 // Overload ostream >> for eAst enum for minitest library.
 std::ostream& operator<<(std::ostream& os, const cnd::corevals::grammar::eAst& obj) {
@@ -38,7 +38,7 @@ using cnd::Ast;
 using cnd::eAstToCStr;
 using cnd::Sast;
 using cnd::Tk;
-using cnd::trtools::Lexer;
+using cnd::frontend::Lexer;
 using cnd::trtools::LoadSourceFile;
 using cnd::trtools::parser::LLPrsResT;
 using cnd::trtools::parser::TkCursorT;
@@ -224,7 +224,7 @@ static void TestParsingMethod(string_view code, ParsingMethod fn, const cnd::Sas
                   "Expected syntax tree is equal.");
 }
 
-}  // namespace cnd::unit_tests
+}  // namespace cnd_unit_test::frontend::test_util
 
 /// @} // end of cnd_unit_test
 

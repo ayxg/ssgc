@@ -18,7 +18,7 @@
 #pragma once
 // clang-format off
 #include "minitest.hpp"
-#include "trtools/Parser.hpp"
+#include "frontend/parser.hpp"
 #include "ParserTestUtils.hpp"
 // clang-format on
 
@@ -59,7 +59,7 @@ TEST(UtParserPrimaryExprOperands, NoneKeyword) { TestParsingMethod("none", Parse
 
 TEST(UtParserPrimaryExprOperands, AllSingularOperands) {
   // This test confirms proper advancement of the iterator after parsing an operand.
-  using namespace cnd::trtools::literals;
+  using namespace cnd::frontend::literals;
 
   using namespace cnd::trtools::parser;
   CND_CX auto src = "1 1.1 \"string literal\" \"\\\\\" alnumus 1c 1b 1u none "_cndTkLiteral;

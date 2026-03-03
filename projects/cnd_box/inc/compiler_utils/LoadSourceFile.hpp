@@ -16,6 +16,7 @@
 #pragma once
 // clang-format off
 #include "ccapi/CommonCppApi.hpp"
+#include "compiler_utils/CompilerProcessResult.hpp"
 
 namespace cnd {
 namespace trtools {

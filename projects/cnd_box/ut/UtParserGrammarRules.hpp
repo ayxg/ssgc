@@ -8,7 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file
 /// @ingroup cnd_unit_test
-/// @brief [UtParserGrammarRules] Validate each parser-stage grammar rule in isolation by calling the associated 
+/// @brief [UtParserGrammarRules] Validate each parser-stage grammar rule in isolation by calling the associated
 ///        parsing method.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -18,7 +18,7 @@
 // !!Keep clang format OFF for this file ,or else expected ast constructors will be unreadable.
 // clang-format off
 #include "minitest.hpp"
-#include "trtools/Parser.hpp"
+#include "frontend/parser.hpp"
 #include "ParserTestUtils.hpp"
 
 namespace cnd_unit_test::frontend::parser {
