@@ -67,6 +67,7 @@ class Lexer {
   constexpr LexerResultT LexWhitespace(StrView src_str) noexcept;
   constexpr LexerResultT LexNewline(StrView src_str) noexcept;
   constexpr LexerResultT LexEscapedCharSequence(StrView src_str) noexcept;
+  constexpr LexerResultT LexCharLiteral(StrView src_str) noexcept;
   constexpr LexerResultT LexLineComment(StrView src_str) noexcept;
   constexpr LexerResultT LexBlockComment(StrView src_str) noexcept;
   constexpr LexerResultT LexRecursiveTokenLiteral(StrView s) noexcept;
@@ -465,6 +466,40 @@ constexpr Lexer::LexerResultT Lexer::LexEscapedCharSequence(StrView s) noexcept 
   return LexerCursor(eTk::kLitCstr, s, s.begin(), c, begin_line, begin_col, curr_line_, curr_col_);
 }
 
+constexpr Lexer::LexerResultT Lexer::LexCharLiteral(StrView s) noexcept {
+  auto c = s.begin();
+
+#if _DEBUG
+  if (!IsInRange(c, s)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
+  if (*c != '\'') return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not a quotation.")};
+#endif
+  c++;  // Pass opening quote.
+
+  if (CheckChar(s, c, IsSrcCharNewline<char>))
+    return ClFail{CND_ERROR_DEV_DEBUG("Unclosed char literal.")};  // TODO: add custom error for this.
+  else if (CheckChar(s, c, '\\')) {
+    c++;  // Pass escape char.
+    if (CheckChar(s, c, IsSrcCharNewline<char>))
+      return ClFail{CND_ERROR_DEV_DEBUG("Unclosed char literal.")};  // TODO: add custom error for this.
+
+    if (!IsInRange(c, s)) return ClFail{CND_ERROR_DEV_DEBUG("Reached eof before end of char literal.")};
+    // Check for valid escape char?
+    c++;  // Pass escaped char.
+  } else if (CheckChar(s, c, '\''))
+    return ClFail{CND_ERROR_DEV_DEBUG("Empty char literal.")};  // TODO: add custom error for this.
+  else if (IsInRange(c, s))
+    c++;  // Pass char literal content.
+  else
+    return ClFail{CND_ERROR_DEV_DEBUG("Unclosed char literal.")};
+
+  // Expect closing quote after char literal content.
+  if (!CheckChar(s, c, '\''))
+    return ClFail{CND_ERROR_DEV_DEBUG("Unclosed char literal.")};  // TODO: add custom error for this.
+  c++;                                                             // Pass closing quote.
+
+  return ProduceToken(eTk::kLitI8, s, s.begin(), c);
+}
+
 constexpr Lexer::LexerResultT Lexer::LexLineComment(StrView s) noexcept {
   auto c = s.begin();
 
@@ -580,7 +615,11 @@ constexpr Lexer::LexerOutputT Lexer::Process(StrView s) noexcept {
       if (!res_buff) return ClFail{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
-      // Unknown beggining of token...
+    } else if (read_head_[0] == '\'') {
+      auto res_buff = LexCharLiteral(read_head_);
+      if (!res_buff) return ClFail{res_buff.error()};
+      tokens.push_back({res_buff.value().processed_tk});
+      read_head_ = res_buff.value().read_head;
     } else if (read_head_[0] == '`') {  // Line Comment
       auto res_buff = LexLineComment(read_head_);
       if (!res_buff) return ClFail{res_buff.error()};
