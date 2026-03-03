@@ -26,6 +26,8 @@ namespace cnd::corevals::diagnostic {
   pre m(NoError)                                  \
   sep m(CompilerDevDebugError)                    \
   sep m(LexerUnclosedStringLiteral)               \
+  sep m(LexerUnclosedCharacterLiteral)            \
+  sep m(LexerEmptyCharacterLiteral)               \
   sep m(LexerUnknownScalarSuffix)                 \
   sep m(FailedToReadFile)                         \
   sep m(ParserExpectedDeclaration)                \

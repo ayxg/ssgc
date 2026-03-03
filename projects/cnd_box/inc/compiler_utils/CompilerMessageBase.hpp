@@ -35,9 +35,9 @@ namespace clmsg {
 using corevals::diagnostic::eClDiagnostic;
 using corevals::diagnostic::eClErr;
 using corevals::diagnostic::eClGuide;
-using corevals::diagnostic::eClWarning;
-using corevals::diagnostic::eClMsgType;
 using corevals::diagnostic::eClMsg;
+using corevals::diagnostic::eClMsgType;
+using corevals::diagnostic::eClWarning;
 using corevals::diagnostic::GetClMsgType;
 
 using std::get;                // For ClMsgDataUnionT accessing std::variant.
