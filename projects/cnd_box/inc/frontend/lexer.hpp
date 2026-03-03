@@ -417,15 +417,19 @@ constexpr Lexer::LexerResultT Lexer::LexNewline(StrView s) noexcept {
   using std::source_location;
   auto c = s.begin();
 #if _DEBUG
-  if (!IsInRange(c, s))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, " Opening char is eof.")};
-  if (!IsSrcCharNewline(*c))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, " Opening char is not a newline.")};
+  if (!IsInRange(c, s)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
+  if (!IsSrcCharNewline(*c)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not a newline.")};
 #endif
 
-  while (IsInRange(c, s) && IsSrcCharNewline(*c)) c++;
-  curr_line_ += std::distance(s.begin(), c);  // increment line count
-  return LexerCursor(eTk::kNewline, s, s.begin(), c);
+  auto begin_col = curr_col_;
+  auto begin_line = curr_line_;
+  while (CheckChar(s, c, IsSrcCharNewline<char>)) {
+    // Handle Windows-style CRLF newlines as a single newline. Skip line advance.
+    if (!(*c == '\r' && CheckChar(s, next(c), '\n'))) curr_line_++;
+    c++;
+}
+  curr_col_ = 1;  // Reset column to 1 after newline(s).
+  return LexerCursor(eTk::kNewline, s, s.begin(), c, begin_line, begin_col, curr_line_, curr_col_);
 }
 
 constexpr Lexer::LexerResultT Lexer::LexEscapedCharSequence(StrView s) noexcept {
