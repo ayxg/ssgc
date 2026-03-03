@@ -467,19 +467,15 @@ constexpr Lexer::LexerResultT Lexer::LexEscapedCharSequence(StrView s) noexcept 
 
 constexpr Lexer::LexerResultT Lexer::LexLineComment(StrView s) noexcept {
   auto c = s.begin();
-#if _DEBUG
-  if (!IsInRange(c, s))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is eof.")};
-  if (*c != '`')
-    return LexerFailT{
-        MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is not a backtick.")};
-#endif
-  c++;
-  while (IsInRange(c, s) && !IsSrcCharNewline(*c)) {
-  c++;
-  }
 
-  return LexerCursor(eTk::kLineComment, s, s.begin(), c);
+#if _DEBUG
+  if (!IsInRange(c, s)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
+  if (*c != '`') return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not a backtick.")};
+#endif
+
+  c++;
+  while (IsInRange(c, s) && !IsSrcCharNewline(*c)) c++;
+  return ProduceToken(eTk::kLineComment, s, s.begin(), c);
   }
 
 constexpr Lexer::LexerResultT Lexer::LexBlockComment(StrView s) noexcept {
