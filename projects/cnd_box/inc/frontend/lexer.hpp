@@ -85,7 +85,8 @@ class Lexer {
   }
   constexpr LexerCursor ProduceToken(eTk token_type, SrcView source, const SrcViewConstIter& from,
                                      const SrcViewConstIter& to) noexcept {
-    return LexerCursor(eTk::kIdent, source, from, to, curr_line_, curr_col_, AdvanceCol(from, to), curr_line_);
+    auto prev_col = curr_col_;
+    return LexerCursor(token_type, source, from, to, curr_line_, prev_col, curr_line_, AdvanceCol(from, to));
   }
 
  private:
