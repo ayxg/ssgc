@@ -435,15 +435,15 @@ TEST(LexerTokens, CharacterLiteral) {
 
 TEST(LexerTokens, CharacterLiteralError) {
   // Eof before closing quote.
-  TestCheckLexerErrorCode("'", cnd::eClErr::kLexerUnclosedStringLiteral);
+  TestCheckLexerErrorCode("'", cnd::eClErr::kLexerUnclosedCharacterLiteral);
   // Newline in char literal.
-  TestCheckLexerErrorCode("'\n'", cnd::eClErr::kLexerUnclosedStringLiteral);
+  TestCheckLexerErrorCode("'\n'", cnd::eClErr::kLexerUnclosedCharacterLiteral);
   // Ending in a lone backlash.
-  TestCheckLexerErrorCode("'\\", cnd::eClErr::kLexerUnclosedStringLiteral);
+  TestCheckLexerErrorCode("'\\", cnd::eClErr::kLexerUnclosedCharacterLiteral);
   // Unclosed char literal.
-  TestCheckLexerErrorCode("'a + unclosed", cnd::eClErr::kLexerUnclosedStringLiteral);
+  TestCheckLexerErrorCode("'a + unclosed", cnd::eClErr::kLexerUnclosedCharacterLiteral);
   // Empty char literal.
-  TestCheckLexerErrorCode("''", cnd::eClErr::kLexerUnclosedStringLiteral);
+  TestCheckLexerErrorCode("''", cnd::eClErr::kLexerEmptyCharacterLiteral);
 }
 
 }  // namespace cnd_unit_test::frontend::lexer
