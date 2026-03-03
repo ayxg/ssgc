@@ -46,11 +46,11 @@ constexpr Size Tk::File() const noexcept { return file_; };
 
 constexpr Size Tk::BegLine() const noexcept { return beg_col_; }
 
-constexpr Size Tk::BegCol() const noexcept { return end_col_; }
+constexpr Size Tk::BegCol() const noexcept { return beg_col_; }
 
-constexpr Size Tk::EndLine() const noexcept { return beg_line_; }
+constexpr Size Tk::EndLine() const noexcept { return end_line_; }
 
-constexpr Size Tk::EndCol() const noexcept { return end_line_; }
+constexpr Size Tk::EndCol() const noexcept { return end_col_; }
 
 constexpr const StrView& Tk::Literal() const noexcept { return literal_; }
 
