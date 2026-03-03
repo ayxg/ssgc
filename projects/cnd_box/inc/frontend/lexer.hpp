@@ -483,37 +483,37 @@ constexpr Lexer::LexerResultT Lexer::LexBlockComment(StrView s) noexcept {
   using cldev::clmsg::MakeClMsg;
   using std::source_location;
   auto c = s.begin();
+
 #if _DEBUG
-  if (!IsInRange(c, s))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is eof.")};
-  if (!IsInRange(next(c), s))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is eof.")};
-  if (*c != '/')
-    return LexerFailT{
-        MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is not a forward slash.")};
-  if (*next(c) != '`')
-    return LexerFailT{
-        MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), " Opening char is not a backtick.")};
+  if (!IsInRange(c, s)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
+  if (!IsInRange(next(c), s)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
+  if (*c != '/') return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not a forward slash.")};
+  if (*next(c) != '`') return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not a backtick.")};
 #endif
+  auto begin_col = curr_col_;
+  auto begin_line = curr_line_;
+
   std::advance(c, 2);  // pass "/`"
+  curr_col_ += 2;
   while (IsInRange(c, s)) {
     // Check for end of block.
     if (*c == '`') {
-      if (!IsInRange(next(c), s))
-        return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(),
-                                                                    "Reached eof before end of block comment.")};
+      if (!IsInRange(next(c), s)) return ClFail{CND_ERROR_DEV_DEBUG("Reached eof before end of block comment.")};
 
       if (*next(c) == '/') {
         std::advance(c, 2);  // pass "`/"
-        return LexerCursor(eTk::kBlockComment, s, s.begin(), c);
-      }
-    }
+        curr_col_ += 2;
+        return LexerCursor(eTk::kBlockComment, s, s.begin(), c, begin_line, begin_col, curr_line_, curr_col_);
+      } else
+        AdvanceSourceLocation(s, c);
+    } else
+      AdvanceSourceLocation(s, c);
+
     // cont.
     c++;
   }
 
-  return LexerFailT{
-      MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT::current(), "Reached eof before end of block comment.")};
+  return ClFail{CND_ERROR_DEV_DEBUG("Reached eof before end of block comment.")};
 }
 
 // format : T"[<delimiter-ident>]([<token-string>])[<delimiter-ident>]"
@@ -523,10 +523,8 @@ constexpr Lexer::LexerResultT Lexer::LexRecursiveTokenLiteral(StrView s) noexcep
   using std::source_location;
   auto c = s.begin();
 #if _DEBUG
-  if (!IsInRange(c, s))
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, " Opening char is eof.")};
-  if (*c != '"')
-    return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, " Opening char is not a quotation.")};
+  if (!IsInRange(c, s)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
+  if (*c != '"') return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not a quotation.")};
 #endif
 
   c++;  // advance past the opening quotation so we are not out of begin range in the loop.
