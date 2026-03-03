@@ -208,7 +208,7 @@ constexpr Lexer::LexerResultT Lexer::LexNumber(StrView s) noexcept {
     if (IsInRange(curr, s) && *curr == 'r') return ProduceToken(eTk::kLitReal, s, beg, ++curr);  // 42.r -> Real
 
     return ProduceToken(eTk::kLitF64, s, beg, curr);  // 40. -> F64.
-    }
+  }
 
   // Check for sized scalar literal suffixes if followed by alpha.
   if (CheckChar(s, curr, IsSrcCharAlpha<char>)) {
@@ -333,7 +333,7 @@ constexpr Lexer::LexerResultT Lexer::LexPunctuator(StrView s) noexcept {
     } else if (CheckChar(s, next(c), '=')) {
       if (CheckChar(s, next(c, 2), '>'))
         return ProduceToken(eTk::kSpaceship, s, c, next(c, 3));
-    else
+      else
         return ProduceToken(eTk::kLte, s, c, next(c, 2));
     } else
       return ProduceToken(eTk::kLt, s, c, next(c));
@@ -424,7 +424,7 @@ constexpr Lexer::LexerResultT Lexer::LexNewline(StrView s) noexcept {
     // Handle Windows-style CRLF newlines as a single newline. Skip line advance.
     if (!(*c == '\r' && CheckChar(s, next(c), '\n'))) curr_line_++;
     c++;
-}
+  }
   curr_col_ = 1;  // Reset column to 1 after newline(s).
   return LexerCursor(eTk::kNewline, s, s.begin(), c, begin_line, begin_col, curr_line_, curr_col_);
 }
@@ -453,7 +453,7 @@ constexpr Lexer::LexerResultT Lexer::LexEscapedCharSequence(StrView s) noexcept 
     }
     c++;
     AdvanceSourceLocation(s, c);
-    }
+  }
 
   // Check if ended with a quote.
   if (IsInRange(c, s) && *c == '"') {
@@ -476,7 +476,7 @@ constexpr Lexer::LexerResultT Lexer::LexLineComment(StrView s) noexcept {
   c++;
   while (IsInRange(c, s) && !IsSrcCharNewline(*c)) c++;
   return ProduceToken(eTk::kLineComment, s, s.begin(), c);
-  }
+}
 
 constexpr Lexer::LexerResultT Lexer::LexBlockComment(StrView s) noexcept {
   using cldev::clmsg::ClMsgBuffer;
@@ -543,62 +543,61 @@ constexpr Lexer::LexerResultT Lexer::LexRecursiveTokenLiteral(StrView s) noexcep
 }
 
 constexpr Lexer::LexerOutputT Lexer::Process(StrView s) noexcept {
-  if (s.empty()) return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(CppSrcLocT{}, "Cannot lex empty source.")};
+  if (s.empty()) return Vec<Tk>{};
   read_head_ = s;
-  curr_line_ = 0;
-  curr_col_ = 0;
+  curr_line_ = 1;
+  curr_col_ = 1;
   Vec<Tk> tokens;
   auto it = read_head_.begin();
   while (read_head_ != "") {
     // Newline initial
     if (IsSrcCharNewline(read_head_[0])) {
       auto res_buff = LexNewline(read_head_);
-      if (!res_buff) return LexerFailT{res_buff.error()};
+      if (!res_buff) return ClFail{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
       // Whitespace initial
     } else if (IsSrcCharSpace(read_head_[0])) {
       auto res_buff = LexWhitespace(read_head_);
-      if (!res_buff) return LexerFailT{res_buff.error()};
+      if (!res_buff) return ClFail{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
       // AlphaUnderscore initial
     } else if (IsSrcCharAlphaUnderscore(read_head_[0])) {
       auto res_buff = LexIdentifier(read_head_);
-      if (!res_buff) return LexerFailT{res_buff.error()};
+      if (!res_buff) return ClFail{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
       // Numeric initial
     } else if (IsSrcCharNumeric(read_head_[0])) {
       auto res_buff = LexNumber(read_head_);
-      if (!res_buff) return LexerFailT{res_buff.error()};
+      if (!res_buff) return ClFail{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
       // Punctuator initial
     } else if (read_head_[0] == '"') {
       auto res_buff = LexEscapedCharSequence(read_head_);
-      if (!res_buff) return LexerFailT{res_buff.error()};
+      if (!res_buff) return ClFail{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
       // Unknown beggining of token...
     } else if (read_head_[0] == '`') {  // Line Comment
       auto res_buff = LexLineComment(read_head_);
-      if (!res_buff) return LexerFailT{res_buff.error()};
+      if (!res_buff) return ClFail{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
     } else if (read_head_[0] == '/' && read_head_.size() > 1 && read_head_[1] == '`') {
       auto res_buff = LexBlockComment(read_head_);
-      if (!res_buff) return LexerFailT{res_buff.error()};
+      if (!res_buff) return ClFail{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
     } else if (IsSrcCharPunctuator(read_head_[0])) {
       auto res_buff = LexPunctuator(read_head_);
-      if (!res_buff) return LexerFailT{res_buff.error()};
+      if (!res_buff) return ClFail{res_buff.error()};
       tokens.push_back({res_buff.value().processed_tk});
       read_head_ = res_buff.value().read_head;
-      // Quotations initial
     } else {
-      return LexerFailT{MakeClMsg<eClErr::kCompilerDevDebugError>(
+      return ClFail{MakeClMsg<eClErr::kCompilerDevDebugError>(
           CppSrcLocT{}, Str{"Unexpected codepoint encountered in source:"} + read_head_[0])};
     }
   }
@@ -659,7 +658,7 @@ template <auto STR_LAMBDA>
 static constexpr auto LiteralTkBuffer = LiteralTkBufferType<STR_LAMBDA>{};
 
 }  // namespace literals
-}  // namespace trtools
+}  // namespace frontend
 }  // namespace cnd
 
 /// @} // end of cnd_compiler_data
