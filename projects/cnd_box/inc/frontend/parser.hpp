@@ -47,7 +47,7 @@
 #endif
 
 namespace cnd {
-namespace trtools {
+namespace frontend {
 namespace parser {
 using cldev::clmsg::MakeClMsg;
 using std::source_location;

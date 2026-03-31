@@ -31,7 +31,7 @@ using cnd_unit_test::frontend::test_util::TestParsingMethod;
 using enum cnd_unit_test::frontend::test_util::eTestParsingMethod;
 
 // The namespace being tested from "trtools/Parser.hpp" header.
-using namespace cnd::trtools::parser;
+using namespace cnd::frontend::parser;
 
 ///////////////////////////////////////
 /* Primary Statement         */

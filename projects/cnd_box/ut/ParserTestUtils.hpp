@@ -39,9 +39,9 @@ using cnd::eAstToCStr;
 using cnd::Sast;
 using cnd::Tk;
 using cnd::frontend::Lexer;
-using cnd::trtools::LoadSourceFile;
-using cnd::trtools::parser::LLPrsResT;
-using cnd::trtools::parser::TkCursorT;
+using cnd::LoadSourceFile;
+using cnd::frontend::parser::LLPrsResT;
+using cnd::frontend::parser::TkCursorT;
 
 using ParsingMethod = LLPrsResT (*)(TkCursorT);
 

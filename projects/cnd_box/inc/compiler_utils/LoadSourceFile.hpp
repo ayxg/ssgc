@@ -19,7 +19,6 @@
 #include "compiler_utils/CompilerProcessResult.hpp"
 
 namespace cnd {
-namespace trtools {
 
 template <class SourceCharT>
 CompilerProcessResult<Vec<SourceCharT>> LoadSourceFile(std::string_view fp) {
@@ -42,7 +41,7 @@ CompilerProcessResult<Vec<SourceCharT>> LoadSourceFile(std::string_view fp) {
   if (temp_file_buffer.back() != '\0') temp_file_buffer.push_back('\0');
 
   return temp_file_buffer;
-}
+
 };  // namespace trtools
 }  // namespace cnd
 
