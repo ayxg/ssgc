@@ -9,6 +9,48 @@
 /// @file
 /// @ingroup cnd_corevals
 /// @brief Compiler Diagnostic Message Base
+///
+/// -[01/13/2025] There may potentially be thousands of unique diagnostic messages that the compiler can generate. We
+/// need a way to programmatically enumerate all the diagnostic messages, and to be able to pass data to a predefined
+/// formatting method of a specific given diagnostic.
+///
+/// The main requirements:
+///
+/// -[01/13/2025] Do NOT create a class or class template specialization for each message. We don't want to overload
+/// the type system and bloat the executable. There will be more important uses for types than error messages.
+///
+/// -[01/13/2025] Each message will depend the message identity, an array of data, a creation method, and a formatting
+/// method.
+///
+/// -[01/13/2025] The data a message is allowed to receive must be one of CompilerMessageDataTypeUnion, which is the
+/// union of allowable types. These types may include known C++ types and any 'corevals' namespace types.
+///
+/// -[01/13/2025] From the compiler developer's user perspective we need to able to get intellisense/compile time
+/// validation of the error creation and formatting methods. eg. 'MakeMsg' must have a concrete set of named overloads.
+///
+/// -[01/13/2025] The error structure should be const-evaluable up to the error code. Since we cannot create formatted
+/// dynamic output at compile time. In a constexpr context we can only access the formatted data as an intermediate
+/// value.
+///
+/// -[01/13/2025] Compiler messages must be able to receive a variable quantity and types of data. The allowable data
+/// types may be enumerated, the quantity may not. This data is stored in the message and formatted into a string when
+/// needed.
+///
+/// -[01/13/2025] The ClMsg structure should be tiny(8 bytes) to minimize stack space. When used as an alternative for
+/// variant expected , optional: ClMsg should not cause an increase in the union size. The expectation is that IF a
+/// ClMsg is returned then the program has already encountered an invalid or error state, or we are printing verbose
+/// diagnostics in which case unpacking speed does not matter. As such we can use many layers of indirection to
+/// dynamically allocate a message upon construction. The overall underlying data structure of ClMsg currently is:
+///    'std::unique_ptr<std::vector<std::variant<ClMsgNode,std::vector<ClMsgNode>>>>'
+/// This is all wrapped up and separated into the ClMsgNode, ClMsgChain, ClMsgUnion and ClMsg classes.
+///
+/// Implementation details:
+///
+/// -[01/13/2025] We can define a method to create a message constrained to a given message enum entry by using
+/// 'requires'. The message category and type will be available at compile time based on the enum entry. By static
+/// casting the enum to ClMsgCodeIntT or ClMsgCategoryIntT, we turn this into a pseudo-'compile time virtual method'.
+/// Intellisense should be able to display the required arguments to create the valid data for this message.
+///
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// @addtogroup cnd_compiler_cldev
@@ -161,7 +203,7 @@ struct ClMsgChain {
   constexpr void PushBack(ClMsgNode&& e) { messages.push_back(forward<ClMsgNode>(e)); }
 };
 
-// underlying type of ClMsgUnion (usually std::variant).
+// underlying type of ClMsgUnion (std::variant or interface equivalent impl).
 using ClMsgUnionUnderlyingT = ccapi::Var<ClMsgNode, ClMsgChain>;
 
 struct ClMsgUnion : ClMsgUnionUnderlyingT {
@@ -185,6 +227,7 @@ struct ClMsgUnion : ClMsgUnionUnderlyingT {
       return false;  // Already a chain.
     else             // Turn this into a chain and add the node as the first element.
       *this = ClMsgChain{{GetSingle()}};
+    return true;
   }
 
   constexpr Bool TransformToEmpty() noexcept {
@@ -524,50 +567,6 @@ static_assert(FormatClMsg<eClDiagnostic::kNoDiagnostic>(MakeClMsg<eClDiagnostic:
 
 /// @} // end of cnd_compiler_cldev
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @devlog Compiler Error/Diagnostic Messages
-///
-/// -[01/13/2025] There may potentially be thousands of unique diagnostic messages that the compiler can generate. We
-/// need a way to programmatically enumerate all the diagnostic messages, and to be able to pass data to a predefined
-/// formatting method of a specific given diagnostic.
-///
-/// The main requirements:
-///
-/// -[01/13/2025] Do NOT create a class or class template specialization for each message. We don't want to overload
-/// the type system and bloat the executable. There will be more important uses for types than error messages.
-///
-/// -[01/13/2025] Each message will depend the message identity, an array of data, a creation method, and a formatting
-/// method.
-///
-/// -[01/13/2025] The data a message is allowed to receive must be one of CompilerMessageDataTypeUnion, which is the
-/// union of allowable types. These types may include known C++ types and any 'corevals' namespace types.
-///
-/// -[01/13/2025] From the compiler developer's user perspective we need to able to get intellisense/compile time
-/// validation of the error creation and formatting methods. eg. 'MakeMsg' must have a concrete set of named overloads.
-///
-/// -[01/13/2025] The error structure should be const-evaluable up to the error code. Since we cannot create formatted
-/// dynamic output at compile time. In a constexpr context we can only access the formatted data as an intermediate
-/// value.
-///
-/// -[01/13/2025] Compiler messages must be able to receive a variable quantity and types of data. The allowable data
-/// types may be enumerated, the quantity may not. This data is stored in the message and formatted into a string when
-/// needed.
-///
-/// -[01/13/2025] The ClMsg structure should be tiny(8 bytes) to minimize stack space. When used as an alternative for
-/// variant expected , optional: ClMsg should not cause an increase in the union size. The expectation is that IF a
-/// ClMsg is returned then the program has already encountered an invalid or error state, or we are printing verbose
-/// diagnostics in which case unpacking speed does not matter. As such we can use many layers of indirection to
-/// dynamically allocate a message upon construction. The overall underlying data structure of ClMsg currently is:
-///    'std::unique_ptr<std::vector<std::variant<ClMsgNode,std::vector<ClMsgNode>>>>'
-/// This is all wrapped up and separated into the ClMsgNode, ClMsgChain, ClMsgUnion and ClMsg classes.
-///
-/// Implementation details:
-///
-/// -[01/13/2025] We can define a method to create a message constrained to a given message enum entry by using
-/// 'requires'. The message category and type will be available at compile time based on the enum entry. By static
-/// casting the enum to ClMsgCodeIntT or ClMsgCategoryIntT, we turn this into a pseudo-'compile time virtual method'.
-/// Intellisense should be able to display the required arguments to create the valid data for this message.
-///
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // @project: C& Programming Language
 // @author(s): Anton Yashchenko

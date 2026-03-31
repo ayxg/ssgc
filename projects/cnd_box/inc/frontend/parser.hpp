@@ -24,14 +24,14 @@
 #include "frontend/TkCursor.hpp"
 #include "frontend/token_scope.hpp"
 
-#include "frontend/Lexer.hpp"
+#include "frontend/lexer.hpp"
 #include "compiler_utils/LoadSourceFile.hpp"
 // clang-format on
 
 /// File local macro, returns a debug error for creating and debugging compiler errors on the fly.
-#define DEBUG_FAIL(msg) \
-  CompilerProcessFailure( \
-      cldev::clmsg::MakeClMsg<corevals::diagnostic::eClErr::kCompilerDevDebugError>(std::source_location::current(), msg))
+#define DEBUG_FAIL(msg)                                                                                 \
+  CompilerProcessFailure(cldev::clmsg::MakeClMsg<corevals::diagnostic::eClErr::kCompilerDevDebugError>( \
+      std::source_location::current(), msg))
 #define DEBUG_MSG(msg) MakeClMsg<eClErr::kCompilerDevDebugError>(std::source_location::current(), msg)
 
 #ifdef _DEBUG
@@ -239,7 +239,7 @@ static CompilerProcessResult<Ast> ParseSource(const Vec<char>& src_data) {
 /// @param fp Source file path. Absolute or relative to working dir.
 static CompilerProcessResult<Ast> ParseFile(const Path& fp) {
   auto loaded_src = LoadSourceFile<char>(fp.string());
-  if (!loaded_src) loaded_src.error(); 
+  if (!loaded_src) loaded_src.error();
   return ParseSource(*loaded_src);
 }
 

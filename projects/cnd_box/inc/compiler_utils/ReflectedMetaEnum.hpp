@@ -26,16 +26,20 @@
 /// @note Since there is currently no reflection support, this seems like the most sane method to associate identifiers
 ///     with enums and convert them to strings, or other symbols. I don't know the specific name of this pattern but
 ///     I'm sure wiser devs have already thought of it.
-/// 
+///
 /// Implementation Limits:
 ///   - The applied list cannot have defined values, only identifiers.
 ///   - The enums are all contiguous.
 ///   - The enums all end in a COUNT enumeration entry.
-/// 
+/// *** IMPORTANT ***
+///   - 'COUNT' must NOT be an identifier in the applied list. It is added by the macro and is used to reflect the
+///     entry count.
+///     @see CND_MM_CREATE_ENUMTOCSTR_FROM_ENUM_LIST
+///
 /// Given this is a macro-based implementation, defining enums should follow the following instructions verbatim:
-/// 
+///
 /// 1.Define an applied list of all the enum entries in the following format where [] is the substitute pattern.
-/// 
+///
 ///   @code
 ///     #define CND_APPLIED_ENUM_LIST_[name-of-enum](m, sep, pre, lst)\
 ///       pre m([first-enum-entry|'INVALID'])\
@@ -43,7 +47,7 @@
 ///       sep m([last-enum-entry])\
 ///       lst
 ///   @endcode
-/// 
+///
 ///   [name-of-enum] : By C& compiler codebase coding guidelines define enums in CamelCase prefixed with an 'e'.
 ///   [first-enum-entry] : The first entry in the applied list. By convention the first entry is 'INVALID'.
 ///   [middle-enum-entry] : All entries except the first and last. By convention the second entry is 'NONE'.
@@ -58,31 +62,32 @@
 ///   "out of bounds" entry.. !the 'COUNT' entry is not prefixed with a k.
 ///   @see CND_MM_CREATE_ENUM_FROM_APPLIED_ENUM
 ///   @note C++ Core Guidelines suggest using untyped enums unless you have a good reason to use a typed enum.
-/// 
+///
 /// 3.Create an enum name to c-string conversion method by calling CND_MM_CREATE_ENUMTOCSTR_FROM_ENUM_LIST(fn, ln, en).
 ///   @see CND_MM_CREATE_ENUMTOCSTR_FROM_ENUM_LIST
-/// 
-/// 4.Static assert the enum to string method to ensure all entries are covered by calling CND_STATIC_ASSERT_ENUM_TO_CSTR.
+///
+/// 4.Static assert the enum to string method to ensure all entries are covered by calling
+/// CND_STATIC_ASSERT_ENUM_TO_CSTR.
 ///   Use the following format where [] is the substitute pattern:
-/// 
+///
 ///   @code
 ///     #define CND_STATIC_ASSERT_ENUM_TO_CSTR_[enum-name](x) CND_STATIC_ASSERT_ENUM_TO_CSTR(x, [enum-name], [fn-name])
 ///     CND_APPLIED_ENUM_[enum-name](CND_STATIC_ASSERT_ENUM_TO_CSTR_[enum-name], , , ); // test the entries
 ///     static_assert(cxx::StrEq([fn-name]([enum-name]::COUNT), "COUNT"));              // test the 'COUNT' entry
 ///     #undef CND_STATIC_ASSERT_ENUM_TO_CSTR_[enum-name]                               // undefine temporary macro
 ///   @endcode
-/// 
+///
 /// BONUS: Applied lists may be nested within each other, this can be useful for defining related enums or categorizing
 /// entries. The following example would make all the entries of 'eBar' part of 'eFoo' excluding the 'COUNT' entry:
-/// 
+///
 /// @code
 /// #define CND_APPLIED_ENUM_LIST_eFoo(m, sep, pre, lst)\
 ///     CND_APPLIED_ENUM_LIST_eBar(m, sep, pre, )\
 ///     sep m(Grok) lst
 /// @endcode
-/// 
+///
 /// To keep it clean and future-proof the codebase - define each enum in its own file. The header should only depend on
-/// the 'ccapi' module. The header should only define the enum, and methods which query syntactical properties of the 
+/// the 'ccapi' module. The header should only define the enum, and methods which query syntactical properties of the
 /// enum. DO NOT include logic related methods. Name the file in the format: 'cnd_corevals_[enum-name-lowercase].hpp'.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -98,7 +103,7 @@
 #define CND_MM_COMMA ,              ///> @warning Internal macro, do not use.
 #define CND_MM_IDTOSTR(x) #x        ///> @warning Internal macro, do not use.
 
-/// Used to expand an enum name to its enum entry name, format: k##x
+/// Used to expand an enum name to its enum entry name, format: k##x [convention]
 /// @warning Internal macro, do not use.
 #define CND_MM_CONST_ID_TAG(x) k##x 
 
