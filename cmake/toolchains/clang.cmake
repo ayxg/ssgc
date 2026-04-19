@@ -1,0 +1,7 @@
+set(CMAKE_SYSTEM_NAME Windows)
+set(CMAKE_C_COMPILER "clang.exe")
+set(CMAKE_CXX_COMPILER "clang++.exe")
+set(CMAKE_C_COMPILER_TARGET x86_64-w64-windows-gnu)
+set(CMAKE_CXX_COMPILER_TARGET x86_64-w64-windows-gnu)
+set(CMAKE_EXE_LINKER_FLAGS "-fuse-ld=lld")
+set(CMAKE_SHARED_LINKER_FLAGS "-fuse-ld=lld")

@@ -71,26 +71,26 @@ ssg_declare_subprojects(
 		mta_box
 		cxxx_box
 		wpl_box
-		caf_box
-		cgui_box
+		#caf_box
+		#cgui_box
 		cnd_box
-		cide_box
+		#cide_box
 	SOURCE_DIRS
 		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/minitest_box"
 		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/mta_box"
 		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cxxx_box"
 		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/wpl_box"
-		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/caf_box"
-		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cgui_box"
+		#"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/caf_box"
+		#"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cgui_box"
 		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cnd_box"
-		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cide_box"
+		#"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cide_box"
 )
 
 #======================================
 # Aquire external subprojects.
 include(SsgGitPkg)
-ssg_gitpkg_imgui_sfml()
-ssg_gitpkg_nlohmanjson()
+#ssg_gitpkg_imgui_sfml()
+#ssg_gitpkg_nlohmanjson()
 #======================================
 
 #[============================================================================[
