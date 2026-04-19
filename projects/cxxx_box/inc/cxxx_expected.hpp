@@ -29,9 +29,7 @@ class BoolError {
   constexpr const std::string& Error() const { return error_; }
 
   /// Creates a runtime_error exception out of the Error() string.
-  inline std::runtime_error Exception() const {
-    return std::runtime_error(error_.c_str());
-  }
+  inline std::runtime_error Exception() const { return std::runtime_error(error_.c_str()); }
 
   /// True if object is in a valid state.
   constexpr operator bool() const { return valid_; }
@@ -49,9 +47,9 @@ class BoolError {
 
  private:
   /// Is this object in a valid state?
-  bool valid_;         
+  bool valid_;
   /// Error message if in error state.
-  std::string error_;  
+  std::string error_;
 };
 
 /// @brief Represents an expected value or an error message.
@@ -69,15 +67,10 @@ class Expected {
   constexpr const T& Value() const { return expected_.value(); }
   constexpr const auto& Error() const { return error_; }
   constexpr operator bool() const { return expected_.has_value(); }
-  static constexpr Expected<T> Success(const T& expected) {
-    return Expected<T>(std::forward<const T>(expected));
-  }
-  static constexpr Expected<T> Success(T&& expected) {
-    return Expected<T>(std::forward<T>(expected));
-  }
+  static constexpr Expected<T> Success(const T& expected) { return Expected<T>(std::forward<const T>(expected)); }
+  static constexpr Expected<T> Success(T&& expected) { return Expected<T>(std::forward<T>(expected)); }
   static constexpr Expected<T> Failure(const std::string& error_message) {
-    return Expected<T>(std::nullopt,
-                       std::forward<const std::string>(error_message));
+    return Expected<T>(std::nullopt, std::forward<const std::string>(error_message));
   }
   static constexpr Expected<T> Failure(std::string&& error_message) {
     return Expected<T>(std::nullopt, std::forward<std::string>(error_message));
@@ -90,15 +83,13 @@ class Expected {
   }
 
   template <typename U>
-  static constexpr Expected<T> NewChainFailure(
-      const Expected<U>& other, const std::string& error_message) {
+  static constexpr Expected<T> NewChainFailure(const Expected<U>& other, const std::string& error_message) {
     auto ret = Expected<T>::Failure(other.Error() + "\n" + error_message);
     return ret;
   }
 
   constexpr Expected<T>&& ChainFailure(std::string error_message) {
-    return std::forward<Expected<T>>(
-        Expected<T>::NewChainFailure(*this, error_message));
+    return std::forward<Expected<T>>(Expected<T>::NewChainFailure(*this, error_message));
   }
 
   template <typename U>
@@ -111,12 +102,11 @@ class Expected {
   std::string error_{""};
 
   constexpr Expected(T expected) : expected_(expected) {}
-  template <typename T>
-  constexpr Expected(const T& expected) : expected_(expected) {}
+  template <typename U>
+  constexpr Expected(const U& expected) : expected_(expected) {}
 
-#pragma warning( \
-    disable : 4100)  // Disable unused parameter warning for std::nullopt_t
-                     // Cannot be instantiated directly from type.
+#pragma warning(disable : 4100)  // Disable unused parameter warning for std::nullopt_t
+                                 // Cannot be instantiated directly from type.
   constexpr Expected(const std::nullopt_t& none, std::string error_message)
       : expected_(std::nullopt), error_(error_message) {}
 #pragma warning(default : 4100)
@@ -133,12 +123,11 @@ class PartialExpected {
   std::optional<T> value_{std::nullopt};
   std::string error_{""};
 
-  template <typename T, typename AlwaysT>
-  constexpr PartialExpected(const AlwaysT& always, T expected)
-      : always_(always), value_(expected) {}
+  template <typename U, typename V>
+  constexpr PartialExpected(const V& always, U expected) : always_(always), value_(expected) {}
 
-  template <typename AlwaysT>
-  constexpr PartialExpected(const AlwaysT& always) : always_(always) {}
+  template <typename V>
+  constexpr PartialExpected(const V& always) : always_(always) {}
 
  public:
   constexpr bool Valid() const { return value_.has_value(); }
@@ -156,47 +145,38 @@ class PartialExpected {
     return val;
   }
 
-  constexpr PartialExpected<T, AlwaysT> ChainFailure(
-      std::string error_message) {
+  constexpr PartialExpected<T, AlwaysT> ChainFailure(std::string error_message) {
     return PartialExpected::NewChainFailure(*this, error_message);
   }
 
-  constexpr PartialExpected<T, AlwaysT> ChainFailure() {
-    return PartialExpected::NewChainFailure(*this);
-  }
+  constexpr PartialExpected<T, AlwaysT> ChainFailure() { return PartialExpected::NewChainFailure(*this); }
 
-  static constexpr PartialExpected<T, AlwaysT> Success(const AlwaysT& always,
-                                                       T expected) {
+  static constexpr PartialExpected<T, AlwaysT> Success(const AlwaysT& always, T expected) {
     return PartialExpected(always, expected);
   }
 
-  static constexpr PartialExpected<T, AlwaysT> Failure(
-      const AlwaysT& always, const std::string& error_message) {
+  static constexpr PartialExpected<T, AlwaysT> Failure(const AlwaysT& always, const std::string& error_message) {
     auto ret = PartialExpected(always);
     ret.error_ = error_message;
     return ret;
   }
 
-  static constexpr PartialExpected<T, AlwaysT> NewChainFailure(
-      const PartialExpected& other, const AlwaysT& new_always,
-      const std::string& error_message) {
-    auto ret = PartialExpected::Failure(new_always,
-                                        other.Error() + "\n" + error_message);
+  static constexpr PartialExpected<T, AlwaysT> NewChainFailure(const PartialExpected& other, const AlwaysT& new_always,
+                                                               const std::string& error_message) {
+    auto ret = PartialExpected::Failure(new_always, other.Error() + "\n" + error_message);
     return ret;
   }
 
-  static constexpr PartialExpected<T, AlwaysT> NewChainFailure(
-      const PartialExpected& other, const std::string& error_message) {
-    auto ret = PartialExpected::Failure(other.Always(),
-                                        other.Error() + "\n" + error_message);
+  static constexpr PartialExpected<T, AlwaysT> NewChainFailure(const PartialExpected& other,
+                                                               const std::string& error_message) {
+    auto ret = PartialExpected::Failure(other.Always(), other.Error() + "\n" + error_message);
     return ret;
   }
 
   template <typename U>
-  static constexpr PartialExpected<T, AlwaysT> NewChainFailure(
-      const Expected<U>& other, const std::string& error_message) {
-    auto ret = PartialExpected::Failure(other.Always(),
-                                        other.Error() + "\n" + error_message);
+  static constexpr PartialExpected<T, AlwaysT> NewChainFailure(const Expected<U>& other,
+                                                               const std::string& error_message) {
+    auto ret = PartialExpected::Failure(other.Always(), other.Error() + "\n" + error_message);
     return ret;
   }
 };

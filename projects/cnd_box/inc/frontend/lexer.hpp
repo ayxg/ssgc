@@ -19,6 +19,7 @@
 #include "compiler_utils/CompilerProcessResult.hpp"
 #include "grammar/eTk.hpp"
 #include "frontend/tk.hpp"
+#include "diagnostic/error_messages.hpp"
 // clang-format on
 
 /// Set true to enable inline static unit tests during compiler development.
@@ -78,7 +79,7 @@ class Lexer {
   constexpr void AdvanceSourceLocation(SrcView source, SrcViewConstIter passed_char) noexcept {
     if (CheckChar(source, passed_char, IsSrcCharNewline<char>)) {
       // Handle Windows-style CRLF newlines as a single newline. Skip line advance.
-      if (!(*passed_char == '\r' && CheckChar(source, next(passed_char), '\n'))) curr_line_++;
+      if (!(*passed_char == '\r' && CheckChar(source,std::next(passed_char), '\n'))) curr_line_++;
       curr_col_ = 1;
     } else {
       curr_col_++;
@@ -102,7 +103,7 @@ class Lexer {
   SrcView file_{""};
   Size curr_line_{1};      ///> Used to maintain line count across intermediate lexing methods.
   Size curr_col_{1};       ///> Used to maintain column count across intermediate lexing methods.
-  SrcView read_head_{""};  ///> Next read location where a token opening pattern is searched from.
+  SrcView read_head_{""};  ///>std::next read location where a token opening pattern is searched from.
   SrcView source_{""};
 };
 
@@ -195,8 +196,8 @@ constexpr Lexer::LexerResultT Lexer::LexNumber(StrView s) noexcept {
   if (!IsInRange(curr, s)) return ProduceToken(eTk::kLitI32, s, beg, curr);
 
   // If followed by ellipsis('...'), return as i32 early. Avoids ambiguity with floating point processing below.
-  if ((IsInRange(curr, s) && *curr == '.') && (IsInRange(next(curr), s) && *next(curr) == '.') &&
-      (IsInRange(next(curr, 2), s) && *next(curr, 2) == '.'))
+  if ((IsInRange(curr, s) && *curr == '.') && (IsInRange(next(curr), s) && *std::next(curr) == '.') &&
+      (IsInRange(next(curr, 2), s) && *std::next(curr, 2) == '.'))
     return ProduceToken(eTk::kLitI32, s, beg, curr);
 
   // Check if it's a floating point literal. Read in decimal digits if a period is found.
@@ -255,7 +256,7 @@ constexpr Lexer::LexerResultT Lexer::LexIdentifier(StrView src) noexcept {
   while (IsInRange(curr, src) && IsSrcCharAlnumus(*curr)) curr++;
 
   // Check for matching keyword.
-  eTk etk = GetTkFromKeyword(src.substr(0, static_cast<Size>(distance(beg, curr))));
+  eTk etk = GetTkFromKeyword(src.substr(0, static_cast<Size>(std::distance(beg, curr))));
   if (etk != eTk::kNONE) return ProduceToken(etk, src, beg, curr);
 
   return ProduceToken(eTk::kIdent, src, beg, curr);
@@ -263,6 +264,7 @@ constexpr Lexer::LexerResultT Lexer::LexIdentifier(StrView src) noexcept {
 
 constexpr Lexer::LexerResultT Lexer::LexPunctuator(StrView s) noexcept {
   using std::distance;
+  using std::next;
   auto c = s.begin();
 
 #if _DEBUG
@@ -273,125 +275,125 @@ constexpr Lexer::LexerResultT Lexer::LexPunctuator(StrView s) noexcept {
   // Switch over all valid initial punctuators which may form a symbol token.
   // The maximum length of any punctuator is 3.
   if (*c == '=') {
-    if (CheckChar(s, next(c), '='))
-      return ProduceToken(eTk::kEq, s, c, next(c, 2));
+    if (CheckChar(s,std::next(c), '='))
+      return ProduceToken(eTk::kEq, s, c,std::next(c, 2));
     else
-      return ProduceToken(eTk::kAssign, s, c, next(c));
+      return ProduceToken(eTk::kAssign, s, c,std::next(c));
   } else if (*c == '+') {
-    if (CheckChar(s, next(c), '+'))
-      return ProduceToken(eTk::kInc, s, c, next(c, 2));
-    else if (CheckChar(s, next(c), '='))
-      return ProduceToken(eTk::kAddAssign, s, c, next(c, 2));
+    if (CheckChar(s,std::next(c), '+'))
+      return ProduceToken(eTk::kInc, s, c,std::next(c, 2));
+    else if (CheckChar(s,std::next(c), '='))
+      return ProduceToken(eTk::kAddAssign, s, c,std::next(c, 2));
     else
-      return ProduceToken(eTk::kAdd, s, c, next(c));
+      return ProduceToken(eTk::kAdd, s, c,std::next(c));
   } else if (*c == '-') {
-    if (CheckChar(s, next(c), '-'))
-      return ProduceToken(eTk::kDec, s, c, next(c, 2));
-    else if (CheckChar(s, next(c), '='))
-      return ProduceToken(eTk::kSubAssign, s, c, next(c, 2));
+    if (CheckChar(s,std::next(c), '-'))
+      return ProduceToken(eTk::kDec, s, c,std::next(c, 2));
+    else if (CheckChar(s,std::next(c), '='))
+      return ProduceToken(eTk::kSubAssign, s, c,std::next(c, 2));
     else
-      return ProduceToken(eTk::kSub, s, c, next(c));
+      return ProduceToken(eTk::kSub, s, c,std::next(c));
   } else if (*c == '*') {
-    if (CheckChar(s, next(c), '='))
-      return ProduceToken(eTk::kMulAssign, s, c, next(c, 2));
+    if (CheckChar(s,std::next(c), '='))
+      return ProduceToken(eTk::kMulAssign, s, c,std::next(c, 2));
     else
-      return ProduceToken(eTk::kMul, s, c, next(c));
+      return ProduceToken(eTk::kMul, s, c,std::next(c));
   } else if (*c == '/') {
-    if (CheckChar(s, next(c), '='))
-      return ProduceToken(eTk::kDivAssign, s, c, next(c, 2));
+    if (CheckChar(s,std::next(c), '='))
+      return ProduceToken(eTk::kDivAssign, s, c,std::next(c, 2));
     else
-      return ProduceToken(eTk::kDiv, s, c, next(c));
+      return ProduceToken(eTk::kDiv, s, c,std::next(c));
   } else if (*c == '%') {
-    if (CheckChar(s, next(c), '='))
-      return ProduceToken(eTk::kModAssign, s, c, next(c, 2));
+    if (CheckChar(s,std::next(c), '='))
+      return ProduceToken(eTk::kModAssign, s, c,std::next(c, 2));
     else
-      return ProduceToken(eTk::kMod, s, c, next(c));
+      return ProduceToken(eTk::kMod, s, c,std::next(c));
   } else if (*c == '&') {
-    if (CheckChar(s, next(c), '='))
-      return ProduceToken(eTk::kAndAssign, s, c, next(c, 2));
-    else if (CheckChar(s, next(c), '&'))
-      return ProduceToken(eTk::kAnd, s, c, next(c, 2));
+    if (CheckChar(s,std::next(c), '='))
+      return ProduceToken(eTk::kAndAssign, s, c,std::next(c, 2));
+    else if (CheckChar(s,std::next(c), '&'))
+      return ProduceToken(eTk::kAnd, s, c,std::next(c, 2));
     else
-      return ProduceToken(eTk::kBand, s, c, next(c));
+      return ProduceToken(eTk::kBand, s, c,std::next(c));
   } else if (*c == '|') {
-    if (CheckChar(s, next(c), '='))
-      return ProduceToken(eTk::kOrAssign, s, c, next(c, 2));
-    else if (CheckChar(s, next(c), '|'))
-      return ProduceToken(eTk::kOr, s, c, next(c, 2));
+    if (CheckChar(s,std::next(c), '='))
+      return ProduceToken(eTk::kOrAssign, s, c,std::next(c, 2));
+    else if (CheckChar(s,std::next(c), '|'))
+      return ProduceToken(eTk::kOr, s, c,std::next(c, 2));
     else
-      return ProduceToken(eTk::kBor, s, c, next(c));
+      return ProduceToken(eTk::kBor, s, c,std::next(c));
   } else if (*c == '^') {
-    if (CheckChar(s, next(c), '='))
-      return ProduceToken(eTk::kXorAssign, s, c, next(c, 2));
+    if (CheckChar(s,std::next(c), '='))
+      return ProduceToken(eTk::kXorAssign, s, c,std::next(c, 2));
     else
-      return ProduceToken(eTk::kXor, s, c, next(c));
+      return ProduceToken(eTk::kXor, s, c,std::next(c));
   } else if (*c == '<') {
-    if (CheckChar(s, next(c), '<')) {
-      if (CheckChar(s, next(c, 2), '='))
-        return ProduceToken(eTk::kLshAssign, s, c, next(c, 3));
+    if (CheckChar(s,std::next(c), '<')) {
+      if (CheckChar(s,std::next(c, 2), '='))
+        return ProduceToken(eTk::kLshAssign, s, c,std::next(c, 3));
       else
-        return ProduceToken(eTk::kLsh, s, c, next(c, 2));
-    } else if (CheckChar(s, next(c), '=')) {
-      if (CheckChar(s, next(c, 2), '>'))
-        return ProduceToken(eTk::kSpaceship, s, c, next(c, 3));
+        return ProduceToken(eTk::kLsh, s, c,std::next(c, 2));
+    } else if (CheckChar(s,std::next(c), '=')) {
+      if (CheckChar(s,std::next(c, 2), '>'))
+        return ProduceToken(eTk::kSpaceship, s, c,std::next(c, 3));
       else
-        return ProduceToken(eTk::kLte, s, c, next(c, 2));
+        return ProduceToken(eTk::kLte, s, c,std::next(c, 2));
     } else
-      return ProduceToken(eTk::kLt, s, c, next(c));
+      return ProduceToken(eTk::kLt, s, c,std::next(c));
   } else if (*c == '>') {
-    if (CheckChar(s, next(c), '>')) {
-      if (CheckChar(s, next(c, 2), '='))
-        return ProduceToken(eTk::kRshAssign, s, c, next(c, 3));
+    if (CheckChar(s,std::next(c), '>')) {
+      if (CheckChar(s,std::next(c, 2), '='))
+        return ProduceToken(eTk::kRshAssign, s, c,std::next(c, 3));
       else
-        return ProduceToken(eTk::kRsh, s, c, next(c, 2));
-    } else if (CheckChar(s, next(c), '='))
-      return ProduceToken(eTk::kGte, s, c, next(c, 2));
+        return ProduceToken(eTk::kRsh, s, c,std::next(c, 2));
+    } else if (CheckChar(s,std::next(c), '='))
+      return ProduceToken(eTk::kGte, s, c,std::next(c, 2));
     else
-      return ProduceToken(eTk::kGt, s, c, next(c));
+      return ProduceToken(eTk::kGt, s, c,std::next(c));
   } else if (*c == '!') {
-    if (CheckChar(s, next(c), '='))
-      return ProduceToken(eTk::kNeq, s, c, next(c, 2));
+    if (CheckChar(s,std::next(c), '='))
+      return ProduceToken(eTk::kNeq, s, c,std::next(c, 2));
     else
-      return ProduceToken(eTk::kNot, s, c, next(c));
+      return ProduceToken(eTk::kNot, s, c,std::next(c));
   } else if (*c == '~') {
-    return ProduceToken(eTk::kBnot, s, c, next(c));
+    return ProduceToken(eTk::kBnot, s, c,std::next(c));
   } else if (*c == '@') {
-    return ProduceToken(eTk::kCommercialAt, s, c, next(c));
+    return ProduceToken(eTk::kCommercialAt, s, c,std::next(c));
   } else if (*c == '#') {
-    return ProduceToken(eTk::kHash, s, c, next(c));
+    return ProduceToken(eTk::kHash, s, c,std::next(c));
   } else if (*c == '$') {
-    return ProduceToken(eTk::kDollar, s, c, next(c));
+    return ProduceToken(eTk::kDollar, s, c,std::next(c));
   } else if (*c == '?') {
-    return ProduceToken(eTk::kQuestion, s, c, next(c));
+    return ProduceToken(eTk::kQuestion, s, c,std::next(c));
   } else if (*c == ':') {
-    if (CheckChar(s, next(c), ':'))
-      return ProduceToken(eTk::kDoubleColon, s, c, next(c, 2));
-    else if (CheckChar(s, next(c), '='))
-      return ProduceToken(eTk::kNewAssign, s, c, next(c, 2));
+    if (CheckChar(s,std::next(c), ':'))
+      return ProduceToken(eTk::kDoubleColon, s, c,std::next(c, 2));
+    else if (CheckChar(s,std::next(c), '='))
+      return ProduceToken(eTk::kNewAssign, s, c,std::next(c, 2));
     else
-      return ProduceToken(eTk::kColon, s, c, next(c));
+      return ProduceToken(eTk::kColon, s, c,std::next(c));
   } else if (*c == ';') {
-    return ProduceToken(eTk::kSemicolon, s, c, next(c));
+    return ProduceToken(eTk::kSemicolon, s, c,std::next(c));
   } else if (*c == ',') {
-    return ProduceToken(eTk::kComma, s, c, next(c));
+    return ProduceToken(eTk::kComma, s, c,std::next(c));
   } else if (*c == '.') {
-    if (CheckChar(s, next(c), '.') && CheckChar(s, next(c, 2), '.'))
-      return ProduceToken(eTk::kEllipsis, s, c, next(c, 3));
-    return ProduceToken(eTk::kPeriod, s, c, next(c));
+    if (CheckChar(s,std::next(c), '.') && CheckChar(s,std::next(c, 2), '.'))
+      return ProduceToken(eTk::kEllipsis, s, c,std::next(c, 3));
+    return ProduceToken(eTk::kPeriod, s, c,std::next(c));
   } else if (*c == '(') {
-    return ProduceToken(eTk::kLParen, s, c, next(c));
+    return ProduceToken(eTk::kLParen, s, c,std::next(c));
   } else if (*c == ')') {
-    return ProduceToken(eTk::kRParen, s, c, next(c));
+    return ProduceToken(eTk::kRParen, s, c,std::next(c));
   } else if (*c == '[') {
-    return ProduceToken(eTk::kLBracket, s, c, next(c));
+    return ProduceToken(eTk::kLBracket, s, c,std::next(c));
   } else if (*c == ']') {
-    return ProduceToken(eTk::kRBracket, s, c, next(c));
+    return ProduceToken(eTk::kRBracket, s, c,std::next(c));
   } else if (*c == '{') {
-    return ProduceToken(eTk::kLBrace, s, c, next(c));
+    return ProduceToken(eTk::kLBrace, s, c,std::next(c));
   } else if (*c == '}') {
-    return ProduceToken(eTk::kRBrace, s, c, next(c));
+    return ProduceToken(eTk::kRBrace, s, c,std::next(c));
   } else if (*c == '\\') {
-    return ProduceToken(eTk::kBacklash, s, c, next(c));
+    return ProduceToken(eTk::kBacklash, s, c,std::next(c));
   } else {
     // This should never happen.
     return ClFail{CND_ERROR_DEV_DEBUG("Unexpected compiler program location reached. Invalid punctuator.")};
@@ -423,7 +425,7 @@ constexpr Lexer::LexerResultT Lexer::LexNewline(StrView s) noexcept {
   auto begin_line = curr_line_;
   while (CheckChar(s, c, IsSrcCharNewline<char>)) {
     // Handle Windows-style CRLF newlines as a single newline. Skip line advance.
-    if (!(*c == '\r' && CheckChar(s, next(c), '\n'))) curr_line_++;
+    if (!(*c == '\r' && CheckChar(s,std::next(c), '\n'))) curr_line_++;
     c++;
   }
   curr_col_ = 1;  // Reset column to 1 after newline(s).
@@ -524,7 +526,7 @@ constexpr Lexer::LexerResultT Lexer::LexBlockComment(StrView s) noexcept {
   if (!IsInRange(c, s)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
   if (!IsInRange(next(c), s)) return ClFail{CND_ERROR_DEV_DEBUG("Opening char is eof.")};
   if (*c != '/') return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not a forward slash.")};
-  if (*next(c) != '`') return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not a backtick.")};
+  if (*std::next(c) != '`') return ClFail{CND_ERROR_DEV_DEBUG("Opening char is not a backtick.")};
 #endif
   auto begin_col = curr_col_;
   auto begin_line = curr_line_;
@@ -534,9 +536,9 @@ constexpr Lexer::LexerResultT Lexer::LexBlockComment(StrView s) noexcept {
   while (IsInRange(c, s)) {
     // Check for end of block.
     if (*c == '`') {
-      if (!IsInRange(next(c), s)) return ClFail{CND_ERROR_DEV_DEBUG("Reached eof before end of block comment.")};
+      if (!IsInRange(std::next(c), s)) return ClFail{CND_ERROR_DEV_DEBUG("Reached eof before end of block comment.")};
 
-      if (*next(c) == '/') {
+      if (*std::next(c) == '/') {
         std::advance(c, 2);  // pass "`/"
         curr_col_ += 2;
         return LexerCursor(eTk::kBlockComment, s, s.begin(), c, begin_line, begin_col, curr_line_, curr_col_);
@@ -564,12 +566,12 @@ constexpr Lexer::LexerResultT Lexer::LexRecursiveTokenLiteral(StrView s) noexcep
 #endif
 
   c++;  // advance past the opening quotation so we are not out of begin range in the loop.
-  while (!(IsInRange(c, s) && *c == '"' && *next(c, -1) != '\\')) {
+  while (!(IsInRange(c, s) && *c == '"' && *std::next(c, -1) != '\\')) {
     c++;
     // Special case '\\'. If there are two backslashes, then it is an escaped
-    // backslash. If next is quotation -> escape. Else continue.
+    // backslash. Ifstd::next is quotation -> escape. Else continue.
     // @note: No IsInRange because we are guaranteed to be at least on the 3rd index here.
-    if (*c == '"' && *next(c, -1) == '\\' && *next(c, -2) == '\\') {
+    if (*c == '"' && *std::next(c, -1) == '\\' && *std::next(c, -2) == '\\') {
       break;
     }
   }

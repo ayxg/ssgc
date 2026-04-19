@@ -154,14 +154,406 @@ namespace cnd::corevals::grammar {
   lst
 
 // Define the enum.
-CND_MM_CREATE_ENUM_FROM_APPLIED_ENUM_UNTYPED(eSrcChar, eSrcChar);
+enum class eSrcChar {
+  kNull,
+  kStartOfHeader,
+  kStartOfText,
+  kEndOfText,
+  kEndOfTransmission,
+  kEnquiry,
+  kAcknowledge,
+  kBell,
+  kBackspace,
+  kHorizontalTab,
+  kLineFeed,
+  kVerticalTab,
+  kFormFeed,
+  kCarriageReturn,
+  kShiftOut,
+  kShiftIn,
+  kDataLinkEscape,
+  kDeviceControl1,
+  kDeviceControl2,
+  kDeviceControl3,
+  kDeviceControl4,
+  kNegativeAcknowledge,
+  kSynchronousIdle,
+  kEndOfTransmissionBlock,
+  kCancel,
+  kEndOfMedium,
+  kSubstitute,
+  kEscape,
+  kFileSeparator,
+  kGroupSeparator,
+  kRecordSeparator,
+  kUnitSeparator,
+  kSpace,
+  kExclamationMark,
+  kQuotation,
+  kHash,
+  kDollarSign,
+  kPercentSign,
+  kAmpersand,
+  kApostrophe,
+  kLeftParenthesis,
+  kRightParenthesis,
+  kAsterisk,
+  kPlusSign,
+  kComma,
+  kHyphenMinus,
+  kPeriod,
+  kSolidus,
+  kZero,
+  kOne,
+  kTwo,
+  kThree,
+  kFour,
+  kFive,
+  kSix,
+  kSeven,
+  kEight,
+  kNine,
+  kColon,
+  kSemicolon,
+  kLessThan,
+  kEqualSign,
+  kGreaterThan,
+  kQuestionMark,
+  kAtSign,
+  kUpperA,
+  kUpperB,
+  kUpperC,
+  kUpperD,
+  kUpperE,
+  kUpperF,
+  kUpperG,
+  kUpperH,
+  kUpperI,
+  kUpperJ,
+  kUpperK,
+  kUpperL,
+  kUpperM,
+  kUpperN,
+  kUpperO,
+  kUpperP,
+  kUpperQ,
+  kUpperR,
+  kUpperS,
+  kUpperT,
+  kUpperU,
+  kUpperV,
+  kUpperW,
+  kUpperX,
+  kUpperY,
+  kUpperZ,
+  kLeftSquareBracket,
+  kBackslash,
+  kRightSquareBracket,
+  kCaret,
+  kUnderscore,
+  kBacktick,
+  kLowerA,
+  kLowerB,
+  kLowerC,
+  kLowerD,
+  kLowerE,
+  kLowerF,
+  kLowerG,
+  kLowerH,
+  kLowerI,
+  kLowerJ,
+  kLowerK,
+  kLowerL,
+  kLowerM,
+  kLowerN,
+  kLowerO,
+  kLowerP,
+  kLowerQ,
+  kLowerR,
+  kLowerS,
+  kLowerT,
+  kLowerU,
+  kLowerV,
+  kLowerW,
+  kLowerX,
+  kLowerY,
+  kLowerZ,
+  kLeftCurlyBrace,
+  kVerticalBar,
+  kRightCurlyBrace,
+  kTilde,
+  kDelete,
+  COUNT
+};
 // Define the enum to cstr conversion.
-CND_MM_CREATE_ENUMTOCSTR_FROM_ENUM_LIST(eSrcCharToCStr, eSrcChar, eSrcChar);
+constexpr const char* eSrcCharToCStr(eSrcChar e) noexcept {
+  using enum eSrcChar;
+  switch (e) {
+    case kNull:
+      return "kNull";
+    case kStartOfHeader:
+      return "kStartOfHeader";
+    case kStartOfText:
+      return "kStartOfText";
+    case kEndOfText:
+      return "kEndOfText";
+    case kEndOfTransmission:
+      return "kEndOfTransmission";
+    case kEnquiry:
+      return "kEnquiry";
+    case kAcknowledge:
+      return "kAcknowledge";
+    case kBell:
+      return "kBell";
+    case kBackspace:
+      return "kBackspace";
+    case kHorizontalTab:
+      return "kHorizontalTab";
+    case kLineFeed:
+      return "kLineFeed";
+    case kVerticalTab:
+      return "kVerticalTab";
+    case kFormFeed:
+      return "kFormFeed";
+    case kCarriageReturn:
+      return "kCarriageReturn";
+    case kShiftOut:
+      return "kShiftOut";
+    case kShiftIn:
+      return "kShiftIn";
+    case kDataLinkEscape:
+      return "kDataLinkEscape";
+    case kDeviceControl1:
+      return "kDeviceControl1";
+    case kDeviceControl2:
+      return "kDeviceControl2";
+    case kDeviceControl3:
+      return "kDeviceControl3";
+    case kDeviceControl4:
+      return "kDeviceControl4";
+    case kNegativeAcknowledge:
+      return "kNegativeAcknowledge";
+    case kSynchronousIdle:
+      return "kSynchronousIdle";
+    case kEndOfTransmissionBlock:
+      return "kEndOfTransmissionBlock";
+    case kCancel:
+      return "kCancel";
+    case kEndOfMedium:
+      return "kEndOfMedium";
+    case kSubstitute:
+      return "kSubstitute";
+    case kEscape:
+      return "kEscape";
+    case kFileSeparator:
+      return "kFileSeparator";
+    case kGroupSeparator:
+      return "kGroupSeparator";
+    case kRecordSeparator:
+      return "kRecordSeparator";
+    case kUnitSeparator:
+      return "kUnitSeparator";
+    case kSpace:
+      return "kSpace";
+    case kExclamationMark:
+      return "kExclamationMark";
+    case kQuotation:
+      return "kQuotation";
+    case kHash:
+      return "kHash";
+    case kDollarSign:
+      return "kDollarSign";
+    case kPercentSign:
+      return "kPercentSign";
+    case kAmpersand:
+      return "kAmpersand";
+    case kApostrophe:
+      return "kApostrophe";
+    case kLeftParenthesis:
+      return "kLeftParenthesis";
+    case kRightParenthesis:
+      return "kRightParenthesis";
+    case kAsterisk:
+      return "kAsterisk";
+    case kPlusSign:
+      return "kPlusSign";
+    case kComma:
+      return "kComma";
+    case kHyphenMinus:
+      return "kHyphenMinus";
+    case kPeriod:
+      return "kPeriod";
+    case kSolidus:
+      return "kSolidus";
+    case kZero:
+      return "kZero";
+    case kOne:
+      return "kOne";
+    case kTwo:
+      return "kTwo";
+    case kThree:
+      return "kThree";
+    case kFour:
+      return "kFour";
+    case kFive:
+      return "kFive";
+    case kSix:
+      return "kSix";
+    case kSeven:
+      return "kSeven";
+    case kEight:
+      return "kEight";
+    case kNine:
+      return "kNine";
+    case kColon:
+      return "kColon";
+    case kSemicolon:
+      return "kSemicolon";
+    case kLessThan:
+      return "kLessThan";
+    case kEqualSign:
+      return "kEqualSign";
+    case kGreaterThan:
+      return "kGreaterThan";
+    case kQuestionMark:
+      return "kQuestionMark";
+    case kAtSign:
+      return "kAtSign";
+    case kUpperA:
+      return "kUpperA";
+    case kUpperB:
+      return "kUpperB";
+    case kUpperC:
+      return "kUpperC";
+    case kUpperD:
+      return "kUpperD";
+    case kUpperE:
+      return "kUpperE";
+    case kUpperF:
+      return "kUpperF";
+    case kUpperG:
+      return "kUpperG";
+    case kUpperH:
+      return "kUpperH";
+    case kUpperI:
+      return "kUpperI";
+    case kUpperJ:
+      return "kUpperJ";
+    case kUpperK:
+      return "kUpperK";
+    case kUpperL:
+      return "kUpperL";
+    case kUpperM:
+      return "kUpperM";
+    case kUpperN:
+      return "kUpperN";
+    case kUpperO:
+      return "kUpperO";
+    case kUpperP:
+      return "kUpperP";
+    case kUpperQ:
+      return "kUpperQ";
+    case kUpperR:
+      return "kUpperR";
+    case kUpperS:
+      return "kUpperS";
+    case kUpperT:
+      return "kUpperT";
+    case kUpperU:
+      return "kUpperU";
+    case kUpperV:
+      return "kUpperV";
+    case kUpperW:
+      return "kUpperW";
+    case kUpperX:
+      return "kUpperX";
+    case kUpperY:
+      return "kUpperY";
+    case kUpperZ:
+      return "kUpperZ";
+    case kLeftSquareBracket:
+      return "kLeftSquareBracket";
+    case kBackslash:
+      return "kBackslash";
+    case kRightSquareBracket:
+      return "kRightSquareBracket";
+    case kCaret:
+      return "kCaret";
+    case kUnderscore:
+      return "kUnderscore";
+    case kBacktick:
+      return "kBacktick";
+    case kLowerA:
+      return "kLowerA";
+    case kLowerB:
+      return "kLowerB";
+    case kLowerC:
+      return "kLowerC";
+    case kLowerD:
+      return "kLowerD";
+    case kLowerE:
+      return "kLowerE";
+    case kLowerF:
+      return "kLowerF";
+    case kLowerG:
+      return "kLowerG";
+    case kLowerH:
+      return "kLowerH";
+    case kLowerI:
+      return "kLowerI";
+    case kLowerJ:
+      return "kLowerJ";
+    case kLowerK:
+      return "kLowerK";
+    case kLowerL:
+      return "kLowerL";
+    case kLowerM:
+      return "kLowerM";
+    case kLowerN:
+      return "kLowerN";
+    case kLowerO:
+      return "kLowerO";
+    case kLowerP:
+      return "kLowerP";
+    case kLowerQ:
+      return "kLowerQ";
+    case kLowerR:
+      return "kLowerR";
+    case kLowerS:
+      return "kLowerS";
+    case kLowerT:
+      return "kLowerT";
+    case kLowerU:
+      return "kLowerU";
+    case kLowerV:
+      return "kLowerV";
+    case kLowerW:
+      return "kLowerW";
+    case kLowerX:
+      return "kLowerX";
+    case kLowerY:
+      return "kLowerY";
+    case kLowerZ:
+      return "kLowerZ";
+    case kLeftCurlyBrace:
+      return "kLeftCurlyBrace";
+    case kVerticalBar:
+      return "kVerticalBar";
+    case kRightCurlyBrace:
+      return "kRightCurlyBrace";
+    case kTilde:
+      return "kTilde";
+    case kDelete:
+      return "kDelete";
+    case COUNT:
+      return "COUNT";
+    default:
+      return "<invalid>";
+  }
+};
 // Assert enum to cstr conversion.
 #define CND_STATIC_ASSERT_ENUM_TO_CSTR_eSrcChar(x) CND_MM_STATIC_ASSERT_ENUM_TO_CSTR(x, eSrcChar, eSrcCharToCStr)
 
-CND_APPLIED_ENUM_eSrcChar(CND_STATIC_ASSERT_ENUM_TO_CSTR_eSrcChar, , , );
-static_assert(cxx::StrEq(eSrcCharToCStr(eSrcChar::COUNT), "COUNT"));
 #undef CND_STATIC_ASSERT_ENUM_TO_CSTR_eSrcChar
 }  // namespace cnd::corevals::grammar
 

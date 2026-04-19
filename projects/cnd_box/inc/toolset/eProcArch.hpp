@@ -50,10 +50,92 @@ namespace cnd::corevals::toolset {
   lst
 
 // Define the enum.
-CND_MM_CREATE_ENUM_FROM_APPLIED_ENUM_UNTYPED(eProcArch, eProcArch);
+enum class eProcArch {
+  kINVALID,
+  kNONE,
+  kCustom,
+  kEmbedded,
+  kAlpha,
+  kAMD64,
+  kARM,
+  kARM64,
+  kBlackfin,
+  kConvex,
+  kEpiphany,
+  kHppaRISC,
+  kIntel86,
+  kIntelItanium,
+  kMotorola68k,
+  kMIPS,
+  kPowerPC,
+  kPyramid9810,
+  kRS6000,
+  kSPARC,
+  kSuperH,
+  kSystemZ,
+  kTMS320,
+  kTMS470,
+  COUNT
+};
 
 // Define the enum to cstr conversion.
-CND_MM_CREATE_ENUMTOCSTR_FROM_ENUM_LIST(eProcArchToCStr, eProcArch, eProcArch);
+constexpr const char* eProcArchToCStr(eProcArch e) noexcept {
+  using enum eProcArch;
+  switch (e) {
+    case kINVALID:
+      return "kINVALID";
+    case kNONE:
+      return "kNONE";
+    case kCustom:
+      return "kCustom";
+    case kEmbedded:
+      return "kEmbedded";
+    case kAlpha:
+      return "kAlpha";
+    case kAMD64:
+      return "kAMD64";
+    case kARM:
+      return "kARM";
+    case kARM64:
+      return "kARM64";
+    case kBlackfin:
+      return "kBlackfin";
+    case kConvex:
+      return "kConvex";
+    case kEpiphany:
+      return "kEpiphany";
+    case kHppaRISC:
+      return "kHppaRISC";
+    case kIntel86:
+      return "kIntel86";
+    case kIntelItanium:
+      return "kIntelItanium";
+    case kMotorola68k:
+      return "kMotorola68k";
+    case kMIPS:
+      return "kMIPS";
+    case kPowerPC:
+      return "kPowerPC";
+    case kPyramid9810:
+      return "kPyramid9810";
+    case kRS6000:
+      return "kRS6000";
+    case kSPARC:
+      return "kSPARC";
+    case kSuperH:
+      return "kSuperH";
+    case kSystemZ:
+      return "kSystemZ";
+    case kTMS320:
+      return "kTMS320";
+    case kTMS470:
+      return "kTMS470";
+    case COUNT:
+      return "COUNT";
+    default:
+      return "<invalid>";
+  }
+};
 
 // Assert enum to cstr conversion.
 #define CND_STATIC_ASSERT_ENUM_TO_CSTR_eProcArch(x) CND_MM_STATIC_ASSERT_ENUM_TO_CSTR(x, eProcArch, eProcArchToCStr)

@@ -160,7 +160,7 @@ template <class EnumT>
   requires std::is_enum_v<EnumT>
 struct UnknownEnumEntry : std::exception {
   using enum_type = EnumT;
-  constexpr cstring what() const override { return "Unkown Enum Entry."; }
+  constexpr cstring what() const noexcept override { return "Unkown Enum Entry."; }
 };
 
 template <size_t Footprint>

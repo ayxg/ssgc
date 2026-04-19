@@ -95,9 +95,223 @@ namespace cnd::corevals::grammar {
   lst
 
 // Define the enum.
-CND_MM_CREATE_ENUM_FROM_APPLIED_ENUM_UNTYPED(eIrInstr, eIrInstr);
+enum class eIrInstr {
+  kStartUp,
+  kRestart,
+  kShutDown,
+  kLoadBootDrive,
+  kInstallBootDriver,
+  kLoadBootDriver,
+  kLoadDriver,
+  kInstallDriver,
+  kLabel,
+  kGoto,
+  kBlock,
+  kLoop,
+  kIf,
+  kBranch,
+  kCall,
+  kReturn,
+  kPhi,
+  kSelect,
+  kUnreachable,
+  kNothing,
+  kAdd,
+  kSubtract,
+  kMuliply,
+  kDivideSigned,
+  kNegate,
+  kDivideUnsigned,
+  kRemainderSigned,
+  kRemainderUnsigned,
+  kNot,
+  kIncrement,
+  kDecrement,
+  kShiftLeft,
+  kShiftRightSigned,
+  kShiftRightUnsigned,
+  kRotateLeft,
+  kRotateRight,
+  kBitwiseAnd,
+  kBitwiseOr,
+  kBitwiseXor,
+  kBitwiseNot,
+  kCountLeadingZeroes,
+  kCountTrailingZeroes,
+  kPopulationCount,
+  kLogicalAnd,
+  kLogicalOr,
+  kEqualZero,
+  kEqual,
+  kNotEqual,
+  kLessThan,
+  kGreaterThan,
+  kLessThanEqual,
+  kGreaterThanEqual,
+  kExtend,
+  kWrap,
+  kPromote,
+  kDemote,
+  kConvert,
+  kTruncate,
+  kReinterpret,
+  kMin,
+  kMax,
+  kNearest,
+  kCiel,
+  kFloor,
+  kTrucate,
+  kAbsolute,
+  kSquareRoot,
+  kCopySign,
+  COUNT
+};
 // Define the enum to cstr conversion.
-CND_MM_CREATE_ENUMTOCSTR_FROM_ENUM_LIST(eIrInstrToCStr, eIrInstr, eIrInstr);
+constexpr const char* eIrInstrToCStr(eIrInstr e) noexcept {
+  using enum eIrInstr;
+  switch (e) {
+    case kStartUp:
+      return "kStartUp";
+    case kRestart:
+      return "kRestart";
+    case kShutDown:
+      return "kShutDown";
+    case kLoadBootDrive:
+      return "kLoadBootDrive";
+    case kInstallBootDriver:
+      return "kInstallBootDriver";
+    case kLoadBootDriver:
+      return "kLoadBootDriver";
+    case kLoadDriver:
+      return "kLoadDriver";
+    case kInstallDriver:
+      return "kInstallDriver";
+    case kLabel:
+      return "kLabel";
+    case kGoto:
+      return "kGoto";
+    case kBlock:
+      return "kBlock";
+    case kLoop:
+      return "kLoop";
+    case kIf:
+      return "kIf";
+    case kBranch:
+      return "kBranch";
+    case kCall:
+      return "kCall";
+    case kReturn:
+      return "kReturn";
+    case kPhi:
+      return "kPhi";
+    case kSelect:
+      return "kSelect";
+    case kUnreachable:
+      return "kUnreachable";
+    case kNothing:
+      return "kNothing";
+    case kAdd:
+      return "kAdd";
+    case kSubtract:
+      return "kSubtract";
+    case kMuliply:
+      return "kMuliply";
+    case kDivideSigned:
+      return "kDivideSigned";
+    case kNegate:
+      return "kNegate";
+    case kDivideUnsigned:
+      return "kDivideUnsigned";
+    case kRemainderSigned:
+      return "kRemainderSigned";
+    case kRemainderUnsigned:
+      return "kRemainderUnsigned";
+    case kNot:
+      return "kNot";
+    case kIncrement:
+      return "kIncrement";
+    case kDecrement:
+      return "kDecrement";
+    case kShiftLeft:
+      return "kShiftLeft";
+    case kShiftRightSigned:
+      return "kShiftRightSigned";
+    case kShiftRightUnsigned:
+      return "kShiftRightUnsigned";
+    case kRotateLeft:
+      return "kRotateLeft";
+    case kRotateRight:
+      return "kRotateRight";
+    case kBitwiseAnd:
+      return "kBitwiseAnd";
+    case kBitwiseOr:
+      return "kBitwiseOr";
+    case kBitwiseXor:
+      return "kBitwiseXor";
+    case kBitwiseNot:
+      return "kBitwiseNot";
+    case kCountLeadingZeroes:
+      return "kCountLeadingZeroes";
+    case kCountTrailingZeroes:
+      return "kCountTrailingZeroes";
+    case kPopulationCount:
+      return "kPopulationCount";
+    case kLogicalAnd:
+      return "kLogicalAnd";
+    case kLogicalOr:
+      return "kLogicalOr";
+    case kEqualZero:
+      return "kEqualZero";
+    case kEqual:
+      return "kEqual";
+    case kNotEqual:
+      return "kNotEqual";
+    case kLessThan:
+      return "kLessThan";
+    case kGreaterThan:
+      return "kGreaterThan";
+    case kLessThanEqual:
+      return "kLessThanEqual";
+    case kGreaterThanEqual:
+      return "kGreaterThanEqual";
+    case kExtend:
+      return "kExtend";
+    case kWrap:
+      return "kWrap";
+    case kPromote:
+      return "kPromote";
+    case kDemote:
+      return "kDemote";
+    case kConvert:
+      return "kConvert";
+    case kTruncate:
+      return "kTruncate";
+    case kReinterpret:
+      return "kReinterpret";
+    case kMin:
+      return "kMin";
+    case kMax:
+      return "kMax";
+    case kNearest:
+      return "kNearest";
+    case kCiel:
+      return "kCiel";
+    case kFloor:
+      return "kFloor";
+    case kTrucate:
+      return "kTrucate";
+    case kAbsolute:
+      return "kAbsolute";
+    case kSquareRoot:
+      return "kSquareRoot";
+    case kCopySign:
+      return "kCopySign";
+    case COUNT:
+      return "COUNT";
+    default:
+      return "<invalid>";
+  }
+};
 // Assert enum to cstr conversion.
 #define CND_STATIC_ASSERT_ENUM_TO_CSTR_eIrInstr(x) CND_MM_STATIC_ASSERT_ENUM_TO_CSTR(x, eIrInstr, eIrInstrToCStr)
 

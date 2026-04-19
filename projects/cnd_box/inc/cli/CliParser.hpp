@@ -104,7 +104,7 @@ struct Flag {
   using FlagMapType = FlagMap<FlagIdType>;
   using FlagValidatorType = bool (*)(const FlagMapType&, FlagIdType);
   FlagIdType id{-1};
-  eFlagInterp interp{eFlagInterp::kNone};
+  eFlagInterp interp{eFlagInterp::kNONE};
   char short_name{' '};
   const char* long_name{""};
   const char* desc{""};

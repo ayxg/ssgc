@@ -37,7 +37,7 @@ class EXCFileNotFound : public std::runtime_error {
       : std::runtime_error("File not found: " + file_path) {
     msg_ = std::runtime_error::what();
   }
-  const char* what() const override { return msg_.c_str(); }
+  const char* what() const noexcept override { return msg_.c_str(); }
 
  private:
   std::string msg_;

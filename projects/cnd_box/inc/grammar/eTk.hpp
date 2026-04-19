@@ -169,15 +169,449 @@ namespace cnd::corevals::grammar {
   lst
 
 // Define the enum.
-CND_MM_CREATE_ENUM_FROM_APPLIED_ENUM_UNTYPED(eTk, eTk);
+enum class eTk {
+  kINVALID,
+  kNONE,
+  kDirectiveInclude,
+  kDirectiveDefMacro,
+  kDirectiveEndmacro,
+  kDirectiveIf,
+  kDirectiveElse,
+  kDirectiveElif,
+  kDirectiveEndif,
+  kDirectiveIfdef,
+  kDirectiveIfndef,
+  kDirectiveUndef,
+  kKwDef,
+  kKwFn,
+  kKwClass,
+  kKwMain,
+  kKwImport,
+  kKwNamespace,
+  kKwUse,
+  kKwLib,
+  kKwDll,
+  kKwEnum,
+  kKwIf,
+  kKwElif,
+  kKwElse,
+  kKwCxif,
+  kKwCxelif,
+  kKwCxelse,
+  kKwSwitch,
+  kKwCase,
+  kKwDefault,
+  kKwWhile,
+  kKwFor,
+  kKwReturn,
+  kKwBreak,
+  kKwContinue,
+  kKwInt,
+  kKwUint,
+  kKwReal,
+  kKwBool,
+  kKwChar,
+  kKwByte,
+  kKwCstr,
+  kKwStr,
+  kKwPtr,
+  kKwList,
+  kKwArray,
+  kKwTrue,
+  kKwFalse,
+  kKwNone,
+  kKwVoid,
+  kKwIn,
+  kKwAs,
+  kKwCin,
+  kKwCout,
+  kKwNative,
+  kKwConst,
+  kKwRef,
+  kKwPrivate,
+  kKwPublic,
+  kKwStatic,
+  kKwAny,
+  kKwAuto,
+  kKwType,
+  kKwValue,
+  kKwTemplate,
+  kKwProc,
+  kHash,
+  kAdd,
+  kSub,
+  kMul,
+  kDiv,
+  kMod,
+  kAnd,
+  kOr,
+  kXor,
+  kNot,
+  kLsh,
+  kRsh,
+  kEq,
+  kNeq,
+  kLt,
+  kGt,
+  kLte,
+  kGte,
+  kSpaceship,
+  kAssign,
+  kNewAssign,
+  kAddAssign,
+  kSubAssign,
+  kMulAssign,
+  kDivAssign,
+  kModAssign,
+  kAndAssign,
+  kOrAssign,
+  kXorAssign,
+  kLshAssign,
+  kRshAssign,
+  kInc,
+  kDec,
+  kBnot,
+  kBand,
+  kBor,
+  kLParen,
+  kRParen,
+  kLBrace,
+  kRBrace,
+  kLBracket,
+  kRBracket,
+  kSemicolon,
+  kColon,
+  kComma,
+  kPeriod,
+  kDoubleColon,
+  kEllipsis,
+  kCommercialAt,
+  kDollar,
+  kBacklash,
+  kQuestion,
+  kLitInt,
+  kLitUint,
+  kLitBool,
+  kLitChar,
+  kLitByte,
+  kLitCstr,
+  kLitU1,
+  kLitU8,
+  kLitU16,
+  kLitU32,
+  kLitU64,
+  kLitI8,
+  kLitI16,
+  kLitI32,
+  kLitI64,
+  kLitF32,
+  kLitF64,
+  kLitReal,
+  kIdent,
+  kWhitespace,
+  kNewline,
+  kBlockComment,
+  kLineComment,
+  kEofile,
+  COUNT
+};
 // Define the enum to cstr conversion.
-CND_MM_CREATE_ENUMTOCSTR_FROM_ENUM_LIST(eTkToCStr, eTk, eTk);
-// Assert enum to cstr conversion.
-#define CND_STATIC_ASSERT_ENUM_TO_CSTR_eTk(x) CND_MM_STATIC_ASSERT_ENUM_TO_CSTR(x, eTk, eTkToCStr)
+constexpr const char* eTkToCStr(eTk e) noexcept {
+  using enum eTk;
+  switch (e) {
+    case kINVALID:
+      return "kINVALID";
+    case kNONE:
+      return "kNONE";
+    case kDirectiveInclude:
+      return "kDirectiveInclude";
+    case kDirectiveDefMacro:
+      return "kDirectiveDefMacro";
+    case kDirectiveEndmacro:
+      return "kDirectiveEndmacro";
+    case kDirectiveIf:
+      return "kDirectiveIf";
+    case kDirectiveElse:
+      return "kDirectiveElse";
+    case kDirectiveElif:
+      return "kDirectiveElif";
+    case kDirectiveEndif:
+      return "kDirectiveEndif";
+    case kDirectiveIfdef:
+      return "kDirectiveIfdef";
+    case kDirectiveIfndef:
+      return "kDirectiveIfndef";
+    case kDirectiveUndef:
+      return "kDirectiveUndef";
+    case kKwDef:
+      return "kKwDef";
+    case kKwFn:
+      return "kKwFn";
+    case kKwClass:
+      return "kKwClass";
+    case kKwMain:
+      return "kKwMain";
+    case kKwImport:
+      return "kKwImport";
+    case kKwNamespace:
+      return "kKwNamespace";
+    case kKwUse:
+      return "kKwUse";
+    case kKwLib:
+      return "kKwLib";
+    case kKwDll:
+      return "kKwDll";
+    case kKwEnum:
+      return "kKwEnum";
+    case kKwIf:
+      return "kKwIf";
+    case kKwElif:
+      return "kKwElif";
+    case kKwElse:
+      return "kKwElse";
+    case kKwCxif:
+      return "kKwCxif";
+    case kKwCxelif:
+      return "kKwCxelif";
+    case kKwCxelse:
+      return "kKwCxelse";
+    case kKwSwitch:
+      return "kKwSwitch";
+    case kKwCase:
+      return "kKwCase";
+    case kKwDefault:
+      return "kKwDefault";
+    case kKwWhile:
+      return "kKwWhile";
+    case kKwFor:
+      return "kKwFor";
+    case kKwReturn:
+      return "kKwReturn";
+    case kKwBreak:
+      return "kKwBreak";
+    case kKwContinue:
+      return "kKwContinue";
+    case kKwInt:
+      return "kKwInt";
+    case kKwUint:
+      return "kKwUint";
+    case kKwReal:
+      return "kKwReal";
+    case kKwBool:
+      return "kKwBool";
+    case kKwChar:
+      return "kKwChar";
+    case kKwByte:
+      return "kKwByte";
+    case kKwCstr:
+      return "kKwCstr";
+    case kKwStr:
+      return "kKwStr";
+    case kKwPtr:
+      return "kKwPtr";
+    case kKwList:
+      return "kKwList";
+    case kKwArray:
+      return "kKwArray";
+    case kKwTrue:
+      return "kKwTrue";
+    case kKwFalse:
+      return "kKwFalse";
+    case kKwNone:
+      return "kKwNone";
+    case kKwVoid:
+      return "kKwVoid";
+    case kKwIn:
+      return "kKwIn";
+    case kKwAs:
+      return "kKwAs";
+    case kKwCin:
+      return "kKwCin";
+    case kKwCout:
+      return "kKwCout";
+    case kKwNative:
+      return "kKwNative";
+    case kKwConst:
+      return "kKwConst";
+    case kKwRef:
+      return "kKwRef";
+    case kKwPrivate:
+      return "kKwPrivate";
+    case kKwPublic:
+      return "kKwPublic";
+    case kKwStatic:
+      return "kKwStatic";
+    case kKwAny:
+      return "kKwAny";
+    case kKwAuto:
+      return "kKwAuto";
+    case kKwType:
+      return "kKwType";
+    case kKwValue:
+      return "kKwValue";
+    case kKwTemplate:
+      return "kKwTemplate";
+    case kKwProc:
+      return "kKwProc";
+    case kHash:
+      return "kHash";
+    case kAdd:
+      return "kAdd";
+    case kSub:
+      return "kSub";
+    case kMul:
+      return "kMul";
+    case kDiv:
+      return "kDiv";
+    case kMod:
+      return "kMod";
+    case kAnd:
+      return "kAnd";
+    case kOr:
+      return "kOr";
+    case kXor:
+      return "kXor";
+    case kNot:
+      return "kNot";
+    case kLsh:
+      return "kLsh";
+    case kRsh:
+      return "kRsh";
+    case kEq:
+      return "kEq";
+    case kNeq:
+      return "kNeq";
+    case kLt:
+      return "kLt";
+    case kGt:
+      return "kGt";
+    case kLte:
+      return "kLte";
+    case kGte:
+      return "kGte";
+    case kSpaceship:
+      return "kSpaceship";
+    case kAssign:
+      return "kAssign";
+    case kNewAssign:
+      return "kNewAssign";
+    case kAddAssign:
+      return "kAddAssign";
+    case kSubAssign:
+      return "kSubAssign";
+    case kMulAssign:
+      return "kMulAssign";
+    case kDivAssign:
+      return "kDivAssign";
+    case kModAssign:
+      return "kModAssign";
+    case kAndAssign:
+      return "kAndAssign";
+    case kOrAssign:
+      return "kOrAssign";
+    case kXorAssign:
+      return "kXorAssign";
+    case kLshAssign:
+      return "kLshAssign";
+    case kRshAssign:
+      return "kRshAssign";
+    case kInc:
+      return "kInc";
+    case kDec:
+      return "kDec";
+    case kBnot:
+      return "kBnot";
+    case kBand:
+      return "kBand";
+    case kBor:
+      return "kBor";
+    case kLParen:
+      return "kLParen";
+    case kRParen:
+      return "kRParen";
+    case kLBrace:
+      return "kLBrace";
+    case kRBrace:
+      return "kRBrace";
+    case kLBracket:
+      return "kLBracket";
+    case kRBracket:
+      return "kRBracket";
+    case kSemicolon:
+      return "kSemicolon";
+    case kColon:
+      return "kColon";
+    case kComma:
+      return "kComma";
+    case kPeriod:
+      return "kPeriod";
+    case kDoubleColon:
+      return "kDoubleColon";
+    case kEllipsis:
+      return "kEllipsis";
+    case kCommercialAt:
+      return "kCommercialAt";
+    case kDollar:
+      return "kDollar";
+    case kBacklash:
+      return "kBacklash";
+    case kQuestion:
+      return "kQuestion";
+    case kLitInt:
+      return "kLitInt";
+    case kLitUint:
+      return "kLitUint";
+    case kLitBool:
+      return "kLitBool";
+    case kLitChar:
+      return "kLitChar";
+    case kLitByte:
+      return "kLitByte";
+    case kLitCstr:
+      return "kLitCstr";
+    case kLitU1:
+      return "kLitU1";
+    case kLitU8:
+      return "kLitU8";
+    case kLitU16:
+      return "kLitU16";
+    case kLitU32:
+      return "kLitU32";
+    case kLitU64:
+      return "kLitU64";
+    case kLitI8:
+      return "kLitI8";
+    case kLitI16:
+      return "kLitI16";
+    case kLitI32:
+      return "kLitI32";
+    case kLitI64:
+      return "kLitI64";
+    case kLitF32:
+      return "kLitF32";
+    case kLitF64:
+      return "kLitF64";
+    case kLitReal:
+      return "kLitReal";
+    case kIdent:
+      return "kIdent";
+    case kWhitespace:
+      return "kWhitespace";
+    case kNewline:
+      return "kNewline";
+    case kBlockComment:
+      return "kBlockComment";
+    case kLineComment:
+      return "kLineComment";
+    case kEofile:
+      return "kEofile";
+    case COUNT:
+      return "COUNT";
+    default:
+      return "<invalid>";
+  }
+};
 
-CND_APPLIED_ENUM_eTk(CND_STATIC_ASSERT_ENUM_TO_CSTR_eTk, , , );
-static_assert(cxx::StrEq(eTkToCStr(eTk::COUNT), "COUNT"));
-#undef CND_STATIC_ASSERT_ENUM_TO_CSTR_eTk
 }  // namespace cnd::corevals::grammar
 
 /// @} // end of cnd_compiler_corevals

@@ -27,9 +27,19 @@ namespace cnd::corevals::diagnostic {
   lst
 
 // Define the enum.
-CND_MM_CREATE_ENUM_FROM_APPLIED_ENUM_UNTYPED(eClDiagnostic, eClDiagnostic);
+enum class eClDiagnostic { kNoDiagnostic, COUNT };
 // Define the enum to cstr conversion.
-CND_MM_CREATE_ENUMTOCSTR_FROM_ENUM_LIST(eClDiagnosticToCStr, eClDiagnostic, eClDiagnostic);
+constexpr const char* eClDiagnosticToCStr(eClDiagnostic e) noexcept {
+  using enum eClDiagnostic;
+  switch (e) {
+    case kNoDiagnostic:
+      return "kNoDiagnostic";
+    case COUNT:
+      return "COUNT";
+    default:
+      return "<invalid>";
+  }
+};
 // Assert enum to cstr conversion.
 #define CND_STATIC_ASSERT_ENUM_TO_CSTR_eClDiagnostic(x) CND_MM_STATIC_ASSERT_ENUM_TO_CSTR(x, eClDiagnostic, eClDiagnosticToCStr)
 

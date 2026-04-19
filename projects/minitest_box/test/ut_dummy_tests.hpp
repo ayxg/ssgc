@@ -48,7 +48,7 @@ TEST(DummyUnitTests, FailExpectAnyThrow) { EXPECT_ANY_THROW(1 == 1;); }
 TEST(DummyUnitTests, FailExpectNoThrow) { EXPECT_NO_THROW(throw "oops!";); }
 
 TEST(DummyUnitTests, FailExpectNoThrowWithStdException) {
-  EXPECT_NO_THROW(throw std::exception("Testing expected std exception."););
+  EXPECT_NO_THROW(throw std::runtime_error("Testing expected std exception."););
 }
 
 // Asserts
@@ -104,7 +104,7 @@ TEST(DummyUnitTests, FailAssertNoThrow) {
 }
 
 TEST(DummyUnitTests, FailAssertNoThrowWithStdException) {
-  ASSERT_NO_THROW(throw std::exception("Testing expected std exception."););
+  ASSERT_NO_THROW(throw std::runtime_error("Testing expected std exception."););
   EXPECT_TRUE(false && "<unreachable>");
 }
 
@@ -151,7 +151,7 @@ TEST(DummyUnitTests, FailExpectNoThrowLog) {
 }
 
 TEST(DummyUnitTests, FailExpectNoThrowWithStdExceptionLog) {
-  EXPECT_NO_THROW_LOG(throw std::exception("Testing expected std exception.");
+  EXPECT_NO_THROW_LOG(throw std::runtime_error("Testing expected std exception.");
                       , "bad-log", "good-log");
 }
 
@@ -208,7 +208,7 @@ TEST(DummyUnitTests, FailAssertNoThrowLog) {
 }
 
 TEST(DummyUnitTests, FailAssertNoThrowWithStdExceptionLog) {
-  ASSERT_NO_THROW_LOG(throw std::exception("Testing expected std exception.");
+  ASSERT_NO_THROW_LOG(throw std::runtime_error("Testing expected std exception.");
                       , "bad-log", "good-log");
   EXPECT_TRUE(false && "<unreachable>");
 }

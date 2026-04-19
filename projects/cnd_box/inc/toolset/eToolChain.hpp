@@ -104,9 +104,253 @@ namespace cnd::corevals::toolset {
   lst
 
 // Define the enum.
-CND_MM_CREATE_ENUM_FROM_APPLIED_ENUM_UNTYPED(eToolchain, eToolchain);
+enum class eToolchain {
+  kINVALID,
+  kNONE,
+  kCustom,
+  kEmbedded,
+  kACC,
+  kAltiumMicroBlazeC,
+  kAltiumCToHardware,
+  kAmsterdamCompilerKit,
+  kARM,
+  kAztecC,
+  kBordland,
+  kCC65,
+  kClang,
+  kComeau,
+  kCompaq,
+  kConvexC,
+  kCompCert,
+  kCrayC,
+  kDiab,
+  kDiceC,
+  kDigitalMars,
+  kDignusSystems,
+  kDJGPP,
+  kEDGFrontend,
+  kEKOPath,
+  kFujitsu,
+  kGCC,
+  kGreenHill,
+  kHPAnsiC,
+  kHPa,
+  kIAR,
+  kIBMXL,
+  kIBMXLLegacy,
+  kIBMXLMainframe,
+  kImageCraftC,
+  kIntel,
+  kKai,
+  kKEILCARM,
+  kKEILC166,
+  kKEILC51,
+  kLCC,
+  kLLVM,
+  kMetaWareHigh,
+  kMetrowerksCodeWarrior,
+  kMSVC,
+  kMicrotec,
+  kMicrowayNDPC,
+  kMinGW,
+  kMinGW64,
+  kMIPSpro,
+  kMiracleC,
+  kMPW,
+  kNorcroftC,
+  kNWCC,
+  kOpen64,
+  kOracleProCPrecompiler,
+  kOracleSolarisStudio,
+  kPacificC,
+  kPalm,
+  kPellesC,
+  kPortlandGroup,
+  kRenesas,
+  kSASC,
+  kSCOOpenServer,
+  kSmallDeviceC,
+  kSN,
+  kStratusVOSC,
+  kSymantecC,
+  kTenDRA,
+  kTexasInstruments,
+  kTHINKC,
+  kTinyC,
+  kTurbo,
+  kUltimate,
+  kUSLC,
+  kVBCC,
+  kWatcomC,
+  kZortechC,
+  COUNT
+};
 // Define the enum to cstr conversion.
-CND_MM_CREATE_ENUMTOCSTR_FROM_ENUM_LIST(eToolchainToCStr, eToolchain, eToolchain);
+constexpr const char* eToolchainToCStr(eToolchain e) noexcept {
+  using enum eToolchain;
+  switch (e) {
+    case kINVALID:
+      return "kINVALID";
+    case kNONE:
+      return "kNONE";
+    case kCustom:
+      return "kCustom";
+    case kEmbedded:
+      return "kEmbedded";
+    case kACC:
+      return "kACC";
+    case kAltiumMicroBlazeC:
+      return "kAltiumMicroBlazeC";
+    case kAltiumCToHardware:
+      return "kAltiumCToHardware";
+    case kAmsterdamCompilerKit:
+      return "kAmsterdamCompilerKit";
+    case kARM:
+      return "kARM";
+    case kAztecC:
+      return "kAztecC";
+    case kBordland:
+      return "kBordland";
+    case kCC65:
+      return "kCC65";
+    case kClang:
+      return "kClang";
+    case kComeau:
+      return "kComeau";
+    case kCompaq:
+      return "kCompaq";
+    case kConvexC:
+      return "kConvexC";
+    case kCompCert:
+      return "kCompCert";
+    case kCrayC:
+      return "kCrayC";
+    case kDiab:
+      return "kDiab";
+    case kDiceC:
+      return "kDiceC";
+    case kDigitalMars:
+      return "kDigitalMars";
+    case kDignusSystems:
+      return "kDignusSystems";
+    case kDJGPP:
+      return "kDJGPP";
+    case kEDGFrontend:
+      return "kEDGFrontend";
+    case kEKOPath:
+      return "kEKOPath";
+    case kFujitsu:
+      return "kFujitsu";
+    case kGCC:
+      return "kGCC";
+    case kGreenHill:
+      return "kGreenHill";
+    case kHPAnsiC:
+      return "kHPAnsiC";
+    case kHPa:
+      return "kHPa";
+    case kIAR:
+      return "kIAR";
+    case kIBMXL:
+      return "kIBMXL";
+    case kIBMXLLegacy:
+      return "kIBMXLLegacy";
+    case kIBMXLMainframe:
+      return "kIBMXLMainframe";
+    case kImageCraftC:
+      return "kImageCraftC";
+    case kIntel:
+      return "kIntel";
+    case kKai:
+      return "kKai";
+    case kKEILCARM:
+      return "kKEILCARM";
+    case kKEILC166:
+      return "kKEILC166";
+    case kKEILC51:
+      return "kKEILC51";
+    case kLCC:
+      return "kLCC";
+    case kLLVM:
+      return "kLLVM";
+    case kMetaWareHigh:
+      return "kMetaWareHigh";
+    case kMetrowerksCodeWarrior:
+      return "kMetrowerksCodeWarrior";
+    case kMSVC:
+      return "kMSVC";
+    case kMicrotec:
+      return "kMicrotec";
+    case kMicrowayNDPC:
+      return "kMicrowayNDPC";
+    case kMinGW:
+      return "kMinGW";
+    case kMinGW64:
+      return "kMinGW64";
+    case kMIPSpro:
+      return "kMIPSpro";
+    case kMiracleC:
+      return "kMiracleC";
+    case kMPW:
+      return "kMPW";
+    case kNorcroftC:
+      return "kNorcroftC";
+    case kNWCC:
+      return "kNWCC";
+    case kOpen64:
+      return "kOpen64";
+    case kOracleProCPrecompiler:
+      return "kOracleProCPrecompiler";
+    case kOracleSolarisStudio:
+      return "kOracleSolarisStudio";
+    case kPacificC:
+      return "kPacificC";
+    case kPalm:
+      return "kPalm";
+    case kPellesC:
+      return "kPellesC";
+    case kPortlandGroup:
+      return "kPortlandGroup";
+    case kRenesas:
+      return "kRenesas";
+    case kSASC:
+      return "kSASC";
+    case kSCOOpenServer:
+      return "kSCOOpenServer";
+    case kSmallDeviceC:
+      return "kSmallDeviceC";
+    case kSN:
+      return "kSN";
+    case kStratusVOSC:
+      return "kStratusVOSC";
+    case kSymantecC:
+      return "kSymantecC";
+    case kTenDRA:
+      return "kTenDRA";
+    case kTexasInstruments:
+      return "kTexasInstruments";
+    case kTHINKC:
+      return "kTHINKC";
+    case kTinyC:
+      return "kTinyC";
+    case kTurbo:
+      return "kTurbo";
+    case kUltimate:
+      return "kUltimate";
+    case kUSLC:
+      return "kUSLC";
+    case kVBCC:
+      return "kVBCC";
+    case kWatcomC:
+      return "kWatcomC";
+    case kZortechC:
+      return "kZortechC";
+    case COUNT:
+      return "COUNT";
+    default:
+      return "<invalid>";
+  }
+};
 // Assert enum to cstr conversion.
 #define CND_STATIC_ASSERT_ENUM_TO_CSTR_eToolchain(x) CND_MM_STATIC_ASSERT_ENUM_TO_CSTR(x, eToolchain, eToolchainToCStr)
 

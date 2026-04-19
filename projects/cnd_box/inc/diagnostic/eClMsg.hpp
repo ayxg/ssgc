@@ -50,16 +50,98 @@ namespace cnd::corevals::diagnostic {
       CND_APPLIED_ENUM_eClDiagnostic(m, sep, sep, ) lst
 
 // Define the enum.
-CND_MM_CREATE_ENUM_FROM_APPLIED_ENUM_UNTYPED(eClMsg, eClMsg);
+enum class eClMsg {
+  kGenericCompilerMessage,
+  kNoError,
+  kCompilerDevDebugError,
+  kLexerUnclosedStringLiteral,
+  kLexerUnclosedCharacterLiteral,
+  kLexerEmptyCharacterLiteral,
+  kLexerUnknownScalarSuffix,
+  kFailedToReadFile,
+  kParserExpectedDeclaration,
+  kDriverInvalidArg,
+  kDriverFlagMustHavePostfix,
+  kDriverFlagExpectedArgs,
+  kDriverFlagInvalidArg,
+  kDriverDeniedOverwrite,
+  kDriverFailedToRedirectStream,
+  kNoWarning,
+  kNoGuide,
+  kNoDiagnostic,
+  COUNT
+};
 
 // Define the enum to cstr conversion.
-CND_MM_CREATE_ENUMTOCSTR_FROM_ENUM_LIST(eClMsgToCStr, eClMsg, eClMsg);
+constexpr const char* eClMsgToCStr(eClMsg e) noexcept {
+  using enum eClMsg;
+  switch (e) {
+    case kGenericCompilerMessage:
+      return "kGenericCompilerMessage";
+    case kNoError:
+      return "kNoError";
+    case kCompilerDevDebugError:
+      return "kCompilerDevDebugError";
+    case kLexerUnclosedStringLiteral:
+      return "kLexerUnclosedStringLiteral";
+    case kLexerUnclosedCharacterLiteral:
+      return "kLexerUnclosedCharacterLiteral";
+    case kLexerEmptyCharacterLiteral:
+      return "kLexerEmptyCharacterLiteral";
+    case kLexerUnknownScalarSuffix:
+      return "kLexerUnknownScalarSuffix";
+    case kFailedToReadFile:
+      return "kFailedToReadFile";
+    case kParserExpectedDeclaration:
+      return "kParserExpectedDeclaration";
+    case kDriverInvalidArg:
+      return "kDriverInvalidArg";
+    case kDriverFlagMustHavePostfix:
+      return "kDriverFlagMustHavePostfix";
+    case kDriverFlagExpectedArgs:
+      return "kDriverFlagExpectedArgs";
+    case kDriverFlagInvalidArg:
+      return "kDriverFlagInvalidArg";
+    case kDriverDeniedOverwrite:
+      return "kDriverDeniedOverwrite";
+    case kDriverFailedToRedirectStream:
+      return "kDriverFailedToRedirectStream";
+    case kNoWarning:
+      return "kNoWarning";
+    case kNoGuide:
+      return "kNoGuide";
+    case kNoDiagnostic:
+      return "kNoDiagnostic";
+    case COUNT:
+      return "COUNT";
+    default:
+      return "<invalid>";
+  }
+};
 
 // Assert enum to cstr conversion.
 #define CND_STATIC_ASSERT_ENUM_TO_CSTR_eClMsg(x) \
   CND_MM_STATIC_ASSERT_ENUM_TO_CSTR(x, eClMsg, eClMsgToCStr)
 
-CND_APPLIED_ENUM_eClMsg(CND_STATIC_ASSERT_ENUM_TO_CSTR_eClMsg, , , );
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kGenericCompilerMessage), "kGenericCompilerMessage"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kNoError), "kNoError"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kCompilerDevDebugError), "kCompilerDevDebugError"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kLexerUnclosedStringLiteral), "kLexerUnclosedStringLiteral"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kLexerUnclosedCharacterLiteral), "kLexerUnclosedCharacterLiteral"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kLexerEmptyCharacterLiteral), "kLexerEmptyCharacterLiteral"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kLexerUnknownScalarSuffix), "kLexerUnknownScalarSuffix"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kFailedToReadFile), "kFailedToReadFile"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kParserExpectedDeclaration), "kParserExpectedDeclaration"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kDriverInvalidArg), "kDriverInvalidArg"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kDriverFlagMustHavePostfix), "kDriverFlagMustHavePostfix"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kDriverFlagExpectedArgs), "kDriverFlagExpectedArgs"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kDriverFlagInvalidArg), "kDriverFlagInvalidArg"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kDriverDeniedOverwrite), "kDriverDeniedOverwrite"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kDriverFailedToRedirectStream), "kDriverFailedToRedirectStream"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kNoWarning), "kNoWarning"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kNoGuide), "kNoGuide"));
+static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::kNoDiagnostic), "kNoDiagnostic"));
+;
 static_assert(cxx::StrEq(eClMsgToCStr(eClMsg::COUNT), "COUNT"));
 #undef CND_STATIC_ASSERT_ENUM_TO_CSTR_eClMsg
 }  // namespace cnd::corevals::diagnostic

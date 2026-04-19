@@ -41,6 +41,16 @@ using std::string;
 using std::stringstream;
 using std::vector;
 
+#if defined(__clang__) || defined(__GNUC__)
+/// Concept to check if a type is invokable/callable. template <ret,fn,args...>
+/// For now temporarily using std::_Is_invocable_r from MSVC.
+/// @see iIsInvokableV
+template <class R, class F, class... Args>
+using iIsInvokable = std::is_invocable_r<R, F, Args...>;
+
+template <class R, class F, class... Args>
+static constexpr bool iIsInvokableV = std::is_invocable_r<R, F, Args...>::value;
+#else // MSVC
 /// Concept to check if a type is invokable/callable. template <ret,fn,args...>
 /// For now temporarily using std::_Is_invocable_r from MSVC.
 /// @see iIsInvokableV
@@ -49,6 +59,7 @@ using iIsInvokable = std::_Is_invocable_r<R, F, Args...>;
 
 template <class R, class F, class... Args>
 static constexpr bool iIsInvokableV = std::_Is_invocable_r<R, F, Args...>::value;
+#endif
 
 /// Concept to check if a type is streamable.
 /// Non-streamable objects are output as their pointer address.

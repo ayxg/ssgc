@@ -27,13 +27,24 @@ namespace cnd::corevals::diagnostic {
   lst
 
 // Define the enum.
-CND_MM_CREATE_ENUM_FROM_APPLIED_ENUM_UNTYPED(eClWarning, eClWarning);
+enum class eClWarning { kNoWarning, COUNT };
 // Define the enum to cstr conversion.
-CND_MM_CREATE_ENUMTOCSTR_FROM_ENUM_LIST(eClWarningToCStr, eClWarning, eClWarning);
+constexpr const char* eClWarningToCStr(eClWarning e) noexcept {
+  using enum eClWarning;
+  switch (e) {
+    case kNoWarning:
+      return "kNoWarning";
+    case COUNT:
+      return "COUNT";
+    default:
+      return "<invalid>";
+  }
+};
 // Assert enum to cstr conversion.
 #define CND_STATIC_ASSERT_ENUM_TO_CSTR_eClWarning(x) CND_MM_STATIC_ASSERT_ENUM_TO_CSTR(x, eClWarning, eClWarningToCStr)
 
-CND_APPLIED_ENUM_eClWarning(CND_STATIC_ASSERT_ENUM_TO_CSTR_eClWarning, , , );
+static_assert(cxx::StrEq(eClWarningToCStr(eClWarning::kNoWarning), "kNoWarning"));
+;
 static_assert(cxx::StrEq(eClWarningToCStr(eClWarning::COUNT), "COUNT"));
 #undef CND_STATIC_ASSERT_ENUM_TO_CSTR_eClWarning
 }  // namespace cnd::corevals::diagnostic
