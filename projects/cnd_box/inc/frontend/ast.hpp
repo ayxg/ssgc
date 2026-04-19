@@ -28,8 +28,8 @@ struct Ast {
   const Ast* parent{nullptr};
   Vec<Ast> children{};
 
-  std::span<const Tk>::const_iterator src_begin{};
-  std::span<const Tk>::const_iterator src_end{};
+  std::span<const Tk>::iterator src_begin{};
+  std::span<const Tk>::iterator src_end{};
 
   constexpr Ast() = default;
   constexpr Ast(Ast&& o) = default;
@@ -79,23 +79,23 @@ struct Ast {
 
   constexpr Ast(const TkCursor<std::span>& c)
       : type(GetAstFromTk(c.Get().Type())), src_begin(c.Iter()), src_end{c.Next().Iter()} {}
-  constexpr Ast(const std::span<const Tk>::const_iterator& c)
+  constexpr Ast(const std::span<const Tk>::iterator& c)
       : type(GetAstFromTk(c->Type())), src_begin(c), src_end{c + 1} {}
 
-  constexpr Ast(eTk operand_token, std::span<const Tk>::const_iterator src_beg,
-                std::span<const Tk>::const_iterator src_end)
+  constexpr Ast(eTk operand_token, std::span<const Tk>::iterator src_beg,
+                std::span<const Tk>::iterator src_end)
       : type{GetAstFromTk(operand_token)}, src_begin{src_beg}, src_end{src_end} {}
 
-  constexpr Ast(eAst type, std::span<const Tk>::const_iterator src_beg, std::span<const Tk>::const_iterator src_end)
+  constexpr Ast(eAst type, std::span<const Tk>::iterator src_beg, std::span<const Tk>::iterator src_end)
       : type{type}, src_begin{src_beg}, src_end{src_end} {}
 
-  constexpr Ast(eAst type, std::span<const Tk>::const_iterator src_beg, std::span<const Tk>::const_iterator src_end,
+  constexpr Ast(eAst type, std::span<const Tk>::iterator src_beg, std::span<const Tk>::iterator src_end,
                 const Ast* parent, const Vec<Ast>& children)
       : type{type}, src_begin{src_beg}, src_end{src_end}, parent(parent), children(children) {}
-  constexpr Ast(eAst type, std::span<const Tk>::const_iterator src_beg, std::span<const Tk>::const_iterator src_end,
+  constexpr Ast(eAst type, std::span<const Tk>::iterator src_beg, std::span<const Tk>::iterator src_end,
                 const Ast* parent, Vec<Ast>&& children)
       : type{type}, src_begin{src_beg}, src_end{src_end}, parent(parent), children(std::forward<Vec<Ast>>(children)) {}
-  constexpr Ast(eAst type, std::span<const Tk>::const_iterator src_beg, std::span<const Tk>::const_iterator src_end,
+  constexpr Ast(eAst type, std::span<const Tk>::iterator src_beg, std::span<const Tk>::iterator src_end,
                 Vec<Ast>&& children)
       : type{type}, src_begin{src_beg}, src_end{src_end}, children(std::forward<Vec<Ast>>(children)) {
     for (auto& child : children) {
@@ -104,7 +104,7 @@ struct Ast {
   }
   template <typename... ChildTs>
     requires(std::is_same_v<Ast, std::decay_t<ChildTs>> && ...)
-  Ast(eAst type, std::span<const Tk>::const_iterator beg, std::span<const Tk>::const_iterator end, ChildTs... children)
+  Ast(eAst type, std::span<const Tk>::iterator beg, std::span<const Tk>::iterator end, ChildTs... children)
       : src_begin{beg}, src_end{end}, type(type) {
     (PushBack(children), ...);
   }

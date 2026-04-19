@@ -27,7 +27,7 @@ template <template <class T> class TokenContainerT>
 class TkCursor {
  public:
   using TkVecT = TokenContainerT<const Tk>;
-  using TkVecConstIterT = TokenContainerT<const Tk>::const_iterator;
+  using TkVecConstIterT = typename TokenContainerT<const Tk>::iterator;
   /*
     // Properties
     constexpr TkVecConstIterT End() const;

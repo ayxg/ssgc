@@ -25,7 +25,7 @@ namespace cnd {
 template <template <class T> class TokenContainerT>
 class TkScope {
   using TkVecT = TokenContainerT<const Tk>;
-  using TkVecConstIterT = TokenContainerT<const Tk>::const_iterator;
+  using TkVecConstIterT = typename TokenContainerT<const Tk>::iterator;
   using TkCursorT = TkCursor<TokenContainerT>;
 
  public:

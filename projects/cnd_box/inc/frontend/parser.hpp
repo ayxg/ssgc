@@ -58,7 +58,7 @@ using TkVectorT = Vec<Tk>;
 using TkVecConstIterT = Vec<Tk>::const_iterator;
 using TkVecIterT = Vec<Tk>::iterator;
 using TkContainerT = span<const Tk>;
-using TkConstIterT = TkContainerT::const_iterator;
+using TkConstIterT = TkContainerT::iterator;
 using TkIterT = TkContainerT::iterator;
 
 /// Iterator over a specific const Tk range. Used by the parser when iterating passed data.
@@ -101,7 +101,7 @@ CND_CX Ast&& ExtractAndAdvance(TkCursorT cursor, LLPrsResT& parse_res) CND_NX {
 /// @return Error or the resulting ast node.
 CND_CX LLPrsResT ParseOptionalModifiers(TkCursorT& c);
 CND_CX LLPrsResT ParseGenericBinaryLeftAssociative(TkCursorT c, bool (*next_cond)(const TkCursorT&),
-                                                   LLPrsResT (*operand_parser)(TkCursorT)) CND_NX(CND_CLDEV_DEBUG_MODE);
+                                                   LLPrsResT (*operand_parser)(TkCursorT)) CND_NX;
 }  // namespace detail
 
 /// @defgroup cand_compiler_parser_parse Internal parsing methods
@@ -168,24 +168,24 @@ CND_CX LLPrsResT ParseComparison(TkCursorT c) CND_NX;
 CND_CX LLPrsResT ParseThreeWayEquality(TkCursorT c) CND_NX;
 CND_CX LLPrsResT ParseBitwiseShift(TkCursorT c) CND_NX;
 CND_CX LLPrsResT ParseSummation(TkCursorT c) CND_NX;
-CND_CX LLPrsResT ParseProduction(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-CND_CX LLPrsResT ParsePrefix(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-CND_CX LLPrsResT ParseAccess(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-CND_CX LLPrsResT ParsePostfix(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-CND_CX LLPrsResT ParseResolution(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
+CND_CX LLPrsResT ParseProduction(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParsePrefix(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParseAccess(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParsePostfix(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParseResolution(TkCursorT c) CND_NX;
 
-CND_CX LLPrsResT ParseScopedArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-CND_CX LLPrsResT ParseParenArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-CND_CX LLPrsResT ParseSquareArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-CND_CX LLPrsResT ParseCurlyArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
+CND_CX LLPrsResT ParseScopedArguments(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParseParenArguments(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParseSquareArguments(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParseCurlyArguments(TkCursorT c) CND_NX;
 
-CND_CX LLPrsResT ParsePrimaryOperand(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-CND_CX LLPrsResT ParseOperandSet(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-CND_CX LLPrsResT ParseIdentityOperand(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-CND_CX LLPrsResT ParseValueOperand(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-CND_CX LLPrsResT ParseParenSubexpr(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-CND_CX LLPrsResT ParseSquareSubexpr(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
-CND_CX LLPrsResT ParseCurlySubexpr(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE);
+CND_CX LLPrsResT ParsePrimaryOperand(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParseOperandSet(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParseIdentityOperand(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParseValueOperand(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParseParenSubexpr(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParseSquareSubexpr(TkCursorT c) CND_NX;
+CND_CX LLPrsResT ParseCurlySubexpr(TkCursorT c) CND_NX;
 
 /// @} // end of cand_compiler_parser_parse
 
@@ -230,7 +230,7 @@ static CompilerProcessResult<Ast> ParseSource(const Vec<char>& src_data) {
   if (!lex_res) return CompilerProcessFailure(lex_res.error());
   auto sanitized_src = Lexer::Sanitize(*lex_res);
   std::span<const Tk> src_span = std::span{sanitized_src.data(), sanitized_src.size()};
-  auto parse_res = parser::ParseSyntax({src_span.cbegin(), src_span.cend()});
+  auto parse_res = parser::ParseSyntax({src_span.begin(), src_span.end()});
   if (!parse_res) return CompilerProcessFailure(parse_res.error());
   return parse_res->ast;
 }
@@ -263,12 +263,12 @@ CND_CX LLPrsResT ParseArguments(TkCursorT c) CND_NX {
     return LLParserResult(c.Advance(2), Ast(eAst::kArguments));
 
   SepScopePrsResT arg_scopes = FindSeperatedParen(c.Iter(), c.End(), kComma);
-  if (!arg_scopes) return LLPrsResT::Failure(move(arg_scopes.error()));
+  if (!arg_scopes) return LLPrsResT::unexpected_type(move(arg_scopes.error()));
 
   Ast arguments_node = eAst::kArguments;
   for (const auto& arg_scope : arg_scopes.value()) {
     LRPrsResT arg_result = ParseExpr(arg_scope.Contained());
-    if (!arg_result) return LLPrsResT::Failure(move(arg_result.error()));
+    if (!arg_result) return LLPrsResT::unexpected_type(move(arg_result.error()));
     arguments_node.children.emplace_back(move(arg_result.value()));
   }
 
@@ -282,11 +282,11 @@ CND_CX LLPrsResT ParseIndexingArguments(TkCursorT c) CND_NX {
   if (c.Next().TypeIs(kRBracket)) return LLParserResult(c.Advance(2), eAst::kArguments);
 
   SepScopePrsResT arg_scopes = FindSeperatedBracket(c.Iter(), c.End(), kComma);
-  if (!arg_scopes) return LLPrsResT::Failure(arg_scopes.error());
+  if (!arg_scopes) return LLPrsResT::unexpected_type(arg_scopes.error());
   Ast arguments_node = eAst::kArguments;
   for (const auto& arg_scope : arg_scopes.value()) {
     LRPrsResT arg_result = ParseExpr(arg_scope.Contained());
-    if (!arg_result) return LLPrsResT::Failure(move(arg_result.error()));
+    if (!arg_result) return LLPrsResT::unexpected_type(move(arg_result.error()));
 
     arguments_node.children.emplace_back(move(arg_result.value()));
   }
@@ -302,11 +302,11 @@ CND_CX LLPrsResT ParseListingArguments(TkCursorT c) CND_NX {
   if (c.Next().TypeIs(kRBrace)) return LLParserResult(c.Advance(2), eAst::kArguments);
 
   SepScopePrsResT arg_scopes = FindSeperatedBracket(c.Iter(), c.End(), kComma);
-  if (!arg_scopes) return LLPrsResT::Failure(arg_scopes.error());
+  if (!arg_scopes) return LLPrsResT::unexpected_type(arg_scopes.error());
   Ast arguments_node = eAst::kArguments;
   for (const auto& arg_scope : arg_scopes.value()) {
     LRPrsResT arg_result = ParseExpr(arg_scope.Contained());
-    if (!arg_result) return LLPrsResT::Failure(move(arg_result.error()));
+    if (!arg_result) return LLPrsResT::unexpected_type(move(arg_result.error()));
 
     arguments_node.children.emplace_back(move(arg_result.value()));
   }
@@ -317,7 +317,7 @@ CND_CX LLPrsResT ParseListingArguments(TkCursorT c) CND_NX {
 CND_CX LLPrsResT ParsePrimaryStatement(TkCursorT c) CND_NX {
   if (!c.IsPrimary()) return DEBUG_FAIL("ImplExpectedToken");
   LLPrsResT expr_result = ParsePrimaryExpr(c);
-  if (!expr_result) return LLPrsResT::Failure(move(expr_result.error()));
+  if (!expr_result) return LLPrsResT::unexpected_type(move(expr_result.error()));
   c.Advance(expr_result->head);
   if (c.TypeIs(eTk::kSemicolon)) {
     c.Advance();
@@ -329,11 +329,11 @@ CND_CX LLPrsResT ParsePrimaryStatement(TkCursorT c) CND_NX {
 
 CND_CX LLPrsResT ParseConditionalSubExpression(TkCursorT c) CND_NX {
   ScopePrsResT paren_scope = FindParen(c);
-  if (!paren_scope) return LLPrsResT::Failure(move(paren_scope.error()));
+  if (!paren_scope) return LLPrsResT::unexpected_type(move(paren_scope.error()));
   if (!paren_scope.value().ContainedBegin()->IsPrimary())
     return DEBUG_FAIL("Invalid start of conditional sub-expression.");
   LLPrsResT subexpr_result = ParsePrimaryExpr({paren_scope.value().ContainedBegin(), c.End()});
-  if (!subexpr_result) return LLPrsResT::Failure(move(subexpr_result.error()));
+  if (!subexpr_result) return LLPrsResT::unexpected_type(move(subexpr_result.error()));
   return LLParserResult(c.Advance(paren_scope.value().End()), move(subexpr_result->ast));
 }
 
@@ -344,7 +344,7 @@ CND_CX LLPrsResT ParsePrimaryPreIdentifier(TkCursorT c) CND_NX {
     return LLParserResult(c.Advance(), eAst::kKwAny);
   else if (c.IsPrimary()) {
     LLPrsResT expr_result = ParsePrimaryExpr(c);
-    if (!expr_result) return LLPrsResT::Failure(move(expr_result.error()));
+    if (!expr_result) return LLPrsResT::unexpected_type(move(expr_result.error()));
     c.Advance(expr_result->head);
     if (c.TypeIs(eTk::kCommercialAt))
       c.Advance();
@@ -366,7 +366,7 @@ CND_CX LLPrsResT ParsePrimaryPostIdentifier(TkCursorT c) CND_NX {
     return LLParserResult(c.Advance(), eAst::kKwAny);
   else if (c.IsPrimary()) {
     LLPrsResT expr_result = ParsePrimaryExpr(c);
-    if (!expr_result) return LLPrsResT::Failure(move(expr_result.error()));
+    if (!expr_result) return LLPrsResT::unexpected_type(move(expr_result.error()));
     c.Advance(expr_result->head);
 
     // !SPECIAL CASE: if end of statement is a semicolon, go 1 offset back.
@@ -563,7 +563,8 @@ CND_CX LLPrsResT ParseWhileDecl(TkCursorT c) CND_NX {
   if (c.TypeIs(eTk::kSemicolon)) {
     c.Advance();
     Ast ret = Ast{eAst::kKwWhile, block_begin, c.Iter()};
-    ret.Append(cond_res.Extract().ast, body_res.Extract().ast);
+    ret.PushBack(cond_res.value().ast);
+    ret.PushBack(body_res.value().ast);
     return LLParserResult(c, move(ret));
   } else
     return DEBUG_FAIL("Expected <;> following while statement block.");
@@ -647,7 +648,7 @@ CND_CX LLPrsResT ParseVariableDecl(TkCursorT c) CND_NX {
     auto def_result = ParsePrimaryStatement(c);
     if (!def_result) return def_result;
     c.Advance(def_result.value().head);
-    Ast def_node = Ast(eAst::kVariableDefinition, def_begin, c.Iter(), nullptr, {def_result.Extract().ast});
+    Ast def_node = Ast(eAst::kVariableDefinition, def_begin, c.Iter(), nullptr, {def_result.value().ast});
 
     return LLParserResult(
         c, Ast(eAst::kVariableDeclaration, decl_begin, c.Iter(), nullptr, {mod_node, what_node, ident_node, def_node}));
@@ -924,7 +925,7 @@ CND_CX LLPrsResT ParseMethodParameters(TkCursorT c) CND_NX {
   }
 
   auto arg_scopes = FindSeperatedParen(c.Iter(), c.End(), kComma);
-  if (!arg_scopes) return LLPrsResT::Failure(arg_scopes.error());
+  if (!arg_scopes) return LLPrsResT::unexpected_type(arg_scopes.error());
 
   // For each arg:
   // - If there is no @ then it is an identifier of type any -> Expecting an identifier.
@@ -1031,7 +1032,7 @@ CND_CX LLPrsResT ParseMethodSignature(TkCursorT c) CND_NX {
 
     // Return type must end in a colon. If it doesn't, error above.
     c.Advance(return_type_result.value().head);
-    return LLParserResult(c, xMakeSigAst(return_type_result.Extract().head,
+    return LLParserResult(c, xMakeSigAst(return_type_result.value().head,
                                          Ast{kMethodParameterList, Ast{kMethodParameter, Ast{kMethodVoid}}}));
   }
   // Open Paren After Identifier -> Method with arguments.
@@ -1064,7 +1065,7 @@ CND_CX LLPrsResT ParseMethodSignature(TkCursorT c) CND_NX {
       if (!return_type_result) return return_type_result;
 
       c.Advance(return_type_result.value().head);
-      return LLParserResult(c, xMakeSigAst(return_type_result.Extract().ast, method_params_result.Extract().ast));
+      return LLParserResult(c, xMakeSigAst(return_type_result.value().ast, method_params_result.value().ast));
     } else {
       return DEBUG_FAIL("Expected <:>.");
     }
@@ -1102,7 +1103,7 @@ CND_CX LLPrsResT ParseMainDef(TkCursorT c) CND_NX {
   using namespace detail;
   Ast node{eAst::kMainDefinition};
   auto stmt = FindBrace(c);
-  if (!stmt) return LLPrsResT::Failure(stmt.error());
+  if (!stmt) return LLPrsResT::unexpected_type(stmt.error());
 
   c.Advance();
 
@@ -1129,7 +1130,7 @@ CND_CX LLPrsResT ParseClassDef(TkCursorT c) CND_NX {
   using namespace detail;
   Ast node{eAst::kClassDefinition};
   auto stmt = FindBrace(c);
-  if (!stmt) return LLPrsResT::Failure(stmt.error());
+  if (!stmt) return LLPrsResT::unexpected_type(stmt.error());
 
   c.Advance();
 
@@ -1157,7 +1158,7 @@ CND_CX LLPrsResT ParseLibDef(TkCursorT c) CND_NX {
   using namespace detail;
   Ast node{eAst::kLibraryDefinition};
   auto stmt = FindBrace(c);
-  if (!stmt) return LLPrsResT::Failure(stmt.error());
+  if (!stmt) return LLPrsResT::unexpected_type(stmt.error());
   c.Advance();
 
   while (c.Iter() != stmt.value().ContainedEnd()) {
@@ -1488,7 +1489,7 @@ CND_CX LLPrsResT ParseUsingDecl(TkCursorT c) CND_NX {
     if (!val_expr) return val_expr;
     c.Advance(val_expr.value().head);
     return LLParserResult(c,
-                          {eAst::kLibraryNamespaceInclusion, stmt_begin, c.Iter(), nullptr, {val_expr.Extract().ast}});
+                          {eAst::kLibraryNamespaceInclusion, stmt_begin, c.Iter(), nullptr, {val_expr.value().ast}});
 
   }
 
@@ -1779,7 +1780,7 @@ CND_CX LLPrsResT ParseEnumBlock(TkCursorT c) CND_NX {
         // Add this category to all categories of the sub-block
         // as a parent (push to the front), then add the entry
         // to this block.
-        auto recursed_block = recursed_block_res.Extract();
+        auto recursed_block = recursed_block_res.value();
         for (auto& entry : recursed_block.ast.children) {
           for (auto& entry_data : entry.children) {
             if (entry_data.TypeIs(eAst::kEnumCategory)) {
@@ -1871,7 +1872,7 @@ CND_CX LLPrsResT ParsePrimaryExpr(TkCursorT c) CND_NX {
 namespace detail {
 CND_CX LLPrsResT ParseGenericBinaryLeftAssociative(TkCursorT c, bool (*next_cond)(const TkCursorT&),
                                                    LLPrsResT (*operand_parser)(TkCursorT))
-    CND_NX(CND_CLDEV_DEBUG_MODE) {
+    CND_NX {
   using std::move;
 
   if (!IsTkPrimarySpecifier(c.Type())) return DEBUG_FAIL("Unexpected token at start of binary access.");
@@ -2082,7 +2083,7 @@ CND_CX LLPrsResT ParseSummation(TkCursorT c) CND_NX {
 // [L->R] <production> ::= <prefix> (<ASTERISK> <prefix>)*
 //				| <prefix> (<SOLIDUS> <prefix>)*
 //				| <prefix> (<PERCENT_SIGN> <prefix>)*
-CND_CX LLPrsResT ParseProduction(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParseProduction(TkCursorT c) CND_NX {
   using std::move;
 
   if (!IsTkPrimarySpecifier(c.Type())) return DEBUG_FAIL("Unexpected token at start of binary access.");
@@ -2127,7 +2128,7 @@ CND_CX LLPrsResT ParseProduction(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
 // [R->L] <prefix> ::= <INCREMENT_SIGN> * <access>
 //            | <DECREMENT_SIGN> * <access>
 //            | <EXCLAMATION_MARK> * <access>
-CND_CX LLPrsResT ParsePrefix(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParsePrefix(TkCursorT c) CND_NX {
   using std::move;
   using std::next;
   using std::ranges::subrange;
@@ -2158,7 +2159,7 @@ CND_CX LLPrsResT ParsePrefix(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
 };
 
 // [L->R] <access> ::= <postfix> (<FULL_STOP> <postfix>)*
-CND_CX LLPrsResT ParseAccess(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParseAccess(TkCursorT c) CND_NX {
   using std::move;
   using std::next;
   using std::ranges::subrange;
@@ -2203,7 +2204,7 @@ CND_CX LLPrsResT ParseAccess(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
   return LLParserResult{c, reduced_binop.back()};
 };
 
-CND_CX LLPrsResT ParsePostfixAccess(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParsePostfixAccess(TkCursorT c) CND_NX {
   using std::move;
   using std::next;
   using std::ranges::subrange;
@@ -2250,7 +2251,7 @@ CND_CX LLPrsResT ParsePostfixAccess(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
 
 // [L->R] <postfix> ::= <resolution> <INCREMENT_SIGN>*
 //             | <resolution> <DECREMENT_SIGN>*
-CND_CX LLPrsResT ParsePostfix(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParsePostfix(TkCursorT c) CND_NX {
   using std::move;
   using std::ranges::subrange;
   using std::views::reverse;
@@ -2353,7 +2354,7 @@ CND_CX LLPrsResT ParsePostfix(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
 
 // [L->R] <resolution> ::= <operand> (<DOUBLE_COLON> <operand>) *
 //                 | <DOUBLE_COLON> <operand> (<DOUBLE_COLON> <operand>) *
-CND_CX LLPrsResT ParseResolution(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParseResolution(TkCursorT c) CND_NX {
   using std::move;
 
   if (!IsTkPrimarySpecifier(c.Type())) return DEBUG_FAIL("Unexpected token at start of binary resolution.");
@@ -2404,13 +2405,13 @@ CND_CX LLPrsResT ParseResolution(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
   return LLParserResult{c, reduced_binop.back()};
 };
 
-CND_CX LLPrsResT ParseScopedArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParseScopedArguments(TkCursorT c) CND_NX {
   if (c.TypeIs(eTk::kLParen)) return ParseParenArguments(c);
   if (c.TypeIs(eTk::kLBracket)) return ParseSquareArguments(c);
   if (c.TypeIs(eTk::kLBrace)) return ParseCurlyArguments(c);
   return DEBUG_FAIL("Expected an opening scope.");
 }
-CND_CX LLPrsResT ParseParenArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParseParenArguments(TkCursorT c) CND_NX {
   if (!c.TypeIs(eTk::kLParen)) return DEBUG_FAIL("Expected an opening scope.");
   // For now we simply parse a primary expr inside the scope and change the root ast type.
   auto args = ParseParenSubexpr(c);
@@ -2418,7 +2419,7 @@ CND_CX LLPrsResT ParseParenArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
   args->ast.type = eAst::kArguments;
   return args;
 }
-CND_CX LLPrsResT ParseSquareArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParseSquareArguments(TkCursorT c) CND_NX {
   if (!c.TypeIs(eTk::kLBracket)) return DEBUG_FAIL("Expected an opening bracket.");
   // For now we simply parse a primary expr inside the scope and change the root ast type.
   auto args = ParseSquareSubexpr(c);
@@ -2426,7 +2427,7 @@ CND_CX LLPrsResT ParseSquareArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) 
   args->ast.type = eAst::kArguments;
   return args;
 }
-CND_CX LLPrsResT ParseCurlyArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParseCurlyArguments(TkCursorT c) CND_NX {
   if (!c.TypeIs(eTk::kLBrace)) return DEBUG_FAIL("Expected an opening brace.");
   // For now we simply parse a primary expr inside the scope and change the root ast type.
   auto args = ParseCurlySubexpr(c);
@@ -2435,31 +2436,31 @@ CND_CX LLPrsResT ParseCurlyArguments(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
   return args;
 }
 
-CND_CX LLPrsResT ParsePrimaryOperand(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParsePrimaryOperand(TkCursorT c) CND_NX {
   if (c.TypeIs(eTk::kIdent)) return ParseIdentityOperand(c);
   if (c.IsAnOperand()) return ParseValueOperand(c);
   if (c.IsOpeningScope()) return ParseOperandSet(c);
   return DEBUG_FAIL("Expected an identity operand, value operand or operand set.");
 };
-CND_CX LLPrsResT ParseOperandSet(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParseOperandSet(TkCursorT c) CND_NX {
   if (c.TypeIs(eTk::kLParen)) return ParseParenSubexpr(c);
   if (c.TypeIs(eTk::kLBracket)) return ParseSquareSubexpr(c);
   if (c.TypeIs(eTk::kLBrace)) return ParseCurlySubexpr(c);
   return DEBUG_FAIL("Expected an opening scope.");
 }
-CND_CX LLPrsResT ParseIdentityOperand(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParseIdentityOperand(TkCursorT c) CND_NX {
   if (c.TypeIs(eTk::kIdent))
     return LLParserResult(c.Next(), Ast{c});
   else
     return DEBUG_FAIL("Expected an identity-operand.");
 };
-CND_CX LLPrsResT ParseValueOperand(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParseValueOperand(TkCursorT c) CND_NX {
   if (c.TypeIsnt(eTk::kIdent) && c.IsAnOperand())
     return LLParserResult(c.Next(), Ast{c});
   else
     return DEBUG_FAIL("Expected a value-operand.");
 };
-CND_CX LLPrsResT ParseParenSubexpr(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParseParenSubexpr(TkCursorT c) CND_NX {
   if (c.TypeIsnt(eTk::kLParen)) return DEBUG_FAIL("Expected a left parentheses.");
   auto subexpr_beg = c.Iter();
   c.Advance();
@@ -2470,7 +2471,7 @@ CND_CX LLPrsResT ParseParenSubexpr(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
   c.Advance();
   return LLParserResult(c, Ast{eAst::kSubexpression, subexpr_beg, c.Iter(), subexpr->ast});
 };
-CND_CX LLPrsResT ParseSquareSubexpr(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParseSquareSubexpr(TkCursorT c) CND_NX {
   if (c.TypeIsnt(eTk::kLBracket)) return DEBUG_FAIL("Expected a left square bracket.");
   auto subexpr_beg = c.Iter();
   c.Advance();
@@ -2481,7 +2482,7 @@ CND_CX LLPrsResT ParseSquareSubexpr(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
   c.Advance();
   return LLParserResult(c, Ast{eAst::kSquareSubexpr, subexpr_beg, c.Iter(), subexpr->ast});
 };
-CND_CX LLPrsResT ParseCurlySubexpr(TkCursorT c) CND_NX(CND_CLDEV_DEBUG_MODE) {
+CND_CX LLPrsResT ParseCurlySubexpr(TkCursorT c) CND_NX {
   if (c.TypeIsnt(eTk::kLBrace)) return DEBUG_FAIL("Expected a left curly bracket.");
   auto subexpr_beg = c.Iter();
   c.Advance();
