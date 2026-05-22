@@ -316,6 +316,15 @@ class Parser {
         case eFlagInterp::kOpt: {
           out.insert({flags_.at(flag_idx).id, ""});
         } break;
+        case eFlagInterp::kCmd: { // This is in case a command is passed prefixed with a '--'.
+          if (HasCommand()) {
+            auto cmd_it = lookup_cmd_.find(std::string_view{arg_it->cbegin() + 2, arg_it->cend()});
+            if (cmd_it == lookup_cmd_.cend()) return unexpected{format("Unknown command: '{}'.", *arg_it)};
+            command_ = flags_[cmd_it->second].id;
+            return arg_it + 1;  // Rest args
+          } else                // Unparsed args are denied by default.
+            return unexpected{format("Unexpected argument: '{}'.", *arg_it)};
+        } break;
         case eFlagInterp::kSingle: {
           auto flag_var = arg_it + 1;
           if (flag_var->starts_with("-"))
@@ -346,6 +355,20 @@ class Parser {
   constexpr bool IsDisplayRun() { return is_display_; }
   constexpr FlagIdType GetDisplayFlag() { return display_flag_; }
   constexpr const vector<string_view>& GetPositionalArgs() { return positional_; }
+  std::string GenerateHelpText() {
+    std::string help_text;
+    for (const auto& flag : flags_) {
+      if (flag.interp == eFlagInterp::kPositional) {
+        help_text += std::format("{}: {}\n", flag.long_name, flag.desc);
+      } else {
+        std::string flag_repr;
+        if (flag.short_name != ' ') flag_repr += std::format("-{}, ", flag.short_name);
+        if (flag.long_name[0] != '\0') flag_repr += std::format("--{}", flag.long_name);
+        help_text += std::format("{}: {}\n", flag_repr, flag.desc);
+      }
+    }
+    return help_text;
+  }
 
  private:
   // `fwd_map` is the current forwarded output flags map in `Parser.Parse`.
