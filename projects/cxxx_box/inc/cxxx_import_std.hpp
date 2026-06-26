@@ -71,7 +71,7 @@ using const_void_ptr = const void*;
 }  // namespace cxx
 
 
-#endif HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_IMPORT_STD_H
+#endif // HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_IMPORT_STD_H
 /// @} // end of cppmodule2_cppextended
 ///////////////////////////////////////////////////////////////////////////////
 // @project: C& Programming Language Environment

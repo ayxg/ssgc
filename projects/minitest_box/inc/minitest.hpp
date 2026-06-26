@@ -18,7 +18,6 @@
 #include "test_framework.hpp"
 
 // clang-format off
-
 #define CURRENT_TEST_CASE_NAME minitest::gFramework.CurrentTestCaseName()
 #define CURRENT_TEST_SUITE_NAME minitest::gFramework.CurrentTestSuiteName()
 

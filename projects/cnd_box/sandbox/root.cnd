@@ -1,0 +1,13 @@
+namespace std {
+
+fn @cout(i8[] @data){
+
+}
+
+};
+
+proc @root:{
+  fn @main(i32 @argc, i8[]^ @argv):{
+    
+  }
+};

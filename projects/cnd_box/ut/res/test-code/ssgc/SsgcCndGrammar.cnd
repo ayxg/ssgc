@@ -38,13 +38,13 @@ enum ePriority :i32:{
   @Max 			: 200000;
 }
 
-enum i32 @eTk:int @Idx:cstr @EnumName:cstr @Literal: eOperation @Operation: eAssoc @Assoc:ePriority @priorty:{
-tag @Abstract @Invalid	:-1	:"Invalid"	:_;
+enum i32 @eTk:i32 @Idx:cstr @EnumName:cstr @Literal: eOperation @Operation: eAssoc @Assoc:ePriority @priorty:{
+tag @Abstract @Invalid	:-1	:"Invalid"	:_:eOperation::kNone;
 tag @Abstract @None		:0	:"None"		:_;
 tag @Keyword  @KwDef	:_	:"KwDef"	:"def";
 tag @Keyword  @KwFn		:_	:"KwFn"		:"fn";
-tag @Keyword  @KwClass 	:_	: "KwClass";
-tag @Keyword  @KwMain;
+tag @Keyword  @KwClass 	:_	: "KwClass":"class";
+tag @Keyword  @KwMain:_:"KwMain":"main";
 tag @Keyword  @KwImport;
 tag @Keyword  @KwNamespace;
 tag @Keyword  @KwUse;

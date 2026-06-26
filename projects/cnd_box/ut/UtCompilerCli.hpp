@@ -17,7 +17,7 @@
 // !!Keep clang format OFF for this file ,or else expected ast constructors will be unreadable.
 // clang-format off
 #include "minitest.hpp"
-#include "cli/CliDriver.hpp"
+#include "ssgc_cli.hpp"
 // clang-format on
 
 namespace cnd_unit_test::compiler {
@@ -45,22 +45,27 @@ struct DummyArgv {
 };
 
 TEST(UtCompilerCli, NoArgs) {
-  DummyArgv args{"cnd"};
-  cnd::ClRes<cnd::TrOutput> cl_out = cnd::driver::CliMain(args.GetArgc(), args.GetArgv());
-  ASSERT_TRUE(cl_out);
-  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
+  DummyArgv args{"ssgc"};
+  int cl_out = ssgcRunCommandLineInterface(args.GetArgc(), args.GetArgv());
+  ASSERT_TRUE(cl_out == EXIT_FAILURE);
 }
 
 TEST(UtCompilerCli, HelpModeRun) {
-  DummyArgv args{"cnd", "help"};
-  cnd::ClRes<cnd::TrOutput> cl_out = cnd::driver::CliMain(args.GetArgc(), args.GetArgv());
-  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
+  DummyArgv args{"ssgc", "--help"};
+  int cl_out = ssgcRunCommandLineInterface(args.GetArgc(), args.GetArgv());
+  ASSERT_TRUE(cl_out == EXIT_SUCCESS);
 }
 
 TEST(UtCompilerCli, VersionModeRun) {
-  DummyArgv args{"cnd", "version"};
-  cnd::ClRes<cnd::TrOutput> cl_out = cnd::driver::CliMain(args.GetArgc(), args.GetArgv());
-  ASSERT_TRUE(cl_out->exit_code == EXIT_SUCCESS);
+  DummyArgv args{"ssgc", "--version"};
+  int cl_out = ssgcRunCommandLineInterface(args.GetArgc(), args.GetArgv());
+  ASSERT_TRUE(cl_out == EXIT_SUCCESS);
+}
+
+TEST(UtCompilerCli, CommandDevLex) {
+  DummyArgv args{"ssgc", "dev", "lex", "test-code/compeval/0-return-zero.cnd"};
+  int cl_out = ssgcRunCommandLineInterface(args.GetArgc(), args.GetArgv());
+  ASSERT_TRUE(cl_out == EXIT_SUCCESS);
 }
 
 // TEST(UtCompilerCli, SilentRun) {

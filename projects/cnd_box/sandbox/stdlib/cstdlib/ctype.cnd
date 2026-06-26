@@ -1,0 +1,16 @@
+namespace std {
+extern "C" fn@isalnum(int c)>int;
+extern "C" fn@isalpha(int c)>int;
+extern "C" fn@isblank(int c)>int;
+extern "C" fn@iscntrl(int c)>int;
+extern "C" fn@isdigit(int c)>int;
+extern "C" fn@isgraph(int c)>int;
+extern "C" fn@islower(int c)>int;
+extern "C" fn@isprint(int c)>int;
+extern "C" fn@ispunct(int c)>int;
+extern "C" fn@isspace(int c)>int;
+extern "C" fn@isupper(int c)>int;
+extern "C" fn@isxdigit(int c)>int;
+extern "C" fn@tolower(int c)>int;
+extern "C" fn@toupper(int c)>int;
+}

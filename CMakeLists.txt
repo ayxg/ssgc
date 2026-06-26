@@ -70,7 +70,7 @@ ssg_declare_subprojects(
 		minitest_box
 		mta_box
 		cxxx_box
-		wpl_box
+		#wpl_box
 		#caf_box
 		#cgui_box
 		cnd_box
@@ -79,7 +79,7 @@ ssg_declare_subprojects(
 		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/minitest_box"
 		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/mta_box"
 		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cxxx_box"
-		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/wpl_box"
+		#"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/wpl_box"
 		#"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/caf_box"
 		#"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cgui_box"
 		"${SSGC_BOX_LOCAL_PROJECTS_SOURCE_DIR}/cnd_box"

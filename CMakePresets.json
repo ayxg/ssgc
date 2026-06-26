@@ -11,7 +11,12 @@
       "hidden": true,
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "installDir": "${sourceDir}/out/install/${presetName}"
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "intelliSenseMode": "windows-msvc-x86"
+        }
+      }
     },
 
     {
@@ -178,140 +183,140 @@
       }
     },
 
-    {
-      "name": "x86-windows-clangcl-debug",
-      "displayName": "x86-windows-clangcl-debug",
-      "inherits": [
-        "base",
-        "x86",
-        "windows",
-        "clangcl",
-        "debug"
-      ]
-    },
-    {
-      "name": "x86-windows-clangcl-release",
-      "displayName": "x86-windows-clangcl-release",
-      "inherits": [
-        "base",
-        "x86",
-        "windows",
-        "clangcl",
-        "release"
-      ]
-    },
-    {
-      "name": "x64-windows-clangcl-debug",
-      "displayName": "x64-windows-clangcl-debug",
-      "inherits": [
-        "base",
-        "x64",
-        "windows",
-        "clangcl",
-        "debug"
-      ]
-    },
-    {
-      "name": "x64-windows-clangcl-release",
-      "displayName": "x64-windows-clangcl-release",
-      "inherits": [
-        "base",
-        "x64",
-        "windows",
-        "clangcl",
-        "release"
-      ]
-    },
+    //{
+    //  "name": "x86-windows-clangcl-debug",
+    //  "displayName": "x86-windows-clangcl-debug",
+    //  "inherits": [
+    //    "base",
+    //    "x86",
+    //    "windows",
+    //    "clangcl",
+    //    "debug"
+    //  ]
+    //},
+    //{
+    //  "name": "x86-windows-clangcl-release",
+    //  "displayName": "x86-windows-clangcl-release",
+    //  "inherits": [
+    //    "base",
+    //    "x86",
+    //    "windows",
+    //    "clangcl",
+    //    "release"
+    //  ]
+    //},
+    //{
+    //  "name": "x64-windows-clangcl-debug",
+    //  "displayName": "x64-windows-clangcl-debug",
+    //  "inherits": [
+    //    "base",
+    //    "x64",
+    //    "windows",
+    //    "clangcl",
+    //    "debug"
+    //  ]
+    //},
+    //{
+    //  "name": "x64-windows-clangcl-release",
+    //  "displayName": "x64-windows-clangcl-release",
+    //  "inherits": [
+    //    "base",
+    //    "x64",
+    //    "windows",
+    //    "clangcl",
+    //    "release"
+    //  ]
+    //},
 
-    {
-      "name": "x86-windows-gcc-debug",
-      "displayName": "x86-windows-gcc-debug",
-      "inherits": [
-        "base",
-        "x86",
-        "windows",
-        "gcc",
-        "debug"
-      ]
-    },
-    {
-      "name": "x86-windows-gcc-release",
-      "displayName": "x86-windows-gcc-release",
-      "inherits": [
-        "base",
-        "x86",
-        "windows",
-        "gcc",
-        "release"
-      ]
-    },
-    {
-      "name": "x64-windows-gcc-debug",
-      "displayName": "x64-windows-gcc-debug",
-      "inherits": [
-        "base",
-        "x64",
-        "windows",
-        "gcc",
-        "debug"
-      ]
-    },
-    {
-      "name": "x64-windows-gcc-release",
-      "displayName": "x64-windows-gcc-release",
-      "inherits": [
-        "base",
-        "x64",
-        "windows",
-        "gcc",
-        "release"
-      ]
-    },
+    //{
+    //  "name": "x86-windows-gcc-debug",
+    //  "displayName": "x86-windows-gcc-debug",
+    //  "inherits": [
+    //    "base",
+    //    "x86",
+    //    "windows",
+    //    "gcc",
+    //    "debug"
+    //  ]
+    //},
+    //{
+    //  "name": "x86-windows-gcc-release",
+    //  "displayName": "x86-windows-gcc-release",
+    //  "inherits": [
+    //    "base",
+    //    "x86",
+    //    "windows",
+    //    "gcc",
+    //    "release"
+    //  ]
+    //},
+    //{
+    //  "name": "x64-windows-gcc-debug",
+    //  "displayName": "x64-windows-gcc-debug",
+    //  "inherits": [
+    //    "base",
+    //    "x64",
+    //    "windows",
+    //    "gcc",
+    //    "debug"
+    //  ]
+    //},
+    //{
+    //  "name": "x64-windows-gcc-release",
+    //  "displayName": "x64-windows-gcc-release",
+    //  "inherits": [
+    //    "base",
+    //    "x64",
+    //    "windows",
+    //    "gcc",
+    //    "release"
+    //  ]
+    //},
 
-    {
-      "name": "x86-windows-clang-debug",
-      "displayName": "x86-windows-clang-debug",
-      "inherits": [
-        "base",
-        "x86",
-        "windows",
-        "winclang",
-        "debug"
-      ]
-    },
-    {
-      "name": "x86-windows-clang-release",
-      "displayName": "x86-windows-clang-release",
-      "inherits": [
-        "base",
-        "x86",
-        "windows",
-        "winclang",
-        "release"
-      ]
-    },
-    {
-      "name": "x64-windows-clang-debug",
-      "displayName": "x64-windows-clang-debug",
-      "inherits": [
-        "base",
-        "x64",
-        "windows",
-        "winclang",
-        "debug"
-      ]
-    },
-    {
-      "name": "x64-windows-clang-release",
-      "displayName": "x64-windows-clang-release",
-      "inherits": [
-        "base",
-        "x64",
-        "windows",
-        "winclang",
-        "release"
-      ]
-    },
+    //{
+    //  "name": "x86-windows-clang-debug",
+    //  "displayName": "x86-windows-clang-debug",
+    //  "inherits": [
+    //    "base",
+    //    "x86",
+    //    "windows",
+    //    "winclang",
+    //    "debug"
+    //  ]
+    //},
+    //{
+    //  "name": "x86-windows-clang-release",
+    //  "displayName": "x86-windows-clang-release",
+    //  "inherits": [
+    //    "base",
+    //    "x86",
+    //    "windows",
+    //    "winclang",
+    //    "release"
+    //  ]
+    //},
+    //{
+    //  "name": "x64-windows-clang-debug",
+    //  "displayName": "x64-windows-clang-debug",
+    //  "inherits": [
+    //    "base",
+    //    "x64",
+    //    "windows",
+    //    "winclang",
+    //    "debug"
+    //  ]
+    //},
+    //{
+    //  "name": "x64-windows-clang-release",
+    //  "displayName": "x64-windows-clang-release",
+    //  "inherits": [
+    //    "base",
+    //    "x64",
+    //    "windows",
+    //    "winclang",
+    //    "release"
+    //  ]
+    //},
 
     {
       "name": "x86-linux-gcc-debug",

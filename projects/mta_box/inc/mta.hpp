@@ -495,7 +495,7 @@ struct contig_enum {
 
   static constexpr std::array<results_of_assoc_invoke, size> associated_values =
       []() constexpr {
-        std::array<results_of_assoc_invoke, size> ret;
+    std::array<results_of_assoc_invoke, size> ret{};
         for (under_t i = 0; i < size; ++i) {
           ret[i] = std::make_tuple(AssociatedValues(to_enum(i))...);
         }
@@ -508,7 +508,7 @@ struct contig_enum {
   }
 
   static constexpr inline std::array<enum_t, size> values_arr = []() {
-    std::array<enum_t, size> ret;
+    std::array<enum_t, size> ret{};
     auto nextval = first_val;
     for (auto& entry : ret) {
       entry = nextval;

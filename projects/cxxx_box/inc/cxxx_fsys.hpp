@@ -105,7 +105,7 @@ static void SaveStrToFile(const std::string& file_path,
 }
 }  // namespace cxx
 
-#endif HEADER_GUARD_SSG_CXXX_FSYS_H
+#endif // HEADER_GUARD_SSG_CXXX_FSYS_H
 /// @} // end of cppmodule2_cppextended
 
 ///////////////////////////////////////////////////////////////////////////////

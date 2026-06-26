@@ -42,16 +42,32 @@ set(cnd_compiler_interface_HEADERS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 set(cnd_compiler_interface_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Compiler Library : for use as an embedded api.
-add_library(cnd_compiler_interface INTERFACE)
+add_library(cnd_compiler_interface STATIC)
 target_include_directories(cnd_compiler_interface 
-  INTERFACE "${cnd_compiler_interface_HEADERS_DIR}"
+  PUBLIC "${cnd_compiler_interface_HEADERS_DIR}"
 )
-#target_sources(cnd_compiler_interface INTERFACE
-#  "${cnd_compiler_interface_SOURCES_DIR}/CliMain.cpp" # SsgcCliMain.hpp
-#  "${cnd_compiler_interface_SOURCES_DIR}/CliDriver.cpp" # SsgcDriver.hpp
-#)
+target_sources(cnd_compiler_interface PRIVATE
+  "${cnd_compiler_interface_SOURCES_DIR}/api/ssgc_cli.cpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend_enum_token.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend_lexer.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend_lexer.cpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/cli_parser.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/cli_parser.cpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/cli_app.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/cli_app.cpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/cli_ansi.hpp"     
+  "${cnd_compiler_interface_SOURCES_DIR}/cli_ansi.cpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/diagnostics.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/diagnostic_impl.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/diagnostic_errors.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/meta_applied_enum.hpp" 
+  "${cnd_compiler_interface_SOURCES_DIR}/util_enum_verbosity.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/util_logger.hpp"         
+  "${cnd_compiler_interface_SOURCES_DIR}/util_logger.cpp"
+
+)
 target_link_libraries(cnd_compiler_interface 
-  INTERFACE mta_box::mta_library
+  PUBLIC mta_box::mta_library
             cxxx_box::cxxx_library
             #wpl_box::wpl_library
 )
@@ -67,9 +83,9 @@ set_target_properties(
 # The implementation is contained inside 'cnd_compiler_interface'.
 # This target only calls 'ssgc::CliMain' method defined the interface. 
 add_executable(ssgc_compiler_executable
-  "${cnd_compiler_interface_SOURCES_DIR}/Main.cpp"
+  "main.cpp"
 )
-target_link_libraries(ssgc_compiler_executable PRIVATE cnd_compiler_interface)
+target_link_libraries(ssgc_compiler_executable PRIVATE cnd_compiler_interface cxxx_box::cxxx_library)
 
 #[============================================================================[
   Test Targets

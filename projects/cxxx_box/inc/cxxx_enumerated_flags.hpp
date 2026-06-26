@@ -104,7 +104,7 @@ class EnumeratedFlags {
 };
 };  // namespace cxx
 
-#endif HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_ENUMERATED_FLAGS_H
+#endif // HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_ENUMERATED_FLAGS_H
 /// @} // end of cppmodule2_cppextended
 
 ///////////////////////////////////////////////////////////////////////////////

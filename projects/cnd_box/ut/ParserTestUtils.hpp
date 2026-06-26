@@ -36,20 +36,21 @@ using std::string_view;
 
 using cnd::Ast;
 using cnd::eAstToCStr;
+using cnd::LoadSourceFile;
 using cnd::Sast;
 using cnd::Tk;
-using cnd::frontend::Lexer;
-using cnd::LoadSourceFile;
+using cnd::frontend::sanitizeTokens;
+using cnd::frontend::tokenizeSourceCode;
 using cnd::frontend::parser::LLPrsResT;
 using cnd::frontend::parser::TkCursorT;
 
 using ParsingMethod = LLPrsResT (*)(TkCursorT);
 
 enum class eTestParsingMethod : int {
-  kNone,
-  kLoadFromFile,
-  kCompareTypeOnly,
-  kCompareSignificantOnly,
+  kNone = 0,
+  kLoadFromFile = 1 << 0,           // 0001
+  kCompareTypeOnly = 1 << 1,        // 0010
+  kCompareSignificantOnly = 1 << 2  // 0100
 };
 using TestParsingMethodFlags = cxx::EnumeratedFlags<eTestParsingMethod>;
 
@@ -84,12 +85,13 @@ static void PrintSynthesizedAstCode(const Ast& node, std::string file_path) {
 static bool TestCompareAst(const Ast& node1, const Ast& node2, TestParsingMethodFlags flags = {}) {
   // Compare node types
   EXPECT_EQ_LOG(node1.type, node2.type,
-                format("Ast type {} not equal {}.", eAstToCStr(node1.type), eAstToCStr(node2.type)), "Ast Type Comp.");
+                format("Ast type {} not equal {}.", eAstToCStr(node1.type), eAstToCStr(node2.type)),
+                "Ast Type Comp.");
   if (node1.type != node2.type) return false;
 
   // Compare node values
   bool is_compare_literals = true;
-  if (flags.Check(eTestParsingMethod::kCompareSignificantOnly) && node1.IsLiteralSignificant())
+  if (flags.Check(eTestParsingMethod::kCompareSignificantOnly) && !node1.IsLiteralSignificant())
     is_compare_literals = false;
   // Overrides kCompareSignificantOnly flag.
   if (flags.Check(eTestParsingMethod::kCompareTypeOnly)) is_compare_literals = false;
@@ -97,15 +99,16 @@ static bool TestCompareAst(const Ast& node1, const Ast& node2, TestParsingMethod
   if (is_compare_literals) {
     auto lit1 = node1.GetLiteral();
     auto lit2 = node2.GetLiteral();
-    EXPECT_EQ_LOG(lit1, lit2, format("Ast literal '{}' not equal '{}'.", lit1, lit2), "Ast Literal Comp.");
+    EXPECT_EQ_LOG(lit1, lit2, format("Ast literal '{}' not equal '{}'.", lit1, lit2),
+                  "Ast Literal Comp.");
     if (lit1 != lit2) return false;
   }
 
   // Compare number of Children
-  EXPECT_TRUE_LOG(
-      node1.children.size() != node2.children.size(),
-      format("Ast branch quantity not equal. Left: {} Right: {}.", node1.children.size(), node2.children.size()),
-      "Ast Size Comp.");
+  EXPECT_TRUE_LOG(node1.children.size() != node2.children.size(),
+                  format("Ast branch quantity not equal. Left: {} Right: {}.",
+                         node1.children.size(), node2.children.size()),
+                  "Ast Size Comp.");
   if (node1.children.size() != node2.children.size()) return false;
 
   // Recursively compare Children
@@ -119,23 +122,23 @@ static bool TestCompareAst(const Ast& node1, const Ast& node2, TestParsingMethod
 // Compare a produced ast to a synthesized ast using minitest to log any inequality.
 // @see `TestParsingMethod`
 static bool TestCompareAst(const Ast& node1, const Sast& node2, TestParsingMethodFlags flags = {}) {
-  EXPECT_EQ_LOG(node1.type, node2.type,
-                format("Ast type {} not equal {}.", eAstToCStr(node1.type), eAstToCStr(node2.type)), "Ast Type Comp.");
+  EXPECT_EQ_LOG(
+      node1.type, node2.type,
+      format("Ast type {} not equal {}.", eAstToCStr(node1.type), eAstToCStr(node2.type)));
   if (node1.type != node2.type) return false;
   bool is_compare_literals = true;
-  if (flags.Check(eTestParsingMethod::kCompareSignificantOnly) && node1.IsLiteralSignificant())
+  if (flags.Check(eTestParsingMethod::kCompareSignificantOnly) && !node1.IsLiteralSignificant())
     is_compare_literals = false;
   if (flags.Check(eTestParsingMethod::kCompareTypeOnly)) is_compare_literals = false;
   if (is_compare_literals) {
     auto lit1 = node1.GetLiteral();
     auto& lit2 = node2.literal;
-    EXPECT_EQ_LOG(lit1, lit2, format("Ast literal '{}' not equal '{}'.", lit1, lit2), "Ast Literal Comp.");
+    EXPECT_EQ_LOG(lit1, lit2, format("Ast literal '{}' not equal '{}'.", lit1, lit2));
     if (lit1 != lit2) return false;
   }
-  EXPECT_TRUE_LOG(
-      node1.children.size() == node2.children.size(),
-      std::format("Ast branch quantity not equal. Left: {} Right: {}.", node1.children.size(), node2.children.size()),
-      "Ast Size Comp.");
+  EXPECT_TRUE_LOG(node1.children.size() == node2.children.size(),
+                  std::format("Ast branch quantity not equal. Left: {} Right: {}.",
+                              node1.children.size(), node2.children.size()));
   if (node1.children.size() != node2.children.size()) return false;
   for (size_t i = 0; i < node1.children.size(); ++i)
     if (!TestCompareAst(node1.children.at(i), node2.children.at(i), flags)) return false;
@@ -148,38 +151,44 @@ static bool TestCompareAst(const Ast& node1, const Sast& node2, TestParsingMetho
 //
 // eTestParsingMethod::kLoadFromFile :
 //    `code` argument must be a path to a file instead of source code. Tests parsing method from
-//    a given code source file path. Code may be a snippet, not necessarily top-down valid C& syntax.
-static void TestParsingMethod(string_view code, ParsingMethod fn, TestParsingMethodFlags flags = {}) {
+//    a given code source file path. Code may be a snippet, not necessarily top-down valid C&
+//    syntax.
+static void TestParsingMethod(string_view code, ParsingMethod fn,
+                              TestParsingMethodFlags flags = {}) {
   string err_msg_buffer{};
   string loaded_source{};
 
   if (flags.Check(eTestParsingMethod::kLoadFromFile)) {
     auto load_res = LoadSourceFile<char>(code);
     err_msg_buffer = load_res ? "" : load_res.error().Format();
-    ASSERT_TRUE_LOG(load_res.has_value(), "Failed load source file. Error:" + err_msg_buffer, "Loaded source file.");
+    ASSERT_TRUE_LOG(load_res.has_value(), err_msg_buffer, "Loaded source file.");
     loaded_source = load_res->data();
   }
 
-  auto expected_source = Lexer::Lex(flags.Check(eTestParsingMethod::kLoadFromFile) ? loaded_source : code);
+  auto expected_source =
+      tokenizeSourceCode(flags.Check(eTestParsingMethod::kLoadFromFile) ? loaded_source : code);
   err_msg_buffer = expected_source ? "" : expected_source.error().Format();
-  ASSERT_TRUE_LOG(expected_source.has_value(), "Failed to lex code. Error:" + err_msg_buffer, "Lex is valid.");
-  auto source = Lexer::Sanitize(*expected_source);
+  ASSERT_TRUE_LOG(expected_source.has_value(), err_msg_buffer, "Lex is valid.");
+  auto source = sanitizeTokens(*expected_source);
   span<const Tk> src_view = source;
-  auto parse_result = fn(TkCursorT{src_view.cbegin(), src_view.cend()});
+  auto parse_result = fn(TkCursorT{src_view.begin(), src_view.end()});
   err_msg_buffer = parse_result ? "" : parse_result.error().Format();
-  ASSERT_TRUE_LOG(parse_result.has_value(), "Failed to parse code. Error:" + err_msg_buffer, "Parse is valid.");
+  ASSERT_TRUE_LOG(parse_result.has_value(), err_msg_buffer, "Parse is valid.");
 
   static string last_test_suite_name{""};
   static string last_test_case_name{""};
   static int last_test_counter{0};
   std::filesystem::create_directory("_ut_generated_code");
-  if (last_test_suite_name == CURRENT_TEST_SUITE_NAME && last_test_case_name == CURRENT_TEST_CASE_NAME) {
+  if (last_test_suite_name == CURRENT_TEST_SUITE_NAME &&
+      last_test_case_name == CURRENT_TEST_CASE_NAME) {
     last_test_counter++;
-    PrintSynthesizedAstCode(parse_result->ast, format("_ut_generated_code/{}{}{}.txt", CURRENT_TEST_SUITE_NAME,
-                                                      CURRENT_TEST_CASE_NAME, last_test_counter));
-  } else {
     PrintSynthesizedAstCode(parse_result->ast,
-                            format("_ut_generated_code/{}{}.txt", CURRENT_TEST_SUITE_NAME, CURRENT_TEST_CASE_NAME));
+                            format("_ut_generated_code/{}{}{}.txt", CURRENT_TEST_SUITE_NAME,
+                                   CURRENT_TEST_CASE_NAME, last_test_counter));
+  } else {
+    PrintSynthesizedAstCode(
+        parse_result->ast,
+        format("_ut_generated_code/{}{}.txt", CURRENT_TEST_SUITE_NAME, CURRENT_TEST_CASE_NAME));
     last_test_suite_name = CURRENT_TEST_SUITE_NAME;
     last_test_case_name = CURRENT_TEST_CASE_NAME;
   }
@@ -206,21 +215,22 @@ static void TestParsingMethod(string_view code, ParsingMethod fn, const cnd::Sas
   if (flags.Check(eTestParsingMethod::kLoadFromFile)) {
     auto load_res = LoadSourceFile<char>(code);
     err_msg_buffer = load_res ? "" : load_res.error().Format();
-    ASSERT_TRUE_LOG(load_res.has_value(), "Failed load source file. Error:" + err_msg_buffer, "Loaded source file.");
+    ASSERT_TRUE_LOG(load_res.has_value(), err_msg_buffer, "Loaded source file.");
     loaded_source = load_res->data();
   }
 
-  auto expected_source = Lexer::Lex(flags.Check(eTestParsingMethod::kLoadFromFile) ? loaded_source : code);
+  auto expected_source =
+      tokenizeSourceCode(flags.Check(eTestParsingMethod::kLoadFromFile) ? loaded_source : code);
   err_msg_buffer = expected_source ? "" : expected_source.error().Format();
-  ASSERT_TRUE_LOG(expected_source.has_value(), "Failed to lex code. Error:" + err_msg_buffer, "Lex is valid.");
-  auto source = Lexer::Sanitize(*expected_source);
+  ASSERT_TRUE_LOG(expected_source.has_value(), err_msg_buffer, "Lex is valid.");
+  auto source = sanitizeTokens(*expected_source);
   span<const Tk> src_view = source;
-  auto parse_result = fn(TkCursorT{src_view.cbegin(), src_view.cend()});
+  auto parse_result = fn(TkCursorT{src_view.begin(), src_view.end()});
   err_msg_buffer = parse_result ? "" : parse_result.error().Format();
-  ASSERT_TRUE_LOG(parse_result.has_value(), "Failed to parse code. Error:" + err_msg_buffer, "Parse is valid.");
+  ASSERT_TRUE_LOG(parse_result.has_value(), err_msg_buffer, "Parse is valid.");
   ASSERT_TRUE_LOG(TestCompareAst(parse_result->ast, expected, flags),
-                  format("Expected syntax tree is not equal:\n[Expected]:\n{}\n[Parsed]:\n{}\n", expected.Format(),
-                         parse_result->ast.Format()),
+                  format("Expected syntax tree is not equal:\n[Expected]:\n{}\n[Parsed]:\n{}\n",
+                         expected.Format(), parse_result->ast.Format()),
                   "Expected syntax tree is equal.");
 }
 

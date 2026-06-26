@@ -1,4 +1,4 @@
-fn@fibb(const int @n)>const int:{
+fn@fibb(int @n)>int:{
   if (n <= 1) {
     return n;
   };
@@ -13,4 +13,5 @@ fn@fibb(const int @n)>const int:{
   }
   return b;
 };
-`return fib(10);
+
+return fib(10);

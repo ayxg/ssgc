@@ -183,7 +183,7 @@ class PartialExpected {
 
 };  // namespace cxx
 
-#endif HEADER_GUARD_EXTENDED_CPP_STANDARD_EXPECTED_H
+#endif // HEADER_GUARD_EXTENDED_CPP_STANDARD_EXPECTED_H
 /// @} // end of cppmodule2_cppextended
 ///////////////////////////////////////////////////////////////////////////////
 // @project: C& Programming Language Environment

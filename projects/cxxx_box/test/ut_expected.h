@@ -104,7 +104,7 @@ TEST(CxxExpected, BoolError) {
   EXPECT_FALSE(bool_bad);
 }
 
-#endif HEADER_GUARD_CAOCO_UNIT_TESTS_UT0_EXPECTED_H
+#endif // HEADER_GUARD_CAOCO_UNIT_TESTS_UT0_EXPECTED_H
 /// @} // end of unittest0_cppextended
 ///////////////////////////////////////////////////////////////////////////////
 // @project: C& Programming Language Environment

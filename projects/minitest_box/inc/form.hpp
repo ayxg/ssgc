@@ -58,7 +58,7 @@ static string FmtTagFail(const string& s) {
 }
 
 static string FmtTagFail(string&& s) { 
-  return (s.front() == '[') ? "[Fail]" + move(s) : "[Fail] " + move(s);
+  return (s.front() == '[') ? "[Fail]" + s : "[Fail] " + s;
 }
 
 static string FmtTagAssert(const string& s) {
@@ -66,7 +66,7 @@ static string FmtTagAssert(const string& s) {
 }
 
 static string FmtTagAssert(string&& s) {
-  return (s.front() == '[') ? "[Assert]" + move(s) : "[Assert] " + move(s);
+  return (s.front() == '[') ? "[Assert]" + s : "[Assert] " + s;
 }
 
 static const char* FmtUnknownExceptionFail() {
@@ -84,7 +84,7 @@ static string FmtExpectTrue(const string& value_code) {
 }
 
 static string FmtExpectTrue(string&& value_code) {
-  return "Expected TRUE boolean value.\n\t--[Condition]: " + move(value_code);
+  return "Expected TRUE boolean value.\n\t--[Condition]: " + value_code;
 }
 
 static string FmtExpectFalse(const string& value_code) {

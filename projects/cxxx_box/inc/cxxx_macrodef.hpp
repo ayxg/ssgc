@@ -79,7 +79,7 @@
 //  macro(a1) __VA_OPT__(FOR_EACH_AGAIN_1024 PARENS_1024(macro, __VA_ARGS__))
 //#define FOR_EACH_AGAIN_1024() FOR_EACH_HELPER_1024
 
-#endif HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_MACRODEF_H
+#endif // HEADER_GUARD_CALE_EXTENDED_CPP_STANDARD_MACRODEF_H
 /// @} // end of cppmodule2_cppextended
 ///////////////////////////////////////////////////////////////////////////////
 // @project: C& Programming Language Environment

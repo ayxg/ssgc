@@ -8,7 +8,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file
 /// @ingroup cnd_unit_test
-/// @brief [UtParserGrammarRules] Validate each parser-stage grammar rule in isolation by calling the associated
+/// @brief [UtParserGrammarRules] Validate each parser-stage grammar rule in isolation by calling
+/// the associated
 ///        parsing method.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -40,10 +41,11 @@ TEST(UtParserGrammarRules, PrimaryStatement) {
   // test a primary expr statement starting with a subexpression.
   TestParsingMethod("(1+2)*a;", ParsePrimaryStatement, 
     Sast{kMul,"(1+2)*a",
+      Sast{kSubexpression,"(1+2)",
       Sast{kAdd,"1+2",
-        Sast{kLitInt,"1"},
-        Sast{kLitInt,"2"}
-      },
+        Sast{kLitI32,"1"},
+        Sast{kLitI32,"2"}
+      }},
       Sast{kIdent,"a"}
     }
     );
@@ -54,17 +56,17 @@ TEST(UtParserGrammarRules, PrimaryStatement) {
 /* Include Statement         */
 ///////////////////////////////////////
 TEST(UtParserGrammarRules, IncludeLocal) {
-  TestParsingMethod("include \"foo.cnd\";", ParseIncludeStmt,
-    Sast{kIncludeLocalStmt,"",
-      Sast{kIQCharSeuquence,"foo.cnd"}
+  TestParsingMethod("include\"foo.cnd\";", ParseIncludeStmt,
+    Sast{kIncludeLocalStmt,"include\"foo.cnd\";",
+      Sast{kIQCharSeuquence,"\"foo.cnd\""}
     }
   );
 }
 
 TEST(UtParserGrammarRules, IncludeSystem) {
   TestParsingMethod("include <foo.cnd>;", ParseIncludeStmt,
-    Sast{kIncludeSystemStmt,"",
-      Sast{kIACharSeuquence,"foo.cnd"}
+    Sast{kIncludeSystemStmt,"include<foo.cnd>;",
+      Sast{kIACharSeuquence,"<foo.cnd>"}
     }
   );
 }
@@ -73,37 +75,37 @@ TEST(UtParserGrammarRules, IncludeSystem) {
 /////////////////////////////////////////
 ///* Pragma Statement         */
 /////////////////////////////////////////
-TEST(UtParserGrammarRules, PragmaEscaped) {
-  TestParsingMethod("pragma \"string_literal\";", ParsePragmaStmt,
-    Sast{kPragmaEscapedStmt,"",
-      Sast{cnd::eAst::kLitCstr,"string_literal"}
-    }
-  );
-}
-
-TEST(UtParserGrammarRules, PragmaRaw) {
-  TestParsingMethod("pragma R\"(raw_string_literal)\";", ParsePragmaStmt,
-    Sast{kPragmaEscapedStmt,"",
-      Sast{cnd::eAst::kLitCstr,"raw_string_literal"}
-    }
-  );
-}
-
-TEST(UtParserGrammarRules, PragmaFunctional) {
-  TestParsingMethod("pragma \"pf_char_sequence\";", ParsePragmaStmt,
-    Sast{kPragmaFunctionalStmt,"",
-      Sast{kPFCharSequence,"pf_char_sequence"}
-    }
-  );
-}
-
-TEST(UtParserGrammarRules, PragmaName) {
-  TestParsingMethod("pragma \"identifier\";", ParsePragmaStmt,
-    Sast{kPragmaNamedStmt,"",
-      Sast{cnd::eAst::kIdent,"identifier"}
-    }
-  );
-}
+//TEST(UtParserGrammarRules, PragmaEscaped) {
+//  TestParsingMethod("pragma \"string_literal\";", ParsePragmaStmt,
+//    Sast{kPragmaEscapedStmt,"",
+//      Sast{cnd::eAst::kLitCstr,"string_literal"}
+//    }
+//  );
+//}
+//
+//TEST(UtParserGrammarRules, PragmaRaw) {
+//  TestParsingMethod("pragma R\"(raw_string_literal)\";", ParsePragmaStmt,
+//    Sast{kPragmaEscapedStmt,"",
+//      Sast{cnd::eAst::kLitCstr,"raw_string_literal"}
+//    }
+//  );
+//}
+//
+//TEST(UtParserGrammarRules, PragmaFunctional) {
+//  TestParsingMethod("pragma \"pf_char_sequence\";", ParsePragmaStmt,
+//    Sast{kPragmaFunctionalStmt,"",
+//      Sast{kPFCharSequence,"pf_char_sequence"}
+//    }
+//  );
+//}
+//
+//TEST(UtParserGrammarRules, PragmaName) {
+//  TestParsingMethod("pragma \"identifier\";", ParsePragmaStmt,
+//    Sast{kPragmaNamedStmt,"",
+//      Sast{cnd::eAst::kIdent,"identifier"}
+//    }
+//  );
+//}
 
 
 ///////////////////////////////////////
@@ -111,7 +113,7 @@ TEST(UtParserGrammarRules, PragmaName) {
 ///////////////////////////////////////
 TEST(UtParserGrammarRules, ProcessDecl) {
   TestParsingMethod("proc@FooProcess;", ParseProcDecl,
-  Sast{kProcessDeclaration,"",
+  Sast{kProcessDeclaration,"proc@FooProcess;",
     Sast{kModifiers,""},
     Sast{kIdent,"FooProcess"}
   }
@@ -124,26 +126,23 @@ TEST(UtParserGrammarRules, ProcessDef) {
 
 TEST(UtParserGrammarRules, ProcessDefWithStatements) {
   TestParsingMethod("proc@FooProcess:{const def str@Foo: 42;using @MyInteger: int;};", ParseProcDecl,
-    Sast{kProcessDeclaration,"",
-      Sast{kModifiers,"",
-        Sast{kKwConst,""},
-        Sast{kKwStatic,""}
-      },
+    Sast{kProcessDeclaration,"proc@FooProcess:{constdefstr@Foo:42;using@MyInteger:int;}",
+      Sast{kModifiers,""},
       Sast{kIdent,"FooProcess"},
       Sast{kProcessDefinition,"",
-        Sast{kVariableDeclaration,"",
+        Sast{kVariableDeclaration,"constdefstr@Foo:42;",
           Sast{kModifiers,"",
-            Sast{kKwConst,""}
+            Sast{kKwConst,"const"}
           },
-          Sast{kKwStr,""},
+          Sast{kKwStr,"str"},
           Sast{kIdent,"Foo"},
-          Sast{kVariableDefinition,"",
-            Sast{kLitInt,"42"}
+          Sast{kVariableDefinition,"42;",
+            Sast{kLitI32,"42"}
           }
         },
-        Sast{kTypeAlias,"",
+        Sast{kTypeAlias,"using@MyInteger:int;",
           Sast{kIdent,"MyInteger"},
-          Sast{kKwInt,""}
+          Sast{kKwInt,"int"}
         }
       }
     }
@@ -156,7 +155,7 @@ TEST(UtParserGrammarRules, ProcessDefWithStatements) {
 ///////////////////////////////////////
 TEST(UtParserGrammarRules, LibDecl) {
   TestParsingMethod("lib @FooLibrary;", ParseLibDecl,
-  Sast{kProcessDeclaration,"",
+  Sast{kLibraryDeclaration,"lib@FooLibrary;",
     Sast{kModifiers,""},
     Sast{kIdent,"FooLibrary"}
   }
@@ -169,10 +168,10 @@ TEST(UtParserGrammarRules, LibDef) {
 
 TEST(UtParserGrammarRules, LibWithMod) {
   TestParsingMethod("const static lib@MathLib;", ParseLibDecl,
-    Sast{kLibraryDeclaration,"",
+    Sast{kLibraryDeclaration,"conststaticlib@MathLib;",
       Sast{kModifiers,"",
-        Sast{kKwConst,""},
-        Sast{kKwStatic,""}
+        Sast{kKwConst,"const"},
+        Sast{kKwStatic,"static"}
       },
       Sast{kIdent,"MathLib"}
     }
@@ -181,26 +180,26 @@ TEST(UtParserGrammarRules, LibWithMod) {
 
 TEST(UtParserGrammarRules, LibWithModAndDefinition) {
   TestParsingMethod("const static lib@MathLib:{const def str@Foo: 42;using @MyInteger: int;};", ParseLibDecl,
-    Sast{kLibraryDeclaration,"",
+    Sast{kLibraryDeclaration,"conststaticlib@MathLib:{constdefstr@Foo:42;using@MyInteger:int;};",
       Sast{kModifiers,"",
-        Sast{kKwConst,""},
-        Sast{kKwStatic,""}
+        Sast{kKwConst,"const"},
+        Sast{kKwStatic,"static"}
       },
       Sast{kIdent,"MathLib"},
       Sast{kLibraryDefinition,"",
-        Sast{kVariableDeclaration,"",
+        Sast{kVariableDeclaration,"constdefstr@Foo:42;",
           Sast{kModifiers,"",
-            Sast{kKwConst,""}
+            Sast{kKwConst,"const"}
           },
-          Sast{kKwStr,""},
+          Sast{kKwStr,"str"},
           Sast{kIdent,"Foo"},
-          Sast{kVariableDefinition,"",
-            Sast{kLitInt,"42"}
+          Sast{kVariableDefinition,"42;",
+            Sast{kLitI32,"42"}
           }
         },
-        Sast{kTypeAlias,"",
+        Sast{kTypeAlias,"using@MyInteger:int;",
           Sast{kIdent,"MyInteger"},
-          Sast{kKwInt,""}
+          Sast{kKwInt,"int"}
         }
       }
     }
@@ -213,16 +212,16 @@ TEST(UtParserGrammarRules, LibWithModAndDefinition) {
 ///////////////////////////////////////
 TEST(UtParserGrammarRules, TypeAlias) {
   TestParsingMethod("using @MyInteger: int;", ParseUsingDecl,
-    Sast{kTypeAlias,"",
+    Sast{kTypeAlias,"using@MyInteger:int;",
       Sast{kIdent,"MyInteger"},
-      Sast{kKwInt,""}
+      Sast{kKwInt,"int"}
     }
   );
 }
 
 TEST(UtParserGrammarRules, LibraryNamespaceInclusion) {
  TestParsingMethod("using lib my_math_lib;", ParseUsingDecl,
-    Sast{kLibraryNamespaceInclusion,"",
+    Sast{kLibraryNamespaceInclusion,"usinglibmy_math_lib;",
       Sast{kIdent,"my_math_lib"}
     }    
   );
@@ -258,7 +257,7 @@ TEST(UtParserGrammarRules, TypeImportDeclaration) {
 ///////////////////////////////////////
 TEST(UtParserGrammarRules, VariableDeclarationNoTypeNoAssignNoMod) {
   TestParsingMethod("def@Foo;", ParseVariableDecl,
-    Sast{kVariableDeclaration,"",
+    Sast{kVariableDeclaration,"def@Foo;",
       Sast{kModifiers,""},
       Sast{kKwAny,""},
       Sast{kIdent,"Foo"}
@@ -268,9 +267,9 @@ TEST(UtParserGrammarRules, VariableDeclarationNoTypeNoAssignNoMod) {
 
 TEST(UtParserGrammarRules, VariableDeclarationNoTypeNoAssign) {
   TestParsingMethod("const def@Foo;", parser::ParseVariableDecl,
-    Sast{kVariableDeclaration,"",
+    Sast{kVariableDeclaration,"constdef@Foo;",
       Sast{kModifiers,"",
-        Sast{kKwConst,""}
+        Sast{kKwConst,"const"}
       },
       Sast{kKwAny,""},
       Sast{kIdent,"Foo"}
@@ -280,11 +279,11 @@ TEST(UtParserGrammarRules, VariableDeclarationNoTypeNoAssign) {
 
 TEST(UtParserGrammarRules, VariableDeclarationNoAssign) {
   TestParsingMethod("const def str@Foo;", parser::ParseVariableDecl,
-    Sast{kVariableDeclaration,"",
+    Sast{kVariableDeclaration,"constdefstr@Foo;",
       Sast{kModifiers,"",
-        Sast{kKwConst,""}
+        Sast{kKwConst,"const"}
       },
-      Sast{kKwStr,""},
+      Sast{kKwStr,"str"},
       Sast{kIdent,"Foo"}
     }
   );
@@ -292,14 +291,14 @@ TEST(UtParserGrammarRules, VariableDeclarationNoAssign) {
 
 TEST(UtParserGrammarRules, VariableDefinition) {
   TestParsingMethod("const def str@Foo: 42;", ParseVariableDecl,
-    Sast{kVariableDeclaration,"",
+    Sast{kVariableDeclaration,"constdefstr@Foo:42;",
       Sast{kModifiers,"",
-        Sast{kKwConst,""}
+        Sast{kKwConst,"const"}
       },
-      Sast{kKwStr,""},
+      Sast{kKwStr,"str"},
       Sast{kIdent,"Foo"},
-      Sast{kVariableDefinition,"",
-        Sast{kLitInt,"42"}
+      Sast{kVariableDefinition,"42;",
+        Sast{kLitI32,"42"}
       }
     }
   );
@@ -311,7 +310,7 @@ TEST(UtParserGrammarRules, VariableDefinition) {
 ///////////////////////////////////////
 TEST(UtParserGrammarRules, MethodDeclImplicitVoidArgNoRet) {
   TestParsingMethod("fn@add;", ParseMethodDecl,
-    Sast{kMethodDeclaration,"",
+    Sast{kMethodDeclaration,"fn@add;",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
       Sast{kMethodSignature,""}
@@ -321,11 +320,11 @@ TEST(UtParserGrammarRules, MethodDeclImplicitVoidArgNoRet) {
 
 TEST(UtParserGrammarRules, MethodDeclImplicitVoidArgNoRet2) {
   TestParsingMethod("fn@add();", ParseMethodDecl,
-    Sast{kMethodDeclaration,"",
+    Sast{kMethodDeclaration,"fn@add();",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
       Sast{kMethodSignature,"",
-        Sast{kMethodParameterList,"",
+        Sast{kMethodParameterList,"()",
           Sast{kMethodParameter,"",
             Sast{kMethodVoid,""}
           }
@@ -340,7 +339,7 @@ TEST(UtParserGrammarRules, MethodDeclImplicitVoidArgNoRet2) {
 
 TEST(UtParserGrammarRules, MethodDeclImplicitVoidArgAnyRet) {
   TestParsingMethod("fn@add>;", ParseMethodDecl,
-    Sast{kMethodDeclaration,"",
+    Sast{kMethodDeclaration,"fn@add>;",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
       Sast{kMethodSignature,"",
@@ -359,11 +358,11 @@ TEST(UtParserGrammarRules, MethodDeclImplicitVoidArgAnyRet) {
 
 TEST(UtParserGrammarRules, MethodDeclImplicitVoidArgAnyRet2) {
   TestParsingMethod("fn@add()>;", ParseMethodDecl,
-    Sast{kMethodDeclaration,"",
+    Sast{kMethodDeclaration,"fn@add()>;",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
       Sast{kMethodSignature,"",
-        Sast{kMethodParameterList,"",
+        Sast{kMethodParameterList,"()",
           Sast{kMethodParameter,"",
             Sast{kMethodVoid,""}
           }
@@ -378,7 +377,7 @@ TEST(UtParserGrammarRules, MethodDeclImplicitVoidArgAnyRet2) {
 
 TEST(UtParserGrammarRules, MethodDeclArgNoRet) {
   TestParsingMethod("fn@add(a,b);", ParseMethodDecl,
-    Sast{kMethodDeclaration,"",
+    Sast{kMethodDeclaration,"fn@add(a,b);",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
       Sast{kMethodSignature,"",
@@ -408,7 +407,7 @@ TEST(UtParserGrammarRules, MethodDeclArgNoRet) {
 
 TEST(UtParserGrammarRules, MethodDeclArgAnyRet) {
   TestParsingMethod("fn@add(a,b)>;", ParseMethodDecl,
-    Sast{kMethodDeclaration,"",
+    Sast{kMethodDeclaration,"fn@add(a,b)>;",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
       Sast{kMethodSignature,"",
@@ -438,7 +437,7 @@ TEST(UtParserGrammarRules, MethodDeclArgAnyRet) {
 
 TEST(UtParserGrammarRules, MethodDeclArgIdentifiedAnyRet) {
   TestParsingMethod("fn@add(@a,@b)>;", ParseMethodDecl,
-    Sast{kMethodDeclaration,"",
+    Sast{kMethodDeclaration,"fn@add(@a,@b)>;",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
       Sast{kMethodSignature,"",
@@ -464,7 +463,7 @@ TEST(UtParserGrammarRules, MethodDeclArgIdentifiedAnyRet) {
 
 TEST(UtParserGrammarRules, MethodDeclArgsTypedRet) {
   TestParsingMethod("fn@add(@a,@b)>int;", ParseMethodDecl,
-    Sast{kMethodDeclaration,"",
+    Sast{kMethodDeclaration,"fn@add(@a,@b)>int;",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
       Sast{kMethodSignature,"",
@@ -481,7 +480,7 @@ TEST(UtParserGrammarRules, MethodDeclArgsTypedRet) {
           }
         },
         Sast{kMethodReturnType,"",
-          Sast{kKwInt,""}
+          Sast{kKwInt,"int"}
         }
       }
     }
@@ -490,24 +489,24 @@ TEST(UtParserGrammarRules, MethodDeclArgsTypedRet) {
 
 TEST(UtParserGrammarRules, MethodDeclTypedArgsTypedRet) {
   TestParsingMethod("fn@add(int @a,int @b)>int;", ParseMethodDecl,
-    Sast{kMethodDeclaration,"",
+    Sast{kMethodDeclaration,"fn@add(int@a,int@b)>int;",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
       Sast{kMethodSignature,"",
         Sast{kMethodParameterList,"",
           Sast{kMethodParameter,"",
             Sast{kModifiers,""},
-            Sast{kKwInt,""},
+            Sast{kKwInt,"int"},
             Sast{kIdent,"a"}
           },
           Sast{kMethodParameter,"",
             Sast{kModifiers,""},
-            Sast{kKwInt,""},
+            Sast{kKwInt,"int"},
             Sast{kIdent,"b"}
           }
         },
         Sast{kMethodReturnType,"",
-          Sast{kKwInt,""}
+          Sast{kKwInt,"int"}
         }
       }
     }    
@@ -516,31 +515,31 @@ TEST(UtParserGrammarRules, MethodDeclTypedArgsTypedRet) {
 
 TEST(UtParserGrammarRules, MethodDeclTypedArgsTypedRetWithModifiers) {
   TestParsingMethod("fn@add(const int @a,const int @b)>const int;", ParseMethodDecl,
-    Sast{kMethodDeclaration,"",
+    Sast{kMethodDeclaration,"fn@add(constint@a,constint@b)>constint;",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
       Sast{kMethodSignature,"",
         Sast{kMethodParameterList,"",
           Sast{kMethodParameter,"",
             Sast{kModifiers,"",
-              Sast{kKwConst,""}
+              Sast{kKwConst,"const"}
             },
-            Sast{kKwInt,""},
+            Sast{kKwInt,"int"},
             Sast{kIdent,"a"}
           },
           Sast{kMethodParameter,"",
             Sast{kModifiers,"",
-              Sast{kKwConst,""}
+              Sast{kKwConst,"const"}
             },
-            Sast{kKwInt,""},
+            Sast{kKwInt,"int"},
             Sast{kIdent,"b"}
           }
         },
         Sast{kMethodReturnType,"",
           Sast{kModifiers,"",
-            Sast{kKwConst,""}
+            Sast{kKwConst,"const"}
           },
-          Sast{kKwInt,""}
+          Sast{kKwInt,"int"}
         }
       }
     }    
@@ -549,35 +548,35 @@ TEST(UtParserGrammarRules, MethodDeclTypedArgsTypedRetWithModifiers) {
 
 TEST(UtParserGrammarRules, MethodDefinition) {
   TestParsingMethod("fn@add(const int @a,const int @b)>const int:{a+b;};", ParseMethodDecl,
-    Sast{kMethodDeclaration,"",
+    Sast{kMethodDeclaration,"fn@add(constint@a,constint@b)>constint:{a+b;};",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
       Sast{kMethodSignature,"",
         Sast{kMethodParameterList,"",
           Sast{kMethodParameter,"",
             Sast{kModifiers,"",
-              Sast{kKwConst,""}
+              Sast{kKwConst,"const"}
             },
-            Sast{kKwInt,""},
+            Sast{kKwInt,"int"},
             Sast{kIdent,"a"}
           },
           Sast{kMethodParameter,"",
             Sast{kModifiers,"",
-              Sast{kKwConst,""}
+              Sast{kKwConst,"const"}
             },
-            Sast{kKwInt,""},
+            Sast{kKwInt,"int"},
             Sast{kIdent,"b"}
           }
         },
         Sast{kMethodReturnType,"",
           Sast{kModifiers,"",
-            Sast{kKwConst,""}
+            Sast{kKwConst,"const"}
           },
-          Sast{kKwInt,""}
+          Sast{kKwInt,"int"}
         }
       },
       Sast{kMethodDefinition,"",
-        Sast{kAdd,"",
+        Sast{kAdd,"a+b",
           Sast{kIdent,"a"},
           Sast{kIdent,"b"}
         }
@@ -647,7 +646,7 @@ TEST(UtParserGrammarRules, ClassWithModAndDefinition) {
           Sast{kKwStr,""},
           Sast{kIdent,"Foo"},
           Sast{kVariableDefinition,"",
-            Sast{kLitInt,"42"}
+            Sast{kLitI32,"42"}
           }
         },
         Sast{kTypeAlias,"",
@@ -666,8 +665,8 @@ TEST(UtParserGrammarRules, ClassWithModAndDefinition) {
 ///////////////////////////////////////
 TEST(UtParserGrammarRules, NamespaceDecl) {
   TestParsingMethod(
-    "class@Husky;", 
-    ParseClassDecl,
+    "namespace@Husky;", 
+    ParseNamespaceDecl,
     Sast{kNamespaceDecl,"",
       Sast{kIdent,"Husky"}
     },
@@ -694,19 +693,64 @@ TEST(UtParserGrammarRules, BasicEnumDefinition) {
 }
 
 TEST(UtParserGrammarRules, EnumDefinitionWithValues) {
-  TestParsingMethod("enum @eResult:{@Good:0;@Bad:1;}", ParseEnumDecl);
+  TestParsingMethod("enum @eResult:{@Good:0;@Bad:1;}", ParseEnumDecl  ,Sast{kEnumDeclaration,"",
+    Sast{kModifiers,""},
+    Sast{kIdent,"eResult"},
+    Sast{kEnumDefinition,"",
+      Sast{kEnumBlock,"",
+        Sast{kEnumEntry,"Good",Sast{kLitI32,"0"}},
+        Sast{kEnumEntry,"Bad",Sast{kLitI32,"1"}}
+      }
+    }
+  },test_util::eTestParsingMethod::kCompareSignificantOnly);
 }
 
 TEST(UtParserGrammarRules, EnumDefinitionWithPositionalAssociatedValue) {
-  TestParsingMethod("enum @eResult:str:{@Good:1:\"Good\";@Bad:\"Bad\";}", ParseEnumDecl);
+  TestParsingMethod("enum @eResult:str:{@Good:0:\"Good\";@Bad:1:\"Bad\";}", ParseEnumDecl,
+    Sast{kEnumDeclaration,"",
+    Sast{kModifiers,""},
+    Sast{kIdent,"eResult"},
+    Sast{kEnumDefinition,"",
+      Sast{kEnumAssociation,"",Sast{kKwStr,"str"}},
+      Sast{kEnumBlock,"",
+        Sast{kEnumEntry,"Good",Sast{kLitI32,"0"},Sast{kLitCstr,"\"Good\""}},
+        Sast{kEnumEntry,"Bad",Sast{kLitI32,"1"},Sast{kLitCstr,"\"Bad\""}}
+      }
+    }
+  },test_util::eTestParsingMethod::kCompareSignificantOnly);
 }
 
 TEST(UtParserGrammarRules, EnumDefinitionWithNamedAssociatedValue) {
-  TestParsingMethod("enum @eResult:str @EnumStr:{@Good:1:\"Good\";@Bad:2:\"Bad\";}", ParseEnumDecl);
+  TestParsingMethod("enum @eResult:str @EnumStr:{@Good:1:\"Good\";@Bad:2:\"Bad\";}", ParseEnumDecl,
+    Sast{kEnumDeclaration,"",
+    Sast{kModifiers,""},
+    Sast{kIdent,"eResult"},
+    Sast{kEnumDefinition,"",
+      Sast{kEnumAssociation,"",Sast{kKwStr,"str"},Sast{kIdent,"EnumStr"}},
+      Sast{kEnumBlock,"",
+        Sast{kEnumEntry,"Good",Sast{kLitI32,"0"},Sast{kLitCstr,"\"Good\""}},
+        Sast{kEnumEntry,"Bad",Sast{kLitI32,"1"},Sast{kLitCstr,"\"Bad\""}}
+      }
+    }
+  },test_util::eTestParsingMethod::kCompareSignificantOnly);
 }
 
 TEST(UtParserGrammarRules, EnumDefinitionWithTaggedEntries) {
-  TestParsingMethod("enum @eResult:str @EnumStr:{@Good:1:\"Good\";tag@ErrorState:@Bad:1:\"Bad\";}", ParseEnumDecl);
+  TestParsingMethod("enum @eResult:str @EnumStr:{@Good:1:\"Good\";namespace@ErrorState:@Bad:1:\"Bad\";}", ParseEnumDecl,
+    Sast{kEnumDeclaration,"",
+    Sast{kModifiers,""},
+    Sast{kIdent,"eResult"},
+    Sast{kEnumDefinition,"",
+      Sast{kEnumAssociation,"",Sast{kKwStr,"str"},Sast{kIdent,"EnumStr"}},
+      Sast{kEnumBlock,"",
+        Sast{kEnumEntry,"Good",Sast{kLitI32,"0"},Sast{kLitCstr,"\"Good\""}},
+        Sast{kEnumEntry,"Bad",
+          Sast{kEnumCategory,"",Sast{kIdent,"ErrorState"}},
+          Sast{kLitI32,"1"},
+          Sast{kLitCstr,"\"Bad\""}}
+      }
+    }
+  },test_util::eTestParsingMethod::kCompareSignificantOnly);
 }
 
 

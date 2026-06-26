@@ -36,6 +36,7 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
   UnitTestIndexMap test_indices{};  // maps test names to index in tests array.
   UnitTestArray::iterator curr_test{tests.end()};
   bool enable_stdout{true};
+  bool print_errors_only{true};
   reference_wrapper<ostream> target_stdout{std::ref(std::cout)};
 
  public:
@@ -61,25 +62,29 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
   }
 
   void RecordFailure(const string& msg) const {
-    if (enable_stdout) target_stdout.get() << msg << std::endl;
+    if (enable_stdout && print_errors_only) {
+      if (curr_test->result)
+        target_stdout.get() << FmtRunTest(curr_test->suite, curr_test->name) << std::endl;
+      target_stdout.get() << msg << std::endl;
+    }
+    else if (enable_stdout) target_stdout.get() << msg << std::endl;
+
     curr_test->log.emplace_back(msg);
     curr_test->result = false;
   }
 
   void RecordMessage(const string& msg) const {
-    if (enable_stdout) target_stdout.get() << msg << std::endl;
+    if (enable_stdout && !print_errors_only) target_stdout.get() << msg << std::endl;
     curr_test->log.emplace_back(msg);
   }
 
   void RegisterTest(
       const string& suite, const string& name, const UnitTestFunction& impl = [] { /* empty unit test */ },
       bool result = true, const UnitTestLog& log = {}) {
-    using std::make_pair;
-    using std::move;
     auto signature = UnitTestSignature{suite, name};
     assert(test_indices.count(signature) == 0 && "Failed to register existing test, name is not unique.");
     tests.push_back(UnitTest{tests.size(), suite, name, impl, result, log});
-    test_indices.emplace(make_pair(move(signature), tests.size() - 1));
+    test_indices.emplace(std::make_pair(std::move(signature), tests.size() - 1));
   }
 
   /// Sets a recorded test in the global test map as the current active test and
@@ -91,7 +96,7 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
     it->result = true;                               // Reset the initial state of this test in the results map.
 
     // Print [Run] test header.
-    if (enable_stdout) target_stdout.get() << FmtRunTest(it->suite, it->name) << std::endl;
+    if (enable_stdout && !print_errors_only) target_stdout.get() << FmtRunTest(it->suite, it->name) << std::endl;
 
     // Surround in try block in-case an unexpected user exception occurs.
     try {
@@ -113,7 +118,7 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
     if (!is_test_passed) {
       return false;
     } else {
-      if (enable_stdout) target_stdout.get() << FmtPassTest(it->suite, it->name) << std::endl;
+      if (enable_stdout && !print_errors_only) target_stdout.get() << FmtPassTest(it->suite, it->name) << std::endl;
       return true;
     }
   }
@@ -191,6 +196,9 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
         }
         std::cout << ss.str();
         return 0;
+      } else if (args[1] == "--error-only") {
+        print_errors_only = true;
+        args.erase(args.begin());
       }
     }
     // else run tests...
@@ -212,8 +220,8 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
     if (equality_fn(lhs, rhs)) {
       return true;
     }
-    RecordFailure(FmtTagFail(fail_format(forward<StrT0>(lhs_code), forward<StrT1>(rhs_code),
-                                         OverloadToString(forward<LhsT>(lhs)), OverloadToString(forward<RhsT>(rhs)))));
+    RecordFailure(FmtTagFail(fail_format(std::forward<StrT0>(lhs_code), std::forward<StrT1>(rhs_code),
+                                         OverloadToString(std::forward<LhsT>(lhs)), OverloadToString(std::forward<RhsT>(rhs)))));
     return false;
   }
 
@@ -224,8 +232,8 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
       return true;
     }
     RecordFailure(FmtTagFail(
-        FmtTagAssert(fail_format(forward<StrT0>(lhs_code), forward<StrT1>(rhs_code),
-                                 OverloadToString(forward<LhsT>(lhs)), OverloadToString(forward<RhsT>(rhs))))));
+        FmtTagAssert(fail_format(std::forward<StrT0>(lhs_code), std::forward<StrT1>(rhs_code),
+                                 OverloadToString(std::forward<LhsT>(lhs)), OverloadToString(std::forward<RhsT>(rhs))))));
     return false;
   }
 
@@ -234,12 +242,12 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
   inline bool GenericExpectEqualityLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog,
                                        GoodLogT&& goodlog, EqualityT&& equality_fn, FormatFnT&& fail_format) {
     if (equality_fn(lhs, rhs)) {
-      RecordMessage(forward<GoodLogT>(goodlog));
+      RecordMessage(std::forward<GoodLogT>(goodlog));
       return true;
     }
-    RecordFailure(FmtTagFail(fail_format(forward<StrT0>(lhs_code), forward<StrT1>(rhs_code),
-                                         OverloadToString(forward<LhsT>(lhs)), OverloadToString(forward<RhsT>(rhs)))));
-    RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+    RecordFailure(FmtTagFail(fail_format(std::forward<StrT0>(lhs_code), std::forward<StrT1>(rhs_code),
+                                         OverloadToString(std::forward<LhsT>(lhs)), OverloadToString(std::forward<RhsT>(rhs)))));
+    RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
     return false;
   }
 
@@ -249,9 +257,9 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
     if (equality_fn(lhs, rhs)) {
       return true;
     }
-    RecordFailure(FmtTagFail(fail_format(forward<StrT0>(lhs_code), forward<StrT1>(rhs_code),
-                                         OverloadToString(forward<LhsT>(lhs)), OverloadToString(forward<RhsT>(rhs)))));
-    RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+    RecordFailure(FmtTagFail(fail_format(std::forward<StrT0>(lhs_code), std::forward<StrT1>(rhs_code),
+                                         OverloadToString(std::forward<LhsT>(lhs)), OverloadToString(std::forward<RhsT>(rhs)))));
+    RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
     return false;
   }
 
@@ -260,20 +268,20 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
   inline bool GenericAssertEqualityLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog,
                                        GoodLogT&& goodlog, EqualityT&& equality_fn, FormatFnT&& fail_format) {
     if (equality_fn(lhs, rhs)) {
-      RecordMessage(forward<GoodLogT>(goodlog));
+      RecordMessage(std::forward<GoodLogT>(goodlog));
       return true;
     }
     RecordFailure(FmtTagFail(
-        FmtTagAssert(fail_format(forward<StrT0>(lhs_code), forward<StrT1>(rhs_code),
-                                 OverloadToString(forward<LhsT>(lhs)), OverloadToString(forward<RhsT>(rhs))))));
-    RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+        FmtTagAssert(fail_format(std::forward<StrT0>(lhs_code), std::forward<StrT1>(rhs_code),
+                                 OverloadToString(std::forward<LhsT>(lhs)), OverloadToString(std::forward<RhsT>(rhs))))));
+    RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
     return false;
   }
 
   template <class StrT>
   bool ExpectTrue(bool v, StrT&& value_code) {
     if (!v) {
-      RecordFailure(FmtTagFail(FmtExpectTrue(forward<StrT>(value_code))));
+      RecordFailure(FmtTagFail(FmtExpectTrue(std::forward<StrT>(value_code))));
       return false;
     }
     return true;
@@ -282,7 +290,7 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
   template <class StrT>
   bool ExpectFalse(bool v, StrT&& value_code) {
     if (v) {
-      RecordFailure(FmtTagFail(FmtExpectFalse(forward<StrT>(value_code))));
+      RecordFailure(FmtTagFail(FmtExpectFalse(std::forward<StrT>(value_code))));
       return false;
     }
     return true;
@@ -290,38 +298,38 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
 
   template <class LhsT, class RhsT, class StrT0, class StrT1>
   bool ExpectEq(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code) {
-    return GenericExpectEquality(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                 forward<StrT1>(rhs_code), std::equal_to<>{}, FmtExpectEq);
+    return GenericExpectEquality(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                 std::forward<StrT1>(rhs_code), std::equal_to<>{}, FmtExpectEq);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1>
   bool ExpectNe(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code) {
-    return GenericExpectEquality(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                 forward<StrT1>(rhs_code), std::not_equal_to<>{}, FmtExpectNe);
+    return GenericExpectEquality(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                 std::forward<StrT1>(rhs_code), std::not_equal_to<>{}, FmtExpectNe);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1>
   bool ExpectGt(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code) {
-    return GenericExpectEquality(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                 forward<StrT1>(rhs_code), std::greater<>{}, FmtExpectGt);
+    return GenericExpectEquality(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                 std::forward<StrT1>(rhs_code), std::greater<>{}, FmtExpectGt);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1>
   bool ExpectGe(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code) {
-    return GenericExpectEquality(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                 forward<StrT1>(rhs_code), std::greater_equal<>{}, FmtExpectGe);
+    return GenericExpectEquality(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                 std::forward<StrT1>(rhs_code), std::greater_equal<>{}, FmtExpectGe);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1>
   bool ExpectLt(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code) {
-    return GenericExpectEquality(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                 forward<StrT1>(rhs_code), std::less<>{}, FmtExpectLt);
+    return GenericExpectEquality(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                 std::forward<StrT1>(rhs_code), std::less<>{}, FmtExpectLt);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1>
   bool ExpectLe(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code) {
-    return GenericExpectEquality(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                 forward<StrT1>(rhs_code), std::less_equal<>{}, FmtExpectLe);
+    return GenericExpectEquality(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                 std::forward<StrT1>(rhs_code), std::less_equal<>{}, FmtExpectLe);
   }
 
   template <class FnT, class StrT>
@@ -331,7 +339,7 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
     } catch (...) {  // NOSONAR
       return true;
     }
-    RecordFailure(FmtTagFail(FmtExpectAnyThrow(forward<StrT>(fn_code))));
+    RecordFailure(FmtTagFail(FmtExpectAnyThrow(std::forward<StrT>(fn_code))));
     return false;
   }
 
@@ -340,10 +348,10 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
     try {
       fn();
     } catch (const std::exception& e) {  // NOSONAR
-      RecordFailure(FmtTagFail(FmtExpectNoThrowStd(forward<StrT>(fn_code), e.what())));
+      RecordFailure(FmtTagFail(FmtExpectNoThrowStd(std::forward<StrT>(fn_code), e.what())));
       return false;
     } catch (...) {
-      RecordFailure(FmtTagFail(FmtExpectNoThrow(forward<StrT>(fn_code))));
+      RecordFailure(FmtTagFail(FmtExpectNoThrow(std::forward<StrT>(fn_code))));
       return false;
     }
     return true;
@@ -352,8 +360,8 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
   template <class CondT, class ValT, class StrT0, class StrT1>
   enable_if_t<iIsInvokableV<bool, CondT, ValT>, bool> ExpectThat(CondT&& condition, ValT&& v, StrT0&& cond_code,
                                                                  StrT1&& val_code) {
-    if (!condition(forward<ValT>(v))) {
-      RecordFailure(FmtTagFail(FmtExpectThat(forward<StrT0>(cond_code), forward<StrT1>(val_code))));
+    if (!condition(std::forward<ValT>(v))) {
+      RecordFailure(FmtTagFail(FmtExpectThat(std::forward<StrT0>(cond_code), std::forward<StrT1>(val_code))));
       return false;
     }
     return true;
@@ -362,7 +370,7 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
   template <class StrT>
   bool AssertTrue(bool v, StrT&& value_code) {
     if (!v) {
-      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectTrue(forward<StrT>(value_code)))));
+      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectTrue(std::forward<StrT>(value_code)))));
       return false;
     }
     return true;
@@ -371,7 +379,7 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
   template <class StrT>
   bool AssertFalse(bool v, StrT&& value_code) {
     if (v) {
-      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectFalse(forward<StrT>(value_code)))));
+      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectFalse(std::forward<StrT>(value_code)))));
       return false;
     }
     return true;
@@ -379,38 +387,38 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
 
   template <class LhsT, class RhsT, class StrT0, class StrT1>
   bool AssertEq(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code) {
-    return GenericAssertEquality(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                 forward<StrT1>(rhs_code), std::equal_to<>{}, FmtExpectEq);
+    return GenericAssertEquality(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                 std::forward<StrT1>(rhs_code), std::equal_to<>{}, FmtExpectEq);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1>
   bool AssertNe(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code) {
-    return GenericAssertEquality(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                 forward<StrT1>(rhs_code), std::not_equal_to<>{}, FmtExpectNe);
+    return GenericAssertEquality(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                 std::forward<StrT1>(rhs_code), std::not_equal_to<>{}, FmtExpectNe);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1>
   bool AssertGt(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code) {
-    return GenericAssertEquality(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                 forward<StrT1>(rhs_code), std::greater<>{}, FmtExpectGt);
+    return GenericAssertEquality(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                 std::forward<StrT1>(rhs_code), std::greater<>{}, FmtExpectGt);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1>
   bool AssertGe(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code) {
-    return GenericAssertEquality(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                 forward<StrT1>(rhs_code), std::greater_equal<>{}, FmtExpectGe);
+    return GenericAssertEquality(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                 std::forward<StrT1>(rhs_code), std::greater_equal<>{}, FmtExpectGe);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1>
   bool AssertLt(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code) {
-    return GenericAssertEquality(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                 forward<StrT1>(rhs_code), std::less<>{}, FmtExpectLt);
+    return GenericAssertEquality(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                 std::forward<StrT1>(rhs_code), std::less<>{}, FmtExpectLt);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1>
   bool AssertLe(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code) {
-    return GenericAssertEquality(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                 forward<StrT1>(rhs_code), std::less_equal<>{}, FmtExpectLe);
+    return GenericAssertEquality(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                 std::forward<StrT1>(rhs_code), std::less_equal<>{}, FmtExpectLe);
   }
 
   template <class FnT, class StrT>
@@ -420,7 +428,7 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
     } catch (...) {  // NOSONAR
       return true;
     }
-    RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectAnyThrow(forward<StrT>(fn_code)))));
+    RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectAnyThrow(std::forward<StrT>(fn_code)))));
     return false;
   }
 
@@ -429,10 +437,10 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
     try {
       fn();
     } catch (const std::exception& e) {  // NOSONAR
-      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectNoThrowStd(forward<StrT>(fn_code), e.what()))));
+      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectNoThrowStd(std::forward<StrT>(fn_code), e.what()))));
       return false;
     } catch (...) {
-      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectNoThrow(forward<StrT>(fn_code)))));
+      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectNoThrow(std::forward<StrT>(fn_code)))));
       return false;
     }
     return true;
@@ -441,8 +449,8 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
   template <class CondT, class ValT, class StrT0, class StrT1>
   enable_if_t<iIsInvokableV<bool, CondT, ValT>, bool> AssertThat(CondT&& condition, ValT&& v, StrT0&& cond_code,
                                                                  StrT1&& val_code) {
-    if (!condition(forward<ValT>(v))) {
-      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectThat(forward<StrT0>(cond_code), forward<StrT1>(val_code)))));
+    if (!condition(std::forward<ValT>(v))) {
+      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectThat(std::forward<StrT0>(cond_code), std::forward<StrT1>(val_code)))));
       return false;
     }
     return true;
@@ -451,70 +459,80 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
   template <class StrT, class GoodLogT, class BadLogT>
   bool ExpectTrueLog(bool v, StrT&& value_code, BadLogT&& badlog, GoodLogT&& goodlog) {
     if (!v) {
-      RecordFailure(FmtTagFail(FmtExpectTrue(forward<StrT>(value_code))));
-      RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+      RecordFailure(FmtTagFail(FmtExpectTrue(std::forward<StrT>(value_code))));
+      RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
       return false;
     }
-    RecordMessage(forward<GoodLogT>(goodlog));
+    RecordMessage(std::forward<GoodLogT>(goodlog));
+    return true;
+  }
+
+  template <class StrT, class BadLogT>
+  bool ExpectTrueLog(bool v, StrT&& value_code, BadLogT&& badlog) {
+    if (!v) {
+      RecordFailure(FmtTagFail(FmtExpectTrue(std::forward<StrT>(value_code))));
+      RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
+      return false;
+    }
     return true;
   }
 
   template <class StrT, class GoodLogT, class BadLogT>
   bool ExpectFalseLog(bool v, StrT&& value_code, BadLogT&& badlog, GoodLogT&& goodlog) {
     if (v) {
-      RecordFailure(FmtTagFail(FmtExpectFalse(forward<StrT>(value_code))));
-      RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+      RecordFailure(FmtTagFail(FmtExpectFalse(std::forward<StrT>(value_code))));
+      RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
       return false;
     }
-    RecordMessage(forward<GoodLogT>(goodlog));
+    RecordMessage(std::forward<GoodLogT>(goodlog));
     return true;
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1, class GoodLogT, class BadLogT>
   bool ExpectEqLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog, GoodLogT&& goodlog) {
-    return GenericExpectEqualityLog(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                    forward<StrT1>(rhs_code), forward<BadLogT>(badlog), forward<GoodLogT>(goodlog),
+    return GenericExpectEqualityLog(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                    std::forward<StrT1>(rhs_code), std::forward<BadLogT>(badlog), std::forward<GoodLogT>(goodlog),
                                     std::equal_to<>{}, FmtExpectEq);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1, class BadLogT>
   bool ExpectEqLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog) {
-    return GenericExpectEqualityLog(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                    forward<StrT1>(rhs_code), forward<BadLogT>(badlog), std::equal_to<>{}, FmtExpectEq);
+    return GenericExpectEqualityLog(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                    std::forward<StrT1>(rhs_code), std::forward<BadLogT>(badlog), std::equal_to<>{}, FmtExpectEq);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1, class GoodLogT, class BadLogT>
   bool ExpectNeLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog, GoodLogT&& goodlog) {
-    return GenericExpectEqualityLog(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                    forward<StrT1>(rhs_code), forward<BadLogT>(badlog), forward<GoodLogT>(goodlog),
+    return GenericExpectEqualityLog(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                    std::forward<StrT1>(rhs_code), std::forward<BadLogT>(badlog), std::forward<GoodLogT>(goodlog),
                                     std::not_equal_to<>{}, FmtExpectNe);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1, class GoodLogT, class BadLogT>
   bool ExpectGtLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog, GoodLogT&& goodlog) {
-    return GenericExpectEqualityLog(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                    forward<StrT1>(rhs_code), forward<BadLogT>(badlog), forward<GoodLogT>(goodlog),
+    return GenericExpectEqualityLog(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                    std::forward<StrT1>(rhs_code), std::forward<BadLogT>(badlog), std::forward<GoodLogT>(goodlog),
                                     std::greater<>{}, FmtExpectGt);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1, class GoodLogT, class BadLogT>
   bool ExpectGeLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog, GoodLogT&& goodlog) {
-    return GenericExpectEqualityLog(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                    forward<StrT1>(rhs_code), forward<BadLogT>(badlog), forward<GoodLogT>(goodlog),
+    return GenericExpectEqualityLog(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                    std::forward<StrT1>(rhs_code), std::forward<BadLogT>(badlog), std::forward<GoodLogT>(goodlog),
                                     std::greater_equal<>{}, FmtExpectGe);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1, class GoodLogT, class BadLogT>
   bool ExpectLtLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog, GoodLogT&& goodlog) {
-    return GenericExpectEqualityLog(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                    forward<StrT1>(rhs_code), forward<BadLogT>(badlog), forward<GoodLogT>(goodlog),
+    return GenericExpectEqualityLog(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                    std::forward<StrT1>(rhs_code), std::forward<BadLogT>(badlog), std::forward<GoodLogT>(goodlog),
                                     std::less<>{}, FmtExpectLt);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1, class GoodLogT, class BadLogT>
   bool ExpectLeLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog, GoodLogT&& goodlog) {
-    return GenericExpectEqualityLog(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                    forward<StrT1>(rhs_code), forward<BadLogT>(badlog), forward<GoodLogT>(goodlog),
+    return GenericExpectEqualityLog(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                    std::forward<StrT1>(rhs_code), std::forward<BadLogT>(badlog), std::forward<GoodLogT>(goodlog),
                                     std::less_equal<>{}, FmtExpectLe);
   }
 
@@ -523,11 +541,11 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
     try {
       fn();
     } catch (...) {  // NOSONAR
-      RecordMessage(forward<GoodLogT>(goodlog));
+      RecordMessage(std::forward<GoodLogT>(goodlog));
       return true;
     }
-    RecordFailure(FmtTagFail(FmtExpectAnyThrow(forward<StrT>(fn_code))));
-    RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+    RecordFailure(FmtTagFail(FmtExpectAnyThrow(std::forward<StrT>(fn_code))));
+    RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
     return false;
   }
 
@@ -536,15 +554,15 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
     try {
       fn();
     } catch (const std::exception& e) {  // NOSONAR
-      RecordFailure(FmtTagFail(FmtExpectNoThrowStd(forward<StrT>(fn_code), e.what())));
-      RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+      RecordFailure(FmtTagFail(FmtExpectNoThrowStd(std::forward<StrT>(fn_code), e.what())));
+      RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
       return false;
     } catch (...) {
-      RecordFailure(FmtTagFail(FmtExpectNoThrow(forward<StrT>(fn_code))));
-      RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+      RecordFailure(FmtTagFail(FmtExpectNoThrow(std::forward<StrT>(fn_code))));
+      RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
       return false;
     }
-    RecordMessage(forward<GoodLogT>(goodlog));
+    RecordMessage(std::forward<GoodLogT>(goodlog));
     return true;
   }
 
@@ -552,76 +570,76 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
   enable_if_t<iIsInvokableV<bool, CondT, ValT>, bool> ExpectThatLog(CondT&& condition, ValT&& v, StrT0&& cond_code,
                                                                     StrT1&& val_code, BadLogT&& badlog,
                                                                     GoodLogT&& goodlog) {
-    if (!condition(forward<ValT>(v))) {
-      RecordFailure(FmtTagFail(FmtExpectThat(forward<StrT0>(cond_code), forward<StrT1>(val_code))));
-      RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+    if (!condition(std::forward<ValT>(v))) {
+      RecordFailure(FmtTagFail(FmtExpectThat(std::forward<StrT0>(cond_code), std::forward<StrT1>(val_code))));
+      RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
       return false;
     }
-    RecordMessage(forward<GoodLogT>(goodlog));
+    RecordMessage(std::forward<GoodLogT>(goodlog));
     return true;
   }
 
   template <class StrT, class GoodLogT, class BadLogT>
   bool AssertTrueLog(bool v, StrT&& value_code, BadLogT&& badlog, GoodLogT&& goodlog) {
     if (!v) {
-      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectTrue(forward<StrT>(value_code)))));
-      RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectTrue(std::forward<StrT>(value_code)))));
+      RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
       return false;
     }
-    RecordMessage(forward<GoodLogT>(goodlog));
+    RecordMessage(std::forward<GoodLogT>(goodlog));
     return true;
   }
 
   template <class StrT, class GoodLogT, class BadLogT>
   bool AssertFalseLog(bool v, StrT&& value_code, BadLogT&& badlog, GoodLogT&& goodlog) {
     if (v) {
-      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectFalse(forward<StrT>(value_code)))));
-      RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectFalse(std::forward<StrT>(value_code)))));
+      RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
       return false;
     }
-    RecordMessage(forward<GoodLogT>(goodlog));
+    RecordMessage(std::forward<GoodLogT>(goodlog));
     return true;
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1, class GoodLogT, class BadLogT>
   bool AssertEqLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog, GoodLogT&& goodlog) {
-    return GenericAssertEqualityLog(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                    forward<StrT1>(rhs_code), forward<BadLogT>(badlog), forward<GoodLogT>(goodlog),
+    return GenericAssertEqualityLog(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                    std::forward<StrT1>(rhs_code), std::forward<BadLogT>(badlog), std::forward<GoodLogT>(goodlog),
                                     std::equal_to<>{}, FmtExpectEq);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1, class GoodLogT, class BadLogT>
   bool AssertNeLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog, GoodLogT&& goodlog) {
-    return GenericAssertEqualityLog(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                    forward<StrT1>(rhs_code), forward<BadLogT>(badlog), forward<GoodLogT>(goodlog),
+    return GenericAssertEqualityLog(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                    std::forward<StrT1>(rhs_code), std::forward<BadLogT>(badlog), std::forward<GoodLogT>(goodlog),
                                     std::not_equal_to<>{}, FmtExpectNe);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1, class GoodLogT, class BadLogT>
   bool AssertGtLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog, GoodLogT&& goodlog) {
-    return GenericAssertEqualityLog(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                    forward<StrT1>(rhs_code), forward<BadLogT>(badlog), forward<GoodLogT>(goodlog),
+    return GenericAssertEqualityLog(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                    std::forward<StrT1>(rhs_code), std::forward<BadLogT>(badlog), std::forward<GoodLogT>(goodlog),
                                     std::greater<>{}, FmtExpectGt);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1, class GoodLogT, class BadLogT>
   bool AssertGeLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog, GoodLogT&& goodlog) {
-    return GenericAssertEqualityLog(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                    forward<StrT1>(rhs_code), forward<BadLogT>(badlog), forward<GoodLogT>(goodlog),
+    return GenericAssertEqualityLog(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                    std::forward<StrT1>(rhs_code), std::forward<BadLogT>(badlog), std::forward<GoodLogT>(goodlog),
                                     std::greater_equal<>{}, FmtExpectGe);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1, class GoodLogT, class BadLogT>
   bool AssertLtLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog, GoodLogT&& goodlog) {
-    return GenericAssertEqualityLog(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                    forward<StrT1>(rhs_code), forward<BadLogT>(badlog), forward<GoodLogT>(goodlog),
+    return GenericAssertEqualityLog(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                    std::forward<StrT1>(rhs_code), std::forward<BadLogT>(badlog), std::forward<GoodLogT>(goodlog),
                                     std::less<>{}, FmtExpectLt);
   }
 
   template <class LhsT, class RhsT, class StrT0, class StrT1, class GoodLogT, class BadLogT>
   bool AssertLeLog(LhsT&& lhs, RhsT&& rhs, StrT0&& lhs_code, StrT1&& rhs_code, BadLogT&& badlog, GoodLogT&& goodlog) {
-    return GenericAssertEqualityLog(forward<LhsT>(lhs), forward<RhsT>(rhs), forward<StrT0>(lhs_code),
-                                    forward<StrT1>(rhs_code), forward<BadLogT>(badlog), forward<GoodLogT>(goodlog),
+    return GenericAssertEqualityLog(std::forward<LhsT>(lhs), std::forward<RhsT>(rhs), std::forward<StrT0>(lhs_code),
+                                    std::forward<StrT1>(rhs_code), std::forward<BadLogT>(badlog), std::forward<GoodLogT>(goodlog),
                                     std::less_equal<>{}, FmtExpectLe);
   }
 
@@ -630,11 +648,11 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
     try {
       fn();
     } catch (...) {  // NOSONAR
-      RecordMessage(forward<GoodLogT>(goodlog));
+      RecordMessage(std::forward<GoodLogT>(goodlog));
       return true;
     }
-    RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectAnyThrow(forward<StrT>(fn_code)))));
-    RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+    RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectAnyThrow(std::forward<StrT>(fn_code)))));
+    RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
     return false;
   }
 
@@ -643,15 +661,15 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
     try {
       fn();
     } catch (const std::exception& e) {  // NOSONAR
-      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectNoThrowStd(forward<StrT>(fn_code), e.what()))));
-      RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectNoThrowStd(std::forward<StrT>(fn_code), e.what()))));
+      RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
       return false;
     } catch (...) {
-      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectNoThrow(forward<StrT>(fn_code)))));
-      RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectNoThrow(std::forward<StrT>(fn_code)))));
+      RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
       return false;
     }
-    RecordMessage(forward<GoodLogT>(goodlog));
+    RecordMessage(std::forward<GoodLogT>(goodlog));
     return true;
   }
 
@@ -659,12 +677,12 @@ struct MinitestFramework {  // NOSONAR - class is big because it models entire
   enable_if_t<iIsInvokableV<bool, CondT, ValT>, bool> AssertThatLog(CondT&& condition, ValT&& v, StrT0&& cond_code,
                                                                     StrT1&& val_code, BadLogT&& badlog,
                                                                     GoodLogT&& goodlog) {
-    if (!condition(forward<ValT>(v))) {
-      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectThat(forward<StrT0>(cond_code), forward<StrT1>(val_code)))));
-      RecordFailure(FmtTagFail(forward<BadLogT>(badlog)));
+    if (!condition(std::forward<ValT>(v))) {
+      RecordFailure(FmtTagFail(FmtTagAssert(FmtExpectThat(std::forward<StrT0>(cond_code), std::forward<StrT1>(val_code)))));
+      RecordFailure(FmtTagFail(std::forward<BadLogT>(badlog)));
       return false;
     }
-    RecordMessage(forward<GoodLogT>(goodlog));
+    RecordMessage(std::forward<GoodLogT>(goodlog));
     return true;
   }
 

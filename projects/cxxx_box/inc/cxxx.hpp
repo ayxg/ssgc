@@ -236,7 +236,7 @@ constexpr std::string_view Dedent(std::string_view input) {
 
 }  // namespace cxx
 
-#endif HEADER_GUARD_SSG_CXXX_CXXX_H
+#endif // HEADER_GUARD_SSG_CXXX_CXXX_H
 /// @} // end of cppmodule2_cppextended
 
 ///////////////////////////////////////////////////////////////////////////////

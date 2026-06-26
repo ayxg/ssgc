@@ -455,7 +455,7 @@ concept iOneOf = (std::same_as<T, Us> || ...);
 }  // namespace req
 }  // namespace mta
 
-#endif HEADER_GUARD_SSG_MTA_MTA_REQUIRE_HPP
+#endif // HEADER_GUARD_SSG_MTA_MTA_REQUIRE_HPP
 /// @} // end of cppmodule0_mta
 
 ///////////////////////////////////////////////////////////////////////////////

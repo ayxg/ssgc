@@ -114,6 +114,18 @@ if(${MINITEST_BOX_ENABLE_CTEST_INTEGRATION} AND ${MINITEST_BOX_ENABLE_TESTS})
     TARGET ut_checks_asserts
     SCAN_ALL
   )
+
+  minitest_add_executable(
+    NAME ut_dummy_tests
+    INCLUDE_DIRECTORIES test
+    TEST_HEADERS ut_dummy_tests.hpp
+  )
+
+  minitest_from_headers(
+    PREFIX UtMinitest
+    TARGET ut_dummy_tests
+    SCAN_ALL
+  )
 endif() 
 
 
