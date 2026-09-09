@@ -16,7 +16,7 @@
 #pragma once
 
 namespace ssgc {
-struct ssgcTranslationOutput {
+struct TranslationOutput {
   int exit_code;
   const char* build_path;
   int build_files_count;

@@ -15,9 +15,7 @@
 /// @{
 
 #pragma once
-// clang-format off
-#include "meta_applied_enum.hpp"
-// clang-format on
+#include "../common/meta_applied_enum.hpp"
 
 /// @addtogroup cnd_compiler_corevals
 /// @{
@@ -32,7 +30,8 @@ namespace ssgc::cli {
   sep m(kSilent)                                    \
   sep m(kNoColor)                                   \
   sep m(kCommandBuild)                              \
-  sep m(kCommandDev)                                   \
+  sep m(kCommandDev)                                \
+  sep m(kCommandDevParse)                            \
   sep m(kModeHelp)                                  \
   sep m(kModeVersion)                               \
   sep m(kSources)                                   \

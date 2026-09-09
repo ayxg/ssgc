@@ -1,0 +1,417 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+// Licensed under the GNU Affero General Public License, Version 3.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file
+/// @ingroup
+/// @brief
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// @addtogroup cnd_compiler_data
+/// @{
+#pragma once
+// clang-format off
+#include "token.hpp"
+#include "token_traits.hpp"
+#include "../common/source_range_raw.hpp"
+// clang-format on
+
+namespace ssgc::frontend {
+class TokenCursor {
+  std::size_t offset_{0};
+  const Token* beg_;
+  const Token* end_;
+  const Token* curr_;
+
+ private:
+  constexpr void skipInsignificant() {
+    while (isTokenInsignificant(curr_->kind)) {
+      curr_++;
+    }
+  }
+
+ public:
+  constexpr TokenCursor() = default;
+  constexpr TokenCursor(const TokenCursor& other) = default;
+  constexpr TokenCursor& operator=(const TokenCursor& other) = default;
+  constexpr TokenCursor(std::size_t offset, const Token* beg, const Token* end)
+      : offset_(offset), beg_(beg), end_(end), curr_(beg) {}
+
+  constexpr std::size_t index() const noexcept { return offset_ + std::distance(beg_, curr_); }
+  constexpr const Token& get() const noexcept { return *curr_; }
+  constexpr const Token* current() const noexcept { return curr_; }
+  constexpr const Token* end() const noexcept { return end_; }
+  constexpr const Token* begin() const noexcept { return beg_; }
+  constexpr TokenCursor& advance() noexcept {
+    if (curr_ < end_) {
+      ++curr_;
+    }
+    skipInsignificant();
+    return *this;
+  }
+  constexpr TokenCursor& advanceBy(std::ptrdiff_t by) noexcept {
+    if (by != 0) {
+      if (curr_ + by >= end_) {
+        curr_ = end_;
+      } else if (curr_ + by < beg_) {
+        curr_ = beg_;
+      } else {
+        curr_ += by;
+        skipInsignificant();
+      }
+    }
+    return *this;
+  }
+ /* constexpr TokenCursor& advance(const Token* new_cursor) noexcept {
+    if (new_cursor < beg_) {
+      curr_ = beg_;
+    } else if (new_cursor > end_) {
+      curr_ = end_;
+    } else {
+      curr_ = new_cursor;
+      skipInsignificant();
+    }
+    return *this;
+  }*/
+  constexpr TokenCursor& advanceTo(std::size_t index) noexcept {
+    curr_ = beg_ + index;
+    skipInsignificant();
+    return *this;
+  }
+  constexpr TokenCursor next() const noexcept {
+    TokenCursor next_cursor = *this;
+    next_cursor.advance();
+    return next_cursor;
+  }
+  //constexpr TokenCursor next(std::ptrdiff_t by) const {
+  //  TokenCursor next_cursor = *this;
+  //  next_cursor.advance(by);
+  //  return next_cursor;
+  //}
+  constexpr const Token& peek(std::ptrdiff_t by = 1) const {
+    const Token* peek_cursor = curr_;
+    if (peek_cursor + by >= end_) {
+      return *end_;
+    } else if (peek_cursor + by < beg_) {
+      return *beg_;
+    } else {
+      peek_cursor = peek_cursor + by;
+      while (isTokenInsignificant(peek_cursor->kind)) {
+        if (by >= 0) {
+          peek_cursor++;
+        } else {
+          peek_cursor--;
+        }
+        
+      }
+      return *peek_cursor;
+    }
+  }
+  constexpr bool is(eToken kind) const noexcept { return curr_->kind == kind; }
+  constexpr eToken kind() const noexcept { return curr_->kind; }
+  constexpr bool atEnd() const noexcept { return curr_ == end_; }
+
+  // constexpr const SourceRangeRaw & sourceRange() const noexcept {
+  //   const Token& tk = this->get();
+  //   return SourceRangeRaw{.file = tk.file, .begin = tk.offset, .end = tk.size};
+  // }
+
+  // constexpr std::size_t sourceOffset() const noexcept { return this->get().offset; }
+  // constexpr std::size_t sourceSize() const noexcept { return this->get().offset; }
+  // constexpr std::size_t sourceEnd() const noexcept { return this->get().offset +
+  // this->get().size; }
+};
+
+// template <template <class T> class TokenContainerT>
+// class TokenCursor {};
+// public:
+//  using TkVecT = TokenContainerT<const Token>;
+//  using TkVecConstIterT = typename TokenContainerT<const Token>::iterator;
+/*
+  // Properties
+  constexpr TkVecConstIterT End() const;
+  constexpr TkVecConstIterT Begin() const;
+  constexpr TkVecConstIterT Iter() const;
+  constexpr const Token& Get() const;
+  constexpr Bool AtEnd() const;
+  constexpr const Token& operator->() const;
+
+  // Token Properties
+  constexpr eTk Type() const noexcept;
+  constexpr Size Length() const;
+  constexpr Size Line() const noexcept;
+  constexpr Size Col() const noexcept;
+  constexpr StrView Literal() const;
+  constexpr ePriority Priority() const;
+  constexpr eAssoc Assoc() const;
+  constexpr eOperation Operation() const;
+  constexpr Bool TypeIs(eTk type) const noexcept;
+  constexpr Bool TypeIsnt(eTk type) const noexcept;
+  constexpr Bool TypeAndLitIs(eTk kind, const Str& literal) const noexcept;
+  constexpr Bool IsKeyword() const noexcept;
+  constexpr Bool IsModifierKeyword() const noexcept;
+  constexpr Bool IsDeclarativeKeyword() const noexcept;
+  constexpr Bool IsAnOperand() const noexcept;
+  constexpr Bool IsSingularPrefixOperator() const noexcept;
+  constexpr Bool IsOpeningScope() const noexcept;
+  constexpr Bool IsClosingScope() const noexcept;
+  constexpr Bool IsClosingScopeOf(eTk open) const noexcept;
+  constexpr Bool IsPrimary() const noexcept;
+  constexpr Bool IsPragmatic() const noexcept;
+  constexpr eAst NodeType() const noexcept;
+
+  // Iteration
+  constexpr TkCursor& Advance();
+  constexpr TkCursor& Advance(int n);
+  constexpr TkCursor& Advance(TkVecConstIterT new_it);
+  constexpr TkCursor& Advance(const TkCursor& to);
+  constexpr TkCursor Next(int n) const;
+  constexpr TkCursor Next(TkVecConstIterT new_it) const;
+  constexpr const Token& Peek(int n = 1) const;
+  constexpr Bool FindForward(const TkVecT& match);
+  constexpr Bool FindForwardExact(TkVecConstIterT cursor, const TkVecT& match);
+
+ public:
+  constexpr TkCursor(TkVecConstIterT begin, TkVecConstIterT end);
+  constexpr TkCursor(TkVecConstIterT begin, TkVecConstIterT end, TkVecConstIterT it);
+  constexpr TkCursor(const TkCursor& other);
+  constexpr TkCursor& operator=(const TkCursor& other);
+*/
+
+// private:
+//  static constexpr Token kSentinelEndToken{eToken::kEofile};
+//  TkVecConstIterT beg_;
+//  TkVecConstIterT end_;
+//  TkVecConstIterT it_;
+
+// public:
+//  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  /* Properties */
+//  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// constexpr TkVecConstIterT End() const { return end_; }
+
+// constexpr TkVecConstIterT Begin() const { return beg_; }
+
+// constexpr TkVecConstIterT Iter() const { return it_; }
+
+// constexpr const Token& Get() const {
+//   if (it_ >= end_) {
+//     return kSentinelEndToken;
+//   }
+//   return *it_;
+// }
+
+// constexpr Bool AtEnd() const { return (it_ == end_) || (it_->TypeIs(eTk::kEofile)); }
+
+// constexpr const Token& operator->() const { return Get(); }
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// /* Token Properties */
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// constexpr eTk Type() const noexcept { return Get().Type(); }
+
+// constexpr Size Length() const { return Get().Length(); }
+
+// constexpr StrView Literal() const { return Get().Literal(); }
+
+// constexpr ePriority Priority() const { return Get().Priority(); }
+
+// constexpr eAssoc Assoc() const { return Get().Assoc(); }
+
+// constexpr eOperation Operation() const { return Get().Operation(); }
+
+// constexpr Bool TypeIs(eTk type) const noexcept { return Get().TypeIs(type); }
+
+// constexpr Bool TypeIsnt(eTk type) const noexcept { return !(Get().TypeIs(type)); }
+
+// constexpr Bool TypeAndLitIs(eTk kind, const Str& literal) const noexcept { return
+// Get().TypeAndLitIs(kind, literal); }
+
+// constexpr Bool IsKeyword() const noexcept { return Get().IsKeyword(); }
+
+// constexpr Bool IsModifierKeyword() const noexcept { return Get().IsModifier(); }
+
+// constexpr Bool IsDeclarativeKeyword() const noexcept { return Get().IsDeclarative(); }
+
+// constexpr Bool IsAnOperand() const noexcept { return Get().IsAnOperand(); }
+
+// constexpr Bool IsSingularPrefixOperator() const noexcept { return Get().IsAPrefixOperator(); }
+// constexpr Bool IsPrefixOperator() const noexcept { return Get().IsAPrefixOperator(); }
+// constexpr Bool IsPostfixOperator() const noexcept { return Get().TypeIs(eTk::kInc) ||
+// Get().TypeIs(eTk::kDec); }
+
+// constexpr Bool IsOpeningScope() const noexcept { return Get().IsLScope(); }
+
+// constexpr Bool IsClosingScope() const noexcept { return Get().IsRScope(); }
+
+// constexpr Bool IsClosingScopeOf(eTk open) const noexcept { return Get().IsRScopeOf(open); }
+
+// constexpr Bool IsPrimary() const noexcept { return Get().IsPrimary(); }
+
+// constexpr Bool IsPragmatic() const noexcept {
+//   auto& c = Get();
+//   return c.IsModifier() || c.IsDeclarative();
+// }
+
+// // Valid first terminal in a top level syntax statement.
+// constexpr Bool IsPragmaticFirstSet() const noexcept {
+//   auto& c = Get();
+//   return (c.IsModifier() || c.IsDeclarative() || c.IsPrimary()) && (c.Type() != eTk::kKwProc) &&
+//          (c.Type() != eTk::kKwLib);
+// }
+
+// // Valid first terminal in a top level syntax statement.
+// constexpr Bool IsDirectiveFirstSet() const noexcept {
+//   auto& c = Get();
+//   return c.IsModifier() || c.IsDeclarative() || c.IsPrimary();
+// }
+
+// constexpr eAst NodeType() const noexcept { return Get().NodeType(); }
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// /* Iteration */
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// /// Advances the cursor by 1.
+// constexpr TkCursor& Advance() {
+//   if (it_ + 1 >= end_) {
+//     it_ = end_;
+//   } else if (it_ + 1 < beg_) {
+//     it_ = beg_;
+//   } else {
+//     it_ += 1;
+//   }
+//   return *this;
+// }
+
+// /// Advances the cursor by n.
+// constexpr TkCursor& Advance(int n) {
+//   if (n != 0) {
+//     if (it_ + n >= end_) {
+//       it_ = end_;
+//     } else if (it_ + n < beg_) {
+//       it_ = beg_;
+//     } else {
+//       it_ += n;
+//     }
+//   }
+//   return *this;
+// }
+
+// /// Advances the cursor to the new_cursor. Checks that
+// /// cursor is within beg and end.
+// constexpr TkCursor& Advance(TkVecConstIterT new_it) {
+//   if (new_it < beg_) {
+//     throw std::out_of_range("tk_cursor passed advance_to outside of begin.");
+//   } else if (new_it > end_) {
+//     throw std::out_of_range("tk_cursor passed advance_to outside of end.");
+//   } else
+//     it_ = new_it;
+//   return *this;
+// }
+
+// constexpr TkCursor& Advance(const TkCursor& to) { return this->Advance(to.Iter()); }
+
+// /// Returns cursor advanced by N. N may be negative.
+// constexpr TkCursor Next(int n) const {
+//   TkCursor next_cursor = *this;
+//   next_cursor.Advance(n);
+//   return next_cursor;
+// }
+
+// /// Returns cursor advanced by N. N may be negative.
+// constexpr TkCursor Next() const {
+//   TkCursor next_cursor = *this;
+//   next_cursor.Advance(1);
+//   return next_cursor;
+// }
+
+// constexpr TkCursor Next(TkVecConstIterT new_it) const {
+//   if (new_it < beg_) {
+//     throw std::out_of_range("tk_cursor passed advance_to outside of begin.");
+//   } else if (new_it > end_) {
+//     throw std::out_of_range("tk_cursor passed advance_to outside of end.");
+//   } else {
+//     TkCursor rt = *this;
+//     rt.it_ = new_it;
+//     return rt;
+//   }
+// }
+
+// constexpr const Token& Peek(int n) const { return Next(n).Get(); }
+
+// constexpr Bool FindForward(const TkVecT& match) {
+//   auto end = std::next(it_, match.size());
+//   auto found = std::search(it_, end, match.begin(), match.end(),
+//                            [](const Token& a, const Token& b) { return a.Type() == b.Type(); });
+
+//   if (found != end) {
+//     return true;
+//   }
+//   return false;
+// }
+
+// constexpr Bool FindForwardExact(TkVecConstIterT cursor, const TkVecT& match) {
+//   // @note If you ever get compilation error:
+//   // [Error C3889 call to object of class type 'std::equal_to<void>' : no matching call operator
+//   found]
+//   // It means that Token class does not have operator== defined.
+//   auto end = std::next(cursor, static_cast<std::ptrdiff_t>(match.size()));
+//   if (std::equal(match.begin(), match.end(), cursor, end)) {
+//     return true;
+//   }
+//   return false;
+// }
+
+// constexpr TkCursor(TkVecConstIterT begin, TkVecConstIterT end) : beg_(begin), end_(end),
+// it_(begin) {}
+
+// constexpr TkCursor(TkVecConstIterT begin, TkVecConstIterT end, TkVecConstIterT it)
+//     : beg_(begin), end_(end), it_(it) {}
+
+// constexpr TkCursor(const TkCursor& other) : beg_(other.beg_), end_(other.end_), it_(other.it_) {}
+
+// constexpr TkCursor& operator=(const TkCursor& other) {
+//   beg_ = other.beg_;
+//   end_ = other.end_;
+//   it_ = other.it_;
+//   return *this;
+// }
+///};
+
+// using TkVecCursor = TkCursor<std::vector>;
+// using TkSpanCursor = TkCursor<std::span>;
+}  // namespace ssgc::frontend
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/* impl */
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// #include "token_cursor.tpp"
+
+/// @} // end of cnd_compiler_data
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// @project: C& Programming Language
+// @author(s): Anton Yashchenko
+// @website: https://www.acpp.dev
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright 2024 Anton Yashchenko
+//
+// Licensed under the GNU Affero General Public License, Version 3.
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

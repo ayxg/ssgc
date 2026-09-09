@@ -45,25 +45,47 @@ set(cnd_compiler_interface_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_library(cnd_compiler_interface STATIC)
 target_include_directories(cnd_compiler_interface 
   PUBLIC "${cnd_compiler_interface_HEADERS_DIR}"
+  "${cnd_compiler_interface_SOURCES_DIR}"
 )
 target_sources(cnd_compiler_interface PRIVATE
   "${cnd_compiler_interface_SOURCES_DIR}/api/ssgc_cli.cpp"
-  "${cnd_compiler_interface_SOURCES_DIR}/frontend_enum_token.hpp"
-  "${cnd_compiler_interface_SOURCES_DIR}/frontend_lexer.hpp"
-  "${cnd_compiler_interface_SOURCES_DIR}/frontend_lexer.cpp"
-  "${cnd_compiler_interface_SOURCES_DIR}/cli_parser.hpp"
-  "${cnd_compiler_interface_SOURCES_DIR}/cli_parser.cpp"
-  "${cnd_compiler_interface_SOURCES_DIR}/cli_app.hpp"
-  "${cnd_compiler_interface_SOURCES_DIR}/cli_app.cpp"
-  "${cnd_compiler_interface_SOURCES_DIR}/cli_ansi.hpp"     
-  "${cnd_compiler_interface_SOURCES_DIR}/cli_ansi.cpp"
-  "${cnd_compiler_interface_SOURCES_DIR}/diagnostics.hpp"
-  "${cnd_compiler_interface_SOURCES_DIR}/diagnostic_impl.hpp"
-  "${cnd_compiler_interface_SOURCES_DIR}/diagnostic_errors.hpp"
-  "${cnd_compiler_interface_SOURCES_DIR}/meta_applied_enum.hpp" 
-  "${cnd_compiler_interface_SOURCES_DIR}/util_enum_verbosity.hpp"
-  "${cnd_compiler_interface_SOURCES_DIR}/util_logger.hpp"         
-  "${cnd_compiler_interface_SOURCES_DIR}/util_logger.cpp"
+
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend/ast.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend/enum_assoc.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend/enum_ast.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend/enum_operation.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend/enum_priority.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend/enum_token.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend/lexer.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend/lexer.cpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend/parser.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend/token.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/frontend/token_cursor.hpp"
+
+
+  "${cnd_compiler_interface_SOURCES_DIR}/cli/app.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/cli/app.cpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/cli/enum_cli_flag.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/cli/parser.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/cli/parser.cpp"
+
+  "${cnd_compiler_interface_SOURCES_DIR}/common/ansi.hpp"     
+  "${cnd_compiler_interface_SOURCES_DIR}/common/ansi.cpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/common/diagnostic.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/common/diagnostic_impl.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/common/diagnostic_errors.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/common/enum_verbosity.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/common/format_diagnostic.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/common/logger.hpp"         
+  "${cnd_compiler_interface_SOURCES_DIR}/common/logger.cpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/common/meta_applied_enum.hpp" 
+  "${cnd_compiler_interface_SOURCES_DIR}/common/read_file.hpp" 
+  "${cnd_compiler_interface_SOURCES_DIR}/common/source_manager.hpp"         
+  "${cnd_compiler_interface_SOURCES_DIR}/common/source_manager.cpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/common/string_interner.hpp"
+
+  "${cnd_compiler_interface_SOURCES_DIR}/compiler/translation_context.hpp"
+  "${cnd_compiler_interface_SOURCES_DIR}/compiler/translation_output.hpp"
 
 )
 target_link_libraries(cnd_compiler_interface 
@@ -135,8 +157,7 @@ unset(UT_COMPEVAL_TEST_CODE_SOURCE_DIR)
 unset(UT_COMPEVAL_TEST_CODE_BINARY_DIR)
 
 #[====================================[
-  Test Suite : UtCndParserPrimaryExpr 
-             & UtParserGrammarRules
+  Test Suite : UtCndLexerTokens
 #]====================================]
 
 minitest_add_executable(
@@ -152,6 +173,9 @@ minitest_from_headers(
   HEADERS UtLexerTokens.hpp
 )
 
+#[====================================[
+  Test Suite : UtCndParserPrimaryExpr
+#]====================================]
 minitest_add_executable(
   NAME                UtCndParserPrimaryExpr
   INCLUDE_DIRECTORIES ut
@@ -165,6 +189,9 @@ minitest_from_headers(
   HEADERS UtParserPrimaryExpr.hpp
 )
 
+#[====================================[
+  Test Suite : UtParserGrammarRules
+#]====================================]
 minitest_add_executable(
   NAME                UtParserGrammarRules
   INCLUDE_DIRECTORIES ut
@@ -177,6 +204,24 @@ minitest_from_headers(
   PREFIX UtCndFrontEnd
   TARGET UtParserGrammarRules
   HEADERS UtParserGrammarRules.hpp
+)
+
+
+#[====================================[
+  Test Suite : UtParserSyntax
+#]====================================]
+minitest_add_executable(
+  NAME                UtParserSyntax
+  INCLUDE_DIRECTORIES ut
+  WORKING_DIRECTORY   ut/res
+  LINK_LIBS           cnd_compiler_interface
+  TEST_HEADERS        UtParserSyntax.hpp
+)
+
+minitest_from_headers(
+  PREFIX UtCndFrontEnd
+  TARGET UtParserSyntax
+  HEADERS UtParserSyntax.hpp
 )
 
 # Add static unit tests.

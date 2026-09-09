@@ -18,7 +18,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "util_enum_verbosity.hpp"
+#include "enum_verbosity.hpp"
 
 namespace ssgc::util {
 

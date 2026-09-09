@@ -6,47 +6,39 @@
 // @author(s): Anton Yashchenko
 // @website: https://www.acpp.dev
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file C& Lexer
-/// @ingroup
-/// @brief
+/// @file
+/// @ingroup cnd_compiler_corevals
+/// @brief eAssoc enum definition.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// @addtogroup cnd_compiler_data
-/// @{
 #pragma once
 
-#include <expected>
-#include <string_view>
-#include <vector>
-
-// #include "compiler_utils/CompilerProcessResult.hpp"
-#include "diagnostics.hpp"
-#include "frontend_enum_token.hpp"
-#include "frontend_token.hpp"
-
-/// Set true to enable inline static unit tests during compiler development.
-// #define CND_ENABLE_STATIC_TEST_MODULE_Lexer true
+/// @addtogroup cnd_compiler_corevals
+/// @{
 
 namespace ssgc::frontend {
 
-std::expected<std::vector<Token>, diagnostic::Diagnostics> tokenizeSourceCode(
-    std::string_view source_code) noexcept;
-std::vector<Token> sanitizeTokens(const std::vector<Token>& output_tokens) noexcept;
+enum class eAssoc { kInvalid, kNone, kLeft, kRight, COUNT };
 
-class Lexer {
- public:
-  Lexer() noexcept;
-  std::expected<std::vector<Token>, diagnostic::Diagnostics> tokenize(
-      std::string_view source_code) noexcept;
-  static std::vector<Token> sanitize(const std::vector<Token>& output_tokens) noexcept;
-
- private:
-  std::unique_ptr<void, void (*)(void*)> pimpl_;
-};
-
+constexpr const char* eAssocToCStr(eAssoc e) {
+  switch (e) {
+    case eAssoc::kInvalid:
+      return "kInvalid";
+    case eAssoc::kNone:
+      return "kNone";
+    case eAssoc::kLeft:
+      return "kLeft";
+    case eAssoc::kRight:
+      return "kRight";
+    case eAssoc::COUNT:
+      return "COUNT";
+    default:
+      return "<invalid>";
+  }
+}
 }  // namespace ssgc::frontend
 
-/// @} // end of cnd_compiler_data
+/// @} // end of cnd_compiler_corevals
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // @project: C& Programming Language

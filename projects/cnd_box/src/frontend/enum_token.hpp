@@ -1,5 +1,5 @@
 #pragma once
-#include "meta_applied_enum.hpp"
+#include "../common/meta_applied_enum.hpp"
 
 namespace ssgc::frontend {
 #define SSGC_AppliedEnum_eToken(m, sep, pre, lst) \
@@ -20,6 +20,7 @@ namespace ssgc::frontend {
   sep m(kKwClass)                                  \
   sep m(kKwMain)                                   \
   sep m(kKwImport)                                 \
+  sep m(kKwInclude)\
   sep m(kKwNamespace)                              \
   sep m(kKwUse)                                    \
   sep m(kKwLib)                                    \
@@ -122,6 +123,7 @@ namespace ssgc::frontend {
   sep m(kDollar)                                   \
   sep m(kBacklash)                                 \
   sep m(kQuestion)                                 \
+  sep m(kRightArrow)                               \
   sep m(kLitInt)                                   \
   sep m(kLitUint)                                  \
   sep m(kLitBool)                                  \

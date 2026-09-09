@@ -54,19 +54,19 @@ static string FmtPassTest(const string& suite, const string& test) {
 }
 
 static string FmtTagFail(const string& s) { 
-  return (s.front() == '[') ? "[Fail]" + s : "[Fail] " + s;
+  return (!s.empty() && s.front() == '[') ? "[Fail]" + s : "[Fail] " + s;
 }
 
 static string FmtTagFail(string&& s) { 
-  return (s.front() == '[') ? "[Fail]" + s : "[Fail] " + s;
+  return (!s.empty() && s.front() == '[') ? "[Fail]" + s : "[Fail] " + s;
 }
 
 static string FmtTagAssert(const string& s) {
-  return (s.front() == '[') ? "[Assert]" + s : "[Assert] " + s;
+  return (!s.empty() && s.front() == '[') ? "[Assert]" + s : "[Assert] " + s;
 }
 
 static string FmtTagAssert(string&& s) {
-  return (s.front() == '[') ? "[Assert]" + s : "[Assert] " + s;
+  return (!s.empty() && s.front() == '[') ? "[Assert]" + s : "[Assert] " + s;
 }
 
 static const char* FmtUnknownExceptionFail() {

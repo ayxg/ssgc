@@ -15,7 +15,7 @@
 /// @{
 
 #pragma once
-#include "cli_parser.hpp"
+#include "parser.hpp"
 
 #include <algorithm>
 #include <array>
@@ -31,8 +31,8 @@
 #include <variant>
 #include <vector>
 
-#include "cli_enum_cli_flag.hpp"
-#include "diagnostics.hpp"
+#include "../common/diagnostic.hpp"
+#include "enum_cli_flag.hpp"
 
 namespace ssgc::cli {
 
@@ -139,7 +139,7 @@ class CliParser {
   static std::string helptext();
 
  private:
-  static diagnostic::Diagnostic parsingFail(const std::string& message);
+  static Diagnostic parsingFail(const std::string& message);
 
   // Check required args now accepts result as output target.
   static void checkRequiredArgs(const CliFlagMap& out, CliParserResult& result);
@@ -361,7 +361,7 @@ CliParserResult CliParser<FLAG_ARRAY>::parse(CliArgs::const_iterator beg,
                     .current_index = 0,
                     .current_positional = 0,
                     .output = &out};
-  CliParserResult result{std::nullopt, std::nullopt, diagnostic::Diagnostics{}, {}, 0};
+  CliParserResult result{std::nullopt, std::nullopt, Diagnostics{}, {}, 0};
 
   if (state.current_index == state.args.size()) {
     if constexpr (kMetadataHasCommand) {
@@ -431,8 +431,8 @@ CliParserResult CliParser<FLAG_ARRAY>::parse(CliArgs::const_iterator beg,
 }
 
 template <auto& FLAG_ARRAY>
-diagnostic::Diagnostic CliParser<FLAG_ARRAY>::parsingFail(const std::string& message) {
-  return diagnostic::Diagnostic{diagnostic::eError::kCliParserFailure, {message}};
+Diagnostic CliParser<FLAG_ARRAY>::parsingFail(const std::string& message) {
+  return Diagnostic{eError::kCliParserFailure, {message}};
 }
 
 // Check required args now accepts result as output target.
@@ -591,10 +591,9 @@ void CliParser<FLAG_ARRAY>::parsePositionalArg(ParserState& state, CliParserResu
   if (state.current_positional >= lookup_pos_.size()) {
     // This shouldnt happen because positional count should be checked before
     // calling this method.
-    result.errors->push_back(
-        diagnostic::makeErrorDeveloperBug(std::source_location::current(),
-                                          "Unexpected program location reached. "
-                                          "Parsing out of bounds positional argument."));
+    result.errors->push_back(makeErrorDeveloperBug(std::source_location::current(),
+                                                   "Unexpected program location reached. "
+                                                   "Parsing out of bounds positional argument."));
     state.current_index++;
     return;
   }
@@ -641,7 +640,7 @@ void CliParser<FLAG_ARRAY>::processFlag(const CliFlag& flag_metadata, std::size_
         return;
       } else {
         // This should never happen.
-        result.errors->push_back(diagnostic::makeErrorDeveloperBug(
+        result.errors->push_back(makeErrorDeveloperBug(
             std::source_location::current(),
             "Unexpected program location reached."
             "Processing command flag but no command exists in flags metadata."));
@@ -676,9 +675,9 @@ void CliParser<FLAG_ARRAY>::processFlag(const CliFlag& flag_metadata, std::size_
       return;
     default:
       result.errors->push_back(
-          diagnostic::makeErrorDeveloperBug(std::source_location::current(),
-                                            "Unexpected program location reached. "
-                                            "Unknown or unimplemented eFlagInterp value."));
+          makeErrorDeveloperBug(std::source_location::current(),
+                                "Unexpected program location reached. "
+                                "Unknown or unimplemented eFlagInterp value."));
       state.is_done = true;
       return;
   }
@@ -758,7 +757,12 @@ static constexpr inline auto kDevModeFlagsMetadata =
                                          .interp = eFlagInterp::kCommand,
                                          .short_name = ' ',
                                          .long_name = "lex",
-                                         .desc = "Lex a source file and output JSON result."});
+                                         .desc = "Lex a source file and output JSON result."},
+                                 CliFlag{.id = eCliFlag::kCommandDevParse,
+                                         .interp = eFlagInterp::kCommand,
+                                         .short_name = ' ',
+                                         .long_name = "parse",
+                                         .desc = "Parse a source file and output JSON result."});
 
 static constexpr inline auto kDevModeLexFlagsMetadata =
     initCliFlagMetadata<CliFlag>(CliFlag{.id = eCliFlag::kSources,
@@ -766,6 +770,14 @@ static constexpr inline auto kDevModeLexFlagsMetadata =
                                          .short_name = ' ',
                                          .long_name = "",
                                          .desc = "C& Source files to lex.",
+                                         .properties = CliFlagProperties{}.Repeatable()});
+
+static constexpr inline auto kCommandDevParseFlagsMetadata =
+    initCliFlagMetadata<CliFlag>(CliFlag{.id = eCliFlag::kSources,
+                                         .interp = eFlagInterp::kPositional,
+                                         .short_name = ' ',
+                                         .long_name = "",
+                                         .desc = "C& Source files to parse.",
                                          .properties = CliFlagProperties{}.Repeatable()});
 
 CliParserResult parseCliMain(CliArgs::const_iterator beg, CliArgs::const_iterator end,
@@ -786,6 +798,11 @@ CliParserResult parseCliCommandDev(CliArgs::const_iterator beg, CliArgs::const_i
 CliParserResult parseCliCommandDevLex(CliArgs::const_iterator beg, CliArgs::const_iterator end,
                                       CliFlagMap& out) noexcept {
   return CliParser<kDevModeLexFlagsMetadata>::parse(beg, end, out);
+}
+
+CliParserResult parseCliCommandDevParse(CliArgs::const_iterator beg, CliArgs::const_iterator end,
+                                      CliFlagMap& out) noexcept {
+  return CliParser<kCommandDevParseFlagsMetadata>::parse(beg, end, out);
 }
 
 std::string helptextCliMain() noexcept { return CliParser<kMainFlagsMetadata>::helptext(); }

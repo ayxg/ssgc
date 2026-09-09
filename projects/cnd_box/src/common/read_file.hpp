@@ -19,25 +19,25 @@
 #include <fstream>
 #include <vector>
 
-#include "diagnostics.hpp"
+#include "diagnostic.hpp"
 
 namespace ssgc::util {
 
-static std::expected<std::string, diagnostic::Diagnostic> readFile(
+static std::expected<std::string, Diagnostic> readFile(
     const std::filesystem::path& file_path) {
   if (!std::filesystem::exists(file_path)) {
     return std::unexpected(
-        diagnostic::makeErrorPlaceholder(std::format("Does not exist : {}", file_path.string())));
+        makeErrorPlaceholder(std::format("Does not exist : {}", file_path.string())));
   }
 
   if (!std::filesystem::is_regular_file(file_path)) {
-    return std::unexpected(diagnostic::makeErrorPlaceholder(
+    return std::unexpected(makeErrorPlaceholder(
         std::format("Not a regular file: {}", file_path.string())));
   }
 
   std::ifstream source_file_stream(file_path);
   if (!source_file_stream.is_open()) {
-    return std::unexpected(diagnostic::makeErrorPlaceholder(
+    return std::unexpected(makeErrorPlaceholder(
         std::format("Could not open file: {}", file_path.string())));
   }
 

@@ -66,16 +66,17 @@
 #include <cstdint>
 #include <format>
 #include <memory>
+#include <ranges>
 #include <source_location>
 #include <span>
 #include <string>
 #include <utility>
 #include <variant>
 #include <vector>
-#include <ranges>
 
 #include "meta_applied_enum.hpp"
-namespace ssgc::diagnostic {
+
+namespace ssgc {
 
 /// Integral type which all message enums must fit in. Currently includes:
 /// eError, eWarning, eGuideline, eInfo.
@@ -103,9 +104,11 @@ using DiagnosticParameterIntT = short;
   sep m(kLexerUnclosedCharacterLiteral)           \
   sep m(kLexerEmptyCharacterLiteral)              \
   sep m(kLexerInvalidPunctuator)                  \
+  sep m(kLexerUnexpectedCodepoint)                \
+  sep m(kLexerUnclosedBlockComment)               \
+  sep m(kParserExpectedToken)\
+  sep m(kParserInvalidSyntax)\
   lst
-
-//
 
 //sep m(kFailedToReadFile)                        \
   //sep m(kParserExpectedDeclaration)               \
@@ -201,6 +204,8 @@ SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eInfoCategory, eInfoC
 
 constexpr eErrorCategory getErrorCategory(eError e) noexcept {
   switch (e) {
+    case eError::kLexerUnclosedStringLiteral:
+      return eErrorCategory::kLexer;
     default:
       return eErrorCategory::kNone;
   }
@@ -368,14 +373,6 @@ using DiagnosticDataUnionT =
 using DiagnosticDataBufferT =
     std::vector<DiagnosticDataUnionT>;  // Buffer of unions of compiler message data types.
 
-// Internal vtable dispatch method for compiler messages.
-//
-// @warning DO NOT call directly - used only in Diagnostic::Format.
-// @see definition further in this header file.
-inline std::string formatDiagnostic(
-    DiagnosticId id,
-    const DiagnosticDataBufferT& data) noexcept;  // MUST be forward declared here.
-
 /////////////////////////////////////////////
 /* Compiler message structure definitions. */
 /////////////////////////////////////////////
@@ -391,7 +388,7 @@ struct Diagnostic {
   DiagnosticDataBufferT data{};
 
   /// Returns formatted message string based on current message data.
-  inline std::string format() const noexcept;
+  // inline std::string format(const TrContext* ctx = nullptr) const noexcept;
 
   constexpr Diagnostic() noexcept = default;
   constexpr Diagnostic(Diagnostic&& other) noexcept = default;
@@ -436,22 +433,30 @@ class Diagnostics {
   Diagnostics(const Diagnostics& other)
       : diagnostics_(std::make_unique<std::vector<Diagnostic>>(*other.diagnostics_)) {}
 
-  /// Returns formatted message strings separated by a newline.
-  std::string format(const std::string& prefix = "") const noexcept {
-    std::string buff{""};
-    for (const auto& msg : *diagnostics_) {
-      buff.append(prefix);
-      buff.append(msg.format());
-      buff.append("\n");
-    }
-    return buff;
-  };
+  Diagnostics& operator=(Diagnostics&& other) {
+    diagnostics_ = std::move(other.diagnostics_);
+    return *this;
+  }
+  Diagnostics& operator=(const Diagnostics& other) {
+    *diagnostics_ = *other.diagnostics_;
+    return *this;
+  }
+  ///// Returns formatted message strings separated by a newline.
+  // std::string format(const std::string& prefix = "") const noexcept {
+  //   std::string buff{""};
+  //   for (const auto& msg : *diagnostics_) {
+  //     buff.append(prefix);
+  //     buff.append(msg.format());
+  //     buff.append("\n");
+  //   }
+  //   return buff;
+  // };
 
   /// @brief Append a range of diagnostics.
-  constexpr void append(const Diagnostics& other) noexcept { 
-    diagnostics_->append_range(std::ranges::subrange(other->cbegin(),other->cend()));
+  constexpr void append(const Diagnostics& other) noexcept {
+    diagnostics_->append_range(std::ranges::subrange(other->cbegin(), other->cend()));
   }
-   
+
   constexpr std::vector<Diagnostic>& operator*() { return *diagnostics_; }
 
   constexpr std::vector<Diagnostic>* operator->() { return diagnostics_.get(); }
@@ -460,301 +465,6 @@ class Diagnostics {
 
   constexpr std::vector<Diagnostic>* operator->() const { return diagnostics_.get(); }
 };
-
-//////////////////////////////////////////////////////////////////////
-/* Forward declare all required formatDiagnostic method specializations. */
-//////////////////////////////////////////////////////////////////////
-//
-// This is required or else the vtable method in formatDiagnostic cannot lookup the method defs.
-// Since every format method signature is the same, we can pre-declare them using macros.
-//
-// @note : When adding new diagnostic enum entries, and the format method has not been defined. A
-// compile time error will be triggered as all enum entries must have a formatter method defined.
-// @important The typename T paramater must be present or else the enum value template will
-// be decayed to an integral so equal values enums will trigger ODR/COMDAT error which is impossible
-// to figure out! You will only get this error if you attempt using this header in multiple
-// translation units. Generated eWarning formatDiagnostic template specialization decls.
-
-template <typename T, eError DIAGNOSTIC>
-inline std::string formatDiagnostic(const DiagnosticDataBufferT& data) noexcept;
-
-template <typename T, eWarning DIAGNOSTIC>
-inline std::string formatDiagnostic(const DiagnosticDataBufferT& data) noexcept;
-
-template <typename T, eGuideline DIAGNOSTIC>
-inline std::string formatDiagnostic(const DiagnosticDataBufferT& data) noexcept;
-
-template <typename T, eInfo DIAGNOSTIC>
-inline std::string formatDiagnostic(const DiagnosticDataBufferT& data) noexcept;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/* Define the manual formatting dispatch method formatDiagnostic(DiagnosticId id, const
- * DiagnosticDataBufferT& data) */
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Declare all specializations here first. So they don't get triggered outside.
-#define SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eError(en) \
-  template <>                                                             \
-  inline std::string formatDiagnostic<eError, eError::en>(                \
-      const DiagnosticDataBufferT& data) noexcept;
-
-#define SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eGuideline(en) \
-  template <>                                                                 \
-  inline std::string formatDiagnostic<eGuideline, eGuideline::en>(            \
-      const DiagnosticDataBufferT& data) noexcept;
-
-#define SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eInfo(en) \
-  template <>                                                            \
-  inline std::string formatDiagnostic<eInfo, eInfo::en>(                 \
-      const DiagnosticDataBufferT& data) noexcept;
-
-#define SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eWarning(en) \
-  template <>                                                               \
-  inline std::string formatDiagnostic<eWarning, eWarning::en>(              \
-      const DiagnosticDataBufferT& data) noexcept;
-
-SSGC_AppliedEnum_eError(SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eError, , , );
-SSGC_AppliedEnum_eGuideline(SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eGuideline, ,
-                            , );
-SSGC_AppliedEnum_eInfo(SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eInfo, , , );
-SSGC_AppliedEnum_eWarning(SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eWarning, , , );
-
-// The 'manual vtable' for FormatClErr method. Dispatches to the specialized template
-// implementations. !warning DO NOT call directly. Called only by 'Diagnostic.Format()'.
-inline std::string formatDiagnostic(DiagnosticId id, const DiagnosticDataBufferT& data) noexcept {
-#define SSGC_LOCAL_MACRO_DispatchDiagnosticFormatError(ec) \
-  case ec:                                                 \
-    return formatDiagnostic<eError, ec>(data);
-#define SSGC_LOCAL_MACRO_DispatchDiagnosticFormatWarning(ec) \
-  case ec:                                                   \
-    return formatDiagnostic<eWarning, ec>(data);
-#define SSGC_LOCAL_MACRO_DispatchDiagnosticFormatGuideline(ec) \
-  case ec:                                                     \
-    return formatDiagnostic<eGuideline, ec>(data);
-#define SSGC_LOCAL_MACRO_DispatchDiagnosticFormatInfo(ec) \
-  case ec:                                                \
-    return formatDiagnostic<eInfo, ec>(data);
-
-  // Make sure we are using the correct global specializations.
-  using ::ssgc::diagnostic::formatDiagnostic;
-
-  switch (static_cast<eDiagnosticType>(id.msg_type)) {
-    case eDiagnosticType::kError:
-      // Handle eError enumeration.
-      {
-        using enum eError;
-        switch (static_cast<eError>(id.code)) {
-          SSGC_AppliedEnum_eError(SSGC_LOCAL_MACRO_DispatchDiagnosticFormatError, , , );
-          default:
-            return "<invalid>";
-        }
-      }
-    case eDiagnosticType::kWarning:
-
-      // Handle eWarning enumeration.
-      {
-        using enum eWarning;
-        switch (static_cast<eWarning>(id.code)) {
-          SSGC_AppliedEnum_eWarning(SSGC_LOCAL_MACRO_DispatchDiagnosticFormatWarning, , , );
-          default:
-            return "<invalid>";
-        }
-      }
-
-    case eDiagnosticType::kGuideline:
-      // Handle eGuideline enumeration.
-      {
-        using enum eGuideline;
-        switch (static_cast<eGuideline>(id.code)) {
-          SSGC_AppliedEnum_eGuideline(SSGC_LOCAL_MACRO_DispatchDiagnosticFormatGuideline, , , );
-          default:
-            return "<invalid>";
-        }
-      }
-    case eDiagnosticType::kInfo:
-      // Handle eInfo enumeration.
-      {
-        using enum eInfo;
-        switch (static_cast<eInfo>(id.code)) {
-          SSGC_AppliedEnum_eInfo(SSGC_LOCAL_MACRO_DispatchDiagnosticFormatInfo, , , );
-          default:
-            return "<invalid>";
-        }
-      }
-
-    default:
-      return "[Uncategorized Compiler Message]";
-  }
-
-// undef function-local
-#undef SSGC_LOCAL_MACRO_DispatchDiagnosticFormat
-}
-
-std::string Diagnostic::format() const noexcept {
-  // debatable if this 'using' is necessary? may help avoid any attempted inheritance trickery.
-  using ::ssgc::diagnostic::formatDiagnostic;  // make sure to use the global declaration.
-  return formatDiagnostic(id, data);           // call the formatting dispatch method.
-};
-
-constexpr DiagnosticDataBufferT convertCppSourceLocationToDiagnosticData(
-    const std::source_location& loc) noexcept {
-  DiagnosticDataBufferT ret;
-  ret.reserve(4);
-  // Fill the vector in declaration order
-  ret.push_back(std::string{loc.file_name()});      // file name (std::string_view)
-  ret.push_back(std::uint64_t{loc.line()});         // line number (size_t)
-  ret.push_back(std::uint64_t{loc.column()});       // column number (size_t)
-  ret.push_back(std::string{loc.function_name()});  // function name (std::string_view)
-  return ret;
-}
-
-inline std::string formatCppSourceLocationDiagnosticData(
-    DiagnosticDataBufferT::const_iterator loc_begin,
-    DiagnosticDataBufferT::const_iterator loc_end) {
-  std::span<const DiagnosticDataUnionT> loc = {loc_begin, loc_end};
-  return std::format("{{file : {}\nline : {}\ncolumn : {}\nfunction : {}}}",
-                     std::get<std::string>(loc[0]), std::get<std::uint64_t>(loc[1]),
-                     std::get<std::uint64_t>(loc[2]), std::get<std::string>(loc[3]));
-}
-
-constexpr std::string formatDiagnosticPrefix(eError e) {
-  std::string ret{"["};
-  ret += eDiagnosticTypeToCStr(getDiagnosticType(e));
-  ret += "][";
-  auto category = getErrorCategory(e);
-  if (category != eErrorCategory::kNone) {
-    ret += eErrorCategoryToCStr(category);
-    ret += "][";
-  }
-  ret += eErrorToCStr(e);
-  ret += "]: ";
-  return ret;
-}
-
-constexpr std::string formatDiagnosticPrefix(eWarning e) {
-  std::string ret{"["};
-  ret += eDiagnosticTypeToCStr(getDiagnosticType(e));
-  ret += "][";
-  auto category = getWarningCategory(e);
-  if (category != eWarningCategory::kNone) {
-    ret += eWarningCategoryToCStr(category);
-    ret += "][";
-  }
-  ret += eWarningToCStr(e);
-  ret += "]: ";
-  return ret;
-}
-
-constexpr std::string formatDiagnosticPrefix(eGuideline e) {
-  std::string ret{"["};
-  ret += eDiagnosticTypeToCStr(getDiagnosticType(e));
-  ret += "][";
-  auto category = getGuidelineCategory(e);
-  if (category != eGuidelineCategory::kNone) {
-    ret += eGuidelineCategoryToCStr(category);
-    ret += "][";
-  }
-  ret += eGuidelineToCStr(e);
-  ret += "]: ";
-  return ret;
-}
-
-constexpr std::string formatDiagnosticPrefix(eInfo e) {
-  std::string ret{"["};
-  ret += eDiagnosticTypeToCStr(getDiagnosticType(e));
-  ret += "][";
-  auto category = getInfoCategory(e);
-  if (category != eInfoCategory::kNone) {
-    ret += eInfoCategoryToCStr(category);
-    ret += "][";
-  }
-  ret += eInfoToCStr(e);
-  ret += "]: ";
-  return ret;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/* Define user-space macros to generate the correct template specializations for a given diagnostic
- * enum entry */
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/// @macro CND_MM_CLMSG_FORMAT_FNSIG
-/// @brief Generates a formatDiagnostic method template specialization signature.
-/// @param en Enum Name.
-/// @param ee Enum Entry.
-///
-/// Used to define a formatting method for a specific eDiagnostic id based on a diagnostic enum.
-/// Method signature:
-///   'std::string formatDiagnostic(const DiagnosticDataBufferT& data)'
-/// Method Locals:
-///   DIAGNOSTIC : the enum entry passed as a template argument.
-///   data : will be the data contained in the Diagnostic which is being formatted.
-#define CND_MM_CLMSG_FORMAT_FNSIG(en, ee) \
-  template <en DIAGNOSTIC>                \
-    requires(DIAGNOSTIC == en::ee)        \
-  constexpr std::string formatDiagnostic(const DiagnosticDataBufferT& data) noexcept
-
-/// @macro CND_MM_CLMSG_FORMAT_FNSIG
-/// @brief Generates a makeDiagnostic method signature.
-/// @param en Enum Name.
-/// @param ee Enum Entry.
-/// @param ... Make method arguments. Types may be anything as long as the developer can provide the
-/// logic to
-///              convert them into a DiagnosticDataBufferT.
-///
-/// Used to define compiler message creation method for a specific eDiagnostic id based on the enum
-/// template parameter. Method signature:
-///   'DiagnosticChain makeDiagnostic(...)'
-///
-/// Method Locals:
-///   'DIAGNOSTIC' : the enum entry passed as a template argument.
-#define CND_MM_CLMSG_MAKE_FNSIG(en, ee, ...) \
-  template <en DIAGNOSTIC>                   \
-    requires(DIAGNOSTIC == en::ee)           \
-  constexpr DiagnosticChain makeDiagnostic(__VA_ARGS__) noexcept
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/* Define example make and formatting methods for the first entry of eError, eWarning, eGuideline
- * and eInfo */
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// The following definitions server only as an example. Other specializations may be defined in
-// 'user-space' from the context of the compiler_message_base implementation.
-//
-// While these method definitions may be defined after, they MUST all be available in the
-// translation unit for the dispatch method to be to look them up.
-
-template <>
-std::string formatDiagnostic<eError, eError::kError>(const DiagnosticDataBufferT& data) noexcept {
-  if (data.size() > 0) {
-    return std::get<std::string>(data[0]);
-  }
-  return "Unknown Error";
-}
-
-template <>
-std::string formatDiagnostic<eWarning, eWarning::kWarning>(
-    const DiagnosticDataBufferT& data) noexcept {
-  if (data.size() > 0) {
-    return std::get<std::string>(data[0]);
-  }
-  return "Unknown Warning";
-}
-template <>
-std::string formatDiagnostic<eGuideline, eGuideline::kGuideline>(
-    const DiagnosticDataBufferT& data) noexcept {
-  if (data.size() > 0) {
-    return std::get<std::string>(data[0]);
-  }
-  return "Unknown Guide";
-}
-template <>
-std::string formatDiagnostic<eInfo, eInfo::kInfo>(const DiagnosticDataBufferT& data) noexcept {
-  if (data.size() > 0) {
-    return std::get<std::string>(data[0]);
-  }
-  return "Unknown Diagnostic";
-}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* Static asserts to validate we are able to use Diagnostic in a constexpr context. */
@@ -767,13 +477,7 @@ static_assert(Diagnostic{eGuideline::kGuideline}.id.code ==
               std::to_underlying(eGuideline::kGuideline));
 static_assert(Diagnostic{eInfo::kInfo}.id.code == std::to_underlying(eInfo::kInfo));
 
-//// Assert that we can access the formatted string in a constexpr context.
-// static_assert(Diagnostic{eError::kError}.format() == "Unknown Error");
-// static_assert(Diagnostic{eWarning::kWarning}.format() == "Unknown Warning");
-// static_assert(Diagnostic{eGuideline::kGuideline}.format() == "Unknown Guide");
-// static_assert(Diagnostic{eInfo::kInfo}.format() == "Unknown Diagnostic");
-
-}  // namespace ssgc::diagnostic
+}  // namespace ssgc
 /// @} // end of cnd_compiler_cldev
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

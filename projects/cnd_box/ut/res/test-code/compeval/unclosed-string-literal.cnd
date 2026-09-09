@@ -1,0 +1,55 @@
+proc @root: {
+
+import lib c;
+
+main(i32 @argc, i8^[] @argv):{
+  
+  for(i32 @i = 0; i < argc; i++){  
+    c::println(c::fmt("{}: {}",i,argv[i]));
+  }
+  
+  if(argc > 1){
+    switch(argv[1]){
+      case "add":{        
+        i32 @lhs;
+        i32 @rhs;
+
+        if(argc > 2) {
+          c::stoi(argv[2]) !? 
+              lhs = _ 
+            : {
+              c::println(_);
+              return c::exit_failure;
+            };  
+        } 
+        else {
+          c::println("Missing left hand side argument for 'add' command.");
+          return c::exit_failure;
+        }
+        
+        if(argc > 3) {
+          c::stoi(argv[3]) !? 
+              lhs = _ 
+            : {
+              c::println(c::fmt("Invalid input integer: {}.",_));
+              return c::exit_failure;
+            };  
+        } 
+        else {
+          c::println("Missing right hand side argument for 'add' command.");
+          return c::exit_failure;
+        }
+        
+        c::println(c::fmt("{} + {} = {}",argv[2],argv[3],lhs + rhs));        
+        return c::exit_success;
+      }
+      default:
+        c::println("Unknown command.");
+        return c::exit_failure;
+    }
+  }
+
+  return c::exit_success;
+};
+
+}; ` proc @root

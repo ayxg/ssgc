@@ -16,14 +16,17 @@
 /// @addtogroup cnd_unit_test
 /// @{
 #pragma once
-#include "compiler_utils/LoadSourceFile.hpp"
+// #include "compiler_utils/LoadSourceFile.hpp"
+#include "compiler/compiler.hpp"
 #include "cxxx_enumerated_flags.hpp"
-#include "frontend/parser.hpp"
+#include "frontend/ast_traits.hpp"
+#include "frontend/syntax_transformer.hpp"
+#include "frontend/synthesized_ast.hpp"
 #include "minitest.hpp"
 
 // Overload ostream >> for eAst enum for minitest library.
-std::ostream& operator<<(std::ostream& os, const cnd::corevals::grammar::eAst& obj) {
-  os << static_cast<std::underlying_type<cnd::corevals::grammar::eAst>::type>(obj);
+std::ostream& operator<<(std::ostream& os, const ssgc::frontend::eAst& obj) {
+  os << static_cast<std::underlying_type<ssgc::frontend::eAst>::type>(obj);
   return os;
 }
 
@@ -34,17 +37,14 @@ using std::span;
 using std::string;
 using std::string_view;
 
-using cnd::Ast;
-using cnd::eAstToCStr;
-using cnd::LoadSourceFile;
-using cnd::Sast;
-using cnd::Tk;
-using cnd::frontend::sanitizeTokens;
-using cnd::frontend::tokenizeSourceCode;
-using cnd::frontend::parser::LLPrsResT;
-using cnd::frontend::parser::TkCursorT;
-
+using ssgc::frontend::Ast;
+using ssgc::frontend::Token;
+using namespace ssgc::frontend::parser;
 using ParsingMethod = LLPrsResT (*)(TkCursorT);
+template <class NodeT>
+using TransformMethod = ssgc::frontend::TransformResult<NodeT> (*)(
+    const Ast& ast, ssgc::frontend::TransformationContext& ctx);
+using Sast = ssgc::frontend::SynthesizedAst;
 
 enum class eTestParsingMethod : int {
   kNone = 0,
@@ -54,35 +54,54 @@ enum class eTestParsingMethod : int {
 };
 using TestParsingMethodFlags = cxx::EnumeratedFlags<eTestParsingMethod>;
 
-static string GenerateSynthesizedAstCode(const Ast& node, std::string::size_type indent = 0) {
+static std::string_view getAstLiteral(const ssgc::SourceFile* src, const std::vector<Token>* tokens,
+                                      const Ast& node) {
+  if (node.sourceBegin() == node.sourceEnd()) {
+    return "";
+  }
+
+  // Trim insignificant tokens
+  const Token* end_token = &tokens->at(node.sourceEnd() - 1);
+
+  while (ssgc::frontend::isTokenInsignificant(end_token->kind)) {
+    end_token--;
+  }
+  return src->slice(tokens->at(node.sourceBegin()).source_range.begin, end_token->source_range.end);
+}
+static string GenerateSynthesizedAstCode(const ssgc::SourceFile* src,
+                                         const std::vector<Token>* tokens, const Ast& node,
+                                         std::string::size_type indent = 0) {
   string synth_branches{};
   string this_indent(indent * 2, ' ');
 
-  for (auto it = node.children.cbegin(); it < node.children.cend(); it++) {
-    if (it == node.children.cend() - 1)
-      synth_branches += GenerateSynthesizedAstCode(*it, indent + 1);
+  for (auto it = node.branches.cbegin(); it < node.branches.cend(); it++) {
+    if (it == node.branches.cend() - 1)
+      synth_branches += GenerateSynthesizedAstCode(src, tokens, *it, indent + 1);
     else
-      synth_branches += GenerateSynthesizedAstCode(*it, indent + 1) + ",\n";
+      synth_branches += GenerateSynthesizedAstCode(src, tokens, *it, indent + 1) + ",\n";
   }
 
-  return format("{0}Sast{{{1},\"{2}\"{3}", this_indent, eAstToCStr(node.type),
-                node.IsLiteralSignificant() ? node.GetLiteral() : "",
-                synth_branches.empty() ? format("}}", synth_branches, this_indent)
-                                       : format(",\n{}\n{}}}", synth_branches, this_indent));
+  return std::format(
+      "{0}Sast{{{1},\"{2}\"{3}", this_indent, eAstToCStr(node.type),
+      ssgc::isAstLiteralSignificant(node.type) ? getAstLiteral(src, tokens, node) : "",
+      synth_branches.empty() ? format("}}", synth_branches, this_indent)
+                             : format(",\n{}\n{}}}", synth_branches, this_indent));
 }
 
-static void PrintSynthesizedAstCode(const Ast& node, std::string file_path) {
+static void PrintSynthesizedAstCode(const ssgc::SourceFile* src, const std::vector<Token>* tokens,
+                                    const Ast& node, std::string file_path) {
   std::ofstream file;
   file.open(file_path, std::ios::out | std::ios::trunc);
   if (file.is_open()) {
-    file << GenerateSynthesizedAstCode(node);
+    file << GenerateSynthesizedAstCode(src, tokens, node);
   }
   file.close();
 }
 
 // Compare two produced asts using minitest to log any inequality.
 // @see `TestParsingMethod`
-static bool TestCompareAst(const Ast& node1, const Ast& node2, TestParsingMethodFlags flags = {}) {
+static bool TestCompareAst(const ssgc::SourceFile* src, const std::vector<Token>* tokens,
+                           const Ast& node1, const Ast& node2, TestParsingMethodFlags flags = {}) {
   // Compare node types
   EXPECT_EQ_LOG(node1.type, node2.type,
                 format("Ast type {} not equal {}.", eAstToCStr(node1.type), eAstToCStr(node2.type)),
@@ -91,29 +110,33 @@ static bool TestCompareAst(const Ast& node1, const Ast& node2, TestParsingMethod
 
   // Compare node values
   bool is_compare_literals = true;
-  if (flags.Check(eTestParsingMethod::kCompareSignificantOnly) && !node1.IsLiteralSignificant())
+  if (flags.Check(eTestParsingMethod::kCompareSignificantOnly) &&
+      !ssgc::isAstLiteralSignificant(node1.type)) {
     is_compare_literals = false;
+  }
+
   // Overrides kCompareSignificantOnly flag.
   if (flags.Check(eTestParsingMethod::kCompareTypeOnly)) is_compare_literals = false;
 
   if (is_compare_literals) {
-    auto lit1 = node1.GetLiteral();
-    auto lit2 = node2.GetLiteral();
+    auto lit1 = getAstLiteral(src, tokens, node1);
+    auto lit2 = getAstLiteral(src, tokens, node2);
     EXPECT_EQ_LOG(lit1, lit2, format("Ast literal '{}' not equal '{}'.", lit1, lit2),
                   "Ast Literal Comp.");
     if (lit1 != lit2) return false;
   }
 
   // Compare number of Children
-  EXPECT_TRUE_LOG(node1.children.size() != node2.children.size(),
-                  format("Ast branch quantity not equal. Left: {} Right: {}.",
-                         node1.children.size(), node2.children.size()),
+  EXPECT_TRUE_LOG(node1.branches.size() != node2.branches.size(),
+                  std::format("Ast branch quantity not equal. Left: {} Right: {}.",
+                              node1.branches.size(), node2.branches.size()),
                   "Ast Size Comp.");
-  if (node1.children.size() != node2.children.size()) return false;
+  if (node1.branches.size() != node2.branches.size()) return false;
 
   // Recursively compare Children
-  for (size_t i = 0; i < node1.children.size(); ++i)
-    if (!TestCompareAst(node1.children.at(i), node2.children.at(i), flags)) return false;
+  for (size_t i = 0; i < node1.branches.size(); ++i)
+    if (!TestCompareAst(src, tokens, node1.branches.at(i), node2.branches.at(i), flags))
+      return false;
 
   // If all checks pass, the ASTs are equal
   return true;
@@ -121,27 +144,30 @@ static bool TestCompareAst(const Ast& node1, const Ast& node2, TestParsingMethod
 
 // Compare a produced ast to a synthesized ast using minitest to log any inequality.
 // @see `TestParsingMethod`
-static bool TestCompareAst(const Ast& node1, const Sast& node2, TestParsingMethodFlags flags = {}) {
+static bool TestCompareAst(const ssgc::SourceFile* src, const std::vector<Token>* tokens,
+                           const Ast& node1, const Sast& node2, TestParsingMethodFlags flags = {}) {
   EXPECT_EQ_LOG(
       node1.type, node2.type,
       format("Ast type {} not equal {}.", eAstToCStr(node1.type), eAstToCStr(node2.type)));
   if (node1.type != node2.type) return false;
   bool is_compare_literals = true;
-  if (flags.Check(eTestParsingMethod::kCompareSignificantOnly) && !node1.IsLiteralSignificant())
+  if (flags.Check(eTestParsingMethod::kCompareSignificantOnly) &&
+      !ssgc::isAstLiteralSignificant(node1.type))
     is_compare_literals = false;
   if (flags.Check(eTestParsingMethod::kCompareTypeOnly)) is_compare_literals = false;
   if (is_compare_literals) {
-    auto lit1 = node1.GetLiteral();
+    auto lit1 = getAstLiteral(src, tokens, node1);
     auto& lit2 = node2.literal;
     EXPECT_EQ_LOG(lit1, lit2, format("Ast literal '{}' not equal '{}'.", lit1, lit2));
     if (lit1 != lit2) return false;
   }
-  EXPECT_TRUE_LOG(node1.children.size() == node2.children.size(),
+  EXPECT_TRUE_LOG(node1.branches.size() == node2.branches.size(),
                   std::format("Ast branch quantity not equal. Left: {} Right: {}.",
-                              node1.children.size(), node2.children.size()));
-  if (node1.children.size() != node2.children.size()) return false;
-  for (size_t i = 0; i < node1.children.size(); ++i)
-    if (!TestCompareAst(node1.children.at(i), node2.children.at(i), flags)) return false;
+                              node1.branches.size(), node2.branches.size()));
+  if (node1.branches.size() != node2.branches.size()) return false;
+  for (size_t i = 0; i < node1.branches.size(); ++i)
+    if (!TestCompareAst(src, tokens, node1.branches.at(i), node2.branches.at(i), flags))
+      return false;
   return true;
 }
 
@@ -155,24 +181,35 @@ static bool TestCompareAst(const Ast& node1, const Sast& node2, TestParsingMetho
 //    syntax.
 static void TestParsingMethod(string_view code, ParsingMethod fn,
                               TestParsingMethodFlags flags = {}) {
-  string err_msg_buffer{};
-  string loaded_source{};
+  ssgc::Compiler comp{};
 
+  // Load/generate source file data.
+  const ssgc::SourceFile* src = nullptr;
   if (flags.Check(eTestParsingMethod::kLoadFromFile)) {
-    auto load_res = LoadSourceFile<char>(code);
-    err_msg_buffer = load_res ? "" : load_res.error().Format();
-    ASSERT_TRUE_LOG(load_res.has_value(), err_msg_buffer, "Loaded source file.");
-    loaded_source = load_res->data();
+    src = comp.loadSource(code);
+
+    ASSERT_TRUE_LOG(!comp.errorOccured(),
+                    comp.errorOccured() ? formatDiagnostic(comp.getLastError(), &comp.context) : "",
+                    "Loaded source file.");
+
+  } else {
+    src = comp.generateSource("_ut_parser_", code);
   }
 
-  auto expected_source =
-      tokenizeSourceCode(flags.Check(eTestParsingMethod::kLoadFromFile) ? loaded_source : code);
-  err_msg_buffer = expected_source ? "" : expected_source.error().Format();
-  ASSERT_TRUE_LOG(expected_source.has_value(), err_msg_buffer, "Lex is valid.");
-  auto source = sanitizeTokens(*expected_source);
-  span<const Tk> src_view = source;
-  auto parse_result = fn(TkCursorT{src_view.begin(), src_view.end()});
-  err_msg_buffer = parse_result ? "" : parse_result.error().Format();
+  // Tokenize.
+  const std::vector<ssgc::frontend::Token>* tokens = comp.tokenize(src->id);
+  std::string err_msg_buffer{""};
+  if (comp.errorOccured()) {
+    auto [err_begin, err_end] = comp.getErrorRange();
+    for (const auto& diag : std::ranges::subrange(err_begin, err_end)) {
+      err_msg_buffer += formatDiagnostic(diag, &comp.context);
+      err_msg_buffer += '\n';
+    }
+  }
+  ASSERT_TRUE_LOG(!comp.errorOccured(), err_msg_buffer, "Loaded source file.");
+
+  auto parse_result = fn({0, tokens->data(), tokens->data() + tokens->size()});
+  err_msg_buffer = parse_result ? "" : formatDiagnostic(parse_result.error(), &comp.context);
   ASSERT_TRUE_LOG(parse_result.has_value(), err_msg_buffer, "Parse is valid.");
 
   static string last_test_suite_name{""};
@@ -182,12 +219,12 @@ static void TestParsingMethod(string_view code, ParsingMethod fn,
   if (last_test_suite_name == CURRENT_TEST_SUITE_NAME &&
       last_test_case_name == CURRENT_TEST_CASE_NAME) {
     last_test_counter++;
-    PrintSynthesizedAstCode(parse_result->ast,
+    PrintSynthesizedAstCode(src, tokens, parse_result->ast,
                             format("_ut_generated_code/{}{}{}.txt", CURRENT_TEST_SUITE_NAME,
                                    CURRENT_TEST_CASE_NAME, last_test_counter));
   } else {
     PrintSynthesizedAstCode(
-        parse_result->ast,
+        src, tokens, parse_result->ast,
         format("_ut_generated_code/{}{}.txt", CURRENT_TEST_SUITE_NAME, CURRENT_TEST_CASE_NAME));
     last_test_suite_name = CURRENT_TEST_SUITE_NAME;
     last_test_case_name = CURRENT_TEST_CASE_NAME;
@@ -207,33 +244,93 @@ static void TestParsingMethod(string_view code, ParsingMethod fn,
 //
 // Note the expected ast should be passed as a synthesized ast, unlike regular ast it stores the
 // literal value internally - avoiding the lexing stage.
-static void TestParsingMethod(string_view code, ParsingMethod fn, const cnd::Sast& expected,
+static void TestParsingMethod(string_view code, ParsingMethod fn, const Sast& expected,
                               TestParsingMethodFlags flags = {}) {
-  string err_msg_buffer{};
-  string loaded_source{""};
+  ssgc::Compiler comp{};
 
+  // Load/generate source file data.
+  const ssgc::SourceFile* src = nullptr;
   if (flags.Check(eTestParsingMethod::kLoadFromFile)) {
-    auto load_res = LoadSourceFile<char>(code);
-    err_msg_buffer = load_res ? "" : load_res.error().Format();
-    ASSERT_TRUE_LOG(load_res.has_value(), err_msg_buffer, "Loaded source file.");
-    loaded_source = load_res->data();
+    src = comp.loadSource(code);
+
+    ASSERT_TRUE_LOG(!comp.errorOccured(),
+                    comp.errorOccured() ? formatDiagnostic(comp.getLastError(), &comp.context) : "",
+                    "Loaded source file.");
+
+  } else {
+    src = comp.generateSource("_ut_parser_", code);
   }
 
-  auto expected_source =
-      tokenizeSourceCode(flags.Check(eTestParsingMethod::kLoadFromFile) ? loaded_source : code);
-  err_msg_buffer = expected_source ? "" : expected_source.error().Format();
-  ASSERT_TRUE_LOG(expected_source.has_value(), err_msg_buffer, "Lex is valid.");
-  auto source = sanitizeTokens(*expected_source);
-  span<const Tk> src_view = source;
-  auto parse_result = fn(TkCursorT{src_view.begin(), src_view.end()});
-  err_msg_buffer = parse_result ? "" : parse_result.error().Format();
+  // Tokenize.
+  const std::vector<ssgc::frontend::Token>* tokens = comp.tokenize(src->id);
+  std::string err_msg_buffer{""};
+  if (comp.errorOccured()) {
+    auto [err_begin, err_end] = comp.getErrorRange();
+    for (const auto& diag : std::ranges::subrange(err_begin, err_end)) {
+      err_msg_buffer += formatDiagnostic(diag, &comp.context);
+      err_msg_buffer += '\n';
+    }
+  }
+  ASSERT_TRUE_LOG(!comp.errorOccured(), err_msg_buffer, "Loaded source file.");
+
+  auto parse_result = fn({0, tokens->data(), tokens->data() + tokens->size()});
+  err_msg_buffer = parse_result ? "" : formatDiagnostic(parse_result.error(), &comp.context);
   ASSERT_TRUE_LOG(parse_result.has_value(), err_msg_buffer, "Parse is valid.");
-  ASSERT_TRUE_LOG(TestCompareAst(parse_result->ast, expected, flags),
-                  format("Expected syntax tree is not equal:\n[Expected]:\n{}\n[Parsed]:\n{}\n",
-                         expected.Format(), parse_result->ast.Format()),
-                  "Expected syntax tree is equal.");
+
+  ASSERT_TRUE_LOG(
+      TestCompareAst(src, tokens, parse_result->ast, expected, flags),
+      std::format("Expected syntax tree is not equal:\n[Expected]:\n{}\n[Parsed]:\n{}\n",
+                  expected.Format(), parse_result->ast.Format(src, tokens)),
+      "Expected syntax tree is equal.");
 }
 
+template <class NodeT>
+static void TestTransformMethod(string_view code, ParsingMethod fn,
+                                TransformMethod<NodeT> transform_fn,
+                                TestParsingMethodFlags flags = {}) {
+  ssgc::Compiler comp{};
+
+  // Load/generate source file data.
+  const ssgc::SourceFile* src = nullptr;
+  if (flags.Check(eTestParsingMethod::kLoadFromFile)) {
+    src = comp.loadSource(code);
+
+    ASSERT_TRUE_LOG(!comp.errorOccured(),
+                    comp.errorOccured() ? formatDiagnostic(comp.getLastError(), &comp.context) : "",
+                    "Loaded source file.");
+
+  } else {
+    src = comp.generateSource("_ut_parser_", code);
+  }
+
+  // Tokenize.
+  const std::vector<ssgc::frontend::Token>* tokens = comp.tokenize(src->id);
+  std::string err_msg_buffer{""};
+  if (comp.errorOccured()) {
+    auto [err_begin, err_end] = comp.getErrorRange();
+    for (const auto& diag : std::ranges::subrange(err_begin, err_end)) {
+      err_msg_buffer += formatDiagnostic(diag, &comp.context);
+      err_msg_buffer += '\n';
+    }
+  }
+  ASSERT_TRUE_LOG(!comp.errorOccured(), err_msg_buffer, "Loaded source file.");
+
+  // Parse
+  auto parse_result = fn({0, tokens->data(), tokens->data() + tokens->size()});
+  err_msg_buffer = parse_result ? "" : formatDiagnostic(parse_result.error(), &comp.context);
+  ASSERT_TRUE_LOG(parse_result.has_value(), err_msg_buffer, "Parse is valid.");
+
+  ssgc::frontend::TransformationContext transform_context{.id_table = comp.context.id_table,
+                                                          .string_table = comp.context.string_table,
+                                                          .source_file = *src,
+                                                          .tokens = *tokens};
+  ssgc::frontend::TransformResult<NodeT> transform_result = transform_fn(parse_result->ast, transform_context);
+  ASSERT_TRUE_LOG(transform_result.diagnostics->empty(),
+                  formatDiagnostic(transform_result.diagnostics, &comp.context),
+                  "Transform is valid.");
+
+
+}
 }  // namespace cnd_unit_test::frontend::test_util
 
 /// @} // end of cnd_unit_test

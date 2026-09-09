@@ -13,13 +13,13 @@
 
 /// @addtogroup ssgc_util
 /// @{
-#include "util_logger.hpp"
+#include "logger.hpp"
 
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 
-#include "util_enum_verbosity.hpp"
+#include "enum_verbosity.hpp"
 
 namespace ssgc::util {
 

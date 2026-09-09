@@ -7,11 +7,11 @@
 // @website: https://www.acpp.dev
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file
-/// @ingroup ssgc_util
+/// @ingroup cand_compiler_data
 /// @brief
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// @addtogroup ssgc_util
+/// @addtogroup cand_compiler_data
 /// @{
 #pragma once
 #include <cstdlib>
@@ -24,29 +24,51 @@
 #include <unordered_map>
 #include <vector>
 
-#include "cli_parser.hpp"
-#include "diagnostics.hpp"
-#include "util_logger.hpp"
-#include "util_source_manager.hpp"
-#include "util_string_interner.hpp"
-
 namespace ssgc {
 
-struct TrContext {
-  util::StringInterner interner{};
-  util::SourceManager sources{};
-  util::Logger log{};
-  cli::CliFlagMap args{};
-  diagnostic::Diagnostics diagnostics{};
+using StringId = std::size_t;
 
-  void printDiagnostics() { 
-    log.err << diagnostics.format();
+class StringInterner {
+  std::vector<std::unique_ptr<std::string>> strings_{};
+  std::unordered_map<std::string_view, StringId> lookup_{};
+
+ public:
+  static constexpr StringId kInvalidId = std::numeric_limits<StringId>::max();
+  bool contains(std::string_view data) const { return lookup_.find(data) != lookup_.end(); }
+
+  StringId push(std::string_view data) {
+    auto found = lookup_.find(data);
+    if (found != lookup_.end()) {
+      return found->second;
+    }
+    strings_.push_back(std::make_unique<std::string>(data.data()));
+    return strings_.size() - 1;
+  }
+
+  const std::string* get(StringId id) const {
+    if (id >= strings_.size()) {
+      return nullptr;
+    }
+    return strings_[id].get();
+  }
+
+  StringId find(std::string_view data) const noexcept {
+    auto found = lookup_.find(data);
+    if (found != lookup_.end()) {
+      return found->second;
+    }
+    return kInvalidId;
+  }
+
+  void clear() {
+    strings_.clear();
+    lookup_.clear();
   }
 };
 
-}  // namespace ssgc
+}  // namespace ssgc::util
 
-/// @} // end of ssgc_util
+/// @} // end of cand_compiler_data
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // @project: C& Programming Language

@@ -13,7 +13,7 @@
 
 /// @addtogroup ssgc_cli
 /// @{
-#include "cli_ansi.hpp"
+#include "ansi.hpp"
 
 #include <string_view>
 

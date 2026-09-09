@@ -63,7 +63,7 @@ TEST(UtCompilerCli, VersionModeRun) {
 }
 
 TEST(UtCompilerCli, CommandDevLex) {
-  DummyArgv args{"ssgc", "dev", "lex", "test-code/compeval/0-return-zero.cnd"};
+  DummyArgv args{"ssgc", "dev", "parse", "test-code/compeval/unclosed-string-literal.cnd"};
   int cl_out = ssgcRunCommandLineInterface(args.GetArgc(), args.GetArgv());
   ASSERT_TRUE(cl_out == EXIT_SUCCESS);
 }

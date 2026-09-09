@@ -17,6 +17,7 @@
 #include <cstdlib>
 #include <functional>
 #include <map>
+#include <memory>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -24,46 +25,50 @@
 #include <unordered_map>
 #include <vector>
 
-namespace ssgc::util {
+#include "read_file.hpp"
+#include "string_interner.hpp"
+namespace ssgc {
 
-using StringId = std::size_t;
+using SourceFileId = std::size_t;
 
-class StringInterner {
-  std::vector<std::unique_ptr<std::string>> strings_{};
-  std::unordered_map<std::string_view, StringId> lookup_{};
+struct SourceFile {
+  std::size_t id{};
+  std::size_t path{};
+  std::string data{};
+  std::vector<std::size_t> line_offsets{};
 
+  SourceFile();
+
+  SourceFile(std::size_t id, std::size_t file_path, const std::string& data);
+
+  SourceFile(std::size_t id, std::size_t file_path, std::string&& data);
+
+  void recalculateLineOffsets();
+
+  std::string_view slice(std::size_t begin, std::size_t end) const noexcept;
+  std::string_view view() const noexcept;
+  std::pair<std::size_t, std::size_t> linecol(std::size_t offset) const noexcept;
+};
+
+class SourceManager {
  public:
-  static constexpr StringId kInvalidId = std::numeric_limits<StringId>::max();
-  bool contains(std::string_view data) const { return lookup_.find(data) != lookup_.end(); }
+  std::expected<const SourceFile*, Diagnostic> load(std::string_view file_path,
+                                                                bool overwrite = true) noexcept;
+  std::expected<const SourceFile*, Diagnostic> generate(std::string_view file_path,std::string_view data,
+                                                    bool overwrite = true) noexcept;
 
-  StringId push(std::string_view data) {
-    auto found = lookup_.find(data);
-    if (found != lookup_.end()) {
-      return found->second;
-    }
-    strings_.push_back(std::make_unique<std::string>(data.data()));
-    return strings_.size() - 1;
-  }
 
-  const std::string* get(StringId id) const {
-    if (id >= strings_.size()) {
-      return nullptr;
-    }
-    return strings_[id].get();
-  }
+  bool unload(std::size_t file_id) noexcept;
+  const SourceFile* get(std::size_t file_id) const noexcept;
+  bool contains(std::string_view file_path) const noexcept;
+  std::string_view pathof(std::size_t file_id) const noexcept;
+  std::string_view pathof(const SourceFile* source_file) const noexcept;
 
-  StringId find(std::string_view data) const noexcept {
-    auto found = lookup_.find(data);
-    if (found != lookup_.end()) {
-      return found->second;
-    }
-    return kInvalidId;
-  }
-
-  void clear() {
-    strings_.clear();
-    lookup_.clear();
-  }
+ private:
+  StringInterner intern_{};
+  std::vector<std::unique_ptr<SourceFile>> files_{};
+  std::unordered_map<std::size_t, std::size_t> lookup_{};
+  std::vector<std::size_t> free_slots_{};
 };
 
 }  // namespace ssgc::util

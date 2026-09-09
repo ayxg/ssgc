@@ -17,8 +17,8 @@
 #include <string>
 #include <string_view>
 
-#include "frontend_enum_token.hpp"
-
+#include "enum_token.hpp"
+#include "../common/source_range_raw.hpp"
 namespace ssgc::frontend {
 
 /// @brief C& source token structure.
@@ -86,9 +86,7 @@ struct Token {
 
   // public:
   eToken kind{eToken::kNone};
-  std::size_t file{0};
-  std::size_t offset{0};
-  std::size_t size{0};
+  SourceRangeRaw source_range{};
   //std::size_t beg_line_{0};
   //std::size_t end_line_{0};
   //std::size_t beg_col_{0};
@@ -236,7 +234,7 @@ namespace ssgc::frontend {
 //constexpr bool Token::operator!=(const Token& rhs) const { return !(*this == rhs); }
 
 }  // namespace ssgc::frontend
-// #include "tk.tpp"
+
 
 /// @} // end of cand_compiler_data
 

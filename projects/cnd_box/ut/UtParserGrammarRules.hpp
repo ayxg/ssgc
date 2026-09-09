@@ -19,20 +19,19 @@
 // !!Keep clang format OFF for this file ,or else expected ast constructors will be unreadable.
 // clang-format off
 #include "minitest.hpp"
-#include "frontend/parser.hpp"
+#include "compiler/compiler.hpp"
 #include "ParserTestUtils.hpp"
 
 namespace cnd_unit_test::frontend::parser {
 // Alias synthesized ast and ast enum to reduce noise for 'expected' ast construction.
-using Sast = cnd::Sast;
-using enum cnd::eAst;
+using Sast = ssgc::frontend::SynthesizedAst;
+using enum ssgc::frontend::eAst;
 
 // Method used for unit testing in this header
-using cnd_unit_test::frontend::test_util::TestParsingMethod;
-using enum cnd_unit_test::frontend::test_util::eTestParsingMethod;
+using namespace cnd_unit_test::frontend::test_util;
 
 // The namespace being tested from "trtools/Parser.hpp" header.
-using namespace cnd::frontend::parser;
+using namespace ssgc::frontend::parser;
 
 ///////////////////////////////////////
 /* Primary Statement         */
@@ -65,7 +64,7 @@ TEST(UtParserGrammarRules, IncludeLocal) {
 
 TEST(UtParserGrammarRules, IncludeSystem) {
   TestParsingMethod("include <foo.cnd>;", ParseIncludeStmt,
-    Sast{kIncludeSystemStmt,"include<foo.cnd>;",
+    Sast{kIncludeSystemStmt,"include <foo.cnd>;",
       Sast{kIACharSeuquence,"<foo.cnd>"}
     }
   );
@@ -125,13 +124,13 @@ TEST(UtParserGrammarRules, ProcessDef) {
 }
 
 TEST(UtParserGrammarRules, ProcessDefWithStatements) {
-  TestParsingMethod("proc@FooProcess:{const def str@Foo: 42;using @MyInteger: int;};", ParseProcDecl,
-    Sast{kProcessDeclaration,"proc@FooProcess:{constdefstr@Foo:42;using@MyInteger:int;}",
+  TestParsingMethod("proc@FooProcess:{const def str@Foo:42; using@MyInteger:int;};", ParseProcDecl,
+    Sast{kProcessDeclaration,"proc@FooProcess:{const def str@Foo:42; using@MyInteger:int;}",
       Sast{kModifiers,""},
       Sast{kIdent,"FooProcess"},
       Sast{kProcessDefinition,"",
-        Sast{kVariableDeclaration,"constdefstr@Foo:42;",
-          Sast{kModifiers,"",
+        Sast{kVariableDeclaration,"const def str@Foo:42;",
+          Sast{kModifiers,"const",
             Sast{kKwConst,"const"}
           },
           Sast{kKwStr,"str"},
@@ -155,7 +154,7 @@ TEST(UtParserGrammarRules, ProcessDefWithStatements) {
 ///////////////////////////////////////
 TEST(UtParserGrammarRules, LibDecl) {
   TestParsingMethod("lib @FooLibrary;", ParseLibDecl,
-  Sast{kLibraryDeclaration,"lib@FooLibrary;",
+  Sast{kLibraryDeclaration,"lib @FooLibrary;",
     Sast{kModifiers,""},
     Sast{kIdent,"FooLibrary"}
   }
@@ -168,8 +167,8 @@ TEST(UtParserGrammarRules, LibDef) {
 
 TEST(UtParserGrammarRules, LibWithMod) {
   TestParsingMethod("const static lib@MathLib;", ParseLibDecl,
-    Sast{kLibraryDeclaration,"conststaticlib@MathLib;",
-      Sast{kModifiers,"",
+    Sast{kLibraryDeclaration,"const static lib@MathLib;",
+      Sast{kModifiers,"const static",
         Sast{kKwConst,"const"},
         Sast{kKwStatic,"static"}
       },
@@ -179,16 +178,16 @@ TEST(UtParserGrammarRules, LibWithMod) {
 }
 
 TEST(UtParserGrammarRules, LibWithModAndDefinition) {
-  TestParsingMethod("const static lib@MathLib:{const def str@Foo: 42;using @MyInteger: int;};", ParseLibDecl,
-    Sast{kLibraryDeclaration,"conststaticlib@MathLib:{constdefstr@Foo:42;using@MyInteger:int;};",
-      Sast{kModifiers,"",
+  TestParsingMethod("const static lib@MathLib:{const def str@Foo:42; using@MyInteger:int;};", ParseLibDecl,
+    Sast{kLibraryDeclaration,"const static lib@MathLib:{const def str@Foo:42; using@MyInteger:int;};",
+      Sast{kModifiers,"const static",
         Sast{kKwConst,"const"},
         Sast{kKwStatic,"static"}
       },
       Sast{kIdent,"MathLib"},
       Sast{kLibraryDefinition,"",
-        Sast{kVariableDeclaration,"constdefstr@Foo:42;",
-          Sast{kModifiers,"",
+        Sast{kVariableDeclaration,"const def str@Foo:42;",
+          Sast{kModifiers,"const",
             Sast{kKwConst,"const"}
           },
           Sast{kKwStr,"str"},
@@ -212,7 +211,7 @@ TEST(UtParserGrammarRules, LibWithModAndDefinition) {
 ///////////////////////////////////////
 TEST(UtParserGrammarRules, TypeAlias) {
   TestParsingMethod("using @MyInteger: int;", ParseUsingDecl,
-    Sast{kTypeAlias,"using@MyInteger:int;",
+    Sast{kTypeAlias,"using @MyInteger: int;",
       Sast{kIdent,"MyInteger"},
       Sast{kKwInt,"int"}
     }
@@ -221,7 +220,7 @@ TEST(UtParserGrammarRules, TypeAlias) {
 
 TEST(UtParserGrammarRules, LibraryNamespaceInclusion) {
  TestParsingMethod("using lib my_math_lib;", ParseUsingDecl,
-    Sast{kLibraryNamespaceInclusion,"usinglibmy_math_lib;",
+    Sast{kLibraryNamespaceInclusion,"using lib my_math_lib;",
       Sast{kIdent,"my_math_lib"}
     }    
   );
@@ -267,8 +266,8 @@ TEST(UtParserGrammarRules, VariableDeclarationNoTypeNoAssignNoMod) {
 
 TEST(UtParserGrammarRules, VariableDeclarationNoTypeNoAssign) {
   TestParsingMethod("const def@Foo;", parser::ParseVariableDecl,
-    Sast{kVariableDeclaration,"constdef@Foo;",
-      Sast{kModifiers,"",
+    Sast{kVariableDeclaration,"const def@Foo;",
+      Sast{kModifiers,"const",
         Sast{kKwConst,"const"}
       },
       Sast{kKwAny,""},
@@ -279,8 +278,8 @@ TEST(UtParserGrammarRules, VariableDeclarationNoTypeNoAssign) {
 
 TEST(UtParserGrammarRules, VariableDeclarationNoAssign) {
   TestParsingMethod("const def str@Foo;", parser::ParseVariableDecl,
-    Sast{kVariableDeclaration,"constdefstr@Foo;",
-      Sast{kModifiers,"",
+    Sast{kVariableDeclaration,"const def str@Foo;",
+      Sast{kModifiers,"const",
         Sast{kKwConst,"const"}
       },
       Sast{kKwStr,"str"},
@@ -290,9 +289,9 @@ TEST(UtParserGrammarRules, VariableDeclarationNoAssign) {
 }
 
 TEST(UtParserGrammarRules, VariableDefinition) {
-  TestParsingMethod("const def str@Foo: 42;", ParseVariableDecl,
-    Sast{kVariableDeclaration,"constdefstr@Foo:42;",
-      Sast{kModifiers,"",
+  TestParsingMethod("const def str@Foo:42;", ParseVariableDecl,
+    Sast{kVariableDeclaration,"const def str@Foo:42;",
+      Sast{kModifiers,"const",
         Sast{kKwConst,"const"}
       },
       Sast{kKwStr,"str"},
@@ -323,14 +322,15 @@ TEST(UtParserGrammarRules, MethodDeclImplicitVoidArgNoRet2) {
     Sast{kMethodDeclaration,"fn@add();",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
-      Sast{kMethodSignature,"",
+      Sast{kMethodSignature,"()",
         Sast{kMethodParameterList,"()",
           Sast{kMethodParameter,"",
-            Sast{kMethodVoid,""}
+            Sast{kKwVoid,""},
+            Sast{kIdent,""}
           }
         },
         Sast{kMethodReturnType,"",
-          Sast{kMethodVoid,""}
+          Sast{kKwVoid,""}
         }
       }
     }    
@@ -345,7 +345,7 @@ TEST(UtParserGrammarRules, MethodDeclImplicitVoidArgAnyRet) {
       Sast{kMethodSignature,"",
         Sast{kMethodParameterList,"",
           Sast{kMethodParameter,"",
-            Sast{kMethodVoid,""}
+            Sast{kKwVoid,""}
           }
         },
         Sast{kMethodReturnType,"",
@@ -361,10 +361,11 @@ TEST(UtParserGrammarRules, MethodDeclImplicitVoidArgAnyRet2) {
     Sast{kMethodDeclaration,"fn@add()>;",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
-      Sast{kMethodSignature,"",
+      Sast{kMethodSignature,"()>",
         Sast{kMethodParameterList,"()",
           Sast{kMethodParameter,"",
-            Sast{kMethodVoid,""}
+            Sast{kKwVoid,""},
+            Sast{kIdent,""}
           }
         },
         Sast{kMethodReturnType,"",
@@ -376,29 +377,23 @@ TEST(UtParserGrammarRules, MethodDeclImplicitVoidArgAnyRet2) {
 }
 
 TEST(UtParserGrammarRules, MethodDeclArgNoRet) {
-  TestParsingMethod("fn@add(a,b);", ParseMethodDecl,
-    Sast{kMethodDeclaration,"fn@add(a,b);",
+  TestParsingMethod("fn@add(@a,@b);", ParseMethodDecl,
+    Sast{kMethodDeclaration,"fn@add(@a,@b);",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
-      Sast{kMethodSignature,"",
-        Sast{kMethodParameterList,"",
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,"",
-              Sast{kNONE,""}
-            },
+      Sast{kMethodSignature,"(@a,@b)",
+        Sast{kMethodParameterList,"(@a,@b)",
+          Sast{kMethodParameter,"@a",
             Sast{kKwAny,""},
             Sast{kIdent,"a"}
           },
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,"",
-              Sast{kNONE,""}
-            },
+          Sast{kMethodParameter,"@b",
             Sast{kKwAny,""},
             Sast{kIdent,"b"}
           }
         },
         Sast{kMethodReturnType,"",
-          Sast{kMethodVoid,""}
+          Sast{kKwVoid,""}
         }
       }
     }    
@@ -406,23 +401,17 @@ TEST(UtParserGrammarRules, MethodDeclArgNoRet) {
 }
 
 TEST(UtParserGrammarRules, MethodDeclArgAnyRet) {
-  TestParsingMethod("fn@add(a,b)>;", ParseMethodDecl,
-    Sast{kMethodDeclaration,"fn@add(a,b)>;",
+  TestParsingMethod("fn@add(@a,@b)>;", ParseMethodDecl,
+    Sast{kMethodDeclaration,"fn@add(@a,@b)>;",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
-      Sast{kMethodSignature,"",
-        Sast{kMethodParameterList,"",
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,"",
-              Sast{kNONE,""}
-            },
+      Sast{kMethodSignature,"(@a,@b)>",
+        Sast{kMethodParameterList,"(@a,@b)",
+          Sast{kMethodParameter,"@a",
             Sast{kKwAny,""},
             Sast{kIdent,"a"}
           },
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,"",
-              Sast{kNONE,""}
-            },
+          Sast{kMethodParameter,"@b",
             Sast{kKwAny,""},
             Sast{kIdent,"b"}
           }
@@ -435,46 +424,19 @@ TEST(UtParserGrammarRules, MethodDeclArgAnyRet) {
   );
 }
 
-TEST(UtParserGrammarRules, MethodDeclArgIdentifiedAnyRet) {
-  TestParsingMethod("fn@add(@a,@b)>;", ParseMethodDecl,
-    Sast{kMethodDeclaration,"fn@add(@a,@b)>;",
-      Sast{kModifiers,""},
-      Sast{kIdent,"add"},
-      Sast{kMethodSignature,"",
-        Sast{kMethodParameterList,"",
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,""},
-            Sast{kKwAny,""},
-            Sast{kIdent,"a"}
-          },
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,""},
-            Sast{kKwAny,""},
-            Sast{kIdent,"b"}
-          }
-        },
-        Sast{kMethodReturnType,"",
-          Sast{kKwAny,""}
-        }
-      }
-    }
-  );
-}
 
 TEST(UtParserGrammarRules, MethodDeclArgsTypedRet) {
   TestParsingMethod("fn@add(@a,@b)>int;", ParseMethodDecl,
     Sast{kMethodDeclaration,"fn@add(@a,@b)>int;",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
-      Sast{kMethodSignature,"",
-        Sast{kMethodParameterList,"",
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,""},
+      Sast{kMethodSignature,"(@a,@b)>int",
+        Sast{kMethodParameterList,"(@a,@b)",
+          Sast{kMethodParameter,"@a",
             Sast{kKwAny,""},
             Sast{kIdent,"a"}
           },
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,""},
+          Sast{kMethodParameter,"@b",
             Sast{kKwAny,""},
             Sast{kIdent,"b"}
           }
@@ -488,19 +450,17 @@ TEST(UtParserGrammarRules, MethodDeclArgsTypedRet) {
 }
 
 TEST(UtParserGrammarRules, MethodDeclTypedArgsTypedRet) {
-  TestParsingMethod("fn@add(int @a,int @b)>int;", ParseMethodDecl,
+  TestParsingMethod("fn@add(int@a,int@b)>int;", ParseMethodDecl,
     Sast{kMethodDeclaration,"fn@add(int@a,int@b)>int;",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
-      Sast{kMethodSignature,"",
-        Sast{kMethodParameterList,"",
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,""},
+      Sast{kMethodSignature,"(int@a,int@b)>int",
+        Sast{kMethodParameterList,"(int@a,int@b)",
+          Sast{kMethodParameter,"int@a",
             Sast{kKwInt,"int"},
             Sast{kIdent,"a"}
           },
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,""},
+          Sast{kMethodParameter,"int@b",
             Sast{kKwInt,"int"},
             Sast{kIdent,"b"}
           }
@@ -515,20 +475,20 @@ TEST(UtParserGrammarRules, MethodDeclTypedArgsTypedRet) {
 
 TEST(UtParserGrammarRules, MethodDeclTypedArgsTypedRetWithModifiers) {
   TestParsingMethod("fn@add(const int @a,const int @b)>const int;", ParseMethodDecl,
-    Sast{kMethodDeclaration,"fn@add(constint@a,constint@b)>constint;",
+    Sast{kMethodDeclaration,"fn@add(const int @a,const int @b)>const int;",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
-      Sast{kMethodSignature,"",
-        Sast{kMethodParameterList,"",
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,"",
+      Sast{kMethodSignature,"(const int @a,const int @b)>const int",
+        Sast{kMethodParameterList,"(const int @a,const int @b)",
+          Sast{kMethodParameter,"const int @a",
+            Sast{kModifiers,"const",
               Sast{kKwConst,"const"}
             },
             Sast{kKwInt,"int"},
             Sast{kIdent,"a"}
           },
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,"",
+          Sast{kMethodParameter,"const int @b",
+            Sast{kModifiers,"const",
               Sast{kKwConst,"const"}
             },
             Sast{kKwInt,"int"},
@@ -536,7 +496,7 @@ TEST(UtParserGrammarRules, MethodDeclTypedArgsTypedRetWithModifiers) {
           }
         },
         Sast{kMethodReturnType,"",
-          Sast{kModifiers,"",
+          Sast{kModifiers,"const",
             Sast{kKwConst,"const"}
           },
           Sast{kKwInt,"int"}
@@ -548,20 +508,20 @@ TEST(UtParserGrammarRules, MethodDeclTypedArgsTypedRetWithModifiers) {
 
 TEST(UtParserGrammarRules, MethodDefinition) {
   TestParsingMethod("fn@add(const int @a,const int @b)>const int:{a+b;};", ParseMethodDecl,
-    Sast{kMethodDeclaration,"fn@add(constint@a,constint@b)>constint:{a+b;};",
+    Sast{kMethodDeclaration,"fn@add(const int @a,const int @b)>const int:{a+b;};",
       Sast{kModifiers,""},
       Sast{kIdent,"add"},
-      Sast{kMethodSignature,"",
-        Sast{kMethodParameterList,"",
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,"",
+      Sast{kMethodSignature,"(const int @a,const int @b)>const int",
+        Sast{kMethodParameterList,"(const int @a,const int @b)",
+          Sast{kMethodParameter,"const int @a",
+            Sast{kModifiers,"const",
               Sast{kKwConst,"const"}
             },
             Sast{kKwInt,"int"},
             Sast{kIdent,"a"}
           },
-          Sast{kMethodParameter,"",
-            Sast{kModifiers,"",
+          Sast{kMethodParameter,"const int @b",
+            Sast{kModifiers,"const",
               Sast{kKwConst,"const"}
             },
             Sast{kKwInt,"int"},
@@ -569,7 +529,7 @@ TEST(UtParserGrammarRules, MethodDefinition) {
           }
         },
         Sast{kMethodReturnType,"",
-          Sast{kModifiers,"",
+          Sast{kModifiers,"const",
             Sast{kKwConst,"const"}
           },
           Sast{kKwInt,"int"}
@@ -590,7 +550,7 @@ TEST(UtParserGrammarRules, MethodDefinition) {
 /* Main Declaration */
 ///////////////////////////////////////
 TEST(UtParserGrammarRules, MainDefinition) {
-  TestParsingMethod("main(a,b):{a+b;};", ParseMainDecl);
+  TestParsingMethod("main(@a,@b):{a+b;};", ParseMainDecl);
 }
 
 
@@ -626,11 +586,10 @@ TEST(UtParserGrammarRules, ClassDeclWithMod) {
 
 TEST(UtParserGrammarRules, ClassWithModAndDefinition) {
   TestParsingMethod(
-    R"(
-    const static class@Husky:{
+    R"(const static class@Husky:{
       const def str@Foo: 42;
       using @MyInteger: int;
-    })", 
+    };)", 
     ParseClassDecl,
     Sast{kClassDeclaration,"",
       Sast{kModifiers,"",
@@ -826,23 +785,22 @@ TEST(UtParserGrammarRules, ParseProgramWithDeclarations) {
 
 TEST(UtParserGrammarRules, AnimalsExampleProgram) {
   TestParsingMethod(
-R"(
-proc AnimalSounds:{
+R"(proc @AnimalSounds:{
   class @Horse: {
-    fn @makeSound():{return "Neigh!";}
-  }
+    fn @makeSound():{return "Neigh!";};
+  };
  
   class @Cow: {
-    fn @makeSound():{return "Moo!";}
-  }
+    fn @makeSound():{return "Moo!";};
+  };
  
   class @Wolf: {
-    fn @makeSound():{return "Oooo!";}
-  }
+    fn @makeSound():{return "Oooo!";};
+  };
  
   class @Cricket: {
-    fn @makeSound():{return "Chirp!";}
-  } 
+    fn @makeSound():{return "Chirp!";};
+  }; 
 
   def @farm_animals : list(Horse(), Cow());
   def @all_animals : farm_animals + list(Wolf(), Cricket());
@@ -853,9 +811,11 @@ proc AnimalSounds:{
       sounds += animal_list[idx].makeSound();
     }
     return sounds;
-  }
+  };
 
-  main : makeAnimalSounds(all_animals);
+  main : {
+    makeAnimalSounds(all_animals);
+  };
 }
 )",
       ParseSyntax);
@@ -878,7 +838,7 @@ TEST(UtParserGrammarRules, PragmaticDeclarations) {
   TestParsingMethod("fn@add();", ParsePragmaticStmt);
   TestParsingMethod("fn@add>;", ParsePragmaticStmt);
   TestParsingMethod("fn@add()>;", ParsePragmaticStmt);
-  TestParsingMethod("fn@add(a,b)>;", ParsePragmaticStmt);
+  TestParsingMethod("fn@add(@a,@b)>;", ParsePragmaticStmt);
   TestParsingMethod("fn@add(@a,@b)>int;", ParsePragmaticStmt);
   TestParsingMethod("fn@add(int @a,int @b)>int;", ParsePragmaticStmt);
   TestParsingMethod("fn@add(const int @a,const int @b)>const int;", ParsePragmaticStmt);

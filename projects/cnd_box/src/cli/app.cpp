@@ -1,12 +1,17 @@
-#include "cli_app.hpp"
+#include "app.hpp"
 
-#include "cli_enum_cli_flag.hpp"
-#include "cli_parser.hpp"
-#include "diagnostics.hpp"
-#include "frontend_lexer.hpp"
-#include "translation_context.hpp"
-#include "util_enum_verbosity.hpp"
-#include "util_read_file.hpp"
+#include "../common/diagnostic.hpp"
+#include "../common/enum_verbosity.hpp"
+#include "../common/format_diagnostic.hpp"
+#include "../common/read_file.hpp"
+#include "../compiler/translation_context.hpp"
+#include "../frontend/lexer.hpp"
+#include "../frontend/node.hpp"
+#include "../frontend/parser.hpp"
+#include "../frontend/token_cursor.hpp"
+#include "../frontend/token_traits.hpp"
+//#include "../frontend/preprocessor.hpp"
+#include "enum_cli_flag.hpp"
 
 namespace ssgc::cli {
 
@@ -21,6 +26,8 @@ int runDisplayVersion(TrContext& context);
 int runCommandBuild(TrContext& context, CliArgs::const_iterator rest, CliArgs::const_iterator end);
 int runCommandDev(TrContext& context, CliArgs::const_iterator rest, CliArgs::const_iterator end);
 int runCommandDevLex(TrContext& context, CliArgs::const_iterator rest, CliArgs::const_iterator end);
+int runCommandDevParse(TrContext& context, CliArgs::const_iterator rest,
+                       CliArgs::const_iterator end);
 int runUnknownCommand(TrContext& context, const std::source_location& src_loc, eCliFlag command);
 
 int run(int argc, char* argv[]) {
@@ -59,7 +66,7 @@ int run(int argc, char* argv[]) {
   if (args_parse_result.failed()) {
     context.diagnostics->append_range(
         std::ranges::subrange(args_parse_result.errors->begin(), args_parse_result.errors->end()));
-    context.log.err << context.diagnostics.format();
+    context.log.err << formatDiagnostic(context.diagnostics, &context);
     return kExitFailure;
   }
 
@@ -77,7 +84,8 @@ int run(int argc, char* argv[]) {
 };
 
 int runDisplayHelp(TrContext& context) {
-  context.log.out << std::format("{}\n{}\n{}", kProgramName, kProgramVersion, helptextCliMain()) << std::endl;
+  context.log.out << std::format("{}\n{}\n{}", kProgramName, kProgramVersion, helptextCliMain())
+                  << std::endl;
   return kExitSuccess;
 };
 
@@ -91,7 +99,7 @@ int runCommandBuild(TrContext& context, CliArgs::const_iterator rest, CliArgs::c
   if (args_parse_result.failed()) {
     context.diagnostics->append_range(
         std::ranges::subrange(args_parse_result.errors->begin(), args_parse_result.errors->end()));
-    context.log.err << context.diagnostics.format();
+    context.log.err << formatDiagnostic(context.diagnostics, &context);
     return kExitFailure;
   }
 
@@ -104,7 +112,7 @@ int runCommandDev(TrContext& context, CliArgs::const_iterator rest, CliArgs::con
   if (args_parse_result.failed()) {
     context.diagnostics->append_range(
         std::ranges::subrange(args_parse_result.errors->begin(), args_parse_result.errors->end()));
-    context.log.err << context.diagnostics.format();
+    context.log.err << formatDiagnostic(context.diagnostics, &context);
     return kExitFailure;
   }
 
@@ -112,6 +120,8 @@ int runCommandDev(TrContext& context, CliArgs::const_iterator rest, CliArgs::con
   switch (*args_parse_result.command_flag) {
     case eCliFlag::kDevModeLex:
       return runCommandDevLex(context, rest + args_parse_result.rest_args, end);
+    case eCliFlag::kCommandDevParse:
+      return runCommandDevParse(context, rest + args_parse_result.rest_args, end);
     default:
       return runUnknownCommand(context, std::source_location::current(),
                                *args_parse_result.command_flag);
@@ -125,15 +135,15 @@ int runCommandDevLex(TrContext& context, CliArgs::const_iterator rest,
   CliParserResult args_parse_result = parseCliCommandDevLex(rest, end, context.args);
 
   if (args_parse_result.failed()) {
-    context.log.err << args_parse_result.errors.format();
+    context.log.err << formatDiagnostic(args_parse_result.errors, &context);
     return kExitFailure;
   }
 
   frontend::Lexer lexer{};
   struct FileLexResult_ {
-    const util::SourceFile* source{nullptr};
+    const SourceFile* source{nullptr};
     std::vector<frontend::Token> tokens{};
-    diagnostic::Diagnostics diagnostics{};
+    Diagnostics diagnostics{};
   };
 
   std::vector<FileLexResult_> results{};
@@ -144,7 +154,7 @@ int runCommandDevLex(TrContext& context, CliArgs::const_iterator rest,
     // Skip files which were already loaded.
     if (context.sources.contains(src_file_path)) {
       this_res.diagnostics->push_back(
-          diagnostic::Diagnostic(std::format("Duplicate file ignored. Path: {}", src_file_path)));
+          Diagnostic(std::format("Duplicate file ignored. Path: {}", src_file_path)));
       continue;
     }
 
@@ -155,11 +165,10 @@ int runCommandDevLex(TrContext& context, CliArgs::const_iterator rest,
     }
     this_res.source = *load_file_result;
 
-    auto lex_result = lexer.tokenize(this_res.source->data);
-    if (!lex_result) {
-      this_res.diagnostics.append(lex_result.error());
-    }
-    this_res.tokens = std::move(*lex_result);
+    Diagnostics diagnostics =
+        lexer.tokenize(this_res.source->id, this_res.source->data, results[0].tokens);
+    this_res.diagnostics.append(diagnostics);
+
   }
 
   std::string debug_print_data{};
@@ -171,23 +180,24 @@ int runCommandDevLex(TrContext& context, CliArgs::const_iterator rest,
       for (auto token_iter = result.tokens.cbegin(); token_iter < result.tokens.cend() - 1;
            token_iter++) {
         debug_print_data += std::format("\"{}\",", [&token_iter] {
-          const char* tkcstr = frontend::eTokenToCStr(token_iter->type_);
+          const char* tkcstr = frontend::eTokenToCStr(token_iter->kind);
           return std::string_view{tkcstr + 1};
         }());
-        if (token_iter->type_ == frontend::eToken::kNewline) {
+        if (token_iter->kind == frontend::eToken::kNewline) {
           debug_print_data += "\n\t";
         }
       }
-      debug_print_data +=
-          std::format("\"{}\"\n]\n", frontend::eTokenToCStr(result.tokens.back().type_));
+      debug_print_data += std::format(
+          "\"{}\"\n]\n", std::string_view{frontend::eTokenToCStr(result.tokens.back().kind) + 1});
     }
     if (!result.diagnostics->empty()) {
       debug_print_data += "\"diagnostics\" : [\n";
       for (auto diagnostic_iter = result.diagnostics->cbegin();
            diagnostic_iter < result.diagnostics->cend() - 1; diagnostic_iter++) {
-        debug_print_data += std::format("\"{}\",", diagnostic_iter->format());
+        debug_print_data += std::format("\"{}\",", formatDiagnostic(*diagnostic_iter, &context));
       }
-      debug_print_data += std::format("\"{}\"\n]\n", result.diagnostics->back().format());
+      debug_print_data +=
+          std::format("\"{}\"\n]\n", formatDiagnostic(result.diagnostics->back(), &context));
     }
     debug_print_data += "}\n\n";
   }
@@ -196,11 +206,49 @@ int runCommandDevLex(TrContext& context, CliArgs::const_iterator rest,
   return kExitSuccess;
 }
 
+int runCommandDevParse(TrContext& context, CliArgs::const_iterator rest,
+                       CliArgs::const_iterator end) {
+  CliParserResult args_parse_result = parseCliCommandDevLex(rest, end, context.args);
+
+  if (args_parse_result.failed()) {
+    context.log.err << formatDiagnostic(args_parse_result.errors, &context);
+    return kExitFailure;
+  }
+
+  frontend::Lexer lexer{};
+  std::vector<frontend::Token> tokens{};
+  Diagnostics diagnostics{};
+
+  for (const auto& src_file_path : context.args.at(eCliFlag::kSources)) {
+    if (context.sources.contains(src_file_path)) {
+      diagnostics->push_back(
+          Diagnostic(std::format("Duplicate file ignored. Path: {}", src_file_path)));
+      continue;
+    }
+
+    auto load_file_result = context.sources.load(src_file_path);
+    if (!load_file_result) {
+      diagnostics->push_back(load_file_result.error());
+      continue;
+    }
+    const SourceFile* loaded_source = *load_file_result;
+
+    Diagnostics lexer_diagnostics = lexer.tokenize(loaded_source->id, loaded_source->data, tokens);
+    std::size_t last_token_count = tokens.size();
+    diagnostics.append(lexer_diagnostics);
+
+    auto parse_result = frontend::parser::parse(last_token_count, tokens.data() + last_token_count,
+                                                tokens.data() + tokens.size());
+  }
+
+  return kExitSuccess;
+}
+
 int runUnknownCommand(TrContext& context, const std::source_location& src_loc, eCliFlag command) {
-  context.diagnostics->push_back(diagnostic::makeErrorDeveloperBug(
+  context.diagnostics->push_back(makeErrorDeveloperBug(
       src_loc,
       std::format("Unknown or unimplemented command line flag: {}.", eCliFlagToCStr(command))));
-  context.log.err << context.diagnostics.format();
+  context.log.err << formatDiagnostic(context.diagnostics, &context);
   return kExitFailure;
 }
 

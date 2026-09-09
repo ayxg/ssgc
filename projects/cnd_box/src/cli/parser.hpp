@@ -29,8 +29,8 @@
 #include <variant>
 #include <vector>
 
-#include "diagnostics.hpp"
-#include "cli_enum_cli_flag.hpp"
+#include "../common/diagnostic.hpp"
+#include "enum_cli_flag.hpp"
 
 namespace ssgc::cli {
 
@@ -41,7 +41,7 @@ using CliFlagMap = std::unordered_map<eCliFlag, std::vector<std::string>>;
 struct CliParserResult {
   std::optional<eCliFlag> command_flag{std::nullopt};
   std::optional<eCliFlag> display_flag{std::nullopt};
-  diagnostic::Diagnostics errors{};
+  Diagnostics errors{};
   std::vector<std::string> positionals{};
   std::size_t rest_args{0};
 
