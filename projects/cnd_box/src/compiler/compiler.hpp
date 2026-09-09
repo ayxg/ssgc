@@ -11,6 +11,7 @@
 #include "../frontend/syntax_transformer.hpp"
 #include "../frontend/token.hpp"
 #include "translation_context.hpp"
+#include "compeval.hpp"
 namespace ssgc {
 
 class Compiler {
@@ -320,7 +321,11 @@ class Compiler {
     return &node;
   }
 
-  Diagnostics compeval(const frontend::NodeFile& root_node) { return Diagnostics{}; }
+  Diagnostics compeval(const frontend::NodeFile& root_node) { 
+
+
+    return Diagnostics{}; 
+  }
 
   void compile(std::string_view root_source_file_path) {
     const SourceFile* source_file = this->load_source(root_source_file_path);
