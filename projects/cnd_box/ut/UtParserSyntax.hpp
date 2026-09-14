@@ -50,6 +50,8 @@ TEST(UtParserSyntax, AstToNodeOperands) {
   TestTransformMethod("fn@add;", ParseMethodDecl, frontend::transformMethod);
   TestTransformMethod("fn@add>;", ParseMethodDecl, frontend::transformMethod);
   TestTransformMethod("fn@add>;", ParseMethodDecl, frontend::transformMethod);
+
+  TestTransformMethod("fn@add>;", ParseSyntax, frontend::transformFile);
 }
 
 

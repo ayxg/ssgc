@@ -76,22 +76,24 @@ struct NodeSubtract;
 struct NodeMultiply;
 struct NodeDivide;
 struct NodeModulus;
-struct NodePreIncrement;
-struct NodePreDecrement;
+struct NodeIncrement;
+struct NodeDecrement;
 struct NodeNot;
 struct NodeNegative;
 struct NodePositive;
 struct NodeAccess;
-struct NodePostIncrement;
-struct NodePostDecrement;
 struct NodeResolution;
 
+struct NodeIncludeStatement;
 struct NodeMethod;
 struct NodeMethodParameter;
+struct NodeClass;
+
 struct NodeFunctionalStatement;
 struct NodePrimaryExpr;
 struct NodeFile;
 struct NodeSyntax;
+
 
 using NodeUnionOperand =
     std::variant<NodeBool, NodeI8, NodeI16, NodeI32, NodeI64, NodeU8, NodeU16, NodeU32, NodeU64,
@@ -102,8 +104,8 @@ using NodeUnionOperator =
                  NodeBitwiseXor, NodeBitwiseAnd, NodeEquality, NodeInequality, NodeGreater,
                  NodeLess, NodeGreaterEqual, NodeLessEqual, NodeBitwiseShiftRight,
                  NodeBitwiseShiftLeft, NodeAdd, NodeSubtract, NodeMultiply, NodeDivide, NodeModulus,
-                 NodePreIncrement, NodePreDecrement, NodeNot, NodeNegative, NodePositive,
-                 NodeAccess, NodePostIncrement, NodePostDecrement, NodeResolution>;
+                 NodeIncrement, NodeDecrement, NodeNot, NodeNegative, NodePositive,
+                 NodeAccess,   NodeResolution>;
 using NodeUnionPrimary =
     std::variant<NodePoison, NodeBool, NodeI8, NodeI16, NodeI32, NodeI64, NodeU8, NodeU16, NodeU32,
                  NodeU64, NodeF32, NodeF64, NodeIdentifier, NodeCStr, NodeNone, NodeTypenameVoid,
@@ -113,8 +115,10 @@ using NodeUnionPrimary =
                  NodeBitwiseOr, NodeBitwiseXor, NodeBitwiseAnd, NodeEquality, NodeInequality,
                  NodeGreater, NodeLess, NodeGreaterEqual, NodeLessEqual, NodeBitwiseShiftRight,
                  NodeBitwiseShiftLeft, NodeAdd, NodeSubtract, NodeMultiply, NodeDivide, NodeModulus,
-                 NodePreIncrement, NodePreDecrement, NodeNot, NodeNegative, NodePositive,
-                 NodeAccess, NodePostIncrement, NodePostDecrement, NodeResolution>;
+                 NodeIncrement, NodeDecrement, NodeNot, NodeNegative, NodePositive,
+                 NodeAccess,   NodeResolution>;
+
+using NodeUnionDirectiveStatement = std::variant<NodeMethod,NodeUnionPrimary>;
 
 struct NodeBase {
   SourceRangeRaw source_range{};
@@ -186,14 +190,12 @@ struct NodeSubtract : NodeBaseBinaryOperator {};
 struct NodeMultiply : NodeBaseBinaryOperator {};
 struct NodeDivide : NodeBaseBinaryOperator {};
 struct NodeModulus : NodeBaseBinaryOperator {};
-struct NodePreIncrement : NodeBaseUnaryOperator {};
-struct NodePreDecrement : NodeBaseUnaryOperator {};
 struct NodeNot : NodeBaseUnaryOperator {};
 struct NodeNegative : NodeBaseUnaryOperator {};
 struct NodePositive : NodeBaseUnaryOperator {};
 struct NodeAccess : NodeBaseBinaryOperator {};
-struct NodePostIncrement : NodeBaseUnaryOperator {};
-struct NodePostDecrement : NodeBaseUnaryOperator {};
+struct NodeIncrement : NodeBaseUnaryOperator {};
+struct NodeDecrement : NodeBaseUnaryOperator {};
 struct NodeResolution : NodeBaseBinaryOperator {};
 
 struct NodePrimaryExpr : NodeUnionPrimary {
@@ -255,7 +257,12 @@ struct NodeMethod : NodeBase {
 
 struct NodeFile : NodeBase {
   SourceFileId id{};
+  std::vector<NodeUnionDirectiveStatement> statements{};
+};
 
+struct NodeIncludeStatement : NodeBase {
+  StringId path{};
+  bool is_local{};
 };
 
 struct NodeSyntax {
