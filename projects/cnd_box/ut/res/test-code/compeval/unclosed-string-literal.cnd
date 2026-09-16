@@ -1,8 +1,7 @@
 proc @root: {
+include <ca>;
 
-import lib c;
-
-main(i32 @argc, i8^[] @argv):{
+main(i32 @argc, u8*[] @argv):{
   
   for(i32 @i = 0; i < argc; i++){  
     c::println(c::fmt("{}: {}",i,argv[i]));

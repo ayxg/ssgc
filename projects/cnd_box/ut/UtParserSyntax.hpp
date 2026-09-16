@@ -27,35 +27,32 @@ namespace ssgc::unit_test {
 // Method used for unit testing in this header
 using namespace cnd_unit_test::frontend::test_util;
 
-TEST(UtParserSyntax, AstToNodeFile) { 
-  TestTransformMethod("",ParseSyntax,frontend::transformFile); 
-}
- 
+TEST(UtParserSyntax, AstToNodeFile) { TestTransformMethod("", ParseSyntax, frontend::lowerFile); }
+
 TEST(UtParserSyntax, AstToNodeOperands) {
-  TestTransformMethod("true", ParseOperand, frontend::transformBool);
-  TestTransformMethod("123i8", ParseOperand, frontend::transformI8);
-  TestTransformMethod("123i16", ParseOperand, frontend::transformI16);
-  TestTransformMethod("123i32", ParseOperand, frontend::transformI32);
-  TestTransformMethod("123i64", ParseOperand, frontend::transformI64);
-  TestTransformMethod("123u8", ParseOperand, frontend::transformU8);
-  TestTransformMethod("123u16", ParseOperand, frontend::transformU16);
-  TestTransformMethod("123u32", ParseOperand, frontend::transformU32);
-  TestTransformMethod("123u64", ParseOperand, frontend::transformU64);
-  TestTransformMethod("123.f", ParseOperand, frontend::transformF32);
-  TestTransformMethod("123.0", ParseOperand, frontend::transformF64);
-  TestTransformMethod("none", ParseOperand, frontend::transformNone);
-  TestTransformMethod("foo", ParseOperand, frontend::transformIdentifier);
-  TestTransformMethod("\"hello world\"", ParseOperand, frontend::transformStringLiteral);
+  TestTransformMethod("true", ParseOperand, frontend::lowerBool);
+  TestTransformMethod("123i8", ParseOperand, frontend::lowerI8);
+  TestTransformMethod("123i16", ParseOperand, frontend::lowerI16);
+  TestTransformMethod("123i32", ParseOperand, frontend::lowerI32);
+  TestTransformMethod("123i64", ParseOperand, frontend::lowerI64);
+  TestTransformMethod("123u8", ParseOperand, frontend::lowerU8);
+  TestTransformMethod("123u16", ParseOperand, frontend::lowerU16);
+  TestTransformMethod("123u32", ParseOperand, frontend::lowerU32);
+  TestTransformMethod("123u64", ParseOperand, frontend::lowerU64);
+  TestTransformMethod("123.f", ParseOperand, frontend::lowerF32);
+  TestTransformMethod("123.0", ParseOperand, frontend::lowerF64);
+  TestTransformMethod("none", ParseOperand, frontend::lowerNone);
+  TestTransformMethod("foo", ParseOperand, frontend::lowerIdentifier);
+  TestTransformMethod("\"hello world\"", ParseOperand, frontend::lowerStringLiteral);
 
-  TestTransformMethod("fn@add;", ParseMethodDecl, frontend::transformMethod);
-  TestTransformMethod("fn@add>;", ParseMethodDecl, frontend::transformMethod);
-  TestTransformMethod("fn@add>;", ParseMethodDecl, frontend::transformMethod);
+  TestTransformMethod("fn@add;", ParseMethodDecl, frontend::lowerMethod);
+  TestTransformMethod("fn@add>;", ParseMethodDecl, frontend::lowerMethod);
+  TestTransformMethod("fn@add>;", ParseMethodDecl, frontend::lowerMethod);
 
-  TestTransformMethod("fn@add>;", ParseSyntax, frontend::transformFile);
+  TestTransformMethod("fn@add>;", ParseSyntax, frontend::lowerFile);
 }
 
-
-}// namespace ssgc::unit_test
+}  // namespace ssgc::unit_test
 /// @} // end of ssgc_unit_test
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

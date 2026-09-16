@@ -10,8 +10,8 @@
 #include "../frontend/syntax.hpp"
 #include "../frontend/syntax_transformer.hpp"
 #include "../frontend/token.hpp"
-#include "translation_context.hpp"
 #include "compeval.hpp"
+#include "translation_context.hpp"
 namespace ssgc {
 
 class Compiler {
@@ -57,16 +57,13 @@ class Compiler {
 
   /// @brief Get an range iterator pair to the errors which occured on the last called compiler
   /// operation.
-  std::pair<std::vector<Diagnostic>::const_iterator, std::vector<Diagnostic>::const_iterator>
-  getErrorRange() {
+  std::pair<std::vector<Diagnostic>::const_iterator, std::vector<Diagnostic>::const_iterator> getErrorRange() {
     return {context.diagnostics->cend() - error_count_, context.diagnostics->cend()};
   }
 
   const Diagnostic& getLastError() { return context.diagnostics->back(); }
 
-  std::string formatDiagnostic(const Diagnostic& diag) const {
-    return ::ssgc::formatDiagnostic(diag, &context);
-  }
+  std::string formatDiagnostic(const Diagnostic& diag) const { return ::ssgc::formatDiagnostic(diag, &context); }
 
   /// @brief Load a source file into memory for future processing.
   /// @param fp File path.
@@ -86,8 +83,7 @@ class Compiler {
   /// @brief Store source file data into memory for future processing.
   /// @param fp File path.
   /// @param overwrite Overwrite currently loaded file data associated with given path.
-  const SourceFile* generateSource(std::string_view fp, std::string_view data,
-                                   bool overwrite = true) {
+  const SourceFile* generateSource(std::string_view fp, std::string_view data, bool overwrite = true) {
     resetErrorState();
     auto gen_result = context.sources.generate(fp, data, overwrite);
     if (!gen_result) {
@@ -116,8 +112,8 @@ class Compiler {
     if (!was_inserted) {
       error_occured_ = true;
       error_count_ = 1;
-      context.diagnostics->push_back(makeErrorPlaceholder(
-          std::format("Source file was already tokenized : {}", source->path)));
+      context.diagnostics->push_back(
+          makeErrorPlaceholder(std::format("Source file was already tokenized : {}", source->path)));
       return &tokens_iter->second;
     }
 
@@ -151,9 +147,8 @@ class Compiler {
     }
     auto [begline, begcol] = src->linecol(source_range.begin);
     auto [endline, endcol] = src->linecol(source_range.end);
-    return SourceRange{.file = source_range.file,
-                       .begin = {.line = begline, .col = begcol},
-                       .end = {.line = endline, .col = endcol}};
+    return SourceRange{
+        .file = source_range.file, .begin = {.line = begline, .col = begcol}, .end = {.line = endline, .col = endcol}};
   }
 
   const frontend::Ast* parse(std::size_t tokenized_file) {
@@ -163,21 +158,21 @@ class Compiler {
     if (source == nullptr) {
       error_occured_ = true;
       error_count_ = 1;
-      context.diagnostics->push_back(makeErrorPlaceholder(
-          std::format("Could not find source file with id : {}", tokenized_file)));
+      context.diagnostics->push_back(
+          makeErrorPlaceholder(std::format("Could not find source file with id : {}", tokenized_file)));
       return nullptr;
     }
 
     auto found_it = context.tokens.find(tokenized_file);
     if (found_it == context.tokens.end()) {
-      context.diagnostics->push_back(std::format("Source file '{}' has not been tokenized.",
-                                                 context.sources.pathof(tokenized_file)));
+      context.diagnostics->push_back(
+          std::format("Source file '{}' has not been tokenized.", context.sources.pathof(tokenized_file)));
       error_count_ = 1;
       error_occured_ = true;
     }
 
-    auto [parsed_ast, parse_diagnostics] = frontend::parser::parse(
-        0, found_it->second.data(), found_it->second.data() + found_it->second.size());
+    auto [parsed_ast, parse_diagnostics] =
+        frontend::parser::parse(0, found_it->second.data(), found_it->second.data() + found_it->second.size());
 
     if (!parse_diagnostics->empty()) {
       error_count_ = parse_diagnostics->size();
@@ -185,13 +180,12 @@ class Compiler {
       context.diagnostics.append(parse_diagnostics);
     }
 
-    auto [ast_iter, was_inserted] =
-        context.syntax_trees.insert({tokenized_file, std::move(parsed_ast)});
+    auto [ast_iter, was_inserted] = context.syntax_trees.insert({tokenized_file, std::move(parsed_ast)});
     if (!was_inserted) {
       error_occured_ = true;
       error_count_ = 1;
-      context.diagnostics->push_back(makeErrorPlaceholder(
-          std::format("Source file was already tokenized : {}", source->path)));
+      context.diagnostics->push_back(
+          makeErrorPlaceholder(std::format("Source file was already tokenized : {}", source->path)));
       return &ast_iter->second;
     }
 
@@ -209,28 +203,26 @@ class Compiler {
 
     auto found_it = context.syntax_trees.find(ast_file_id);
     if (found_it == context.syntax_trees.end()) {
-      this->pushError(std::format("Source file '{}' has not been tokenized.",
-                                  context.sources.pathof(source_file->path)));
+      this->pushError(
+          std::format("Source file '{}' has not been tokenized.", context.sources.pathof(source_file->path)));
     }
     auto& [file_id, ast] = *found_it;
 
-    ssgc::frontend::TransformationContext transform_context{
-        .id_table = context.id_table,
-        .string_table = context.string_table,
-        .source_file = *source_file,
-        .tokens = context.tokens.at(ast_file_id)};
-    auto [transformed_ast, transform_diagnostics] = frontend::transformFile(ast, transform_context);
+    ssgc::frontend::LoweringContext transform_context{.id_table = context.id_table,
+                                                      .string_table = context.string_table,
+                                                      .source_file = *source_file,
+                                                      .tokens = context.tokens.at(ast_file_id)};
+    auto [transformed_ast, transform_diagnostics] = frontend::lowerFile(ast, transform_context);
     if (!transform_diagnostics->empty()) {
       this->pushErrors(transform_diagnostics);
     }
 
-    auto [ast_iter, was_inserted] =
-        context.syntax_nodes.insert({ast_file_id, std::move(transformed_ast)});
+    auto [ast_iter, was_inserted] = context.syntax_nodes.insert({ast_file_id, std::move(transformed_ast)});
     if (!was_inserted) {
       error_occured_ = true;
       error_count_ = 1;
-      context.diagnostics->push_back(makeErrorPlaceholder(std::format(
-          "Source file was already transformed : {}", context.sources.pathof(source_file->path))));
+      context.diagnostics->push_back(makeErrorPlaceholder(
+          std::format("Source file was already transformed : {}", context.sources.pathof(source_file->path))));
       return &ast_iter->second;
     }
 
@@ -269,8 +261,7 @@ class Compiler {
     // - this->context.syntax_nodes
     std::string_view source_file_path = this->context.sources.pathof(source_file.id);
 
-    auto [tokens_data_iter, tokens_data_was_inserted] =
-        this->context.tokens.insert({source_file.id, {}});
+    auto [tokens_data_iter, tokens_data_was_inserted] = this->context.tokens.insert({source_file.id, {}});
     if (!tokens_data_was_inserted) {
       this->push_error(std::format("Source file was already tokenized : {}", source_file_path));
       return nullptr;
@@ -302,18 +293,16 @@ class Compiler {
       this->push_errors(std::move(lexer_diagnostics));
     }
 
-    auto [parsed_ast, parse_diagnostics] =
-        frontend::parser::parse(0, tokens.data(), tokens.data() + tokens.size());
+    auto [parsed_ast, parse_diagnostics] = frontend::parser::parse(0, tokens.data(), tokens.data() + tokens.size());
     if (!parse_diagnostics->empty()) {
       this->push_errors(std::move(parse_diagnostics));
     }
 
-    ssgc::frontend::TransformationContext transform_context{
-        .id_table = context.id_table,
-        .string_table = context.string_table,
-        .source_file = source_file,
-        .tokens = context.tokens.at(source_file.id)};
-    auto [transformed_ast, transform_diagnostics] = frontend::transformFile(ast, transform_context);
+    ssgc::frontend::LoweringContext transform_context{.id_table = context.id_table,
+                                                      .string_table = context.string_table,
+                                                      .source_file = source_file,
+                                                      .tokens = context.tokens.at(source_file.id)};
+    auto [transformed_ast, transform_diagnostics] = frontend::lowerFile(ast, transform_context);
     if (!transform_diagnostics->empty()) {
       this->pushErrors(transform_diagnostics);
     }
@@ -321,21 +310,15 @@ class Compiler {
     return &node;
   }
 
-  Diagnostics compeval(const frontend::NodeFile& root_node) { 
-
-
-    return Diagnostics{}; 
-  }
+  Diagnostics compeval(const frontend::NodeFile& root_node) { return Diagnostics{}; }
 
   void compile(std::string_view root_source_file_path) {
     const SourceFile* source_file = this->load_source(root_source_file_path);
     if (source_file == nullptr) return;
 
     const frontend::NodeFile* root_node = this->parse_file(*source_file);
-    
+
     compeval(*root_node);
-
-
   }
 };
 

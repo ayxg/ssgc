@@ -63,11 +63,16 @@ TEST(UtCompilerCli, VersionModeRun) {
 }
 
 TEST(UtCompilerCli, CommandDevLex) {
-  DummyArgv args{"ssgc", "dev", "parse", "test-code/compeval/unclosed-string-literal.cnd"};
+  DummyArgv args{"ssgc", "dev", "lex", "test-code/compeval/unclosed-string-literal.cnd"};
   int cl_out = ssgcRunCommandLineInterface(args.GetArgc(), args.GetArgv());
   ASSERT_TRUE(cl_out == EXIT_SUCCESS);
 }
 
+TEST(UtCompilerCli, CommandDevParse) {
+  DummyArgv args{"ssgc", "dev", "parse", "test-code/compeval/unclosed-string-literal.cnd"};
+  int cl_out = ssgcRunCommandLineInterface(args.GetArgc(), args.GetArgv());
+  ASSERT_TRUE(cl_out == EXIT_SUCCESS);
+}
 // TEST(UtCompilerCli, SilentRun) {
 //   int argc = 3;
 //   char* argv[] = {"cnd"};

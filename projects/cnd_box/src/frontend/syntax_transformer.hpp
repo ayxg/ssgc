@@ -12,20 +12,20 @@
 
 namespace ssgc::frontend {
 
-#define SSGC_PARSER_INVALID_SYNTAX(ast_var, msg)                       \
-  makeErrorParserInvalidSyntax(std::source_location::current(),        \
-                               ctx.getAstSourceRangeRaw(ast_var).file, \
+#define SSGC_PARSER_INVALID_SYNTAX(ast_var, msg)                                                        \
+  makeErrorParserInvalidSyntax(std::source_location::current(), ctx.getAstSourceRangeRaw(ast_var).file, \
                                ctx.getAstSourceRangeRaw(ast_var).begin, msg)
 
 template <typename T>
-struct TransformResult {
+struct LowerResult {
+  using NodeType = T;
   T node{};
   Diagnostics diagnostics{};
 
   bool failed() { return !diagnostics->empty(); }
 };
 
-struct TransformationContext {
+struct LoweringContext {
   StringInterner& id_table;
   StringInterner& string_table;
   const SourceFile& source_file;
@@ -42,8 +42,7 @@ struct TransformationContext {
     while (isTokenInsignificant(end_token->kind)) {
       end_token--;
     }
-    return source_file.slice(tokens.at(ast.sourceBegin()).source_range.begin,
-                             end_token->source_range.end);
+    return source_file.slice(tokens.at(ast.sourceBegin()).source_range.begin, end_token->source_range.end);
   }
 
   SourceRangeRaw getAstSourceRangeRaw(const Ast& ast) const {
@@ -94,131 +93,65 @@ constexpr bool isAstPrimaryExpr(eAst kind) noexcept {
   }
 }
 
-TransformResult<NodeBool> transformBool(const Ast& ast, TransformationContext& ctx) noexcept;
-TransformResult<NodeI8> transformI8(const Ast& ast, TransformationContext& ctx) noexcept;
-TransformResult<NodeI16> transformI16(const Ast& ast, TransformationContext& ctx) noexcept;
-TransformResult<NodeI32> transformI32(const Ast& ast, TransformationContext& ctx) noexcept;
-TransformResult<NodeI64> transformI64(const Ast& ast, TransformationContext& ctx) noexcept;
-TransformResult<NodeU8> transformU8(const Ast& ast, TransformationContext& ctx) noexcept;
-TransformResult<NodeU16> transformU16(const Ast& ast, TransformationContext& ctx) noexcept;
-TransformResult<NodeU32> transformU32(const Ast& ast, TransformationContext& ctx) noexcept;
-TransformResult<NodeU64> transformU64(const Ast& ast, TransformationContext& ctx) noexcept;
-TransformResult<NodeF32> transformF32(const Ast& ast, TransformationContext& ctx) noexcept;
-TransformResult<NodeF64> transformF64(const Ast& ast, TransformationContext& ctx) noexcept;
-TransformResult<NodeNone> transformNone(const Ast& ast, TransformationContext& ctx) noexcept;
-TransformResult<NodeIdentifier> transformIdentifier(const Ast& ast,
-                                                    TransformationContext& ctx) noexcept;
-TransformResult<NodeCStr> transformStringLiteral(const Ast& ast,
-                                                 TransformationContext& ctx) noexcept;
+LowerResult<NodeBool> lowerBool(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeI8> lowerI8(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeI16> lowerI16(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeI32> lowerI32(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeI64> lowerI64(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeU8> lowerU8(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeU16> lowerU16(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeU32> lowerU32(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeU64> lowerU64(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeF32> lowerF32(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeF64> lowerF64(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeNone> lowerNone(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeIdentifier> lowerIdentifier(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeCStr> lowerStringLiteral(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeParenSubexpr> lowerParenSubexpr(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeBraceSubexpr> lowerBraceSubexpr(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeBracketSubexpr> lowerBracketSubexpr(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodePrimaryExpr> lowerPrimaryExpr(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeModifiers> lowerModifiers(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodeFunctionalStatement> lowerFunctionalStatement(const Ast& ast, LoweringContext& ctx) noexcept;
 
-TransformResult<NodeParenSubexpr> transformParenSubexpr(const Ast& ast,
-                                                        TransformationContext& ctx) noexcept;
-TransformResult<NodeBraceSubexpr> transformBraceSubexpr(const Ast& ast,
-                                                        TransformationContext& ctx) noexcept;
-TransformResult<NodeBracketSubexpr> transformBracketSubexpr(const Ast& ast,
-                                                            TransformationContext& ctx) noexcept;
+LowerResult<NodeMethod> lowerMethod(const Ast& ast, LoweringContext& ctx) noexcept;
 
-TransformResult<NodePrimaryExpr> transformPrimaryExpr(const Ast& ast,
-                                                      TransformationContext& ctx) noexcept;
+LowerResult<NodePrimaryExpr> lowerNamespaceDecl(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodePrimaryExpr> lowerIncludeStatement(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodePrimaryExpr> lowerClass(const Ast& ast, LoweringContext& ctx) noexcept;
+LowerResult<NodePrimaryExpr> lowerVariable(const Ast& ast, LoweringContext& ctx) noexcept;
 
-TransformResult<NodeModifiers> transformModifiers(const Ast& ast,
-                                                  TransformationContext& ctx) noexcept;
+template <class LoweringFunctionT,
+          class ResultNodeT = std::invoke_result_t<LoweringFunctionT, const Ast&, LoweringContext&>>
+void applyLower(LoweringFunctionT&& lowering_func, ResultNodeT& assign_to, Diagnostics& diagnostics, const Ast& ast,
+                LoweringContext& ctx) noexcept {
+  auto lower_result = lowering_func(ast, ctx);
+  assign_to = std::move(lower_result.node);
+  diagnostics.append(std::move(lower_result.diagnostics));
+}
 
-TransformResult<NodeFunctionalStatement> transformFunctionalStatement(
-    const Ast& ast, TransformationContext& ctx) noexcept;
-
-TransformResult<NodeMethod> transformMethod(const Ast& ast, TransformationContext& ctx) noexcept;
-
-TransformResult<NodePrimaryExpr> transformNamespaceDecl(const Ast& ast,
-                                                        TransformationContext& ctx) noexcept;
-TransformResult<NodePrimaryExpr> transformIncludeStatement(const Ast& ast,
-                                                           TransformationContext& ctx) noexcept;
-TransformResult<NodePrimaryExpr> transformClass(const Ast& ast,
-                                                TransformationContext& ctx) noexcept;
-TransformResult<NodePrimaryExpr> transformVariable(const Ast& ast,
-                                                   TransformationContext& ctx) noexcept;
-
-// TransformResult<NodePrimaryExpr> transformOperand(const Ast& ast,
-//                                                       TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformArguments(const Ast& ast,
-//                                                         TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformIndexingArguments(
-//         const Ast& ast, TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformListingArguments(const Ast& ast,
-//                                                                TransformationContext& ctx)
-//                                                                noexcept;
-//     TransformResult<NodePrimaryExpr> transformPrimaryStatement(const Ast& ast,
-//                                                                TransformationContext& ctx)
-//                                                                noexcept;
-//     TransformResult<NodePrimaryExpr> transformConditionalSubExpression(
-//         const Ast& ast, TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformPrimaryPreIdentifier(
-//         const Ast& ast, TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformPrimaryPostIdentifier(
-//         const Ast& ast, TransformationContext& ctx) noexcept;
-//
-//     TransformResult<NodePrimaryExpr> transformReturnStmt(const Ast& ast,
-//                                                          TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformLibDef(const Ast& ast,
-//                                                      TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformPragmaticStmt(const Ast& ast,
-//                                                             TransformationContext& ctx) noexcept;
-//
-//     TransformResult<NodePrimaryExpr> transformConditionalStmt(const Ast& ast,
-//                                                               TransformationContext& ctx)
-//                                                               noexcept;
-//     TransformResult<NodePrimaryExpr> transformIfDecl(const Ast& ast,
-//                                                      TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformMainDecl(const Ast& ast,
-//                                                        TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformLibDecl(const Ast& ast,
-//                                                       TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformImportDecl(const Ast& ast,
-//                                                          TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformIncludeStmt(const Ast& ast,
-//                                                           TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformPragmaStmt(const Ast& ast,
-//                                                          TransformationContext& ctx) noexcept;
-//
-//     TransformResult<NodePrimaryExpr> transformWhileDecl(const Ast& ast,
-//                                                         TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformForDecl(const Ast& ast,
-//                                                       TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformUsingDecl(const Ast& ast,
-//                                                         TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformVariableDecl(const Ast& ast,
-//                                                            TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformEnumDecl(const Ast& ast,
-//                                                        TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformEnumDef(const Ast& ast,
-//                                                       TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformEnumBlock(const Ast& ast,
-//                                                         TransformationContext& ctx) noexcept;
-//     TransformResult<NodePrimaryExpr> transformSyntax(const Ast& ast,
-//                                                      TransformationContext& ctx) noexcept;
 template <class NodeT, class ResultNodeT = NodeT>
-auto xApplyPrimaryTransformGeneric(const Ast& ast, TransformationContext& ctx) {
-  TransformResult<ResultNodeT> ret{};
+auto xApplyPrimaryLowerGeneric(const Ast& ast, LoweringContext& ctx) {
+  LowerResult<ResultNodeT> ret{};
   ret.node = NodeT{};
   *ret.node.sourceRange() = ctx.getAstSourceRangeRaw(ast);
   return ret;
 };
 
 template <class BinopNodeT>
-TransformResult<NodePrimaryExpr> transformBinaryOperation(const Ast& ast,
-                                                          TransformationContext& ctx) noexcept {
+LowerResult<NodePrimaryExpr> lowerBinaryOperation(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.size() == 2);
 
-  TransformResult<NodePrimaryExpr> result{};
+  LowerResult<NodePrimaryExpr> result{};
 
   BinopNodeT node{};
   const Ast& lhs = ast[0];
-  TransformResult<NodePrimaryExpr> lhs_node_result = transformPrimaryExpr(lhs, ctx);
+  LowerResult<NodePrimaryExpr> lhs_node_result = lowerPrimaryExpr(lhs, ctx);
   node.setLeftOperand(std::move(lhs_node_result.node));
   result.diagnostics.append(lhs_node_result.diagnostics);
 
   const Ast& rhs = ast[0];
-  TransformResult<NodePrimaryExpr> rhs_node_result = transformPrimaryExpr(rhs, ctx);
+  LowerResult<NodePrimaryExpr> rhs_node_result = lowerPrimaryExpr(rhs, ctx);
   node.setRightOperand(std::move(rhs_node_result.node));
   result.diagnostics.append(rhs_node_result.diagnostics);
 
@@ -228,46 +161,103 @@ TransformResult<NodePrimaryExpr> transformBinaryOperation(const Ast& ast,
 }
 
 template <class UnaryOperandNodeT>
-TransformResult<NodePrimaryExpr> transformUnaryOperation(const Ast& ast,
-                                                         TransformationContext& ctx) noexcept {
+LowerResult<NodePrimaryExpr> lowerUnaryOperation(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.size() == 1);
-  TransformResult<NodePrimaryExpr> result{};
+  LowerResult<NodePrimaryExpr> result{};
   auto& result_node = result.node.emplace<UnaryOperandNodeT>();
   const Ast& operand = ast[0];
-  TransformResult<NodePrimaryExpr> lhs_node_result = transformPrimaryExpr(operand, ctx);
+  LowerResult<NodePrimaryExpr> lhs_node_result = lowerPrimaryExpr(operand, ctx);
   result_node.operand = std::make_unique<NodePrimaryExpr>(std::move(lhs_node_result.node));
   result.diagnostics.append(lhs_node_result.diagnostics);
   return result;
 }
 
-TransformResult<NodeFile> transformFile(const Ast& ast, TransformationContext& ctx) noexcept;
+// LowerResult<NodePrimaryExpr> lowerOperand(const Ast& ast,
+//                                                       LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerArguments(const Ast& ast,
+//                                                         LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerIndexingArguments(
+//         const Ast& ast, LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerListingArguments(const Ast& ast,
+//                                                                LoweringContext& ctx)
+//                                                                noexcept;
+//     LowerResult<NodePrimaryExpr> lowerPrimaryStatement(const Ast& ast,
+//                                                                LoweringContext& ctx)
+//                                                                noexcept;
+//     LowerResult<NodePrimaryExpr> lowerConditionalSubExpression(
+//         const Ast& ast, LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerPrimaryPreIdentifier(
+//         const Ast& ast, LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerPrimaryPostIdentifier(
+//         const Ast& ast, LoweringContext& ctx) noexcept;
+//
+//     LowerResult<NodePrimaryExpr> lowerReturnStmt(const Ast& ast,
+//                                                          LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerLibDef(const Ast& ast,
+//                                                      LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerPragmaticStmt(const Ast& ast,
+//                                                             LoweringContext& ctx) noexcept;
+//
+//     LowerResult<NodePrimaryExpr> lowerConditionalStmt(const Ast& ast,
+//                                                               LoweringContext& ctx)
+//                                                               noexcept;
+//     LowerResult<NodePrimaryExpr> lowerIfDecl(const Ast& ast,
+//                                                      LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerMainDecl(const Ast& ast,
+//                                                        LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerLibDecl(const Ast& ast,
+//                                                       LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerImportDecl(const Ast& ast,
+//                                                          LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerIncludeStmt(const Ast& ast,
+//                                                           LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerPragmaStmt(const Ast& ast,
+//                                                          LoweringContext& ctx) noexcept;
+//
+//     LowerResult<NodePrimaryExpr> lowerWhileDecl(const Ast& ast,
+//                                                         LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerForDecl(const Ast& ast,
+//                                                       LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerUsingDecl(const Ast& ast,
+//                                                         LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerVariableDecl(const Ast& ast,
+//                                                            LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerEnumDecl(const Ast& ast,
+//                                                        LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerEnumDef(const Ast& ast,
+//                                                       LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerEnumBlock(const Ast& ast,
+//                                                         LoweringContext& ctx) noexcept;
+//     LowerResult<NodePrimaryExpr> lowerSyntax(const Ast& ast,
+//                                                      LoweringContext& ctx) noexcept;
 
-TransformResult<NodeFile> transformFile(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeFile> lowerFile(const Ast& ast, LoweringContext& ctx) noexcept;
+
+LowerResult<NodeFile> lowerFile(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kSourceFile);
 
-  TransformResult<NodeFile> ret{};
-  auto xApplyTransformAndPushStatement = [&ret](auto&& fn, const Ast& ast,
-                                                TransformationContext& ctx) {
-    auto transform_result = fn(ast, ctx);
-    ret.node.statements.push_back(std::move(transform_result.node));
-    ret.diagnostics.append(std::move(transform_result.diagnostics));
+  LowerResult<NodeFile> ret{};
+  auto xApplyLowerAndPushStatement = [&ret](auto&& fn, const Ast& ast, LoweringContext& ctx) {
+    auto lower_result = fn(ast, ctx);
+    ret.node.statements.push_back(std::move(lower_result.node));
+    ret.diagnostics.append(std::move(lower_result.diagnostics));
   };
 
   for (const Ast& directive_statement : ast.branches) {
     if (isAstPrimaryExpr(ast.type)) {
-      xApplyTransformAndPushStatement(transformPrimaryExpr, directive_statement, ctx);
+      xApplyLowerAndPushStatement(lowerPrimaryExpr, directive_statement, ctx);
       continue;
     }
 
     switch (directive_statement.type) {
       case eAst::kMethodDeclaration:
-        xApplyTransformAndPushStatement(transformMethod, directive_statement, ctx);
+        xApplyLowerAndPushStatement(lowerMethod, directive_statement, ctx);
         break;
       case eAst::kClassDeclaration:
-        xApplyTransformAndPushStatement(transformClass, directive_statement, ctx);
+        xApplyLowerAndPushStatement(lowerClass, directive_statement, ctx);
         break;
       case eAst::kIncludeLocalStmt:
-        xApplyTransformAndPushStatement(transformIncludeStatement, directive_statement, ctx);
+        xApplyLowerAndPushStatement(lowerIncludeStatement, directive_statement, ctx);
         break;
       default:
         ret.diagnostics->push_back("Expected directive statement.");
@@ -277,10 +267,10 @@ TransformResult<NodeFile> transformFile(const Ast& ast, TransformationContext& c
   return ret;
 }
 
-TransformResult<NodeBool> transformBool(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeBool> lowerBool(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kLitU1 || ast.type == eAst::kKwTrue ||
          ast.type == eAst::kKwFalse && "Expected kLitU1,kKwTrue or kKwFalse token type.");
-  TransformResult<NodeBool> ret{};
+  LowerResult<NodeBool> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
   std::string_view literal = ctx.getAstLiteral(ast);
 
@@ -301,9 +291,9 @@ TransformResult<NodeBool> transformBool(const Ast& ast, TransformationContext& c
   return ret;
 }
 
-TransformResult<NodeI8> transformI8(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeI8> lowerI8(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kLitI8 && "Expected kLitI8 ast type.");
-  TransformResult<NodeI8> ret{};
+  LowerResult<NodeI8> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
   std::string_view literal = ctx.getAstLiteral(ast);
 
@@ -313,8 +303,7 @@ TransformResult<NodeI8> transformI8(const Ast& ast, TransformationContext& ctx) 
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid i8 literal suffix."));
   }
 
-  auto [error_loc, error_code] =
-      std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
+  auto [error_loc, error_code] = std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
 
   if (error_code == std::errc::invalid_argument) {
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid i8 literal format."));
@@ -325,9 +314,9 @@ TransformResult<NodeI8> transformI8(const Ast& ast, TransformationContext& ctx) 
   return ret;
 }
 
-TransformResult<NodeI16> transformI16(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeI16> lowerI16(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kLitI16 && "Expected kLitI16 token type.");
-  TransformResult<NodeI16> ret{};
+  LowerResult<NodeI16> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
   std::string_view literal = ctx.getAstLiteral(ast);
 
@@ -337,8 +326,7 @@ TransformResult<NodeI16> transformI16(const Ast& ast, TransformationContext& ctx
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid i16 literal suffix."));
   }
 
-  auto [error_loc, error_code] =
-      std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
+  auto [error_loc, error_code] = std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
 
   if (error_code == std::errc::invalid_argument) {
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid i16 literal format."));
@@ -349,9 +337,9 @@ TransformResult<NodeI16> transformI16(const Ast& ast, TransformationContext& ctx
   return ret;
 }
 
-TransformResult<NodeI32> transformI32(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeI32> lowerI32(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kLitI32 && "Expected kLitI32 ast type.");
-  TransformResult<NodeI32> ret{};
+  LowerResult<NodeI32> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
   std::string_view literal = ctx.getAstLiteral(ast);
 
@@ -361,8 +349,7 @@ TransformResult<NodeI32> transformI32(const Ast& ast, TransformationContext& ctx
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid i32 literal suffix."));
   }
 
-  auto [error_loc, error_code] =
-      std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
+  auto [error_loc, error_code] = std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
 
   if (error_code == std::errc::invalid_argument) {
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid i32 literal format."));
@@ -373,9 +360,9 @@ TransformResult<NodeI32> transformI32(const Ast& ast, TransformationContext& ctx
   return ret;
 }
 
-TransformResult<NodeI64> transformI64(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeI64> lowerI64(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kLitI64 && "Expected kLitI16 token type.");
-  TransformResult<NodeI64> ret{};
+  LowerResult<NodeI64> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
   std::string_view literal = ctx.getAstLiteral(ast);
 
@@ -385,8 +372,7 @@ TransformResult<NodeI64> transformI64(const Ast& ast, TransformationContext& ctx
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid i64 literal suffix."));
   }
 
-  auto [error_loc, error_code] =
-      std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
+  auto [error_loc, error_code] = std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
 
   if (error_code == std::errc::invalid_argument) {
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid i64 literal format."));
@@ -397,9 +383,9 @@ TransformResult<NodeI64> transformI64(const Ast& ast, TransformationContext& ctx
   return ret;
 }
 
-TransformResult<NodeU8> transformU8(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeU8> lowerU8(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kLitU8 && "Expected kLitU8 token type.");
-  TransformResult<NodeU8> ret{};
+  LowerResult<NodeU8> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
   std::string_view literal = ctx.getAstLiteral(ast);
 
@@ -409,8 +395,7 @@ TransformResult<NodeU8> transformU8(const Ast& ast, TransformationContext& ctx) 
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid u8 literal suffix."));
   }
 
-  auto [error_loc, error_code] =
-      std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
+  auto [error_loc, error_code] = std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
 
   if (error_code == std::errc::invalid_argument) {
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid u8 literal format."));
@@ -421,9 +406,9 @@ TransformResult<NodeU8> transformU8(const Ast& ast, TransformationContext& ctx) 
   return ret;
 }
 
-TransformResult<NodeU16> transformU16(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeU16> lowerU16(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kLitU16 && "Expected kLitU16 token type.");
-  TransformResult<NodeU16> ret{};
+  LowerResult<NodeU16> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
   std::string_view literal = ctx.getAstLiteral(ast);
 
@@ -433,8 +418,7 @@ TransformResult<NodeU16> transformU16(const Ast& ast, TransformationContext& ctx
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid u16 literal suffix."));
   }
 
-  auto [error_loc, error_code] =
-      std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
+  auto [error_loc, error_code] = std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
 
   if (error_code == std::errc::invalid_argument) {
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid u16 literal format."));
@@ -445,9 +429,9 @@ TransformResult<NodeU16> transformU16(const Ast& ast, TransformationContext& ctx
   return ret;
 }
 
-TransformResult<NodeU32> transformU32(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeU32> lowerU32(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kLitU32 && "Expected kLitU32 token type.");
-  TransformResult<NodeU32> ret{};
+  LowerResult<NodeU32> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
   std::string_view literal = ctx.getAstLiteral(ast);
 
@@ -457,8 +441,7 @@ TransformResult<NodeU32> transformU32(const Ast& ast, TransformationContext& ctx
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid u32 literal suffix."));
   }
 
-  auto [error_loc, error_code] =
-      std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
+  auto [error_loc, error_code] = std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
 
   if (error_code == std::errc::invalid_argument) {
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid u32 literal format."));
@@ -469,9 +452,9 @@ TransformResult<NodeU32> transformU32(const Ast& ast, TransformationContext& ctx
   return ret;
 }
 
-TransformResult<NodeU64> transformU64(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeU64> lowerU64(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kLitU64 && "Expected kLitU64 token type.");
-  TransformResult<NodeU64> ret{};
+  LowerResult<NodeU64> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
   std::string_view literal = ctx.getAstLiteral(ast);
 
@@ -481,8 +464,7 @@ TransformResult<NodeU64> transformU64(const Ast& ast, TransformationContext& ctx
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid u64 literal suffix."));
   }
 
-  auto [error_loc, error_code] =
-      std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
+  auto [error_loc, error_code] = std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
 
   if (error_code == std::errc::invalid_argument) {
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid u64 literal format."));
@@ -493,9 +475,9 @@ TransformResult<NodeU64> transformU64(const Ast& ast, TransformationContext& ctx
   return ret;
 }
 
-TransformResult<NodeF32> transformF32(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeF32> lowerF32(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kLitF32 && "Expected kLitF32 token type.");
-  TransformResult<NodeF32> ret{};
+  LowerResult<NodeF32> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
   std::string_view literal = ctx.getAstLiteral(ast);
 
@@ -507,8 +489,7 @@ TransformResult<NodeF32> transformF32(const Ast& ast, TransformationContext& ctx
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid f32 literal suffix."));
   }
 
-  auto [error_loc, error_code] =
-      std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
+  auto [error_loc, error_code] = std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
 
   if (error_code == std::errc::invalid_argument) {
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid f32 literal format."));
@@ -519,9 +500,9 @@ TransformResult<NodeF32> transformF32(const Ast& ast, TransformationContext& ctx
   return ret;
 }
 
-TransformResult<NodeF64> transformF64(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeF64> lowerF64(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kLitF64 && "Expected kLitF64 token type.");
-  TransformResult<NodeF64> ret{};
+  LowerResult<NodeF64> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
   std::string_view literal = ctx.getAstLiteral(ast);
 
@@ -531,8 +512,7 @@ TransformResult<NodeF64> transformF64(const Ast& ast, TransformationContext& ctx
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid f64 literal suffix."));
   }
 
-  auto [error_loc, error_code] =
-      std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
+  auto [error_loc, error_code] = std::from_chars(literal.data(), literal.data() + literal.size(), ret.node.data);
 
   if (error_code == std::errc::invalid_argument) {
     ret.diagnostics->push_back(makeErrorPlaceholder("Invalid f64 literal format."));
@@ -543,35 +523,32 @@ TransformResult<NodeF64> transformF64(const Ast& ast, TransformationContext& ctx
   return ret;
 }
 
-TransformResult<NodeNone> transformNone(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeNone> lowerNone(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kKwNone && "Expected kKwNone token type.");
-  TransformResult<NodeNone> ret{};
+  LowerResult<NodeNone> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
 
   return ret;
 }
 
-TransformResult<NodeIdentifier> transformIdentifier(const Ast& ast,
-                                                    TransformationContext& ctx) noexcept {
+LowerResult<NodeIdentifier> lowerIdentifier(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kIdent && "Expected kIdent token type.");
-  TransformResult<NodeIdentifier> ret{};
+  LowerResult<NodeIdentifier> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
   std::string_view literal = ctx.getAstLiteral(ast);
   ret.node.data = ctx.id_table.push(literal);
   return ret;
 }
 
-TransformResult<NodeCStr> transformStringLiteral(const Ast& ast,
-                                                 TransformationContext& ctx) noexcept {
+LowerResult<NodeCStr> lowerStringLiteral(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kLitCstr && "Expected kLitCstr ast type.");
-  TransformResult<NodeCStr> ret{};
+  LowerResult<NodeCStr> ret{};
   ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
   std::string_view literal = ctx.getAstLiteral(ast);
 
   assert(!literal.empty() && literal.front() == '\"' &&
          "Invalid string literal value. Expected '\"' character at begin.");
-  assert(!literal.empty() && literal.back() == '\"' &&
-         "Invalid string literal value. Expected '\"' character at end.");
+  assert(!literal.empty() && literal.back() == '\"' && "Invalid string literal value. Expected '\"' character at end.");
   assert(literal.size() >= 2 && "Invalid string literal value. Must be atleast 2 chars of '\"'.");
 
   literal = literal.substr(1, literal.size() - 2);
@@ -645,160 +622,140 @@ TransformResult<NodeCStr> transformStringLiteral(const Ast& ast,
   return ret;
 }
 
-TransformResult<NodeParenSubexpr> transformParenSubexpr(const Ast& ast,
-                                                        TransformationContext& ctx) noexcept {
-  return {};
-}
+LowerResult<NodeParenSubexpr> lowerParenSubexpr(const Ast& ast, LoweringContext& ctx) noexcept { return {}; }
 
-TransformResult<NodeBraceSubexpr> transformBraceSubexpr(const Ast& ast,
-                                                        TransformationContext& ctx) noexcept {
-  return {};
-}
+LowerResult<NodeBraceSubexpr> lowerBraceSubexpr(const Ast& ast, LoweringContext& ctx) noexcept { return {}; }
 
-TransformResult<NodeBracketSubexpr> transformBracketSubexpr(const Ast& ast,
-                                                            TransformationContext& ctx) noexcept {
-  return {};
-}
+LowerResult<NodeBracketSubexpr> lowerBracketSubexpr(const Ast& ast, LoweringContext& ctx) noexcept { return {}; }
 
-TransformResult<NodePrimaryExpr> transformPrimaryExpr(const Ast& ast,
-                                                      TransformationContext& ctx) noexcept {
-  auto xApplyPrimaryTransform = [](auto&& fn, const Ast& ast, TransformationContext& ctx) {
-    TransformResult<NodePrimaryExpr> ret{};
-    auto transform_result = fn(ast, ctx);
-    ret.node = std::move(transform_result.node);
-    ret.diagnostics.append(std::move(transform_result.diagnostics));
+LowerResult<NodePrimaryExpr> lowerPrimaryExpr(const Ast& ast, LoweringContext& ctx) noexcept {
+  auto xApplyPrimaryLower = [](auto&& fn, const Ast& ast, LoweringContext& ctx) {
+    LowerResult<NodePrimaryExpr> ret{};
+    auto lower_result = fn(ast, ctx);
+    ret.node = std::move(lower_result.node);
+    ret.diagnostics.append(std::move(lower_result.diagnostics));
     return ret;
   };
 
   switch (ast.type) {
     case eAst::kLitU1:
-      return xApplyPrimaryTransform(transformBool, ast, ctx);
+      return xApplyPrimaryLower(lowerBool, ast, ctx);
     case eAst::kLitU8:
-      return xApplyPrimaryTransform(transformU8, ast, ctx);
+      return xApplyPrimaryLower(lowerU8, ast, ctx);
     case eAst::kLitU16:
-      return xApplyPrimaryTransform(transformU16, ast, ctx);
+      return xApplyPrimaryLower(lowerU16, ast, ctx);
     case eAst::kLitU32:
-      return xApplyPrimaryTransform(transformU32, ast, ctx);
+      return xApplyPrimaryLower(lowerU32, ast, ctx);
     case eAst::kLitU64:
-      return xApplyPrimaryTransform(transformU64, ast, ctx);
+      return xApplyPrimaryLower(lowerU64, ast, ctx);
     case eAst::kLitI8:
-      return xApplyPrimaryTransform(transformI8, ast, ctx);
+      return xApplyPrimaryLower(lowerI8, ast, ctx);
     case eAst::kLitI16:
-      return xApplyPrimaryTransform(transformI16, ast, ctx);
+      return xApplyPrimaryLower(lowerI16, ast, ctx);
     case eAst::kLitI32:
-      return xApplyPrimaryTransform(transformI32, ast, ctx);
+      return xApplyPrimaryLower(lowerI32, ast, ctx);
     case eAst::kLitI64:
-      return xApplyPrimaryTransform(transformI64, ast, ctx);
+      return xApplyPrimaryLower(lowerI64, ast, ctx);
     case eAst::kLitF32:
-      return xApplyPrimaryTransform(transformF32, ast, ctx);
+      return xApplyPrimaryLower(lowerF32, ast, ctx);
     case eAst::kLitF64:
-      return xApplyPrimaryTransform(transformF64, ast, ctx);
+      return xApplyPrimaryLower(lowerF64, ast, ctx);
     case eAst::kIdent:
-      return xApplyPrimaryTransform(transformIdentifier, ast, ctx);
+      return xApplyPrimaryLower(lowerIdentifier, ast, ctx);
     case eAst::kLitCstr:
-      return xApplyPrimaryTransform(transformStringLiteral, ast, ctx);
+      return xApplyPrimaryLower(lowerStringLiteral, ast, ctx);
     case eAst::kKwNone:
-      return xApplyPrimaryTransform(transformNone, ast, ctx);
+      return xApplyPrimaryLower(lowerNone, ast, ctx);
     case eAst::kKwVoid:
-      return xApplyPrimaryTransformGeneric<NodeTypenameVoid, NodePrimaryExpr>(ast, ctx);
+      return xApplyPrimaryLowerGeneric<NodeTypenameVoid, NodePrimaryExpr>(ast, ctx);
     case eAst::kKwAny:
-      return xApplyPrimaryTransformGeneric<NodeTypenameAny, NodePrimaryExpr>(ast, ctx);
+      return xApplyPrimaryLowerGeneric<NodeTypenameAny, NodePrimaryExpr>(ast, ctx);
 
     // Binary Operators
     case eAst::kListingOperator:
-      return transformBinaryOperation<NodeListFold>(ast, ctx);
+      return lowerBinaryOperation<NodeListFold>(ast, ctx);
     case eAst::kAssign:
-      return transformBinaryOperation<NodeAssignment>(ast, ctx);
+      return lowerBinaryOperation<NodeAssignment>(ast, ctx);
     case eAst::kOr:
-      return transformBinaryOperation<NodeLogicalOr>(ast, ctx);
+      return lowerBinaryOperation<NodeLogicalOr>(ast, ctx);
     case eAst::kAnd:
-      return transformBinaryOperation<NodeLogicalAnd>(ast, ctx);
+      return lowerBinaryOperation<NodeLogicalAnd>(ast, ctx);
     case eAst::kBor:
-      return transformBinaryOperation<NodeBitwiseOr>(ast, ctx);
+      return lowerBinaryOperation<NodeBitwiseOr>(ast, ctx);
     case eAst::kXor:
-      return transformBinaryOperation<NodeBitwiseXor>(ast, ctx);
+      return lowerBinaryOperation<NodeBitwiseXor>(ast, ctx);
     case eAst::kBand:
-      return transformBinaryOperation<NodeBitwiseAnd>(ast, ctx);
+      return lowerBinaryOperation<NodeBitwiseAnd>(ast, ctx);
     case eAst::kEq:
-      return transformBinaryOperation<NodeEquality>(ast, ctx);
+      return lowerBinaryOperation<NodeEquality>(ast, ctx);
     case eAst::kNeq:
-      return transformBinaryOperation<NodeInequality>(ast, ctx);
+      return lowerBinaryOperation<NodeInequality>(ast, ctx);
     case eAst::kGt:
-      return transformBinaryOperation<NodeGreater>(ast, ctx);
+      return lowerBinaryOperation<NodeGreater>(ast, ctx);
     case eAst::kLt:
-      return transformBinaryOperation<NodeLess>(ast, ctx);
+      return lowerBinaryOperation<NodeLess>(ast, ctx);
     case eAst::kGte:
-      return transformBinaryOperation<NodeGreaterEqual>(ast, ctx);
+      return lowerBinaryOperation<NodeGreaterEqual>(ast, ctx);
     case eAst::kLte:
-      return transformBinaryOperation<NodeLessEqual>(ast, ctx);
+      return lowerBinaryOperation<NodeLessEqual>(ast, ctx);
     case eAst::kRsh:
-      return transformBinaryOperation<NodeBitwiseShiftRight>(ast, ctx);
+      return lowerBinaryOperation<NodeBitwiseShiftRight>(ast, ctx);
     case eAst::kLsh:
-      return transformBinaryOperation<NodeBitwiseShiftLeft>(ast, ctx);
+      return lowerBinaryOperation<NodeBitwiseShiftLeft>(ast, ctx);
     case eAst::kAdd:
-      return transformBinaryOperation<NodeAdd>(ast, ctx);
+      return lowerBinaryOperation<NodeAdd>(ast, ctx);
     case eAst::kSub:
-      return transformBinaryOperation<NodeSubtract>(ast, ctx);
+      return lowerBinaryOperation<NodeSubtract>(ast, ctx);
     case eAst::kMul:
-      return transformBinaryOperation<NodeMultiply>(ast, ctx);
+      return lowerBinaryOperation<NodeMultiply>(ast, ctx);
     case eAst::kDiv:
-      return transformBinaryOperation<NodeDivide>(ast, ctx);
+      return lowerBinaryOperation<NodeDivide>(ast, ctx);
     case eAst::kMod:
-      return transformBinaryOperation<NodeModulus>(ast, ctx);
+      return lowerBinaryOperation<NodeModulus>(ast, ctx);
     case eAst::kMemberAccess:
-      return transformBinaryOperation<NodeAccess>(ast, ctx);
+      return lowerBinaryOperation<NodeAccess>(ast, ctx);
     case eAst::kResolutionOp:
-      return transformBinaryOperation<NodeResolution>(ast, ctx);
+      return lowerBinaryOperation<NodeResolution>(ast, ctx);
 
     // Unary Operations
     case eAst::kInc:
-      return transformUnaryOperation<NodeIncrement>(ast, ctx);
+      return lowerUnaryOperation<NodeIncrement>(ast, ctx);
     case eAst::kDec:
-      return transformUnaryOperation<NodeDecrement>(ast, ctx);
+      return lowerUnaryOperation<NodeDecrement>(ast, ctx);
     case eAst::kNot:
-      return transformUnaryOperation<NodeNot>(ast, ctx);
-      // return transformBinaryOperation<NodeNegative>(ast, ctx);
-      // return transformBinaryOperation<NodePositive>(ast, ctx);
+      return lowerUnaryOperation<NodeNot>(ast, ctx);
+      // return lowerBinaryOperation<NodeNegative>(ast, ctx);
+      // return lowerBinaryOperation<NodePositive>(ast, ctx);
 
     default:
-      Diagnostic error =
-          SSGC_PARSER_INVALID_SYNTAX(ast, std::format("Invalid primary expression. Node: \n{}",
-                                                      ast.Format(&ctx.source_file, &ctx.tokens))
+      Diagnostic error = SSGC_PARSER_INVALID_SYNTAX(
+          ast, std::format("Invalid primary expression. Node: \n{}", ast.Format(&ctx.source_file, &ctx.tokens))
 
-          );
-      return TransformResult<NodePrimaryExpr>{NodePoison{}, Diagnostics{error}};
+      );
+      return LowerResult<NodePrimaryExpr>{NodePoison{}, Diagnostics{error}};
   }
 }
 
-TransformResult<NodeModifiers> transformModifiers(const Ast& ast,
-                                                  TransformationContext& ctx) noexcept {
+LowerResult<NodeModifiers> lowerModifiers(const Ast& ast, LoweringContext& ctx) noexcept { return {}; }
+
+LowerResult<NodeFunctionalStatement> lowerFunctionalStatement(const Ast& ast, LoweringContext& ctx) noexcept {
   return {};
 }
 
-TransformResult<NodeFunctionalStatement> transformFunctionalStatement(
-    const Ast& ast, TransformationContext& ctx) noexcept {
-  return {};
-}
-
-TransformResult<NodeMethod> transformMethod(const Ast& ast, TransformationContext& ctx) noexcept {
+LowerResult<NodeMethod> lowerMethod(const Ast& ast, LoweringContext& ctx) noexcept {
   assert(ast.type == eAst::kMethodDeclaration);
-  TransformResult<NodeMethod> ret{};
-  ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
-
-  assert(ast.branches.size() > 0);
-  const Ast& modifiers = ast[0];
-  TransformResult<NodeModifiers> modifiers_node_res = transformModifiers(ast[0], ctx);
-  ret.node.mods = modifiers_node_res.node;
-  ret.diagnostics.append(modifiers_node_res.diagnostics);
-
-  assert(ast.branches.size() > 1);
-  const Ast& name = ast[1];
-  TransformResult<NodeIdentifier> name_node_res = transformIdentifier(name, ctx);
-  ret.node.name = name_node_res.node;
-  ret.diagnostics.append(name_node_res.diagnostics);
-
   assert(ast.branches.size() > 2);
+  assert(ast[0].type == eAst::kModifiers);
+  assert(ast[1].type == eAst::kIdent);
   assert(ast[2].type == eAst::kMethodSignature);
+  assert(ast[2].branches.size() > 1);
+  assert(ast[2][0].type == eAst::kMethodParameterList);
+
+  LowerResult<NodeMethod> ret{};
+  ret.node.source_range = ctx.getAstSourceRangeRaw(ast);
+  applyLower(lowerModifiers, ret.node.mods, ret.diagnostics, ast[0], ctx);
+  applyLower(lowerIdentifier, ret.node.name, ret.diagnostics, ast[1], ctx);
+
   const Ast& signature = ast[2];
 
   assert(signature.branches.size() > 1);
@@ -808,28 +765,15 @@ TransformResult<NodeMethod> transformMethod(const Ast& ast, TransformationContex
   for (const Ast& param : parameter_list.branches) {
     assert(param.type == eAst::kMethodParameter);
     assert(param.branches.size() > 2);
-
     assert(param[0].type == eAst::kModifiers);
     assert(isAstPrimaryExpr(param[1].type));
     assert(param[2].type == eAst::kIdent);
-    const Ast& param_mods = param[0];
-    const Ast& param_type = param[1];
-    const Ast& param_name = param[2];
-
-    TransformResult<NodeModifiers> param_mods_res = transformModifiers(param_mods, ctx);
-    TransformResult<NodePrimaryExpr> param_type_res = transformPrimaryExpr(param_type, ctx);
-    TransformResult<NodeIdentifier> param_name_res = transformIdentifier(param_name, ctx);
-
-    ret.diagnostics.append(std::move(param_mods_res.diagnostics));
-    ret.diagnostics.append(std::move(param_type_res.diagnostics));
-    ret.diagnostics.append(std::move(param_name_res.diagnostics));
 
     NodeMethodParameter param_node{};
     param_node.source_range = ctx.getAstSourceRangeRaw(param);
-    param_node.mods = std::move(param_mods_res.node);
-    param_node.type = std::move(param_type_res.node);
-    param_node.name = std::move(param_name_res.node);
-
+    applyLower(lowerModifiers, param_node.mods, ret.diagnostics, param[0], ctx);
+    applyLower(lowerPrimaryExpr, param_node.type, ret.diagnostics, param[1], ctx);
+    applyLower(lowerIdentifier, param_node.name, ret.diagnostics, param[2], ctx);
     ret.node.params.push_back(std::move(param_node));
   }
 
@@ -839,21 +783,21 @@ TransformResult<NodeMethod> transformMethod(const Ast& ast, TransformationContex
   assert(return_type.branches.size() > 0);
   assert(return_type[0].type == eAst::kModifiers);
   const Ast& return_type_mods = return_type[0];
-  auto return_type_mods_res = transformModifiers(return_type_mods, ctx);
+  auto return_type_mods_res = lowerModifiers(return_type_mods, ctx);
   ret.node.return_mods = return_type_mods_res.node;
   ret.diagnostics.append(return_type_mods_res.diagnostics);
 
   assert(return_type.branches.size() > 1);
   const Ast& return_type_expr = return_type[1];
   assert(isAstPrimaryExpr(return_type_expr.type));
-  auto return_type_expr_res = transformPrimaryExpr(return_type_expr, ctx);
+  auto return_type_expr_res = lowerPrimaryExpr(return_type_expr, ctx);
   ret.node.return_mods = std::move(return_type_mods_res.node);
   ret.diagnostics.append(return_type_mods_res.diagnostics);
 
   if (ast.branches.size() > 3) {
     const Ast& definition = ast[3];
     for (const Ast& statement : definition.branches) {
-      auto stmt_res = transformFunctionalStatement(statement, ctx);
+      auto stmt_res = lowerFunctionalStatement(statement, ctx);
       ret.node.definition.push_back(stmt_res.node);
     }
   }
@@ -861,19 +805,14 @@ TransformResult<NodeMethod> transformMethod(const Ast& ast, TransformationContex
   return ret;
 }
 
-TransformResult<NodePrimaryExpr> transformIncludeStatement(const Ast& ast,
-                                                           TransformationContext& ctx) noexcept {
+LowerResult<NodePrimaryExpr> lowerIncludeStatement(const Ast& ast, LoweringContext& ctx) noexcept {
+  assert(ast.type == eAst::kIncludeLocalStmt || ast.type == eAst::kIncludeSystemStmt);
+
   return {};
 }
 
-TransformResult<NodePrimaryExpr> transformClass(const Ast& ast,
-                                                TransformationContext& ctx) noexcept {
-  return {};
-};
+LowerResult<NodePrimaryExpr> lowerClass(const Ast& ast, LoweringContext& ctx) noexcept { return {}; };
 
-TransformResult<NodePrimaryExpr> transformVariable(const Ast& ast,
-                                                   TransformationContext& ctx) noexcept {
-  return {};
-};
+LowerResult<NodePrimaryExpr> lowerVariable(const Ast& ast, LoweringContext& ctx) noexcept { return {}; };
 
 }  // namespace ssgc::frontend

@@ -1,12 +1,12 @@
+#pragma once
+#include "../compiler/translation_context.hpp"
 #include "ansi.hpp"
 #include "diagnostic_impl.hpp"
-#include "../compiler/translation_context.hpp"
 
 namespace ssgc {
 
 // Internal vtable dispatch method for compiler messages.
-inline std::string formatDiagnostic(DiagnosticId id, const DiagnosticDataBufferT& data,
-                                    const TrContext* ctx) noexcept;
+inline std::string formatDiagnostic(DiagnosticId id, const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept;
 
 inline std::string formatDiagnostic(Diagnostic diag, const TrContext* ctx) noexcept {
   return formatDiagnostic(diag.id, diag.data, ctx);
@@ -36,20 +36,16 @@ inline std::string formatDiagnostic(Diagnostics diags, const TrContext* ctx) noe
 // translation units. Generated eWarning formatDiagnostic template specialization decls.
 
 template <typename T, eError DIAGNOSTIC>
-inline std::string formatDiagnostic(const DiagnosticDataBufferT& data,
-                                    const TrContext* ctx) noexcept;
+inline std::string formatDiagnostic(const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept;
 
 template <typename T, eWarning DIAGNOSTIC>
-inline std::string formatDiagnostic(const DiagnosticDataBufferT& data,
-                                    const TrContext* ctx) noexcept;
+inline std::string formatDiagnostic(const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept;
 
 template <typename T, eGuideline DIAGNOSTIC>
-inline std::string formatDiagnostic(const DiagnosticDataBufferT& data,
-                                    const TrContext* ctx) noexcept;
+inline std::string formatDiagnostic(const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept;
 
 template <typename T, eInfo DIAGNOSTIC>
-inline std::string formatDiagnostic(const DiagnosticDataBufferT& data,
-                                    const TrContext* ctx) noexcept;
+inline std::string formatDiagnostic(const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* Define the manual formatting dispatch method formatDiagnostic(DiagnosticId id, const
@@ -62,10 +58,10 @@ inline std::string formatDiagnostic(const DiagnosticDataBufferT& data,
   inline std::string formatDiagnostic<eError, eError::en>(const DiagnosticDataBufferT& data, \
                                                           const TrContext* ctx) noexcept;
 
-#define SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eGuideline(en) \
-  template <>                                                                 \
-  inline std::string formatDiagnostic<eGuideline, eGuideline::en>(            \
-      const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept;
+#define SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eGuideline(en)                        \
+  template <>                                                                                        \
+  inline std::string formatDiagnostic<eGuideline, eGuideline::en>(const DiagnosticDataBufferT& data, \
+                                                                  const TrContext* ctx) noexcept;
 
 #define SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eInfo(en)                   \
   template <>                                                                              \
@@ -78,15 +74,13 @@ inline std::string formatDiagnostic(const DiagnosticDataBufferT& data,
                                                               const TrContext* ctx) noexcept;
 
 SSGC_AppliedEnum_eError(SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eError, , , );
-SSGC_AppliedEnum_eGuideline(SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eGuideline, ,
-                            , );
+SSGC_AppliedEnum_eGuideline(SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eGuideline, , , );
 SSGC_AppliedEnum_eInfo(SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eInfo, , , );
 SSGC_AppliedEnum_eWarning(SSGC_LOCAL_MACRO_DeclareFormatDiagnosticSpecialization_eWarning, , , );
 
 // The 'manual vtable' for FormatClErr method. Dispatches to the specialized template
 // implementations. !warning DO NOT call directly. Called only by 'Diagnostic.Format()'.
-inline std::string formatDiagnostic(DiagnosticId id, const DiagnosticDataBufferT& data,
-                                    const TrContext* ctx) noexcept {
+inline std::string formatDiagnostic(DiagnosticId id, const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept {
 #define SSGC_LOCAL_MACRO_DispatchDiagnosticFormatError(ec) \
   case ec:                                                 \
     return formatDiagnostic<eError, ec>(data, ctx);
@@ -146,8 +140,7 @@ inline std::string formatDiagnostic(DiagnosticId id, const DiagnosticDataBufferT
 #undef SSGC_LOCAL_MACRO_DispatchDiagnosticFormat
 }
 
-constexpr DiagnosticDataBufferT convertCppSourceLocationToDiagnosticData(
-    const std::source_location& loc) noexcept {
+constexpr DiagnosticDataBufferT convertCppSourceLocationToDiagnosticData(const std::source_location& loc) noexcept {
   DiagnosticDataBufferT ret;
   ret.reserve(4);
   // Fill the vector in declaration order
@@ -158,13 +151,11 @@ constexpr DiagnosticDataBufferT convertCppSourceLocationToDiagnosticData(
   return ret;
 }
 
-inline std::string formatCppSourceLocationDiagnosticData(
-    DiagnosticDataBufferT::const_iterator loc_begin,
-    DiagnosticDataBufferT::const_iterator loc_end) {
+inline std::string formatCppSourceLocationDiagnosticData(DiagnosticDataBufferT::const_iterator loc_begin,
+                                                         DiagnosticDataBufferT::const_iterator loc_end) {
   std::span<const DiagnosticDataUnionT> loc = {loc_begin, loc_end};
-  return std::format("{{file : {}\nline : {}\ncolumn : {}\nfunction : {}}}",
-                     std::get<std::string>(loc[0]), std::get<std::uint64_t>(loc[1]),
-                     std::get<std::uint64_t>(loc[2]), std::get<std::string>(loc[3]));
+  return std::format("{{file : {}\nline : {}\ncolumn : {}\nfunction : {}}}", std::get<std::string>(loc[0]),
+                     std::get<std::uint64_t>(loc[1]), std::get<std::uint64_t>(loc[2]), std::get<std::string>(loc[3]));
 }
 
 std::string formatDiagnosticPrefix(eError e) {
@@ -227,8 +218,8 @@ constexpr std::string formatDiagnosticPrefix(eInfo e) {
   return ret;
 }
 
-std::string formatDiagnosticSourceLocation(std::uint64_t file_id, std::uint64_t byte_offset,
-                                           const TrContext* ctx, bool add_line_cursor = false) {
+std::string formatDiagnosticSourceLocation(std::uint64_t file_id, std::uint64_t byte_offset, const TrContext* ctx,
+                                           bool add_line_cursor = false) {
   const SourceFile* src_file = ctx->sources.get(file_id);
   auto relative_path = std::filesystem::relative(ctx->sources.pathof(src_file));
   auto [line, col] = src_file->linecol(byte_offset);
@@ -252,20 +243,16 @@ std::string formatDiagnosticSourceLocation(std::uint64_t file_id, std::uint64_t 
   std::size_t caret = byte_offset - line_cursor_begin;
   pointer_line[caret] = '^';
 
-  return std::format("{}:{}:{}\n{}\n{}", relative_path.string(), line, col, line_view,
-                     pointer_line);
+  return std::format("{}:{}:{}\n{}\n{}", relative_path.string(), line, col, line_view, pointer_line);
 }
 
 std::string formatDiagnosticCompilerSourceLocation(const std::string& filename, std::uint64_t line,
-                                                   std::uint64_t column,const std::string & method) {
-  return std::format(
-      "[file]: {}\n[line]: {}\n[column]: {}\n[function]: {}", filename, line, column,
-                     method);
+                                                   std::uint64_t column, const std::string& method) {
+  return std::format("[file]: {}\n[line]: {}\n[column]: {}\n[function]: {}", filename, line, column, method);
 }
 
 template <>
-std::string formatDiagnostic<eError, eError::kError>(const DiagnosticDataBufferT& data,
-                                                     const TrContext* ctx) noexcept {
+std::string formatDiagnostic<eError, eError::kError>(const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept {
   if (data.size() > 0) {
     return std::get<std::string>(data[0]);
   }
@@ -291,8 +278,7 @@ std::string formatDiagnostic<eGuideline, eGuideline::kGuideline>(const Diagnosti
 }
 
 template <>
-std::string formatDiagnostic<eInfo, eInfo::kInfo>(const DiagnosticDataBufferT& data,
-                                                  const TrContext* ctx) noexcept {
+std::string formatDiagnostic<eInfo, eInfo::kInfo>(const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept {
   if (data.size() > 0) {
     return std::get<std::string>(data[0]);
   }
@@ -308,11 +294,10 @@ std::string formatDiagnostic<eError, eError::kPlaceholder>(const DiagnosticDataB
 template <>
 std::string formatDiagnostic<eError, eError::kDeveloperBug>(const DiagnosticDataBufferT& data,
                                                             const TrContext* ctx) noexcept {
-  return std::format(
-      "{}[file]: {}\n[line]: {}\n[column]: {}\n[function]: {}",
-      std::get<std::string>(data[4]).empty() ? "" : std::get<std::string>(data[4]) + "\n",
-      std::get<std::string>(data[0]), std::get<std::uint64_t>(data[1]),
-      std::get<std::uint64_t>(data[2]), std::get<std::string>(data[3]));
+  return std::format("{}[file]: {}\n[line]: {}\n[column]: {}\n[function]: {}",
+                     std::get<std::string>(data[4]).empty() ? "" : std::get<std::string>(data[4]) + "\n",
+                     std::get<std::string>(data[0]), std::get<std::uint64_t>(data[1]), std::get<std::uint64_t>(data[2]),
+                     std::get<std::string>(data[3]));
 }
 
 template <>
@@ -325,19 +310,18 @@ std::string formatDiagnostic<eError, eError::kCliParserFailure>(const Diagnostic
 }
 
 template <>
-std::string formatDiagnostic<eError, eError::kLexerUnclosedStringLiteral>(
-    const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept {
+std::string formatDiagnostic<eError, eError::kLexerUnclosedStringLiteral>(const DiagnosticDataBufferT& data,
+                                                                          const TrContext* ctx) noexcept {
   std::uint64_t file_id = std::get<std::uint64_t>(data[0]);
   std::uint64_t byte_offset = std::get<std::uint64_t>(data[1]);
 
-  return std::format("{}{}\nString literal is not closed.",
-                     formatDiagnosticPrefix(eError::kLexerUnclosedStringLiteral),
+  return std::format("{}{}\nString literal is not closed.", formatDiagnosticPrefix(eError::kLexerUnclosedStringLiteral),
                      formatDiagnosticSourceLocation(file_id, byte_offset, ctx, true));
 }
 
 template <>
-std::string formatDiagnostic<eError, eError::kLexerUnclosedCharacterLiteral>(
-    const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept {
+std::string formatDiagnostic<eError, eError::kLexerUnclosedCharacterLiteral>(const DiagnosticDataBufferT& data,
+                                                                             const TrContext* ctx) noexcept {
   std::uint64_t file_id = std::get<std::uint64_t>(data[0]);
   std::uint64_t byte_offset = std::get<std::uint64_t>(data[1]);
 
@@ -347,74 +331,69 @@ std::string formatDiagnostic<eError, eError::kLexerUnclosedCharacterLiteral>(
 }
 
 template <>
-std::string formatDiagnostic<eError, eError::kLexerEmptyCharacterLiteral>(
-    const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept {
+std::string formatDiagnostic<eError, eError::kLexerEmptyCharacterLiteral>(const DiagnosticDataBufferT& data,
+                                                                          const TrContext* ctx) noexcept {
   std::uint64_t file_id = std::get<std::uint64_t>(data[0]);
   std::uint64_t byte_offset = std::get<std::uint64_t>(data[1]);
 
-  return std::format("{}{}\nEmpty character literal.",
-                     formatDiagnosticPrefix(eError::kLexerEmptyCharacterLiteral),
+  return std::format("{}{}\nEmpty character literal.", formatDiagnosticPrefix(eError::kLexerEmptyCharacterLiteral),
                      formatDiagnosticSourceLocation(file_id, byte_offset, ctx, true));
 }
 
 template <>
-std::string formatDiagnostic<eError, eError::kLexerUnknownNumericSuffix>(
-    const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept {
+std::string formatDiagnostic<eError, eError::kLexerUnknownNumericSuffix>(const DiagnosticDataBufferT& data,
+                                                                         const TrContext* ctx) noexcept {
   std::uint64_t file_id = std::get<std::uint64_t>(data[0]);
   std::uint64_t byte_offset = std::get<std::uint64_t>(data[1]);
   std::string suffix = std::get<std::string>(data[2]);
 
-  return std::format("{}{}\nUnknown scalar suffix '{}'.",
-                     formatDiagnosticPrefix(eError::kLexerUnknownNumericSuffix),
+  return std::format("{}{}\nUnknown scalar suffix '{}'.", formatDiagnosticPrefix(eError::kLexerUnknownNumericSuffix),
                      formatDiagnosticSourceLocation(file_id, byte_offset, ctx, true), suffix);
 }
 
 template <>
-std::string formatDiagnostic<eError, eError::kLexerInvalidPunctuator>(
-    const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept {
+std::string formatDiagnostic<eError, eError::kLexerInvalidPunctuator>(const DiagnosticDataBufferT& data,
+                                                                      const TrContext* ctx) noexcept {
   std::uint64_t file_id = std::get<std::uint64_t>(data[0]);
   std::uint64_t byte_offset = std::get<std::uint64_t>(data[1]);
   std::string punctuator = std::get<std::string>(data[2]);
 
-  return std::format("{}{}\nInvalid punctuator '{}'.",
-                     formatDiagnosticPrefix(eError::kLexerInvalidPunctuator),
+  return std::format("{}{}\nInvalid punctuator '{}'.", formatDiagnosticPrefix(eError::kLexerInvalidPunctuator),
                      formatDiagnosticSourceLocation(file_id, byte_offset, ctx, true), punctuator);
 }
 
 template <>
-std::string formatDiagnostic<eError, eError::kLexerUnexpectedCodepoint>(
-    const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept {
+std::string formatDiagnostic<eError, eError::kLexerUnexpectedCodepoint>(const DiagnosticDataBufferT& data,
+                                                                        const TrContext* ctx) noexcept {
   std::uint64_t file_id = std::get<std::uint64_t>(data[0]);
   std::uint64_t byte_offset = std::get<std::uint64_t>(data[1]);
   std::string codepoint = std::get<std::string>(data[2]);
 
-  return std::format("{}{}\nUnexpected codepoint '{}'.",
-                     formatDiagnosticPrefix(eError::kLexerUnexpectedCodepoint),
+  return std::format("{}{}\nUnexpected codepoint '{}'.", formatDiagnosticPrefix(eError::kLexerUnexpectedCodepoint),
                      formatDiagnosticSourceLocation(file_id, byte_offset, ctx, true), codepoint);
 }
 
 template <>
-std::string formatDiagnostic<eError, eError::kLexerUnclosedBlockComment>(
-    const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept {
+std::string formatDiagnostic<eError, eError::kLexerUnclosedBlockComment>(const DiagnosticDataBufferT& data,
+                                                                         const TrContext* ctx) noexcept {
   std::uint64_t file_id = std::get<std::uint64_t>(data[0]);
   std::uint64_t byte_offset = std::get<std::uint64_t>(data[1]);
 
-  return std::format("{}{}\nUnclosed block comment.",
-                     formatDiagnosticPrefix(eError::kLexerUnclosedBlockComment),
+  return std::format("{}{}\nUnclosed block comment.", formatDiagnosticPrefix(eError::kLexerUnclosedBlockComment),
                      formatDiagnosticSourceLocation(file_id, byte_offset, ctx, true));
 }
 
 template <>
-std::string formatDiagnostic<eError, eError::kParserExpectedToken>(
-    const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept {
+std::string formatDiagnostic<eError, eError::kParserExpectedToken>(const DiagnosticDataBufferT& data,
+                                                                   const TrContext* ctx) noexcept {
   auto data_it = data.begin();
   const std::string& compiler_source_file_name = std::get<std::string>(*data_it);
   data_it++;
-  std::uint64_t compiler_source_line = std::get<std::uint64_t>(*data_it);  
+  std::uint64_t compiler_source_line = std::get<std::uint64_t>(*data_it);
   data_it++;
   std::uint64_t compiler_source_column = std::get<std::uint64_t>(*data_it);
   data_it++;
-  std::string compiler_source_function = std::get<std::string>(*data_it);  
+  std::string compiler_source_function = std::get<std::string>(*data_it);
   data_it++;
   std::uint64_t file_id = std::get<std::uint64_t>(*data_it);
   data_it++;
@@ -423,15 +402,12 @@ std::string formatDiagnostic<eError, eError::kParserExpectedToken>(
   frontend::eToken current_token = static_cast<frontend::eToken>(std::get<std::int64_t>(*data_it));
   data_it++;
 
-
-
   std::string expected_tokens{};
   if (data_it < data.end() && std::holds_alternative<std::string>(*data_it)) {
     expected_tokens = std::get<std::string>(*data_it);
   } else {
     for (auto& it = data_it; it < data.end(); it++) {
-      expected_tokens +=
-          frontend::eTokenToCStr(static_cast<frontend::eToken>(std::get<std::int64_t>(*it)));
+      expected_tokens += frontend::eTokenToCStr(static_cast<frontend::eToken>(std::get<std::int64_t>(*it)));
       if (!(it == data.end() - 1)) {
         expected_tokens += " || ";
       }
@@ -441,14 +417,13 @@ std::string formatDiagnostic<eError, eError::kParserExpectedToken>(
                      formatDiagnosticPrefix(eError::kParserExpectedToken),
                      formatDiagnosticSourceLocation(file_id, byte_offset, ctx, true),
                      frontend::eTokenToCStr(current_token), expected_tokens,
-                     formatDiagnosticCompilerSourceLocation(compiler_source_file_name, 
-                       compiler_source_line, compiler_source_column, compiler_source_function)
-  );
+                     formatDiagnosticCompilerSourceLocation(compiler_source_file_name, compiler_source_line,
+                                                            compiler_source_column, compiler_source_function));
 }
 
 template <>
-std::string formatDiagnostic<eError, eError::kParserInvalidSyntax>(
-    const DiagnosticDataBufferT& data, const TrContext* ctx) noexcept {
+std::string formatDiagnostic<eError, eError::kParserInvalidSyntax>(const DiagnosticDataBufferT& data,
+                                                                   const TrContext* ctx) noexcept {
   auto data_it = data.begin();
   const std::string& compiler_source_file_name = std::get<std::string>(*data_it);
   data_it++;
@@ -466,13 +441,10 @@ std::string formatDiagnostic<eError, eError::kParserInvalidSyntax>(
   std::string message = std::get<std::string>(*data_it);
   data_it++;
 
-  return std::format(
-      "{}{}\n{}\n{}",
-      formatDiagnosticPrefix(eError::kParserInvalidSyntax),
-      formatDiagnosticSourceLocation(file_id, byte_offset, ctx, true),
-      message,
-      formatDiagnosticCompilerSourceLocation(compiler_source_file_name, compiler_source_line,
-                                             compiler_source_column, compiler_source_function));
+  return std::format("{}{}\n{}\n{}", formatDiagnosticPrefix(eError::kParserInvalidSyntax),
+                     formatDiagnosticSourceLocation(file_id, byte_offset, ctx, true), message,
+                     formatDiagnosticCompilerSourceLocation(compiler_source_file_name, compiler_source_line,
+                                                            compiler_source_column, compiler_source_function));
 }
 
 }  // namespace ssgc

@@ -106,8 +106,8 @@ using DiagnosticParameterIntT = short;
   sep m(kLexerInvalidPunctuator)                  \
   sep m(kLexerUnexpectedCodepoint)                \
   sep m(kLexerUnclosedBlockComment)               \
-  sep m(kParserExpectedToken)\
-  sep m(kParserInvalidSyntax)\
+  sep m(kParserExpectedToken)                     \
+  sep m(kParserInvalidSyntax)                     \
   lst
 
 //sep m(kFailedToReadFile)                        \
@@ -130,8 +130,7 @@ SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eWarning, eWarning, D
 #define SSGC_AppliedEnum_eGuideline(m, sep, pre, lst) \
   pre m(kGuideline)                                   \
   lst
-SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eGuideline, eGuideline,
-                                          DiagnosticCodeIntT);
+SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eGuideline, eGuideline, DiagnosticCodeIntT);
 
 #define SSGC_AppliedEnum_eInfo(m, sep, pre, lst) \
   pre m(kInfo)                                   \
@@ -154,8 +153,7 @@ SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eInfo, eInfo, Diagnos
   sep m(kPreprocessor)                                    \
   sep m(kConstEval)                                       \
   lst
-SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eErrorCategory, eErrorCategory,
-                                          DiagnosticCategoryIntT);
+SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eErrorCategory, eErrorCategory, DiagnosticCategoryIntT);
 
 #define SSGC_AppliedEnum_eWarningCategory(m, sep, pre, lst) \
   pre m(kNone)                                              \
@@ -169,8 +167,7 @@ SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eErrorCategory, eErro
   sep m(kPreprocessor)                                      \
   sep m(kConstEval)                                         \
   lst
-SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eWarningCategory, eWarningCategory,
-                                          DiagnosticCategoryIntT);
+SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eWarningCategory, eWarningCategory, DiagnosticCategoryIntT);
 
 #define SSGC_AppliedEnum_eGuidelineCategory(m, sep, pre, lst) \
   pre m(kNone)                                                \
@@ -199,8 +196,7 @@ SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eGuidelineCategory, e
   sep m(kPreprocessor)                                   \
   sep m(kConstEval)                                      \
   lst
-SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eInfoCategory, eInfoCategory,
-                                          DiagnosticCategoryIntT);
+SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eInfoCategory, eInfoCategory, DiagnosticCategoryIntT);
 
 constexpr eErrorCategory getErrorCategory(eError e) noexcept {
   switch (e) {
@@ -245,18 +241,13 @@ constexpr eInfoCategory getInfoCategory(eInfo e) noexcept {
   sep m(kGeneric)                                          \
   lst
 
-SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eDiagnosticType, eDiagnosticType,
-                                          DiagnosticCategoryIntT);
+SSGC_MACRO_DefineTypedEnumFromAppliedList(SSGC_AppliedEnum_eDiagnosticType, eDiagnosticType, DiagnosticCategoryIntT);
 
 constexpr eDiagnosticType getDiagnosticType(eError e) noexcept { return eDiagnosticType::kError; };
 
-constexpr eDiagnosticType getDiagnosticType(eWarning e) noexcept {
-  return eDiagnosticType::kWarning;
-};
+constexpr eDiagnosticType getDiagnosticType(eWarning e) noexcept { return eDiagnosticType::kWarning; };
 
-constexpr eDiagnosticType getDiagnosticType(eGuideline e) noexcept {
-  return eDiagnosticType::kGuideline;
-};
+constexpr eDiagnosticType getDiagnosticType(eGuideline e) noexcept { return eDiagnosticType::kGuideline; };
 
 constexpr eDiagnosticType getDiagnosticType(eInfo e) noexcept { return eDiagnosticType::kInfo; };
 
@@ -264,10 +255,9 @@ constexpr eDiagnosticType getDiagnosticType(eInfo e) noexcept { return eDiagnost
 // Define message enum.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define SSGC_AppliedEnum_eDiagnostic(m, sep, pre, lst)                                    \
-  pre m(GenericCompilerMessage) SSGC_AppliedEnum_eError(m, sep, sep, )                    \
-      SSGC_AppliedEnum_eWarning(m, sep, sep, ) SSGC_AppliedEnum_eGuideline(m, sep, sep, ) \
-          SSGC_AppliedEnum_eInfo(m, sep, sep, ) lst
+#define SSGC_AppliedEnum_eDiagnostic(m, sep, pre, lst)                                                          \
+  pre m(GenericCompilerMessage) SSGC_AppliedEnum_eError(m, sep, sep, ) SSGC_AppliedEnum_eWarning(m, sep, sep, ) \
+      SSGC_AppliedEnum_eGuideline(m, sep, sep, ) SSGC_AppliedEnum_eInfo(m, sep, sep, ) lst
 
 SSGC_MACRO_DefineEnumFromAppliedList(SSGC_AppliedEnum_eDiagnostic, eDiagnostic);
 
@@ -288,10 +278,8 @@ constexpr DiagnosticId getDiagnosticId(eInfo e);
 
 /// A bitfield structure which identifies a compiler message.
 struct DiagnosticId {
-  DiagnosticCodeIntT code{
-      0};  ///> Id of the message within the message type, maps to the diagnostic enums.
-  DiagnosticCategoryIntT category{
-      0};  ///> Category within the message type, maps to the message category enums.
+  DiagnosticCodeIntT code{0};            ///> Id of the message within the message type, maps to the diagnostic enums.
+  DiagnosticCategoryIntT category{0};    ///> Category within the message type, maps to the message category enums.
   DiagnosticCategoryIntT msg_type{0};    ///> Message type, maps to eDiagnosticType
   DiagnosticParameterIntT parameter{0};  ///> Placeholder for data dependant on code and category.
 
@@ -307,8 +295,8 @@ struct DiagnosticId {
 
   constexpr DiagnosticId() {}
 
-  constexpr DiagnosticId(DiagnosticCodeIntT c, DiagnosticCategoryIntT cat,
-                         DiagnosticCategoryIntT type, DiagnosticParameterIntT param = 0) noexcept
+  constexpr DiagnosticId(DiagnosticCodeIntT c, DiagnosticCategoryIntT cat, DiagnosticCategoryIntT type,
+                         DiagnosticParameterIntT param = 0) noexcept
       : code(c), category(cat), msg_type(type), parameter(param) {}
 
   constexpr DiagnosticId(DiagnosticId&& other) noexcept
@@ -318,10 +306,7 @@ struct DiagnosticId {
         parameter(std::move(other.parameter)) {}
 
   constexpr DiagnosticId(const DiagnosticId& other) noexcept
-      : code(other.code),
-        category(other.category),
-        msg_type(other.msg_type),
-        parameter(other.parameter) {}
+      : code(other.code), category(other.category), msg_type(other.msg_type), parameter(other.parameter) {}
 
   constexpr DiagnosticId& operator=(const DiagnosticId&) noexcept = default;
   constexpr DiagnosticId& operator=(DiagnosticId&&) noexcept = default;
@@ -341,37 +326,31 @@ static_assert(sizeof(DiagnosticId) == 8 && "DiagnosticId must be 8 bytes.");
 // yet.
 //       Later make sure to add the parameter retrieving logic to these methods if ever used
 constexpr DiagnosticId getDiagnosticId(eError e) {
-  return DiagnosticId{static_cast<DiagnosticCodeIntT>(e),
-                      static_cast<DiagnosticCategoryIntT>(getErrorCategory(e)),
+  return DiagnosticId{static_cast<DiagnosticCodeIntT>(e), static_cast<DiagnosticCategoryIntT>(getErrorCategory(e)),
                       static_cast<DiagnosticCategoryIntT>(getDiagnosticType(e))};
 };
 
 constexpr DiagnosticId getDiagnosticId(eWarning e) {
-  return DiagnosticId{static_cast<DiagnosticCodeIntT>(e),
-                      static_cast<DiagnosticCategoryIntT>(getWarningCategory(e)),
+  return DiagnosticId{static_cast<DiagnosticCodeIntT>(e), static_cast<DiagnosticCategoryIntT>(getWarningCategory(e)),
                       static_cast<DiagnosticCategoryIntT>(getDiagnosticType(e))};
 };
 
 constexpr DiagnosticId getDiagnosticId(eGuideline e) {
-  return DiagnosticId{static_cast<DiagnosticCodeIntT>(e),
-                      static_cast<DiagnosticCategoryIntT>(getGuidelineCategory(e)),
+  return DiagnosticId{static_cast<DiagnosticCodeIntT>(e), static_cast<DiagnosticCategoryIntT>(getGuidelineCategory(e)),
                       static_cast<DiagnosticCategoryIntT>(getDiagnosticType(e))};
 };
 
 constexpr DiagnosticId getDiagnosticId(eInfo e) {
-  return DiagnosticId{static_cast<DiagnosticCodeIntT>(e),
-                      static_cast<DiagnosticCategoryIntT>(getInfoCategory(e)),
+  return DiagnosticId{static_cast<DiagnosticCodeIntT>(e), static_cast<DiagnosticCategoryIntT>(getInfoCategory(e)),
                       static_cast<DiagnosticCategoryIntT>(getDiagnosticType(e))};
 };
 ///////////////////////////////////////////////////////////////////////////////////
 /* Forward decl of 'formatDiagnostic'. The message formatting vtable dispatch method. */
 ///////////////////////////////////////////////////////////////////////////////////
 
-using DiagnosticDataUnionT =
-    std::variant<std::int64_t, std::uint64_t,
-                 std::string>;  // Union of allowed compiler message data types.
-using DiagnosticDataBufferT =
-    std::vector<DiagnosticDataUnionT>;  // Buffer of unions of compiler message data types.
+using DiagnosticDataUnionT = std::variant<std::int64_t, std::uint64_t,
+                                          std::string>;           // Union of allowed compiler message data types.
+using DiagnosticDataBufferT = std::vector<DiagnosticDataUnionT>;  // Buffer of unions of compiler message data types.
 
 /////////////////////////////////////////////
 /* Compiler message structure definitions. */
@@ -397,19 +376,13 @@ struct Diagnostic {
   constexpr Diagnostic& operator=(const Diagnostic& other) = default;
 
   constexpr Diagnostic(DiagnosticId id, DiagnosticDataBufferT data = {}) : id(id), data(data) {}
-  constexpr Diagnostic(eError id, DiagnosticDataBufferT data = {})
-      : id(getDiagnosticId(id)), data(data) {}
-  constexpr Diagnostic(eWarning id, DiagnosticDataBufferT data = {})
-      : id(getDiagnosticId(id)), data(data) {}
-  constexpr Diagnostic(eGuideline id, DiagnosticDataBufferT data = {})
-      : id(getDiagnosticId(id)), data(data) {}
-  constexpr Diagnostic(eInfo id, DiagnosticDataBufferT data = {})
-      : id(getDiagnosticId(id)), data(data) {}
+  constexpr Diagnostic(eError id, DiagnosticDataBufferT data = {}) : id(getDiagnosticId(id)), data(data) {}
+  constexpr Diagnostic(eWarning id, DiagnosticDataBufferT data = {}) : id(getDiagnosticId(id)), data(data) {}
+  constexpr Diagnostic(eGuideline id, DiagnosticDataBufferT data = {}) : id(getDiagnosticId(id)), data(data) {}
+  constexpr Diagnostic(eInfo id, DiagnosticDataBufferT data = {}) : id(getDiagnosticId(id)), data(data) {}
 
-  constexpr Diagnostic(const std::string& message)
-      : id(getDiagnosticId(eError::kError)), data({message}) {}
-  constexpr Diagnostic(const char* message)
-      : id(getDiagnosticId(eError::kError)), data({std::string{message}}) {}
+  constexpr Diagnostic(const std::string& message) : id(getDiagnosticId(eError::kError)), data({message}) {}
+  constexpr Diagnostic(const char* message) : id(getDiagnosticId(eError::kError)), data({std::string{message}}) {}
 };
 
 class Diagnostics {
@@ -421,12 +394,10 @@ class Diagnostics {
       : diagnostics_(std::make_unique<std::vector<Diagnostic>>(std::vector<Diagnostic>{})) {}
 
   explicit constexpr Diagnostics(Diagnostic&& diagnostic) noexcept
-      : diagnostics_(
-            std::make_unique<std::vector<Diagnostic>>(std::vector<Diagnostic>{diagnostic})) {}
+      : diagnostics_(std::make_unique<std::vector<Diagnostic>>(std::vector<Diagnostic>{diagnostic})) {}
 
   explicit constexpr Diagnostics(const Diagnostic& diagnostic) noexcept
-      : diagnostics_(
-            std::make_unique<std::vector<Diagnostic>>(std::vector<Diagnostic>{diagnostic})) {}
+      : diagnostics_(std::make_unique<std::vector<Diagnostic>>(std::vector<Diagnostic>{diagnostic})) {}
 
   Diagnostics(Diagnostics&& other) noexcept : diagnostics_(std::move(other.diagnostics_)) {}
 
@@ -441,16 +412,9 @@ class Diagnostics {
     *diagnostics_ = *other.diagnostics_;
     return *this;
   }
-  ///// Returns formatted message strings separated by a newline.
-  // std::string format(const std::string& prefix = "") const noexcept {
-  //   std::string buff{""};
-  //   for (const auto& msg : *diagnostics_) {
-  //     buff.append(prefix);
-  //     buff.append(msg.format());
-  //     buff.append("\n");
-  //   }
-  //   return buff;
-  // };
+
+  constexpr std::size_t size() const noexcept { return diagnostics_->size(); }
+  constexpr bool empty() const noexcept { return diagnostics_->empty(); }
 
   /// @brief Append a range of diagnostics.
   constexpr void append(const Diagnostics& other) noexcept {
@@ -473,8 +437,7 @@ class Diagnostics {
 // Assert we can access the last error code in a constexpr context.
 static_assert(Diagnostic{eError::kError}.id.code == std::to_underlying(eError::kError));
 static_assert(Diagnostic{eWarning::kWarning}.id.code == std::to_underlying(eWarning::kWarning));
-static_assert(Diagnostic{eGuideline::kGuideline}.id.code ==
-              std::to_underlying(eGuideline::kGuideline));
+static_assert(Diagnostic{eGuideline::kGuideline}.id.code == std::to_underlying(eGuideline::kGuideline));
 static_assert(Diagnostic{eInfo::kInfo}.id.code == std::to_underlying(eInfo::kInfo));
 
 }  // namespace ssgc
